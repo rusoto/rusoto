@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
@@ -2285,126 +2286,136 @@ impl Error for UpdateClusterConfigurationError {
     }
 }
 /// Trait representing the capabilities of the Kafka API. Kafka clients implement this trait.
+#[async_trait]
 pub trait Kafka {
     /// <pre><code>        &lt;p&gt;Creates a new MSK cluster.&lt;/p&gt;
     /// </code></pre>
-    fn create_cluster(
+    async fn create_cluster(
         &self,
         input: CreateClusterRequest,
-    ) -> RusotoFuture<CreateClusterResponse, CreateClusterError>;
+    ) -> Result<CreateClusterResponse, RusotoError<CreateClusterError>>;
 
     /// <pre><code>        &lt;p&gt;Creates a new MSK configuration.&lt;/p&gt;
     /// </code></pre>
-    fn create_configuration(
+    async fn create_configuration(
         &self,
         input: CreateConfigurationRequest,
-    ) -> RusotoFuture<CreateConfigurationResponse, CreateConfigurationError>;
+    ) -> Result<CreateConfigurationResponse, RusotoError<CreateConfigurationError>>;
 
     /// <pre><code>        &lt;p&gt;Deletes the MSK cluster specified by the Amazon Resource Name (ARN) in the request.&lt;/p&gt;
     /// </code></pre>
-    fn delete_cluster(
+    async fn delete_cluster(
         &self,
         input: DeleteClusterRequest,
-    ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError>;
+    ) -> Result<DeleteClusterResponse, RusotoError<DeleteClusterError>>;
 
     /// <pre><code>        &lt;p&gt;Returns a description of the MSK cluster whose Amazon Resource Name (ARN) is specified in the request.&lt;/p&gt;
     /// </code></pre>
-    fn describe_cluster(
+    async fn describe_cluster(
         &self,
         input: DescribeClusterRequest,
-    ) -> RusotoFuture<DescribeClusterResponse, DescribeClusterError>;
+    ) -> Result<DescribeClusterResponse, RusotoError<DescribeClusterError>>;
 
     /// <pre><code>        &lt;p&gt;Returns a description of the cluster operation specified by the ARN.&lt;/p&gt;
     /// </code></pre>
-    fn describe_cluster_operation(
+    async fn describe_cluster_operation(
         &self,
         input: DescribeClusterOperationRequest,
-    ) -> RusotoFuture<DescribeClusterOperationResponse, DescribeClusterOperationError>;
+    ) -> Result<DescribeClusterOperationResponse, RusotoError<DescribeClusterOperationError>>;
 
     /// <pre><code>        &lt;p&gt;Returns a description of this MSK configuration.&lt;/p&gt;
     /// </code></pre>
-    fn describe_configuration(
+    async fn describe_configuration(
         &self,
         input: DescribeConfigurationRequest,
-    ) -> RusotoFuture<DescribeConfigurationResponse, DescribeConfigurationError>;
+    ) -> Result<DescribeConfigurationResponse, RusotoError<DescribeConfigurationError>>;
 
     /// <pre><code>        &lt;p&gt;Returns a description of this revision of the configuration.&lt;/p&gt;
     /// </code></pre>
-    fn describe_configuration_revision(
+    async fn describe_configuration_revision(
         &self,
         input: DescribeConfigurationRevisionRequest,
-    ) -> RusotoFuture<DescribeConfigurationRevisionResponse, DescribeConfigurationRevisionError>;
+    ) -> Result<
+        DescribeConfigurationRevisionResponse,
+        RusotoError<DescribeConfigurationRevisionError>,
+    >;
 
     /// <pre><code>        &lt;p&gt;A list of brokers that a client application can use to bootstrap.&lt;/p&gt;
     /// </code></pre>
-    fn get_bootstrap_brokers(
+    async fn get_bootstrap_brokers(
         &self,
         input: GetBootstrapBrokersRequest,
-    ) -> RusotoFuture<GetBootstrapBrokersResponse, GetBootstrapBrokersError>;
+    ) -> Result<GetBootstrapBrokersResponse, RusotoError<GetBootstrapBrokersError>>;
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the operations that have been performed on the specified MSK cluster.&lt;/p&gt;
     /// </code></pre>
-    fn list_cluster_operations(
+    async fn list_cluster_operations(
         &self,
         input: ListClusterOperationsRequest,
-    ) -> RusotoFuture<ListClusterOperationsResponse, ListClusterOperationsError>;
+    ) -> Result<ListClusterOperationsResponse, RusotoError<ListClusterOperationsError>>;
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK clusters in the current Region.&lt;/p&gt;
     /// </code></pre>
-    fn list_clusters(
+    async fn list_clusters(
         &self,
         input: ListClustersRequest,
-    ) -> RusotoFuture<ListClustersResponse, ListClustersError>;
+    ) -> Result<ListClustersResponse, RusotoError<ListClustersError>>;
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK configurations in this Region.&lt;/p&gt;
     /// </code></pre>
-    fn list_configuration_revisions(
+    async fn list_configuration_revisions(
         &self,
         input: ListConfigurationRevisionsRequest,
-    ) -> RusotoFuture<ListConfigurationRevisionsResponse, ListConfigurationRevisionsError>;
+    ) -> Result<ListConfigurationRevisionsResponse, RusotoError<ListConfigurationRevisionsError>>;
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK configurations in this Region.&lt;/p&gt;
     /// </code></pre>
-    fn list_configurations(
+    async fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
-    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError>;
+    ) -> Result<ListConfigurationsResponse, RusotoError<ListConfigurationsError>>;
 
     /// <pre><code>        &lt;p&gt;Returns a list of the broker nodes in the cluster.&lt;/p&gt;
     /// </code></pre>
-    fn list_nodes(
+    async fn list_nodes(
         &self,
         input: ListNodesRequest,
-    ) -> RusotoFuture<ListNodesResponse, ListNodesError>;
+    ) -> Result<ListNodesResponse, RusotoError<ListNodesError>>;
 
     /// <pre><code>        &lt;p&gt;Returns a list of the tags associated with the specified resource.&lt;/p&gt;
     /// </code></pre>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <pre><code>        &lt;p&gt;Adds tags to the specified MSK resource.&lt;/p&gt;
     /// </code></pre>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>>;
 
     /// <pre><code>        &lt;p&gt;Removes the tags associated with the keys that are provided in the query.&lt;/p&gt;
     /// </code></pre>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>>;
 
     /// <pre><code>        &lt;p&gt;Updates the EBS storage associated with MSK brokers.&lt;/p&gt;
     /// </code></pre>
-    fn update_broker_storage(
+    async fn update_broker_storage(
         &self,
         input: UpdateBrokerStorageRequest,
-    ) -> RusotoFuture<UpdateBrokerStorageResponse, UpdateBrokerStorageError>;
+    ) -> Result<UpdateBrokerStorageResponse, RusotoError<UpdateBrokerStorageError>>;
 
     /// <pre><code>        &lt;p&gt;Updates the cluster with the configuration that is specified in the request body.&lt;/p&gt;
     /// </code></pre>
-    fn update_cluster_configuration(
+    async fn update_cluster_configuration(
         &self,
         input: UpdateClusterConfigurationRequest,
-    ) -> RusotoFuture<UpdateClusterConfigurationResponse, UpdateClusterConfigurationError>;
+    ) -> Result<UpdateClusterConfigurationResponse, RusotoError<UpdateClusterConfigurationError>>;
 }
 /// A client for the Kafka API.
 #[derive(Clone)]
@@ -2440,13 +2451,14 @@ impl KafkaClient {
     }
 }
 
+#[async_trait]
 impl Kafka for KafkaClient {
     /// <pre><code>        &lt;p&gt;Creates a new MSK cluster.&lt;/p&gt;
     /// </code></pre>
-    fn create_cluster(
+    async fn create_cluster(
         &self,
         input: CreateClusterRequest,
-    ) -> RusotoFuture<CreateClusterResponse, CreateClusterError> {
+    ) -> Result<CreateClusterResponse, RusotoError<CreateClusterError>> {
         let request_uri = "/v1/clusters";
 
         let mut request = SignedRequest::new("POST", "kafka", &self.region, &request_uri);
@@ -2455,39 +2467,29 @@ impl Kafka for KafkaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateClusterError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateClusterResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateClusterError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateClusterResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateClusterError>())
-                            .and_then(|response| Err(CreateClusterError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateClusterError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Creates a new MSK configuration.&lt;/p&gt;
     /// </code></pre>
-    fn create_configuration(
+    async fn create_configuration(
         &self,
         input: CreateConfigurationRequest,
-    ) -> RusotoFuture<CreateConfigurationResponse, CreateConfigurationError> {
+    ) -> Result<CreateConfigurationResponse, RusotoError<CreateConfigurationError>> {
         let request_uri = "/v1/configurations";
 
         let mut request = SignedRequest::new("POST", "kafka", &self.region, &request_uri);
@@ -2496,41 +2498,29 @@ impl Kafka for KafkaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateConfigurationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateConfigurationResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateConfigurationError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateConfigurationResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateConfigurationError>())
-                            .and_then(|response| {
-                                Err(CreateConfigurationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateConfigurationError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Deletes the MSK cluster specified by the Amazon Resource Name (ARN) in the request.&lt;/p&gt;
     /// </code></pre>
-    fn delete_cluster(
+    async fn delete_cluster(
         &self,
         input: DeleteClusterRequest,
-    ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError> {
+    ) -> Result<DeleteClusterResponse, RusotoError<DeleteClusterError>> {
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}",
             cluster_arn = input.cluster_arn
@@ -2545,39 +2535,29 @@ impl Kafka for KafkaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteClusterError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteClusterResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteClusterError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteClusterResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteClusterError>())
-                            .and_then(|response| Err(DeleteClusterError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteClusterError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Returns a description of the MSK cluster whose Amazon Resource Name (ARN) is specified in the request.&lt;/p&gt;
     /// </code></pre>
-    fn describe_cluster(
+    async fn describe_cluster(
         &self,
         input: DescribeClusterRequest,
-    ) -> RusotoFuture<DescribeClusterResponse, DescribeClusterError> {
+    ) -> Result<DescribeClusterResponse, RusotoError<DescribeClusterError>> {
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}",
             cluster_arn = input.cluster_arn
@@ -2586,39 +2566,29 @@ impl Kafka for KafkaClient {
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeClusterError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeClusterResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeClusterError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeClusterResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeClusterError>())
-                            .and_then(|response| Err(DescribeClusterError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeClusterError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Returns a description of the cluster operation specified by the ARN.&lt;/p&gt;
     /// </code></pre>
-    fn describe_cluster_operation(
+    async fn describe_cluster_operation(
         &self,
         input: DescribeClusterOperationRequest,
-    ) -> RusotoFuture<DescribeClusterOperationResponse, DescribeClusterOperationError> {
+    ) -> Result<DescribeClusterOperationResponse, RusotoError<DescribeClusterOperationError>> {
         let request_uri = format!(
             "/v1/operations/{cluster_operation_arn}",
             cluster_operation_arn = input.cluster_operation_arn
@@ -2627,82 +2597,60 @@ impl Kafka for KafkaClient {
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeClusterOperationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeClusterOperationResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeClusterOperationError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeClusterOperationResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeClusterOperationError>())
-                            .and_then(|response| {
-                                Err(DescribeClusterOperationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeClusterOperationError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Returns a description of this MSK configuration.&lt;/p&gt;
     /// </code></pre>
-    fn describe_configuration(
+    async fn describe_configuration(
         &self,
         input: DescribeConfigurationRequest,
-    ) -> RusotoFuture<DescribeConfigurationResponse, DescribeConfigurationError> {
+    ) -> Result<DescribeConfigurationResponse, RusotoError<DescribeConfigurationError>> {
         let request_uri = format!("/v1/configurations/{arn}", arn = input.arn);
 
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeConfigurationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConfigurationResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeConfigurationError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConfigurationResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeConfigurationError>())
-                            .and_then(|response| {
-                                Err(DescribeConfigurationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConfigurationError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Returns a description of this revision of the configuration.&lt;/p&gt;
     /// </code></pre>
-    fn describe_configuration_revision(
+    async fn describe_configuration_revision(
         &self,
         input: DescribeConfigurationRevisionRequest,
-    ) -> RusotoFuture<DescribeConfigurationRevisionResponse, DescribeConfigurationRevisionError>
-    {
+    ) -> Result<
+        DescribeConfigurationRevisionResponse,
+        RusotoError<DescribeConfigurationRevisionError>,
+    > {
         let request_uri = format!(
             "/v1/configurations/{arn}/revisions/{revision}",
             arn = input.arn,
@@ -2712,41 +2660,29 @@ impl Kafka for KafkaClient {
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeConfigurationRevisionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConfigurationRevisionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeConfigurationRevisionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConfigurationRevisionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeConfigurationRevisionError>())
-                            .and_then(|response| {
-                                Err(DescribeConfigurationRevisionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConfigurationRevisionError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;A list of brokers that a client application can use to bootstrap.&lt;/p&gt;
     /// </code></pre>
-    fn get_bootstrap_brokers(
+    async fn get_bootstrap_brokers(
         &self,
         input: GetBootstrapBrokersRequest,
-    ) -> RusotoFuture<GetBootstrapBrokersResponse, GetBootstrapBrokersError> {
+    ) -> Result<GetBootstrapBrokersResponse, RusotoError<GetBootstrapBrokersError>> {
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/bootstrap-brokers",
             cluster_arn = input.cluster_arn
@@ -2755,41 +2691,29 @@ impl Kafka for KafkaClient {
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetBootstrapBrokersError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBootstrapBrokersResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBootstrapBrokersError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetBootstrapBrokersResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetBootstrapBrokersError>())
-                            .and_then(|response| {
-                                Err(GetBootstrapBrokersError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetBootstrapBrokersError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the operations that have been performed on the specified MSK cluster.&lt;/p&gt;
     /// </code></pre>
-    fn list_cluster_operations(
+    async fn list_cluster_operations(
         &self,
         input: ListClusterOperationsRequest,
-    ) -> RusotoFuture<ListClusterOperationsResponse, ListClusterOperationsError> {
+    ) -> Result<ListClusterOperationsResponse, RusotoError<ListClusterOperationsError>> {
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/operations",
             cluster_arn = input.cluster_arn
@@ -2807,41 +2731,29 @@ impl Kafka for KafkaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListClusterOperationsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListClusterOperationsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListClusterOperationsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListClusterOperationsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListClusterOperationsError>())
-                            .and_then(|response| {
-                                Err(ListClusterOperationsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListClusterOperationsError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK clusters in the current Region.&lt;/p&gt;
     /// </code></pre>
-    fn list_clusters(
+    async fn list_clusters(
         &self,
         input: ListClustersRequest,
-    ) -> RusotoFuture<ListClustersResponse, ListClustersError> {
+    ) -> Result<ListClustersResponse, RusotoError<ListClustersError>> {
         let request_uri = "/v1/clusters";
 
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
@@ -2859,39 +2771,30 @@ impl Kafka for KafkaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListClustersError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListClustersResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListClustersError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListClustersResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListClustersError>())
-                            .and_then(|response| Err(ListClustersError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListClustersError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK configurations in this Region.&lt;/p&gt;
     /// </code></pre>
-    fn list_configuration_revisions(
+    async fn list_configuration_revisions(
         &self,
         input: ListConfigurationRevisionsRequest,
-    ) -> RusotoFuture<ListConfigurationRevisionsResponse, ListConfigurationRevisionsError> {
+    ) -> Result<ListConfigurationRevisionsResponse, RusotoError<ListConfigurationRevisionsError>>
+    {
         let request_uri = format!("/v1/configurations/{arn}/revisions", arn = input.arn);
 
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
@@ -2906,41 +2809,29 @@ impl Kafka for KafkaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListConfigurationRevisionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListConfigurationRevisionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListConfigurationRevisionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListConfigurationRevisionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListConfigurationRevisionsError>())
-                            .and_then(|response| {
-                                Err(ListConfigurationRevisionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListConfigurationRevisionsError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK configurations in this Region.&lt;/p&gt;
     /// </code></pre>
-    fn list_configurations(
+    async fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
-    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError> {
+    ) -> Result<ListConfigurationsResponse, RusotoError<ListConfigurationsError>> {
         let request_uri = "/v1/configurations";
 
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
@@ -2955,41 +2846,29 @@ impl Kafka for KafkaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListConfigurationsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListConfigurationsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListConfigurationsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListConfigurationsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListConfigurationsError>())
-                            .and_then(|response| {
-                                Err(ListConfigurationsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListConfigurationsError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Returns a list of the broker nodes in the cluster.&lt;/p&gt;
     /// </code></pre>
-    fn list_nodes(
+    async fn list_nodes(
         &self,
         input: ListNodesRequest,
-    ) -> RusotoFuture<ListNodesResponse, ListNodesError> {
+    ) -> Result<ListNodesResponse, RusotoError<ListNodesError>> {
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/nodes",
             cluster_arn = input.cluster_arn
@@ -3007,76 +2886,57 @@ impl Kafka for KafkaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListNodesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListNodesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListNodesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<ListNodesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListNodesError>())
-                            .and_then(|response| Err(ListNodesError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListNodesError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Returns a list of the tags associated with the specified resource.&lt;/p&gt;
     /// </code></pre>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListTagsForResourceError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListTagsForResourceError>())
-                            .and_then(|response| {
-                                Err(ListTagsForResourceError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Adds tags to the specified MSK resource.&lt;/p&gt;
     /// </code></pre>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>> {
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "kafka", &self.region, &request_uri);
@@ -3085,35 +2945,28 @@ impl Kafka for KafkaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                response
-                    .buffer()
-                    .map_err(|e| TagResourceError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagResourceError::SignAndDispatch)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<TagResourceError>())
-                            .and_then(|response| Err(TagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Removes the tags associated with the keys that are provided in the query.&lt;/p&gt;
     /// </code></pre>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>> {
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "kafka", &self.region, &request_uri);
@@ -3125,38 +2978,28 @@ impl Kafka for KafkaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                response
-                    .buffer()
-                    .map_err(|e| UntagResourceError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagResourceError::SignAndDispatch)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UntagResourceError>())
-                            .and_then(|response| Err(UntagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Updates the EBS storage associated with MSK brokers.&lt;/p&gt;
     /// </code></pre>
-    fn update_broker_storage(
+    async fn update_broker_storage(
         &self,
         input: UpdateBrokerStorageRequest,
-    ) -> RusotoFuture<UpdateBrokerStorageResponse, UpdateBrokerStorageError> {
+    ) -> Result<UpdateBrokerStorageResponse, RusotoError<UpdateBrokerStorageError>> {
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/nodes/storage",
             cluster_arn = input.cluster_arn
@@ -3168,41 +3011,30 @@ impl Kafka for KafkaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateBrokerStorageError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateBrokerStorageResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateBrokerStorageError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateBrokerStorageResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateBrokerStorageError>())
-                            .and_then(|response| {
-                                Err(UpdateBrokerStorageError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateBrokerStorageError::from_response(response))
+        }
     }
 
     /// <pre><code>        &lt;p&gt;Updates the cluster with the configuration that is specified in the request body.&lt;/p&gt;
     /// </code></pre>
-    fn update_cluster_configuration(
+    async fn update_cluster_configuration(
         &self,
         input: UpdateClusterConfigurationRequest,
-    ) -> RusotoFuture<UpdateClusterConfigurationResponse, UpdateClusterConfigurationError> {
+    ) -> Result<UpdateClusterConfigurationResponse, RusotoError<UpdateClusterConfigurationError>>
+    {
         let request_uri = format!(
             "/v1/clusters/{cluster_arn}/configuration",
             cluster_arn = input.cluster_arn
@@ -3214,32 +3046,20 @@ impl Kafka for KafkaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateClusterConfigurationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateClusterConfigurationResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateClusterConfigurationError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateClusterConfigurationResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateClusterConfigurationError>())
-                            .and_then(|response| {
-                                Err(UpdateClusterConfigurationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateClusterConfigurationError::from_response(response))
+        }
     }
 }

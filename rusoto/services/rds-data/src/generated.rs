@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -865,6 +866,7 @@ impl Error for RollbackTransactionError {
     }
 }
 /// Trait representing the capabilities of the AWS RDS DataService API. AWS RDS DataService clients implement this trait.
+#[async_trait]
 pub trait RdsData {
     /// <p>Runs a batch SQL statement over an array of data.</p>
     ///
@@ -877,10 +879,10 @@ pub trait RdsData {
     /// committed automatically.&lt;/p&gt;
     /// &lt;/important&gt;
     /// </code></pre>
-    fn batch_execute_statement(
+    async fn batch_execute_statement(
         &self,
         input: BatchExecuteStatementRequest,
-    ) -> RusotoFuture<BatchExecuteStatementResponse, BatchExecuteStatementError>;
+    ) -> Result<BatchExecuteStatementResponse, RusotoError<BatchExecuteStatementError>>;
 
     /// <p>Starts a SQL transaction.</p>
     ///
@@ -895,17 +897,17 @@ pub trait RdsData {
     /// &lt;code&gt;continueAfterTimeout&lt;/code&gt; enabled.&lt;/p&gt;
     /// &lt;/important&gt;
     /// </code></pre>
-    fn begin_transaction(
+    async fn begin_transaction(
         &self,
         input: BeginTransactionRequest,
-    ) -> RusotoFuture<BeginTransactionResponse, BeginTransactionError>;
+    ) -> Result<BeginTransactionResponse, RusotoError<BeginTransactionError>>;
 
     /// <p>Ends a SQL transaction started with the <code>BeginTransaction</code> operation and
     /// commits the changes.</p>
-    fn commit_transaction(
+    async fn commit_transaction(
         &self,
         input: CommitTransactionRequest,
-    ) -> RusotoFuture<CommitTransactionResponse, CommitTransactionError>;
+    ) -> Result<CommitTransactionResponse, RusotoError<CommitTransactionError>>;
 
     /// <p>Runs one or more SQL statements.</p>
     ///
@@ -914,10 +916,10 @@ pub trait RdsData {
     /// &lt;code&gt;ExecuteStatement&lt;/code&gt; operation.&lt;/p&gt;
     /// &lt;/important&gt;
     /// </code></pre>
-    fn execute_sql(
+    async fn execute_sql(
         &self,
         input: ExecuteSqlRequest,
-    ) -> RusotoFuture<ExecuteSqlResponse, ExecuteSqlError>;
+    ) -> Result<ExecuteSqlResponse, RusotoError<ExecuteSqlError>>;
 
     /// <p>Runs a SQL statement against a database.</p>
     ///
@@ -928,16 +930,16 @@ pub trait RdsData {
     /// &lt;/important&gt;
     /// &lt;p&gt;The response size limit is 1 MB or 1,000 records. If the call returns more than 1 MB of response data or over 1,000 records, the call is terminated.&lt;/p&gt;
     /// </code></pre>
-    fn execute_statement(
+    async fn execute_statement(
         &self,
         input: ExecuteStatementRequest,
-    ) -> RusotoFuture<ExecuteStatementResponse, ExecuteStatementError>;
+    ) -> Result<ExecuteStatementResponse, RusotoError<ExecuteStatementError>>;
 
     /// <p>Performs a rollback of a transaction. Rolling back a transaction cancels its changes.</p>
-    fn rollback_transaction(
+    async fn rollback_transaction(
         &self,
         input: RollbackTransactionRequest,
-    ) -> RusotoFuture<RollbackTransactionResponse, RollbackTransactionError>;
+    ) -> Result<RollbackTransactionResponse, RusotoError<RollbackTransactionError>>;
 }
 /// A client for the AWS RDS DataService API.
 #[derive(Clone)]
@@ -973,6 +975,7 @@ impl RdsDataClient {
     }
 }
 
+#[async_trait]
 impl RdsData for RdsDataClient {
     /// <p>Runs a batch SQL statement over an array of data.</p>
     ///
@@ -985,10 +988,10 @@ impl RdsData for RdsDataClient {
     /// committed automatically.&lt;/p&gt;
     /// &lt;/important&gt;
     /// </code></pre>
-    fn batch_execute_statement(
+    async fn batch_execute_statement(
         &self,
         input: BatchExecuteStatementRequest,
-    ) -> RusotoFuture<BatchExecuteStatementResponse, BatchExecuteStatementError> {
+    ) -> Result<BatchExecuteStatementResponse, RusotoError<BatchExecuteStatementError>> {
         let request_uri = "/BatchExecute";
 
         let mut request = SignedRequest::new("POST", "rds-data", &self.region, &request_uri);
@@ -997,33 +1000,21 @@ impl RdsData for RdsDataClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| BatchExecuteStatementError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchExecuteStatementResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchExecuteStatementError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchExecuteStatementResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<BatchExecuteStatementError>())
-                            .and_then(|response| {
-                                Err(BatchExecuteStatementError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchExecuteStatementError::from_response(response))
+        }
     }
 
     /// <p>Starts a SQL transaction.</p>
@@ -1039,10 +1030,10 @@ impl RdsData for RdsDataClient {
     /// &lt;code&gt;continueAfterTimeout&lt;/code&gt; enabled.&lt;/p&gt;
     /// &lt;/important&gt;
     /// </code></pre>
-    fn begin_transaction(
+    async fn begin_transaction(
         &self,
         input: BeginTransactionRequest,
-    ) -> RusotoFuture<BeginTransactionResponse, BeginTransactionError> {
+    ) -> Result<BeginTransactionResponse, RusotoError<BeginTransactionError>> {
         let request_uri = "/BeginTransaction";
 
         let mut request = SignedRequest::new("POST", "rds-data", &self.region, &request_uri);
@@ -1051,41 +1042,29 @@ impl RdsData for RdsDataClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| BeginTransactionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BeginTransactionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BeginTransactionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BeginTransactionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<BeginTransactionError>())
-                            .and_then(|response| {
-                                Err(BeginTransactionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BeginTransactionError::from_response(response))
+        }
     }
 
     /// <p>Ends a SQL transaction started with the <code>BeginTransaction</code> operation and
     /// commits the changes.</p>
-    fn commit_transaction(
+    async fn commit_transaction(
         &self,
         input: CommitTransactionRequest,
-    ) -> RusotoFuture<CommitTransactionResponse, CommitTransactionError> {
+    ) -> Result<CommitTransactionResponse, RusotoError<CommitTransactionError>> {
         let request_uri = "/CommitTransaction";
 
         let mut request = SignedRequest::new("POST", "rds-data", &self.region, &request_uri);
@@ -1094,33 +1073,21 @@ impl RdsData for RdsDataClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CommitTransactionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CommitTransactionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CommitTransactionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CommitTransactionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CommitTransactionError>())
-                            .and_then(|response| {
-                                Err(CommitTransactionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CommitTransactionError::from_response(response))
+        }
     }
 
     /// <p>Runs one or more SQL statements.</p>
@@ -1130,10 +1097,10 @@ impl RdsData for RdsDataClient {
     /// &lt;code&gt;ExecuteStatement&lt;/code&gt; operation.&lt;/p&gt;
     /// &lt;/important&gt;
     /// </code></pre>
-    fn execute_sql(
+    async fn execute_sql(
         &self,
         input: ExecuteSqlRequest,
-    ) -> RusotoFuture<ExecuteSqlResponse, ExecuteSqlError> {
+    ) -> Result<ExecuteSqlResponse, RusotoError<ExecuteSqlError>> {
         let request_uri = "/ExecuteSql";
 
         let mut request = SignedRequest::new("POST", "rds-data", &self.region, &request_uri);
@@ -1142,31 +1109,21 @@ impl RdsData for RdsDataClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ExecuteSqlError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ExecuteSqlResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ExecuteSqlError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<ExecuteSqlResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ExecuteSqlError>())
-                            .and_then(|response| Err(ExecuteSqlError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ExecuteSqlError::from_response(response))
+        }
     }
 
     /// <p>Runs a SQL statement against a database.</p>
@@ -1178,10 +1135,10 @@ impl RdsData for RdsDataClient {
     /// &lt;/important&gt;
     /// &lt;p&gt;The response size limit is 1 MB or 1,000 records. If the call returns more than 1 MB of response data or over 1,000 records, the call is terminated.&lt;/p&gt;
     /// </code></pre>
-    fn execute_statement(
+    async fn execute_statement(
         &self,
         input: ExecuteStatementRequest,
-    ) -> RusotoFuture<ExecuteStatementResponse, ExecuteStatementError> {
+    ) -> Result<ExecuteStatementResponse, RusotoError<ExecuteStatementError>> {
         let request_uri = "/Execute";
 
         let mut request = SignedRequest::new("POST", "rds-data", &self.region, &request_uri);
@@ -1190,40 +1147,28 @@ impl RdsData for RdsDataClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ExecuteStatementError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ExecuteStatementResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ExecuteStatementError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ExecuteStatementResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ExecuteStatementError>())
-                            .and_then(|response| {
-                                Err(ExecuteStatementError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ExecuteStatementError::from_response(response))
+        }
     }
 
     /// <p>Performs a rollback of a transaction. Rolling back a transaction cancels its changes.</p>
-    fn rollback_transaction(
+    async fn rollback_transaction(
         &self,
         input: RollbackTransactionRequest,
-    ) -> RusotoFuture<RollbackTransactionResponse, RollbackTransactionError> {
+    ) -> Result<RollbackTransactionResponse, RusotoError<RollbackTransactionError>> {
         let request_uri = "/RollbackTransaction";
 
         let mut request = SignedRequest::new("POST", "rds-data", &self.region, &request_uri);
@@ -1232,32 +1177,20 @@ impl RdsData for RdsDataClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| RollbackTransactionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RollbackTransactionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RollbackTransactionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RollbackTransactionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<RollbackTransactionError>())
-                            .and_then(|response| {
-                                Err(RollbackTransactionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RollbackTransactionError::from_response(response))
+        }
     }
 }

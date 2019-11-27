@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -2640,198 +2641,204 @@ impl Error for UpdateRulesOfIpGroupError {
     }
 }
 /// Trait representing the capabilities of the Amazon WorkSpaces API. Amazon WorkSpaces clients implement this trait.
+#[async_trait]
 pub trait Workspaces {
     /// <p>Associates the specified IP access control group with the specified directory.</p>
-    fn associate_ip_groups(
+    async fn associate_ip_groups(
         &self,
         input: AssociateIpGroupsRequest,
-    ) -> RusotoFuture<AssociateIpGroupsResult, AssociateIpGroupsError>;
+    ) -> Result<AssociateIpGroupsResult, RusotoError<AssociateIpGroupsError>>;
 
     /// <p>Adds one or more rules to the specified IP access control group.</p> <p>This action gives users permission to access their WorkSpaces from the CIDR address ranges specified in the rules.</p>
-    fn authorize_ip_rules(
+    async fn authorize_ip_rules(
         &self,
         input: AuthorizeIpRulesRequest,
-    ) -> RusotoFuture<AuthorizeIpRulesResult, AuthorizeIpRulesError>;
+    ) -> Result<AuthorizeIpRulesResult, RusotoError<AuthorizeIpRulesError>>;
 
     /// <p>Creates an IP access control group.</p> <p>An IP access control group provides you with the ability to control the IP addresses from which users are allowed to access their WorkSpaces. To specify the CIDR address ranges, add rules to your IP access control group and then associate the group with your directory. You can add rules when you create the group or at any time using <a>AuthorizeIpRules</a>.</p> <p>There is a default IP access control group associated with your directory. If you don't associate an IP access control group with your directory, the default group is used. The default group includes a default rule that allows users to access their WorkSpaces from anywhere. You cannot modify the default IP access control group for your directory.</p>
-    fn create_ip_group(
+    async fn create_ip_group(
         &self,
         input: CreateIpGroupRequest,
-    ) -> RusotoFuture<CreateIpGroupResult, CreateIpGroupError>;
+    ) -> Result<CreateIpGroupResult, RusotoError<CreateIpGroupError>>;
 
     /// <p>Creates the specified tags for the specified WorkSpaces resource.</p>
-    fn create_tags(
+    async fn create_tags(
         &self,
         input: CreateTagsRequest,
-    ) -> RusotoFuture<CreateTagsResult, CreateTagsError>;
+    ) -> Result<CreateTagsResult, RusotoError<CreateTagsError>>;
 
     /// <p>Creates one or more WorkSpaces.</p> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p>
-    fn create_workspaces(
+    async fn create_workspaces(
         &self,
         input: CreateWorkspacesRequest,
-    ) -> RusotoFuture<CreateWorkspacesResult, CreateWorkspacesError>;
+    ) -> Result<CreateWorkspacesResult, RusotoError<CreateWorkspacesError>>;
 
     /// <p>Deletes the specified IP access control group.</p> <p>You cannot delete an IP access control group that is associated with a directory.</p>
-    fn delete_ip_group(
+    async fn delete_ip_group(
         &self,
         input: DeleteIpGroupRequest,
-    ) -> RusotoFuture<DeleteIpGroupResult, DeleteIpGroupError>;
+    ) -> Result<DeleteIpGroupResult, RusotoError<DeleteIpGroupError>>;
 
     /// <p>Deletes the specified tags from the specified WorkSpaces resource.</p>
-    fn delete_tags(
+    async fn delete_tags(
         &self,
         input: DeleteTagsRequest,
-    ) -> RusotoFuture<DeleteTagsResult, DeleteTagsError>;
+    ) -> Result<DeleteTagsResult, RusotoError<DeleteTagsError>>;
 
     /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image. </p>
-    fn delete_workspace_image(
+    async fn delete_workspace_image(
         &self,
         input: DeleteWorkspaceImageRequest,
-    ) -> RusotoFuture<DeleteWorkspaceImageResult, DeleteWorkspaceImageError>;
+    ) -> Result<DeleteWorkspaceImageResult, RusotoError<DeleteWorkspaceImageError>>;
 
     /// <p>Retrieves a list that describes the configuration of bring your own license (BYOL) for the specified account.</p>
-    fn describe_account(&self) -> RusotoFuture<DescribeAccountResult, DescribeAccountError>;
+    async fn describe_account(
+        &self,
+    ) -> Result<DescribeAccountResult, RusotoError<DescribeAccountError>>;
 
     /// <p>Retrieves a list that describes modifications to the configuration of bring your own license (BYOL) for the specified account.</p>
-    fn describe_account_modifications(
+    async fn describe_account_modifications(
         &self,
         input: DescribeAccountModificationsRequest,
-    ) -> RusotoFuture<DescribeAccountModificationsResult, DescribeAccountModificationsError>;
+    ) -> Result<DescribeAccountModificationsResult, RusotoError<DescribeAccountModificationsError>>;
 
     /// <p>Retrieves a list that describes one or more specified Amazon WorkSpaces clients.</p>
-    fn describe_client_properties(
+    async fn describe_client_properties(
         &self,
         input: DescribeClientPropertiesRequest,
-    ) -> RusotoFuture<DescribeClientPropertiesResult, DescribeClientPropertiesError>;
+    ) -> Result<DescribeClientPropertiesResult, RusotoError<DescribeClientPropertiesError>>;
 
     /// <p>Describes one or more of your IP access control groups.</p>
-    fn describe_ip_groups(
+    async fn describe_ip_groups(
         &self,
         input: DescribeIpGroupsRequest,
-    ) -> RusotoFuture<DescribeIpGroupsResult, DescribeIpGroupsError>;
+    ) -> Result<DescribeIpGroupsResult, RusotoError<DescribeIpGroupsError>>;
 
     /// <p>Describes the specified tags for the specified WorkSpaces resource.</p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsRequest,
-    ) -> RusotoFuture<DescribeTagsResult, DescribeTagsError>;
+    ) -> Result<DescribeTagsResult, RusotoError<DescribeTagsError>>;
 
     /// <p>Retrieves a list that describes the available WorkSpace bundles.</p> <p>You can filter the results using either bundle ID or owner, but not both.</p>
-    fn describe_workspace_bundles(
+    async fn describe_workspace_bundles(
         &self,
         input: DescribeWorkspaceBundlesRequest,
-    ) -> RusotoFuture<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError>;
+    ) -> Result<DescribeWorkspaceBundlesResult, RusotoError<DescribeWorkspaceBundlesError>>;
 
     /// <p>Describes the available AWS Directory Service directories that are registered with Amazon WorkSpaces.</p>
-    fn describe_workspace_directories(
+    async fn describe_workspace_directories(
         &self,
         input: DescribeWorkspaceDirectoriesRequest,
-    ) -> RusotoFuture<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError>;
+    ) -> Result<DescribeWorkspaceDirectoriesResult, RusotoError<DescribeWorkspaceDirectoriesError>>;
 
     /// <p>Retrieves a list that describes one or more specified images, if the image identifiers are provided. Otherwise, all images in the account are described. </p>
-    fn describe_workspace_images(
+    async fn describe_workspace_images(
         &self,
         input: DescribeWorkspaceImagesRequest,
-    ) -> RusotoFuture<DescribeWorkspaceImagesResult, DescribeWorkspaceImagesError>;
+    ) -> Result<DescribeWorkspaceImagesResult, RusotoError<DescribeWorkspaceImagesError>>;
 
     /// <p>Describes the specified WorkSpaces.</p> <p>You can filter the results by using the bundle identifier, directory identifier, or owner, but you can specify only one filter at a time.</p>
-    fn describe_workspaces(
+    async fn describe_workspaces(
         &self,
         input: DescribeWorkspacesRequest,
-    ) -> RusotoFuture<DescribeWorkspacesResult, DescribeWorkspacesError>;
+    ) -> Result<DescribeWorkspacesResult, RusotoError<DescribeWorkspacesError>>;
 
     /// <p>Describes the connection status of the specified WorkSpaces.</p>
-    fn describe_workspaces_connection_status(
+    async fn describe_workspaces_connection_status(
         &self,
         input: DescribeWorkspacesConnectionStatusRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeWorkspacesConnectionStatusResult,
-        DescribeWorkspacesConnectionStatusError,
+        RusotoError<DescribeWorkspacesConnectionStatusError>,
     >;
 
     /// <p>Disassociates the specified IP access control group from the specified directory.</p>
-    fn disassociate_ip_groups(
+    async fn disassociate_ip_groups(
         &self,
         input: DisassociateIpGroupsRequest,
-    ) -> RusotoFuture<DisassociateIpGroupsResult, DisassociateIpGroupsError>;
+    ) -> Result<DisassociateIpGroupsResult, RusotoError<DisassociateIpGroupsError>>;
 
     /// <p>Imports the specified Windows 7 or Windows 10 bring your own license (BYOL) image into Amazon WorkSpaces. The image must be an already licensed EC2 image that is in your AWS account, and you must own the image. </p>
-    fn import_workspace_image(
+    async fn import_workspace_image(
         &self,
         input: ImportWorkspaceImageRequest,
-    ) -> RusotoFuture<ImportWorkspaceImageResult, ImportWorkspaceImageError>;
+    ) -> Result<ImportWorkspaceImageResult, RusotoError<ImportWorkspaceImageError>>;
 
     /// <p>Retrieves a list of IP address ranges, specified as IPv4 CIDR blocks, that you can use for the network management interface when you enable bring your own license (BYOL). </p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
-    fn list_available_management_cidr_ranges(
+    async fn list_available_management_cidr_ranges(
         &self,
         input: ListAvailableManagementCidrRangesRequest,
-    ) -> RusotoFuture<ListAvailableManagementCidrRangesResult, ListAvailableManagementCidrRangesError>;
+    ) -> Result<
+        ListAvailableManagementCidrRangesResult,
+        RusotoError<ListAvailableManagementCidrRangesError>,
+    >;
 
     /// <p>Modifies the configuration of bring your own license (BYOL) for the specified account.</p>
-    fn modify_account(
+    async fn modify_account(
         &self,
         input: ModifyAccountRequest,
-    ) -> RusotoFuture<ModifyAccountResult, ModifyAccountError>;
+    ) -> Result<ModifyAccountResult, RusotoError<ModifyAccountError>>;
 
     /// <p>Modifies the properties of the specified Amazon WorkSpaces clients.</p>
-    fn modify_client_properties(
+    async fn modify_client_properties(
         &self,
         input: ModifyClientPropertiesRequest,
-    ) -> RusotoFuture<ModifyClientPropertiesResult, ModifyClientPropertiesError>;
+    ) -> Result<ModifyClientPropertiesResult, RusotoError<ModifyClientPropertiesError>>;
 
     /// <p>Modifies the specified WorkSpace properties.</p>
-    fn modify_workspace_properties(
+    async fn modify_workspace_properties(
         &self,
         input: ModifyWorkspacePropertiesRequest,
-    ) -> RusotoFuture<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError>;
+    ) -> Result<ModifyWorkspacePropertiesResult, RusotoError<ModifyWorkspacePropertiesError>>;
 
     /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, or rebuild. An AutoStop WorkSpace in this state is not stopped. Users can log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
-    fn modify_workspace_state(
+    async fn modify_workspace_state(
         &self,
         input: ModifyWorkspaceStateRequest,
-    ) -> RusotoFuture<ModifyWorkspaceStateResult, ModifyWorkspaceStateError>;
+    ) -> Result<ModifyWorkspaceStateResult, RusotoError<ModifyWorkspaceStateError>>;
 
     /// <p>Reboots the specified WorkSpaces.</p> <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code> or <code>UNHEALTHY</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>
-    fn reboot_workspaces(
+    async fn reboot_workspaces(
         &self,
         input: RebootWorkspacesRequest,
-    ) -> RusotoFuture<RebootWorkspacesResult, RebootWorkspacesError>;
+    ) -> Result<RebootWorkspacesResult, RusotoError<RebootWorkspacesError>>;
 
     /// <p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, or <code>UNHEALTHY</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
-    fn rebuild_workspaces(
+    async fn rebuild_workspaces(
         &self,
         input: RebuildWorkspacesRequest,
-    ) -> RusotoFuture<RebuildWorkspacesResult, RebuildWorkspacesError>;
+    ) -> Result<RebuildWorkspacesResult, RusotoError<RebuildWorkspacesError>>;
 
     /// <p>Removes one or more rules from the specified IP access control group.</p>
-    fn revoke_ip_rules(
+    async fn revoke_ip_rules(
         &self,
         input: RevokeIpRulesRequest,
-    ) -> RusotoFuture<RevokeIpRulesResult, RevokeIpRulesError>;
+    ) -> Result<RevokeIpRulesResult, RusotoError<RevokeIpRulesError>>;
 
     /// <p>Starts the specified WorkSpaces.</p> <p>You cannot start a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>STOPPED</code>.</p>
-    fn start_workspaces(
+    async fn start_workspaces(
         &self,
         input: StartWorkspacesRequest,
-    ) -> RusotoFuture<StartWorkspacesResult, StartWorkspacesError>;
+    ) -> Result<StartWorkspacesResult, RusotoError<StartWorkspacesError>>;
 
     /// <p> Stops the specified WorkSpaces.</p> <p>You cannot stop a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>AVAILABLE</code>, <code>IMPAIRED</code>, <code>UNHEALTHY</code>, or <code>ERROR</code>.</p>
-    fn stop_workspaces(
+    async fn stop_workspaces(
         &self,
         input: StopWorkspacesRequest,
-    ) -> RusotoFuture<StopWorkspacesResult, StopWorkspacesError>;
+    ) -> Result<StopWorkspacesResult, RusotoError<StopWorkspacesError>>;
 
     /// <p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p>
-    fn terminate_workspaces(
+    async fn terminate_workspaces(
         &self,
         input: TerminateWorkspacesRequest,
-    ) -> RusotoFuture<TerminateWorkspacesResult, TerminateWorkspacesError>;
+    ) -> Result<TerminateWorkspacesResult, RusotoError<TerminateWorkspacesError>>;
 
     /// <p>Replaces the current rules of the specified IP access control group with the specified rules.</p>
-    fn update_rules_of_ip_group(
+    async fn update_rules_of_ip_group(
         &self,
         input: UpdateRulesOfIpGroupRequest,
-    ) -> RusotoFuture<UpdateRulesOfIpGroupResult, UpdateRulesOfIpGroupError>;
+    ) -> Result<UpdateRulesOfIpGroupResult, RusotoError<UpdateRulesOfIpGroupError>>;
 }
 /// A client for the Amazon WorkSpaces API.
 #[derive(Clone)]
@@ -2867,12 +2874,13 @@ impl WorkspacesClient {
     }
 }
 
+#[async_trait]
 impl Workspaces for WorkspacesClient {
     /// <p>Associates the specified IP access control group with the specified directory.</p>
-    fn associate_ip_groups(
+    async fn associate_ip_groups(
         &self,
         input: AssociateIpGroupsRequest,
-    ) -> RusotoFuture<AssociateIpGroupsResult, AssociateIpGroupsError> {
+    ) -> Result<AssociateIpGroupsResult, RusotoError<AssociateIpGroupsError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2880,44 +2888,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| AssociateIpGroupsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<AssociateIpGroupsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<AssociateIpGroupsResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<AssociateIpGroupsError>
-                            })
-                            .and_then(|response| {
-                                Err(AssociateIpGroupsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<AssociateIpGroupsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateIpGroupsError::from_response(response))
+        }
     }
 
     /// <p>Adds one or more rules to the specified IP access control group.</p> <p>This action gives users permission to access their WorkSpaces from the CIDR address ranges specified in the rules.</p>
-    fn authorize_ip_rules(
+    async fn authorize_ip_rules(
         &self,
         input: AuthorizeIpRulesRequest,
-    ) -> RusotoFuture<AuthorizeIpRulesResult, AuthorizeIpRulesError> {
+    ) -> Result<AuthorizeIpRulesResult, RusotoError<AuthorizeIpRulesError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2925,44 +2915,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| AuthorizeIpRulesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<AuthorizeIpRulesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<AuthorizeIpRulesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<AuthorizeIpRulesError>
-                            })
-                            .and_then(|response| {
-                                Err(AuthorizeIpRulesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<AuthorizeIpRulesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AuthorizeIpRulesError::from_response(response))
+        }
     }
 
     /// <p>Creates an IP access control group.</p> <p>An IP access control group provides you with the ability to control the IP addresses from which users are allowed to access their WorkSpaces. To specify the CIDR address ranges, add rules to your IP access control group and then associate the group with your directory. You can add rules when you create the group or at any time using <a>AuthorizeIpRules</a>.</p> <p>There is a default IP access control group associated with your directory. If you don't associate an IP access control group with your directory, the default group is used. The default group includes a default rule that allows users to access their WorkSpaces from anywhere. You cannot modify the default IP access control group for your directory.</p>
-    fn create_ip_group(
+    async fn create_ip_group(
         &self,
         input: CreateIpGroupRequest,
-    ) -> RusotoFuture<CreateIpGroupResult, CreateIpGroupError> {
+    ) -> Result<CreateIpGroupResult, RusotoError<CreateIpGroupError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2970,42 +2942,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateIpGroupError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateIpGroupError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<CreateIpGroupResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateIpGroupError>
-                            })
-                            .and_then(|response| Err(CreateIpGroupError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateIpGroupResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateIpGroupError::from_response(response))
+        }
     }
 
     /// <p>Creates the specified tags for the specified WorkSpaces resource.</p>
-    fn create_tags(
+    async fn create_tags(
         &self,
         input: CreateTagsRequest,
-    ) -> RusotoFuture<CreateTagsResult, CreateTagsError> {
+    ) -> Result<CreateTagsResult, RusotoError<CreateTagsError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3013,42 +2969,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateTagsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateTagsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<CreateTagsResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateTagsError>
-                            })
-                            .and_then(|response| Err(CreateTagsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateTagsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateTagsError::from_response(response))
+        }
     }
 
     /// <p>Creates one or more WorkSpaces.</p> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p>
-    fn create_workspaces(
+    async fn create_workspaces(
         &self,
         input: CreateWorkspacesRequest,
-    ) -> RusotoFuture<CreateWorkspacesResult, CreateWorkspacesError> {
+    ) -> Result<CreateWorkspacesResult, RusotoError<CreateWorkspacesError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3056,44 +2996,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateWorkspacesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateWorkspacesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<CreateWorkspacesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateWorkspacesError>
-                            })
-                            .and_then(|response| {
-                                Err(CreateWorkspacesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateWorkspacesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateWorkspacesError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified IP access control group.</p> <p>You cannot delete an IP access control group that is associated with a directory.</p>
-    fn delete_ip_group(
+    async fn delete_ip_group(
         &self,
         input: DeleteIpGroupRequest,
-    ) -> RusotoFuture<DeleteIpGroupResult, DeleteIpGroupError> {
+    ) -> Result<DeleteIpGroupResult, RusotoError<DeleteIpGroupError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3101,42 +3023,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteIpGroupError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteIpGroupError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteIpGroupResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteIpGroupError>
-                            })
-                            .and_then(|response| Err(DeleteIpGroupError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteIpGroupResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteIpGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified tags from the specified WorkSpaces resource.</p>
-    fn delete_tags(
+    async fn delete_tags(
         &self,
         input: DeleteTagsRequest,
-    ) -> RusotoFuture<DeleteTagsResult, DeleteTagsError> {
+    ) -> Result<DeleteTagsResult, RusotoError<DeleteTagsError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3144,42 +3050,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteTagsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTagsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteTagsResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTagsError>
-                            })
-                            .and_then(|response| Err(DeleteTagsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTagsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTagsError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image. </p>
-    fn delete_workspace_image(
+    async fn delete_workspace_image(
         &self,
         input: DeleteWorkspaceImageRequest,
-    ) -> RusotoFuture<DeleteWorkspaceImageResult, DeleteWorkspaceImageError> {
+    ) -> Result<DeleteWorkspaceImageResult, RusotoError<DeleteWorkspaceImageError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3187,85 +3077,53 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteWorkspaceImageError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteWorkspaceImageError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteWorkspaceImageResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteWorkspaceImageError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteWorkspaceImageError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteWorkspaceImageResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteWorkspaceImageError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list that describes the configuration of bring your own license (BYOL) for the specified account.</p>
-    fn describe_account(&self) -> RusotoFuture<DescribeAccountResult, DescribeAccountError> {
+    async fn describe_account(
+        &self,
+    ) -> Result<DescribeAccountResult, RusotoError<DescribeAccountError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DescribeAccount");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeAccountError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAccountError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeAccountResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAccountError>
-                            })
-                            .and_then(|response| Err(DescribeAccountError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeAccountResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAccountError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list that describes modifications to the configuration of bring your own license (BYOL) for the specified account.</p>
-    fn describe_account_modifications(
+    async fn describe_account_modifications(
         &self,
         input: DescribeAccountModificationsRequest,
-    ) -> RusotoFuture<DescribeAccountModificationsResult, DescribeAccountModificationsError> {
+    ) -> Result<DescribeAccountModificationsResult, RusotoError<DescribeAccountModificationsError>>
+    {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3276,46 +3134,27 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeAccountModificationsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeAccountModificationsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeAccountModificationsResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeAccountModificationsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeAccountModificationsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAccountModificationsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAccountModificationsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list that describes one or more specified Amazon WorkSpaces clients.</p>
-    fn describe_client_properties(
+    async fn describe_client_properties(
         &self,
         input: DescribeClientPropertiesRequest,
-    ) -> RusotoFuture<DescribeClientPropertiesResult, DescribeClientPropertiesError> {
+    ) -> Result<DescribeClientPropertiesResult, RusotoError<DescribeClientPropertiesError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3323,46 +3162,27 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeClientPropertiesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeClientPropertiesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeClientPropertiesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeClientPropertiesError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeClientPropertiesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeClientPropertiesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeClientPropertiesError::from_response(response))
+        }
     }
 
     /// <p>Describes one or more of your IP access control groups.</p>
-    fn describe_ip_groups(
+    async fn describe_ip_groups(
         &self,
         input: DescribeIpGroupsRequest,
-    ) -> RusotoFuture<DescribeIpGroupsResult, DescribeIpGroupsError> {
+    ) -> Result<DescribeIpGroupsResult, RusotoError<DescribeIpGroupsError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3370,44 +3190,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeIpGroupsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeIpGroupsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeIpGroupsResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeIpGroupsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeIpGroupsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeIpGroupsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeIpGroupsError::from_response(response))
+        }
     }
 
     /// <p>Describes the specified tags for the specified WorkSpaces resource.</p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsRequest,
-    ) -> RusotoFuture<DescribeTagsResult, DescribeTagsError> {
+    ) -> Result<DescribeTagsResult, RusotoError<DescribeTagsError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3415,42 +3217,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeTagsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTagsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeTagsResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTagsError>
-                            })
-                            .and_then(|response| Err(DescribeTagsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTagsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTagsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list that describes the available WorkSpace bundles.</p> <p>You can filter the results using either bundle ID or owner, but not both.</p>
-    fn describe_workspace_bundles(
+    async fn describe_workspace_bundles(
         &self,
         input: DescribeWorkspaceBundlesRequest,
-    ) -> RusotoFuture<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError> {
+    ) -> Result<DescribeWorkspaceBundlesResult, RusotoError<DescribeWorkspaceBundlesError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3458,46 +3244,28 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeWorkspaceBundlesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeWorkspaceBundlesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeWorkspaceBundlesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeWorkspaceBundlesError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeWorkspaceBundlesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeWorkspaceBundlesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeWorkspaceBundlesError::from_response(response))
+        }
     }
 
     /// <p>Describes the available AWS Directory Service directories that are registered with Amazon WorkSpaces.</p>
-    fn describe_workspace_directories(
+    async fn describe_workspace_directories(
         &self,
         input: DescribeWorkspaceDirectoriesRequest,
-    ) -> RusotoFuture<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError> {
+    ) -> Result<DescribeWorkspaceDirectoriesResult, RusotoError<DescribeWorkspaceDirectoriesError>>
+    {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3508,46 +3276,27 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeWorkspaceDirectoriesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeWorkspaceDirectoriesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeWorkspaceDirectoriesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeWorkspaceDirectoriesError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeWorkspaceDirectoriesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeWorkspaceDirectoriesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeWorkspaceDirectoriesError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list that describes one or more specified images, if the image identifiers are provided. Otherwise, all images in the account are described. </p>
-    fn describe_workspace_images(
+    async fn describe_workspace_images(
         &self,
         input: DescribeWorkspaceImagesRequest,
-    ) -> RusotoFuture<DescribeWorkspaceImagesResult, DescribeWorkspaceImagesError> {
+    ) -> Result<DescribeWorkspaceImagesResult, RusotoError<DescribeWorkspaceImagesError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3555,46 +3304,27 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeWorkspaceImagesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeWorkspaceImagesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeWorkspaceImagesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeWorkspaceImagesError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeWorkspaceImagesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeWorkspaceImagesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeWorkspaceImagesError::from_response(response))
+        }
     }
 
     /// <p>Describes the specified WorkSpaces.</p> <p>You can filter the results by using the bundle identifier, directory identifier, or owner, but you can specify only one filter at a time.</p>
-    fn describe_workspaces(
+    async fn describe_workspaces(
         &self,
         input: DescribeWorkspacesRequest,
-    ) -> RusotoFuture<DescribeWorkspacesResult, DescribeWorkspacesError> {
+    ) -> Result<DescribeWorkspacesResult, RusotoError<DescribeWorkspacesError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3602,46 +3332,29 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeWorkspacesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeWorkspacesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeWorkspacesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeWorkspacesError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeWorkspacesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeWorkspacesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeWorkspacesError::from_response(response))
+        }
     }
 
     /// <p>Describes the connection status of the specified WorkSpaces.</p>
-    fn describe_workspaces_connection_status(
+    async fn describe_workspaces_connection_status(
         &self,
         input: DescribeWorkspacesConnectionStatusRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeWorkspacesConnectionStatusResult,
-        DescribeWorkspacesConnectionStatusError,
+        RusotoError<DescribeWorkspacesConnectionStatusError>,
     > {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
@@ -3653,48 +3366,29 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeWorkspacesConnectionStatusError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeWorkspacesConnectionStatusError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeWorkspacesConnectionStatusResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeWorkspacesConnectionStatusError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeWorkspacesConnectionStatusError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeWorkspacesConnectionStatusResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeWorkspacesConnectionStatusError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Disassociates the specified IP access control group from the specified directory.</p>
-    fn disassociate_ip_groups(
+    async fn disassociate_ip_groups(
         &self,
         input: DisassociateIpGroupsRequest,
-    ) -> RusotoFuture<DisassociateIpGroupsResult, DisassociateIpGroupsError> {
+    ) -> Result<DisassociateIpGroupsResult, RusotoError<DisassociateIpGroupsError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3702,46 +3396,27 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DisassociateIpGroupsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DisassociateIpGroupsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DisassociateIpGroupsResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DisassociateIpGroupsError>
-                            })
-                            .and_then(|response| {
-                                Err(DisassociateIpGroupsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateIpGroupsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateIpGroupsError::from_response(response))
+        }
     }
 
     /// <p>Imports the specified Windows 7 or Windows 10 bring your own license (BYOL) image into Amazon WorkSpaces. The image must be an already licensed EC2 image that is in your AWS account, and you must own the image. </p>
-    fn import_workspace_image(
+    async fn import_workspace_image(
         &self,
         input: ImportWorkspaceImageRequest,
-    ) -> RusotoFuture<ImportWorkspaceImageResult, ImportWorkspaceImageError> {
+    ) -> Result<ImportWorkspaceImageResult, RusotoError<ImportWorkspaceImageError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3749,47 +3424,30 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ImportWorkspaceImageError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ImportWorkspaceImageError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ImportWorkspaceImageResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ImportWorkspaceImageError>
-                            })
-                            .and_then(|response| {
-                                Err(ImportWorkspaceImageError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ImportWorkspaceImageResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ImportWorkspaceImageError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of IP address ranges, specified as IPv4 CIDR blocks, that you can use for the network management interface when you enable bring your own license (BYOL). </p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
-    fn list_available_management_cidr_ranges(
+    async fn list_available_management_cidr_ranges(
         &self,
         input: ListAvailableManagementCidrRangesRequest,
-    ) -> RusotoFuture<ListAvailableManagementCidrRangesResult, ListAvailableManagementCidrRangesError>
-    {
+    ) -> Result<
+        ListAvailableManagementCidrRangesResult,
+        RusotoError<ListAvailableManagementCidrRangesError>,
+    > {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3800,48 +3458,29 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListAvailableManagementCidrRangesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListAvailableManagementCidrRangesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListAvailableManagementCidrRangesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListAvailableManagementCidrRangesError>
-                            })
-                            .and_then(|response| {
-                                Err(ListAvailableManagementCidrRangesError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAvailableManagementCidrRangesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAvailableManagementCidrRangesError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Modifies the configuration of bring your own license (BYOL) for the specified account.</p>
-    fn modify_account(
+    async fn modify_account(
         &self,
         input: ModifyAccountRequest,
-    ) -> RusotoFuture<ModifyAccountResult, ModifyAccountError> {
+    ) -> Result<ModifyAccountResult, RusotoError<ModifyAccountError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3849,42 +3488,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ModifyAccountError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ModifyAccountError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ModifyAccountResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ModifyAccountError>
-                            })
-                            .and_then(|response| Err(ModifyAccountError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ModifyAccountResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyAccountError::from_response(response))
+        }
     }
 
     /// <p>Modifies the properties of the specified Amazon WorkSpaces clients.</p>
-    fn modify_client_properties(
+    async fn modify_client_properties(
         &self,
         input: ModifyClientPropertiesRequest,
-    ) -> RusotoFuture<ModifyClientPropertiesResult, ModifyClientPropertiesError> {
+    ) -> Result<ModifyClientPropertiesResult, RusotoError<ModifyClientPropertiesError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3892,46 +3515,27 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ModifyClientPropertiesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ModifyClientPropertiesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ModifyClientPropertiesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ModifyClientPropertiesError>
-                            })
-                            .and_then(|response| {
-                                Err(ModifyClientPropertiesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ModifyClientPropertiesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyClientPropertiesError::from_response(response))
+        }
     }
 
     /// <p>Modifies the specified WorkSpace properties.</p>
-    fn modify_workspace_properties(
+    async fn modify_workspace_properties(
         &self,
         input: ModifyWorkspacePropertiesRequest,
-    ) -> RusotoFuture<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError> {
+    ) -> Result<ModifyWorkspacePropertiesResult, RusotoError<ModifyWorkspacePropertiesError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3942,46 +3546,27 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ModifyWorkspacePropertiesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ModifyWorkspacePropertiesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ModifyWorkspacePropertiesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ModifyWorkspacePropertiesError>
-                            })
-                            .and_then(|response| {
-                                Err(ModifyWorkspacePropertiesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ModifyWorkspacePropertiesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyWorkspacePropertiesError::from_response(response))
+        }
     }
 
     /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, or rebuild. An AutoStop WorkSpace in this state is not stopped. Users can log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
-    fn modify_workspace_state(
+    async fn modify_workspace_state(
         &self,
         input: ModifyWorkspaceStateRequest,
-    ) -> RusotoFuture<ModifyWorkspaceStateResult, ModifyWorkspaceStateError> {
+    ) -> Result<ModifyWorkspaceStateResult, RusotoError<ModifyWorkspaceStateError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3989,46 +3574,27 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ModifyWorkspaceStateError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ModifyWorkspaceStateError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ModifyWorkspaceStateResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ModifyWorkspaceStateError>
-                            })
-                            .and_then(|response| {
-                                Err(ModifyWorkspaceStateError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ModifyWorkspaceStateResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyWorkspaceStateError::from_response(response))
+        }
     }
 
     /// <p>Reboots the specified WorkSpaces.</p> <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code> or <code>UNHEALTHY</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>
-    fn reboot_workspaces(
+    async fn reboot_workspaces(
         &self,
         input: RebootWorkspacesRequest,
-    ) -> RusotoFuture<RebootWorkspacesResult, RebootWorkspacesError> {
+    ) -> Result<RebootWorkspacesResult, RusotoError<RebootWorkspacesError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4036,44 +3602,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| RebootWorkspacesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<RebootWorkspacesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<RebootWorkspacesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<RebootWorkspacesError>
-                            })
-                            .and_then(|response| {
-                                Err(RebootWorkspacesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<RebootWorkspacesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RebootWorkspacesError::from_response(response))
+        }
     }
 
     /// <p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, or <code>UNHEALTHY</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
-    fn rebuild_workspaces(
+    async fn rebuild_workspaces(
         &self,
         input: RebuildWorkspacesRequest,
-    ) -> RusotoFuture<RebuildWorkspacesResult, RebuildWorkspacesError> {
+    ) -> Result<RebuildWorkspacesResult, RusotoError<RebuildWorkspacesError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4081,44 +3629,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| RebuildWorkspacesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<RebuildWorkspacesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<RebuildWorkspacesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<RebuildWorkspacesError>
-                            })
-                            .and_then(|response| {
-                                Err(RebuildWorkspacesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<RebuildWorkspacesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RebuildWorkspacesError::from_response(response))
+        }
     }
 
     /// <p>Removes one or more rules from the specified IP access control group.</p>
-    fn revoke_ip_rules(
+    async fn revoke_ip_rules(
         &self,
         input: RevokeIpRulesRequest,
-    ) -> RusotoFuture<RevokeIpRulesResult, RevokeIpRulesError> {
+    ) -> Result<RevokeIpRulesResult, RusotoError<RevokeIpRulesError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4126,42 +3656,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| RevokeIpRulesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<RevokeIpRulesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<RevokeIpRulesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<RevokeIpRulesError>
-                            })
-                            .and_then(|response| Err(RevokeIpRulesError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<RevokeIpRulesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RevokeIpRulesError::from_response(response))
+        }
     }
 
     /// <p>Starts the specified WorkSpaces.</p> <p>You cannot start a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>STOPPED</code>.</p>
-    fn start_workspaces(
+    async fn start_workspaces(
         &self,
         input: StartWorkspacesRequest,
-    ) -> RusotoFuture<StartWorkspacesResult, StartWorkspacesError> {
+    ) -> Result<StartWorkspacesResult, RusotoError<StartWorkspacesError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4169,42 +3683,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| StartWorkspacesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<StartWorkspacesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<StartWorkspacesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<StartWorkspacesError>
-                            })
-                            .and_then(|response| Err(StartWorkspacesError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StartWorkspacesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartWorkspacesError::from_response(response))
+        }
     }
 
     /// <p> Stops the specified WorkSpaces.</p> <p>You cannot stop a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>AVAILABLE</code>, <code>IMPAIRED</code>, <code>UNHEALTHY</code>, or <code>ERROR</code>.</p>
-    fn stop_workspaces(
+    async fn stop_workspaces(
         &self,
         input: StopWorkspacesRequest,
-    ) -> RusotoFuture<StopWorkspacesResult, StopWorkspacesError> {
+    ) -> Result<StopWorkspacesResult, RusotoError<StopWorkspacesError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4212,42 +3710,26 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| StopWorkspacesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<StopWorkspacesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<StopWorkspacesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<StopWorkspacesError>
-                            })
-                            .and_then(|response| Err(StopWorkspacesError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StopWorkspacesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopWorkspacesError::from_response(response))
+        }
     }
 
     /// <p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p>
-    fn terminate_workspaces(
+    async fn terminate_workspaces(
         &self,
         input: TerminateWorkspacesRequest,
-    ) -> RusotoFuture<TerminateWorkspacesResult, TerminateWorkspacesError> {
+    ) -> Result<TerminateWorkspacesResult, RusotoError<TerminateWorkspacesError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4255,46 +3737,27 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| TerminateWorkspacesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<TerminateWorkspacesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<TerminateWorkspacesResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<TerminateWorkspacesError>
-                            })
-                            .and_then(|response| {
-                                Err(TerminateWorkspacesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<TerminateWorkspacesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TerminateWorkspacesError::from_response(response))
+        }
     }
 
     /// <p>Replaces the current rules of the specified IP access control group with the specified rules.</p>
-    fn update_rules_of_ip_group(
+    async fn update_rules_of_ip_group(
         &self,
         input: UpdateRulesOfIpGroupRequest,
-    ) -> RusotoFuture<UpdateRulesOfIpGroupResult, UpdateRulesOfIpGroupError> {
+    ) -> Result<UpdateRulesOfIpGroupResult, RusotoError<UpdateRulesOfIpGroupError>> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4302,38 +3765,19 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateRulesOfIpGroupError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<UpdateRulesOfIpGroupError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<UpdateRulesOfIpGroupResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<UpdateRulesOfIpGroupError>
-                            })
-                            .and_then(|response| {
-                                Err(UpdateRulesOfIpGroupError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateRulesOfIpGroupResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateRulesOfIpGroupError::from_response(response))
+        }
     }
 }

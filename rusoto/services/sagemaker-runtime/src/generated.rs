@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -114,12 +115,13 @@ impl Error for InvokeEndpointError {
     }
 }
 /// Trait representing the capabilities of the Amazon SageMaker Runtime API. Amazon SageMaker Runtime clients implement this trait.
+#[async_trait]
 pub trait SageMakerRuntime {
     /// <p><p>After you deploy a model into production using Amazon SageMaker hosting services, your client applications use this API to get inferences from the model hosted at the specified endpoint. </p> <p>For an overview of Amazon SageMaker, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p> <p>Amazon SageMaker strips all POST headers except those supported by the API. Amazon SageMaker might add additional headers. You should not rely on the behavior of headers outside those enumerated in the request syntax. </p> <p>Cals to <code>InvokeEndpoint</code> are authenticated by using AWS Signature Version 4. For information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">Authenticating Requests (AWS Signature Version 4)</a> in the <i>Amazon S3 API Reference</i>.</p> <note> <p>Endpoints are scoped to an individual account, and are not public. The URL does not contain the account ID, but Amazon SageMaker determines the account ID from the authentication token that is supplied by the caller.</p> </note></p>
-    fn invoke_endpoint(
+    async fn invoke_endpoint(
         &self,
         input: InvokeEndpointInput,
-    ) -> RusotoFuture<InvokeEndpointOutput, InvokeEndpointError>;
+    ) -> Result<InvokeEndpointOutput, RusotoError<InvokeEndpointError>>;
 }
 /// A client for the Amazon SageMaker Runtime API.
 #[derive(Clone)]
@@ -155,12 +157,13 @@ impl SageMakerRuntimeClient {
     }
 }
 
+#[async_trait]
 impl SageMakerRuntime for SageMakerRuntimeClient {
     /// <p><p>After you deploy a model into production using Amazon SageMaker hosting services, your client applications use this API to get inferences from the model hosted at the specified endpoint. </p> <p>For an overview of Amazon SageMaker, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p> <p>Amazon SageMaker strips all POST headers except those supported by the API. Amazon SageMaker might add additional headers. You should not rely on the behavior of headers outside those enumerated in the request syntax. </p> <p>Cals to <code>InvokeEndpoint</code> are authenticated by using AWS Signature Version 4. For information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">Authenticating Requests (AWS Signature Version 4)</a> in the <i>Amazon S3 API Reference</i>.</p> <note> <p>Endpoints are scoped to an individual account, and are not public. The URL does not contain the account ID, but Amazon SageMaker determines the account ID from the authentication token that is supplied by the caller.</p> </note></p>
-    fn invoke_endpoint(
+    async fn invoke_endpoint(
         &self,
         input: InvokeEndpointInput,
-    ) -> RusotoFuture<InvokeEndpointOutput, InvokeEndpointError> {
+    ) -> Result<InvokeEndpointOutput, RusotoError<InvokeEndpointError>> {
         let request_uri = format!(
             "/endpoints/{endpoint_name}/invocations",
             endpoint_name = input.endpoint_name
@@ -190,47 +193,38 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
             );
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| InvokeEndpointError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let mut result = InvokeEndpointOutput::default();
-                            result.body = response.body;
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(InvokeEndpointError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-                            if let Some(content_type) = response.headers.get("Content-Type") {
-                                let value = content_type.to_owned();
-                                result.content_type = Some(value)
-                            };
-                            if let Some(custom_attributes) =
-                                response.headers.get("X-Amzn-SageMaker-Custom-Attributes")
-                            {
-                                let value = custom_attributes.to_owned();
-                                result.custom_attributes = Some(value)
-                            };
-                            if let Some(invoked_production_variant) =
-                                response.headers.get("x-Amzn-Invoked-Production-Variant")
-                            {
-                                let value = invoked_production_variant.to_owned();
-                                result.invoked_production_variant = Some(value)
-                            };
+            let mut result = InvokeEndpointOutput::default();
+            result.body = response.body;
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<InvokeEndpointError>())
-                            .and_then(|response| Err(InvokeEndpointError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            if let Some(content_type) = response.headers.get("Content-Type") {
+                let value = content_type.to_owned();
+                result.content_type = Some(value)
+            };
+            if let Some(custom_attributes) =
+                response.headers.get("X-Amzn-SageMaker-Custom-Attributes")
+            {
+                let value = custom_attributes.to_owned();
+                result.custom_attributes = Some(value)
+            };
+            if let Some(invoked_production_variant) =
+                response.headers.get("x-Amzn-Invoked-Production-Variant")
+            {
+                let value = invoked_production_variant.to_owned();
+                result.invoked_production_variant = Some(value)
+            };
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(InvokeEndpointError::from_response(response))
+        }
     }
 }

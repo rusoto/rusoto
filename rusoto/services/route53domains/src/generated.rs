@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -2066,150 +2067,154 @@ impl Error for ViewBillingError {
     }
 }
 /// Trait representing the capabilities of the Amazon Route 53 Domains API. Amazon Route 53 Domains clients implement this trait.
+#[async_trait]
 pub trait Route53Domains {
     /// <p>This operation checks the availability of one domain name. Note that if the availability status of a domain is pending, you must submit another request to determine the availability of the domain name.</p>
-    fn check_domain_availability(
+    async fn check_domain_availability(
         &self,
         input: CheckDomainAvailabilityRequest,
-    ) -> RusotoFuture<CheckDomainAvailabilityResponse, CheckDomainAvailabilityError>;
+    ) -> Result<CheckDomainAvailabilityResponse, RusotoError<CheckDomainAvailabilityError>>;
 
     /// <p>Checks whether a domain name can be transferred to Amazon Route 53. </p>
-    fn check_domain_transferability(
+    async fn check_domain_transferability(
         &self,
         input: CheckDomainTransferabilityRequest,
-    ) -> RusotoFuture<CheckDomainTransferabilityResponse, CheckDomainTransferabilityError>;
+    ) -> Result<CheckDomainTransferabilityResponse, RusotoError<CheckDomainTransferabilityError>>;
 
     /// <p>This operation deletes the specified tags for a domain.</p> <p>All tag operations are eventually consistent; subsequent operations might not immediately represent all issued operations.</p>
-    fn delete_tags_for_domain(
+    async fn delete_tags_for_domain(
         &self,
         input: DeleteTagsForDomainRequest,
-    ) -> RusotoFuture<DeleteTagsForDomainResponse, DeleteTagsForDomainError>;
+    ) -> Result<DeleteTagsForDomainResponse, RusotoError<DeleteTagsForDomainError>>;
 
     /// <p>This operation disables automatic renewal of domain registration for the specified domain.</p>
-    fn disable_domain_auto_renew(
+    async fn disable_domain_auto_renew(
         &self,
         input: DisableDomainAutoRenewRequest,
-    ) -> RusotoFuture<DisableDomainAutoRenewResponse, DisableDomainAutoRenewError>;
+    ) -> Result<DisableDomainAutoRenewResponse, RusotoError<DisableDomainAutoRenewError>>;
 
     /// <p>This operation removes the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to allow domain transfers. We recommend you refrain from performing this action unless you intend to transfer the domain to a different registrar. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
-    fn disable_domain_transfer_lock(
+    async fn disable_domain_transfer_lock(
         &self,
         input: DisableDomainTransferLockRequest,
-    ) -> RusotoFuture<DisableDomainTransferLockResponse, DisableDomainTransferLockError>;
+    ) -> Result<DisableDomainTransferLockResponse, RusotoError<DisableDomainTransferLockError>>;
 
     /// <p>This operation configures Amazon Route 53 to automatically renew the specified domain before the domain registration expires. The cost of renewing your domain registration is billed to your AWS account.</p> <p>The period during which you can renew a domain name varies by TLD. For a list of TLDs and their renewal policies, see <a href="http://wiki.gandi.net/en/domains/renew#renewal_restoration_and_deletion_times">"Renewal, restoration, and deletion times"</a> on the website for our registrar associate, Gandi. Amazon Route 53 requires that you renew before the end of the renewal period that is listed on the Gandi website so we can complete processing before the deadline.</p>
-    fn enable_domain_auto_renew(
+    async fn enable_domain_auto_renew(
         &self,
         input: EnableDomainAutoRenewRequest,
-    ) -> RusotoFuture<EnableDomainAutoRenewResponse, EnableDomainAutoRenewError>;
+    ) -> Result<EnableDomainAutoRenewResponse, RusotoError<EnableDomainAutoRenewError>>;
 
     /// <p>This operation sets the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to prevent domain transfers. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
-    fn enable_domain_transfer_lock(
+    async fn enable_domain_transfer_lock(
         &self,
         input: EnableDomainTransferLockRequest,
-    ) -> RusotoFuture<EnableDomainTransferLockResponse, EnableDomainTransferLockError>;
+    ) -> Result<EnableDomainTransferLockResponse, RusotoError<EnableDomainTransferLockError>>;
 
     /// <p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation returns information about whether the registrant contact has responded.</p> <p>If you want us to resend the email, use the <code>ResendContactReachabilityEmail</code> operation.</p>
-    fn get_contact_reachability_status(
+    async fn get_contact_reachability_status(
         &self,
         input: GetContactReachabilityStatusRequest,
-    ) -> RusotoFuture<GetContactReachabilityStatusResponse, GetContactReachabilityStatusError>;
+    ) -> Result<GetContactReachabilityStatusResponse, RusotoError<GetContactReachabilityStatusError>>;
 
     /// <p>This operation returns detailed information about a specified domain that is associated with the current AWS account. Contact information for the domain is also returned as part of the output.</p>
-    fn get_domain_detail(
+    async fn get_domain_detail(
         &self,
         input: GetDomainDetailRequest,
-    ) -> RusotoFuture<GetDomainDetailResponse, GetDomainDetailError>;
+    ) -> Result<GetDomainDetailResponse, RusotoError<GetDomainDetailError>>;
 
     /// <p>The GetDomainSuggestions operation returns a list of suggested domain names given a string, which can either be a domain name or simply a word or phrase (without spaces).</p>
-    fn get_domain_suggestions(
+    async fn get_domain_suggestions(
         &self,
         input: GetDomainSuggestionsRequest,
-    ) -> RusotoFuture<GetDomainSuggestionsResponse, GetDomainSuggestionsError>;
+    ) -> Result<GetDomainSuggestionsResponse, RusotoError<GetDomainSuggestionsError>>;
 
     /// <p>This operation returns the current status of an operation that is not completed.</p>
-    fn get_operation_detail(
+    async fn get_operation_detail(
         &self,
         input: GetOperationDetailRequest,
-    ) -> RusotoFuture<GetOperationDetailResponse, GetOperationDetailError>;
+    ) -> Result<GetOperationDetailResponse, RusotoError<GetOperationDetailError>>;
 
     /// <p>This operation returns all the domain names registered with Amazon Route 53 for the current AWS account.</p>
-    fn list_domains(
+    async fn list_domains(
         &self,
         input: ListDomainsRequest,
-    ) -> RusotoFuture<ListDomainsResponse, ListDomainsError>;
+    ) -> Result<ListDomainsResponse, RusotoError<ListDomainsError>>;
 
     /// <p>This operation returns the operation IDs of operations that are not yet complete.</p>
-    fn list_operations(
+    async fn list_operations(
         &self,
         input: ListOperationsRequest,
-    ) -> RusotoFuture<ListOperationsResponse, ListOperationsError>;
+    ) -> Result<ListOperationsResponse, RusotoError<ListOperationsError>>;
 
     /// <p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations might not immediately represent all issued operations.</p>
-    fn list_tags_for_domain(
+    async fn list_tags_for_domain(
         &self,
         input: ListTagsForDomainRequest,
-    ) -> RusotoFuture<ListTagsForDomainResponse, ListTagsForDomainError>;
+    ) -> Result<ListTagsForDomainResponse, RusotoError<ListTagsForDomainError>>;
 
     /// <p><p>This operation registers a domain. Domains are registered either by Amazon Registrar (for .com, .net, and .org domains) or by our registrar associate, Gandi (for all other domains). For some top-level domains (TLDs), this operation requires extra parameters.</p> <p>When you register a domain, Amazon Route 53 does the following:</p> <ul> <li> <p>Creates a Amazon Route 53 hosted zone that has the same name as the domain. Amazon Route 53 assigns four name servers to your hosted zone and automatically updates your domain registration with the names of these name servers.</p> </li> <li> <p>Enables autorenew, so your domain registration will renew automatically each year. We&#39;ll notify you in advance of the renewal date so you can choose whether to renew the registration.</p> </li> <li> <p>Optionally enables privacy protection, so WHOIS queries return contact information either for Amazon Registrar (for .com, .net, and .org domains) or for our registrar associate, Gandi (for all other TLDs). If you don&#39;t enable privacy protection, WHOIS queries return the information that you entered for the registrant, admin, and tech contacts.</p> </li> <li> <p>If registration is successful, returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant is notified by email.</p> </li> <li> <p>Charges your AWS account an amount based on the top-level domain. For more information, see <a href="http://aws.amazon.com/route53/pricing/">Amazon Route 53 Pricing</a>.</p> </li> </ul></p>
-    fn register_domain(
+    async fn register_domain(
         &self,
         input: RegisterDomainRequest,
-    ) -> RusotoFuture<RegisterDomainResponse, RegisterDomainError>;
+    ) -> Result<RegisterDomainResponse, RusotoError<RegisterDomainError>>;
 
     /// <p>This operation renews a domain for the specified number of years. The cost of renewing your domain is billed to your AWS account.</p> <p>We recommend that you renew your domain several weeks before the expiration date. Some TLD registries delete domains before the expiration date if you haven't renewed far enough in advance. For more information about renewing domain registration, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-renew.html">Renewing Registration for a Domain</a> in the Amazon Route 53 Developer Guide.</p>
-    fn renew_domain(
+    async fn renew_domain(
         &self,
         input: RenewDomainRequest,
-    ) -> RusotoFuture<RenewDomainResponse, RenewDomainError>;
+    ) -> Result<RenewDomainResponse, RusotoError<RenewDomainError>>;
 
     /// <p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation resends the confirmation email to the current email address for the registrant contact.</p>
-    fn resend_contact_reachability_email(
+    async fn resend_contact_reachability_email(
         &self,
         input: ResendContactReachabilityEmailRequest,
-    ) -> RusotoFuture<ResendContactReachabilityEmailResponse, ResendContactReachabilityEmailError>;
+    ) -> Result<
+        ResendContactReachabilityEmailResponse,
+        RusotoError<ResendContactReachabilityEmailError>,
+    >;
 
     /// <p>This operation returns the AuthCode for the domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>
-    fn retrieve_domain_auth_code(
+    async fn retrieve_domain_auth_code(
         &self,
         input: RetrieveDomainAuthCodeRequest,
-    ) -> RusotoFuture<RetrieveDomainAuthCodeResponse, RetrieveDomainAuthCodeError>;
+    ) -> Result<RetrieveDomainAuthCodeResponse, RusotoError<RetrieveDomainAuthCodeError>>;
 
     /// <p>This operation transfers a domain from another registrar to Amazon Route 53. When the transfer is complete, the domain is registered either with Amazon Registrar (for .com, .net, and .org domains) or with our registrar associate, Gandi (for all other TLDs).</p> <p>For transfer requirements, a detailed procedure, and information about viewing the status of a domain transfer, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html">Transferring Registration for a Domain to Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If the registrar for your domain is also the DNS service provider for the domain, we highly recommend that you consider transferring your DNS service to Amazon Route 53 or to another DNS service provider before you transfer your registration. Some registrars provide free DNS service when you purchase a domain registration. When you transfer the registration, the previous registrar will not renew your domain registration and could end your DNS service at any time.</p> <important> <p>If the registrar for your domain is also the DNS service provider for the domain and you don't transfer DNS service to another provider, your website, email, and the web applications associated with the domain might become unavailable.</p> </important> <p>If the transfer is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the transfer doesn't complete successfully, the domain registrant will be notified by email.</p>
-    fn transfer_domain(
+    async fn transfer_domain(
         &self,
         input: TransferDomainRequest,
-    ) -> RusotoFuture<TransferDomainResponse, TransferDomainError>;
+    ) -> Result<TransferDomainResponse, RusotoError<TransferDomainError>>;
 
     /// <p>This operation updates the contact information for a particular domain. You must specify information for at least one contact: registrant, administrator, or technical.</p> <p>If the update is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
-    fn update_domain_contact(
+    async fn update_domain_contact(
         &self,
         input: UpdateDomainContactRequest,
-    ) -> RusotoFuture<UpdateDomainContactResponse, UpdateDomainContactError>;
+    ) -> Result<UpdateDomainContactResponse, RusotoError<UpdateDomainContactError>>;
 
     /// <p>This operation updates the specified domain contact's privacy setting. When privacy protection is enabled, contact information such as email address is replaced either with contact information for Amazon Registrar (for .com, .net, and .org domains) or with contact information for our registrar associate, Gandi.</p> <p>This operation affects only the contact information for the specified contact type (registrant, administrator, or tech). If the request succeeds, Amazon Route 53 returns an operation ID that you can use with <a>GetOperationDetail</a> to track the progress and completion of the action. If the request doesn't complete successfully, the domain registrant will be notified by email.</p>
-    fn update_domain_contact_privacy(
+    async fn update_domain_contact_privacy(
         &self,
         input: UpdateDomainContactPrivacyRequest,
-    ) -> RusotoFuture<UpdateDomainContactPrivacyResponse, UpdateDomainContactPrivacyError>;
+    ) -> Result<UpdateDomainContactPrivacyResponse, RusotoError<UpdateDomainContactPrivacyError>>;
 
     /// <p>This operation replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain.</p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
-    fn update_domain_nameservers(
+    async fn update_domain_nameservers(
         &self,
         input: UpdateDomainNameserversRequest,
-    ) -> RusotoFuture<UpdateDomainNameserversResponse, UpdateDomainNameserversError>;
+    ) -> Result<UpdateDomainNameserversResponse, RusotoError<UpdateDomainNameserversError>>;
 
     /// <p>This operation adds or updates tags for a specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations might not immediately represent all issued operations.</p>
-    fn update_tags_for_domain(
+    async fn update_tags_for_domain(
         &self,
         input: UpdateTagsForDomainRequest,
-    ) -> RusotoFuture<UpdateTagsForDomainResponse, UpdateTagsForDomainError>;
+    ) -> Result<UpdateTagsForDomainResponse, RusotoError<UpdateTagsForDomainError>>;
 
     /// <p>Returns all the domain-related billing records for the current AWS account for a specified period</p>
-    fn view_billing(
+    async fn view_billing(
         &self,
         input: ViewBillingRequest,
-    ) -> RusotoFuture<ViewBillingResponse, ViewBillingError>;
+    ) -> Result<ViewBillingResponse, RusotoError<ViewBillingError>>;
 }
 /// A client for the Amazon Route 53 Domains API.
 #[derive(Clone)]
@@ -2245,12 +2250,13 @@ impl Route53DomainsClient {
     }
 }
 
+#[async_trait]
 impl Route53Domains for Route53DomainsClient {
     /// <p>This operation checks the availability of one domain name. Note that if the availability status of a domain is pending, you must submit another request to determine the availability of the domain name.</p>
-    fn check_domain_availability(
+    async fn check_domain_availability(
         &self,
         input: CheckDomainAvailabilityRequest,
-    ) -> RusotoFuture<CheckDomainAvailabilityResponse, CheckDomainAvailabilityError> {
+    ) -> Result<CheckDomainAvailabilityResponse, RusotoError<CheckDomainAvailabilityError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2261,46 +2267,28 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CheckDomainAvailabilityError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<CheckDomainAvailabilityError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<CheckDomainAvailabilityResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<CheckDomainAvailabilityError>
-                            })
-                            .and_then(|response| {
-                                Err(CheckDomainAvailabilityError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CheckDomainAvailabilityResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CheckDomainAvailabilityError::from_response(response))
+        }
     }
 
     /// <p>Checks whether a domain name can be transferred to Amazon Route 53. </p>
-    fn check_domain_transferability(
+    async fn check_domain_transferability(
         &self,
         input: CheckDomainTransferabilityRequest,
-    ) -> RusotoFuture<CheckDomainTransferabilityResponse, CheckDomainTransferabilityError> {
+    ) -> Result<CheckDomainTransferabilityResponse, RusotoError<CheckDomainTransferabilityError>>
+    {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2311,46 +2299,27 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CheckDomainTransferabilityError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<CheckDomainTransferabilityError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<CheckDomainTransferabilityResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<CheckDomainTransferabilityError>
-                            })
-                            .and_then(|response| {
-                                Err(CheckDomainTransferabilityError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CheckDomainTransferabilityResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CheckDomainTransferabilityError::from_response(response))
+        }
     }
 
     /// <p>This operation deletes the specified tags for a domain.</p> <p>All tag operations are eventually consistent; subsequent operations might not immediately represent all issued operations.</p>
-    fn delete_tags_for_domain(
+    async fn delete_tags_for_domain(
         &self,
         input: DeleteTagsForDomainRequest,
-    ) -> RusotoFuture<DeleteTagsForDomainResponse, DeleteTagsForDomainError> {
+    ) -> Result<DeleteTagsForDomainResponse, RusotoError<DeleteTagsForDomainError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2361,46 +2330,27 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteTagsForDomainError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteTagsForDomainError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteTagsForDomainResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteTagsForDomainError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteTagsForDomainError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteTagsForDomainResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTagsForDomainError::from_response(response))
+        }
     }
 
     /// <p>This operation disables automatic renewal of domain registration for the specified domain.</p>
-    fn disable_domain_auto_renew(
+    async fn disable_domain_auto_renew(
         &self,
         input: DisableDomainAutoRenewRequest,
-    ) -> RusotoFuture<DisableDomainAutoRenewResponse, DisableDomainAutoRenewError> {
+    ) -> Result<DisableDomainAutoRenewResponse, RusotoError<DisableDomainAutoRenewError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2411,46 +2361,28 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DisableDomainAutoRenewError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DisableDomainAutoRenewError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DisableDomainAutoRenewResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DisableDomainAutoRenewError>
-                            })
-                            .and_then(|response| {
-                                Err(DisableDomainAutoRenewError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisableDomainAutoRenewResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisableDomainAutoRenewError::from_response(response))
+        }
     }
 
     /// <p>This operation removes the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to allow domain transfers. We recommend you refrain from performing this action unless you intend to transfer the domain to a different registrar. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
-    fn disable_domain_transfer_lock(
+    async fn disable_domain_transfer_lock(
         &self,
         input: DisableDomainTransferLockRequest,
-    ) -> RusotoFuture<DisableDomainTransferLockResponse, DisableDomainTransferLockError> {
+    ) -> Result<DisableDomainTransferLockResponse, RusotoError<DisableDomainTransferLockError>>
+    {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2461,46 +2393,27 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DisableDomainTransferLockError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DisableDomainTransferLockError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DisableDomainTransferLockResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DisableDomainTransferLockError>
-                            })
-                            .and_then(|response| {
-                                Err(DisableDomainTransferLockError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisableDomainTransferLockResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisableDomainTransferLockError::from_response(response))
+        }
     }
 
     /// <p>This operation configures Amazon Route 53 to automatically renew the specified domain before the domain registration expires. The cost of renewing your domain registration is billed to your AWS account.</p> <p>The period during which you can renew a domain name varies by TLD. For a list of TLDs and their renewal policies, see <a href="http://wiki.gandi.net/en/domains/renew#renewal_restoration_and_deletion_times">"Renewal, restoration, and deletion times"</a> on the website for our registrar associate, Gandi. Amazon Route 53 requires that you renew before the end of the renewal period that is listed on the Gandi website so we can complete processing before the deadline.</p>
-    fn enable_domain_auto_renew(
+    async fn enable_domain_auto_renew(
         &self,
         input: EnableDomainAutoRenewRequest,
-    ) -> RusotoFuture<EnableDomainAutoRenewResponse, EnableDomainAutoRenewError> {
+    ) -> Result<EnableDomainAutoRenewResponse, RusotoError<EnableDomainAutoRenewError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2511,46 +2424,27 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| EnableDomainAutoRenewError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<EnableDomainAutoRenewError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<EnableDomainAutoRenewResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<EnableDomainAutoRenewError>
-                            })
-                            .and_then(|response| {
-                                Err(EnableDomainAutoRenewError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<EnableDomainAutoRenewResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(EnableDomainAutoRenewError::from_response(response))
+        }
     }
 
     /// <p>This operation sets the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to prevent domain transfers. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
-    fn enable_domain_transfer_lock(
+    async fn enable_domain_transfer_lock(
         &self,
         input: EnableDomainTransferLockRequest,
-    ) -> RusotoFuture<EnableDomainTransferLockResponse, EnableDomainTransferLockError> {
+    ) -> Result<EnableDomainTransferLockResponse, RusotoError<EnableDomainTransferLockError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2561,46 +2455,28 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| EnableDomainTransferLockError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<EnableDomainTransferLockError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<EnableDomainTransferLockResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<EnableDomainTransferLockError>
-                            })
-                            .and_then(|response| {
-                                Err(EnableDomainTransferLockError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<EnableDomainTransferLockResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(EnableDomainTransferLockError::from_response(response))
+        }
     }
 
     /// <p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation returns information about whether the registrant contact has responded.</p> <p>If you want us to resend the email, use the <code>ResendContactReachabilityEmail</code> operation.</p>
-    fn get_contact_reachability_status(
+    async fn get_contact_reachability_status(
         &self,
         input: GetContactReachabilityStatusRequest,
-    ) -> RusotoFuture<GetContactReachabilityStatusResponse, GetContactReachabilityStatusError> {
+    ) -> Result<GetContactReachabilityStatusResponse, RusotoError<GetContactReachabilityStatusError>>
+    {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2611,46 +2487,27 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetContactReachabilityStatusError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetContactReachabilityStatusError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetContactReachabilityStatusResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetContactReachabilityStatusError>
-                            })
-                            .and_then(|response| {
-                                Err(GetContactReachabilityStatusError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetContactReachabilityStatusResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetContactReachabilityStatusError::from_response(response))
+        }
     }
 
     /// <p>This operation returns detailed information about a specified domain that is associated with the current AWS account. Contact information for the domain is also returned as part of the output.</p>
-    fn get_domain_detail(
+    async fn get_domain_detail(
         &self,
         input: GetDomainDetailRequest,
-    ) -> RusotoFuture<GetDomainDetailResponse, GetDomainDetailError> {
+    ) -> Result<GetDomainDetailResponse, RusotoError<GetDomainDetailError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2658,42 +2515,26 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetDomainDetailError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetDomainDetailError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetDomainDetailResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetDomainDetailError>
-                            })
-                            .and_then(|response| Err(GetDomainDetailError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetDomainDetailResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDomainDetailError::from_response(response))
+        }
     }
 
     /// <p>The GetDomainSuggestions operation returns a list of suggested domain names given a string, which can either be a domain name or simply a word or phrase (without spaces).</p>
-    fn get_domain_suggestions(
+    async fn get_domain_suggestions(
         &self,
         input: GetDomainSuggestionsRequest,
-    ) -> RusotoFuture<GetDomainSuggestionsResponse, GetDomainSuggestionsError> {
+    ) -> Result<GetDomainSuggestionsResponse, RusotoError<GetDomainSuggestionsError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2704,46 +2545,27 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetDomainSuggestionsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetDomainSuggestionsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetDomainSuggestionsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetDomainSuggestionsError>
-                            })
-                            .and_then(|response| {
-                                Err(GetDomainSuggestionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDomainSuggestionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDomainSuggestionsError::from_response(response))
+        }
     }
 
     /// <p>This operation returns the current status of an operation that is not completed.</p>
-    fn get_operation_detail(
+    async fn get_operation_detail(
         &self,
         input: GetOperationDetailRequest,
-    ) -> RusotoFuture<GetOperationDetailResponse, GetOperationDetailError> {
+    ) -> Result<GetOperationDetailResponse, RusotoError<GetOperationDetailError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2754,44 +2576,27 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetOperationDetailError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetOperationDetailError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetOperationDetailResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetOperationDetailError>
-                            })
-                            .and_then(|response| {
-                                Err(GetOperationDetailError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetOperationDetailResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetOperationDetailError::from_response(response))
+        }
     }
 
     /// <p>This operation returns all the domain names registered with Amazon Route 53 for the current AWS account.</p>
-    fn list_domains(
+    async fn list_domains(
         &self,
         input: ListDomainsRequest,
-    ) -> RusotoFuture<ListDomainsResponse, ListDomainsError> {
+    ) -> Result<ListDomainsResponse, RusotoError<ListDomainsError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2799,42 +2604,26 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListDomainsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ListDomainsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListDomainsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ListDomainsError>
-                            })
-                            .and_then(|response| Err(ListDomainsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListDomainsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDomainsError::from_response(response))
+        }
     }
 
     /// <p>This operation returns the operation IDs of operations that are not yet complete.</p>
-    fn list_operations(
+    async fn list_operations(
         &self,
         input: ListOperationsRequest,
-    ) -> RusotoFuture<ListOperationsResponse, ListOperationsError> {
+    ) -> Result<ListOperationsResponse, RusotoError<ListOperationsError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2842,42 +2631,26 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListOperationsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ListOperationsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListOperationsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ListOperationsError>
-                            })
-                            .and_then(|response| Err(ListOperationsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListOperationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListOperationsError::from_response(response))
+        }
     }
 
     /// <p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations might not immediately represent all issued operations.</p>
-    fn list_tags_for_domain(
+    async fn list_tags_for_domain(
         &self,
         input: ListTagsForDomainRequest,
-    ) -> RusotoFuture<ListTagsForDomainResponse, ListTagsForDomainError> {
+    ) -> Result<ListTagsForDomainResponse, RusotoError<ListTagsForDomainError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2885,44 +2658,27 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListTagsForDomainError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ListTagsForDomainError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListTagsForDomainResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ListTagsForDomainError>
-                            })
-                            .and_then(|response| {
-                                Err(ListTagsForDomainError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForDomainResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForDomainError::from_response(response))
+        }
     }
 
     /// <p><p>This operation registers a domain. Domains are registered either by Amazon Registrar (for .com, .net, and .org domains) or by our registrar associate, Gandi (for all other domains). For some top-level domains (TLDs), this operation requires extra parameters.</p> <p>When you register a domain, Amazon Route 53 does the following:</p> <ul> <li> <p>Creates a Amazon Route 53 hosted zone that has the same name as the domain. Amazon Route 53 assigns four name servers to your hosted zone and automatically updates your domain registration with the names of these name servers.</p> </li> <li> <p>Enables autorenew, so your domain registration will renew automatically each year. We&#39;ll notify you in advance of the renewal date so you can choose whether to renew the registration.</p> </li> <li> <p>Optionally enables privacy protection, so WHOIS queries return contact information either for Amazon Registrar (for .com, .net, and .org domains) or for our registrar associate, Gandi (for all other TLDs). If you don&#39;t enable privacy protection, WHOIS queries return the information that you entered for the registrant, admin, and tech contacts.</p> </li> <li> <p>If registration is successful, returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant is notified by email.</p> </li> <li> <p>Charges your AWS account an amount based on the top-level domain. For more information, see <a href="http://aws.amazon.com/route53/pricing/">Amazon Route 53 Pricing</a>.</p> </li> </ul></p>
-    fn register_domain(
+    async fn register_domain(
         &self,
         input: RegisterDomainRequest,
-    ) -> RusotoFuture<RegisterDomainResponse, RegisterDomainError> {
+    ) -> Result<RegisterDomainResponse, RusotoError<RegisterDomainError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2930,42 +2686,26 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| RegisterDomainError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<RegisterDomainError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<RegisterDomainResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<RegisterDomainError>
-                            })
-                            .and_then(|response| Err(RegisterDomainError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<RegisterDomainResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterDomainError::from_response(response))
+        }
     }
 
     /// <p>This operation renews a domain for the specified number of years. The cost of renewing your domain is billed to your AWS account.</p> <p>We recommend that you renew your domain several weeks before the expiration date. Some TLD registries delete domains before the expiration date if you haven't renewed far enough in advance. For more information about renewing domain registration, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-renew.html">Renewing Registration for a Domain</a> in the Amazon Route 53 Developer Guide.</p>
-    fn renew_domain(
+    async fn renew_domain(
         &self,
         input: RenewDomainRequest,
-    ) -> RusotoFuture<RenewDomainResponse, RenewDomainError> {
+    ) -> Result<RenewDomainResponse, RusotoError<RenewDomainError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2973,43 +2713,29 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| RenewDomainError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<RenewDomainError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<RenewDomainResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<RenewDomainError>
-                            })
-                            .and_then(|response| Err(RenewDomainError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<RenewDomainResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RenewDomainError::from_response(response))
+        }
     }
 
     /// <p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation resends the confirmation email to the current email address for the registrant contact.</p>
-    fn resend_contact_reachability_email(
+    async fn resend_contact_reachability_email(
         &self,
         input: ResendContactReachabilityEmailRequest,
-    ) -> RusotoFuture<ResendContactReachabilityEmailResponse, ResendContactReachabilityEmailError>
-    {
+    ) -> Result<
+        ResendContactReachabilityEmailResponse,
+        RusotoError<ResendContactReachabilityEmailError>,
+    > {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3020,46 +2746,27 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ResendContactReachabilityEmailError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ResendContactReachabilityEmailError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ResendContactReachabilityEmailResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ResendContactReachabilityEmailError>
-                            })
-                            .and_then(|response| {
-                                Err(ResendContactReachabilityEmailError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ResendContactReachabilityEmailResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ResendContactReachabilityEmailError::from_response(response))
+        }
     }
 
     /// <p>This operation returns the AuthCode for the domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>
-    fn retrieve_domain_auth_code(
+    async fn retrieve_domain_auth_code(
         &self,
         input: RetrieveDomainAuthCodeRequest,
-    ) -> RusotoFuture<RetrieveDomainAuthCodeResponse, RetrieveDomainAuthCodeError> {
+    ) -> Result<RetrieveDomainAuthCodeResponse, RusotoError<RetrieveDomainAuthCodeError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3070,46 +2777,27 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| RetrieveDomainAuthCodeError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<RetrieveDomainAuthCodeError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<RetrieveDomainAuthCodeResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<RetrieveDomainAuthCodeError>
-                            })
-                            .and_then(|response| {
-                                Err(RetrieveDomainAuthCodeError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RetrieveDomainAuthCodeResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RetrieveDomainAuthCodeError::from_response(response))
+        }
     }
 
     /// <p>This operation transfers a domain from another registrar to Amazon Route 53. When the transfer is complete, the domain is registered either with Amazon Registrar (for .com, .net, and .org domains) or with our registrar associate, Gandi (for all other TLDs).</p> <p>For transfer requirements, a detailed procedure, and information about viewing the status of a domain transfer, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html">Transferring Registration for a Domain to Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If the registrar for your domain is also the DNS service provider for the domain, we highly recommend that you consider transferring your DNS service to Amazon Route 53 or to another DNS service provider before you transfer your registration. Some registrars provide free DNS service when you purchase a domain registration. When you transfer the registration, the previous registrar will not renew your domain registration and could end your DNS service at any time.</p> <important> <p>If the registrar for your domain is also the DNS service provider for the domain and you don't transfer DNS service to another provider, your website, email, and the web applications associated with the domain might become unavailable.</p> </important> <p>If the transfer is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the transfer doesn't complete successfully, the domain registrant will be notified by email.</p>
-    fn transfer_domain(
+    async fn transfer_domain(
         &self,
         input: TransferDomainRequest,
-    ) -> RusotoFuture<TransferDomainResponse, TransferDomainError> {
+    ) -> Result<TransferDomainResponse, RusotoError<TransferDomainError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3117,42 +2805,26 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| TransferDomainError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<TransferDomainError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<TransferDomainResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<TransferDomainError>
-                            })
-                            .and_then(|response| Err(TransferDomainError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TransferDomainResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TransferDomainError::from_response(response))
+        }
     }
 
     /// <p>This operation updates the contact information for a particular domain. You must specify information for at least one contact: registrant, administrator, or technical.</p> <p>If the update is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
-    fn update_domain_contact(
+    async fn update_domain_contact(
         &self,
         input: UpdateDomainContactRequest,
-    ) -> RusotoFuture<UpdateDomainContactResponse, UpdateDomainContactError> {
+    ) -> Result<UpdateDomainContactResponse, RusotoError<UpdateDomainContactError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3163,46 +2835,28 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateDomainContactError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<UpdateDomainContactError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<UpdateDomainContactResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<UpdateDomainContactError>
-                            })
-                            .and_then(|response| {
-                                Err(UpdateDomainContactError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateDomainContactResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDomainContactError::from_response(response))
+        }
     }
 
     /// <p>This operation updates the specified domain contact's privacy setting. When privacy protection is enabled, contact information such as email address is replaced either with contact information for Amazon Registrar (for .com, .net, and .org domains) or with contact information for our registrar associate, Gandi.</p> <p>This operation affects only the contact information for the specified contact type (registrant, administrator, or tech). If the request succeeds, Amazon Route 53 returns an operation ID that you can use with <a>GetOperationDetail</a> to track the progress and completion of the action. If the request doesn't complete successfully, the domain registrant will be notified by email.</p>
-    fn update_domain_contact_privacy(
+    async fn update_domain_contact_privacy(
         &self,
         input: UpdateDomainContactPrivacyRequest,
-    ) -> RusotoFuture<UpdateDomainContactPrivacyResponse, UpdateDomainContactPrivacyError> {
+    ) -> Result<UpdateDomainContactPrivacyResponse, RusotoError<UpdateDomainContactPrivacyError>>
+    {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3213,46 +2867,27 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateDomainContactPrivacyError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<UpdateDomainContactPrivacyError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<UpdateDomainContactPrivacyResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<UpdateDomainContactPrivacyError>
-                            })
-                            .and_then(|response| {
-                                Err(UpdateDomainContactPrivacyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateDomainContactPrivacyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDomainContactPrivacyError::from_response(response))
+        }
     }
 
     /// <p>This operation replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain.</p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
-    fn update_domain_nameservers(
+    async fn update_domain_nameservers(
         &self,
         input: UpdateDomainNameserversRequest,
-    ) -> RusotoFuture<UpdateDomainNameserversResponse, UpdateDomainNameserversError> {
+    ) -> Result<UpdateDomainNameserversResponse, RusotoError<UpdateDomainNameserversError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3263,46 +2898,27 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateDomainNameserversError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<UpdateDomainNameserversError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<UpdateDomainNameserversResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<UpdateDomainNameserversError>
-                            })
-                            .and_then(|response| {
-                                Err(UpdateDomainNameserversError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateDomainNameserversResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDomainNameserversError::from_response(response))
+        }
     }
 
     /// <p>This operation adds or updates tags for a specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations might not immediately represent all issued operations.</p>
-    fn update_tags_for_domain(
+    async fn update_tags_for_domain(
         &self,
         input: UpdateTagsForDomainRequest,
-    ) -> RusotoFuture<UpdateTagsForDomainResponse, UpdateTagsForDomainError> {
+    ) -> Result<UpdateTagsForDomainResponse, RusotoError<UpdateTagsForDomainError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3313,46 +2929,27 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateTagsForDomainError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<UpdateTagsForDomainError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<UpdateTagsForDomainResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<UpdateTagsForDomainError>
-                            })
-                            .and_then(|response| {
-                                Err(UpdateTagsForDomainError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateTagsForDomainResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateTagsForDomainError::from_response(response))
+        }
     }
 
     /// <p>Returns all the domain-related billing records for the current AWS account for a specified period</p>
-    fn view_billing(
+    async fn view_billing(
         &self,
         input: ViewBillingRequest,
-    ) -> RusotoFuture<ViewBillingResponse, ViewBillingError> {
+    ) -> Result<ViewBillingResponse, RusotoError<ViewBillingError>> {
         let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3360,34 +2957,18 @@ impl Route53Domains for Route53DomainsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ViewBillingError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ViewBillingError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ViewBillingResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ViewBillingError>
-                            })
-                            .and_then(|response| Err(ViewBillingError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ViewBillingResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ViewBillingError::from_response(response))
+        }
     }
 }

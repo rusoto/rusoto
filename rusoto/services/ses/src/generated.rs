@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
@@ -10536,468 +10537,469 @@ impl Error for VerifyEmailIdentityError {
     }
 }
 /// Trait representing the capabilities of the Amazon SES API. Amazon SES clients implement this trait.
+#[async_trait]
 pub trait Ses {
     /// <p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn clone_receipt_rule_set(
+    async fn clone_receipt_rule_set(
         &self,
         input: CloneReceiptRuleSetRequest,
-    ) -> RusotoFuture<CloneReceiptRuleSetResponse, CloneReceiptRuleSetError>;
+    ) -> Result<CloneReceiptRuleSetResponse, RusotoError<CloneReceiptRuleSetError>>;
 
     /// <p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_configuration_set(
+    async fn create_configuration_set(
         &self,
         input: CreateConfigurationSetRequest,
-    ) -> RusotoFuture<CreateConfigurationSetResponse, CreateConfigurationSetError>;
+    ) -> Result<CreateConfigurationSetResponse, RusotoError<CreateConfigurationSetError>>;
 
     /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_configuration_set_event_destination(
+    async fn create_configuration_set_event_destination(
         &self,
         input: CreateConfigurationSetEventDestinationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateConfigurationSetEventDestinationResponse,
-        CreateConfigurationSetEventDestinationError,
+        RusotoError<CreateConfigurationSetEventDestinationError>,
     >;
 
     /// <p>Creates an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
-    fn create_configuration_set_tracking_options(
+    async fn create_configuration_set_tracking_options(
         &self,
         input: CreateConfigurationSetTrackingOptionsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateConfigurationSetTrackingOptionsResponse,
-        CreateConfigurationSetTrackingOptionsError,
+        RusotoError<CreateConfigurationSetTrackingOptionsError>,
     >;
 
     /// <p>Creates a new custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_custom_verification_email_template(
+    async fn create_custom_verification_email_template(
         &self,
         input: CreateCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<(), CreateCustomVerificationEmailTemplateError>;
+    ) -> Result<(), RusotoError<CreateCustomVerificationEmailTemplateError>>;
 
     /// <p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_receipt_filter(
+    async fn create_receipt_filter(
         &self,
         input: CreateReceiptFilterRequest,
-    ) -> RusotoFuture<CreateReceiptFilterResponse, CreateReceiptFilterError>;
+    ) -> Result<CreateReceiptFilterResponse, RusotoError<CreateReceiptFilterError>>;
 
     /// <p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_receipt_rule(
+    async fn create_receipt_rule(
         &self,
         input: CreateReceiptRuleRequest,
-    ) -> RusotoFuture<CreateReceiptRuleResponse, CreateReceiptRuleError>;
+    ) -> Result<CreateReceiptRuleResponse, RusotoError<CreateReceiptRuleError>>;
 
     /// <p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_receipt_rule_set(
+    async fn create_receipt_rule_set(
         &self,
         input: CreateReceiptRuleSetRequest,
-    ) -> RusotoFuture<CreateReceiptRuleSetResponse, CreateReceiptRuleSetError>;
+    ) -> Result<CreateReceiptRuleSetResponse, RusotoError<CreateReceiptRuleSetError>>;
 
     /// <p>Creates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_template(
+    async fn create_template(
         &self,
         input: CreateTemplateRequest,
-    ) -> RusotoFuture<CreateTemplateResponse, CreateTemplateError>;
+    ) -> Result<CreateTemplateResponse, RusotoError<CreateTemplateError>>;
 
     /// <p>Deletes a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_configuration_set(
+    async fn delete_configuration_set(
         &self,
         input: DeleteConfigurationSetRequest,
-    ) -> RusotoFuture<DeleteConfigurationSetResponse, DeleteConfigurationSetError>;
+    ) -> Result<DeleteConfigurationSetResponse, RusotoError<DeleteConfigurationSetError>>;
 
     /// <p>Deletes a configuration set event destination. Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_configuration_set_event_destination(
+    async fn delete_configuration_set_event_destination(
         &self,
         input: DeleteConfigurationSetEventDestinationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DeleteConfigurationSetEventDestinationResponse,
-        DeleteConfigurationSetEventDestinationError,
+        RusotoError<DeleteConfigurationSetEventDestinationError>,
     >;
 
     /// <p><p>Deletes an association between a configuration set and a custom domain for open and click event tracking.</p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p> <note> <p>Deleting this kind of association will result in emails sent using the specified configuration set to capture open and click events using the standard, Amazon SES-operated domains.</p> </note></p>
-    fn delete_configuration_set_tracking_options(
+    async fn delete_configuration_set_tracking_options(
         &self,
         input: DeleteConfigurationSetTrackingOptionsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DeleteConfigurationSetTrackingOptionsResponse,
-        DeleteConfigurationSetTrackingOptionsError,
+        RusotoError<DeleteConfigurationSetTrackingOptionsError>,
     >;
 
     /// <p>Deletes an existing custom verification email template. </p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_custom_verification_email_template(
+    async fn delete_custom_verification_email_template(
         &self,
         input: DeleteCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<(), DeleteCustomVerificationEmailTemplateError>;
+    ) -> Result<(), RusotoError<DeleteCustomVerificationEmailTemplateError>>;
 
     /// <p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_identity(
+    async fn delete_identity(
         &self,
         input: DeleteIdentityRequest,
-    ) -> RusotoFuture<DeleteIdentityResponse, DeleteIdentityError>;
+    ) -> Result<DeleteIdentityResponse, RusotoError<DeleteIdentityError>>;
 
     /// <p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_identity_policy(
+    async fn delete_identity_policy(
         &self,
         input: DeleteIdentityPolicyRequest,
-    ) -> RusotoFuture<DeleteIdentityPolicyResponse, DeleteIdentityPolicyError>;
+    ) -> Result<DeleteIdentityPolicyResponse, RusotoError<DeleteIdentityPolicyError>>;
 
     /// <p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_receipt_filter(
+    async fn delete_receipt_filter(
         &self,
         input: DeleteReceiptFilterRequest,
-    ) -> RusotoFuture<DeleteReceiptFilterResponse, DeleteReceiptFilterError>;
+    ) -> Result<DeleteReceiptFilterResponse, RusotoError<DeleteReceiptFilterError>>;
 
     /// <p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_receipt_rule(
+    async fn delete_receipt_rule(
         &self,
         input: DeleteReceiptRuleRequest,
-    ) -> RusotoFuture<DeleteReceiptRuleResponse, DeleteReceiptRuleError>;
+    ) -> Result<DeleteReceiptRuleResponse, RusotoError<DeleteReceiptRuleError>>;
 
     /// <p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_receipt_rule_set(
+    async fn delete_receipt_rule_set(
         &self,
         input: DeleteReceiptRuleSetRequest,
-    ) -> RusotoFuture<DeleteReceiptRuleSetResponse, DeleteReceiptRuleSetError>;
+    ) -> Result<DeleteReceiptRuleSetResponse, RusotoError<DeleteReceiptRuleSetError>>;
 
     /// <p>Deletes an email template.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_template(
+    async fn delete_template(
         &self,
         input: DeleteTemplateRequest,
-    ) -> RusotoFuture<DeleteTemplateResponse, DeleteTemplateError>;
+    ) -> Result<DeleteTemplateResponse, RusotoError<DeleteTemplateError>>;
 
     /// <p>Deprecated. Use the <code>DeleteIdentity</code> operation to delete email addresses and domains.</p>
-    fn delete_verified_email_address(
+    async fn delete_verified_email_address(
         &self,
         input: DeleteVerifiedEmailAddressRequest,
-    ) -> RusotoFuture<(), DeleteVerifiedEmailAddressError>;
+    ) -> Result<(), RusotoError<DeleteVerifiedEmailAddressError>>;
 
     /// <p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn describe_active_receipt_rule_set(
+    async fn describe_active_receipt_rule_set(
         &self,
         input: DescribeActiveReceiptRuleSetRequest,
-    ) -> RusotoFuture<DescribeActiveReceiptRuleSetResponse, DescribeActiveReceiptRuleSetError>;
+    ) -> Result<DescribeActiveReceiptRuleSetResponse, RusotoError<DescribeActiveReceiptRuleSetError>>;
 
     /// <p>Returns the details of the specified configuration set. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn describe_configuration_set(
+    async fn describe_configuration_set(
         &self,
         input: DescribeConfigurationSetRequest,
-    ) -> RusotoFuture<DescribeConfigurationSetResponse, DescribeConfigurationSetError>;
+    ) -> Result<DescribeConfigurationSetResponse, RusotoError<DescribeConfigurationSetError>>;
 
     /// <p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn describe_receipt_rule(
+    async fn describe_receipt_rule(
         &self,
         input: DescribeReceiptRuleRequest,
-    ) -> RusotoFuture<DescribeReceiptRuleResponse, DescribeReceiptRuleError>;
+    ) -> Result<DescribeReceiptRuleResponse, RusotoError<DescribeReceiptRuleError>>;
 
     /// <p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn describe_receipt_rule_set(
+    async fn describe_receipt_rule_set(
         &self,
         input: DescribeReceiptRuleSetRequest,
-    ) -> RusotoFuture<DescribeReceiptRuleSetResponse, DescribeReceiptRuleSetError>;
+    ) -> Result<DescribeReceiptRuleSetResponse, RusotoError<DescribeReceiptRuleSetError>>;
 
     /// <p>Returns the email sending status of the Amazon SES account for the current region.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_account_sending_enabled(
+    async fn get_account_sending_enabled(
         &self,
-    ) -> RusotoFuture<GetAccountSendingEnabledResponse, GetAccountSendingEnabledError>;
+    ) -> Result<GetAccountSendingEnabledResponse, RusotoError<GetAccountSendingEnabledError>>;
 
     /// <p>Returns the custom email verification template for the template name you specify.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_custom_verification_email_template(
+    async fn get_custom_verification_email_template(
         &self,
         input: GetCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetCustomVerificationEmailTemplateResponse,
-        GetCustomVerificationEmailTemplateError,
+        RusotoError<GetCustomVerificationEmailTemplateError>,
     >;
 
     /// <p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this operation also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This operation takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This operation is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
-    fn get_identity_dkim_attributes(
+    async fn get_identity_dkim_attributes(
         &self,
         input: GetIdentityDkimAttributesRequest,
-    ) -> RusotoFuture<GetIdentityDkimAttributesResponse, GetIdentityDkimAttributesError>;
+    ) -> Result<GetIdentityDkimAttributesResponse, RusotoError<GetIdentityDkimAttributesError>>;
 
     /// <p>Returns the custom MAIL FROM attributes for a list of identities (email addresses : domains).</p> <p>This operation is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>
-    fn get_identity_mail_from_domain_attributes(
+    async fn get_identity_mail_from_domain_attributes(
         &self,
         input: GetIdentityMailFromDomainAttributesRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetIdentityMailFromDomainAttributesResponse,
-        GetIdentityMailFromDomainAttributesError,
+        RusotoError<GetIdentityMailFromDomainAttributesError>,
     >;
 
     /// <p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This operation is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
-    fn get_identity_notification_attributes(
+    async fn get_identity_notification_attributes(
         &self,
         input: GetIdentityNotificationAttributesRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetIdentityNotificationAttributesResponse,
-        GetIdentityNotificationAttributesError,
+        RusotoError<GetIdentityNotificationAttributesError>,
     >;
 
     /// <p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_identity_policies(
+    async fn get_identity_policies(
         &self,
         input: GetIdentityPoliciesRequest,
-    ) -> RusotoFuture<GetIdentityPoliciesResponse, GetIdentityPoliciesError>;
+    ) -> Result<GetIdentityPoliciesResponse, RusotoError<GetIdentityPoliciesError>>;
 
     /// <p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is "Pending" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to "Success". If the link is not clicked within 24 hours, the verification status changes to "Failed." In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is "Pending" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to "Success". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to "Failed." In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This operation is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>
-    fn get_identity_verification_attributes(
+    async fn get_identity_verification_attributes(
         &self,
         input: GetIdentityVerificationAttributesRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetIdentityVerificationAttributesResponse,
-        GetIdentityVerificationAttributesError,
+        RusotoError<GetIdentityVerificationAttributesError>,
     >;
 
     /// <p>Provides the sending limits for the Amazon SES account. </p> <p>You can execute this operation no more than once per second.</p>
-    fn get_send_quota(&self) -> RusotoFuture<GetSendQuotaResponse, GetSendQuotaError>;
+    async fn get_send_quota(&self) -> Result<GetSendQuotaResponse, RusotoError<GetSendQuotaError>>;
 
     /// <p>Provides sending statistics for the current AWS Region. The result is a list of data points, representing the last two weeks of sending activity. Each data point in the list contains statistics for a 15-minute period of time.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_send_statistics(
+    async fn get_send_statistics(
         &self,
-    ) -> RusotoFuture<GetSendStatisticsResponse, GetSendStatisticsError>;
+    ) -> Result<GetSendStatisticsResponse, RusotoError<GetSendStatisticsError>>;
 
     /// <p>Displays the template object (which includes the Subject line, HTML part and text part) for the template you specify.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_template(
+    async fn get_template(
         &self,
         input: GetTemplateRequest,
-    ) -> RusotoFuture<GetTemplateResponse, GetTemplateError>;
+    ) -> Result<GetTemplateResponse, RusotoError<GetTemplateError>>;
 
     /// <p>Provides a list of the configuration sets associated with your Amazon SES account in the current AWS Region. For information about using configuration sets, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second. This operation will return up to 1,000 configuration sets each time it is run. If your Amazon SES account has more than 1,000 configuration sets, this operation will also return a NextToken element. You can then execute the <code>ListConfigurationSets</code> operation again, passing the <code>NextToken</code> parameter and the value of the NextToken element to retrieve additional results.</p>
-    fn list_configuration_sets(
+    async fn list_configuration_sets(
         &self,
         input: ListConfigurationSetsRequest,
-    ) -> RusotoFuture<ListConfigurationSetsResponse, ListConfigurationSetsError>;
+    ) -> Result<ListConfigurationSetsResponse, RusotoError<ListConfigurationSetsError>>;
 
     /// <p>Lists the existing custom verification email templates for your account in the current AWS Region.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_custom_verification_email_templates(
+    async fn list_custom_verification_email_templates(
         &self,
         input: ListCustomVerificationEmailTemplatesRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListCustomVerificationEmailTemplatesResponse,
-        ListCustomVerificationEmailTemplatesError,
+        RusotoError<ListCustomVerificationEmailTemplatesError>,
     >;
 
     /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account in the current AWS Region, regardless of verification status.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_identities(
+    async fn list_identities(
         &self,
         input: ListIdentitiesRequest,
-    ) -> RusotoFuture<ListIdentitiesResponse, ListIdentitiesError>;
+    ) -> Result<ListIdentitiesResponse, RusotoError<ListIdentitiesError>>;
 
     /// <p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_identity_policies(
+    async fn list_identity_policies(
         &self,
         input: ListIdentityPoliciesRequest,
-    ) -> RusotoFuture<ListIdentityPoliciesResponse, ListIdentityPoliciesError>;
+    ) -> Result<ListIdentityPoliciesResponse, RusotoError<ListIdentityPoliciesError>>;
 
     /// <p>Lists the IP address filters associated with your AWS account in the current AWS Region.</p> <p>For information about managing IP address filters, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_receipt_filters(
+    async fn list_receipt_filters(
         &self,
         input: ListReceiptFiltersRequest,
-    ) -> RusotoFuture<ListReceiptFiltersResponse, ListReceiptFiltersError>;
+    ) -> Result<ListReceiptFiltersResponse, RusotoError<ListReceiptFiltersError>>;
 
     /// <p>Lists the receipt rule sets that exist under your AWS account in the current AWS Region. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_receipt_rule_sets(
+    async fn list_receipt_rule_sets(
         &self,
         input: ListReceiptRuleSetsRequest,
-    ) -> RusotoFuture<ListReceiptRuleSetsResponse, ListReceiptRuleSetsError>;
+    ) -> Result<ListReceiptRuleSetsResponse, RusotoError<ListReceiptRuleSetsError>>;
 
     /// <p>Lists the email templates present in your Amazon SES account in the current AWS Region.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_templates(
+    async fn list_templates(
         &self,
         input: ListTemplatesRequest,
-    ) -> RusotoFuture<ListTemplatesResponse, ListTemplatesError>;
+    ) -> Result<ListTemplatesResponse, RusotoError<ListTemplatesError>>;
 
     /// <p>Deprecated. Use the <code>ListIdentities</code> operation to list the email addresses and domains associated with your account.</p>
-    fn list_verified_email_addresses(
+    async fn list_verified_email_addresses(
         &self,
-    ) -> RusotoFuture<ListVerifiedEmailAddressesResponse, ListVerifiedEmailAddressesError>;
+    ) -> Result<ListVerifiedEmailAddressesResponse, RusotoError<ListVerifiedEmailAddressesError>>;
 
     /// <p>Adds or updates the delivery options for a configuration set.</p>
-    fn put_configuration_set_delivery_options(
+    async fn put_configuration_set_delivery_options(
         &self,
         input: PutConfigurationSetDeliveryOptionsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         PutConfigurationSetDeliveryOptionsResponse,
-        PutConfigurationSetDeliveryOptionsError,
+        RusotoError<PutConfigurationSetDeliveryOptionsError>,
     >;
 
     /// <p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn put_identity_policy(
+    async fn put_identity_policy(
         &self,
         input: PutIdentityPolicyRequest,
-    ) -> RusotoFuture<PutIdentityPolicyResponse, PutIdentityPolicyError>;
+    ) -> Result<PutIdentityPolicyResponse, RusotoError<PutIdentityPolicyError>>;
 
     /// <p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn reorder_receipt_rule_set(
+    async fn reorder_receipt_rule_set(
         &self,
         input: ReorderReceiptRuleSetRequest,
-    ) -> RusotoFuture<ReorderReceiptRuleSetResponse, ReorderReceiptRuleSetError>;
+    ) -> Result<ReorderReceiptRuleSetResponse, RusotoError<ReorderReceiptRuleSetError>>;
 
     /// <p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn send_bounce(
+    async fn send_bounce(
         &self,
         input: SendBounceRequest,
-    ) -> RusotoFuture<SendBounceResponse, SendBounceError>;
+    ) -> Result<SendBounceResponse, RusotoError<SendBounceError>>;
 
     /// <p><p>Composes an email message to multiple destinations. The message body is created using an email template.</p> <p>In order to send email using the <code>SendBulkTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>Each <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendBulkTemplatedEmail</code> operation several times to send the message to each group.</p> </li> <li> <p>The number of destinations you can contact in a single call to the API may be limited by your account&#39;s maximum sending rate.</p> </li> </ul></p>
-    fn send_bulk_templated_email(
+    async fn send_bulk_templated_email(
         &self,
         input: SendBulkTemplatedEmailRequest,
-    ) -> RusotoFuture<SendBulkTemplatedEmailResponse, SendBulkTemplatedEmailError>;
+    ) -> Result<SendBulkTemplatedEmailResponse, RusotoError<SendBulkTemplatedEmailError>>;
 
     /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. As a result of executing this operation, a customized verification email is sent to the specified address.</p> <p>To use this operation, you must first create a custom verification email template. For more information about creating and using custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn send_custom_verification_email(
+    async fn send_custom_verification_email(
         &self,
         input: SendCustomVerificationEmailRequest,
-    ) -> RusotoFuture<SendCustomVerificationEmailResponse, SendCustomVerificationEmailError>;
+    ) -> Result<SendCustomVerificationEmailResponse, RusotoError<SendCustomVerificationEmailError>>;
 
     /// <p><p>Composes an email message and immediately queues it for sending. In order to send email using the <code>SendEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important></p>
-    fn send_email(
+    async fn send_email(
         &self,
         input: SendEmailRequest,
-    ) -> RusotoFuture<SendEmailResponse, SendEmailError>;
+    ) -> Result<SendEmailResponse, RusotoError<SendEmailError>>;
 
     /// <p><p>Composes an email message and immediately queues it for sending.</p> <p>This operation is more flexible than the <code>SendEmail</code> API operation. When you use the <code>SendRawEmail</code> operation, you can specify the headers of the message as well as its content. This flexibility is useful, for example, when you want to send a multipart MIME email (such a message that contains both a text and an HTML version). You can also use this operation to send messages that include attachments.</p> <p>The <code>SendRawEmail</code> operation has the following requirements:</p> <ul> <li> <p>You can only send email from <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">verified email addresses or domains</a>. If you try to send email from an address that isn&#39;t verified, the operation results in an &quot;Email address not verified&quot; error.</p> </li> <li> <p>If your account is still in the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html">Amazon SES sandbox</a>, you can only send email to other verified addresses in your account, or to addresses that are associated with the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/mailbox-simulator.html">Amazon SES mailbox simulator</a>.</p> </li> <li> <p>The maximum message size, including attachments, is 10 MB.</p> </li> <li> <p>Each message has to include at least one recipient address. A recipient address includes any address on the To:, CC:, or BCC: lines.</p> </li> <li> <p>If you send a single message to more than one recipient address, and one of the recipient addresses isn&#39;t in a valid format (that is, it&#39;s not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), Amazon SES rejects the entire message, even if the other addresses are valid.</p> </li> <li> <p>Each message can include up to 50 recipient addresses across the To:, CC:, or BCC: lines. If you need to send a single message to more than 50 recipients, you have to split the list of recipient addresses into groups of less than 50 recipients, and send separate messages to each group.</p> </li> <li> <p>Amazon SES allows you to specify 8-bit Content-Transfer-Encoding for MIME message parts. However, if Amazon SES has to modify the contents of your message (for example, if you use open and click tracking), 8-bit content isn&#39;t preserved. For this reason, we highly recommend that you encode all content that isn&#39;t 7-bit ASCII. For more information, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html#send-email-mime-encoding">MIME Encoding</a> in the <i>Amazon SES Developer Guide</i>.</p> </li> </ul> <p>Additionally, keep the following considerations in mind when using the <code>SendRawEmail</code> operation:</p> <ul> <li> <p>Although you can customize the message headers when using the <code>SendRawEmail</code> operation, Amazon SES will automatically apply its own <code>Message-ID</code> and <code>Date</code> headers; if you passed these headers when creating the message, they will be overwritten by the values that Amazon SES provides.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s Source, From, and Return-Path parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature; Amazon SES will remove them before sending the email.</p> </important> <p>For most common sending authorization scenarios, we recommend that you specify the <code>SourceIdentityArn</code> parameter and not the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code> parameters. If you only specify the <code>SourceIdentityArn</code> parameter, Amazon SES will set the From and Return Path addresses to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Using Sending Authorization with Amazon SES</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> </ul></p>
-    fn send_raw_email(
+    async fn send_raw_email(
         &self,
         input: SendRawEmailRequest,
-    ) -> RusotoFuture<SendRawEmailResponse, SendRawEmailError>;
+    ) -> Result<SendRawEmailResponse, RusotoError<SendRawEmailError>>;
 
     /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul> <important> <p>If your call to the <code>SendTemplatedEmail</code> operation includes all of the required parameters, Amazon SES accepts it and returns a Message ID. However, if Amazon SES can&#39;t render the email because the template contains errors, it doesn&#39;t send the email. Additionally, because it already accepted the message, Amazon SES doesn&#39;t return a message stating that it was unable to send the email.</p> <p>For these reasons, we highly recommend that you set up Amazon SES to send you notifications when Rendering Failure events occur. For more information, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Sending Personalized Email Using the Amazon SES API</a> in the <i>Amazon Simple Email Service Developer Guide</i>.</p> </important></p>
-    fn send_templated_email(
+    async fn send_templated_email(
         &self,
         input: SendTemplatedEmailRequest,
-    ) -> RusotoFuture<SendTemplatedEmailResponse, SendTemplatedEmailError>;
+    ) -> Result<SendTemplatedEmailResponse, RusotoError<SendTemplatedEmailError>>;
 
     /// <p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn set_active_receipt_rule_set(
+    async fn set_active_receipt_rule_set(
         &self,
         input: SetActiveReceiptRuleSetRequest,
-    ) -> RusotoFuture<SetActiveReceiptRuleSetResponse, SetActiveReceiptRuleSetError>;
+    ) -> Result<SetActiveReceiptRuleSetResponse, RusotoError<SetActiveReceiptRuleSetError>>;
 
     /// <p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (such as <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (for example, <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (for example, <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (in this case, <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> operation.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about Easy DKIM signing, go to the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
-    fn set_identity_dkim_enabled(
+    async fn set_identity_dkim_enabled(
         &self,
         input: SetIdentityDkimEnabledRequest,
-    ) -> RusotoFuture<SetIdentityDkimEnabledResponse, SetIdentityDkimEnabledError>;
+    ) -> Result<SetIdentityDkimEnabledResponse, RusotoError<SetIdentityDkimEnabledError>>;
 
     /// <p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>You can execute this operation no more than once per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
-    fn set_identity_feedback_forwarding_enabled(
+    async fn set_identity_feedback_forwarding_enabled(
         &self,
         input: SetIdentityFeedbackForwardingEnabledRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         SetIdentityFeedbackForwardingEnabledResponse,
-        SetIdentityFeedbackForwardingEnabledError,
+        RusotoError<SetIdentityFeedbackForwardingEnabledError>,
     >;
 
     /// <p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
-    fn set_identity_headers_in_notifications_enabled(
+    async fn set_identity_headers_in_notifications_enabled(
         &self,
         input: SetIdentityHeadersInNotificationsEnabledRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         SetIdentityHeadersInNotificationsEnabledResponse,
-        SetIdentityHeadersInNotificationsEnabledError,
+        RusotoError<SetIdentityHeadersInNotificationsEnabledError>,
     >;
 
     /// <p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html">Amazon SES Developer Guide</a>.</p> </important> <p>You can execute this operation no more than once per second.</p>
-    fn set_identity_mail_from_domain(
+    async fn set_identity_mail_from_domain(
         &self,
         input: SetIdentityMailFromDomainRequest,
-    ) -> RusotoFuture<SetIdentityMailFromDomainResponse, SetIdentityMailFromDomainError>;
+    ) -> Result<SetIdentityMailFromDomainResponse, RusotoError<SetIdentityMailFromDomainError>>;
 
     /// <p>Sets an Amazon Simple Notification Service (Amazon SNS) topic to use when delivering notifications. When you use this operation, you specify a verified identity, such as an email address or domain. When you send an email that uses the chosen identity in the Source field, Amazon SES sends notifications to the topic you specified. You can send bounce, complaint, or delivery notifications (or any combination of the three) to the Amazon SNS topic that you specify.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about feedback notification, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
-    fn set_identity_notification_topic(
+    async fn set_identity_notification_topic(
         &self,
         input: SetIdentityNotificationTopicRequest,
-    ) -> RusotoFuture<SetIdentityNotificationTopicResponse, SetIdentityNotificationTopicError>;
+    ) -> Result<SetIdentityNotificationTopicResponse, RusotoError<SetIdentityNotificationTopicError>>;
 
     /// <p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn set_receipt_rule_position(
+    async fn set_receipt_rule_position(
         &self,
         input: SetReceiptRulePositionRequest,
-    ) -> RusotoFuture<SetReceiptRulePositionResponse, SetReceiptRulePositionError>;
+    ) -> Result<SetReceiptRulePositionResponse, RusotoError<SetReceiptRulePositionError>>;
 
     /// <p>Creates a preview of the MIME content of an email when provided with a template and a set of replacement data.</p> <p>You can execute this operation no more than once per second.</p>
-    fn test_render_template(
+    async fn test_render_template(
         &self,
         input: TestRenderTemplateRequest,
-    ) -> RusotoFuture<TestRenderTemplateResponse, TestRenderTemplateError>;
+    ) -> Result<TestRenderTemplateResponse, RusotoError<TestRenderTemplateError>>;
 
     /// <p>Enables or disables email sending across your entire Amazon SES account in the current AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending across your Amazon SES account in a given AWS Region when reputation metrics (such as your bounce or complaint rates) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_account_sending_enabled(
+    async fn update_account_sending_enabled(
         &self,
         input: UpdateAccountSendingEnabledRequest,
-    ) -> RusotoFuture<(), UpdateAccountSendingEnabledError>;
+    ) -> Result<(), RusotoError<UpdateAccountSendingEnabledError>>;
 
     /// <p>Updates the event destination of a configuration set. Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>You can execute this operation no more than once per second.</p>
-    fn update_configuration_set_event_destination(
+    async fn update_configuration_set_event_destination(
         &self,
         input: UpdateConfigurationSetEventDestinationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateConfigurationSetEventDestinationResponse,
-        UpdateConfigurationSetEventDestinationError,
+        RusotoError<UpdateConfigurationSetEventDestinationError>,
     >;
 
     /// <p>Enables or disables the publishing of reputation metrics for emails sent using a specific configuration set in a given AWS Region. Reputation metrics include bounce and complaint rates. These metrics are published to Amazon CloudWatch. By using CloudWatch, you can create alarms when bounce or complaint rates exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_configuration_set_reputation_metrics_enabled(
+    async fn update_configuration_set_reputation_metrics_enabled(
         &self,
         input: UpdateConfigurationSetReputationMetricsEnabledRequest,
-    ) -> RusotoFuture<(), UpdateConfigurationSetReputationMetricsEnabledError>;
+    ) -> Result<(), RusotoError<UpdateConfigurationSetReputationMetricsEnabledError>>;
 
     /// <p>Enables or disables email sending for messages sent using a specific configuration set in a given AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending for a configuration set when the reputation metrics for that configuration set (such as your bounce on complaint rate) exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_configuration_set_sending_enabled(
+    async fn update_configuration_set_sending_enabled(
         &self,
         input: UpdateConfigurationSetSendingEnabledRequest,
-    ) -> RusotoFuture<(), UpdateConfigurationSetSendingEnabledError>;
+    ) -> Result<(), RusotoError<UpdateConfigurationSetSendingEnabledError>>;
 
     /// <p>Modifies an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
-    fn update_configuration_set_tracking_options(
+    async fn update_configuration_set_tracking_options(
         &self,
         input: UpdateConfigurationSetTrackingOptionsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateConfigurationSetTrackingOptionsResponse,
-        UpdateConfigurationSetTrackingOptionsError,
+        RusotoError<UpdateConfigurationSetTrackingOptionsError>,
     >;
 
     /// <p>Updates an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_custom_verification_email_template(
+    async fn update_custom_verification_email_template(
         &self,
         input: UpdateCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<(), UpdateCustomVerificationEmailTemplateError>;
+    ) -> Result<(), RusotoError<UpdateCustomVerificationEmailTemplateError>>;
 
     /// <p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_receipt_rule(
+    async fn update_receipt_rule(
         &self,
         input: UpdateReceiptRuleRequest,
-    ) -> RusotoFuture<UpdateReceiptRuleResponse, UpdateReceiptRuleError>;
+    ) -> Result<UpdateReceiptRuleResponse, RusotoError<UpdateReceiptRuleError>>;
 
     /// <p>Updates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_template(
+    async fn update_template(
         &self,
         input: UpdateTemplateRequest,
-    ) -> RusotoFuture<UpdateTemplateResponse, UpdateTemplateError>;
+    ) -> Result<UpdateTemplateResponse, RusotoError<UpdateTemplateError>>;
 
     /// <p>Returns a set of DKIM tokens for a domain identity.</p> <important> <p>When you execute the <code>VerifyDomainDkim</code> operation, the domain that you specify is added to the list of identities that are associated with your account. This is true even if you haven't already associated the domain with your account by using the <code>VerifyDomainIdentity</code> operation. However, you can't send email from the domain until you either successfully <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-domains.html">verify it</a> or you successfully <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">set up DKIM for it</a>.</p> </important> <p>You use the tokens that are generated by this operation to create CNAME records. When Amazon SES detects that you've added these records to the DNS configuration for a domain, you can start sending email from that domain. You can start sending email even if you haven't added the TXT record provided by the VerifyDomainIdentity operation to the DNS configuration for your domain. All email that you send from the domain is authenticated using DKIM.</p> <p>To create the CNAME records for DKIM authentication, use the following values:</p> <ul> <li> <p> <b>Name</b>: <i>token</i>._domainkey.<i>example.com</i> </p> </li> <li> <p> <b>Type</b>: CNAME</p> </li> <li> <p> <b>Value</b>: <i>token</i>.dkim.amazonses.com</p> </li> </ul> <p>In the preceding example, replace <i>token</i> with one of the tokens that are generated when you execute this operation. Replace <i>example.com</i> with your domain. Repeat this process for each token that's generated by this operation.</p> <p>You can execute this operation no more than once per second.</p>
-    fn verify_domain_dkim(
+    async fn verify_domain_dkim(
         &self,
         input: VerifyDomainDkimRequest,
-    ) -> RusotoFuture<VerifyDomainDkimResponse, VerifyDomainDkimError>;
+    ) -> Result<VerifyDomainDkimResponse, RusotoError<VerifyDomainDkimError>>;
 
     /// <p>Adds a domain to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. For more information about verifying domains, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second.</p>
-    fn verify_domain_identity(
+    async fn verify_domain_identity(
         &self,
         input: VerifyDomainIdentityRequest,
-    ) -> RusotoFuture<VerifyDomainIdentityResponse, VerifyDomainIdentityError>;
+    ) -> Result<VerifyDomainIdentityResponse, RusotoError<VerifyDomainIdentityError>>;
 
     /// <p>Deprecated. Use the <code>VerifyEmailIdentity</code> operation to verify a new email address.</p>
-    fn verify_email_address(
+    async fn verify_email_address(
         &self,
         input: VerifyEmailAddressRequest,
-    ) -> RusotoFuture<(), VerifyEmailAddressError>;
+    ) -> Result<(), RusotoError<VerifyEmailAddressError>>;
 
     /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS region and attempts to verify it. As a result of executing this operation, a verification email is sent to the specified address.</p> <p>You can execute this operation no more than once per second.</p>
-    fn verify_email_identity(
+    async fn verify_email_identity(
         &self,
         input: VerifyEmailIdentityRequest,
-    ) -> RusotoFuture<VerifyEmailIdentityResponse, VerifyEmailIdentityError>;
+    ) -> Result<VerifyEmailIdentityResponse, RusotoError<VerifyEmailIdentityError>>;
 }
 /// A client for the Amazon SES API.
 #[derive(Clone)]
@@ -11033,12 +11035,13 @@ impl SesClient {
     }
 }
 
+#[async_trait]
 impl Ses for SesClient {
     /// <p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn clone_receipt_rule_set(
+    async fn clone_receipt_rule_set(
         &self,
         input: CloneReceiptRuleSetRequest,
-    ) -> RusotoFuture<CloneReceiptRuleSetResponse, CloneReceiptRuleSetError> {
+    ) -> Result<CloneReceiptRuleSetResponse, RusotoError<CloneReceiptRuleSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -11048,56 +11051,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CloneReceiptRuleSetError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CloneReceiptRuleSetError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CloneReceiptRuleSetError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CloneReceiptRuleSetResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CloneReceiptRuleSetResponseDeserializer::deserialize(
-                            "CloneReceiptRuleSetResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CloneReceiptRuleSetResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CloneReceiptRuleSetResponseDeserializer::deserialize(
+                "CloneReceiptRuleSetResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_configuration_set(
+    async fn create_configuration_set(
         &self,
         input: CreateConfigurationSetRequest,
-    ) -> RusotoFuture<CreateConfigurationSetResponse, CreateConfigurationSetError> {
+    ) -> Result<CreateConfigurationSetResponse, RusotoError<CreateConfigurationSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -11107,58 +11100,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CreateConfigurationSetError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreateConfigurationSetError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateConfigurationSetError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateConfigurationSetResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CreateConfigurationSetResponseDeserializer::deserialize(
-                            "CreateConfigurationSetResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateConfigurationSetResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateConfigurationSetResponseDeserializer::deserialize(
+                "CreateConfigurationSetResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_configuration_set_event_destination(
+    async fn create_configuration_set_event_destination(
         &self,
         input: CreateConfigurationSetEventDestinationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateConfigurationSetEventDestinationResponse,
-        CreateConfigurationSetEventDestinationError,
+        RusotoError<CreateConfigurationSetEventDestinationError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -11169,62 +11152,50 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<CreateConfigurationSetEventDestinationError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreateConfigurationSetEventDestinationError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateConfigurationSetEventDestinationError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateConfigurationSetEventDestinationResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            CreateConfigurationSetEventDestinationResponseDeserializer::deserialize(
-                                "CreateConfigurationSetEventDestinationResult",
-                                &mut stack,
-                            );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateConfigurationSetEventDestinationResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateConfigurationSetEventDestinationResponseDeserializer::deserialize(
+                "CreateConfigurationSetEventDestinationResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
-    fn create_configuration_set_tracking_options(
+    async fn create_configuration_set_tracking_options(
         &self,
         input: CreateConfigurationSetTrackingOptionsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateConfigurationSetTrackingOptionsResponse,
-        CreateConfigurationSetTrackingOptionsError,
+        RusotoError<CreateConfigurationSetTrackingOptionsError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -11235,60 +11206,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<CreateConfigurationSetTrackingOptionsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreateConfigurationSetTrackingOptionsError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateConfigurationSetTrackingOptionsError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateConfigurationSetTrackingOptionsResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            CreateConfigurationSetTrackingOptionsResponseDeserializer::deserialize(
-                                "CreateConfigurationSetTrackingOptionsResult",
-                                &mut stack,
-                            );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateConfigurationSetTrackingOptionsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateConfigurationSetTrackingOptionsResponseDeserializer::deserialize(
+                "CreateConfigurationSetTrackingOptionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a new custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_custom_verification_email_template(
+    async fn create_custom_verification_email_template(
         &self,
         input: CreateCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<(), CreateCustomVerificationEmailTemplateError> {
+    ) -> Result<(), RusotoError<CreateCustomVerificationEmailTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -11298,33 +11257,26 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<CreateCustomVerificationEmailTemplateError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreateCustomVerificationEmailTemplateError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateCustomVerificationEmailTemplateError::from_response(
+                response,
+            ));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_receipt_filter(
+    async fn create_receipt_filter(
         &self,
         input: CreateReceiptFilterRequest,
-    ) -> RusotoFuture<CreateReceiptFilterResponse, CreateReceiptFilterError> {
+    ) -> Result<CreateReceiptFilterResponse, RusotoError<CreateReceiptFilterError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -11334,56 +11286,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CreateReceiptFilterError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreateReceiptFilterError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateReceiptFilterError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateReceiptFilterResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CreateReceiptFilterResponseDeserializer::deserialize(
-                            "CreateReceiptFilterResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateReceiptFilterResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateReceiptFilterResponseDeserializer::deserialize(
+                "CreateReceiptFilterResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_receipt_rule(
+    async fn create_receipt_rule(
         &self,
         input: CreateReceiptRuleRequest,
-    ) -> RusotoFuture<CreateReceiptRuleResponse, CreateReceiptRuleError> {
+    ) -> Result<CreateReceiptRuleResponse, RusotoError<CreateReceiptRuleError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -11393,56 +11335,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CreateReceiptRuleError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreateReceiptRuleError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateReceiptRuleError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateReceiptRuleResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CreateReceiptRuleResponseDeserializer::deserialize(
-                            "CreateReceiptRuleResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateReceiptRuleResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateReceiptRuleResponseDeserializer::deserialize(
+                "CreateReceiptRuleResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_receipt_rule_set(
+    async fn create_receipt_rule_set(
         &self,
         input: CreateReceiptRuleSetRequest,
-    ) -> RusotoFuture<CreateReceiptRuleSetResponse, CreateReceiptRuleSetError> {
+    ) -> Result<CreateReceiptRuleSetResponse, RusotoError<CreateReceiptRuleSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -11452,56 +11384,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CreateReceiptRuleSetError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreateReceiptRuleSetError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateReceiptRuleSetError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateReceiptRuleSetResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CreateReceiptRuleSetResponseDeserializer::deserialize(
-                            "CreateReceiptRuleSetResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateReceiptRuleSetResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateReceiptRuleSetResponseDeserializer::deserialize(
+                "CreateReceiptRuleSetResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn create_template(
+    async fn create_template(
         &self,
         input: CreateTemplateRequest,
-    ) -> RusotoFuture<CreateTemplateResponse, CreateTemplateError> {
+    ) -> Result<CreateTemplateResponse, RusotoError<CreateTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -11511,54 +11433,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CreateTemplateError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(CreateTemplateError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateTemplateError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateTemplateResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CreateTemplateResponseDeserializer::deserialize(
-                            "CreateTemplateResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateTemplateResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateTemplateResponseDeserializer::deserialize(
+                "CreateTemplateResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_configuration_set(
+    async fn delete_configuration_set(
         &self,
         input: DeleteConfigurationSetRequest,
-    ) -> RusotoFuture<DeleteConfigurationSetResponse, DeleteConfigurationSetError> {
+    ) -> Result<DeleteConfigurationSetResponse, RusotoError<DeleteConfigurationSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -11568,58 +11482,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DeleteConfigurationSetError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteConfigurationSetError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteConfigurationSetError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteConfigurationSetResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DeleteConfigurationSetResponseDeserializer::deserialize(
-                            "DeleteConfigurationSetResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteConfigurationSetResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteConfigurationSetResponseDeserializer::deserialize(
+                "DeleteConfigurationSetResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes a configuration set event destination. Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_configuration_set_event_destination(
+    async fn delete_configuration_set_event_destination(
         &self,
         input: DeleteConfigurationSetEventDestinationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DeleteConfigurationSetEventDestinationResponse,
-        DeleteConfigurationSetEventDestinationError,
+        RusotoError<DeleteConfigurationSetEventDestinationError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -11630,62 +11534,50 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DeleteConfigurationSetEventDestinationError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteConfigurationSetEventDestinationError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteConfigurationSetEventDestinationError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteConfigurationSetEventDestinationResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            DeleteConfigurationSetEventDestinationResponseDeserializer::deserialize(
-                                "DeleteConfigurationSetEventDestinationResult",
-                                &mut stack,
-                            );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteConfigurationSetEventDestinationResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteConfigurationSetEventDestinationResponseDeserializer::deserialize(
+                "DeleteConfigurationSetEventDestinationResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Deletes an association between a configuration set and a custom domain for open and click event tracking.</p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p> <note> <p>Deleting this kind of association will result in emails sent using the specified configuration set to capture open and click events using the standard, Amazon SES-operated domains.</p> </note></p>
-    fn delete_configuration_set_tracking_options(
+    async fn delete_configuration_set_tracking_options(
         &self,
         input: DeleteConfigurationSetTrackingOptionsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DeleteConfigurationSetTrackingOptionsResponse,
-        DeleteConfigurationSetTrackingOptionsError,
+        RusotoError<DeleteConfigurationSetTrackingOptionsError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -11696,60 +11588,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DeleteConfigurationSetTrackingOptionsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteConfigurationSetTrackingOptionsError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteConfigurationSetTrackingOptionsError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteConfigurationSetTrackingOptionsResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            DeleteConfigurationSetTrackingOptionsResponseDeserializer::deserialize(
-                                "DeleteConfigurationSetTrackingOptionsResult",
-                                &mut stack,
-                            );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteConfigurationSetTrackingOptionsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteConfigurationSetTrackingOptionsResponseDeserializer::deserialize(
+                "DeleteConfigurationSetTrackingOptionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes an existing custom verification email template. </p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_custom_verification_email_template(
+    async fn delete_custom_verification_email_template(
         &self,
         input: DeleteCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<(), DeleteCustomVerificationEmailTemplateError> {
+    ) -> Result<(), RusotoError<DeleteCustomVerificationEmailTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -11759,33 +11639,26 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DeleteCustomVerificationEmailTemplateError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteCustomVerificationEmailTemplateError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteCustomVerificationEmailTemplateError::from_response(
+                response,
+            ));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_identity(
+    async fn delete_identity(
         &self,
         input: DeleteIdentityRequest,
-    ) -> RusotoFuture<DeleteIdentityResponse, DeleteIdentityError> {
+    ) -> Result<DeleteIdentityResponse, RusotoError<DeleteIdentityError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -11795,54 +11668,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteIdentityError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(DeleteIdentityError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteIdentityError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteIdentityResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DeleteIdentityResponseDeserializer::deserialize(
-                            "DeleteIdentityResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteIdentityResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteIdentityResponseDeserializer::deserialize(
+                "DeleteIdentityResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_identity_policy(
+    async fn delete_identity_policy(
         &self,
         input: DeleteIdentityPolicyRequest,
-    ) -> RusotoFuture<DeleteIdentityPolicyResponse, DeleteIdentityPolicyError> {
+    ) -> Result<DeleteIdentityPolicyResponse, RusotoError<DeleteIdentityPolicyError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -11852,56 +11717,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DeleteIdentityPolicyError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteIdentityPolicyError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteIdentityPolicyError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteIdentityPolicyResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DeleteIdentityPolicyResponseDeserializer::deserialize(
-                            "DeleteIdentityPolicyResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteIdentityPolicyResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteIdentityPolicyResponseDeserializer::deserialize(
+                "DeleteIdentityPolicyResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_receipt_filter(
+    async fn delete_receipt_filter(
         &self,
         input: DeleteReceiptFilterRequest,
-    ) -> RusotoFuture<DeleteReceiptFilterResponse, DeleteReceiptFilterError> {
+    ) -> Result<DeleteReceiptFilterResponse, RusotoError<DeleteReceiptFilterError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -11911,56 +11766,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DeleteReceiptFilterError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteReceiptFilterError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteReceiptFilterError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteReceiptFilterResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DeleteReceiptFilterResponseDeserializer::deserialize(
-                            "DeleteReceiptFilterResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteReceiptFilterResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteReceiptFilterResponseDeserializer::deserialize(
+                "DeleteReceiptFilterResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_receipt_rule(
+    async fn delete_receipt_rule(
         &self,
         input: DeleteReceiptRuleRequest,
-    ) -> RusotoFuture<DeleteReceiptRuleResponse, DeleteReceiptRuleError> {
+    ) -> Result<DeleteReceiptRuleResponse, RusotoError<DeleteReceiptRuleError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -11970,56 +11815,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DeleteReceiptRuleError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteReceiptRuleError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteReceiptRuleError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteReceiptRuleResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DeleteReceiptRuleResponseDeserializer::deserialize(
-                            "DeleteReceiptRuleResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteReceiptRuleResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteReceiptRuleResponseDeserializer::deserialize(
+                "DeleteReceiptRuleResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_receipt_rule_set(
+    async fn delete_receipt_rule_set(
         &self,
         input: DeleteReceiptRuleSetRequest,
-    ) -> RusotoFuture<DeleteReceiptRuleSetResponse, DeleteReceiptRuleSetError> {
+    ) -> Result<DeleteReceiptRuleSetResponse, RusotoError<DeleteReceiptRuleSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -12029,56 +11864,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DeleteReceiptRuleSetError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteReceiptRuleSetError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteReceiptRuleSetError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteReceiptRuleSetResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DeleteReceiptRuleSetResponseDeserializer::deserialize(
-                            "DeleteReceiptRuleSetResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteReceiptRuleSetResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteReceiptRuleSetResponseDeserializer::deserialize(
+                "DeleteReceiptRuleSetResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes an email template.</p> <p>You can execute this operation no more than once per second.</p>
-    fn delete_template(
+    async fn delete_template(
         &self,
         input: DeleteTemplateRequest,
-    ) -> RusotoFuture<DeleteTemplateResponse, DeleteTemplateError> {
+    ) -> Result<DeleteTemplateResponse, RusotoError<DeleteTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -12088,54 +11913,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteTemplateError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(DeleteTemplateError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteTemplateError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteTemplateResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DeleteTemplateResponseDeserializer::deserialize(
-                            "DeleteTemplateResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteTemplateResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteTemplateResponseDeserializer::deserialize(
+                "DeleteTemplateResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deprecated. Use the <code>DeleteIdentity</code> operation to delete email addresses and domains.</p>
-    fn delete_verified_email_address(
+    async fn delete_verified_email_address(
         &self,
         input: DeleteVerifiedEmailAddressRequest,
-    ) -> RusotoFuture<(), DeleteVerifiedEmailAddressError> {
+    ) -> Result<(), RusotoError<DeleteVerifiedEmailAddressError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -12145,30 +11962,25 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DeleteVerifiedEmailAddressError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteVerifiedEmailAddressError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteVerifiedEmailAddressError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn describe_active_receipt_rule_set(
+    async fn describe_active_receipt_rule_set(
         &self,
         input: DescribeActiveReceiptRuleSetRequest,
-    ) -> RusotoFuture<DescribeActiveReceiptRuleSetResponse, DescribeActiveReceiptRuleSetError> {
+    ) -> Result<DescribeActiveReceiptRuleSetResponse, RusotoError<DescribeActiveReceiptRuleSetError>>
+    {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -12178,57 +11990,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DescribeActiveReceiptRuleSetError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeActiveReceiptRuleSetError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeActiveReceiptRuleSetError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeActiveReceiptRuleSetResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeActiveReceiptRuleSetResponseDeserializer::deserialize(
-                            "DescribeActiveReceiptRuleSetResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeActiveReceiptRuleSetResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeActiveReceiptRuleSetResponseDeserializer::deserialize(
+                "DescribeActiveReceiptRuleSetResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the details of the specified configuration set. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn describe_configuration_set(
+    async fn describe_configuration_set(
         &self,
         input: DescribeConfigurationSetRequest,
-    ) -> RusotoFuture<DescribeConfigurationSetResponse, DescribeConfigurationSetError> {
+    ) -> Result<DescribeConfigurationSetResponse, RusotoError<DescribeConfigurationSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -12238,56 +12039,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribeConfigurationSetError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeConfigurationSetError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeConfigurationSetError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeConfigurationSetResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeConfigurationSetResponseDeserializer::deserialize(
-                            "DescribeConfigurationSetResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeConfigurationSetResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeConfigurationSetResponseDeserializer::deserialize(
+                "DescribeConfigurationSetResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn describe_receipt_rule(
+    async fn describe_receipt_rule(
         &self,
         input: DescribeReceiptRuleRequest,
-    ) -> RusotoFuture<DescribeReceiptRuleResponse, DescribeReceiptRuleError> {
+    ) -> Result<DescribeReceiptRuleResponse, RusotoError<DescribeReceiptRuleError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -12297,56 +12088,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribeReceiptRuleError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeReceiptRuleError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeReceiptRuleError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeReceiptRuleResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeReceiptRuleResponseDeserializer::deserialize(
-                            "DescribeReceiptRuleResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeReceiptRuleResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeReceiptRuleResponseDeserializer::deserialize(
+                "DescribeReceiptRuleResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn describe_receipt_rule_set(
+    async fn describe_receipt_rule_set(
         &self,
         input: DescribeReceiptRuleSetRequest,
-    ) -> RusotoFuture<DescribeReceiptRuleSetResponse, DescribeReceiptRuleSetError> {
+    ) -> Result<DescribeReceiptRuleSetResponse, RusotoError<DescribeReceiptRuleSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -12356,55 +12137,45 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribeReceiptRuleSetError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeReceiptRuleSetError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeReceiptRuleSetError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeReceiptRuleSetResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeReceiptRuleSetResponseDeserializer::deserialize(
-                            "DescribeReceiptRuleSetResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeReceiptRuleSetResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeReceiptRuleSetResponseDeserializer::deserialize(
+                "DescribeReceiptRuleSetResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the email sending status of the Amazon SES account for the current region.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_account_sending_enabled(
+    async fn get_account_sending_enabled(
         &self,
-    ) -> RusotoFuture<GetAccountSendingEnabledResponse, GetAccountSendingEnabledError> {
+    ) -> Result<GetAccountSendingEnabledResponse, RusotoError<GetAccountSendingEnabledError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -12414,58 +12185,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<GetAccountSendingEnabledError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(GetAccountSendingEnabledError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetAccountSendingEnabledError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetAccountSendingEnabledResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = GetAccountSendingEnabledResponseDeserializer::deserialize(
-                            "GetAccountSendingEnabledResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetAccountSendingEnabledResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetAccountSendingEnabledResponseDeserializer::deserialize(
+                "GetAccountSendingEnabledResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the custom email verification template for the template name you specify.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_custom_verification_email_template(
+    async fn get_custom_verification_email_template(
         &self,
         input: GetCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetCustomVerificationEmailTemplateResponse,
-        GetCustomVerificationEmailTemplateError,
+        RusotoError<GetCustomVerificationEmailTemplateError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -12476,60 +12237,49 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<GetCustomVerificationEmailTemplateError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(GetCustomVerificationEmailTemplateError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetCustomVerificationEmailTemplateError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetCustomVerificationEmailTemplateResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            GetCustomVerificationEmailTemplateResponseDeserializer::deserialize(
-                                "GetCustomVerificationEmailTemplateResult",
-                                &mut stack,
-                            );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetCustomVerificationEmailTemplateResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetCustomVerificationEmailTemplateResponseDeserializer::deserialize(
+                "GetCustomVerificationEmailTemplateResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this operation also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This operation takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This operation is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
-    fn get_identity_dkim_attributes(
+    async fn get_identity_dkim_attributes(
         &self,
         input: GetIdentityDkimAttributesRequest,
-    ) -> RusotoFuture<GetIdentityDkimAttributesResponse, GetIdentityDkimAttributesError> {
+    ) -> Result<GetIdentityDkimAttributesResponse, RusotoError<GetIdentityDkimAttributesError>>
+    {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -12539,58 +12289,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<GetIdentityDkimAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(GetIdentityDkimAttributesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetIdentityDkimAttributesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetIdentityDkimAttributesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = GetIdentityDkimAttributesResponseDeserializer::deserialize(
-                            "GetIdentityDkimAttributesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetIdentityDkimAttributesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetIdentityDkimAttributesResponseDeserializer::deserialize(
+                "GetIdentityDkimAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the custom MAIL FROM attributes for a list of identities (email addresses : domains).</p> <p>This operation is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>
-    fn get_identity_mail_from_domain_attributes(
+    async fn get_identity_mail_from_domain_attributes(
         &self,
         input: GetIdentityMailFromDomainAttributesRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetIdentityMailFromDomainAttributesResponse,
-        GetIdentityMailFromDomainAttributesError,
+        RusotoError<GetIdentityMailFromDomainAttributesError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -12601,62 +12341,50 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<GetIdentityMailFromDomainAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(GetIdentityMailFromDomainAttributesError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetIdentityMailFromDomainAttributesError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetIdentityMailFromDomainAttributesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            GetIdentityMailFromDomainAttributesResponseDeserializer::deserialize(
-                                "GetIdentityMailFromDomainAttributesResult",
-                                &mut stack,
-                            );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetIdentityMailFromDomainAttributesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetIdentityMailFromDomainAttributesResponseDeserializer::deserialize(
+                "GetIdentityMailFromDomainAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This operation is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
-    fn get_identity_notification_attributes(
+    async fn get_identity_notification_attributes(
         &self,
         input: GetIdentityNotificationAttributesRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetIdentityNotificationAttributesResponse,
-        GetIdentityNotificationAttributesError,
+        RusotoError<GetIdentityNotificationAttributesError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -12667,59 +12395,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<GetIdentityNotificationAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(GetIdentityNotificationAttributesError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetIdentityNotificationAttributesError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetIdentityNotificationAttributesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = GetIdentityNotificationAttributesResponseDeserializer::deserialize(
-                            "GetIdentityNotificationAttributesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetIdentityNotificationAttributesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetIdentityNotificationAttributesResponseDeserializer::deserialize(
+                "GetIdentityNotificationAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_identity_policies(
+    async fn get_identity_policies(
         &self,
         input: GetIdentityPoliciesRequest,
-    ) -> RusotoFuture<GetIdentityPoliciesResponse, GetIdentityPoliciesError> {
+    ) -> Result<GetIdentityPoliciesResponse, RusotoError<GetIdentityPoliciesError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -12729,58 +12446,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<GetIdentityPoliciesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(GetIdentityPoliciesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetIdentityPoliciesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetIdentityPoliciesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = GetIdentityPoliciesResponseDeserializer::deserialize(
-                            "GetIdentityPoliciesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetIdentityPoliciesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetIdentityPoliciesResponseDeserializer::deserialize(
+                "GetIdentityPoliciesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is "Pending" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to "Success". If the link is not clicked within 24 hours, the verification status changes to "Failed." In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is "Pending" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to "Success". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to "Failed." In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This operation is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>
-    fn get_identity_verification_attributes(
+    async fn get_identity_verification_attributes(
         &self,
         input: GetIdentityVerificationAttributesRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetIdentityVerificationAttributesResponse,
-        GetIdentityVerificationAttributesError,
+        RusotoError<GetIdentityVerificationAttributesError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -12791,56 +12498,45 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<GetIdentityVerificationAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(GetIdentityVerificationAttributesError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetIdentityVerificationAttributesError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetIdentityVerificationAttributesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = GetIdentityVerificationAttributesResponseDeserializer::deserialize(
-                            "GetIdentityVerificationAttributesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetIdentityVerificationAttributesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetIdentityVerificationAttributesResponseDeserializer::deserialize(
+                "GetIdentityVerificationAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Provides the sending limits for the Amazon SES account. </p> <p>You can execute this operation no more than once per second.</p>
-    fn get_send_quota(&self) -> RusotoFuture<GetSendQuotaResponse, GetSendQuotaError> {
+    async fn get_send_quota(&self) -> Result<GetSendQuotaResponse, RusotoError<GetSendQuotaError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -12850,53 +12546,43 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetSendQuotaError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(GetSendQuotaError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetSendQuotaError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetSendQuotaResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = GetSendQuotaResponseDeserializer::deserialize(
-                            "GetSendQuotaResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetSendQuotaResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                GetSendQuotaResponseDeserializer::deserialize("GetSendQuotaResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Provides sending statistics for the current AWS Region. The result is a list of data points, representing the last two weeks of sending activity. Each data point in the list contains statistics for a 15-minute period of time.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_send_statistics(
+    async fn get_send_statistics(
         &self,
-    ) -> RusotoFuture<GetSendStatisticsResponse, GetSendStatisticsError> {
+    ) -> Result<GetSendStatisticsResponse, RusotoError<GetSendStatisticsError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -12906,56 +12592,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<GetSendStatisticsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(GetSendStatisticsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetSendStatisticsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetSendStatisticsResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = GetSendStatisticsResponseDeserializer::deserialize(
-                            "GetSendStatisticsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetSendStatisticsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetSendStatisticsResponseDeserializer::deserialize(
+                "GetSendStatisticsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Displays the template object (which includes the Subject line, HTML part and text part) for the template you specify.</p> <p>You can execute this operation no more than once per second.</p>
-    fn get_template(
+    async fn get_template(
         &self,
         input: GetTemplateRequest,
-    ) -> RusotoFuture<GetTemplateResponse, GetTemplateError> {
+    ) -> Result<GetTemplateResponse, RusotoError<GetTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -12965,54 +12641,43 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetTemplateError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(GetTemplateError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetTemplateError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetTemplateResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = GetTemplateResponseDeserializer::deserialize(
-                            "GetTemplateResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetTemplateResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetTemplateResponseDeserializer::deserialize("GetTemplateResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Provides a list of the configuration sets associated with your Amazon SES account in the current AWS Region. For information about using configuration sets, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second. This operation will return up to 1,000 configuration sets each time it is run. If your Amazon SES account has more than 1,000 configuration sets, this operation will also return a NextToken element. You can then execute the <code>ListConfigurationSets</code> operation again, passing the <code>NextToken</code> parameter and the value of the NextToken element to retrieve additional results.</p>
-    fn list_configuration_sets(
+    async fn list_configuration_sets(
         &self,
         input: ListConfigurationSetsRequest,
-    ) -> RusotoFuture<ListConfigurationSetsResponse, ListConfigurationSetsError> {
+    ) -> Result<ListConfigurationSetsResponse, RusotoError<ListConfigurationSetsError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13022,58 +12687,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ListConfigurationSetsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListConfigurationSetsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListConfigurationSetsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListConfigurationSetsResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListConfigurationSetsResponseDeserializer::deserialize(
-                            "ListConfigurationSetsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListConfigurationSetsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListConfigurationSetsResponseDeserializer::deserialize(
+                "ListConfigurationSetsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists the existing custom verification email templates for your account in the current AWS Region.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_custom_verification_email_templates(
+    async fn list_custom_verification_email_templates(
         &self,
         input: ListCustomVerificationEmailTemplatesRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListCustomVerificationEmailTemplatesResponse,
-        ListCustomVerificationEmailTemplatesError,
+        RusotoError<ListCustomVerificationEmailTemplatesError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -13084,60 +12739,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<ListCustomVerificationEmailTemplatesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListCustomVerificationEmailTemplatesError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListCustomVerificationEmailTemplatesError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListCustomVerificationEmailTemplatesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            ListCustomVerificationEmailTemplatesResponseDeserializer::deserialize(
-                                "ListCustomVerificationEmailTemplatesResult",
-                                &mut stack,
-                            );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListCustomVerificationEmailTemplatesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListCustomVerificationEmailTemplatesResponseDeserializer::deserialize(
+                "ListCustomVerificationEmailTemplatesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account in the current AWS Region, regardless of verification status.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_identities(
+    async fn list_identities(
         &self,
         input: ListIdentitiesRequest,
-    ) -> RusotoFuture<ListIdentitiesResponse, ListIdentitiesError> {
+    ) -> Result<ListIdentitiesResponse, RusotoError<ListIdentitiesError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13147,54 +12790,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListIdentitiesError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(ListIdentitiesError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListIdentitiesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListIdentitiesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListIdentitiesResponseDeserializer::deserialize(
-                            "ListIdentitiesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListIdentitiesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListIdentitiesResponseDeserializer::deserialize(
+                "ListIdentitiesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_identity_policies(
+    async fn list_identity_policies(
         &self,
         input: ListIdentityPoliciesRequest,
-    ) -> RusotoFuture<ListIdentityPoliciesResponse, ListIdentityPoliciesError> {
+    ) -> Result<ListIdentityPoliciesResponse, RusotoError<ListIdentityPoliciesError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13204,56 +12839,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ListIdentityPoliciesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListIdentityPoliciesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListIdentityPoliciesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListIdentityPoliciesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListIdentityPoliciesResponseDeserializer::deserialize(
-                            "ListIdentityPoliciesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListIdentityPoliciesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListIdentityPoliciesResponseDeserializer::deserialize(
+                "ListIdentityPoliciesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists the IP address filters associated with your AWS account in the current AWS Region.</p> <p>For information about managing IP address filters, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_receipt_filters(
+    async fn list_receipt_filters(
         &self,
         input: ListReceiptFiltersRequest,
-    ) -> RusotoFuture<ListReceiptFiltersResponse, ListReceiptFiltersError> {
+    ) -> Result<ListReceiptFiltersResponse, RusotoError<ListReceiptFiltersError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13263,56 +12888,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ListReceiptFiltersError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListReceiptFiltersError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListReceiptFiltersError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListReceiptFiltersResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListReceiptFiltersResponseDeserializer::deserialize(
-                            "ListReceiptFiltersResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListReceiptFiltersResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListReceiptFiltersResponseDeserializer::deserialize(
+                "ListReceiptFiltersResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists the receipt rule sets that exist under your AWS account in the current AWS Region. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_receipt_rule_sets(
+    async fn list_receipt_rule_sets(
         &self,
         input: ListReceiptRuleSetsRequest,
-    ) -> RusotoFuture<ListReceiptRuleSetsResponse, ListReceiptRuleSetsError> {
+    ) -> Result<ListReceiptRuleSetsResponse, RusotoError<ListReceiptRuleSetsError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13322,56 +12937,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ListReceiptRuleSetsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListReceiptRuleSetsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListReceiptRuleSetsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListReceiptRuleSetsResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListReceiptRuleSetsResponseDeserializer::deserialize(
-                            "ListReceiptRuleSetsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListReceiptRuleSetsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListReceiptRuleSetsResponseDeserializer::deserialize(
+                "ListReceiptRuleSetsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists the email templates present in your Amazon SES account in the current AWS Region.</p> <p>You can execute this operation no more than once per second.</p>
-    fn list_templates(
+    async fn list_templates(
         &self,
         input: ListTemplatesRequest,
-    ) -> RusotoFuture<ListTemplatesResponse, ListTemplatesError> {
+    ) -> Result<ListTemplatesResponse, RusotoError<ListTemplatesError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13381,53 +12986,44 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListTemplatesError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(ListTemplatesError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListTemplatesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListTemplatesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListTemplatesResponseDeserializer::deserialize(
-                            "ListTemplatesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListTemplatesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                ListTemplatesResponseDeserializer::deserialize("ListTemplatesResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deprecated. Use the <code>ListIdentities</code> operation to list the email addresses and domains associated with your account.</p>
-    fn list_verified_email_addresses(
+    async fn list_verified_email_addresses(
         &self,
-    ) -> RusotoFuture<ListVerifiedEmailAddressesResponse, ListVerifiedEmailAddressesError> {
+    ) -> Result<ListVerifiedEmailAddressesResponse, RusotoError<ListVerifiedEmailAddressesError>>
+    {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13437,58 +13033,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ListVerifiedEmailAddressesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListVerifiedEmailAddressesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListVerifiedEmailAddressesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListVerifiedEmailAddressesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListVerifiedEmailAddressesResponseDeserializer::deserialize(
-                            "ListVerifiedEmailAddressesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListVerifiedEmailAddressesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListVerifiedEmailAddressesResponseDeserializer::deserialize(
+                "ListVerifiedEmailAddressesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Adds or updates the delivery options for a configuration set.</p>
-    fn put_configuration_set_delivery_options(
+    async fn put_configuration_set_delivery_options(
         &self,
         input: PutConfigurationSetDeliveryOptionsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         PutConfigurationSetDeliveryOptionsResponse,
-        PutConfigurationSetDeliveryOptionsError,
+        RusotoError<PutConfigurationSetDeliveryOptionsError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -13499,60 +13085,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<PutConfigurationSetDeliveryOptionsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(PutConfigurationSetDeliveryOptionsError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutConfigurationSetDeliveryOptionsError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(PutConfigurationSetDeliveryOptionsResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            PutConfigurationSetDeliveryOptionsResponseDeserializer::deserialize(
-                                "PutConfigurationSetDeliveryOptionsResult",
-                                &mut stack,
-                            );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = PutConfigurationSetDeliveryOptionsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = PutConfigurationSetDeliveryOptionsResponseDeserializer::deserialize(
+                "PutConfigurationSetDeliveryOptionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn put_identity_policy(
+    async fn put_identity_policy(
         &self,
         input: PutIdentityPolicyRequest,
-    ) -> RusotoFuture<PutIdentityPolicyResponse, PutIdentityPolicyError> {
+    ) -> Result<PutIdentityPolicyResponse, RusotoError<PutIdentityPolicyError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13562,56 +13136,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<PutIdentityPolicyError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(PutIdentityPolicyError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutIdentityPolicyError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(PutIdentityPolicyResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = PutIdentityPolicyResponseDeserializer::deserialize(
-                            "PutIdentityPolicyResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = PutIdentityPolicyResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = PutIdentityPolicyResponseDeserializer::deserialize(
+                "PutIdentityPolicyResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn reorder_receipt_rule_set(
+    async fn reorder_receipt_rule_set(
         &self,
         input: ReorderReceiptRuleSetRequest,
-    ) -> RusotoFuture<ReorderReceiptRuleSetResponse, ReorderReceiptRuleSetError> {
+    ) -> Result<ReorderReceiptRuleSetResponse, RusotoError<ReorderReceiptRuleSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13621,56 +13185,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ReorderReceiptRuleSetError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ReorderReceiptRuleSetError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ReorderReceiptRuleSetError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ReorderReceiptRuleSetResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ReorderReceiptRuleSetResponseDeserializer::deserialize(
-                            "ReorderReceiptRuleSetResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ReorderReceiptRuleSetResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ReorderReceiptRuleSetResponseDeserializer::deserialize(
+                "ReorderReceiptRuleSetResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn send_bounce(
+    async fn send_bounce(
         &self,
         input: SendBounceRequest,
-    ) -> RusotoFuture<SendBounceResponse, SendBounceError> {
+    ) -> Result<SendBounceResponse, RusotoError<SendBounceError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13680,54 +13234,43 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<SendBounceError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(SendBounceError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SendBounceError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SendBounceResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SendBounceResponseDeserializer::deserialize(
-                            "SendBounceResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SendBounceResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SendBounceResponseDeserializer::deserialize("SendBounceResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Composes an email message to multiple destinations. The message body is created using an email template.</p> <p>In order to send email using the <code>SendBulkTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>Each <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendBulkTemplatedEmail</code> operation several times to send the message to each group.</p> </li> <li> <p>The number of destinations you can contact in a single call to the API may be limited by your account&#39;s maximum sending rate.</p> </li> </ul></p>
-    fn send_bulk_templated_email(
+    async fn send_bulk_templated_email(
         &self,
         input: SendBulkTemplatedEmailRequest,
-    ) -> RusotoFuture<SendBulkTemplatedEmailResponse, SendBulkTemplatedEmailError> {
+    ) -> Result<SendBulkTemplatedEmailResponse, RusotoError<SendBulkTemplatedEmailError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13737,56 +13280,47 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<SendBulkTemplatedEmailError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SendBulkTemplatedEmailError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SendBulkTemplatedEmailError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SendBulkTemplatedEmailResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SendBulkTemplatedEmailResponseDeserializer::deserialize(
-                            "SendBulkTemplatedEmailResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SendBulkTemplatedEmailResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SendBulkTemplatedEmailResponseDeserializer::deserialize(
+                "SendBulkTemplatedEmailResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. As a result of executing this operation, a customized verification email is sent to the specified address.</p> <p>To use this operation, you must first create a custom verification email template. For more information about creating and using custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn send_custom_verification_email(
+    async fn send_custom_verification_email(
         &self,
         input: SendCustomVerificationEmailRequest,
-    ) -> RusotoFuture<SendCustomVerificationEmailResponse, SendCustomVerificationEmailError> {
+    ) -> Result<SendCustomVerificationEmailResponse, RusotoError<SendCustomVerificationEmailError>>
+    {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13796,57 +13330,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<SendCustomVerificationEmailError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SendCustomVerificationEmailError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SendCustomVerificationEmailError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SendCustomVerificationEmailResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SendCustomVerificationEmailResponseDeserializer::deserialize(
-                            "SendCustomVerificationEmailResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SendCustomVerificationEmailResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SendCustomVerificationEmailResponseDeserializer::deserialize(
+                "SendCustomVerificationEmailResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Composes an email message and immediately queues it for sending. In order to send email using the <code>SendEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important></p>
-    fn send_email(
+    async fn send_email(
         &self,
         input: SendEmailRequest,
-    ) -> RusotoFuture<SendEmailResponse, SendEmailError> {
+    ) -> Result<SendEmailResponse, RusotoError<SendEmailError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13856,54 +13379,43 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<SendEmailError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(SendEmailError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SendEmailError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SendEmailResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SendEmailResponseDeserializer::deserialize(
-                            "SendEmailResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SendEmailResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SendEmailResponseDeserializer::deserialize("SendEmailResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Composes an email message and immediately queues it for sending.</p> <p>This operation is more flexible than the <code>SendEmail</code> API operation. When you use the <code>SendRawEmail</code> operation, you can specify the headers of the message as well as its content. This flexibility is useful, for example, when you want to send a multipart MIME email (such a message that contains both a text and an HTML version). You can also use this operation to send messages that include attachments.</p> <p>The <code>SendRawEmail</code> operation has the following requirements:</p> <ul> <li> <p>You can only send email from <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">verified email addresses or domains</a>. If you try to send email from an address that isn&#39;t verified, the operation results in an &quot;Email address not verified&quot; error.</p> </li> <li> <p>If your account is still in the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html">Amazon SES sandbox</a>, you can only send email to other verified addresses in your account, or to addresses that are associated with the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/mailbox-simulator.html">Amazon SES mailbox simulator</a>.</p> </li> <li> <p>The maximum message size, including attachments, is 10 MB.</p> </li> <li> <p>Each message has to include at least one recipient address. A recipient address includes any address on the To:, CC:, or BCC: lines.</p> </li> <li> <p>If you send a single message to more than one recipient address, and one of the recipient addresses isn&#39;t in a valid format (that is, it&#39;s not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), Amazon SES rejects the entire message, even if the other addresses are valid.</p> </li> <li> <p>Each message can include up to 50 recipient addresses across the To:, CC:, or BCC: lines. If you need to send a single message to more than 50 recipients, you have to split the list of recipient addresses into groups of less than 50 recipients, and send separate messages to each group.</p> </li> <li> <p>Amazon SES allows you to specify 8-bit Content-Transfer-Encoding for MIME message parts. However, if Amazon SES has to modify the contents of your message (for example, if you use open and click tracking), 8-bit content isn&#39;t preserved. For this reason, we highly recommend that you encode all content that isn&#39;t 7-bit ASCII. For more information, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html#send-email-mime-encoding">MIME Encoding</a> in the <i>Amazon SES Developer Guide</i>.</p> </li> </ul> <p>Additionally, keep the following considerations in mind when using the <code>SendRawEmail</code> operation:</p> <ul> <li> <p>Although you can customize the message headers when using the <code>SendRawEmail</code> operation, Amazon SES will automatically apply its own <code>Message-ID</code> and <code>Date</code> headers; if you passed these headers when creating the message, they will be overwritten by the values that Amazon SES provides.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s Source, From, and Return-Path parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature; Amazon SES will remove them before sending the email.</p> </important> <p>For most common sending authorization scenarios, we recommend that you specify the <code>SourceIdentityArn</code> parameter and not the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code> parameters. If you only specify the <code>SourceIdentityArn</code> parameter, Amazon SES will set the From and Return Path addresses to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Using Sending Authorization with Amazon SES</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> </ul></p>
-    fn send_raw_email(
+    async fn send_raw_email(
         &self,
         input: SendRawEmailRequest,
-    ) -> RusotoFuture<SendRawEmailResponse, SendRawEmailError> {
+    ) -> Result<SendRawEmailResponse, RusotoError<SendRawEmailError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13913,54 +13425,44 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<SendRawEmailError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(SendRawEmailError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SendRawEmailError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SendRawEmailResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SendRawEmailResponseDeserializer::deserialize(
-                            "SendRawEmailResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SendRawEmailResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                SendRawEmailResponseDeserializer::deserialize("SendRawEmailResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul> <important> <p>If your call to the <code>SendTemplatedEmail</code> operation includes all of the required parameters, Amazon SES accepts it and returns a Message ID. However, if Amazon SES can&#39;t render the email because the template contains errors, it doesn&#39;t send the email. Additionally, because it already accepted the message, Amazon SES doesn&#39;t return a message stating that it was unable to send the email.</p> <p>For these reasons, we highly recommend that you set up Amazon SES to send you notifications when Rendering Failure events occur. For more information, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Sending Personalized Email Using the Amazon SES API</a> in the <i>Amazon Simple Email Service Developer Guide</i>.</p> </important></p>
-    fn send_templated_email(
+    async fn send_templated_email(
         &self,
         input: SendTemplatedEmailRequest,
-    ) -> RusotoFuture<SendTemplatedEmailResponse, SendTemplatedEmailError> {
+    ) -> Result<SendTemplatedEmailResponse, RusotoError<SendTemplatedEmailError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -13970,56 +13472,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<SendTemplatedEmailError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SendTemplatedEmailError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SendTemplatedEmailError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SendTemplatedEmailResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SendTemplatedEmailResponseDeserializer::deserialize(
-                            "SendTemplatedEmailResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SendTemplatedEmailResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SendTemplatedEmailResponseDeserializer::deserialize(
+                "SendTemplatedEmailResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn set_active_receipt_rule_set(
+    async fn set_active_receipt_rule_set(
         &self,
         input: SetActiveReceiptRuleSetRequest,
-    ) -> RusotoFuture<SetActiveReceiptRuleSetResponse, SetActiveReceiptRuleSetError> {
+    ) -> Result<SetActiveReceiptRuleSetResponse, RusotoError<SetActiveReceiptRuleSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -14029,56 +13521,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<SetActiveReceiptRuleSetError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SetActiveReceiptRuleSetError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetActiveReceiptRuleSetError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SetActiveReceiptRuleSetResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SetActiveReceiptRuleSetResponseDeserializer::deserialize(
-                            "SetActiveReceiptRuleSetResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SetActiveReceiptRuleSetResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetActiveReceiptRuleSetResponseDeserializer::deserialize(
+                "SetActiveReceiptRuleSetResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (such as <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (for example, <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (for example, <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (in this case, <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> operation.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about Easy DKIM signing, go to the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
-    fn set_identity_dkim_enabled(
+    async fn set_identity_dkim_enabled(
         &self,
         input: SetIdentityDkimEnabledRequest,
-    ) -> RusotoFuture<SetIdentityDkimEnabledResponse, SetIdentityDkimEnabledError> {
+    ) -> Result<SetIdentityDkimEnabledResponse, RusotoError<SetIdentityDkimEnabledError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -14088,58 +13570,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<SetIdentityDkimEnabledError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SetIdentityDkimEnabledError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetIdentityDkimEnabledError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SetIdentityDkimEnabledResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SetIdentityDkimEnabledResponseDeserializer::deserialize(
-                            "SetIdentityDkimEnabledResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SetIdentityDkimEnabledResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetIdentityDkimEnabledResponseDeserializer::deserialize(
+                "SetIdentityDkimEnabledResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>You can execute this operation no more than once per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
-    fn set_identity_feedback_forwarding_enabled(
+    async fn set_identity_feedback_forwarding_enabled(
         &self,
         input: SetIdentityFeedbackForwardingEnabledRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         SetIdentityFeedbackForwardingEnabledResponse,
-        SetIdentityFeedbackForwardingEnabledError,
+        RusotoError<SetIdentityFeedbackForwardingEnabledError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -14150,62 +13622,50 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<SetIdentityFeedbackForwardingEnabledError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SetIdentityFeedbackForwardingEnabledError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetIdentityFeedbackForwardingEnabledError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SetIdentityFeedbackForwardingEnabledResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            SetIdentityFeedbackForwardingEnabledResponseDeserializer::deserialize(
-                                "SetIdentityFeedbackForwardingEnabledResult",
-                                &mut stack,
-                            );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SetIdentityFeedbackForwardingEnabledResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetIdentityFeedbackForwardingEnabledResponseDeserializer::deserialize(
+                "SetIdentityFeedbackForwardingEnabledResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
-    fn set_identity_headers_in_notifications_enabled(
+    async fn set_identity_headers_in_notifications_enabled(
         &self,
         input: SetIdentityHeadersInNotificationsEnabledRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         SetIdentityHeadersInNotificationsEnabledResponse,
-        SetIdentityHeadersInNotificationsEnabledError,
+        RusotoError<SetIdentityHeadersInNotificationsEnabledError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -14220,48 +13680,47 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if !response.status.is_success() {
-                            return response.buffer()
-                                .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<SetIdentityHeadersInNotificationsEnabledError>)
-                                .map(|try_response| {
-                                    try_response
-                                        .map_err(|e| e.into())
-                                        .and_then(|response| {
-                                            Err(SetIdentityHeadersInNotificationsEnabledError::from_response(response))
-                                        })
-                                }).boxed();
-                        }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetIdentityHeadersInNotificationsEnabledError::from_response(response));
+        }
 
-                        response.buffer().and_then(move |xml_response| {
-            let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-            if xml_response.body.is_empty() {
-                result = Ok(SetIdentityHeadersInNotificationsEnabledResponse::default());
-            } else {
-                let reader = EventReader::new_with_config(
-                    xml_response.body.as_ref(),
-                    ParserConfig::new().trim_whitespace(true)
-                );
-                let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                let _start_document = stack.next();
-                let actual_tag_name = peek_at_name(&mut stack)?;
-                start_element(&actual_tag_name, &mut stack)?;
-                     result = SetIdentityHeadersInNotificationsEnabledResponseDeserializer::deserialize("SetIdentityHeadersInNotificationsEnabledResult", &mut stack);
-                     skip_tree(&mut stack);
-                     end_element(&actual_tag_name, &mut stack)?;
-            }
-             // parse non-payload
-            futures::future::ready(Ok(result))
-        }).boxed()
-                    })
+        if xml_response.body.is_empty() {
+            result = SetIdentityHeadersInNotificationsEnabledResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetIdentityHeadersInNotificationsEnabledResponseDeserializer::deserialize(
+                "SetIdentityHeadersInNotificationsEnabledResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html">Amazon SES Developer Guide</a>.</p> </important> <p>You can execute this operation no more than once per second.</p>
-    fn set_identity_mail_from_domain(
+    async fn set_identity_mail_from_domain(
         &self,
         input: SetIdentityMailFromDomainRequest,
-    ) -> RusotoFuture<SetIdentityMailFromDomainResponse, SetIdentityMailFromDomainError> {
+    ) -> Result<SetIdentityMailFromDomainResponse, RusotoError<SetIdentityMailFromDomainError>>
+    {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -14271,56 +13730,47 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<SetIdentityMailFromDomainError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SetIdentityMailFromDomainError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetIdentityMailFromDomainError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SetIdentityMailFromDomainResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SetIdentityMailFromDomainResponseDeserializer::deserialize(
-                            "SetIdentityMailFromDomainResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SetIdentityMailFromDomainResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetIdentityMailFromDomainResponseDeserializer::deserialize(
+                "SetIdentityMailFromDomainResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Sets an Amazon Simple Notification Service (Amazon SNS) topic to use when delivering notifications. When you use this operation, you specify a verified identity, such as an email address or domain. When you send an email that uses the chosen identity in the Source field, Amazon SES sends notifications to the topic you specified. You can send bounce, complaint, or delivery notifications (or any combination of the three) to the Amazon SNS topic that you specify.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about feedback notification, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
-    fn set_identity_notification_topic(
+    async fn set_identity_notification_topic(
         &self,
         input: SetIdentityNotificationTopicRequest,
-    ) -> RusotoFuture<SetIdentityNotificationTopicResponse, SetIdentityNotificationTopicError> {
+    ) -> Result<SetIdentityNotificationTopicResponse, RusotoError<SetIdentityNotificationTopicError>>
+    {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -14330,57 +13780,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<SetIdentityNotificationTopicError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SetIdentityNotificationTopicError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetIdentityNotificationTopicError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SetIdentityNotificationTopicResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SetIdentityNotificationTopicResponseDeserializer::deserialize(
-                            "SetIdentityNotificationTopicResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SetIdentityNotificationTopicResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetIdentityNotificationTopicResponseDeserializer::deserialize(
+                "SetIdentityNotificationTopicResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn set_receipt_rule_position(
+    async fn set_receipt_rule_position(
         &self,
         input: SetReceiptRulePositionRequest,
-    ) -> RusotoFuture<SetReceiptRulePositionResponse, SetReceiptRulePositionError> {
+    ) -> Result<SetReceiptRulePositionResponse, RusotoError<SetReceiptRulePositionError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -14390,56 +13829,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<SetReceiptRulePositionError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SetReceiptRulePositionError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetReceiptRulePositionError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SetReceiptRulePositionResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SetReceiptRulePositionResponseDeserializer::deserialize(
-                            "SetReceiptRulePositionResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SetReceiptRulePositionResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetReceiptRulePositionResponseDeserializer::deserialize(
+                "SetReceiptRulePositionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a preview of the MIME content of an email when provided with a template and a set of replacement data.</p> <p>You can execute this operation no more than once per second.</p>
-    fn test_render_template(
+    async fn test_render_template(
         &self,
         input: TestRenderTemplateRequest,
-    ) -> RusotoFuture<TestRenderTemplateResponse, TestRenderTemplateError> {
+    ) -> Result<TestRenderTemplateResponse, RusotoError<TestRenderTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -14449,56 +13878,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<TestRenderTemplateError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(TestRenderTemplateError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(TestRenderTemplateError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(TestRenderTemplateResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = TestRenderTemplateResponseDeserializer::deserialize(
-                            "TestRenderTemplateResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = TestRenderTemplateResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = TestRenderTemplateResponseDeserializer::deserialize(
+                "TestRenderTemplateResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Enables or disables email sending across your entire Amazon SES account in the current AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending across your Amazon SES account in a given AWS Region when reputation metrics (such as your bounce or complaint rates) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_account_sending_enabled(
+    async fn update_account_sending_enabled(
         &self,
         input: UpdateAccountSendingEnabledRequest,
-    ) -> RusotoFuture<(), UpdateAccountSendingEnabledError> {
+    ) -> Result<(), RusotoError<UpdateAccountSendingEnabledError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -14508,33 +13927,26 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<UpdateAccountSendingEnabledError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(UpdateAccountSendingEnabledError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateAccountSendingEnabledError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Updates the event destination of a configuration set. Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>You can execute this operation no more than once per second.</p>
-    fn update_configuration_set_event_destination(
+    async fn update_configuration_set_event_destination(
         &self,
         input: UpdateConfigurationSetEventDestinationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateConfigurationSetEventDestinationResponse,
-        UpdateConfigurationSetEventDestinationError,
+        RusotoError<UpdateConfigurationSetEventDestinationError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -14545,60 +13957,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<UpdateConfigurationSetEventDestinationError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(UpdateConfigurationSetEventDestinationError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateConfigurationSetEventDestinationError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(UpdateConfigurationSetEventDestinationResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            UpdateConfigurationSetEventDestinationResponseDeserializer::deserialize(
-                                "UpdateConfigurationSetEventDestinationResult",
-                                &mut stack,
-                            );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateConfigurationSetEventDestinationResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = UpdateConfigurationSetEventDestinationResponseDeserializer::deserialize(
+                "UpdateConfigurationSetEventDestinationResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Enables or disables the publishing of reputation metrics for emails sent using a specific configuration set in a given AWS Region. Reputation metrics include bounce and complaint rates. These metrics are published to Amazon CloudWatch. By using CloudWatch, you can create alarms when bounce or complaint rates exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_configuration_set_reputation_metrics_enabled(
+    async fn update_configuration_set_reputation_metrics_enabled(
         &self,
         input: UpdateConfigurationSetReputationMetricsEnabledRequest,
-    ) -> RusotoFuture<(), UpdateConfigurationSetReputationMetricsEnabledError> {
+    ) -> Result<(), RusotoError<UpdateConfigurationSetReputationMetricsEnabledError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -14612,35 +14012,26 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<UpdateConfigurationSetReputationMetricsEnabledError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(
-                                UpdateConfigurationSetReputationMetricsEnabledError::from_response(
-                                    response,
-                                ),
-                            )
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(
+                UpdateConfigurationSetReputationMetricsEnabledError::from_response(response),
+            );
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Enables or disables email sending for messages sent using a specific configuration set in a given AWS Region. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending for a configuration set when the reputation metrics for that configuration set (such as your bounce on complaint rate) exceed certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_configuration_set_sending_enabled(
+    async fn update_configuration_set_sending_enabled(
         &self,
         input: UpdateConfigurationSetSendingEnabledRequest,
-    ) -> RusotoFuture<(), UpdateConfigurationSetSendingEnabledError> {
+    ) -> Result<(), RusotoError<UpdateConfigurationSetSendingEnabledError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -14650,35 +14041,28 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<UpdateConfigurationSetSendingEnabledError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(UpdateConfigurationSetSendingEnabledError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateConfigurationSetSendingEnabledError::from_response(
+                response,
+            ));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Modifies an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using custom domains, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Amazon SES Developer Guide</a>.</p>
-    fn update_configuration_set_tracking_options(
+    async fn update_configuration_set_tracking_options(
         &self,
         input: UpdateConfigurationSetTrackingOptionsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateConfigurationSetTrackingOptionsResponse,
-        UpdateConfigurationSetTrackingOptionsError,
+        RusotoError<UpdateConfigurationSetTrackingOptionsError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -14689,60 +14073,48 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<UpdateConfigurationSetTrackingOptionsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(UpdateConfigurationSetTrackingOptionsError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateConfigurationSetTrackingOptionsError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(UpdateConfigurationSetTrackingOptionsResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            UpdateConfigurationSetTrackingOptionsResponseDeserializer::deserialize(
-                                "UpdateConfigurationSetTrackingOptionsResult",
-                                &mut stack,
-                            );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateConfigurationSetTrackingOptionsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = UpdateConfigurationSetTrackingOptionsResponseDeserializer::deserialize(
+                "UpdateConfigurationSetTrackingOptionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Updates an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_custom_verification_email_template(
+    async fn update_custom_verification_email_template(
         &self,
         input: UpdateCustomVerificationEmailTemplateRequest,
-    ) -> RusotoFuture<(), UpdateCustomVerificationEmailTemplateError> {
+    ) -> Result<(), RusotoError<UpdateCustomVerificationEmailTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -14752,33 +14124,26 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<UpdateCustomVerificationEmailTemplateError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(UpdateCustomVerificationEmailTemplateError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateCustomVerificationEmailTemplateError::from_response(
+                response,
+            ));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_receipt_rule(
+    async fn update_receipt_rule(
         &self,
         input: UpdateReceiptRuleRequest,
-    ) -> RusotoFuture<UpdateReceiptRuleResponse, UpdateReceiptRuleError> {
+    ) -> Result<UpdateReceiptRuleResponse, RusotoError<UpdateReceiptRuleError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -14788,56 +14153,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<UpdateReceiptRuleError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(UpdateReceiptRuleError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateReceiptRuleError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(UpdateReceiptRuleResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = UpdateReceiptRuleResponseDeserializer::deserialize(
-                            "UpdateReceiptRuleResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateReceiptRuleResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = UpdateReceiptRuleResponseDeserializer::deserialize(
+                "UpdateReceiptRuleResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Updates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
-    fn update_template(
+    async fn update_template(
         &self,
         input: UpdateTemplateRequest,
-    ) -> RusotoFuture<UpdateTemplateResponse, UpdateTemplateError> {
+    ) -> Result<UpdateTemplateResponse, RusotoError<UpdateTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -14847,54 +14202,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<UpdateTemplateError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(UpdateTemplateError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateTemplateError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(UpdateTemplateResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = UpdateTemplateResponseDeserializer::deserialize(
-                            "UpdateTemplateResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateTemplateResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = UpdateTemplateResponseDeserializer::deserialize(
+                "UpdateTemplateResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a set of DKIM tokens for a domain identity.</p> <important> <p>When you execute the <code>VerifyDomainDkim</code> operation, the domain that you specify is added to the list of identities that are associated with your account. This is true even if you haven't already associated the domain with your account by using the <code>VerifyDomainIdentity</code> operation. However, you can't send email from the domain until you either successfully <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-domains.html">verify it</a> or you successfully <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">set up DKIM for it</a>.</p> </important> <p>You use the tokens that are generated by this operation to create CNAME records. When Amazon SES detects that you've added these records to the DNS configuration for a domain, you can start sending email from that domain. You can start sending email even if you haven't added the TXT record provided by the VerifyDomainIdentity operation to the DNS configuration for your domain. All email that you send from the domain is authenticated using DKIM.</p> <p>To create the CNAME records for DKIM authentication, use the following values:</p> <ul> <li> <p> <b>Name</b>: <i>token</i>._domainkey.<i>example.com</i> </p> </li> <li> <p> <b>Type</b>: CNAME</p> </li> <li> <p> <b>Value</b>: <i>token</i>.dkim.amazonses.com</p> </li> </ul> <p>In the preceding example, replace <i>token</i> with one of the tokens that are generated when you execute this operation. Replace <i>example.com</i> with your domain. Repeat this process for each token that's generated by this operation.</p> <p>You can execute this operation no more than once per second.</p>
-    fn verify_domain_dkim(
+    async fn verify_domain_dkim(
         &self,
         input: VerifyDomainDkimRequest,
-    ) -> RusotoFuture<VerifyDomainDkimResponse, VerifyDomainDkimError> {
+    ) -> Result<VerifyDomainDkimResponse, RusotoError<VerifyDomainDkimError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -14904,54 +14251,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<VerifyDomainDkimError>)
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(VerifyDomainDkimError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(VerifyDomainDkimError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(VerifyDomainDkimResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = VerifyDomainDkimResponseDeserializer::deserialize(
-                            "VerifyDomainDkimResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = VerifyDomainDkimResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = VerifyDomainDkimResponseDeserializer::deserialize(
+                "VerifyDomainDkimResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Adds a domain to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. For more information about verifying domains, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second.</p>
-    fn verify_domain_identity(
+    async fn verify_domain_identity(
         &self,
         input: VerifyDomainIdentityRequest,
-    ) -> RusotoFuture<VerifyDomainIdentityResponse, VerifyDomainIdentityError> {
+    ) -> Result<VerifyDomainIdentityResponse, RusotoError<VerifyDomainIdentityError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -14961,56 +14300,46 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<VerifyDomainIdentityError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(VerifyDomainIdentityError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(VerifyDomainIdentityError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(VerifyDomainIdentityResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = VerifyDomainIdentityResponseDeserializer::deserialize(
-                            "VerifyDomainIdentityResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = VerifyDomainIdentityResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = VerifyDomainIdentityResponseDeserializer::deserialize(
+                "VerifyDomainIdentityResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deprecated. Use the <code>VerifyEmailIdentity</code> operation to verify a new email address.</p>
-    fn verify_email_address(
+    async fn verify_email_address(
         &self,
         input: VerifyEmailAddressRequest,
-    ) -> RusotoFuture<(), VerifyEmailAddressError> {
+    ) -> Result<(), RusotoError<VerifyEmailAddressError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -15020,30 +14349,24 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<VerifyEmailAddressError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(VerifyEmailAddressError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(VerifyEmailAddressError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Adds an email address to the list of identities for your Amazon SES account in the current AWS region and attempts to verify it. As a result of executing this operation, a verification email is sent to the specified address.</p> <p>You can execute this operation no more than once per second.</p>
-    fn verify_email_identity(
+    async fn verify_email_identity(
         &self,
         input: VerifyEmailIdentityRequest,
-    ) -> RusotoFuture<VerifyEmailIdentityResponse, VerifyEmailIdentityError> {
+    ) -> Result<VerifyEmailIdentityResponse, RusotoError<VerifyEmailIdentityError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
 
@@ -15053,49 +14376,39 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<VerifyEmailIdentityError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(VerifyEmailIdentityError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(VerifyEmailIdentityError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(VerifyEmailIdentityResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = VerifyEmailIdentityResponseDeserializer::deserialize(
-                            "VerifyEmailIdentityResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = VerifyEmailIdentityResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = VerifyEmailIdentityResponseDeserializer::deserialize(
+                "VerifyEmailIdentityResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 }
 
@@ -15108,8 +14421,8 @@ mod protocol_tests {
     use super::*;
     use rusoto_core::Region as rusoto_region;
 
-    #[test]
-    fn test_parse_error_ses_delete_identity() {
+    #[tokio::test]
+    async fn test_parse_error_ses_delete_identity() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/error",
             "ses-delete-identity.xml",
@@ -15117,12 +14430,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeleteIdentityRequest::default();
-        let result = client.delete_identity(request).sync();
+        let result = client.delete_identity(request).await;
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_ses_delete_identity() {
+    #[tokio::test]
+    async fn test_parse_valid_ses_delete_identity() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "ses-delete-identity.xml",
@@ -15130,12 +14443,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeleteIdentityRequest::default();
-        let result = client.delete_identity(request).sync();
+        let result = client.delete_identity(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_ses_get_identity_dkim_attributes() {
+    #[tokio::test]
+    async fn test_parse_valid_ses_get_identity_dkim_attributes() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "ses-get-identity-dkim-attributes.xml",
@@ -15143,12 +14456,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetIdentityDkimAttributesRequest::default();
-        let result = client.get_identity_dkim_attributes(request).sync();
+        let result = client.get_identity_dkim_attributes(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_ses_get_identity_notification_attributes() {
+    #[tokio::test]
+    async fn test_parse_valid_ses_get_identity_notification_attributes() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "ses-get-identity-notification-attributes.xml",
@@ -15156,12 +14469,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetIdentityNotificationAttributesRequest::default();
-        let result = client.get_identity_notification_attributes(request).sync();
+        let result = client.get_identity_notification_attributes(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_ses_get_identity_verification_attributes() {
+    #[tokio::test]
+    async fn test_parse_valid_ses_get_identity_verification_attributes() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "ses-get-identity-verification-attributes.xml",
@@ -15169,12 +14482,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetIdentityVerificationAttributesRequest::default();
-        let result = client.get_identity_verification_attributes(request).sync();
+        let result = client.get_identity_verification_attributes(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_ses_get_send_quota() {
+    #[tokio::test]
+    async fn test_parse_valid_ses_get_send_quota() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "ses-get-send-quota.xml",
@@ -15182,12 +14495,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.get_send_quota().sync();
+        let result = client.get_send_quota().await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_ses_get_send_statistics() {
+    #[tokio::test]
+    async fn test_parse_valid_ses_get_send_statistics() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "ses-get-send-statistics.xml",
@@ -15195,12 +14508,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.get_send_statistics().sync();
+        let result = client.get_send_statistics().await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_ses_list_identities() {
+    #[tokio::test]
+    async fn test_parse_valid_ses_list_identities() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "ses-list-identities.xml",
@@ -15208,12 +14521,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListIdentitiesRequest::default();
-        let result = client.list_identities(request).sync();
+        let result = client.list_identities(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_ses_send_email() {
+    #[tokio::test]
+    async fn test_parse_valid_ses_send_email() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "ses-send-email.xml",
@@ -15221,12 +14534,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = SendEmailRequest::default();
-        let result = client.send_email(request).sync();
+        let result = client.send_email(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_ses_send_raw_email() {
+    #[tokio::test]
+    async fn test_parse_valid_ses_send_raw_email() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "ses-send-raw-email.xml",
@@ -15234,12 +14547,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = SendRawEmailRequest::default();
-        let result = client.send_raw_email(request).sync();
+        let result = client.send_raw_email(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_ses_set_identity_dkim_enabled() {
+    #[tokio::test]
+    async fn test_parse_valid_ses_set_identity_dkim_enabled() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "ses-set-identity-dkim-enabled.xml",
@@ -15247,12 +14560,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = SetIdentityDkimEnabledRequest::default();
-        let result = client.set_identity_dkim_enabled(request).sync();
+        let result = client.set_identity_dkim_enabled(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_ses_verify_domain_dkim() {
+    #[tokio::test]
+    async fn test_parse_valid_ses_verify_domain_dkim() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "ses-verify-domain-dkim.xml",
@@ -15260,12 +14573,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = VerifyDomainDkimRequest::default();
-        let result = client.verify_domain_dkim(request).sync();
+        let result = client.verify_domain_dkim(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_ses_verify_domain_identity() {
+    #[tokio::test]
+    async fn test_parse_valid_ses_verify_domain_identity() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "ses-verify-domain-identity.xml",
@@ -15273,7 +14586,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = VerifyDomainIdentityRequest::default();
-        let result = client.verify_domain_identity(request).sync();
+        let result = client.verify_domain_identity(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

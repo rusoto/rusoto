@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -2367,129 +2368,133 @@ impl Error for UpdateSubnetGroupError {
     }
 }
 /// Trait representing the capabilities of the Amazon DAX API. Amazon DAX clients implement this trait.
+#[async_trait]
 pub trait DynamodbAccelerator {
     /// <p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>
-    fn create_cluster(
+    async fn create_cluster(
         &self,
         input: CreateClusterRequest,
-    ) -> RusotoFuture<CreateClusterResponse, CreateClusterError>;
+    ) -> Result<CreateClusterResponse, RusotoError<CreateClusterError>>;
 
     /// <p>Creates a new parameter group. A parameter group is a collection of parameters that you apply to all of the nodes in a DAX cluster.</p>
-    fn create_parameter_group(
+    async fn create_parameter_group(
         &self,
         input: CreateParameterGroupRequest,
-    ) -> RusotoFuture<CreateParameterGroupResponse, CreateParameterGroupError>;
+    ) -> Result<CreateParameterGroupResponse, RusotoError<CreateParameterGroupError>>;
 
     /// <p>Creates a new subnet group.</p>
-    fn create_subnet_group(
+    async fn create_subnet_group(
         &self,
         input: CreateSubnetGroupRequest,
-    ) -> RusotoFuture<CreateSubnetGroupResponse, CreateSubnetGroupError>;
+    ) -> Result<CreateSubnetGroupResponse, RusotoError<CreateSubnetGroupError>>;
 
     /// <p><p>Removes one or more nodes from a DAX cluster.</p> <note> <p>You cannot use <code>DecreaseReplicationFactor</code> to remove the last node in a DAX cluster. If you need to do this, use <code>DeleteCluster</code> instead.</p> </note></p>
-    fn decrease_replication_factor(
+    async fn decrease_replication_factor(
         &self,
         input: DecreaseReplicationFactorRequest,
-    ) -> RusotoFuture<DecreaseReplicationFactorResponse, DecreaseReplicationFactorError>;
+    ) -> Result<DecreaseReplicationFactorResponse, RusotoError<DecreaseReplicationFactorError>>;
 
     /// <p>Deletes a previously provisioned DAX cluster. <i>DeleteCluster</i> deletes all associated nodes, node endpoints and the DAX cluster itself. When you receive a successful response from this action, DAX immediately begins deleting the cluster; you cannot cancel or revert this action.</p>
-    fn delete_cluster(
+    async fn delete_cluster(
         &self,
         input: DeleteClusterRequest,
-    ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError>;
+    ) -> Result<DeleteClusterResponse, RusotoError<DeleteClusterError>>;
 
     /// <p>Deletes the specified parameter group. You cannot delete a parameter group if it is associated with any DAX clusters.</p>
-    fn delete_parameter_group(
+    async fn delete_parameter_group(
         &self,
         input: DeleteParameterGroupRequest,
-    ) -> RusotoFuture<DeleteParameterGroupResponse, DeleteParameterGroupError>;
+    ) -> Result<DeleteParameterGroupResponse, RusotoError<DeleteParameterGroupError>>;
 
     /// <p><p>Deletes a subnet group.</p> <note> <p>You cannot delete a subnet group if it is associated with any DAX clusters.</p> </note></p>
-    fn delete_subnet_group(
+    async fn delete_subnet_group(
         &self,
         input: DeleteSubnetGroupRequest,
-    ) -> RusotoFuture<DeleteSubnetGroupResponse, DeleteSubnetGroupError>;
+    ) -> Result<DeleteSubnetGroupResponse, RusotoError<DeleteSubnetGroupError>>;
 
     /// <p>Returns information about all provisioned DAX clusters if no cluster identifier is specified, or about a specific DAX cluster if a cluster identifier is supplied.</p> <p>If the cluster is in the CREATING state, only cluster level information will be displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster level information will be displayed.</p> <p>If nodes are currently being added to the DAX cluster, node endpoint information and creation time for the additional nodes will not be displayed until they are completely provisioned. When the DAX cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If nodes are currently being removed from the DAX cluster, no endpoint information for the removed nodes is displayed.</p>
-    fn describe_clusters(
+    async fn describe_clusters(
         &self,
         input: DescribeClustersRequest,
-    ) -> RusotoFuture<DescribeClustersResponse, DescribeClustersError>;
+    ) -> Result<DescribeClustersResponse, RusotoError<DescribeClustersError>>;
 
     /// <p>Returns the default system parameter information for the DAX caching software.</p>
-    fn describe_default_parameters(
+    async fn describe_default_parameters(
         &self,
         input: DescribeDefaultParametersRequest,
-    ) -> RusotoFuture<DescribeDefaultParametersResponse, DescribeDefaultParametersError>;
+    ) -> Result<DescribeDefaultParametersResponse, RusotoError<DescribeDefaultParametersError>>;
 
     /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
-    fn describe_events(
+    async fn describe_events(
         &self,
         input: DescribeEventsRequest,
-    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError>;
+    ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>>;
 
     /// <p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>
-    fn describe_parameter_groups(
+    async fn describe_parameter_groups(
         &self,
         input: DescribeParameterGroupsRequest,
-    ) -> RusotoFuture<DescribeParameterGroupsResponse, DescribeParameterGroupsError>;
+    ) -> Result<DescribeParameterGroupsResponse, RusotoError<DescribeParameterGroupsError>>;
 
     /// <p>Returns the detailed parameter list for a particular parameter group.</p>
-    fn describe_parameters(
+    async fn describe_parameters(
         &self,
         input: DescribeParametersRequest,
-    ) -> RusotoFuture<DescribeParametersResponse, DescribeParametersError>;
+    ) -> Result<DescribeParametersResponse, RusotoError<DescribeParametersError>>;
 
     /// <p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>
-    fn describe_subnet_groups(
+    async fn describe_subnet_groups(
         &self,
         input: DescribeSubnetGroupsRequest,
-    ) -> RusotoFuture<DescribeSubnetGroupsResponse, DescribeSubnetGroupsError>;
+    ) -> Result<DescribeSubnetGroupsResponse, RusotoError<DescribeSubnetGroupsError>>;
 
     /// <p>Adds one or more nodes to a DAX cluster.</p>
-    fn increase_replication_factor(
+    async fn increase_replication_factor(
         &self,
         input: IncreaseReplicationFactorRequest,
-    ) -> RusotoFuture<IncreaseReplicationFactorResponse, IncreaseReplicationFactorError>;
+    ) -> Result<IncreaseReplicationFactorResponse, RusotoError<IncreaseReplicationFactorError>>;
 
     /// <p>List all of the tags for a DAX cluster. You can call <code>ListTags</code> up to 10 times per second, per account.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
+    async fn list_tags(
+        &self,
+        input: ListTagsRequest,
+    ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
 
     /// <p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>
-    fn reboot_node(
+    async fn reboot_node(
         &self,
         input: RebootNodeRequest,
-    ) -> RusotoFuture<RebootNodeResponse, RebootNodeError>;
+    ) -> Result<RebootNodeResponse, RusotoError<RebootNodeError>>;
 
     /// <p>Associates a set of tags with a DAX resource. You can call <code>TagResource</code> up to 5 times per second, per account. </p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
     /// <p>Removes the association of tags from a DAX resource. You can call <code>UntagResource</code> up to 5 times per second, per account. </p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Modifies the settings for a DAX cluster. You can use this action to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
-    fn update_cluster(
+    async fn update_cluster(
         &self,
         input: UpdateClusterRequest,
-    ) -> RusotoFuture<UpdateClusterResponse, UpdateClusterError>;
+    ) -> Result<UpdateClusterResponse, RusotoError<UpdateClusterError>>;
 
     /// <p>Modifies the parameters of a parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
-    fn update_parameter_group(
+    async fn update_parameter_group(
         &self,
         input: UpdateParameterGroupRequest,
-    ) -> RusotoFuture<UpdateParameterGroupResponse, UpdateParameterGroupError>;
+    ) -> Result<UpdateParameterGroupResponse, RusotoError<UpdateParameterGroupError>>;
 
     /// <p>Modifies an existing subnet group.</p>
-    fn update_subnet_group(
+    async fn update_subnet_group(
         &self,
         input: UpdateSubnetGroupRequest,
-    ) -> RusotoFuture<UpdateSubnetGroupResponse, UpdateSubnetGroupError>;
+    ) -> Result<UpdateSubnetGroupResponse, RusotoError<UpdateSubnetGroupError>>;
 }
 /// A client for the Amazon DAX API.
 #[derive(Clone)]
@@ -2525,12 +2530,13 @@ impl DynamodbAcceleratorClient {
     }
 }
 
+#[async_trait]
 impl DynamodbAccelerator for DynamodbAcceleratorClient {
     /// <p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>
-    fn create_cluster(
+    async fn create_cluster(
         &self,
         input: CreateClusterRequest,
-    ) -> RusotoFuture<CreateClusterResponse, CreateClusterError> {
+    ) -> Result<CreateClusterResponse, RusotoError<CreateClusterError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2538,42 +2544,26 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateClusterError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateClusterError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<CreateClusterResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateClusterError>
-                            })
-                            .and_then(|response| Err(CreateClusterError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateClusterResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateClusterError::from_response(response))
+        }
     }
 
     /// <p>Creates a new parameter group. A parameter group is a collection of parameters that you apply to all of the nodes in a DAX cluster.</p>
-    fn create_parameter_group(
+    async fn create_parameter_group(
         &self,
         input: CreateParameterGroupRequest,
-    ) -> RusotoFuture<CreateParameterGroupResponse, CreateParameterGroupError> {
+    ) -> Result<CreateParameterGroupResponse, RusotoError<CreateParameterGroupError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2581,46 +2571,27 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateParameterGroupError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<CreateParameterGroupError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<CreateParameterGroupResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<CreateParameterGroupError>
-                            })
-                            .and_then(|response| {
-                                Err(CreateParameterGroupError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateParameterGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateParameterGroupError::from_response(response))
+        }
     }
 
     /// <p>Creates a new subnet group.</p>
-    fn create_subnet_group(
+    async fn create_subnet_group(
         &self,
         input: CreateSubnetGroupRequest,
-    ) -> RusotoFuture<CreateSubnetGroupResponse, CreateSubnetGroupError> {
+    ) -> Result<CreateSubnetGroupResponse, RusotoError<CreateSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2628,44 +2599,28 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateSubnetGroupError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateSubnetGroupError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<CreateSubnetGroupResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateSubnetGroupError>
-                            })
-                            .and_then(|response| {
-                                Err(CreateSubnetGroupError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSubnetGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSubnetGroupError::from_response(response))
+        }
     }
 
     /// <p><p>Removes one or more nodes from a DAX cluster.</p> <note> <p>You cannot use <code>DecreaseReplicationFactor</code> to remove the last node in a DAX cluster. If you need to do this, use <code>DeleteCluster</code> instead.</p> </note></p>
-    fn decrease_replication_factor(
+    async fn decrease_replication_factor(
         &self,
         input: DecreaseReplicationFactorRequest,
-    ) -> RusotoFuture<DecreaseReplicationFactorResponse, DecreaseReplicationFactorError> {
+    ) -> Result<DecreaseReplicationFactorResponse, RusotoError<DecreaseReplicationFactorError>>
+    {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2673,46 +2628,27 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DecreaseReplicationFactorError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DecreaseReplicationFactorError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DecreaseReplicationFactorResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DecreaseReplicationFactorError>
-                            })
-                            .and_then(|response| {
-                                Err(DecreaseReplicationFactorError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DecreaseReplicationFactorResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DecreaseReplicationFactorError::from_response(response))
+        }
     }
 
     /// <p>Deletes a previously provisioned DAX cluster. <i>DeleteCluster</i> deletes all associated nodes, node endpoints and the DAX cluster itself. When you receive a successful response from this action, DAX immediately begins deleting the cluster; you cannot cancel or revert this action.</p>
-    fn delete_cluster(
+    async fn delete_cluster(
         &self,
         input: DeleteClusterRequest,
-    ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError> {
+    ) -> Result<DeleteClusterResponse, RusotoError<DeleteClusterError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2720,42 +2656,26 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteClusterError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteClusterError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteClusterResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteClusterError>
-                            })
-                            .and_then(|response| Err(DeleteClusterError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteClusterResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteClusterError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified parameter group. You cannot delete a parameter group if it is associated with any DAX clusters.</p>
-    fn delete_parameter_group(
+    async fn delete_parameter_group(
         &self,
         input: DeleteParameterGroupRequest,
-    ) -> RusotoFuture<DeleteParameterGroupResponse, DeleteParameterGroupError> {
+    ) -> Result<DeleteParameterGroupResponse, RusotoError<DeleteParameterGroupError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2763,46 +2683,27 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteParameterGroupError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteParameterGroupError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteParameterGroupResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteParameterGroupError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteParameterGroupError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteParameterGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteParameterGroupError::from_response(response))
+        }
     }
 
     /// <p><p>Deletes a subnet group.</p> <note> <p>You cannot delete a subnet group if it is associated with any DAX clusters.</p> </note></p>
-    fn delete_subnet_group(
+    async fn delete_subnet_group(
         &self,
         input: DeleteSubnetGroupRequest,
-    ) -> RusotoFuture<DeleteSubnetGroupResponse, DeleteSubnetGroupError> {
+    ) -> Result<DeleteSubnetGroupResponse, RusotoError<DeleteSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2810,44 +2711,27 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteSubnetGroupError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteSubnetGroupError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteSubnetGroupResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteSubnetGroupError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteSubnetGroupError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteSubnetGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSubnetGroupError::from_response(response))
+        }
     }
 
     /// <p>Returns information about all provisioned DAX clusters if no cluster identifier is specified, or about a specific DAX cluster if a cluster identifier is supplied.</p> <p>If the cluster is in the CREATING state, only cluster level information will be displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster level information will be displayed.</p> <p>If nodes are currently being added to the DAX cluster, node endpoint information and creation time for the additional nodes will not be displayed until they are completely provisioned. When the DAX cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If nodes are currently being removed from the DAX cluster, no endpoint information for the removed nodes is displayed.</p>
-    fn describe_clusters(
+    async fn describe_clusters(
         &self,
         input: DescribeClustersRequest,
-    ) -> RusotoFuture<DescribeClustersResponse, DescribeClustersError> {
+    ) -> Result<DescribeClustersResponse, RusotoError<DescribeClustersError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2855,44 +2739,28 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeClustersError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeClustersError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeClustersResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeClustersError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeClustersError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeClustersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeClustersError::from_response(response))
+        }
     }
 
     /// <p>Returns the default system parameter information for the DAX caching software.</p>
-    fn describe_default_parameters(
+    async fn describe_default_parameters(
         &self,
         input: DescribeDefaultParametersRequest,
-    ) -> RusotoFuture<DescribeDefaultParametersResponse, DescribeDefaultParametersError> {
+    ) -> Result<DescribeDefaultParametersResponse, RusotoError<DescribeDefaultParametersError>>
+    {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2900,46 +2768,27 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeDefaultParametersError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeDefaultParametersError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeDefaultParametersResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeDefaultParametersError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeDefaultParametersError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDefaultParametersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDefaultParametersError::from_response(response))
+        }
     }
 
     /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
-    fn describe_events(
+    async fn describe_events(
         &self,
         input: DescribeEventsRequest,
-    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError> {
+    ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2947,42 +2796,26 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeEventsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEventsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeEventsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEventsError>
-                            })
-                            .and_then(|response| Err(DescribeEventsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeEventsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventsError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>
-    fn describe_parameter_groups(
+    async fn describe_parameter_groups(
         &self,
         input: DescribeParameterGroupsRequest,
-    ) -> RusotoFuture<DescribeParameterGroupsResponse, DescribeParameterGroupsError> {
+    ) -> Result<DescribeParameterGroupsResponse, RusotoError<DescribeParameterGroupsError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2990,46 +2823,27 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeParameterGroupsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeParameterGroupsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeParameterGroupsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeParameterGroupsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeParameterGroupsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeParameterGroupsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeParameterGroupsError::from_response(response))
+        }
     }
 
     /// <p>Returns the detailed parameter list for a particular parameter group.</p>
-    fn describe_parameters(
+    async fn describe_parameters(
         &self,
         input: DescribeParametersRequest,
-    ) -> RusotoFuture<DescribeParametersResponse, DescribeParametersError> {
+    ) -> Result<DescribeParametersResponse, RusotoError<DescribeParametersError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3037,44 +2851,27 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeParametersError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeParametersError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeParametersResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeParametersError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeParametersError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeParametersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeParametersError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>
-    fn describe_subnet_groups(
+    async fn describe_subnet_groups(
         &self,
         input: DescribeSubnetGroupsRequest,
-    ) -> RusotoFuture<DescribeSubnetGroupsResponse, DescribeSubnetGroupsError> {
+    ) -> Result<DescribeSubnetGroupsResponse, RusotoError<DescribeSubnetGroupsError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3082,46 +2879,28 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeSubnetGroupsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeSubnetGroupsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeSubnetGroupsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeSubnetGroupsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeSubnetGroupsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeSubnetGroupsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeSubnetGroupsError::from_response(response))
+        }
     }
 
     /// <p>Adds one or more nodes to a DAX cluster.</p>
-    fn increase_replication_factor(
+    async fn increase_replication_factor(
         &self,
         input: IncreaseReplicationFactorRequest,
-    ) -> RusotoFuture<IncreaseReplicationFactorResponse, IncreaseReplicationFactorError> {
+    ) -> Result<IncreaseReplicationFactorResponse, RusotoError<IncreaseReplicationFactorError>>
+    {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3129,43 +2908,27 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| IncreaseReplicationFactorError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<IncreaseReplicationFactorError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<IncreaseReplicationFactorResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<IncreaseReplicationFactorError>
-                            })
-                            .and_then(|response| {
-                                Err(IncreaseReplicationFactorError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<IncreaseReplicationFactorResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(IncreaseReplicationFactorError::from_response(response))
+        }
     }
 
     /// <p>List all of the tags for a DAX cluster. You can call <code>ListTags</code> up to 10 times per second, per account.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
+    async fn list_tags(
+        &self,
+        input: ListTagsRequest,
+    ) -> Result<ListTagsResponse, RusotoError<ListTagsError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3173,38 +2936,26 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListTagsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListTagsError>)
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListTagsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListTagsError>)
-                            .and_then(|response| Err(ListTagsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsError::from_response(response))
+        }
     }
 
     /// <p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>
-    fn reboot_node(
+    async fn reboot_node(
         &self,
         input: RebootNodeRequest,
-    ) -> RusotoFuture<RebootNodeResponse, RebootNodeError> {
+    ) -> Result<RebootNodeResponse, RusotoError<RebootNodeError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3212,42 +2963,26 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| RebootNodeError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<RebootNodeError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<RebootNodeResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<RebootNodeError>
-                            })
-                            .and_then(|response| Err(RebootNodeError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<RebootNodeResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RebootNodeError::from_response(response))
+        }
     }
 
     /// <p>Associates a set of tags with a DAX resource. You can call <code>TagResource</code> up to 5 times per second, per account. </p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3255,42 +2990,26 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| TagResourceError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<TagResourceResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
-                            })
-                            .and_then(|response| Err(TagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p>Removes the association of tags from a DAX resource. You can call <code>UntagResource</code> up to 5 times per second, per account. </p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3298,42 +3017,26 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UntagResourceError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<UntagResourceResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
-                            })
-                            .and_then(|response| Err(UntagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <p>Modifies the settings for a DAX cluster. You can use this action to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
-    fn update_cluster(
+    async fn update_cluster(
         &self,
         input: UpdateClusterRequest,
-    ) -> RusotoFuture<UpdateClusterResponse, UpdateClusterError> {
+    ) -> Result<UpdateClusterResponse, RusotoError<UpdateClusterError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3341,42 +3044,26 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateClusterError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<UpdateClusterError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<UpdateClusterResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<UpdateClusterError>
-                            })
-                            .and_then(|response| Err(UpdateClusterError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateClusterResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateClusterError::from_response(response))
+        }
     }
 
     /// <p>Modifies the parameters of a parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
-    fn update_parameter_group(
+    async fn update_parameter_group(
         &self,
         input: UpdateParameterGroupRequest,
-    ) -> RusotoFuture<UpdateParameterGroupResponse, UpdateParameterGroupError> {
+    ) -> Result<UpdateParameterGroupResponse, RusotoError<UpdateParameterGroupError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3384,46 +3071,27 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateParameterGroupError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<UpdateParameterGroupError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<UpdateParameterGroupResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<UpdateParameterGroupError>
-                            })
-                            .and_then(|response| {
-                                Err(UpdateParameterGroupError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateParameterGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateParameterGroupError::from_response(response))
+        }
     }
 
     /// <p>Modifies an existing subnet group.</p>
-    fn update_subnet_group(
+    async fn update_subnet_group(
         &self,
         input: UpdateSubnetGroupRequest,
-    ) -> RusotoFuture<UpdateSubnetGroupResponse, UpdateSubnetGroupError> {
+    ) -> Result<UpdateSubnetGroupResponse, RusotoError<UpdateSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3431,36 +3099,19 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateSubnetGroupError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<UpdateSubnetGroupError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<UpdateSubnetGroupResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<UpdateSubnetGroupError>
-                            })
-                            .and_then(|response| {
-                                Err(UpdateSubnetGroupError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSubnetGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSubnetGroupError::from_response(response))
+        }
     }
 }

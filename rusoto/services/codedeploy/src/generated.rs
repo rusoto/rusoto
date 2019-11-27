@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -6050,285 +6051,286 @@ impl Error for UpdateDeploymentGroupError {
     }
 }
 /// Trait representing the capabilities of the CodeDeploy API. CodeDeploy clients implement this trait.
+#[async_trait]
 pub trait CodeDeploy {
     /// <p>Adds tags to on-premises instances.</p>
-    fn add_tags_to_on_premises_instances(
+    async fn add_tags_to_on_premises_instances(
         &self,
         input: AddTagsToOnPremisesInstancesInput,
-    ) -> RusotoFuture<(), AddTagsToOnPremisesInstancesError>;
+    ) -> Result<(), RusotoError<AddTagsToOnPremisesInstancesError>>;
 
     /// <p>Gets information about one or more application revisions. The maximum number of application revisions that can be returned is 25.</p>
-    fn batch_get_application_revisions(
+    async fn batch_get_application_revisions(
         &self,
         input: BatchGetApplicationRevisionsInput,
-    ) -> RusotoFuture<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError>;
+    ) -> Result<BatchGetApplicationRevisionsOutput, RusotoError<BatchGetApplicationRevisionsError>>;
 
     /// <p>Gets information about one or more applications. The maximum number of applications that can be returned is 25.</p>
-    fn batch_get_applications(
+    async fn batch_get_applications(
         &self,
         input: BatchGetApplicationsInput,
-    ) -> RusotoFuture<BatchGetApplicationsOutput, BatchGetApplicationsError>;
+    ) -> Result<BatchGetApplicationsOutput, RusotoError<BatchGetApplicationsError>>;
 
     /// <p>Gets information about one or more deployment groups.</p>
-    fn batch_get_deployment_groups(
+    async fn batch_get_deployment_groups(
         &self,
         input: BatchGetDeploymentGroupsInput,
-    ) -> RusotoFuture<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError>;
+    ) -> Result<BatchGetDeploymentGroupsOutput, RusotoError<BatchGetDeploymentGroupsError>>;
 
     /// <p><note> <p> This method works, but is deprecated. Use <code>BatchGetDeploymentTargets</code> instead. </p> </note> <p> Returns an array of one or more instances associated with a deployment. This method works with EC2/On-premises and AWS Lambda compute platforms. The newer <code>BatchGetDeploymentTargets</code> works with all compute platforms. The maximum number of instances that can be returned is 25.</p></p>
-    fn batch_get_deployment_instances(
+    async fn batch_get_deployment_instances(
         &self,
         input: BatchGetDeploymentInstancesInput,
-    ) -> RusotoFuture<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError>;
+    ) -> Result<BatchGetDeploymentInstancesOutput, RusotoError<BatchGetDeploymentInstancesError>>;
 
     /// <p><p> Returns an array of one or more targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. The maximum number of targets that can be returned is 25.</p> <p> The type of targets returned depends on the deployment&#39;s compute platform: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> </ul></p>
-    fn batch_get_deployment_targets(
+    async fn batch_get_deployment_targets(
         &self,
         input: BatchGetDeploymentTargetsInput,
-    ) -> RusotoFuture<BatchGetDeploymentTargetsOutput, BatchGetDeploymentTargetsError>;
+    ) -> Result<BatchGetDeploymentTargetsOutput, RusotoError<BatchGetDeploymentTargetsError>>;
 
     /// <p>Gets information about one or more deployments. The maximum number of deployments that can be returned is 25.</p>
-    fn batch_get_deployments(
+    async fn batch_get_deployments(
         &self,
         input: BatchGetDeploymentsInput,
-    ) -> RusotoFuture<BatchGetDeploymentsOutput, BatchGetDeploymentsError>;
+    ) -> Result<BatchGetDeploymentsOutput, RusotoError<BatchGetDeploymentsError>>;
 
     /// <p>Gets information about one or more on-premises instances. The maximum number of on-premises instances that can be returned is 25.</p>
-    fn batch_get_on_premises_instances(
+    async fn batch_get_on_premises_instances(
         &self,
         input: BatchGetOnPremisesInstancesInput,
-    ) -> RusotoFuture<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError>;
+    ) -> Result<BatchGetOnPremisesInstancesOutput, RusotoError<BatchGetOnPremisesInstancesError>>;
 
     /// <p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>
-    fn continue_deployment(
+    async fn continue_deployment(
         &self,
         input: ContinueDeploymentInput,
-    ) -> RusotoFuture<(), ContinueDeploymentError>;
+    ) -> Result<(), RusotoError<ContinueDeploymentError>>;
 
     /// <p>Creates an application.</p>
-    fn create_application(
+    async fn create_application(
         &self,
         input: CreateApplicationInput,
-    ) -> RusotoFuture<CreateApplicationOutput, CreateApplicationError>;
+    ) -> Result<CreateApplicationOutput, RusotoError<CreateApplicationError>>;
 
     /// <p>Deploys an application revision through the specified deployment group.</p>
-    fn create_deployment(
+    async fn create_deployment(
         &self,
         input: CreateDeploymentInput,
-    ) -> RusotoFuture<CreateDeploymentOutput, CreateDeploymentError>;
+    ) -> Result<CreateDeploymentOutput, RusotoError<CreateDeploymentError>>;
 
     /// <p> Creates a deployment configuration. </p>
-    fn create_deployment_config(
+    async fn create_deployment_config(
         &self,
         input: CreateDeploymentConfigInput,
-    ) -> RusotoFuture<CreateDeploymentConfigOutput, CreateDeploymentConfigError>;
+    ) -> Result<CreateDeploymentConfigOutput, RusotoError<CreateDeploymentConfigError>>;
 
     /// <p>Creates a deployment group to which application revisions are deployed.</p>
-    fn create_deployment_group(
+    async fn create_deployment_group(
         &self,
         input: CreateDeploymentGroupInput,
-    ) -> RusotoFuture<CreateDeploymentGroupOutput, CreateDeploymentGroupError>;
+    ) -> Result<CreateDeploymentGroupOutput, RusotoError<CreateDeploymentGroupError>>;
 
     /// <p>Deletes an application.</p>
-    fn delete_application(
+    async fn delete_application(
         &self,
         input: DeleteApplicationInput,
-    ) -> RusotoFuture<(), DeleteApplicationError>;
+    ) -> Result<(), RusotoError<DeleteApplicationError>>;
 
     /// <p><p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note></p>
-    fn delete_deployment_config(
+    async fn delete_deployment_config(
         &self,
         input: DeleteDeploymentConfigInput,
-    ) -> RusotoFuture<(), DeleteDeploymentConfigError>;
+    ) -> Result<(), RusotoError<DeleteDeploymentConfigError>>;
 
     /// <p>Deletes a deployment group.</p>
-    fn delete_deployment_group(
+    async fn delete_deployment_group(
         &self,
         input: DeleteDeploymentGroupInput,
-    ) -> RusotoFuture<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError>;
+    ) -> Result<DeleteDeploymentGroupOutput, RusotoError<DeleteDeploymentGroupError>>;
 
     /// <p>Deletes a GitHub account connection.</p>
-    fn delete_git_hub_account_token(
+    async fn delete_git_hub_account_token(
         &self,
         input: DeleteGitHubAccountTokenInput,
-    ) -> RusotoFuture<DeleteGitHubAccountTokenOutput, DeleteGitHubAccountTokenError>;
+    ) -> Result<DeleteGitHubAccountTokenOutput, RusotoError<DeleteGitHubAccountTokenError>>;
 
     /// <p>Deregisters an on-premises instance.</p>
-    fn deregister_on_premises_instance(
+    async fn deregister_on_premises_instance(
         &self,
         input: DeregisterOnPremisesInstanceInput,
-    ) -> RusotoFuture<(), DeregisterOnPremisesInstanceError>;
+    ) -> Result<(), RusotoError<DeregisterOnPremisesInstanceError>>;
 
     /// <p>Gets information about an application.</p>
-    fn get_application(
+    async fn get_application(
         &self,
         input: GetApplicationInput,
-    ) -> RusotoFuture<GetApplicationOutput, GetApplicationError>;
+    ) -> Result<GetApplicationOutput, RusotoError<GetApplicationError>>;
 
     /// <p>Gets information about an application revision.</p>
-    fn get_application_revision(
+    async fn get_application_revision(
         &self,
         input: GetApplicationRevisionInput,
-    ) -> RusotoFuture<GetApplicationRevisionOutput, GetApplicationRevisionError>;
+    ) -> Result<GetApplicationRevisionOutput, RusotoError<GetApplicationRevisionError>>;
 
     /// <p><p>Gets information about a deployment.</p> <note> <p> The <code>content</code> property of the <code>appSpecContent</code> object in the returned revision is always null. Use <code>GetApplicationRevision</code> and the <code>sha256</code> property of the returned <code>appSpecContent</code> object to get the content of the deployment’s AppSpec file. </p> </note></p>
-    fn get_deployment(
+    async fn get_deployment(
         &self,
         input: GetDeploymentInput,
-    ) -> RusotoFuture<GetDeploymentOutput, GetDeploymentError>;
+    ) -> Result<GetDeploymentOutput, RusotoError<GetDeploymentError>>;
 
     /// <p>Gets information about a deployment configuration.</p>
-    fn get_deployment_config(
+    async fn get_deployment_config(
         &self,
         input: GetDeploymentConfigInput,
-    ) -> RusotoFuture<GetDeploymentConfigOutput, GetDeploymentConfigError>;
+    ) -> Result<GetDeploymentConfigOutput, RusotoError<GetDeploymentConfigError>>;
 
     /// <p>Gets information about a deployment group.</p>
-    fn get_deployment_group(
+    async fn get_deployment_group(
         &self,
         input: GetDeploymentGroupInput,
-    ) -> RusotoFuture<GetDeploymentGroupOutput, GetDeploymentGroupError>;
+    ) -> Result<GetDeploymentGroupOutput, RusotoError<GetDeploymentGroupError>>;
 
     /// <p>Gets information about an instance as part of a deployment.</p>
-    fn get_deployment_instance(
+    async fn get_deployment_instance(
         &self,
         input: GetDeploymentInstanceInput,
-    ) -> RusotoFuture<GetDeploymentInstanceOutput, GetDeploymentInstanceError>;
+    ) -> Result<GetDeploymentInstanceOutput, RusotoError<GetDeploymentInstanceError>>;
 
     /// <p> Returns information about a deployment target. </p>
-    fn get_deployment_target(
+    async fn get_deployment_target(
         &self,
         input: GetDeploymentTargetInput,
-    ) -> RusotoFuture<GetDeploymentTargetOutput, GetDeploymentTargetError>;
+    ) -> Result<GetDeploymentTargetOutput, RusotoError<GetDeploymentTargetError>>;
 
     /// <p> Gets information about an on-premises instance. </p>
-    fn get_on_premises_instance(
+    async fn get_on_premises_instance(
         &self,
         input: GetOnPremisesInstanceInput,
-    ) -> RusotoFuture<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError>;
+    ) -> Result<GetOnPremisesInstanceOutput, RusotoError<GetOnPremisesInstanceError>>;
 
     /// <p>Lists information about revisions for an application.</p>
-    fn list_application_revisions(
+    async fn list_application_revisions(
         &self,
         input: ListApplicationRevisionsInput,
-    ) -> RusotoFuture<ListApplicationRevisionsOutput, ListApplicationRevisionsError>;
+    ) -> Result<ListApplicationRevisionsOutput, RusotoError<ListApplicationRevisionsError>>;
 
     /// <p>Lists the applications registered with the IAM user or AWS account.</p>
-    fn list_applications(
+    async fn list_applications(
         &self,
         input: ListApplicationsInput,
-    ) -> RusotoFuture<ListApplicationsOutput, ListApplicationsError>;
+    ) -> Result<ListApplicationsOutput, RusotoError<ListApplicationsError>>;
 
     /// <p>Lists the deployment configurations with the IAM user or AWS account.</p>
-    fn list_deployment_configs(
+    async fn list_deployment_configs(
         &self,
         input: ListDeploymentConfigsInput,
-    ) -> RusotoFuture<ListDeploymentConfigsOutput, ListDeploymentConfigsError>;
+    ) -> Result<ListDeploymentConfigsOutput, RusotoError<ListDeploymentConfigsError>>;
 
     /// <p>Lists the deployment groups for an application registered with the IAM user or AWS account.</p>
-    fn list_deployment_groups(
+    async fn list_deployment_groups(
         &self,
         input: ListDeploymentGroupsInput,
-    ) -> RusotoFuture<ListDeploymentGroupsOutput, ListDeploymentGroupsError>;
+    ) -> Result<ListDeploymentGroupsOutput, RusotoError<ListDeploymentGroupsError>>;
 
     /// <p><note> <p> The newer BatchGetDeploymentTargets should be used instead because it works with all compute types. <code>ListDeploymentInstances</code> throws an exception if it is used with a compute platform other than EC2/On-premises or AWS Lambda. </p> </note> <p> Lists the instance for a deployment associated with the IAM user or AWS account. </p></p>
-    fn list_deployment_instances(
+    async fn list_deployment_instances(
         &self,
         input: ListDeploymentInstancesInput,
-    ) -> RusotoFuture<ListDeploymentInstancesOutput, ListDeploymentInstancesError>;
+    ) -> Result<ListDeploymentInstancesOutput, RusotoError<ListDeploymentInstancesError>>;
 
     /// <p> Returns an array of target IDs that are associated a deployment. </p>
-    fn list_deployment_targets(
+    async fn list_deployment_targets(
         &self,
         input: ListDeploymentTargetsInput,
-    ) -> RusotoFuture<ListDeploymentTargetsOutput, ListDeploymentTargetsError>;
+    ) -> Result<ListDeploymentTargetsOutput, RusotoError<ListDeploymentTargetsError>>;
 
     /// <p>Lists the deployments in a deployment group for an application registered with the IAM user or AWS account.</p>
-    fn list_deployments(
+    async fn list_deployments(
         &self,
         input: ListDeploymentsInput,
-    ) -> RusotoFuture<ListDeploymentsOutput, ListDeploymentsError>;
+    ) -> Result<ListDeploymentsOutput, RusotoError<ListDeploymentsError>>;
 
     /// <p>Lists the names of stored connections to GitHub accounts.</p>
-    fn list_git_hub_account_token_names(
+    async fn list_git_hub_account_token_names(
         &self,
         input: ListGitHubAccountTokenNamesInput,
-    ) -> RusotoFuture<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError>;
+    ) -> Result<ListGitHubAccountTokenNamesOutput, RusotoError<ListGitHubAccountTokenNamesError>>;
 
     /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names are listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
-    fn list_on_premises_instances(
+    async fn list_on_premises_instances(
         &self,
         input: ListOnPremisesInstancesInput,
-    ) -> RusotoFuture<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError>;
+    ) -> Result<ListOnPremisesInstancesOutput, RusotoError<ListOnPremisesInstancesError>>;
 
     /// <p> Returns a list of tags for the resource identified by a specified ARN. Tags are used to organize and categorize your CodeDeploy resources. </p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
 
     /// <p> Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>. </p>
-    fn put_lifecycle_event_hook_execution_status(
+    async fn put_lifecycle_event_hook_execution_status(
         &self,
         input: PutLifecycleEventHookExecutionStatusInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         PutLifecycleEventHookExecutionStatusOutput,
-        PutLifecycleEventHookExecutionStatusError,
+        RusotoError<PutLifecycleEventHookExecutionStatusError>,
     >;
 
     /// <p>Registers with AWS CodeDeploy a revision for the specified application.</p>
-    fn register_application_revision(
+    async fn register_application_revision(
         &self,
         input: RegisterApplicationRevisionInput,
-    ) -> RusotoFuture<(), RegisterApplicationRevisionError>;
+    ) -> Result<(), RusotoError<RegisterApplicationRevisionError>>;
 
     /// <p><p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note></p>
-    fn register_on_premises_instance(
+    async fn register_on_premises_instance(
         &self,
         input: RegisterOnPremisesInstanceInput,
-    ) -> RusotoFuture<(), RegisterOnPremisesInstanceError>;
+    ) -> Result<(), RusotoError<RegisterOnPremisesInstanceError>>;
 
     /// <p>Removes one or more tags from one or more on-premises instances.</p>
-    fn remove_tags_from_on_premises_instances(
+    async fn remove_tags_from_on_premises_instances(
         &self,
         input: RemoveTagsFromOnPremisesInstancesInput,
-    ) -> RusotoFuture<(), RemoveTagsFromOnPremisesInstancesError>;
+    ) -> Result<(), RusotoError<RemoveTagsFromOnPremisesInstancesError>>;
 
     /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is complete.</p>
-    fn skip_wait_time_for_instance_termination(
+    async fn skip_wait_time_for_instance_termination(
         &self,
         input: SkipWaitTimeForInstanceTerminationInput,
-    ) -> RusotoFuture<(), SkipWaitTimeForInstanceTerminationError>;
+    ) -> Result<(), RusotoError<SkipWaitTimeForInstanceTerminationError>>;
 
     /// <p>Attempts to stop an ongoing deployment.</p>
-    fn stop_deployment(
+    async fn stop_deployment(
         &self,
         input: StopDeploymentInput,
-    ) -> RusotoFuture<StopDeploymentOutput, StopDeploymentError>;
+    ) -> Result<StopDeploymentOutput, RusotoError<StopDeploymentError>>;
 
     /// <p> Associates the list of tags in the input <code>Tags</code> parameter with the resource identified by the <code>ResourceArn</code> input parameter. </p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceOutput, TagResourceError>;
+    ) -> Result<TagResourceOutput, RusotoError<TagResourceError>>;
 
     /// <p> Disassociates a resource from a list of tags. The resource is identified by the <code>ResourceArn</code> input parameter. The tags are identfied by the list of keys in the <code>TagKeys</code> input parameter. </p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError>;
+    ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>>;
 
     /// <p>Changes the name of an application.</p>
-    fn update_application(
+    async fn update_application(
         &self,
         input: UpdateApplicationInput,
-    ) -> RusotoFuture<(), UpdateApplicationError>;
+    ) -> Result<(), RusotoError<UpdateApplicationError>>;
 
     /// <p>Changes information about a deployment group.</p>
-    fn update_deployment_group(
+    async fn update_deployment_group(
         &self,
         input: UpdateDeploymentGroupInput,
-    ) -> RusotoFuture<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError>;
+    ) -> Result<UpdateDeploymentGroupOutput, RusotoError<UpdateDeploymentGroupError>>;
 }
 /// A client for the CodeDeploy API.
 #[derive(Clone)]
@@ -6364,12 +6366,13 @@ impl CodeDeployClient {
     }
 }
 
+#[async_trait]
 impl CodeDeploy for CodeDeployClient {
     /// <p>Adds tags to on-premises instances.</p>
-    fn add_tags_to_on_premises_instances(
+    async fn add_tags_to_on_premises_instances(
         &self,
         input: AddTagsToOnPremisesInstancesInput,
-    ) -> RusotoFuture<(), AddTagsToOnPremisesInstancesError> {
+    ) -> Result<(), RusotoError<AddTagsToOnPremisesInstancesError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6380,32 +6383,26 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<AddTagsToOnPremisesInstancesError>
-                            })
-                            .and_then(|response| {
-                                Err(AddTagsToOnPremisesInstancesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AddTagsToOnPremisesInstancesError::from_response(response))
+        }
     }
 
     /// <p>Gets information about one or more application revisions. The maximum number of application revisions that can be returned is 25.</p>
-    fn batch_get_application_revisions(
+    async fn batch_get_application_revisions(
         &self,
         input: BatchGetApplicationRevisionsInput,
-    ) -> RusotoFuture<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError> {
+    ) -> Result<BatchGetApplicationRevisionsOutput, RusotoError<BatchGetApplicationRevisionsError>>
+    {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6416,46 +6413,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| BatchGetApplicationRevisionsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetApplicationRevisionsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<BatchGetApplicationRevisionsOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetApplicationRevisionsError>
-                            })
-                            .and_then(|response| {
-                                Err(BatchGetApplicationRevisionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchGetApplicationRevisionsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchGetApplicationRevisionsError::from_response(response))
+        }
     }
 
     /// <p>Gets information about one or more applications. The maximum number of applications that can be returned is 25.</p>
-    fn batch_get_applications(
+    async fn batch_get_applications(
         &self,
         input: BatchGetApplicationsInput,
-    ) -> RusotoFuture<BatchGetApplicationsOutput, BatchGetApplicationsError> {
+    ) -> Result<BatchGetApplicationsOutput, RusotoError<BatchGetApplicationsError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6463,46 +6441,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| BatchGetApplicationsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetApplicationsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<BatchGetApplicationsOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetApplicationsError>
-                            })
-                            .and_then(|response| {
-                                Err(BatchGetApplicationsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchGetApplicationsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchGetApplicationsError::from_response(response))
+        }
     }
 
     /// <p>Gets information about one or more deployment groups.</p>
-    fn batch_get_deployment_groups(
+    async fn batch_get_deployment_groups(
         &self,
         input: BatchGetDeploymentGroupsInput,
-    ) -> RusotoFuture<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError> {
+    ) -> Result<BatchGetDeploymentGroupsOutput, RusotoError<BatchGetDeploymentGroupsError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6513,46 +6472,28 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| BatchGetDeploymentGroupsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetDeploymentGroupsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<BatchGetDeploymentGroupsOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetDeploymentGroupsError>
-                            })
-                            .and_then(|response| {
-                                Err(BatchGetDeploymentGroupsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchGetDeploymentGroupsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchGetDeploymentGroupsError::from_response(response))
+        }
     }
 
     /// <p><note> <p> This method works, but is deprecated. Use <code>BatchGetDeploymentTargets</code> instead. </p> </note> <p> Returns an array of one or more instances associated with a deployment. This method works with EC2/On-premises and AWS Lambda compute platforms. The newer <code>BatchGetDeploymentTargets</code> works with all compute platforms. The maximum number of instances that can be returned is 25.</p></p>
-    fn batch_get_deployment_instances(
+    async fn batch_get_deployment_instances(
         &self,
         input: BatchGetDeploymentInstancesInput,
-    ) -> RusotoFuture<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError> {
+    ) -> Result<BatchGetDeploymentInstancesOutput, RusotoError<BatchGetDeploymentInstancesError>>
+    {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6563,46 +6504,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| BatchGetDeploymentInstancesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetDeploymentInstancesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<BatchGetDeploymentInstancesOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetDeploymentInstancesError>
-                            })
-                            .and_then(|response| {
-                                Err(BatchGetDeploymentInstancesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchGetDeploymentInstancesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchGetDeploymentInstancesError::from_response(response))
+        }
     }
 
     /// <p><p> Returns an array of one or more targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. The maximum number of targets that can be returned is 25.</p> <p> The type of targets returned depends on the deployment&#39;s compute platform: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> </ul></p>
-    fn batch_get_deployment_targets(
+    async fn batch_get_deployment_targets(
         &self,
         input: BatchGetDeploymentTargetsInput,
-    ) -> RusotoFuture<BatchGetDeploymentTargetsOutput, BatchGetDeploymentTargetsError> {
+    ) -> Result<BatchGetDeploymentTargetsOutput, RusotoError<BatchGetDeploymentTargetsError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6613,46 +6535,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| BatchGetDeploymentTargetsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetDeploymentTargetsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<BatchGetDeploymentTargetsOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetDeploymentTargetsError>
-                            })
-                            .and_then(|response| {
-                                Err(BatchGetDeploymentTargetsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchGetDeploymentTargetsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchGetDeploymentTargetsError::from_response(response))
+        }
     }
 
     /// <p>Gets information about one or more deployments. The maximum number of deployments that can be returned is 25.</p>
-    fn batch_get_deployments(
+    async fn batch_get_deployments(
         &self,
         input: BatchGetDeploymentsInput,
-    ) -> RusotoFuture<BatchGetDeploymentsOutput, BatchGetDeploymentsError> {
+    ) -> Result<BatchGetDeploymentsOutput, RusotoError<BatchGetDeploymentsError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6660,46 +6563,28 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| BatchGetDeploymentsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetDeploymentsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<BatchGetDeploymentsOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetDeploymentsError>
-                            })
-                            .and_then(|response| {
-                                Err(BatchGetDeploymentsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchGetDeploymentsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchGetDeploymentsError::from_response(response))
+        }
     }
 
     /// <p>Gets information about one or more on-premises instances. The maximum number of on-premises instances that can be returned is 25.</p>
-    fn batch_get_on_premises_instances(
+    async fn batch_get_on_premises_instances(
         &self,
         input: BatchGetOnPremisesInstancesInput,
-    ) -> RusotoFuture<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError> {
+    ) -> Result<BatchGetOnPremisesInstancesOutput, RusotoError<BatchGetOnPremisesInstancesError>>
+    {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6710,46 +6595,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| BatchGetOnPremisesInstancesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetOnPremisesInstancesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<BatchGetOnPremisesInstancesOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetOnPremisesInstancesError>
-                            })
-                            .and_then(|response| {
-                                Err(BatchGetOnPremisesInstancesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchGetOnPremisesInstancesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchGetOnPremisesInstancesError::from_response(response))
+        }
     }
 
     /// <p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>
-    fn continue_deployment(
+    async fn continue_deployment(
         &self,
         input: ContinueDeploymentInput,
-    ) -> RusotoFuture<(), ContinueDeploymentError> {
+    ) -> Result<(), RusotoError<ContinueDeploymentError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6757,31 +6623,25 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ContinueDeploymentError>
-                            })
-                            .and_then(|response| {
-                                Err(ContinueDeploymentError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ContinueDeploymentError::from_response(response))
+        }
     }
 
     /// <p>Creates an application.</p>
-    fn create_application(
+    async fn create_application(
         &self,
         input: CreateApplicationInput,
-    ) -> RusotoFuture<CreateApplicationOutput, CreateApplicationError> {
+    ) -> Result<CreateApplicationOutput, RusotoError<CreateApplicationError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6789,44 +6649,26 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateApplicationError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateApplicationError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<CreateApplicationOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateApplicationError>
-                            })
-                            .and_then(|response| {
-                                Err(CreateApplicationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateApplicationOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateApplicationError::from_response(response))
+        }
     }
 
     /// <p>Deploys an application revision through the specified deployment group.</p>
-    fn create_deployment(
+    async fn create_deployment(
         &self,
         input: CreateDeploymentInput,
-    ) -> RusotoFuture<CreateDeploymentOutput, CreateDeploymentError> {
+    ) -> Result<CreateDeploymentOutput, RusotoError<CreateDeploymentError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6834,44 +6676,26 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateDeploymentError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateDeploymentError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<CreateDeploymentOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateDeploymentError>
-                            })
-                            .and_then(|response| {
-                                Err(CreateDeploymentError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateDeploymentOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDeploymentError::from_response(response))
+        }
     }
 
     /// <p> Creates a deployment configuration. </p>
-    fn create_deployment_config(
+    async fn create_deployment_config(
         &self,
         input: CreateDeploymentConfigInput,
-    ) -> RusotoFuture<CreateDeploymentConfigOutput, CreateDeploymentConfigError> {
+    ) -> Result<CreateDeploymentConfigOutput, RusotoError<CreateDeploymentConfigError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6879,46 +6703,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateDeploymentConfigError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<CreateDeploymentConfigError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<CreateDeploymentConfigOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<CreateDeploymentConfigError>
-                            })
-                            .and_then(|response| {
-                                Err(CreateDeploymentConfigError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDeploymentConfigOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDeploymentConfigError::from_response(response))
+        }
     }
 
     /// <p>Creates a deployment group to which application revisions are deployed.</p>
-    fn create_deployment_group(
+    async fn create_deployment_group(
         &self,
         input: CreateDeploymentGroupInput,
-    ) -> RusotoFuture<CreateDeploymentGroupOutput, CreateDeploymentGroupError> {
+    ) -> Result<CreateDeploymentGroupOutput, RusotoError<CreateDeploymentGroupError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6926,46 +6731,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateDeploymentGroupError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<CreateDeploymentGroupError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<CreateDeploymentGroupOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<CreateDeploymentGroupError>
-                            })
-                            .and_then(|response| {
-                                Err(CreateDeploymentGroupError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDeploymentGroupOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDeploymentGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes an application.</p>
-    fn delete_application(
+    async fn delete_application(
         &self,
         input: DeleteApplicationInput,
-    ) -> RusotoFuture<(), DeleteApplicationError> {
+    ) -> Result<(), RusotoError<DeleteApplicationError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6973,31 +6759,25 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteApplicationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteApplicationError::from_response(response))
+        }
     }
 
     /// <p><p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note></p>
-    fn delete_deployment_config(
+    async fn delete_deployment_config(
         &self,
         input: DeleteDeploymentConfigInput,
-    ) -> RusotoFuture<(), DeleteDeploymentConfigError> {
+    ) -> Result<(), RusotoError<DeleteDeploymentConfigError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7005,32 +6785,25 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteDeploymentConfigError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteDeploymentConfigError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDeploymentConfigError::from_response(response))
+        }
     }
 
     /// <p>Deletes a deployment group.</p>
-    fn delete_deployment_group(
+    async fn delete_deployment_group(
         &self,
         input: DeleteDeploymentGroupInput,
-    ) -> RusotoFuture<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError> {
+    ) -> Result<DeleteDeploymentGroupOutput, RusotoError<DeleteDeploymentGroupError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7038,46 +6811,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteDeploymentGroupError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteDeploymentGroupError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteDeploymentGroupOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteDeploymentGroupError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteDeploymentGroupError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteDeploymentGroupOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDeploymentGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes a GitHub account connection.</p>
-    fn delete_git_hub_account_token(
+    async fn delete_git_hub_account_token(
         &self,
         input: DeleteGitHubAccountTokenInput,
-    ) -> RusotoFuture<DeleteGitHubAccountTokenOutput, DeleteGitHubAccountTokenError> {
+    ) -> Result<DeleteGitHubAccountTokenOutput, RusotoError<DeleteGitHubAccountTokenError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7088,46 +6842,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteGitHubAccountTokenError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteGitHubAccountTokenError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteGitHubAccountTokenOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteGitHubAccountTokenError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteGitHubAccountTokenError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteGitHubAccountTokenOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteGitHubAccountTokenError::from_response(response))
+        }
     }
 
     /// <p>Deregisters an on-premises instance.</p>
-    fn deregister_on_premises_instance(
+    async fn deregister_on_premises_instance(
         &self,
         input: DeregisterOnPremisesInstanceInput,
-    ) -> RusotoFuture<(), DeregisterOnPremisesInstanceError> {
+    ) -> Result<(), RusotoError<DeregisterOnPremisesInstanceError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7138,32 +6873,25 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeregisterOnPremisesInstanceError>
-                            })
-                            .and_then(|response| {
-                                Err(DeregisterOnPremisesInstanceError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeregisterOnPremisesInstanceError::from_response(response))
+        }
     }
 
     /// <p>Gets information about an application.</p>
-    fn get_application(
+    async fn get_application(
         &self,
         input: GetApplicationInput,
-    ) -> RusotoFuture<GetApplicationOutput, GetApplicationError> {
+    ) -> Result<GetApplicationOutput, RusotoError<GetApplicationError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7171,42 +6899,26 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetApplicationError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetApplicationError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetApplicationOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetApplicationError>
-                            })
-                            .and_then(|response| Err(GetApplicationError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetApplicationOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetApplicationError::from_response(response))
+        }
     }
 
     /// <p>Gets information about an application revision.</p>
-    fn get_application_revision(
+    async fn get_application_revision(
         &self,
         input: GetApplicationRevisionInput,
-    ) -> RusotoFuture<GetApplicationRevisionOutput, GetApplicationRevisionError> {
+    ) -> Result<GetApplicationRevisionOutput, RusotoError<GetApplicationRevisionError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7214,46 +6926,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetApplicationRevisionError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetApplicationRevisionError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetApplicationRevisionOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetApplicationRevisionError>
-                            })
-                            .and_then(|response| {
-                                Err(GetApplicationRevisionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetApplicationRevisionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetApplicationRevisionError::from_response(response))
+        }
     }
 
     /// <p><p>Gets information about a deployment.</p> <note> <p> The <code>content</code> property of the <code>appSpecContent</code> object in the returned revision is always null. Use <code>GetApplicationRevision</code> and the <code>sha256</code> property of the returned <code>appSpecContent</code> object to get the content of the deployment’s AppSpec file. </p> </note></p>
-    fn get_deployment(
+    async fn get_deployment(
         &self,
         input: GetDeploymentInput,
-    ) -> RusotoFuture<GetDeploymentOutput, GetDeploymentError> {
+    ) -> Result<GetDeploymentOutput, RusotoError<GetDeploymentError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7261,42 +6954,26 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetDeploymentError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetDeploymentError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetDeploymentOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetDeploymentError>
-                            })
-                            .and_then(|response| Err(GetDeploymentError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetDeploymentOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDeploymentError::from_response(response))
+        }
     }
 
     /// <p>Gets information about a deployment configuration.</p>
-    fn get_deployment_config(
+    async fn get_deployment_config(
         &self,
         input: GetDeploymentConfigInput,
-    ) -> RusotoFuture<GetDeploymentConfigOutput, GetDeploymentConfigError> {
+    ) -> Result<GetDeploymentConfigOutput, RusotoError<GetDeploymentConfigError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7304,46 +6981,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetDeploymentConfigError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetDeploymentConfigError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetDeploymentConfigOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetDeploymentConfigError>
-                            })
-                            .and_then(|response| {
-                                Err(GetDeploymentConfigError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDeploymentConfigOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDeploymentConfigError::from_response(response))
+        }
     }
 
     /// <p>Gets information about a deployment group.</p>
-    fn get_deployment_group(
+    async fn get_deployment_group(
         &self,
         input: GetDeploymentGroupInput,
-    ) -> RusotoFuture<GetDeploymentGroupOutput, GetDeploymentGroupError> {
+    ) -> Result<GetDeploymentGroupOutput, RusotoError<GetDeploymentGroupError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7351,44 +7009,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetDeploymentGroupError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetDeploymentGroupError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetDeploymentGroupOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetDeploymentGroupError>
-                            })
-                            .and_then(|response| {
-                                Err(GetDeploymentGroupError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDeploymentGroupOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDeploymentGroupError::from_response(response))
+        }
     }
 
     /// <p>Gets information about an instance as part of a deployment.</p>
-    fn get_deployment_instance(
+    async fn get_deployment_instance(
         &self,
         input: GetDeploymentInstanceInput,
-    ) -> RusotoFuture<GetDeploymentInstanceOutput, GetDeploymentInstanceError> {
+    ) -> Result<GetDeploymentInstanceOutput, RusotoError<GetDeploymentInstanceError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7396,46 +7037,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetDeploymentInstanceError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetDeploymentInstanceError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetDeploymentInstanceOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetDeploymentInstanceError>
-                            })
-                            .and_then(|response| {
-                                Err(GetDeploymentInstanceError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDeploymentInstanceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDeploymentInstanceError::from_response(response))
+        }
     }
 
     /// <p> Returns information about a deployment target. </p>
-    fn get_deployment_target(
+    async fn get_deployment_target(
         &self,
         input: GetDeploymentTargetInput,
-    ) -> RusotoFuture<GetDeploymentTargetOutput, GetDeploymentTargetError> {
+    ) -> Result<GetDeploymentTargetOutput, RusotoError<GetDeploymentTargetError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7443,46 +7065,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetDeploymentTargetError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetDeploymentTargetError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetDeploymentTargetOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetDeploymentTargetError>
-                            })
-                            .and_then(|response| {
-                                Err(GetDeploymentTargetError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDeploymentTargetOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDeploymentTargetError::from_response(response))
+        }
     }
 
     /// <p> Gets information about an on-premises instance. </p>
-    fn get_on_premises_instance(
+    async fn get_on_premises_instance(
         &self,
         input: GetOnPremisesInstanceInput,
-    ) -> RusotoFuture<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError> {
+    ) -> Result<GetOnPremisesInstanceOutput, RusotoError<GetOnPremisesInstanceError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7490,46 +7093,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetOnPremisesInstanceError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetOnPremisesInstanceError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetOnPremisesInstanceOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetOnPremisesInstanceError>
-                            })
-                            .and_then(|response| {
-                                Err(GetOnPremisesInstanceError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetOnPremisesInstanceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetOnPremisesInstanceError::from_response(response))
+        }
     }
 
     /// <p>Lists information about revisions for an application.</p>
-    fn list_application_revisions(
+    async fn list_application_revisions(
         &self,
         input: ListApplicationRevisionsInput,
-    ) -> RusotoFuture<ListApplicationRevisionsOutput, ListApplicationRevisionsError> {
+    ) -> Result<ListApplicationRevisionsOutput, RusotoError<ListApplicationRevisionsError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7540,46 +7124,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListApplicationRevisionsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListApplicationRevisionsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListApplicationRevisionsOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListApplicationRevisionsError>
-                            })
-                            .and_then(|response| {
-                                Err(ListApplicationRevisionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListApplicationRevisionsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListApplicationRevisionsError::from_response(response))
+        }
     }
 
     /// <p>Lists the applications registered with the IAM user or AWS account.</p>
-    fn list_applications(
+    async fn list_applications(
         &self,
         input: ListApplicationsInput,
-    ) -> RusotoFuture<ListApplicationsOutput, ListApplicationsError> {
+    ) -> Result<ListApplicationsOutput, RusotoError<ListApplicationsError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7587,44 +7152,26 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListApplicationsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ListApplicationsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListApplicationsOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ListApplicationsError>
-                            })
-                            .and_then(|response| {
-                                Err(ListApplicationsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListApplicationsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListApplicationsError::from_response(response))
+        }
     }
 
     /// <p>Lists the deployment configurations with the IAM user or AWS account.</p>
-    fn list_deployment_configs(
+    async fn list_deployment_configs(
         &self,
         input: ListDeploymentConfigsInput,
-    ) -> RusotoFuture<ListDeploymentConfigsOutput, ListDeploymentConfigsError> {
+    ) -> Result<ListDeploymentConfigsOutput, RusotoError<ListDeploymentConfigsError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7632,46 +7179,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListDeploymentConfigsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListDeploymentConfigsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListDeploymentConfigsOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListDeploymentConfigsError>
-                            })
-                            .and_then(|response| {
-                                Err(ListDeploymentConfigsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDeploymentConfigsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDeploymentConfigsError::from_response(response))
+        }
     }
 
     /// <p>Lists the deployment groups for an application registered with the IAM user or AWS account.</p>
-    fn list_deployment_groups(
+    async fn list_deployment_groups(
         &self,
         input: ListDeploymentGroupsInput,
-    ) -> RusotoFuture<ListDeploymentGroupsOutput, ListDeploymentGroupsError> {
+    ) -> Result<ListDeploymentGroupsOutput, RusotoError<ListDeploymentGroupsError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7679,46 +7207,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListDeploymentGroupsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListDeploymentGroupsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListDeploymentGroupsOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListDeploymentGroupsError>
-                            })
-                            .and_then(|response| {
-                                Err(ListDeploymentGroupsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDeploymentGroupsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDeploymentGroupsError::from_response(response))
+        }
     }
 
     /// <p><note> <p> The newer BatchGetDeploymentTargets should be used instead because it works with all compute types. <code>ListDeploymentInstances</code> throws an exception if it is used with a compute platform other than EC2/On-premises or AWS Lambda. </p> </note> <p> Lists the instance for a deployment associated with the IAM user or AWS account. </p></p>
-    fn list_deployment_instances(
+    async fn list_deployment_instances(
         &self,
         input: ListDeploymentInstancesInput,
-    ) -> RusotoFuture<ListDeploymentInstancesOutput, ListDeploymentInstancesError> {
+    ) -> Result<ListDeploymentInstancesOutput, RusotoError<ListDeploymentInstancesError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7729,46 +7238,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListDeploymentInstancesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListDeploymentInstancesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListDeploymentInstancesOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListDeploymentInstancesError>
-                            })
-                            .and_then(|response| {
-                                Err(ListDeploymentInstancesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDeploymentInstancesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDeploymentInstancesError::from_response(response))
+        }
     }
 
     /// <p> Returns an array of target IDs that are associated a deployment. </p>
-    fn list_deployment_targets(
+    async fn list_deployment_targets(
         &self,
         input: ListDeploymentTargetsInput,
-    ) -> RusotoFuture<ListDeploymentTargetsOutput, ListDeploymentTargetsError> {
+    ) -> Result<ListDeploymentTargetsOutput, RusotoError<ListDeploymentTargetsError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7776,46 +7266,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListDeploymentTargetsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListDeploymentTargetsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListDeploymentTargetsOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListDeploymentTargetsError>
-                            })
-                            .and_then(|response| {
-                                Err(ListDeploymentTargetsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDeploymentTargetsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDeploymentTargetsError::from_response(response))
+        }
     }
 
     /// <p>Lists the deployments in a deployment group for an application registered with the IAM user or AWS account.</p>
-    fn list_deployments(
+    async fn list_deployments(
         &self,
         input: ListDeploymentsInput,
-    ) -> RusotoFuture<ListDeploymentsOutput, ListDeploymentsError> {
+    ) -> Result<ListDeploymentsOutput, RusotoError<ListDeploymentsError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7823,42 +7294,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListDeploymentsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ListDeploymentsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListDeploymentsOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ListDeploymentsError>
-                            })
-                            .and_then(|response| Err(ListDeploymentsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListDeploymentsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDeploymentsError::from_response(response))
+        }
     }
 
     /// <p>Lists the names of stored connections to GitHub accounts.</p>
-    fn list_git_hub_account_token_names(
+    async fn list_git_hub_account_token_names(
         &self,
         input: ListGitHubAccountTokenNamesInput,
-    ) -> RusotoFuture<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError> {
+    ) -> Result<ListGitHubAccountTokenNamesOutput, RusotoError<ListGitHubAccountTokenNamesError>>
+    {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7869,46 +7325,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListGitHubAccountTokenNamesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListGitHubAccountTokenNamesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListGitHubAccountTokenNamesOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListGitHubAccountTokenNamesError>
-                            })
-                            .and_then(|response| {
-                                Err(ListGitHubAccountTokenNamesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListGitHubAccountTokenNamesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListGitHubAccountTokenNamesError::from_response(response))
+        }
     }
 
     /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names are listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
-    fn list_on_premises_instances(
+    async fn list_on_premises_instances(
         &self,
         input: ListOnPremisesInstancesInput,
-    ) -> RusotoFuture<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError> {
+    ) -> Result<ListOnPremisesInstancesOutput, RusotoError<ListOnPremisesInstancesError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7919,46 +7356,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListOnPremisesInstancesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListOnPremisesInstancesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListOnPremisesInstancesOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListOnPremisesInstancesError>
-                            })
-                            .and_then(|response| {
-                                Err(ListOnPremisesInstancesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListOnPremisesInstancesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListOnPremisesInstancesError::from_response(response))
+        }
     }
 
     /// <p> Returns a list of tags for the resource identified by a specified ARN. Tags are used to organize and categorize your CodeDeploy resources. </p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7966,48 +7384,29 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListTagsForResourceError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListTagsForResourceError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListTagsForResourceOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListTagsForResourceError>
-                            })
-                            .and_then(|response| {
-                                Err(ListTagsForResourceError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p> Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>. </p>
-    fn put_lifecycle_event_hook_execution_status(
+    async fn put_lifecycle_event_hook_execution_status(
         &self,
         input: PutLifecycleEventHookExecutionStatusInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         PutLifecycleEventHookExecutionStatusOutput,
-        PutLifecycleEventHookExecutionStatusError,
+        RusotoError<PutLifecycleEventHookExecutionStatusError>,
     > {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -8019,48 +7418,29 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutLifecycleEventHookExecutionStatusError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<PutLifecycleEventHookExecutionStatusError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<PutLifecycleEventHookExecutionStatusOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<PutLifecycleEventHookExecutionStatusError>
-                            })
-                            .and_then(|response| {
-                                Err(PutLifecycleEventHookExecutionStatusError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutLifecycleEventHookExecutionStatusOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutLifecycleEventHookExecutionStatusError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Registers with AWS CodeDeploy a revision for the specified application.</p>
-    fn register_application_revision(
+    async fn register_application_revision(
         &self,
         input: RegisterApplicationRevisionInput,
-    ) -> RusotoFuture<(), RegisterApplicationRevisionError> {
+    ) -> Result<(), RusotoError<RegisterApplicationRevisionError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8071,32 +7451,25 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<RegisterApplicationRevisionError>
-                            })
-                            .and_then(|response| {
-                                Err(RegisterApplicationRevisionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterApplicationRevisionError::from_response(response))
+        }
     }
 
     /// <p><p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note></p>
-    fn register_on_premises_instance(
+    async fn register_on_premises_instance(
         &self,
         input: RegisterOnPremisesInstanceInput,
-    ) -> RusotoFuture<(), RegisterOnPremisesInstanceError> {
+    ) -> Result<(), RusotoError<RegisterOnPremisesInstanceError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8107,32 +7480,25 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<RegisterOnPremisesInstanceError>
-                            })
-                            .and_then(|response| {
-                                Err(RegisterOnPremisesInstanceError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterOnPremisesInstanceError::from_response(response))
+        }
     }
 
     /// <p>Removes one or more tags from one or more on-premises instances.</p>
-    fn remove_tags_from_on_premises_instances(
+    async fn remove_tags_from_on_premises_instances(
         &self,
         input: RemoveTagsFromOnPremisesInstancesInput,
-    ) -> RusotoFuture<(), RemoveTagsFromOnPremisesInstancesError> {
+    ) -> Result<(), RusotoError<RemoveTagsFromOnPremisesInstancesError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8143,34 +7509,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<RemoveTagsFromOnPremisesInstancesError>
-                            })
-                            .and_then(|response| {
-                                Err(RemoveTagsFromOnPremisesInstancesError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveTagsFromOnPremisesInstancesError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is complete.</p>
-    fn skip_wait_time_for_instance_termination(
+    async fn skip_wait_time_for_instance_termination(
         &self,
         input: SkipWaitTimeForInstanceTerminationInput,
-    ) -> RusotoFuture<(), SkipWaitTimeForInstanceTerminationError> {
+    ) -> Result<(), RusotoError<SkipWaitTimeForInstanceTerminationError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8181,34 +7540,27 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<SkipWaitTimeForInstanceTerminationError>
-                            })
-                            .and_then(|response| {
-                                Err(SkipWaitTimeForInstanceTerminationError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SkipWaitTimeForInstanceTerminationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Attempts to stop an ongoing deployment.</p>
-    fn stop_deployment(
+    async fn stop_deployment(
         &self,
         input: StopDeploymentInput,
-    ) -> RusotoFuture<StopDeploymentOutput, StopDeploymentError> {
+    ) -> Result<StopDeploymentOutput, RusotoError<StopDeploymentError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8216,42 +7568,26 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| StopDeploymentError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<StopDeploymentError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<StopDeploymentOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<StopDeploymentError>
-                            })
-                            .and_then(|response| Err(StopDeploymentError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StopDeploymentOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopDeploymentError::from_response(response))
+        }
     }
 
     /// <p> Associates the list of tags in the input <code>Tags</code> parameter with the resource identified by the <code>ResourceArn</code> input parameter. </p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceOutput, TagResourceError> {
+    ) -> Result<TagResourceOutput, RusotoError<TagResourceError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8259,42 +7595,26 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| TagResourceError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<TagResourceOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
-                            })
-                            .and_then(|response| Err(TagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p> Disassociates a resource from a list of tags. The resource is identified by the <code>ResourceArn</code> input parameter. The tags are identfied by the list of keys in the <code>TagKeys</code> input parameter. </p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError> {
+    ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8302,42 +7622,26 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UntagResourceError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<UntagResourceOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
-                            })
-                            .and_then(|response| Err(UntagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <p>Changes the name of an application.</p>
-    fn update_application(
+    async fn update_application(
         &self,
         input: UpdateApplicationInput,
-    ) -> RusotoFuture<(), UpdateApplicationError> {
+    ) -> Result<(), RusotoError<UpdateApplicationError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8345,31 +7649,25 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<UpdateApplicationError>
-                            })
-                            .and_then(|response| {
-                                Err(UpdateApplicationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateApplicationError::from_response(response))
+        }
     }
 
     /// <p>Changes information about a deployment group.</p>
-    fn update_deployment_group(
+    async fn update_deployment_group(
         &self,
         input: UpdateDeploymentGroupInput,
-    ) -> RusotoFuture<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError> {
+    ) -> Result<UpdateDeploymentGroupOutput, RusotoError<UpdateDeploymentGroupError>> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8377,38 +7675,19 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateDeploymentGroupError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<UpdateDeploymentGroupError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<UpdateDeploymentGroupOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<UpdateDeploymentGroupError>
-                            })
-                            .and_then(|response| {
-                                Err(UpdateDeploymentGroupError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateDeploymentGroupOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDeploymentGroupError::from_response(response))
+        }
     }
 }

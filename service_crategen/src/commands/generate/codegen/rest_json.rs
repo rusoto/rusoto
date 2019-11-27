@@ -28,7 +28,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 "
                 {documentation}
                 {method_signature} -> \
-                      RusotoFuture<{output_type}, {error_type}>;
+                      Result<{output_type}, RusotoError<{error_type}>>;
                 ",
                 documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
                 method_signature = generate_method_signature(operation, *input_shape),
@@ -52,7 +52,7 @@ impl GenerateProtocol for RestJsonGenerator {
 
             writeln!(writer,"
                 {documentation}
-                {method_signature} -> RusotoFuture<{output_type}, {error_type}> {{
+                {method_signature} -> Result<{output_type}, RusotoError<{error_type}>> {{
                     {request_uri_formatter}
 
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", &self.region, &request_uri);
@@ -63,30 +63,17 @@ impl GenerateProtocol for RestJsonGenerator {
                     {load_headers}
                     {load_params}
 
-                    self.client.sign_and_dispatch(request, |response| {{
-                        if {status_check} {{
-                            response.buffer()
-                                .map_err(|e| {error_type}::from(e))
-                                .map(|try_response| {{
-                                    try_response
-                                        .map_err(|e| e.into())
-                                        .and_then(|response| {{
-                                            {parse_body}
-                                            {parse_headers}
-                                            {parse_status_code}
-                                            result
-                                        }})
-                                }}).boxed()
-                        }} else {{
-                            response.buffer().map(|try_response| {{
-                                try_response
-                                    .map_err(|e| e.into::<{error_type}>())
-                                    .and_then(|response| {{
-                                        Err({error_type}::from_response(response))
-                                    }})
-                            }}).boxed()
-                        }}
-                    }})
+                    let response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::SignAndDispatch)?;
+                    if {status_check} {{
+                        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                        {parse_body}
+                        {parse_headers}
+                        {parse_status_code}
+                        Ok(result)
+                    }} else {{
+                        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                        Err({error_type}::from_response(response))
+                    }}
                 }}
                 ",
                 documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
@@ -198,17 +185,17 @@ fn generate_method_signature(operation: &Operation, shape: Option<&Shape>) -> St
     match shape {
         Some(s) => match s.members {
             Some(ref members) if !members.is_empty() => format!(
-                "fn {method_name}(&self, input: {input_type})",
+                "async fn {method_name}(&self, input: {input_type})",
                 method_name = operation.name.to_snake_case(),
                 input_type = operation.input_shape()
             ),
             _ => format!(
-                "fn {method_name}(&self)",
+                "async fn {method_name}(&self)",
                 method_name = operation.name.to_snake_case()
             ),
         },
         None => format!(
-            "fn {method_name}(&self)",
+            "async fn {method_name}(&self)",
             method_name = operation.name.to_snake_case()
         ),
     }

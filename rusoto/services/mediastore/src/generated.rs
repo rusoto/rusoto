@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -1022,96 +1023,97 @@ impl Error for StopAccessLoggingError {
     }
 }
 /// Trait representing the capabilities of the MediaStore API. MediaStore clients implement this trait.
+#[async_trait]
 pub trait MediaStore {
     /// <p>Creates a storage container to hold objects. A container is similar to a bucket in the Amazon S3 service.</p>
-    fn create_container(
+    async fn create_container(
         &self,
         input: CreateContainerInput,
-    ) -> RusotoFuture<CreateContainerOutput, CreateContainerError>;
+    ) -> Result<CreateContainerOutput, RusotoError<CreateContainerError>>;
 
     /// <p>Deletes the specified container. Before you make a <code>DeleteContainer</code> request, delete any objects in the container or in any folders in the container. You can delete only empty containers. </p>
-    fn delete_container(
+    async fn delete_container(
         &self,
         input: DeleteContainerInput,
-    ) -> RusotoFuture<DeleteContainerOutput, DeleteContainerError>;
+    ) -> Result<DeleteContainerOutput, RusotoError<DeleteContainerError>>;
 
     /// <p>Deletes the access policy that is associated with the specified container.</p>
-    fn delete_container_policy(
+    async fn delete_container_policy(
         &self,
         input: DeleteContainerPolicyInput,
-    ) -> RusotoFuture<DeleteContainerPolicyOutput, DeleteContainerPolicyError>;
+    ) -> Result<DeleteContainerPolicyOutput, RusotoError<DeleteContainerPolicyError>>;
 
     /// <p>Deletes the cross-origin resource sharing (CORS) configuration information that is set for the container.</p> <p>To use this operation, you must have permission to perform the <code>MediaStore:DeleteCorsPolicy</code> action. The container owner has this permission by default and can grant this permission to others.</p>
-    fn delete_cors_policy(
+    async fn delete_cors_policy(
         &self,
         input: DeleteCorsPolicyInput,
-    ) -> RusotoFuture<DeleteCorsPolicyOutput, DeleteCorsPolicyError>;
+    ) -> Result<DeleteCorsPolicyOutput, RusotoError<DeleteCorsPolicyError>>;
 
     /// <p>Removes an object lifecycle policy from a container. It takes up to 20 minutes for the change to take effect.</p>
-    fn delete_lifecycle_policy(
+    async fn delete_lifecycle_policy(
         &self,
         input: DeleteLifecyclePolicyInput,
-    ) -> RusotoFuture<DeleteLifecyclePolicyOutput, DeleteLifecyclePolicyError>;
+    ) -> Result<DeleteLifecyclePolicyOutput, RusotoError<DeleteLifecyclePolicyError>>;
 
     /// <p>Retrieves the properties of the requested container. This request is commonly used to retrieve the endpoint of a container. An endpoint is a value assigned by the service when a new container is created. A container's endpoint does not change after it has been assigned. The <code>DescribeContainer</code> request returns a single <code>Container</code> object based on <code>ContainerName</code>. To return all <code>Container</code> objects that are associated with a specified AWS account, use <a>ListContainers</a>.</p>
-    fn describe_container(
+    async fn describe_container(
         &self,
         input: DescribeContainerInput,
-    ) -> RusotoFuture<DescribeContainerOutput, DescribeContainerError>;
+    ) -> Result<DescribeContainerOutput, RusotoError<DescribeContainerError>>;
 
     /// <p>Retrieves the access policy for the specified container. For information about the data that is included in an access policy, see the <a href="https://aws.amazon.com/documentation/iam/">AWS Identity and Access Management User Guide</a>.</p>
-    fn get_container_policy(
+    async fn get_container_policy(
         &self,
         input: GetContainerPolicyInput,
-    ) -> RusotoFuture<GetContainerPolicyOutput, GetContainerPolicyError>;
+    ) -> Result<GetContainerPolicyOutput, RusotoError<GetContainerPolicyError>>;
 
     /// <p>Returns the cross-origin resource sharing (CORS) configuration information that is set for the container.</p> <p>To use this operation, you must have permission to perform the <code>MediaStore:GetCorsPolicy</code> action. By default, the container owner has this permission and can grant it to others.</p>
-    fn get_cors_policy(
+    async fn get_cors_policy(
         &self,
         input: GetCorsPolicyInput,
-    ) -> RusotoFuture<GetCorsPolicyOutput, GetCorsPolicyError>;
+    ) -> Result<GetCorsPolicyOutput, RusotoError<GetCorsPolicyError>>;
 
     /// <p>Retrieves the object lifecycle policy that is assigned to a container.</p>
-    fn get_lifecycle_policy(
+    async fn get_lifecycle_policy(
         &self,
         input: GetLifecyclePolicyInput,
-    ) -> RusotoFuture<GetLifecyclePolicyOutput, GetLifecyclePolicyError>;
+    ) -> Result<GetLifecyclePolicyOutput, RusotoError<GetLifecyclePolicyError>>;
 
     /// <p>Lists the properties of all containers in AWS Elemental MediaStore. </p> <p>You can query to receive all the containers in one response. Or you can include the <code>MaxResults</code> parameter to receive a limited number of containers in each response. In this case, the response includes a token. To get the next set of containers, send the command again, this time with the <code>NextToken</code> parameter (with the returned token as its value). The next set of responses appears, with a token if there are still more containers to receive. </p> <p>See also <a>DescribeContainer</a>, which gets the properties of one container. </p>
-    fn list_containers(
+    async fn list_containers(
         &self,
         input: ListContainersInput,
-    ) -> RusotoFuture<ListContainersOutput, ListContainersError>;
+    ) -> Result<ListContainersOutput, RusotoError<ListContainersError>>;
 
     /// <p>Creates an access policy for the specified container to restrict the users and clients that can access it. For information about the data that is included in an access policy, see the <a href="https://aws.amazon.com/documentation/iam/">AWS Identity and Access Management User Guide</a>.</p> <p>For this release of the REST API, you can create only one policy for a container. If you enter <code>PutContainerPolicy</code> twice, the second command modifies the existing policy. </p>
-    fn put_container_policy(
+    async fn put_container_policy(
         &self,
         input: PutContainerPolicyInput,
-    ) -> RusotoFuture<PutContainerPolicyOutput, PutContainerPolicyError>;
+    ) -> Result<PutContainerPolicyOutput, RusotoError<PutContainerPolicyError>>;
 
     /// <p>Sets the cross-origin resource sharing (CORS) configuration on a container so that the container can service cross-origin requests. For example, you might want to enable a request whose origin is http://www.example.com to access your AWS Elemental MediaStore container at my.example.container.com by using the browser's XMLHttpRequest capability.</p> <p>To enable CORS on a container, you attach a CORS policy to the container. In the CORS policy, you configure rules that identify origins and the HTTP methods that can be executed on your container. The policy can contain up to 398,000 characters. You can add up to 100 rules to a CORS policy. If more than one rule applies, the service uses the first applicable rule listed.</p> <p>To learn more about CORS, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/cors-policy.html">Cross-Origin Resource Sharing (CORS) in AWS Elemental MediaStore</a>.</p>
-    fn put_cors_policy(
+    async fn put_cors_policy(
         &self,
         input: PutCorsPolicyInput,
-    ) -> RusotoFuture<PutCorsPolicyOutput, PutCorsPolicyError>;
+    ) -> Result<PutCorsPolicyOutput, RusotoError<PutCorsPolicyError>>;
 
     /// <p>Writes an object lifecycle policy to a container. If the container already has an object lifecycle policy, the service replaces the existing policy with the new policy. It takes up to 20 minutes for the change to take effect.</p> <p>For information about how to construct an object lifecycle policy, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/policies-object-lifecycle-components.html">Components of an Object Lifecycle Policy</a>.</p>
-    fn put_lifecycle_policy(
+    async fn put_lifecycle_policy(
         &self,
         input: PutLifecyclePolicyInput,
-    ) -> RusotoFuture<PutLifecyclePolicyOutput, PutLifecyclePolicyError>;
+    ) -> Result<PutLifecyclePolicyOutput, RusotoError<PutLifecyclePolicyError>>;
 
     /// <p>Starts access logging on the specified container. When you enable access logging on a container, MediaStore delivers access logs for objects stored in that container to Amazon CloudWatch Logs.</p>
-    fn start_access_logging(
+    async fn start_access_logging(
         &self,
         input: StartAccessLoggingInput,
-    ) -> RusotoFuture<StartAccessLoggingOutput, StartAccessLoggingError>;
+    ) -> Result<StartAccessLoggingOutput, RusotoError<StartAccessLoggingError>>;
 
     /// <p>Stops access logging on the specified container. When you stop access logging on a container, MediaStore stops sending access logs to Amazon CloudWatch Logs. These access logs are not saved and are not retrievable.</p>
-    fn stop_access_logging(
+    async fn stop_access_logging(
         &self,
         input: StopAccessLoggingInput,
-    ) -> RusotoFuture<StopAccessLoggingOutput, StopAccessLoggingError>;
+    ) -> Result<StopAccessLoggingOutput, RusotoError<StopAccessLoggingError>>;
 }
 /// A client for the MediaStore API.
 #[derive(Clone)]
@@ -1147,12 +1149,13 @@ impl MediaStoreClient {
     }
 }
 
+#[async_trait]
 impl MediaStore for MediaStoreClient {
     /// <p>Creates a storage container to hold objects. A container is similar to a bucket in the Amazon S3 service.</p>
-    fn create_container(
+    async fn create_container(
         &self,
         input: CreateContainerInput,
-    ) -> RusotoFuture<CreateContainerOutput, CreateContainerError> {
+    ) -> Result<CreateContainerOutput, RusotoError<CreateContainerError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1160,42 +1163,26 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateContainerError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateContainerError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<CreateContainerOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateContainerError>
-                            })
-                            .and_then(|response| Err(CreateContainerError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateContainerOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateContainerError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified container. Before you make a <code>DeleteContainer</code> request, delete any objects in the container or in any folders in the container. You can delete only empty containers. </p>
-    fn delete_container(
+    async fn delete_container(
         &self,
         input: DeleteContainerInput,
-    ) -> RusotoFuture<DeleteContainerOutput, DeleteContainerError> {
+    ) -> Result<DeleteContainerOutput, RusotoError<DeleteContainerError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1203,42 +1190,26 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteContainerError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteContainerError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteContainerOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteContainerError>
-                            })
-                            .and_then(|response| Err(DeleteContainerError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteContainerOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteContainerError::from_response(response))
+        }
     }
 
     /// <p>Deletes the access policy that is associated with the specified container.</p>
-    fn delete_container_policy(
+    async fn delete_container_policy(
         &self,
         input: DeleteContainerPolicyInput,
-    ) -> RusotoFuture<DeleteContainerPolicyOutput, DeleteContainerPolicyError> {
+    ) -> Result<DeleteContainerPolicyOutput, RusotoError<DeleteContainerPolicyError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1246,46 +1217,27 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteContainerPolicyError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteContainerPolicyError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteContainerPolicyOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteContainerPolicyError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteContainerPolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteContainerPolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteContainerPolicyError::from_response(response))
+        }
     }
 
     /// <p>Deletes the cross-origin resource sharing (CORS) configuration information that is set for the container.</p> <p>To use this operation, you must have permission to perform the <code>MediaStore:DeleteCorsPolicy</code> action. The container owner has this permission by default and can grant this permission to others.</p>
-    fn delete_cors_policy(
+    async fn delete_cors_policy(
         &self,
         input: DeleteCorsPolicyInput,
-    ) -> RusotoFuture<DeleteCorsPolicyOutput, DeleteCorsPolicyError> {
+    ) -> Result<DeleteCorsPolicyOutput, RusotoError<DeleteCorsPolicyError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1293,44 +1245,26 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteCorsPolicyError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteCorsPolicyError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteCorsPolicyOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteCorsPolicyError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteCorsPolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteCorsPolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteCorsPolicyError::from_response(response))
+        }
     }
 
     /// <p>Removes an object lifecycle policy from a container. It takes up to 20 minutes for the change to take effect.</p>
-    fn delete_lifecycle_policy(
+    async fn delete_lifecycle_policy(
         &self,
         input: DeleteLifecyclePolicyInput,
-    ) -> RusotoFuture<DeleteLifecyclePolicyOutput, DeleteLifecyclePolicyError> {
+    ) -> Result<DeleteLifecyclePolicyOutput, RusotoError<DeleteLifecyclePolicyError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1338,46 +1272,27 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteLifecyclePolicyError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteLifecyclePolicyError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteLifecyclePolicyOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteLifecyclePolicyError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteLifecyclePolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteLifecyclePolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteLifecyclePolicyError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the properties of the requested container. This request is commonly used to retrieve the endpoint of a container. An endpoint is a value assigned by the service when a new container is created. A container's endpoint does not change after it has been assigned. The <code>DescribeContainer</code> request returns a single <code>Container</code> object based on <code>ContainerName</code>. To return all <code>Container</code> objects that are associated with a specified AWS account, use <a>ListContainers</a>.</p>
-    fn describe_container(
+    async fn describe_container(
         &self,
         input: DescribeContainerInput,
-    ) -> RusotoFuture<DescribeContainerOutput, DescribeContainerError> {
+    ) -> Result<DescribeContainerOutput, RusotoError<DescribeContainerError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1385,44 +1300,26 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeContainerError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeContainerError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeContainerOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeContainerError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeContainerError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeContainerOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeContainerError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the access policy for the specified container. For information about the data that is included in an access policy, see the <a href="https://aws.amazon.com/documentation/iam/">AWS Identity and Access Management User Guide</a>.</p>
-    fn get_container_policy(
+    async fn get_container_policy(
         &self,
         input: GetContainerPolicyInput,
-    ) -> RusotoFuture<GetContainerPolicyOutput, GetContainerPolicyError> {
+    ) -> Result<GetContainerPolicyOutput, RusotoError<GetContainerPolicyError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1430,44 +1327,27 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetContainerPolicyError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetContainerPolicyError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetContainerPolicyOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetContainerPolicyError>
-                            })
-                            .and_then(|response| {
-                                Err(GetContainerPolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetContainerPolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetContainerPolicyError::from_response(response))
+        }
     }
 
     /// <p>Returns the cross-origin resource sharing (CORS) configuration information that is set for the container.</p> <p>To use this operation, you must have permission to perform the <code>MediaStore:GetCorsPolicy</code> action. By default, the container owner has this permission and can grant it to others.</p>
-    fn get_cors_policy(
+    async fn get_cors_policy(
         &self,
         input: GetCorsPolicyInput,
-    ) -> RusotoFuture<GetCorsPolicyOutput, GetCorsPolicyError> {
+    ) -> Result<GetCorsPolicyOutput, RusotoError<GetCorsPolicyError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1475,42 +1355,26 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetCorsPolicyError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetCorsPolicyError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetCorsPolicyOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetCorsPolicyError>
-                            })
-                            .and_then(|response| Err(GetCorsPolicyError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetCorsPolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetCorsPolicyError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the object lifecycle policy that is assigned to a container.</p>
-    fn get_lifecycle_policy(
+    async fn get_lifecycle_policy(
         &self,
         input: GetLifecyclePolicyInput,
-    ) -> RusotoFuture<GetLifecyclePolicyOutput, GetLifecyclePolicyError> {
+    ) -> Result<GetLifecyclePolicyOutput, RusotoError<GetLifecyclePolicyError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1518,44 +1382,27 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetLifecyclePolicyError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetLifecyclePolicyError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetLifecyclePolicyOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetLifecyclePolicyError>
-                            })
-                            .and_then(|response| {
-                                Err(GetLifecyclePolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetLifecyclePolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetLifecyclePolicyError::from_response(response))
+        }
     }
 
     /// <p>Lists the properties of all containers in AWS Elemental MediaStore. </p> <p>You can query to receive all the containers in one response. Or you can include the <code>MaxResults</code> parameter to receive a limited number of containers in each response. In this case, the response includes a token. To get the next set of containers, send the command again, this time with the <code>NextToken</code> parameter (with the returned token as its value). The next set of responses appears, with a token if there are still more containers to receive. </p> <p>See also <a>DescribeContainer</a>, which gets the properties of one container. </p>
-    fn list_containers(
+    async fn list_containers(
         &self,
         input: ListContainersInput,
-    ) -> RusotoFuture<ListContainersOutput, ListContainersError> {
+    ) -> Result<ListContainersOutput, RusotoError<ListContainersError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1563,42 +1410,26 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListContainersError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ListContainersError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListContainersOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ListContainersError>
-                            })
-                            .and_then(|response| Err(ListContainersError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListContainersOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListContainersError::from_response(response))
+        }
     }
 
     /// <p>Creates an access policy for the specified container to restrict the users and clients that can access it. For information about the data that is included in an access policy, see the <a href="https://aws.amazon.com/documentation/iam/">AWS Identity and Access Management User Guide</a>.</p> <p>For this release of the REST API, you can create only one policy for a container. If you enter <code>PutContainerPolicy</code> twice, the second command modifies the existing policy. </p>
-    fn put_container_policy(
+    async fn put_container_policy(
         &self,
         input: PutContainerPolicyInput,
-    ) -> RusotoFuture<PutContainerPolicyOutput, PutContainerPolicyError> {
+    ) -> Result<PutContainerPolicyOutput, RusotoError<PutContainerPolicyError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1606,44 +1437,27 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutContainerPolicyError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutContainerPolicyError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<PutContainerPolicyOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutContainerPolicyError>
-                            })
-                            .and_then(|response| {
-                                Err(PutContainerPolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutContainerPolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutContainerPolicyError::from_response(response))
+        }
     }
 
     /// <p>Sets the cross-origin resource sharing (CORS) configuration on a container so that the container can service cross-origin requests. For example, you might want to enable a request whose origin is http://www.example.com to access your AWS Elemental MediaStore container at my.example.container.com by using the browser's XMLHttpRequest capability.</p> <p>To enable CORS on a container, you attach a CORS policy to the container. In the CORS policy, you configure rules that identify origins and the HTTP methods that can be executed on your container. The policy can contain up to 398,000 characters. You can add up to 100 rules to a CORS policy. If more than one rule applies, the service uses the first applicable rule listed.</p> <p>To learn more about CORS, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/cors-policy.html">Cross-Origin Resource Sharing (CORS) in AWS Elemental MediaStore</a>.</p>
-    fn put_cors_policy(
+    async fn put_cors_policy(
         &self,
         input: PutCorsPolicyInput,
-    ) -> RusotoFuture<PutCorsPolicyOutput, PutCorsPolicyError> {
+    ) -> Result<PutCorsPolicyOutput, RusotoError<PutCorsPolicyError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1651,42 +1465,26 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutCorsPolicyError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutCorsPolicyError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<PutCorsPolicyOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutCorsPolicyError>
-                            })
-                            .and_then(|response| Err(PutCorsPolicyError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<PutCorsPolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutCorsPolicyError::from_response(response))
+        }
     }
 
     /// <p>Writes an object lifecycle policy to a container. If the container already has an object lifecycle policy, the service replaces the existing policy with the new policy. It takes up to 20 minutes for the change to take effect.</p> <p>For information about how to construct an object lifecycle policy, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/policies-object-lifecycle-components.html">Components of an Object Lifecycle Policy</a>.</p>
-    fn put_lifecycle_policy(
+    async fn put_lifecycle_policy(
         &self,
         input: PutLifecyclePolicyInput,
-    ) -> RusotoFuture<PutLifecyclePolicyOutput, PutLifecyclePolicyError> {
+    ) -> Result<PutLifecyclePolicyOutput, RusotoError<PutLifecyclePolicyError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1694,44 +1492,27 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutLifecyclePolicyError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutLifecyclePolicyError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<PutLifecyclePolicyOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutLifecyclePolicyError>
-                            })
-                            .and_then(|response| {
-                                Err(PutLifecyclePolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutLifecyclePolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutLifecyclePolicyError::from_response(response))
+        }
     }
 
     /// <p>Starts access logging on the specified container. When you enable access logging on a container, MediaStore delivers access logs for objects stored in that container to Amazon CloudWatch Logs.</p>
-    fn start_access_logging(
+    async fn start_access_logging(
         &self,
         input: StartAccessLoggingInput,
-    ) -> RusotoFuture<StartAccessLoggingOutput, StartAccessLoggingError> {
+    ) -> Result<StartAccessLoggingOutput, RusotoError<StartAccessLoggingError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1739,44 +1520,27 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| StartAccessLoggingError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<StartAccessLoggingError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<StartAccessLoggingOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<StartAccessLoggingError>
-                            })
-                            .and_then(|response| {
-                                Err(StartAccessLoggingError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartAccessLoggingOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartAccessLoggingError::from_response(response))
+        }
     }
 
     /// <p>Stops access logging on the specified container. When you stop access logging on a container, MediaStore stops sending access logs to Amazon CloudWatch Logs. These access logs are not saved and are not retrievable.</p>
-    fn stop_access_logging(
+    async fn stop_access_logging(
         &self,
         input: StopAccessLoggingInput,
-    ) -> RusotoFuture<StopAccessLoggingOutput, StopAccessLoggingError> {
+    ) -> Result<StopAccessLoggingOutput, RusotoError<StopAccessLoggingError>> {
         let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1784,36 +1548,18 @@ impl MediaStore for MediaStoreClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| StopAccessLoggingError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<StopAccessLoggingError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<StopAccessLoggingOutput, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<StopAccessLoggingError>
-                            })
-                            .and_then(|response| {
-                                Err(StopAccessLoggingError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StopAccessLoggingOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopAccessLoggingError::from_response(response))
+        }
     }
 }

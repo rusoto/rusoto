@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -154,12 +155,13 @@ impl Error for GetEntitlementsError {
     }
 }
 /// Trait representing the capabilities of the AWS Marketplace Entitlement Service API. AWS Marketplace Entitlement Service clients implement this trait.
+#[async_trait]
 pub trait MarketplaceEntitlement {
     /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>
-    fn get_entitlements(
+    async fn get_entitlements(
         &self,
         input: GetEntitlementsRequest,
-    ) -> RusotoFuture<GetEntitlementsResult, GetEntitlementsError>;
+    ) -> Result<GetEntitlementsResult, RusotoError<GetEntitlementsError>>;
 }
 /// A client for the AWS Marketplace Entitlement Service API.
 #[derive(Clone)]
@@ -195,12 +197,13 @@ impl MarketplaceEntitlementClient {
     }
 }
 
+#[async_trait]
 impl MarketplaceEntitlement for MarketplaceEntitlementClient {
     /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>
-    fn get_entitlements(
+    async fn get_entitlements(
         &self,
         input: GetEntitlementsRequest,
-    ) -> RusotoFuture<GetEntitlementsResult, GetEntitlementsError> {
+    ) -> Result<GetEntitlementsResult, RusotoError<GetEntitlementsError>> {
         let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
         request.set_endpoint_prefix("entitlement.marketplace".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -208,34 +211,18 @@ impl MarketplaceEntitlement for MarketplaceEntitlementClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetEntitlementsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetEntitlementsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetEntitlementsResult, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetEntitlementsError>
-                            })
-                            .and_then(|response| Err(GetEntitlementsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetEntitlementsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetEntitlementsError::from_response(response))
+        }
     }
 }

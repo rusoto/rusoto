@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
@@ -4841,189 +4842,211 @@ impl Error for UntagResourceError {
     }
 }
 /// Trait representing the capabilities of the Amazon SNS API. Amazon SNS clients implement this trait.
+#[async_trait]
 pub trait Sns {
     /// <p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>
-    fn add_permission(&self, input: AddPermissionInput) -> RusotoFuture<(), AddPermissionError>;
+    async fn add_permission(
+        &self,
+        input: AddPermissionInput,
+    ) -> Result<(), RusotoError<AddPermissionError>>;
 
     /// <p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>
-    fn check_if_phone_number_is_opted_out(
+    async fn check_if_phone_number_is_opted_out(
         &self,
         input: CheckIfPhoneNumberIsOptedOutInput,
-    ) -> RusotoFuture<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError>;
+    ) -> Result<CheckIfPhoneNumberIsOptedOutResponse, RusotoError<CheckIfPhoneNumberIsOptedOutError>>;
 
     /// <p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to "true".</p>
-    fn confirm_subscription(
+    async fn confirm_subscription(
         &self,
         input: ConfirmSubscriptionInput,
-    ) -> RusotoFuture<ConfirmSubscriptionResponse, ConfirmSubscriptionError>;
+    ) -> Result<ConfirmSubscriptionResponse, RusotoError<ConfirmSubscriptionError>>;
 
     /// <p>Creates a platform application object for one of the supported push notification services, such as APNS and FCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client id". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is "Package Security Identifier". For MPNS, PlatformPrincipal is "TLS certificate". For Baidu, PlatformPrincipal is "API key".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is "private key". For GCM, PlatformCredential is "API key". For ADM, PlatformCredential is "client secret". For WNS, PlatformCredential is "secret key". For MPNS, PlatformCredential is "private key". For Baidu, PlatformCredential is "secret key". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html">Getting Started with Apple Push Notification Service</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html">Getting Started with Amazon Device Messaging</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html">Getting Started with Baidu Cloud Push</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html">Getting Started with Google Cloud Messaging for Android</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html">Getting Started with MPNS</a>, or <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html">Getting Started with WNS</a>. </p>
-    fn create_platform_application(
+    async fn create_platform_application(
         &self,
         input: CreatePlatformApplicationInput,
-    ) -> RusotoFuture<CreatePlatformApplicationResponse, CreatePlatformApplicationError>;
+    ) -> Result<CreatePlatformApplicationResponse, RusotoError<CreatePlatformApplicationError>>;
 
     /// <p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html">Creating an Amazon SNS Endpoint for Baidu</a>. </p>
-    fn create_platform_endpoint(
+    async fn create_platform_endpoint(
         &self,
         input: CreatePlatformEndpointInput,
-    ) -> RusotoFuture<CreateEndpointResponse, CreatePlatformEndpointError>;
+    ) -> Result<CreateEndpointResponse, RusotoError<CreatePlatformEndpointError>>;
 
     /// <p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href="http://aws.amazon.com/sns/">https://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>
-    fn create_topic(
+    async fn create_topic(
         &self,
         input: CreateTopicInput,
-    ) -> RusotoFuture<CreateTopicResponse, CreateTopicError>;
+    ) -> Result<CreateTopicResponse, RusotoError<CreateTopicError>>;
 
     /// <p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>
-    fn delete_endpoint(&self, input: DeleteEndpointInput) -> RusotoFuture<(), DeleteEndpointError>;
+    async fn delete_endpoint(
+        &self,
+        input: DeleteEndpointInput,
+    ) -> Result<(), RusotoError<DeleteEndpointError>>;
 
     /// <p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
-    fn delete_platform_application(
+    async fn delete_platform_application(
         &self,
         input: DeletePlatformApplicationInput,
-    ) -> RusotoFuture<(), DeletePlatformApplicationError>;
+    ) -> Result<(), RusotoError<DeletePlatformApplicationError>>;
 
     /// <p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>
-    fn delete_topic(&self, input: DeleteTopicInput) -> RusotoFuture<(), DeleteTopicError>;
+    async fn delete_topic(
+        &self,
+        input: DeleteTopicInput,
+    ) -> Result<(), RusotoError<DeleteTopicError>>;
 
     /// <p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
-    fn get_endpoint_attributes(
+    async fn get_endpoint_attributes(
         &self,
         input: GetEndpointAttributesInput,
-    ) -> RusotoFuture<GetEndpointAttributesResponse, GetEndpointAttributesError>;
+    ) -> Result<GetEndpointAttributesResponse, RusotoError<GetEndpointAttributesError>>;
 
     /// <p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
-    fn get_platform_application_attributes(
+    async fn get_platform_application_attributes(
         &self,
         input: GetPlatformApplicationAttributesInput,
-    ) -> RusotoFuture<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError>;
+    ) -> Result<
+        GetPlatformApplicationAttributesResponse,
+        RusotoError<GetPlatformApplicationAttributesError>,
+    >;
 
     /// <p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>
-    fn get_sms_attributes(
+    async fn get_sms_attributes(
         &self,
         input: GetSMSAttributesInput,
-    ) -> RusotoFuture<GetSMSAttributesResponse, GetSMSAttributesError>;
+    ) -> Result<GetSMSAttributesResponse, RusotoError<GetSMSAttributesError>>;
 
     /// <p>Returns all of the properties of a subscription.</p>
-    fn get_subscription_attributes(
+    async fn get_subscription_attributes(
         &self,
         input: GetSubscriptionAttributesInput,
-    ) -> RusotoFuture<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError>;
+    ) -> Result<GetSubscriptionAttributesResponse, RusotoError<GetSubscriptionAttributesError>>;
 
     /// <p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>
-    fn get_topic_attributes(
+    async fn get_topic_attributes(
         &self,
         input: GetTopicAttributesInput,
-    ) -> RusotoFuture<GetTopicAttributesResponse, GetTopicAttributesError>;
+    ) -> Result<GetTopicAttributesResponse, RusotoError<GetTopicAttributesError>>;
 
     /// <p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 30 transactions per second (TPS).</p>
-    fn list_endpoints_by_platform_application(
+    async fn list_endpoints_by_platform_application(
         &self,
         input: ListEndpointsByPlatformApplicationInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListEndpointsByPlatformApplicationResponse,
-        ListEndpointsByPlatformApplicationError,
+        RusotoError<ListEndpointsByPlatformApplicationError>,
     >;
 
     /// <p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>
-    fn list_phone_numbers_opted_out(
+    async fn list_phone_numbers_opted_out(
         &self,
         input: ListPhoneNumbersOptedOutInput,
-    ) -> RusotoFuture<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError>;
+    ) -> Result<ListPhoneNumbersOptedOutResponse, RusotoError<ListPhoneNumbersOptedOutError>>;
 
     /// <p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 15 transactions per second (TPS).</p>
-    fn list_platform_applications(
+    async fn list_platform_applications(
         &self,
         input: ListPlatformApplicationsInput,
-    ) -> RusotoFuture<ListPlatformApplicationsResponse, ListPlatformApplicationsError>;
+    ) -> Result<ListPlatformApplicationsResponse, RusotoError<ListPlatformApplicationsError>>;
 
     /// <p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
-    fn list_subscriptions(
+    async fn list_subscriptions(
         &self,
         input: ListSubscriptionsInput,
-    ) -> RusotoFuture<ListSubscriptionsResponse, ListSubscriptionsError>;
+    ) -> Result<ListSubscriptionsResponse, RusotoError<ListSubscriptionsError>>;
 
     /// <p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
-    fn list_subscriptions_by_topic(
+    async fn list_subscriptions_by_topic(
         &self,
         input: ListSubscriptionsByTopicInput,
-    ) -> RusotoFuture<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError>;
+    ) -> Result<ListSubscriptionsByTopicResponse, RusotoError<ListSubscriptionsByTopicError>>;
 
     /// <p>List all tags added to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
-    fn list_topics(
+    async fn list_topics(
         &self,
         input: ListTopicsInput,
-    ) -> RusotoFuture<ListTopicsResponse, ListTopicsError>;
+    ) -> Result<ListTopicsResponse, RusotoError<ListTopicsError>>;
 
     /// <p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>
-    fn opt_in_phone_number(
+    async fn opt_in_phone_number(
         &self,
         input: OptInPhoneNumberInput,
-    ) -> RusotoFuture<OptInPhoneNumberResponse, OptInPhoneNumberError>;
+    ) -> Result<OptInPhoneNumberResponse, RusotoError<OptInPhoneNumberError>>;
 
     /// <p>Sends a message to an Amazon SNS topic or sends a text message (SMS message) directly to a phone number. </p> <p>If you send a message to a topic, Amazon SNS delivers the message to each endpoint that is subscribed to the topic. The format of the message depends on the notification protocol for each subscribed endpoint.</p> <p>When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it shortly.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>
-    fn publish(&self, input: PublishInput) -> RusotoFuture<PublishResponse, PublishError>;
+    async fn publish(
+        &self,
+        input: PublishInput,
+    ) -> Result<PublishResponse, RusotoError<PublishError>>;
 
     /// <p>Removes a statement from a topic's access control policy.</p>
-    fn remove_permission(
+    async fn remove_permission(
         &self,
         input: RemovePermissionInput,
-    ) -> RusotoFuture<(), RemovePermissionError>;
+    ) -> Result<(), RusotoError<RemovePermissionError>>;
 
     /// <p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
-    fn set_endpoint_attributes(
+    async fn set_endpoint_attributes(
         &self,
         input: SetEndpointAttributesInput,
-    ) -> RusotoFuture<(), SetEndpointAttributesError>;
+    ) -> Result<(), RusotoError<SetEndpointAttributesError>>;
 
     /// <p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>
-    fn set_platform_application_attributes(
+    async fn set_platform_application_attributes(
         &self,
         input: SetPlatformApplicationAttributesInput,
-    ) -> RusotoFuture<(), SetPlatformApplicationAttributesError>;
+    ) -> Result<(), RusotoError<SetPlatformApplicationAttributesError>>;
 
     /// <p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>
-    fn set_sms_attributes(
+    async fn set_sms_attributes(
         &self,
         input: SetSMSAttributesInput,
-    ) -> RusotoFuture<SetSMSAttributesResponse, SetSMSAttributesError>;
+    ) -> Result<SetSMSAttributesResponse, RusotoError<SetSMSAttributesError>>;
 
     /// <p>Allows a subscription owner to set an attribute of the subscription to a new value.</p>
-    fn set_subscription_attributes(
+    async fn set_subscription_attributes(
         &self,
         input: SetSubscriptionAttributesInput,
-    ) -> RusotoFuture<(), SetSubscriptionAttributesError>;
+    ) -> Result<(), RusotoError<SetSubscriptionAttributesError>>;
 
     /// <p>Allows a topic owner to set an attribute of the topic to a new value.</p>
-    fn set_topic_attributes(
+    async fn set_topic_attributes(
         &self,
         input: SetTopicAttributesInput,
-    ) -> RusotoFuture<(), SetTopicAttributesError>;
+    ) -> Result<(), RusotoError<SetTopicAttributesError>>;
 
     /// <p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p> <p>This action is throttled at 100 transactions per second (TPS).</p>
-    fn subscribe(&self, input: SubscribeInput) -> RusotoFuture<SubscribeResponse, SubscribeError>;
+    async fn subscribe(
+        &self,
+        input: SubscribeInput,
+    ) -> Result<SubscribeResponse, RusotoError<SubscribeError>>;
 
     /// <p>Add tags to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon SNS Developer Guide</i>.</p> <p>When you use topic tags, keep the following guidelines in mind:</p> <ul> <li> <p>Adding more than 50 tags to a topic isn't recommended.</p> </li> <li> <p>Tags don't have any semantic meaning. Amazon SNS interprets tags as character strings.</p> </li> <li> <p>Tags are case-sensitive.</p> </li> <li> <p>A new tag with a key identical to that of an existing tag overwrites the existing tag.</p> </li> <li> <p>Tagging actions are limited to 10 TPS per AWS account. If your application requires a higher throughput, file a <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=technical">technical support request</a>.</p> </li> </ul> <p>For a full list of tag restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-limits.html#limits-topics">Limits Related to Topics</a> in the <i>Amazon SNS Developer Guide</i>.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
     /// <p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p> <p>This action is throttled at 100 transactions per second (TPS).</p>
-    fn unsubscribe(&self, input: UnsubscribeInput) -> RusotoFuture<(), UnsubscribeError>;
+    async fn unsubscribe(
+        &self,
+        input: UnsubscribeInput,
+    ) -> Result<(), RusotoError<UnsubscribeError>>;
 
     /// <p>Remove tags from the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon SNS Developer Guide</i>.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 }
 /// A client for the Amazon SNS API.
 #[derive(Clone)]
@@ -5059,9 +5082,13 @@ impl SnsClient {
     }
 }
 
+#[async_trait]
 impl Sns for SnsClient {
     /// <p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>
-    fn add_permission(&self, input: AddPermissionInput) -> RusotoFuture<(), AddPermissionError> {
+    async fn add_permission(
+        &self,
+        input: AddPermissionInput,
+    ) -> Result<(), RusotoError<AddPermissionError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5071,28 +5098,25 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddPermissionError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(AddPermissionError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AddPermissionError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>
-    fn check_if_phone_number_is_opted_out(
+    async fn check_if_phone_number_is_opted_out(
         &self,
         input: CheckIfPhoneNumberIsOptedOutInput,
-    ) -> RusotoFuture<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError> {
+    ) -> Result<CheckIfPhoneNumberIsOptedOutResponse, RusotoError<CheckIfPhoneNumberIsOptedOutError>>
+    {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5102,57 +5126,46 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<CheckIfPhoneNumberIsOptedOutError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CheckIfPhoneNumberIsOptedOutError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CheckIfPhoneNumberIsOptedOutError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CheckIfPhoneNumberIsOptedOutResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CheckIfPhoneNumberIsOptedOutResponseDeserializer::deserialize(
-                            "CheckIfPhoneNumberIsOptedOutResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CheckIfPhoneNumberIsOptedOutResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CheckIfPhoneNumberIsOptedOutResponseDeserializer::deserialize(
+                "CheckIfPhoneNumberIsOptedOutResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to "true".</p>
-    fn confirm_subscription(
+    async fn confirm_subscription(
         &self,
         input: ConfirmSubscriptionInput,
-    ) -> RusotoFuture<ConfirmSubscriptionResponse, ConfirmSubscriptionError> {
+    ) -> Result<ConfirmSubscriptionResponse, RusotoError<ConfirmSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5162,56 +5175,47 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ConfirmSubscriptionError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ConfirmSubscriptionError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ConfirmSubscriptionError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ConfirmSubscriptionResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ConfirmSubscriptionResponseDeserializer::deserialize(
-                            "ConfirmSubscriptionResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ConfirmSubscriptionResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ConfirmSubscriptionResponseDeserializer::deserialize(
+                "ConfirmSubscriptionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a platform application object for one of the supported push notification services, such as APNS and FCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client id". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is "Package Security Identifier". For MPNS, PlatformPrincipal is "TLS certificate". For Baidu, PlatformPrincipal is "API key".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is "private key". For GCM, PlatformCredential is "API key". For ADM, PlatformCredential is "client secret". For WNS, PlatformCredential is "secret key". For MPNS, PlatformCredential is "private key". For Baidu, PlatformCredential is "secret key". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html">Getting Started with Apple Push Notification Service</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html">Getting Started with Amazon Device Messaging</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html">Getting Started with Baidu Cloud Push</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html">Getting Started with Google Cloud Messaging for Android</a>, <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html">Getting Started with MPNS</a>, or <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html">Getting Started with WNS</a>. </p>
-    fn create_platform_application(
+    async fn create_platform_application(
         &self,
         input: CreatePlatformApplicationInput,
-    ) -> RusotoFuture<CreatePlatformApplicationResponse, CreatePlatformApplicationError> {
+    ) -> Result<CreatePlatformApplicationResponse, RusotoError<CreatePlatformApplicationError>>
+    {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5221,56 +5225,46 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CreatePlatformApplicationError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreatePlatformApplicationError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreatePlatformApplicationError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreatePlatformApplicationResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CreatePlatformApplicationResponseDeserializer::deserialize(
-                            "CreatePlatformApplicationResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreatePlatformApplicationResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreatePlatformApplicationResponseDeserializer::deserialize(
+                "CreatePlatformApplicationResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html">Creating an Amazon SNS Endpoint for Baidu</a>. </p>
-    fn create_platform_endpoint(
+    async fn create_platform_endpoint(
         &self,
         input: CreatePlatformEndpointInput,
-    ) -> RusotoFuture<CreateEndpointResponse, CreatePlatformEndpointError> {
+    ) -> Result<CreateEndpointResponse, RusotoError<CreatePlatformEndpointError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5280,56 +5274,46 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CreatePlatformEndpointError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreatePlatformEndpointError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreatePlatformEndpointError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateEndpointResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CreateEndpointResponseDeserializer::deserialize(
-                            "CreatePlatformEndpointResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateEndpointResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateEndpointResponseDeserializer::deserialize(
+                "CreatePlatformEndpointResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href="http://aws.amazon.com/sns/">https://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>
-    fn create_topic(
+    async fn create_topic(
         &self,
         input: CreateTopicInput,
-    ) -> RusotoFuture<CreateTopicResponse, CreateTopicError> {
+    ) -> Result<CreateTopicResponse, RusotoError<CreateTopicError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5339,51 +5323,43 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CreateTopicError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(CreateTopicError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateTopicError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateTopicResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CreateTopicResponseDeserializer::deserialize(
-                            "CreateTopicResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateTopicResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateTopicResponseDeserializer::deserialize("CreateTopicResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>
-    fn delete_endpoint(&self, input: DeleteEndpointInput) -> RusotoFuture<(), DeleteEndpointError> {
+    async fn delete_endpoint(
+        &self,
+        input: DeleteEndpointInput,
+    ) -> Result<(), RusotoError<DeleteEndpointError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5393,28 +5369,24 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteEndpointError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(DeleteEndpointError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteEndpointError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
-    fn delete_platform_application(
+    async fn delete_platform_application(
         &self,
         input: DeletePlatformApplicationInput,
-    ) -> RusotoFuture<(), DeletePlatformApplicationError> {
+    ) -> Result<(), RusotoError<DeletePlatformApplicationError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5424,27 +5396,24 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DeletePlatformApplicationError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeletePlatformApplicationError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeletePlatformApplicationError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>
-    fn delete_topic(&self, input: DeleteTopicInput) -> RusotoFuture<(), DeleteTopicError> {
+    async fn delete_topic(
+        &self,
+        input: DeleteTopicInput,
+    ) -> Result<(), RusotoError<DeleteTopicError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5454,28 +5423,24 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteTopicError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(DeleteTopicError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteTopicError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
-    fn get_endpoint_attributes(
+    async fn get_endpoint_attributes(
         &self,
         input: GetEndpointAttributesInput,
-    ) -> RusotoFuture<GetEndpointAttributesResponse, GetEndpointAttributesError> {
+    ) -> Result<GetEndpointAttributesResponse, RusotoError<GetEndpointAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5485,57 +5450,49 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<GetEndpointAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(GetEndpointAttributesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetEndpointAttributesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetEndpointAttributesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = GetEndpointAttributesResponseDeserializer::deserialize(
-                            "GetEndpointAttributesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetEndpointAttributesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetEndpointAttributesResponseDeserializer::deserialize(
+                "GetEndpointAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
-    fn get_platform_application_attributes(
+    async fn get_platform_application_attributes(
         &self,
         input: GetPlatformApplicationAttributesInput,
-    ) -> RusotoFuture<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError>
-    {
+    ) -> Result<
+        GetPlatformApplicationAttributesResponse,
+        RusotoError<GetPlatformApplicationAttributesError>,
+    > {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5545,59 +5502,48 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<GetPlatformApplicationAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(GetPlatformApplicationAttributesError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetPlatformApplicationAttributesError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetPlatformApplicationAttributesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = GetPlatformApplicationAttributesResponseDeserializer::deserialize(
-                            "GetPlatformApplicationAttributesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetPlatformApplicationAttributesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetPlatformApplicationAttributesResponseDeserializer::deserialize(
+                "GetPlatformApplicationAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>
-    fn get_sms_attributes(
+    async fn get_sms_attributes(
         &self,
         input: GetSMSAttributesInput,
-    ) -> RusotoFuture<GetSMSAttributesResponse, GetSMSAttributesError> {
+    ) -> Result<GetSMSAttributesResponse, RusotoError<GetSMSAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5607,54 +5553,47 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetSMSAttributesError>)
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(GetSMSAttributesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetSMSAttributesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetSMSAttributesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = GetSMSAttributesResponseDeserializer::deserialize(
-                            "GetSMSAttributesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetSMSAttributesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetSMSAttributesResponseDeserializer::deserialize(
+                "GetSMSAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns all of the properties of a subscription.</p>
-    fn get_subscription_attributes(
+    async fn get_subscription_attributes(
         &self,
         input: GetSubscriptionAttributesInput,
-    ) -> RusotoFuture<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError> {
+    ) -> Result<GetSubscriptionAttributesResponse, RusotoError<GetSubscriptionAttributesError>>
+    {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5664,56 +5603,46 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<GetSubscriptionAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(GetSubscriptionAttributesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetSubscriptionAttributesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetSubscriptionAttributesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = GetSubscriptionAttributesResponseDeserializer::deserialize(
-                            "GetSubscriptionAttributesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetSubscriptionAttributesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetSubscriptionAttributesResponseDeserializer::deserialize(
+                "GetSubscriptionAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>
-    fn get_topic_attributes(
+    async fn get_topic_attributes(
         &self,
         input: GetTopicAttributesInput,
-    ) -> RusotoFuture<GetTopicAttributesResponse, GetTopicAttributesError> {
+    ) -> Result<GetTopicAttributesResponse, RusotoError<GetTopicAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5723,58 +5652,48 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<GetTopicAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(GetTopicAttributesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetTopicAttributesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetTopicAttributesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = GetTopicAttributesResponseDeserializer::deserialize(
-                            "GetTopicAttributesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetTopicAttributesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetTopicAttributesResponseDeserializer::deserialize(
+                "GetTopicAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 30 transactions per second (TPS).</p>
-    fn list_endpoints_by_platform_application(
+    async fn list_endpoints_by_platform_application(
         &self,
         input: ListEndpointsByPlatformApplicationInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListEndpointsByPlatformApplicationResponse,
-        ListEndpointsByPlatformApplicationError,
+        RusotoError<ListEndpointsByPlatformApplicationError>,
     > {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
@@ -5785,60 +5704,48 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<ListEndpointsByPlatformApplicationError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListEndpointsByPlatformApplicationError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListEndpointsByPlatformApplicationError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListEndpointsByPlatformApplicationResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            ListEndpointsByPlatformApplicationResponseDeserializer::deserialize(
-                                "ListEndpointsByPlatformApplicationResult",
-                                &mut stack,
-                            );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListEndpointsByPlatformApplicationResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListEndpointsByPlatformApplicationResponseDeserializer::deserialize(
+                "ListEndpointsByPlatformApplicationResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>
-    fn list_phone_numbers_opted_out(
+    async fn list_phone_numbers_opted_out(
         &self,
         input: ListPhoneNumbersOptedOutInput,
-    ) -> RusotoFuture<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError> {
+    ) -> Result<ListPhoneNumbersOptedOutResponse, RusotoError<ListPhoneNumbersOptedOutError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5848,56 +5755,46 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ListPhoneNumbersOptedOutError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListPhoneNumbersOptedOutError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListPhoneNumbersOptedOutError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListPhoneNumbersOptedOutResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListPhoneNumbersOptedOutResponseDeserializer::deserialize(
-                            "ListPhoneNumbersOptedOutResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListPhoneNumbersOptedOutResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListPhoneNumbersOptedOutResponseDeserializer::deserialize(
+                "ListPhoneNumbersOptedOutResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 15 transactions per second (TPS).</p>
-    fn list_platform_applications(
+    async fn list_platform_applications(
         &self,
         input: ListPlatformApplicationsInput,
-    ) -> RusotoFuture<ListPlatformApplicationsResponse, ListPlatformApplicationsError> {
+    ) -> Result<ListPlatformApplicationsResponse, RusotoError<ListPlatformApplicationsError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5907,56 +5804,46 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ListPlatformApplicationsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListPlatformApplicationsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListPlatformApplicationsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListPlatformApplicationsResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListPlatformApplicationsResponseDeserializer::deserialize(
-                            "ListPlatformApplicationsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListPlatformApplicationsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListPlatformApplicationsResponseDeserializer::deserialize(
+                "ListPlatformApplicationsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
-    fn list_subscriptions(
+    async fn list_subscriptions(
         &self,
         input: ListSubscriptionsInput,
-    ) -> RusotoFuture<ListSubscriptionsResponse, ListSubscriptionsError> {
+    ) -> Result<ListSubscriptionsResponse, RusotoError<ListSubscriptionsError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5966,56 +5853,46 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ListSubscriptionsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListSubscriptionsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListSubscriptionsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListSubscriptionsResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListSubscriptionsResponseDeserializer::deserialize(
-                            "ListSubscriptionsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListSubscriptionsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListSubscriptionsResponseDeserializer::deserialize(
+                "ListSubscriptionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
-    fn list_subscriptions_by_topic(
+    async fn list_subscriptions_by_topic(
         &self,
         input: ListSubscriptionsByTopicInput,
-    ) -> RusotoFuture<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError> {
+    ) -> Result<ListSubscriptionsByTopicResponse, RusotoError<ListSubscriptionsByTopicError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6025,56 +5902,46 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ListSubscriptionsByTopicError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListSubscriptionsByTopicError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListSubscriptionsByTopicError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListSubscriptionsByTopicResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListSubscriptionsByTopicResponseDeserializer::deserialize(
-                            "ListSubscriptionsByTopicResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListSubscriptionsByTopicResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListSubscriptionsByTopicResponseDeserializer::deserialize(
+                "ListSubscriptionsByTopicResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>List all tags added to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6084,56 +5951,46 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ListTagsForResourceError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListTagsForResourceError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListTagsForResourceError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListTagsForResourceResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListTagsForResourceResponseDeserializer::deserialize(
-                            "ListTagsForResourceResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListTagsForResourceResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListTagsForResourceResponseDeserializer::deserialize(
+                "ListTagsForResourceResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
-    fn list_topics(
+    async fn list_topics(
         &self,
         input: ListTopicsInput,
-    ) -> RusotoFuture<ListTopicsResponse, ListTopicsError> {
+    ) -> Result<ListTopicsResponse, RusotoError<ListTopicsError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6143,54 +6000,43 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListTopicsError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(ListTopicsError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListTopicsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListTopicsResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListTopicsResponseDeserializer::deserialize(
-                            "ListTopicsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListTopicsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListTopicsResponseDeserializer::deserialize("ListTopicsResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>
-    fn opt_in_phone_number(
+    async fn opt_in_phone_number(
         &self,
         input: OptInPhoneNumberInput,
-    ) -> RusotoFuture<OptInPhoneNumberResponse, OptInPhoneNumberError> {
+    ) -> Result<OptInPhoneNumberResponse, RusotoError<OptInPhoneNumberError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6200,51 +6046,46 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<OptInPhoneNumberError>)
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(OptInPhoneNumberError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(OptInPhoneNumberError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(OptInPhoneNumberResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = OptInPhoneNumberResponseDeserializer::deserialize(
-                            "OptInPhoneNumberResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = OptInPhoneNumberResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = OptInPhoneNumberResponseDeserializer::deserialize(
+                "OptInPhoneNumberResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Sends a message to an Amazon SNS topic or sends a text message (SMS message) directly to a phone number. </p> <p>If you send a message to a topic, Amazon SNS delivers the message to each endpoint that is subscribed to the topic. The format of the message depends on the notification protocol for each subscribed endpoint.</p> <p>When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it shortly.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href="https://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>
-    fn publish(&self, input: PublishInput) -> RusotoFuture<PublishResponse, PublishError> {
+    async fn publish(
+        &self,
+        input: PublishInput,
+    ) -> Result<PublishResponse, RusotoError<PublishError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6254,52 +6095,43 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<PublishError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(PublishError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PublishError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(PublishResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            PublishResponseDeserializer::deserialize("PublishResult", &mut stack);
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = PublishResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = PublishResponseDeserializer::deserialize("PublishResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Removes a statement from a topic's access control policy.</p>
-    fn remove_permission(
+    async fn remove_permission(
         &self,
         input: RemovePermissionInput,
-    ) -> RusotoFuture<(), RemovePermissionError> {
+    ) -> Result<(), RusotoError<RemovePermissionError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6309,28 +6141,24 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<RemovePermissionError>)
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(RemovePermissionError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RemovePermissionError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
-    fn set_endpoint_attributes(
+    async fn set_endpoint_attributes(
         &self,
         input: SetEndpointAttributesInput,
-    ) -> RusotoFuture<(), SetEndpointAttributesError> {
+    ) -> Result<(), RusotoError<SetEndpointAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6340,30 +6168,24 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<SetEndpointAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SetEndpointAttributesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetEndpointAttributesError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>
-    fn set_platform_application_attributes(
+    async fn set_platform_application_attributes(
         &self,
         input: SetPlatformApplicationAttributesInput,
-    ) -> RusotoFuture<(), SetPlatformApplicationAttributesError> {
+    ) -> Result<(), RusotoError<SetPlatformApplicationAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6373,33 +6195,26 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<SetPlatformApplicationAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SetPlatformApplicationAttributesError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetPlatformApplicationAttributesError::from_response(
+                response,
+            ));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>
-    fn set_sms_attributes(
+    async fn set_sms_attributes(
         &self,
         input: SetSMSAttributesInput,
-    ) -> RusotoFuture<SetSMSAttributesResponse, SetSMSAttributesError> {
+    ) -> Result<SetSMSAttributesResponse, RusotoError<SetSMSAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6409,54 +6224,46 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<SetSMSAttributesError>)
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SetSMSAttributesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetSMSAttributesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SetSMSAttributesResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SetSMSAttributesResponseDeserializer::deserialize(
-                            "SetSMSAttributesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SetSMSAttributesResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetSMSAttributesResponseDeserializer::deserialize(
+                "SetSMSAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Allows a subscription owner to set an attribute of the subscription to a new value.</p>
-    fn set_subscription_attributes(
+    async fn set_subscription_attributes(
         &self,
         input: SetSubscriptionAttributesInput,
-    ) -> RusotoFuture<(), SetSubscriptionAttributesError> {
+    ) -> Result<(), RusotoError<SetSubscriptionAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6466,30 +6273,24 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<SetSubscriptionAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SetSubscriptionAttributesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetSubscriptionAttributesError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Allows a topic owner to set an attribute of the topic to a new value.</p>
-    fn set_topic_attributes(
+    async fn set_topic_attributes(
         &self,
         input: SetTopicAttributesInput,
-    ) -> RusotoFuture<(), SetTopicAttributesError> {
+    ) -> Result<(), RusotoError<SetTopicAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6499,27 +6300,24 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<SetTopicAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SetTopicAttributesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetTopicAttributesError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p> <p>This action is throttled at 100 transactions per second (TPS).</p>
-    fn subscribe(&self, input: SubscribeInput) -> RusotoFuture<SubscribeResponse, SubscribeError> {
+    async fn subscribe(
+        &self,
+        input: SubscribeInput,
+    ) -> Result<SubscribeResponse, RusotoError<SubscribeError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6529,54 +6327,43 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<SubscribeError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(SubscribeError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SubscribeError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SubscribeResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SubscribeResponseDeserializer::deserialize(
-                            "SubscribeResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SubscribeResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SubscribeResponseDeserializer::deserialize("SubscribeResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Add tags to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon SNS Developer Guide</i>.</p> <p>When you use topic tags, keep the following guidelines in mind:</p> <ul> <li> <p>Adding more than 50 tags to a topic isn't recommended.</p> </li> <li> <p>Tags don't have any semantic meaning. Amazon SNS interprets tags as character strings.</p> </li> <li> <p>Tags are case-sensitive.</p> </li> <li> <p>A new tag with a key identical to that of an existing tag overwrites the existing tag.</p> </li> <li> <p>Tagging actions are limited to 10 TPS per AWS account. If your application requires a higher throughput, file a <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=technical">technical support request</a>.</p> </li> </ul> <p>For a full list of tag restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-limits.html#limits-topics">Limits Related to Topics</a> in the <i>Amazon SNS Developer Guide</i>.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6586,51 +6373,43 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(TagResourceError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(TagResourceError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(TagResourceResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = TagResourceResponseDeserializer::deserialize(
-                            "TagResourceResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = TagResourceResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = TagResourceResponseDeserializer::deserialize("TagResourceResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p> <p>This action is throttled at 100 transactions per second (TPS).</p>
-    fn unsubscribe(&self, input: UnsubscribeInput) -> RusotoFuture<(), UnsubscribeError> {
+    async fn unsubscribe(
+        &self,
+        input: UnsubscribeInput,
+    ) -> Result<(), RusotoError<UnsubscribeError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6640,28 +6419,24 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<UnsubscribeError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(UnsubscribeError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UnsubscribeError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Remove tags from the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon SNS Developer Guide</i>.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6671,47 +6446,37 @@ impl Sns for SnsClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(UntagResourceError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UntagResourceError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(UntagResourceResponse::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = UntagResourceResponseDeserializer::deserialize(
-                            "UntagResourceResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = UntagResourceResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                UntagResourceResponseDeserializer::deserialize("UntagResourceResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 }
 
@@ -6724,8 +6489,8 @@ mod protocol_tests {
     use super::*;
     use rusoto_core::Region as rusoto_region;
 
-    #[test]
-    fn test_parse_error_sns_delete_topic() {
+    #[tokio::test]
+    async fn test_parse_error_sns_delete_topic() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/error",
             "sns-delete-topic.xml",
@@ -6733,12 +6498,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeleteTopicInput::default();
-        let result = client.delete_topic(request).sync();
+        let result = client.delete_topic(request).await;
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_sns_add_permission() {
+    #[tokio::test]
+    async fn test_parse_valid_sns_add_permission() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "sns-add-permission.xml",
@@ -6746,12 +6511,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = AddPermissionInput::default();
-        let result = client.add_permission(request).sync();
+        let result = client.add_permission(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_sns_confirm_subscription() {
+    #[tokio::test]
+    async fn test_parse_valid_sns_confirm_subscription() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "sns-confirm-subscription.xml",
@@ -6759,12 +6524,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ConfirmSubscriptionInput::default();
-        let result = client.confirm_subscription(request).sync();
+        let result = client.confirm_subscription(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_sns_create_topic() {
+    #[tokio::test]
+    async fn test_parse_valid_sns_create_topic() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "sns-create-topic.xml",
@@ -6772,12 +6537,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateTopicInput::default();
-        let result = client.create_topic(request).sync();
+        let result = client.create_topic(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_sns_get_subscription_attributes() {
+    #[tokio::test]
+    async fn test_parse_valid_sns_get_subscription_attributes() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "sns-get-subscription-attributes.xml",
@@ -6785,12 +6550,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetSubscriptionAttributesInput::default();
-        let result = client.get_subscription_attributes(request).sync();
+        let result = client.get_subscription_attributes(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_sns_get_topic_attributes() {
+    #[tokio::test]
+    async fn test_parse_valid_sns_get_topic_attributes() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "sns-get-topic-attributes.xml",
@@ -6798,12 +6563,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetTopicAttributesInput::default();
-        let result = client.get_topic_attributes(request).sync();
+        let result = client.get_topic_attributes(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_sns_list_subscriptions_by_topic() {
+    #[tokio::test]
+    async fn test_parse_valid_sns_list_subscriptions_by_topic() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "sns-list-subscriptions-by-topic.xml",
@@ -6811,12 +6576,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListSubscriptionsByTopicInput::default();
-        let result = client.list_subscriptions_by_topic(request).sync();
+        let result = client.list_subscriptions_by_topic(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_sns_list_subscriptions() {
+    #[tokio::test]
+    async fn test_parse_valid_sns_list_subscriptions() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "sns-list-subscriptions.xml",
@@ -6824,12 +6589,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListSubscriptionsInput::default();
-        let result = client.list_subscriptions(request).sync();
+        let result = client.list_subscriptions(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_sns_list_topics() {
+    #[tokio::test]
+    async fn test_parse_valid_sns_list_topics() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "sns-list-topics.xml",
@@ -6837,23 +6602,23 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListTopicsInput::default();
-        let result = client.list_topics(request).sync();
+        let result = client.list_topics(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_sns_publish() {
+    #[tokio::test]
+    async fn test_parse_valid_sns_publish() {
         let mock_response =
             MockResponseReader::read_response("test_resources/generated/valid", "sns-publish.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = PublishInput::default();
-        let result = client.publish(request).sync();
+        let result = client.publish(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_sns_subscribe() {
+    #[tokio::test]
+    async fn test_parse_valid_sns_subscribe() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "sns-subscribe.xml",
@@ -6861,7 +6626,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = SubscribeInput::default();
-        let result = client.subscribe(request).sync();
+        let result = client.subscribe(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
@@ -393,27 +394,28 @@ impl Error for UpdateThingShadowError {
     }
 }
 /// Trait representing the capabilities of the AWS IoT Data Plane API. AWS IoT Data Plane clients implement this trait.
+#[async_trait]
 pub trait IotData {
     /// <p>Deletes the thing shadow for the specified thing.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/API_DeleteThingShadow.html">DeleteThingShadow</a> in the <i>AWS IoT Developer Guide</i>.</p>
-    fn delete_thing_shadow(
+    async fn delete_thing_shadow(
         &self,
         input: DeleteThingShadowRequest,
-    ) -> RusotoFuture<DeleteThingShadowResponse, DeleteThingShadowError>;
+    ) -> Result<DeleteThingShadowResponse, RusotoError<DeleteThingShadowError>>;
 
     /// <p>Gets the thing shadow for the specified thing.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/API_GetThingShadow.html">GetThingShadow</a> in the <i>AWS IoT Developer Guide</i>.</p>
-    fn get_thing_shadow(
+    async fn get_thing_shadow(
         &self,
         input: GetThingShadowRequest,
-    ) -> RusotoFuture<GetThingShadowResponse, GetThingShadowError>;
+    ) -> Result<GetThingShadowResponse, RusotoError<GetThingShadowError>>;
 
     /// <p>Publishes state information.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/protocols.html#http">HTTP Protocol</a> in the <i>AWS IoT Developer Guide</i>.</p>
-    fn publish(&self, input: PublishRequest) -> RusotoFuture<(), PublishError>;
+    async fn publish(&self, input: PublishRequest) -> Result<(), RusotoError<PublishError>>;
 
     /// <p>Updates the thing shadow for the specified thing.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/API_UpdateThingShadow.html">UpdateThingShadow</a> in the <i>AWS IoT Developer Guide</i>.</p>
-    fn update_thing_shadow(
+    async fn update_thing_shadow(
         &self,
         input: UpdateThingShadowRequest,
-    ) -> RusotoFuture<UpdateThingShadowResponse, UpdateThingShadowError>;
+    ) -> Result<UpdateThingShadowResponse, RusotoError<UpdateThingShadowError>>;
 }
 /// A client for the AWS IoT Data Plane API.
 #[derive(Clone)]
@@ -449,12 +451,13 @@ impl IotDataClient {
     }
 }
 
+#[async_trait]
 impl IotData for IotDataClient {
     /// <p>Deletes the thing shadow for the specified thing.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/API_DeleteThingShadow.html">DeleteThingShadow</a> in the <i>AWS IoT Developer Guide</i>.</p>
-    fn delete_thing_shadow(
+    async fn delete_thing_shadow(
         &self,
         input: DeleteThingShadowRequest,
-    ) -> RusotoFuture<DeleteThingShadowResponse, DeleteThingShadowError> {
+    ) -> Result<DeleteThingShadowResponse, RusotoError<DeleteThingShadowError>> {
         let request_uri = format!("/things/{thing_name}/shadow", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("DELETE", "iotdata", &self.region, &request_uri);
@@ -462,40 +465,29 @@ impl IotData for IotDataClient {
 
         request.set_endpoint_prefix("data.iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteThingShadowError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let mut result = DeleteThingShadowResponse::default();
-                            result.payload = response.body;
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteThingShadowError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteThingShadowError>())
-                            .and_then(|response| {
-                                Err(DeleteThingShadowError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            let mut result = DeleteThingShadowResponse::default();
+            result.payload = response.body;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteThingShadowError::from_response(response))
+        }
     }
 
     /// <p>Gets the thing shadow for the specified thing.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/API_GetThingShadow.html">GetThingShadow</a> in the <i>AWS IoT Developer Guide</i>.</p>
-    fn get_thing_shadow(
+    async fn get_thing_shadow(
         &self,
         input: GetThingShadowRequest,
-    ) -> RusotoFuture<GetThingShadowResponse, GetThingShadowError> {
+    ) -> Result<GetThingShadowResponse, RusotoError<GetThingShadowError>> {
         let request_uri = format!("/things/{thing_name}/shadow", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("GET", "iotdata", &self.region, &request_uri);
@@ -503,35 +495,26 @@ impl IotData for IotDataClient {
 
         request.set_endpoint_prefix("data.iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetThingShadowError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let mut result = GetThingShadowResponse::default();
-                            result.payload = Some(response.body);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetThingShadowError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetThingShadowError>())
-                            .and_then(|response| Err(GetThingShadowError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            let mut result = GetThingShadowResponse::default();
+            result.payload = Some(response.body);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetThingShadowError::from_response(response))
+        }
     }
 
     /// <p>Publishes state information.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/protocols.html#http">HTTP Protocol</a> in the <i>AWS IoT Developer Guide</i>.</p>
-    fn publish(&self, input: PublishRequest) -> RusotoFuture<(), PublishError> {
+    async fn publish(&self, input: PublishRequest) -> Result<(), RusotoError<PublishError>> {
         let request_uri = format!("/topics/{topic}", topic = input.topic);
 
         let mut request = SignedRequest::new("POST", "iotdata", &self.region, &request_uri);
@@ -551,37 +534,27 @@ impl IotData for IotDataClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PublishError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PublishError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<PublishError>())
-                            .and_then(|response| Err(PublishError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PublishError::from_response(response))
+        }
     }
 
     /// <p>Updates the thing shadow for the specified thing.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/API_UpdateThingShadow.html">UpdateThingShadow</a> in the <i>AWS IoT Developer Guide</i>.</p>
-    fn update_thing_shadow(
+    async fn update_thing_shadow(
         &self,
         input: UpdateThingShadowRequest,
-    ) -> RusotoFuture<UpdateThingShadowResponse, UpdateThingShadowError> {
+    ) -> Result<UpdateThingShadowResponse, RusotoError<UpdateThingShadowError>> {
         let request_uri = format!("/things/{thing_name}/shadow", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("POST", "iotdata", &self.region, &request_uri);
@@ -591,32 +564,21 @@ impl IotData for IotDataClient {
         let encoded = Some(input.payload.to_owned());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateThingShadowError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let mut result = UpdateThingShadowResponse::default();
-                            result.payload = Some(response.body);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateThingShadowError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateThingShadowError>())
-                            .and_then(|response| {
-                                Err(UpdateThingShadowError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            let mut result = UpdateThingShadowResponse::default();
+            result.payload = Some(response.body);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateThingShadowError::from_response(response))
+        }
     }
 }

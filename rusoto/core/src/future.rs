@@ -2,16 +2,10 @@ use std::pin::Pin;
 use std::future::Future;
 use std::task::{Context, Poll};
 
-use super::client::SignAndDispatchFuture;
 use super::error::{RusotoError, RusotoResult};
-use super::request::HttpResponse;
 
 use futures::FutureExt;
 use pin_project::pin_project;
-
-//lazy_static! {
-//    static ref FALLBACK_RUNTIME: Runtime = tokio::runtime::Runtime::new().unwrap();
-//}
 
 /// Future that is returned from all rusoto service APIs.
 ///
@@ -150,26 +144,18 @@ pub struct RusotoFuture<T, E> {
 
 pub(crate) type RusotoHandlerFuture<T, E> = Pin<Box<dyn Future<Output = Result<T, RusotoError<E>>> + Send>>;
 
-async fn dispatch_rusoto_future<T, E>(
-    future: SignAndDispatchFuture,
-    handler: fn(HttpResponse) -> RusotoHandlerFuture<T, E>
-) -> Result<T, RusotoError<E>> {
-    let resp = future.await.map_err(|e| RusotoError::from(e))?;
-    handler(resp).await
-}
-
-pub fn new<T, E>(
-    future: SignAndDispatchFuture,
-    handler: fn(HttpResponse) -> RusotoHandlerFuture<T, E>,
-) -> RusotoFuture<T, E>
-    where
-        T: 'static,
-        E: 'static
-{
-    RusotoFuture {
-        inner: dispatch_rusoto_future(future, handler).boxed(),
-    }
-}
+//pub fn new<T, E>(
+//    future: SignAndDispatchFuture,
+//    handler: fn(HttpResponse) -> RusotoHandlerFuture<T, E>,
+//) -> RusotoFuture<T, E>
+//    where
+//        T: 'static,
+//        E: 'static
+//{
+//    RusotoFuture {
+//        inner: dispatch_rusoto_future(future, handler).boxed(),
+//    }
+//}
 
 impl<T, E> RusotoFuture<T, E> {
     /// Blocks the current thread until the future has resolved.
@@ -189,7 +175,7 @@ impl<T, E> RusotoFuture<T, E> {
 impl<T, E> Future for RusotoFuture<T, E> {
     type Output = Result<T, RusotoError<E>>;
 
-    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         let this = self.project();
         this.inner.poll(cx)
     }

@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -910,63 +911,67 @@ impl Error for UpdateStreamError {
     }
 }
 /// Trait representing the capabilities of the Kinesis Video API. Kinesis Video clients implement this trait.
+#[async_trait]
 pub trait KinesisVideo {
     /// <p>Creates a new Kinesis video stream. </p> <p>When you create a new stream, Kinesis Video Streams assigns it a version number. When you change the stream's metadata, Kinesis Video Streams updates the version. </p> <p> <code>CreateStream</code> is an asynchronous operation.</p> <p>For information about how the service works, see <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/how-it-works.html">How it Works</a>. </p> <p>You must have permissions for the <code>KinesisVideo:CreateStream</code> action.</p>
-    fn create_stream(
+    async fn create_stream(
         &self,
         input: CreateStreamInput,
-    ) -> RusotoFuture<CreateStreamOutput, CreateStreamError>;
+    ) -> Result<CreateStreamOutput, RusotoError<CreateStreamError>>;
 
     /// <p>Deletes a Kinesis video stream and the data contained in the stream. </p> <p>This method marks the stream for deletion, and makes the data in the stream inaccessible immediately.</p> <p> </p> <p> To ensure that you have the latest version of the stream before deleting it, you can specify the stream version. Kinesis Video Streams assigns a version to each stream. When you update a stream, Kinesis Video Streams assigns a new version number. To get the latest stream version, use the <code>DescribeStream</code> API. </p> <p>This operation requires permission for the <code>KinesisVideo:DeleteStream</code> action.</p>
-    fn delete_stream(
+    async fn delete_stream(
         &self,
         input: DeleteStreamInput,
-    ) -> RusotoFuture<DeleteStreamOutput, DeleteStreamError>;
+    ) -> Result<DeleteStreamOutput, RusotoError<DeleteStreamError>>;
 
     /// <p>Returns the most current information about the specified stream. You must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p>
-    fn describe_stream(
+    async fn describe_stream(
         &self,
         input: DescribeStreamInput,
-    ) -> RusotoFuture<DescribeStreamOutput, DescribeStreamError>;
+    ) -> Result<DescribeStreamOutput, RusotoError<DescribeStreamError>>;
 
     /// <p>Gets an endpoint for a specified stream for either reading or writing. Use this endpoint in your application to read from the specified stream (using the <code>GetMedia</code> or <code>GetMediaForFragmentList</code> operations) or write to it (using the <code>PutMedia</code> operation). </p> <note> <p>The returned endpoint does not have the API name appended. The client needs to add the API name to the returned endpoint.</p> </note> <p>In the request, specify the stream either by <code>StreamName</code> or <code>StreamARN</code>.</p>
-    fn get_data_endpoint(
+    async fn get_data_endpoint(
         &self,
         input: GetDataEndpointInput,
-    ) -> RusotoFuture<GetDataEndpointOutput, GetDataEndpointError>;
+    ) -> Result<GetDataEndpointOutput, RusotoError<GetDataEndpointError>>;
 
     /// <p>Returns an array of <code>StreamInfo</code> objects. Each object describes a stream. To retrieve only streams that satisfy a specific condition, you can specify a <code>StreamNameCondition</code>. </p>
-    fn list_streams(
+    async fn list_streams(
         &self,
         input: ListStreamsInput,
-    ) -> RusotoFuture<ListStreamsOutput, ListStreamsError>;
+    ) -> Result<ListStreamsOutput, RusotoError<ListStreamsError>>;
 
     /// <p>Returns a list of tags associated with the specified stream.</p> <p>In the request, you must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p>
-    fn list_tags_for_stream(
+    async fn list_tags_for_stream(
         &self,
         input: ListTagsForStreamInput,
-    ) -> RusotoFuture<ListTagsForStreamOutput, ListTagsForStreamError>;
+    ) -> Result<ListTagsForStreamOutput, RusotoError<ListTagsForStreamError>>;
 
     /// <p>Adds one or more tags to a stream. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p> <p>You must provide either the <code>StreamName</code> or the <code>StreamARN</code>.</p> <p>This operation requires permission for the <code>KinesisVideo:TagStream</code> action.</p> <p>Kinesis video streams support up to 50 tags.</p>
-    fn tag_stream(&self, input: TagStreamInput) -> RusotoFuture<TagStreamOutput, TagStreamError>;
+    async fn tag_stream(
+        &self,
+        input: TagStreamInput,
+    ) -> Result<TagStreamOutput, RusotoError<TagStreamError>>;
 
     /// <p>Removes one or more tags from a stream. In the request, specify only a tag key or keys; don't specify the value. If you specify a tag key that does not exist, it's ignored.</p> <p>In the request, you must provide the <code>StreamName</code> or <code>StreamARN</code>.</p>
-    fn untag_stream(
+    async fn untag_stream(
         &self,
         input: UntagStreamInput,
-    ) -> RusotoFuture<UntagStreamOutput, UntagStreamError>;
+    ) -> Result<UntagStreamOutput, RusotoError<UntagStreamError>>;
 
     /// <p><p> Increases or decreases the stream&#39;s data retention period by the value that you specify. To indicate whether you want to increase or decrease the data retention period, specify the <code>Operation</code> parameter in the request body. In the request, you must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p> <note> <p>The retention period that you specify replaces the current value.</p> </note> <p>This operation requires permission for the <code>KinesisVideo:UpdateDataRetention</code> action.</p> <p>Changing the data retention period affects the data in the stream as follows:</p> <ul> <li> <p>If the data retention period is increased, existing data is retained for the new retention period. For example, if the data retention period is increased from one hour to seven hours, all existing data is retained for seven hours.</p> </li> <li> <p>If the data retention period is decreased, existing data is retained for the new retention period. For example, if the data retention period is decreased from seven hours to one hour, all existing data is retained for one hour, and any data older than one hour is deleted immediately.</p> </li> </ul></p>
-    fn update_data_retention(
+    async fn update_data_retention(
         &self,
         input: UpdateDataRetentionInput,
-    ) -> RusotoFuture<UpdateDataRetentionOutput, UpdateDataRetentionError>;
+    ) -> Result<UpdateDataRetentionOutput, RusotoError<UpdateDataRetentionError>>;
 
     /// <p>Updates stream metadata, such as the device name and media type.</p> <p>You must provide the stream name or the Amazon Resource Name (ARN) of the stream.</p> <p>To make sure that you have the latest version of the stream before updating it, you can specify the stream version. Kinesis Video Streams assigns a version to each stream. When you update a stream, Kinesis Video Streams assigns a new version number. To get the latest stream version, use the <code>DescribeStream</code> API. </p> <p> <code>UpdateStream</code> is an asynchronous operation, and takes time to complete.</p>
-    fn update_stream(
+    async fn update_stream(
         &self,
         input: UpdateStreamInput,
-    ) -> RusotoFuture<UpdateStreamOutput, UpdateStreamError>;
+    ) -> Result<UpdateStreamOutput, RusotoError<UpdateStreamError>>;
 }
 /// A client for the Kinesis Video API.
 #[derive(Clone)]
@@ -1002,12 +1007,13 @@ impl KinesisVideoClient {
     }
 }
 
+#[async_trait]
 impl KinesisVideo for KinesisVideoClient {
     /// <p>Creates a new Kinesis video stream. </p> <p>When you create a new stream, Kinesis Video Streams assigns it a version number. When you change the stream's metadata, Kinesis Video Streams updates the version. </p> <p> <code>CreateStream</code> is an asynchronous operation.</p> <p>For information about how the service works, see <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/how-it-works.html">How it Works</a>. </p> <p>You must have permissions for the <code>KinesisVideo:CreateStream</code> action.</p>
-    fn create_stream(
+    async fn create_stream(
         &self,
         input: CreateStreamInput,
-    ) -> RusotoFuture<CreateStreamOutput, CreateStreamError> {
+    ) -> Result<CreateStreamOutput, RusotoError<CreateStreamError>> {
         let request_uri = "/createStream";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -1016,38 +1022,28 @@ impl KinesisVideo for KinesisVideoClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateStreamError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateStreamOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateStreamError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateStreamOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateStreamError>())
-                            .and_then(|response| Err(CreateStreamError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateStreamError::from_response(response))
+        }
     }
 
     /// <p>Deletes a Kinesis video stream and the data contained in the stream. </p> <p>This method marks the stream for deletion, and makes the data in the stream inaccessible immediately.</p> <p> </p> <p> To ensure that you have the latest version of the stream before deleting it, you can specify the stream version. Kinesis Video Streams assigns a version to each stream. When you update a stream, Kinesis Video Streams assigns a new version number. To get the latest stream version, use the <code>DescribeStream</code> API. </p> <p>This operation requires permission for the <code>KinesisVideo:DeleteStream</code> action.</p>
-    fn delete_stream(
+    async fn delete_stream(
         &self,
         input: DeleteStreamInput,
-    ) -> RusotoFuture<DeleteStreamOutput, DeleteStreamError> {
+    ) -> Result<DeleteStreamOutput, RusotoError<DeleteStreamError>> {
         let request_uri = "/deleteStream";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -1056,38 +1052,28 @@ impl KinesisVideo for KinesisVideoClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteStreamError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteStreamOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteStreamError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteStreamOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteStreamError>())
-                            .and_then(|response| Err(DeleteStreamError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteStreamError::from_response(response))
+        }
     }
 
     /// <p>Returns the most current information about the specified stream. You must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p>
-    fn describe_stream(
+    async fn describe_stream(
         &self,
         input: DescribeStreamInput,
-    ) -> RusotoFuture<DescribeStreamOutput, DescribeStreamError> {
+    ) -> Result<DescribeStreamOutput, RusotoError<DescribeStreamError>> {
         let request_uri = "/describeStream";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -1096,38 +1082,28 @@ impl KinesisVideo for KinesisVideoClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeStreamError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeStreamOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeStreamError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeStreamOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeStreamError>())
-                            .and_then(|response| Err(DescribeStreamError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeStreamError::from_response(response))
+        }
     }
 
     /// <p>Gets an endpoint for a specified stream for either reading or writing. Use this endpoint in your application to read from the specified stream (using the <code>GetMedia</code> or <code>GetMediaForFragmentList</code> operations) or write to it (using the <code>PutMedia</code> operation). </p> <note> <p>The returned endpoint does not have the API name appended. The client needs to add the API name to the returned endpoint.</p> </note> <p>In the request, specify the stream either by <code>StreamName</code> or <code>StreamARN</code>.</p>
-    fn get_data_endpoint(
+    async fn get_data_endpoint(
         &self,
         input: GetDataEndpointInput,
-    ) -> RusotoFuture<GetDataEndpointOutput, GetDataEndpointError> {
+    ) -> Result<GetDataEndpointOutput, RusotoError<GetDataEndpointError>> {
         let request_uri = "/getDataEndpoint";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -1136,38 +1112,28 @@ impl KinesisVideo for KinesisVideoClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetDataEndpointError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDataEndpointOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDataEndpointError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDataEndpointOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetDataEndpointError>())
-                            .and_then(|response| Err(GetDataEndpointError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDataEndpointError::from_response(response))
+        }
     }
 
     /// <p>Returns an array of <code>StreamInfo</code> objects. Each object describes a stream. To retrieve only streams that satisfy a specific condition, you can specify a <code>StreamNameCondition</code>. </p>
-    fn list_streams(
+    async fn list_streams(
         &self,
         input: ListStreamsInput,
-    ) -> RusotoFuture<ListStreamsOutput, ListStreamsError> {
+    ) -> Result<ListStreamsOutput, RusotoError<ListStreamsError>> {
         let request_uri = "/listStreams";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -1176,38 +1142,28 @@ impl KinesisVideo for KinesisVideoClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListStreamsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListStreamsOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListStreamsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<ListStreamsOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListStreamsError>())
-                            .and_then(|response| Err(ListStreamsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListStreamsError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of tags associated with the specified stream.</p> <p>In the request, you must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p>
-    fn list_tags_for_stream(
+    async fn list_tags_for_stream(
         &self,
         input: ListTagsForStreamInput,
-    ) -> RusotoFuture<ListTagsForStreamOutput, ListTagsForStreamError> {
+    ) -> Result<ListTagsForStreamOutput, RusotoError<ListTagsForStreamError>> {
         let request_uri = "/listTagsForStream";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -1216,37 +1172,28 @@ impl KinesisVideo for KinesisVideoClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListTagsForStreamError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForStreamOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTagsForStreamError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForStreamOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListTagsForStreamError>())
-                            .and_then(|response| {
-                                Err(ListTagsForStreamError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForStreamError::from_response(response))
+        }
     }
 
     /// <p>Adds one or more tags to a stream. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p> <p>You must provide either the <code>StreamName</code> or the <code>StreamARN</code>.</p> <p>This operation requires permission for the <code>KinesisVideo:TagStream</code> action.</p> <p>Kinesis video streams support up to 50 tags.</p>
-    fn tag_stream(&self, input: TagStreamInput) -> RusotoFuture<TagStreamOutput, TagStreamError> {
+    async fn tag_stream(
+        &self,
+        input: TagStreamInput,
+    ) -> Result<TagStreamOutput, RusotoError<TagStreamError>> {
         let request_uri = "/tagStream";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -1255,38 +1202,28 @@ impl KinesisVideo for KinesisVideoClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| TagStreamError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagStreamOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagStreamError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<TagStreamOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<TagStreamError>())
-                            .and_then(|response| Err(TagStreamError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagStreamError::from_response(response))
+        }
     }
 
     /// <p>Removes one or more tags from a stream. In the request, specify only a tag key or keys; don't specify the value. If you specify a tag key that does not exist, it's ignored.</p> <p>In the request, you must provide the <code>StreamName</code> or <code>StreamARN</code>.</p>
-    fn untag_stream(
+    async fn untag_stream(
         &self,
         input: UntagStreamInput,
-    ) -> RusotoFuture<UntagStreamOutput, UntagStreamError> {
+    ) -> Result<UntagStreamOutput, RusotoError<UntagStreamError>> {
         let request_uri = "/untagStream";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -1295,38 +1232,28 @@ impl KinesisVideo for KinesisVideoClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UntagStreamError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagStreamOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagStreamError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<UntagStreamOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UntagStreamError>())
-                            .and_then(|response| Err(UntagStreamError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagStreamError::from_response(response))
+        }
     }
 
     /// <p><p> Increases or decreases the stream&#39;s data retention period by the value that you specify. To indicate whether you want to increase or decrease the data retention period, specify the <code>Operation</code> parameter in the request body. In the request, you must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p> <note> <p>The retention period that you specify replaces the current value.</p> </note> <p>This operation requires permission for the <code>KinesisVideo:UpdateDataRetention</code> action.</p> <p>Changing the data retention period affects the data in the stream as follows:</p> <ul> <li> <p>If the data retention period is increased, existing data is retained for the new retention period. For example, if the data retention period is increased from one hour to seven hours, all existing data is retained for seven hours.</p> </li> <li> <p>If the data retention period is decreased, existing data is retained for the new retention period. For example, if the data retention period is decreased from seven hours to one hour, all existing data is retained for one hour, and any data older than one hour is deleted immediately.</p> </li> </ul></p>
-    fn update_data_retention(
+    async fn update_data_retention(
         &self,
         input: UpdateDataRetentionInput,
-    ) -> RusotoFuture<UpdateDataRetentionOutput, UpdateDataRetentionError> {
+    ) -> Result<UpdateDataRetentionOutput, RusotoError<UpdateDataRetentionError>> {
         let request_uri = "/updateDataRetention";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -1335,40 +1262,28 @@ impl KinesisVideo for KinesisVideoClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateDataRetentionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDataRetentionOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateDataRetentionError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateDataRetentionOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateDataRetentionError>())
-                            .and_then(|response| {
-                                Err(UpdateDataRetentionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDataRetentionError::from_response(response))
+        }
     }
 
     /// <p>Updates stream metadata, such as the device name and media type.</p> <p>You must provide the stream name or the Amazon Resource Name (ARN) of the stream.</p> <p>To make sure that you have the latest version of the stream before updating it, you can specify the stream version. Kinesis Video Streams assigns a version to each stream. When you update a stream, Kinesis Video Streams assigns a new version number. To get the latest stream version, use the <code>DescribeStream</code> API. </p> <p> <code>UpdateStream</code> is an asynchronous operation, and takes time to complete.</p>
-    fn update_stream(
+    async fn update_stream(
         &self,
         input: UpdateStreamInput,
-    ) -> RusotoFuture<UpdateStreamOutput, UpdateStreamError> {
+    ) -> Result<UpdateStreamOutput, RusotoError<UpdateStreamError>> {
         let request_uri = "/updateStream";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -1377,30 +1292,20 @@ impl KinesisVideo for KinesisVideoClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateStreamError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateStreamOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateStreamError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<UpdateStreamOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateStreamError>())
-                            .and_then(|response| Err(UpdateStreamError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateStreamError::from_response(response))
+        }
     }
 }

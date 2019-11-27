@@ -26,25 +26,27 @@ azure-devops = { project = "matthewkmayer/Rusoto", pipeline = "rusoto.rusoto", b
 rustc_version = "0.2.1"
 
 [dependencies]
-bytes = "0.4.12"
-futures-preview = { version = "0.3.0-alpha.18", features = ["async-await", "nightly"] }
+async-trait = "0.1"
+bytes = "0.4"
+futures-preview = "0.3.0-alpha.19"
 hmac = "0.5.0"
-http = "0.1.17"
-hyper = { version = "0.13.0-alpha.2", features = ["unstable-stream"] }
-hyper-rustls = { version = "0.18.0-alpha.1", optional = true }
-hyper-tls = { version = "0.4.0-alpha.2", optional = true }
-lazy_static = "1.0"
-log = "0.4.1"
-md5 = "0.3.6"
-pin-project = "0.4.0-alpha.9"
+http = "0.1"
+hyper = { version = "0.13.0-alpha.4", features = ["unstable-stream"] }
+hyper-rustls = { version = "0.19.0-alpha.3", optional = true }
+hyper-tls = { version = "0.4.0-alpha.4", optional = true }
+lazy_static = "1.4"
+log = "0.4"
+md5 = "0.3"
+percent-encoding = "2.1"
+pin-project = "0.4"
 base64 = "0.9"
 hex = "0.3"
 serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0.2"
-sha2 = "0.7.0"
-time = "0.1.35"
-url = "1.6.0"
-tokio = "0.2.0-alpha.5"
+serde_json = "1.0"
+sha2 = "0.7"
+time = "0.1"
+url = "2.1"
+tokio = "0.2.0-alpha.6"
 xml-rs = "0.7"
 
 [dependencies.rusoto_credential]
@@ -57,9 +59,9 @@ version = "0.0"
 
 [dev-dependencies]
 env_logger = "0.5"
-rand = "0.4.2"
-serde_json = "1.0.1"
-serde_test = "1.0.1"
+rand = "0.4"
+serde_json = "1.0"
+serde_test = "1.0"
 
 [features]
 default = ["native-tls"]

@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
@@ -8434,207 +8435,214 @@ impl Error for SetSubnetsError {
     }
 }
 /// Trait representing the capabilities of the Elastic Load Balancing v2 API. Elastic Load Balancing v2 clients implement this trait.
+#[async_trait]
 pub trait Elb {
     /// <p>Adds the specified certificate to the specified HTTPS listener.</p> <p>If the certificate was already added, the call is successful but the certificate is not added again.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>. To remove certificates from your listener, use <a>RemoveListenerCertificates</a>. To specify the default SSL server certificate, use <a>ModifyListener</a>.</p>
-    fn add_listener_certificates(
+    async fn add_listener_certificates(
         &self,
         input: AddListenerCertificatesInput,
-    ) -> RusotoFuture<AddListenerCertificatesOutput, AddListenerCertificatesError>;
+    ) -> Result<AddListenerCertificatesOutput, RusotoError<AddListenerCertificatesError>>;
 
     /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
+    async fn add_tags(
+        &self,
+        input: AddTagsInput,
+    ) -> Result<AddTagsOutput, RusotoError<AddTagsError>>;
 
     /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_listener(
+    async fn create_listener(
         &self,
         input: CreateListenerInput,
-    ) -> RusotoFuture<CreateListenerOutput, CreateListenerError>;
+    ) -> Result<CreateListenerOutput, RusotoError<CreateListenerError>>;
 
     /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_load_balancer(
+    async fn create_load_balancer(
         &self,
         input: CreateLoadBalancerInput,
-    ) -> RusotoFuture<CreateLoadBalancerOutput, CreateLoadBalancerError>;
+    ) -> Result<CreateLoadBalancerOutput, RusotoError<CreateLoadBalancerError>>;
 
     /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
-    fn create_rule(
+    async fn create_rule(
         &self,
         input: CreateRuleInput,
-    ) -> RusotoFuture<CreateRuleOutput, CreateRuleError>;
+    ) -> Result<CreateRuleOutput, RusotoError<CreateRuleError>>;
 
     /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_target_group(
+    async fn create_target_group(
         &self,
         input: CreateTargetGroupInput,
-    ) -> RusotoFuture<CreateTargetGroupOutput, CreateTargetGroupError>;
+    ) -> Result<CreateTargetGroupOutput, RusotoError<CreateTargetGroupError>>;
 
     /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer to which it is attached, using <a>DeleteLoadBalancer</a>.</p>
-    fn delete_listener(
+    async fn delete_listener(
         &self,
         input: DeleteListenerInput,
-    ) -> RusotoFuture<DeleteListenerOutput, DeleteListenerError>;
+    ) -> Result<DeleteListenerOutput, RusotoError<DeleteListenerError>>;
 
     /// <p>Deletes the specified Application Load Balancer or Network Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
-    fn delete_load_balancer(
+    async fn delete_load_balancer(
         &self,
         input: DeleteLoadBalancerInput,
-    ) -> RusotoFuture<DeleteLoadBalancerOutput, DeleteLoadBalancerError>;
+    ) -> Result<DeleteLoadBalancerOutput, RusotoError<DeleteLoadBalancerError>>;
 
     /// <p>Deletes the specified rule.</p>
-    fn delete_rule(
+    async fn delete_rule(
         &self,
         input: DeleteRuleInput,
-    ) -> RusotoFuture<DeleteRuleOutput, DeleteRuleError>;
+    ) -> Result<DeleteRuleOutput, RusotoError<DeleteRuleError>>;
 
     /// <p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>
-    fn delete_target_group(
+    async fn delete_target_group(
         &self,
         input: DeleteTargetGroupInput,
-    ) -> RusotoFuture<DeleteTargetGroupOutput, DeleteTargetGroupError>;
+    ) -> Result<DeleteTargetGroupOutput, RusotoError<DeleteTargetGroupError>>;
 
     /// <p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>
-    fn deregister_targets(
+    async fn deregister_targets(
         &self,
         input: DeregisterTargetsInput,
-    ) -> RusotoFuture<DeregisterTargetsOutput, DeregisterTargetsError>;
+    ) -> Result<DeregisterTargetsOutput, RusotoError<DeregisterTargetsError>>;
 
     /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_account_limits(
+    async fn describe_account_limits(
         &self,
         input: DescribeAccountLimitsInput,
-    ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError>;
+    ) -> Result<DescribeAccountLimitsOutput, RusotoError<DescribeAccountLimitsError>>;
 
     /// <p>Describes the certificates for the specified HTTPS listener.</p>
-    fn describe_listener_certificates(
+    async fn describe_listener_certificates(
         &self,
         input: DescribeListenerCertificatesInput,
-    ) -> RusotoFuture<DescribeListenerCertificatesOutput, DescribeListenerCertificatesError>;
+    ) -> Result<DescribeListenerCertificatesOutput, RusotoError<DescribeListenerCertificatesError>>;
 
     /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer. You must specify either a load balancer or one or more listeners.</p>
-    fn describe_listeners(
+    async fn describe_listeners(
         &self,
         input: DescribeListenersInput,
-    ) -> RusotoFuture<DescribeListenersOutput, DescribeListenersError>;
+    ) -> Result<DescribeListenersOutput, RusotoError<DescribeListenersError>>;
 
     /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_load_balancer_attributes(
+    async fn describe_load_balancer_attributes(
         &self,
         input: DescribeLoadBalancerAttributesInput,
-    ) -> RusotoFuture<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>;
+    ) -> Result<
+        DescribeLoadBalancerAttributesOutput,
+        RusotoError<DescribeLoadBalancerAttributesError>,
+    >;
 
     /// <p>Describes the specified load balancers or all of your load balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
-    fn describe_load_balancers(
+    async fn describe_load_balancers(
         &self,
         input: DescribeLoadBalancersInput,
-    ) -> RusotoFuture<DescribeLoadBalancersOutput, DescribeLoadBalancersError>;
+    ) -> Result<DescribeLoadBalancersOutput, RusotoError<DescribeLoadBalancersError>>;
 
     /// <p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>
-    fn describe_rules(
+    async fn describe_rules(
         &self,
         input: DescribeRulesInput,
-    ) -> RusotoFuture<DescribeRulesOutput, DescribeRulesError>;
+    ) -> Result<DescribeRulesOutput, RusotoError<DescribeRulesError>>;
 
     /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
-    fn describe_ssl_policies(
+    async fn describe_ssl_policies(
         &self,
         input: DescribeSSLPoliciesInput,
-    ) -> RusotoFuture<DescribeSSLPoliciesOutput, DescribeSSLPoliciesError>;
+    ) -> Result<DescribeSSLPoliciesOutput, RusotoError<DescribeSSLPoliciesError>>;
 
     /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, and target groups.</p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsInput,
-    ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError>;
+    ) -> Result<DescribeTagsOutput, RusotoError<DescribeTagsError>>;
 
     /// <p>Describes the attributes for the specified target group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_target_group_attributes(
+    async fn describe_target_group_attributes(
         &self,
         input: DescribeTargetGroupAttributesInput,
-    ) -> RusotoFuture<DescribeTargetGroupAttributesOutput, DescribeTargetGroupAttributesError>;
+    ) -> Result<DescribeTargetGroupAttributesOutput, RusotoError<DescribeTargetGroupAttributesError>>;
 
     /// <p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>
-    fn describe_target_groups(
+    async fn describe_target_groups(
         &self,
         input: DescribeTargetGroupsInput,
-    ) -> RusotoFuture<DescribeTargetGroupsOutput, DescribeTargetGroupsError>;
+    ) -> Result<DescribeTargetGroupsOutput, RusotoError<DescribeTargetGroupsError>>;
 
     /// <p>Describes the health of the specified targets or all of your targets.</p>
-    fn describe_target_health(
+    async fn describe_target_health(
         &self,
         input: DescribeTargetHealthInput,
-    ) -> RusotoFuture<DescribeTargetHealthOutput, DescribeTargetHealthError>;
+    ) -> Result<DescribeTargetHealthOutput, RusotoError<DescribeTargetHealthError>>;
 
     /// <p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP, or from TLS to TCP, removes the security policy and server certificate properties. If you change the protocol from HTTP to HTTPS, or from TCP to TLS, you must add the security policy and server certificate properties.</p>
-    fn modify_listener(
+    async fn modify_listener(
         &self,
         input: ModifyListenerInput,
-    ) -> RusotoFuture<ModifyListenerOutput, ModifyListenerError>;
+    ) -> Result<ModifyListenerOutput, RusotoError<ModifyListenerError>>;
 
     /// <p>Modifies the specified attributes of the specified Application Load Balancer or Network Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
-    fn modify_load_balancer_attributes(
+    async fn modify_load_balancer_attributes(
         &self,
         input: ModifyLoadBalancerAttributesInput,
-    ) -> RusotoFuture<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError>;
+    ) -> Result<ModifyLoadBalancerAttributesOutput, RusotoError<ModifyLoadBalancerAttributesError>>;
 
     /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the actions for the default rule, use <a>ModifyListener</a>.</p>
-    fn modify_rule(
+    async fn modify_rule(
         &self,
         input: ModifyRuleInput,
-    ) -> RusotoFuture<ModifyRuleOutput, ModifyRuleError>;
+    ) -> Result<ModifyRuleOutput, RusotoError<ModifyRuleError>>;
 
     /// <p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>
-    fn modify_target_group(
+    async fn modify_target_group(
         &self,
         input: ModifyTargetGroupInput,
-    ) -> RusotoFuture<ModifyTargetGroupOutput, ModifyTargetGroupError>;
+    ) -> Result<ModifyTargetGroupOutput, RusotoError<ModifyTargetGroupError>>;
 
     /// <p>Modifies the specified attributes of the specified target group.</p>
-    fn modify_target_group_attributes(
+    async fn modify_target_group_attributes(
         &self,
         input: ModifyTargetGroupAttributesInput,
-    ) -> RusotoFuture<ModifyTargetGroupAttributesOutput, ModifyTargetGroupAttributesError>;
+    ) -> Result<ModifyTargetGroupAttributesOutput, RusotoError<ModifyTargetGroupAttributesError>>;
 
     /// <p>Registers the specified targets with the specified target group.</p> <p>If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port for the target group. Alternatively, you can override the port for a target when you register it. You can register each EC2 instance or IP address with the same target group multiple times using different ports.</p> <p>With a Network Load Balancer, you cannot register instances by instance ID if they have the following instance types: C1, CC1, CC2, CG1, CG2, CR1, CS1, G1, G2, HI1, HS1, M1, M2, M3, and T1. You can register instances of these types by IP address.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
-    fn register_targets(
+    async fn register_targets(
         &self,
         input: RegisterTargetsInput,
-    ) -> RusotoFuture<RegisterTargetsOutput, RegisterTargetsError>;
+    ) -> Result<RegisterTargetsOutput, RusotoError<RegisterTargetsError>>;
 
     /// <p>Removes the specified certificate from the specified HTTPS listener.</p> <p>You can't remove the default certificate for a listener. To replace the default certificate, call <a>ModifyListener</a>.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>.</p>
-    fn remove_listener_certificates(
+    async fn remove_listener_certificates(
         &self,
         input: RemoveListenerCertificatesInput,
-    ) -> RusotoFuture<RemoveListenerCertificatesOutput, RemoveListenerCertificatesError>;
+    ) -> Result<RemoveListenerCertificatesOutput, RusotoError<RemoveListenerCertificatesError>>;
 
     /// <p>Removes the specified tags from the specified Elastic Load Balancing resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
-    fn remove_tags(
+    async fn remove_tags(
         &self,
         input: RemoveTagsInput,
-    ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError>;
+    ) -> Result<RemoveTagsOutput, RusotoError<RemoveTagsError>>;
 
     /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Network Load Balancers must use <code>ipv4</code>.</p>
-    fn set_ip_address_type(
+    async fn set_ip_address_type(
         &self,
         input: SetIpAddressTypeInput,
-    ) -> RusotoFuture<SetIpAddressTypeOutput, SetIpAddressTypeError>;
+    ) -> Result<SetIpAddressTypeOutput, RusotoError<SetIpAddressTypeError>>;
 
     /// <p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>
-    fn set_rule_priorities(
+    async fn set_rule_priorities(
         &self,
         input: SetRulePrioritiesInput,
-    ) -> RusotoFuture<SetRulePrioritiesOutput, SetRulePrioritiesError>;
+    ) -> Result<SetRulePrioritiesOutput, RusotoError<SetRulePrioritiesError>>;
 
     /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>You can't specify a security group for a Network Load Balancer.</p>
-    fn set_security_groups(
+    async fn set_security_groups(
         &self,
         input: SetSecurityGroupsInput,
-    ) -> RusotoFuture<SetSecurityGroupsOutput, SetSecurityGroupsError>;
+    ) -> Result<SetSecurityGroupsOutput, RusotoError<SetSecurityGroupsError>>;
 
     /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>You can't change the subnets for a Network Load Balancer.</p>
-    fn set_subnets(
+    async fn set_subnets(
         &self,
         input: SetSubnetsInput,
-    ) -> RusotoFuture<SetSubnetsOutput, SetSubnetsError>;
+    ) -> Result<SetSubnetsOutput, RusotoError<SetSubnetsError>>;
 }
 /// A client for the Elastic Load Balancing v2 API.
 #[derive(Clone)]
@@ -8670,12 +8678,13 @@ impl ElbClient {
     }
 }
 
+#[async_trait]
 impl Elb for ElbClient {
     /// <p>Adds the specified certificate to the specified HTTPS listener.</p> <p>If the certificate was already added, the call is successful but the certificate is not added again.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>. To remove certificates from your listener, use <a>RemoveListenerCertificates</a>. To specify the default SSL server certificate, use <a>ModifyListener</a>.</p>
-    fn add_listener_certificates(
+    async fn add_listener_certificates(
         &self,
         input: AddListenerCertificatesInput,
-    ) -> RusotoFuture<AddListenerCertificatesOutput, AddListenerCertificatesError> {
+    ) -> Result<AddListenerCertificatesOutput, RusotoError<AddListenerCertificatesError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8685,53 +8694,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<AddListenerCertificatesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(AddListenerCertificatesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AddListenerCertificatesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(AddListenerCertificatesOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = AddListenerCertificatesOutputDeserializer::deserialize(
-                            "AddListenerCertificatesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = AddListenerCertificatesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = AddListenerCertificatesOutputDeserializer::deserialize(
+                "AddListenerCertificatesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
+    async fn add_tags(
+        &self,
+        input: AddTagsInput,
+    ) -> Result<AddTagsOutput, RusotoError<AddTagsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8741,52 +8743,43 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddTagsError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(AddTagsError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AddTagsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(AddTagsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            AddTagsOutputDeserializer::deserialize("AddTagsResult", &mut stack);
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = AddTagsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = AddTagsOutputDeserializer::deserialize("AddTagsResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_listener(
+    async fn create_listener(
         &self,
         input: CreateListenerInput,
-    ) -> RusotoFuture<CreateListenerOutput, CreateListenerError> {
+    ) -> Result<CreateListenerOutput, RusotoError<CreateListenerError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8796,54 +8789,44 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CreateListenerError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(CreateListenerError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateListenerError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateListenerOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CreateListenerOutputDeserializer::deserialize(
-                            "CreateListenerResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateListenerOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                CreateListenerOutputDeserializer::deserialize("CreateListenerResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_load_balancer(
+    async fn create_load_balancer(
         &self,
         input: CreateLoadBalancerInput,
-    ) -> RusotoFuture<CreateLoadBalancerOutput, CreateLoadBalancerError> {
+    ) -> Result<CreateLoadBalancerOutput, RusotoError<CreateLoadBalancerError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8853,56 +8836,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CreateLoadBalancerError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreateLoadBalancerError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateLoadBalancerError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateLoadBalancerOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CreateLoadBalancerOutputDeserializer::deserialize(
-                            "CreateLoadBalancerResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateLoadBalancerOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateLoadBalancerOutputDeserializer::deserialize(
+                "CreateLoadBalancerResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
-    fn create_rule(
+    async fn create_rule(
         &self,
         input: CreateRuleInput,
-    ) -> RusotoFuture<CreateRuleOutput, CreateRuleError> {
+    ) -> Result<CreateRuleOutput, RusotoError<CreateRuleError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8912,54 +8885,43 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CreateRuleError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(CreateRuleError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateRuleError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateRuleOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CreateRuleOutputDeserializer::deserialize(
-                            "CreateRuleResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateRuleOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateRuleOutputDeserializer::deserialize("CreateRuleResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_target_group(
+    async fn create_target_group(
         &self,
         input: CreateTargetGroupInput,
-    ) -> RusotoFuture<CreateTargetGroupOutput, CreateTargetGroupError> {
+    ) -> Result<CreateTargetGroupOutput, RusotoError<CreateTargetGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8969,56 +8931,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CreateTargetGroupError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreateTargetGroupError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateTargetGroupError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateTargetGroupOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CreateTargetGroupOutputDeserializer::deserialize(
-                            "CreateTargetGroupResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateTargetGroupOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateTargetGroupOutputDeserializer::deserialize(
+                "CreateTargetGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer to which it is attached, using <a>DeleteLoadBalancer</a>.</p>
-    fn delete_listener(
+    async fn delete_listener(
         &self,
         input: DeleteListenerInput,
-    ) -> RusotoFuture<DeleteListenerOutput, DeleteListenerError> {
+    ) -> Result<DeleteListenerOutput, RusotoError<DeleteListenerError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9028,54 +8980,44 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteListenerError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(DeleteListenerError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteListenerError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteListenerOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DeleteListenerOutputDeserializer::deserialize(
-                            "DeleteListenerResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteListenerOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                DeleteListenerOutputDeserializer::deserialize("DeleteListenerResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the specified Application Load Balancer or Network Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
-    fn delete_load_balancer(
+    async fn delete_load_balancer(
         &self,
         input: DeleteLoadBalancerInput,
-    ) -> RusotoFuture<DeleteLoadBalancerOutput, DeleteLoadBalancerError> {
+    ) -> Result<DeleteLoadBalancerOutput, RusotoError<DeleteLoadBalancerError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9085,56 +9027,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DeleteLoadBalancerError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteLoadBalancerError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteLoadBalancerError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteLoadBalancerOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DeleteLoadBalancerOutputDeserializer::deserialize(
-                            "DeleteLoadBalancerResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteLoadBalancerOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteLoadBalancerOutputDeserializer::deserialize(
+                "DeleteLoadBalancerResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the specified rule.</p>
-    fn delete_rule(
+    async fn delete_rule(
         &self,
         input: DeleteRuleInput,
-    ) -> RusotoFuture<DeleteRuleOutput, DeleteRuleError> {
+    ) -> Result<DeleteRuleOutput, RusotoError<DeleteRuleError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9144,54 +9076,43 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteRuleError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(DeleteRuleError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteRuleError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteRuleOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DeleteRuleOutputDeserializer::deserialize(
-                            "DeleteRuleResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteRuleOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteRuleOutputDeserializer::deserialize("DeleteRuleResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>
-    fn delete_target_group(
+    async fn delete_target_group(
         &self,
         input: DeleteTargetGroupInput,
-    ) -> RusotoFuture<DeleteTargetGroupOutput, DeleteTargetGroupError> {
+    ) -> Result<DeleteTargetGroupOutput, RusotoError<DeleteTargetGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9201,56 +9122,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DeleteTargetGroupError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteTargetGroupError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteTargetGroupError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteTargetGroupOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DeleteTargetGroupOutputDeserializer::deserialize(
-                            "DeleteTargetGroupResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteTargetGroupOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteTargetGroupOutputDeserializer::deserialize(
+                "DeleteTargetGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>
-    fn deregister_targets(
+    async fn deregister_targets(
         &self,
         input: DeregisterTargetsInput,
-    ) -> RusotoFuture<DeregisterTargetsOutput, DeregisterTargetsError> {
+    ) -> Result<DeregisterTargetsOutput, RusotoError<DeregisterTargetsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9260,56 +9171,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DeregisterTargetsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeregisterTargetsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeregisterTargetsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeregisterTargetsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DeregisterTargetsOutputDeserializer::deserialize(
-                            "DeregisterTargetsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeregisterTargetsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeregisterTargetsOutputDeserializer::deserialize(
+                "DeregisterTargetsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_account_limits(
+    async fn describe_account_limits(
         &self,
         input: DescribeAccountLimitsInput,
-    ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError> {
+    ) -> Result<DescribeAccountLimitsOutput, RusotoError<DescribeAccountLimitsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9319,56 +9220,47 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribeAccountLimitsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeAccountLimitsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeAccountLimitsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeAccountLimitsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeAccountLimitsOutputDeserializer::deserialize(
-                            "DescribeAccountLimitsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeAccountLimitsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeAccountLimitsOutputDeserializer::deserialize(
+                "DescribeAccountLimitsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the certificates for the specified HTTPS listener.</p>
-    fn describe_listener_certificates(
+    async fn describe_listener_certificates(
         &self,
         input: DescribeListenerCertificatesInput,
-    ) -> RusotoFuture<DescribeListenerCertificatesOutput, DescribeListenerCertificatesError> {
+    ) -> Result<DescribeListenerCertificatesOutput, RusotoError<DescribeListenerCertificatesError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9378,57 +9270,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DescribeListenerCertificatesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeListenerCertificatesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeListenerCertificatesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeListenerCertificatesOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeListenerCertificatesOutputDeserializer::deserialize(
-                            "DescribeListenerCertificatesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeListenerCertificatesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeListenerCertificatesOutputDeserializer::deserialize(
+                "DescribeListenerCertificatesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer. You must specify either a load balancer or one or more listeners.</p>
-    fn describe_listeners(
+    async fn describe_listeners(
         &self,
         input: DescribeListenersInput,
-    ) -> RusotoFuture<DescribeListenersOutput, DescribeListenersError> {
+    ) -> Result<DescribeListenersOutput, RusotoError<DescribeListenersError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9438,57 +9319,49 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribeListenersError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeListenersError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeListenersError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeListenersOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeListenersOutputDeserializer::deserialize(
-                            "DescribeListenersResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeListenersOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeListenersOutputDeserializer::deserialize(
+                "DescribeListenersResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_load_balancer_attributes(
+    async fn describe_load_balancer_attributes(
         &self,
         input: DescribeLoadBalancerAttributesInput,
-    ) -> RusotoFuture<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>
-    {
+    ) -> Result<
+        DescribeLoadBalancerAttributesOutput,
+        RusotoError<DescribeLoadBalancerAttributesError>,
+    > {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9498,57 +9371,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DescribeLoadBalancerAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeLoadBalancerAttributesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeLoadBalancerAttributesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeLoadBalancerAttributesOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeLoadBalancerAttributesOutputDeserializer::deserialize(
-                            "DescribeLoadBalancerAttributesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeLoadBalancerAttributesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeLoadBalancerAttributesOutputDeserializer::deserialize(
+                "DescribeLoadBalancerAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the specified load balancers or all of your load balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
-    fn describe_load_balancers(
+    async fn describe_load_balancers(
         &self,
         input: DescribeLoadBalancersInput,
-    ) -> RusotoFuture<DescribeLoadBalancersOutput, DescribeLoadBalancersError> {
+    ) -> Result<DescribeLoadBalancersOutput, RusotoError<DescribeLoadBalancersError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9558,56 +9420,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribeLoadBalancersError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeLoadBalancersError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeLoadBalancersError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeLoadBalancersOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeLoadBalancersOutputDeserializer::deserialize(
-                            "DescribeLoadBalancersResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeLoadBalancersOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeLoadBalancersOutputDeserializer::deserialize(
+                "DescribeLoadBalancersResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>
-    fn describe_rules(
+    async fn describe_rules(
         &self,
         input: DescribeRulesInput,
-    ) -> RusotoFuture<DescribeRulesOutput, DescribeRulesError> {
+    ) -> Result<DescribeRulesOutput, RusotoError<DescribeRulesError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9617,54 +9469,44 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeRulesError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(DescribeRulesError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeRulesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeRulesOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeRulesOutputDeserializer::deserialize(
-                            "DescribeRulesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeRulesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                DescribeRulesOutputDeserializer::deserialize("DescribeRulesResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
-    fn describe_ssl_policies(
+    async fn describe_ssl_policies(
         &self,
         input: DescribeSSLPoliciesInput,
-    ) -> RusotoFuture<DescribeSSLPoliciesOutput, DescribeSSLPoliciesError> {
+    ) -> Result<DescribeSSLPoliciesOutput, RusotoError<DescribeSSLPoliciesError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9674,56 +9516,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribeSSLPoliciesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeSSLPoliciesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeSSLPoliciesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeSSLPoliciesOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeSSLPoliciesOutputDeserializer::deserialize(
-                            "DescribeSSLPoliciesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeSSLPoliciesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeSSLPoliciesOutputDeserializer::deserialize(
+                "DescribeSSLPoliciesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, and target groups.</p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsInput,
-    ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError> {
+    ) -> Result<DescribeTagsOutput, RusotoError<DescribeTagsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9733,54 +9565,44 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeTagsError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(DescribeTagsError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeTagsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeTagsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeTagsOutputDeserializer::deserialize(
-                            "DescribeTagsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeTagsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeTagsOutputDeserializer::deserialize("DescribeTagsResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the attributes for the specified target group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_target_group_attributes(
+    async fn describe_target_group_attributes(
         &self,
         input: DescribeTargetGroupAttributesInput,
-    ) -> RusotoFuture<DescribeTargetGroupAttributesOutput, DescribeTargetGroupAttributesError> {
+    ) -> Result<DescribeTargetGroupAttributesOutput, RusotoError<DescribeTargetGroupAttributesError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9790,57 +9612,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DescribeTargetGroupAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeTargetGroupAttributesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeTargetGroupAttributesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeTargetGroupAttributesOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeTargetGroupAttributesOutputDeserializer::deserialize(
-                            "DescribeTargetGroupAttributesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeTargetGroupAttributesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeTargetGroupAttributesOutputDeserializer::deserialize(
+                "DescribeTargetGroupAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>
-    fn describe_target_groups(
+    async fn describe_target_groups(
         &self,
         input: DescribeTargetGroupsInput,
-    ) -> RusotoFuture<DescribeTargetGroupsOutput, DescribeTargetGroupsError> {
+    ) -> Result<DescribeTargetGroupsOutput, RusotoError<DescribeTargetGroupsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9850,56 +9661,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribeTargetGroupsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeTargetGroupsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeTargetGroupsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeTargetGroupsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeTargetGroupsOutputDeserializer::deserialize(
-                            "DescribeTargetGroupsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeTargetGroupsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeTargetGroupsOutputDeserializer::deserialize(
+                "DescribeTargetGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the health of the specified targets or all of your targets.</p>
-    fn describe_target_health(
+    async fn describe_target_health(
         &self,
         input: DescribeTargetHealthInput,
-    ) -> RusotoFuture<DescribeTargetHealthOutput, DescribeTargetHealthError> {
+    ) -> Result<DescribeTargetHealthOutput, RusotoError<DescribeTargetHealthError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9909,56 +9710,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribeTargetHealthError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeTargetHealthError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeTargetHealthError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeTargetHealthOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeTargetHealthOutputDeserializer::deserialize(
-                            "DescribeTargetHealthResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeTargetHealthOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeTargetHealthOutputDeserializer::deserialize(
+                "DescribeTargetHealthResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP, or from TLS to TCP, removes the security policy and server certificate properties. If you change the protocol from HTTP to HTTPS, or from TCP to TLS, you must add the security policy and server certificate properties.</p>
-    fn modify_listener(
+    async fn modify_listener(
         &self,
         input: ModifyListenerInput,
-    ) -> RusotoFuture<ModifyListenerOutput, ModifyListenerError> {
+    ) -> Result<ModifyListenerOutput, RusotoError<ModifyListenerError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9968,54 +9759,45 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ModifyListenerError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(ModifyListenerError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyListenerError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ModifyListenerOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ModifyListenerOutputDeserializer::deserialize(
-                            "ModifyListenerResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyListenerOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                ModifyListenerOutputDeserializer::deserialize("ModifyListenerResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies the specified attributes of the specified Application Load Balancer or Network Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
-    fn modify_load_balancer_attributes(
+    async fn modify_load_balancer_attributes(
         &self,
         input: ModifyLoadBalancerAttributesInput,
-    ) -> RusotoFuture<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError> {
+    ) -> Result<ModifyLoadBalancerAttributesOutput, RusotoError<ModifyLoadBalancerAttributesError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10025,57 +9807,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<ModifyLoadBalancerAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ModifyLoadBalancerAttributesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyLoadBalancerAttributesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ModifyLoadBalancerAttributesOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
-                            "ModifyLoadBalancerAttributesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyLoadBalancerAttributesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
+                "ModifyLoadBalancerAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the actions for the default rule, use <a>ModifyListener</a>.</p>
-    fn modify_rule(
+    async fn modify_rule(
         &self,
         input: ModifyRuleInput,
-    ) -> RusotoFuture<ModifyRuleOutput, ModifyRuleError> {
+    ) -> Result<ModifyRuleOutput, RusotoError<ModifyRuleError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10085,54 +9856,43 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ModifyRuleError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(ModifyRuleError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyRuleError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ModifyRuleOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ModifyRuleOutputDeserializer::deserialize(
-                            "ModifyRuleResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyRuleOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyRuleOutputDeserializer::deserialize("ModifyRuleResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>
-    fn modify_target_group(
+    async fn modify_target_group(
         &self,
         input: ModifyTargetGroupInput,
-    ) -> RusotoFuture<ModifyTargetGroupOutput, ModifyTargetGroupError> {
+    ) -> Result<ModifyTargetGroupOutput, RusotoError<ModifyTargetGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10142,56 +9902,47 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ModifyTargetGroupError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ModifyTargetGroupError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyTargetGroupError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ModifyTargetGroupOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ModifyTargetGroupOutputDeserializer::deserialize(
-                            "ModifyTargetGroupResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyTargetGroupOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyTargetGroupOutputDeserializer::deserialize(
+                "ModifyTargetGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies the specified attributes of the specified target group.</p>
-    fn modify_target_group_attributes(
+    async fn modify_target_group_attributes(
         &self,
         input: ModifyTargetGroupAttributesInput,
-    ) -> RusotoFuture<ModifyTargetGroupAttributesOutput, ModifyTargetGroupAttributesError> {
+    ) -> Result<ModifyTargetGroupAttributesOutput, RusotoError<ModifyTargetGroupAttributesError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10201,57 +9952,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<ModifyTargetGroupAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ModifyTargetGroupAttributesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyTargetGroupAttributesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ModifyTargetGroupAttributesOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ModifyTargetGroupAttributesOutputDeserializer::deserialize(
-                            "ModifyTargetGroupAttributesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyTargetGroupAttributesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyTargetGroupAttributesOutputDeserializer::deserialize(
+                "ModifyTargetGroupAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Registers the specified targets with the specified target group.</p> <p>If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port for the target group. Alternatively, you can override the port for a target when you register it. You can register each EC2 instance or IP address with the same target group multiple times using different ports.</p> <p>With a Network Load Balancer, you cannot register instances by instance ID if they have the following instance types: C1, CC1, CC2, CG1, CG2, CR1, CS1, G1, G2, HI1, HS1, M1, M2, M3, and T1. You can register instances of these types by IP address.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
-    fn register_targets(
+    async fn register_targets(
         &self,
         input: RegisterTargetsInput,
-    ) -> RusotoFuture<RegisterTargetsOutput, RegisterTargetsError> {
+    ) -> Result<RegisterTargetsOutput, RusotoError<RegisterTargetsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10261,54 +10001,47 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<RegisterTargetsError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(RegisterTargetsError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RegisterTargetsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(RegisterTargetsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = RegisterTargetsOutputDeserializer::deserialize(
-                            "RegisterTargetsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = RegisterTargetsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = RegisterTargetsOutputDeserializer::deserialize(
+                "RegisterTargetsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Removes the specified certificate from the specified HTTPS listener.</p> <p>You can't remove the default certificate for a listener. To replace the default certificate, call <a>ModifyListener</a>.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>.</p>
-    fn remove_listener_certificates(
+    async fn remove_listener_certificates(
         &self,
         input: RemoveListenerCertificatesInput,
-    ) -> RusotoFuture<RemoveListenerCertificatesOutput, RemoveListenerCertificatesError> {
+    ) -> Result<RemoveListenerCertificatesOutput, RusotoError<RemoveListenerCertificatesError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10318,56 +10051,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<RemoveListenerCertificatesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(RemoveListenerCertificatesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RemoveListenerCertificatesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(RemoveListenerCertificatesOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = RemoveListenerCertificatesOutputDeserializer::deserialize(
-                            "RemoveListenerCertificatesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = RemoveListenerCertificatesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = RemoveListenerCertificatesOutputDeserializer::deserialize(
+                "RemoveListenerCertificatesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Removes the specified tags from the specified Elastic Load Balancing resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
-    fn remove_tags(
+    async fn remove_tags(
         &self,
         input: RemoveTagsInput,
-    ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError> {
+    ) -> Result<RemoveTagsOutput, RusotoError<RemoveTagsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10377,54 +10100,43 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<RemoveTagsError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(RemoveTagsError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RemoveTagsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(RemoveTagsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = RemoveTagsOutputDeserializer::deserialize(
-                            "RemoveTagsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = RemoveTagsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = RemoveTagsOutputDeserializer::deserialize("RemoveTagsResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Network Load Balancers must use <code>ipv4</code>.</p>
-    fn set_ip_address_type(
+    async fn set_ip_address_type(
         &self,
         input: SetIpAddressTypeInput,
-    ) -> RusotoFuture<SetIpAddressTypeOutput, SetIpAddressTypeError> {
+    ) -> Result<SetIpAddressTypeOutput, RusotoError<SetIpAddressTypeError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10434,54 +10146,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<SetIpAddressTypeError>)
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SetIpAddressTypeError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetIpAddressTypeError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SetIpAddressTypeOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SetIpAddressTypeOutputDeserializer::deserialize(
-                            "SetIpAddressTypeResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SetIpAddressTypeOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetIpAddressTypeOutputDeserializer::deserialize(
+                "SetIpAddressTypeResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>
-    fn set_rule_priorities(
+    async fn set_rule_priorities(
         &self,
         input: SetRulePrioritiesInput,
-    ) -> RusotoFuture<SetRulePrioritiesOutput, SetRulePrioritiesError> {
+    ) -> Result<SetRulePrioritiesOutput, RusotoError<SetRulePrioritiesError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10491,56 +10195,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<SetRulePrioritiesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SetRulePrioritiesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetRulePrioritiesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SetRulePrioritiesOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SetRulePrioritiesOutputDeserializer::deserialize(
-                            "SetRulePrioritiesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SetRulePrioritiesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetRulePrioritiesOutputDeserializer::deserialize(
+                "SetRulePrioritiesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>You can't specify a security group for a Network Load Balancer.</p>
-    fn set_security_groups(
+    async fn set_security_groups(
         &self,
         input: SetSecurityGroupsInput,
-    ) -> RusotoFuture<SetSecurityGroupsOutput, SetSecurityGroupsError> {
+    ) -> Result<SetSecurityGroupsOutput, RusotoError<SetSecurityGroupsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10550,56 +10244,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<SetSecurityGroupsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SetSecurityGroupsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetSecurityGroupsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SetSecurityGroupsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SetSecurityGroupsOutputDeserializer::deserialize(
-                            "SetSecurityGroupsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SetSecurityGroupsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetSecurityGroupsOutputDeserializer::deserialize(
+                "SetSecurityGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>You can't change the subnets for a Network Load Balancer.</p>
-    fn set_subnets(
+    async fn set_subnets(
         &self,
         input: SetSubnetsInput,
-    ) -> RusotoFuture<SetSubnetsOutput, SetSubnetsError> {
+    ) -> Result<SetSubnetsOutput, RusotoError<SetSubnetsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10609,47 +10293,36 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<SetSubnetsError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(SetSubnetsError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetSubnetsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SetSubnetsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = SetSubnetsOutputDeserializer::deserialize(
-                            "SetSubnetsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SetSubnetsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetSubnetsOutputDeserializer::deserialize("SetSubnetsResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 }
 
@@ -10662,8 +10335,8 @@ mod protocol_tests {
     use super::*;
     use rusoto_core::Region as rusoto_region;
 
-    #[test]
-    fn test_parse_error_elb_describe_load_balancers() {
+    #[tokio::test]
+    async fn test_parse_error_elb_describe_load_balancers() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/error",
             "elb-describe-load-balancers.xml",
@@ -10671,12 +10344,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = ElbClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeLoadBalancersInput::default();
-        let result = client.describe_load_balancers(request).sync();
+        let result = client.describe_load_balancers(request).await;
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elb_describe_load_balancers() {
+    #[tokio::test]
+    async fn test_parse_valid_elb_describe_load_balancers() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elb-describe-load-balancers.xml",
@@ -10684,7 +10357,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeLoadBalancersInput::default();
-        let result = client.describe_load_balancers(request).sync();
+        let result = client.describe_load_balancers(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

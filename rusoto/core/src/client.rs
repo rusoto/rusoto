@@ -1,18 +1,13 @@
-use std::future::Future;
-use std::pin::Pin;
 use std::sync::{Arc, Mutex, Weak};
 use std::time::Duration;
 
 use crate::credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
-use crate::future::{self, RusotoFuture};
 use crate::request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
 use crate::signature::SignedRequest;
 
-use futures::FutureExt;
+use async_trait::async_trait;
 use lazy_static::lazy_static;
 use tokio::future::FutureExt as _;
-
-pub(crate) type SignAndDispatchFuture = Pin<Box<dyn Future<Output = Result<HttpResponse, SignAndDispatchError>> + Send>>;
 
 lazy_static! {
     static ref SHARED_CLIENT: Mutex<Weak<ClientInner<DefaultCredentialsProvider, HttpClient>>> =
@@ -59,31 +54,31 @@ impl Client {
     }
 
     /// Fetch credentials, sign the request and dispatch it.
-    pub fn sign_and_dispatch<T, E>(
+    pub async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        response_handler: fn(HttpResponse) -> future::RusotoHandlerFuture<T, E>,
-    ) -> RusotoFuture<T, E>
-        where
-            T: 'static,
-            E: 'static
+    ) -> Result<HttpResponse, SignAndDispatchError>
     {
-        future::new(self.inner.sign_and_dispatch(request, None), response_handler)
+        self.inner.sign_and_dispatch(request, None).await
     }
 }
 
+/// Error that occurs during `sign_and_dispatch`
 #[derive(Debug, PartialEq)]
 pub enum SignAndDispatchError {
+    /// Error was due to bad credentials
     Credentials(CredentialsError),
+    /// Error was due to http dispatch
     Dispatch(HttpDispatchError),
 }
 
+#[async_trait]
 trait SignAndDispatch {
-    fn sign_and_dispatch(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
         timeout: Option<Duration>,
-    ) -> SignAndDispatchFuture;
+    ) -> Result<HttpResponse, SignAndDispatchError>;
 }
 
 struct ClientInner<P, D> {
@@ -129,21 +124,22 @@ async fn sign_and_dispatch<P, D>(
     client.dispatcher.dispatch(request, timeout).await.map_err(SignAndDispatchError::Dispatch)
 }
 
+#[async_trait]
 impl<P, D> SignAndDispatch for ClientInner<P, D>
 where
     P: ProvideAwsCredentials + Send + Sync + 'static,
     D: DispatchSignedRequest + Send + Sync + 'static,
 {
-    fn sign_and_dispatch(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
         timeout: Option<Duration>,
-    ) -> SignAndDispatchFuture {
+    ) -> Result<HttpResponse, SignAndDispatchError> {
         sign_and_dispatch(
             self.clone(),
             request,
             timeout,
-        ).boxed()
+        ).await
     }
 }
 

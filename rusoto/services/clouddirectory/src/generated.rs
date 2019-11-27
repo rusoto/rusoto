@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -8121,393 +8122,397 @@ impl Error for UpgradePublishedSchemaError {
     }
 }
 /// Trait representing the capabilities of the Amazon CloudDirectory API. Amazon CloudDirectory clients implement this trait.
+#[async_trait]
 pub trait CloudDirectory {
     /// <p>Adds a new <a>Facet</a> to an object. An object can have more than one facet applied on it.</p>
-    fn add_facet_to_object(
+    async fn add_facet_to_object(
         &self,
         input: AddFacetToObjectRequest,
-    ) -> RusotoFuture<AddFacetToObjectResponse, AddFacetToObjectError>;
+    ) -> Result<AddFacetToObjectResponse, RusotoError<AddFacetToObjectError>>;
 
     /// <p>Copies the input published schema, at the specified version, into the <a>Directory</a> with the same name and version as that of the published schema.</p>
-    fn apply_schema(
+    async fn apply_schema(
         &self,
         input: ApplySchemaRequest,
-    ) -> RusotoFuture<ApplySchemaResponse, ApplySchemaError>;
+    ) -> Result<ApplySchemaResponse, RusotoError<ApplySchemaError>>;
 
     /// <p><p>Attaches an existing object to another object. An object can be accessed in two ways:</p> <ol> <li> <p>Using the path</p> </li> <li> <p>Using <code>ObjectIdentifier</code> </p> </li> </ol></p>
-    fn attach_object(
+    async fn attach_object(
         &self,
         input: AttachObjectRequest,
-    ) -> RusotoFuture<AttachObjectResponse, AttachObjectError>;
+    ) -> Result<AttachObjectResponse, RusotoError<AttachObjectError>>;
 
     /// <p>Attaches a policy object to a regular object. An object can have a limited number of attached policies.</p>
-    fn attach_policy(
+    async fn attach_policy(
         &self,
         input: AttachPolicyRequest,
-    ) -> RusotoFuture<AttachPolicyResponse, AttachPolicyError>;
+    ) -> Result<AttachPolicyResponse, RusotoError<AttachPolicyError>>;
 
     /// <p>Attaches the specified object to the specified index.</p>
-    fn attach_to_index(
+    async fn attach_to_index(
         &self,
         input: AttachToIndexRequest,
-    ) -> RusotoFuture<AttachToIndexResponse, AttachToIndexError>;
+    ) -> Result<AttachToIndexResponse, RusotoError<AttachToIndexError>>;
 
     /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn attach_typed_link(
+    async fn attach_typed_link(
         &self,
         input: AttachTypedLinkRequest,
-    ) -> RusotoFuture<AttachTypedLinkResponse, AttachTypedLinkError>;
+    ) -> Result<AttachTypedLinkResponse, RusotoError<AttachTypedLinkError>>;
 
     /// <p>Performs all the read operations in a batch. </p>
-    fn batch_read(
+    async fn batch_read(
         &self,
         input: BatchReadRequest,
-    ) -> RusotoFuture<BatchReadResponse, BatchReadError>;
+    ) -> Result<BatchReadResponse, RusotoError<BatchReadError>>;
 
     /// <p>Performs all the write operations in a batch. Either all the operations succeed or none.</p>
-    fn batch_write(
+    async fn batch_write(
         &self,
         input: BatchWriteRequest,
-    ) -> RusotoFuture<BatchWriteResponse, BatchWriteError>;
+    ) -> Result<BatchWriteResponse, RusotoError<BatchWriteError>>;
 
     /// <p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p>
-    fn create_directory(
+    async fn create_directory(
         &self,
         input: CreateDirectoryRequest,
-    ) -> RusotoFuture<CreateDirectoryResponse, CreateDirectoryError>;
+    ) -> Result<CreateDirectoryResponse, RusotoError<CreateDirectoryError>>;
 
     /// <p>Creates a new <a>Facet</a> in a schema. Facet creation is allowed only in development or applied schemas.</p>
-    fn create_facet(
+    async fn create_facet(
         &self,
         input: CreateFacetRequest,
-    ) -> RusotoFuture<CreateFacetResponse, CreateFacetError>;
+    ) -> Result<CreateFacetResponse, RusotoError<CreateFacetError>>;
 
     /// <p>Creates an index object. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_indexing.html">Indexing</a> for more information.</p>
-    fn create_index(
+    async fn create_index(
         &self,
         input: CreateIndexRequest,
-    ) -> RusotoFuture<CreateIndexResponse, CreateIndexError>;
+    ) -> Result<CreateIndexResponse, RusotoError<CreateIndexError>>;
 
     /// <p>Creates an object in a <a>Directory</a>. Additionally attaches the object to a parent, if a parent reference and <code>LinkName</code> is specified. An object is simply a collection of <a>Facet</a> attributes. You can also use this API call to create a policy object, if the facet from which you create the object is a policy facet. </p>
-    fn create_object(
+    async fn create_object(
         &self,
         input: CreateObjectRequest,
-    ) -> RusotoFuture<CreateObjectResponse, CreateObjectError>;
+    ) -> Result<CreateObjectResponse, RusotoError<CreateObjectError>>;
 
     /// <p><p>Creates a new schema in a development state. A schema can exist in three phases:</p> <ul> <li> <p> <i>Development:</i> This is a mutable phase of the schema. All new schemas are in the development phase. Once the schema is finalized, it can be published.</p> </li> <li> <p> <i>Published:</i> Published schemas are immutable and have a version associated with them.</p> </li> <li> <p> <i>Applied:</i> Applied schemas are mutable in a way that allows you to add new schema facets. You can also add new, nonrequired attributes to existing schema facets. You can apply only published schemas to directories. </p> </li> </ul></p>
-    fn create_schema(
+    async fn create_schema(
         &self,
         input: CreateSchemaRequest,
-    ) -> RusotoFuture<CreateSchemaResponse, CreateSchemaError>;
+    ) -> Result<CreateSchemaResponse, RusotoError<CreateSchemaError>>;
 
     /// <p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn create_typed_link_facet(
+    async fn create_typed_link_facet(
         &self,
         input: CreateTypedLinkFacetRequest,
-    ) -> RusotoFuture<CreateTypedLinkFacetResponse, CreateTypedLinkFacetError>;
+    ) -> Result<CreateTypedLinkFacetResponse, RusotoError<CreateTypedLinkFacetError>>;
 
     /// <p>Deletes a directory. Only disabled directories can be deleted. A deleted directory cannot be undone. Exercise extreme caution when deleting directories.</p>
-    fn delete_directory(
+    async fn delete_directory(
         &self,
         input: DeleteDirectoryRequest,
-    ) -> RusotoFuture<DeleteDirectoryResponse, DeleteDirectoryError>;
+    ) -> Result<DeleteDirectoryResponse, RusotoError<DeleteDirectoryError>>;
 
     /// <p>Deletes a given <a>Facet</a>. All attributes and <a>Rule</a>s that are associated with the facet will be deleted. Only development schema facets are allowed deletion.</p>
-    fn delete_facet(
+    async fn delete_facet(
         &self,
         input: DeleteFacetRequest,
-    ) -> RusotoFuture<DeleteFacetResponse, DeleteFacetError>;
+    ) -> Result<DeleteFacetResponse, RusotoError<DeleteFacetError>>;
 
     /// <p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted.</p>
-    fn delete_object(
+    async fn delete_object(
         &self,
         input: DeleteObjectRequest,
-    ) -> RusotoFuture<DeleteObjectResponse, DeleteObjectError>;
+    ) -> Result<DeleteObjectResponse, RusotoError<DeleteObjectError>>;
 
     /// <p>Deletes a given schema. Schemas in a development and published state can only be deleted. </p>
-    fn delete_schema(
+    async fn delete_schema(
         &self,
         input: DeleteSchemaRequest,
-    ) -> RusotoFuture<DeleteSchemaResponse, DeleteSchemaError>;
+    ) -> Result<DeleteSchemaResponse, RusotoError<DeleteSchemaError>>;
 
     /// <p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn delete_typed_link_facet(
+    async fn delete_typed_link_facet(
         &self,
         input: DeleteTypedLinkFacetRequest,
-    ) -> RusotoFuture<DeleteTypedLinkFacetResponse, DeleteTypedLinkFacetError>;
+    ) -> Result<DeleteTypedLinkFacetResponse, RusotoError<DeleteTypedLinkFacetError>>;
 
     /// <p>Detaches the specified object from the specified index.</p>
-    fn detach_from_index(
+    async fn detach_from_index(
         &self,
         input: DetachFromIndexRequest,
-    ) -> RusotoFuture<DetachFromIndexResponse, DetachFromIndexError>;
+    ) -> Result<DetachFromIndexResponse, RusotoError<DetachFromIndexError>>;
 
     /// <p>Detaches a given object from the parent object. The object that is to be detached from the parent is specified by the link name.</p>
-    fn detach_object(
+    async fn detach_object(
         &self,
         input: DetachObjectRequest,
-    ) -> RusotoFuture<DetachObjectResponse, DetachObjectError>;
+    ) -> Result<DetachObjectResponse, RusotoError<DetachObjectError>>;
 
     /// <p>Detaches a policy from an object.</p>
-    fn detach_policy(
+    async fn detach_policy(
         &self,
         input: DetachPolicyRequest,
-    ) -> RusotoFuture<DetachPolicyResponse, DetachPolicyError>;
+    ) -> Result<DetachPolicyResponse, RusotoError<DetachPolicyError>>;
 
     /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn detach_typed_link(
+    async fn detach_typed_link(
         &self,
         input: DetachTypedLinkRequest,
-    ) -> RusotoFuture<(), DetachTypedLinkError>;
+    ) -> Result<(), RusotoError<DetachTypedLinkError>>;
 
     /// <p>Disables the specified directory. Disabled directories cannot be read or written to. Only enabled directories can be disabled. Disabled directories may be reenabled.</p>
-    fn disable_directory(
+    async fn disable_directory(
         &self,
         input: DisableDirectoryRequest,
-    ) -> RusotoFuture<DisableDirectoryResponse, DisableDirectoryError>;
+    ) -> Result<DisableDirectoryResponse, RusotoError<DisableDirectoryError>>;
 
     /// <p>Enables the specified directory. Only disabled directories can be enabled. Once enabled, the directory can then be read and written to.</p>
-    fn enable_directory(
+    async fn enable_directory(
         &self,
         input: EnableDirectoryRequest,
-    ) -> RusotoFuture<EnableDirectoryResponse, EnableDirectoryError>;
+    ) -> Result<EnableDirectoryResponse, RusotoError<EnableDirectoryError>>;
 
     /// <p>Returns current applied schema version ARN, including the minor version in use.</p>
-    fn get_applied_schema_version(
+    async fn get_applied_schema_version(
         &self,
         input: GetAppliedSchemaVersionRequest,
-    ) -> RusotoFuture<GetAppliedSchemaVersionResponse, GetAppliedSchemaVersionError>;
+    ) -> Result<GetAppliedSchemaVersionResponse, RusotoError<GetAppliedSchemaVersionError>>;
 
     /// <p>Retrieves metadata about a directory.</p>
-    fn get_directory(
+    async fn get_directory(
         &self,
         input: GetDirectoryRequest,
-    ) -> RusotoFuture<GetDirectoryResponse, GetDirectoryError>;
+    ) -> Result<GetDirectoryResponse, RusotoError<GetDirectoryError>>;
 
     /// <p>Gets details of the <a>Facet</a>, such as facet name, attributes, <a>Rule</a>s, or <code>ObjectType</code>. You can call this on all kinds of schema facets -- published, development, or applied.</p>
-    fn get_facet(&self, input: GetFacetRequest) -> RusotoFuture<GetFacetResponse, GetFacetError>;
+    async fn get_facet(
+        &self,
+        input: GetFacetRequest,
+    ) -> Result<GetFacetResponse, RusotoError<GetFacetError>>;
 
     /// <p>Retrieves attributes that are associated with a typed link.</p>
-    fn get_link_attributes(
+    async fn get_link_attributes(
         &self,
         input: GetLinkAttributesRequest,
-    ) -> RusotoFuture<GetLinkAttributesResponse, GetLinkAttributesError>;
+    ) -> Result<GetLinkAttributesResponse, RusotoError<GetLinkAttributesError>>;
 
     /// <p>Retrieves attributes within a facet that are associated with an object.</p>
-    fn get_object_attributes(
+    async fn get_object_attributes(
         &self,
         input: GetObjectAttributesRequest,
-    ) -> RusotoFuture<GetObjectAttributesResponse, GetObjectAttributesError>;
+    ) -> Result<GetObjectAttributesResponse, RusotoError<GetObjectAttributesError>>;
 
     /// <p>Retrieves metadata about an object.</p>
-    fn get_object_information(
+    async fn get_object_information(
         &self,
         input: GetObjectInformationRequest,
-    ) -> RusotoFuture<GetObjectInformationResponse, GetObjectInformationError>;
+    ) -> Result<GetObjectInformationResponse, RusotoError<GetObjectInformationError>>;
 
     /// <p>Retrieves a JSON representation of the schema. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
-    fn get_schema_as_json(
+    async fn get_schema_as_json(
         &self,
         input: GetSchemaAsJsonRequest,
-    ) -> RusotoFuture<GetSchemaAsJsonResponse, GetSchemaAsJsonError>;
+    ) -> Result<GetSchemaAsJsonResponse, RusotoError<GetSchemaAsJsonError>>;
 
     /// <p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn get_typed_link_facet_information(
+    async fn get_typed_link_facet_information(
         &self,
         input: GetTypedLinkFacetInformationRequest,
-    ) -> RusotoFuture<GetTypedLinkFacetInformationResponse, GetTypedLinkFacetInformationError>;
+    ) -> Result<GetTypedLinkFacetInformationResponse, RusotoError<GetTypedLinkFacetInformationError>>;
 
     /// <p>Lists schema major versions applied to a directory. If <code>SchemaArn</code> is provided, lists the minor version.</p>
-    fn list_applied_schema_arns(
+    async fn list_applied_schema_arns(
         &self,
         input: ListAppliedSchemaArnsRequest,
-    ) -> RusotoFuture<ListAppliedSchemaArnsResponse, ListAppliedSchemaArnsError>;
+    ) -> Result<ListAppliedSchemaArnsResponse, RusotoError<ListAppliedSchemaArnsError>>;
 
     /// <p>Lists indices attached to the specified object.</p>
-    fn list_attached_indices(
+    async fn list_attached_indices(
         &self,
         input: ListAttachedIndicesRequest,
-    ) -> RusotoFuture<ListAttachedIndicesResponse, ListAttachedIndicesError>;
+    ) -> Result<ListAttachedIndicesResponse, RusotoError<ListAttachedIndicesError>>;
 
     /// <p>Retrieves each Amazon Resource Name (ARN) of schemas in the development state.</p>
-    fn list_development_schema_arns(
+    async fn list_development_schema_arns(
         &self,
         input: ListDevelopmentSchemaArnsRequest,
-    ) -> RusotoFuture<ListDevelopmentSchemaArnsResponse, ListDevelopmentSchemaArnsError>;
+    ) -> Result<ListDevelopmentSchemaArnsResponse, RusotoError<ListDevelopmentSchemaArnsError>>;
 
     /// <p>Lists directories created within an account.</p>
-    fn list_directories(
+    async fn list_directories(
         &self,
         input: ListDirectoriesRequest,
-    ) -> RusotoFuture<ListDirectoriesResponse, ListDirectoriesError>;
+    ) -> Result<ListDirectoriesResponse, RusotoError<ListDirectoriesError>>;
 
     /// <p>Retrieves attributes attached to the facet.</p>
-    fn list_facet_attributes(
+    async fn list_facet_attributes(
         &self,
         input: ListFacetAttributesRequest,
-    ) -> RusotoFuture<ListFacetAttributesResponse, ListFacetAttributesError>;
+    ) -> Result<ListFacetAttributesResponse, RusotoError<ListFacetAttributesError>>;
 
     /// <p>Retrieves the names of facets that exist in a schema.</p>
-    fn list_facet_names(
+    async fn list_facet_names(
         &self,
         input: ListFacetNamesRequest,
-    ) -> RusotoFuture<ListFacetNamesResponse, ListFacetNamesError>;
+    ) -> Result<ListFacetNamesResponse, RusotoError<ListFacetNamesError>>;
 
     /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn list_incoming_typed_links(
+    async fn list_incoming_typed_links(
         &self,
         input: ListIncomingTypedLinksRequest,
-    ) -> RusotoFuture<ListIncomingTypedLinksResponse, ListIncomingTypedLinksError>;
+    ) -> Result<ListIncomingTypedLinksResponse, RusotoError<ListIncomingTypedLinksError>>;
 
     /// <p>Lists objects attached to the specified index.</p>
-    fn list_index(
+    async fn list_index(
         &self,
         input: ListIndexRequest,
-    ) -> RusotoFuture<ListIndexResponse, ListIndexError>;
+    ) -> Result<ListIndexResponse, RusotoError<ListIndexError>>;
 
     /// <p>Lists all attributes that are associated with an object. </p>
-    fn list_object_attributes(
+    async fn list_object_attributes(
         &self,
         input: ListObjectAttributesRequest,
-    ) -> RusotoFuture<ListObjectAttributesResponse, ListObjectAttributesError>;
+    ) -> Result<ListObjectAttributesResponse, RusotoError<ListObjectAttributesError>>;
 
     /// <p>Returns a paginated list of child objects that are associated with a given object.</p>
-    fn list_object_children(
+    async fn list_object_children(
         &self,
         input: ListObjectChildrenRequest,
-    ) -> RusotoFuture<ListObjectChildrenResponse, ListObjectChildrenError>;
+    ) -> Result<ListObjectChildrenResponse, RusotoError<ListObjectChildrenError>>;
 
     /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>
-    fn list_object_parent_paths(
+    async fn list_object_parent_paths(
         &self,
         input: ListObjectParentPathsRequest,
-    ) -> RusotoFuture<ListObjectParentPathsResponse, ListObjectParentPathsError>;
+    ) -> Result<ListObjectParentPathsResponse, RusotoError<ListObjectParentPathsError>>;
 
     /// <p>Lists parent objects that are associated with a given object in pagination fashion.</p>
-    fn list_object_parents(
+    async fn list_object_parents(
         &self,
         input: ListObjectParentsRequest,
-    ) -> RusotoFuture<ListObjectParentsResponse, ListObjectParentsError>;
+    ) -> Result<ListObjectParentsResponse, RusotoError<ListObjectParentsError>>;
 
     /// <p>Returns policies attached to an object in pagination fashion.</p>
-    fn list_object_policies(
+    async fn list_object_policies(
         &self,
         input: ListObjectPoliciesRequest,
-    ) -> RusotoFuture<ListObjectPoliciesResponse, ListObjectPoliciesError>;
+    ) -> Result<ListObjectPoliciesResponse, RusotoError<ListObjectPoliciesError>>;
 
     /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn list_outgoing_typed_links(
+    async fn list_outgoing_typed_links(
         &self,
         input: ListOutgoingTypedLinksRequest,
-    ) -> RusotoFuture<ListOutgoingTypedLinksResponse, ListOutgoingTypedLinksError>;
+    ) -> Result<ListOutgoingTypedLinksResponse, RusotoError<ListOutgoingTypedLinksError>>;
 
     /// <p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached.</p>
-    fn list_policy_attachments(
+    async fn list_policy_attachments(
         &self,
         input: ListPolicyAttachmentsRequest,
-    ) -> RusotoFuture<ListPolicyAttachmentsResponse, ListPolicyAttachmentsError>;
+    ) -> Result<ListPolicyAttachmentsResponse, RusotoError<ListPolicyAttachmentsError>>;
 
     /// <p>Lists the major version families of each published schema. If a major version ARN is provided as <code>SchemaArn</code>, the minor version revisions in that family are listed instead.</p>
-    fn list_published_schema_arns(
+    async fn list_published_schema_arns(
         &self,
         input: ListPublishedSchemaArnsRequest,
-    ) -> RusotoFuture<ListPublishedSchemaArnsResponse, ListPublishedSchemaArnsError>;
+    ) -> Result<ListPublishedSchemaArnsResponse, RusotoError<ListPublishedSchemaArnsError>>;
 
     /// <p>Returns tags for a resource. Tagging is currently supported only for directories with a limit of 50 tags per directory. All 50 tags are returned for a given directory with this API call.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn list_typed_link_facet_attributes(
+    async fn list_typed_link_facet_attributes(
         &self,
         input: ListTypedLinkFacetAttributesRequest,
-    ) -> RusotoFuture<ListTypedLinkFacetAttributesResponse, ListTypedLinkFacetAttributesError>;
+    ) -> Result<ListTypedLinkFacetAttributesResponse, RusotoError<ListTypedLinkFacetAttributesError>>;
 
     /// <p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn list_typed_link_facet_names(
+    async fn list_typed_link_facet_names(
         &self,
         input: ListTypedLinkFacetNamesRequest,
-    ) -> RusotoFuture<ListTypedLinkFacetNamesResponse, ListTypedLinkFacetNamesError>;
+    ) -> Result<ListTypedLinkFacetNamesResponse, RusotoError<ListTypedLinkFacetNamesError>>;
 
     /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
-    fn lookup_policy(
+    async fn lookup_policy(
         &self,
         input: LookupPolicyRequest,
-    ) -> RusotoFuture<LookupPolicyResponse, LookupPolicyError>;
+    ) -> Result<LookupPolicyResponse, RusotoError<LookupPolicyError>>;
 
     /// <p>Publishes a development schema with a major version and a recommended minor version.</p>
-    fn publish_schema(
+    async fn publish_schema(
         &self,
         input: PublishSchemaRequest,
-    ) -> RusotoFuture<PublishSchemaResponse, PublishSchemaError>;
+    ) -> Result<PublishSchemaResponse, RusotoError<PublishSchemaError>>;
 
     /// <p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
-    fn put_schema_from_json(
+    async fn put_schema_from_json(
         &self,
         input: PutSchemaFromJsonRequest,
-    ) -> RusotoFuture<PutSchemaFromJsonResponse, PutSchemaFromJsonError>;
+    ) -> Result<PutSchemaFromJsonResponse, RusotoError<PutSchemaFromJsonError>>;
 
     /// <p>Removes the specified facet from the specified object.</p>
-    fn remove_facet_from_object(
+    async fn remove_facet_from_object(
         &self,
         input: RemoveFacetFromObjectRequest,
-    ) -> RusotoFuture<RemoveFacetFromObjectResponse, RemoveFacetFromObjectError>;
+    ) -> Result<RemoveFacetFromObjectResponse, RusotoError<RemoveFacetFromObjectError>>;
 
     /// <p>An API operation for adding tags to a resource.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
     /// <p>An API operation for removing tags from a resource.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p><p>Does the following:</p> <ol> <li> <p>Adds new <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Updates existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Deletes existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> </ol></p>
-    fn update_facet(
+    async fn update_facet(
         &self,
         input: UpdateFacetRequest,
-    ) -> RusotoFuture<UpdateFacetResponse, UpdateFacetError>;
+    ) -> Result<UpdateFacetResponse, RusotoError<UpdateFacetError>>;
 
     /// <p>Updates a given typed link’s attributes. Attributes to be updated must not contribute to the typed link’s identity, as defined by its <code>IdentityAttributeOrder</code>.</p>
-    fn update_link_attributes(
+    async fn update_link_attributes(
         &self,
         input: UpdateLinkAttributesRequest,
-    ) -> RusotoFuture<UpdateLinkAttributesResponse, UpdateLinkAttributesError>;
+    ) -> Result<UpdateLinkAttributesResponse, RusotoError<UpdateLinkAttributesError>>;
 
     /// <p>Updates a given object's attributes.</p>
-    fn update_object_attributes(
+    async fn update_object_attributes(
         &self,
         input: UpdateObjectAttributesRequest,
-    ) -> RusotoFuture<UpdateObjectAttributesResponse, UpdateObjectAttributesError>;
+    ) -> Result<UpdateObjectAttributesResponse, RusotoError<UpdateObjectAttributesError>>;
 
     /// <p>Updates the schema name with a new name. Only development schema names can be updated.</p>
-    fn update_schema(
+    async fn update_schema(
         &self,
         input: UpdateSchemaRequest,
-    ) -> RusotoFuture<UpdateSchemaResponse, UpdateSchemaError>;
+    ) -> Result<UpdateSchemaResponse, RusotoError<UpdateSchemaError>>;
 
     /// <p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn update_typed_link_facet(
+    async fn update_typed_link_facet(
         &self,
         input: UpdateTypedLinkFacetRequest,
-    ) -> RusotoFuture<UpdateTypedLinkFacetResponse, UpdateTypedLinkFacetError>;
+    ) -> Result<UpdateTypedLinkFacetResponse, RusotoError<UpdateTypedLinkFacetError>>;
 
     /// <p>Upgrades a single directory in-place using the <code>PublishedSchemaArn</code> with schema updates found in <code>MinorVersion</code>. Backwards-compatible minor version upgrades are instantaneously available for readers on all objects in the directory. Note: This is a synchronous API call and upgrades only one schema on a given directory per call. To upgrade multiple directories from one schema, you would need to call this API on each directory.</p>
-    fn upgrade_applied_schema(
+    async fn upgrade_applied_schema(
         &self,
         input: UpgradeAppliedSchemaRequest,
-    ) -> RusotoFuture<UpgradeAppliedSchemaResponse, UpgradeAppliedSchemaError>;
+    ) -> Result<UpgradeAppliedSchemaResponse, RusotoError<UpgradeAppliedSchemaError>>;
 
     /// <p>Upgrades a published schema under a new minor version revision using the current contents of <code>DevelopmentSchemaArn</code>.</p>
-    fn upgrade_published_schema(
+    async fn upgrade_published_schema(
         &self,
         input: UpgradePublishedSchemaRequest,
-    ) -> RusotoFuture<UpgradePublishedSchemaResponse, UpgradePublishedSchemaError>;
+    ) -> Result<UpgradePublishedSchemaResponse, RusotoError<UpgradePublishedSchemaError>>;
 }
 /// A client for the Amazon CloudDirectory API.
 #[derive(Clone)]
@@ -8543,12 +8548,13 @@ impl CloudDirectoryClient {
     }
 }
 
+#[async_trait]
 impl CloudDirectory for CloudDirectoryClient {
     /// <p>Adds a new <a>Facet</a> to an object. An object can have more than one facet applied on it.</p>
-    fn add_facet_to_object(
+    async fn add_facet_to_object(
         &self,
         input: AddFacetToObjectRequest,
-    ) -> RusotoFuture<AddFacetToObjectResponse, AddFacetToObjectError> {
+    ) -> Result<AddFacetToObjectResponse, RusotoError<AddFacetToObjectError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/facets";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8558,40 +8564,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| AddFacetToObjectError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddFacetToObjectResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AddFacetToObjectError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AddFacetToObjectResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<AddFacetToObjectError>())
-                            .and_then(|response| {
-                                Err(AddFacetToObjectError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AddFacetToObjectError::from_response(response))
+        }
     }
 
     /// <p>Copies the input published schema, at the specified version, into the <a>Directory</a> with the same name and version as that of the published schema.</p>
-    fn apply_schema(
+    async fn apply_schema(
         &self,
         input: ApplySchemaRequest,
-    ) -> RusotoFuture<ApplySchemaResponse, ApplySchemaError> {
+    ) -> Result<ApplySchemaResponse, RusotoError<ApplySchemaError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/apply";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8601,38 +8595,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ApplySchemaError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ApplySchemaResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ApplySchemaError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ApplySchemaResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ApplySchemaError>())
-                            .and_then(|response| Err(ApplySchemaError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ApplySchemaError::from_response(response))
+        }
     }
 
     /// <p><p>Attaches an existing object to another object. An object can be accessed in two ways:</p> <ol> <li> <p>Using the path</p> </li> <li> <p>Using <code>ObjectIdentifier</code> </p> </li> </ol></p>
-    fn attach_object(
+    async fn attach_object(
         &self,
         input: AttachObjectRequest,
-    ) -> RusotoFuture<AttachObjectResponse, AttachObjectError> {
+    ) -> Result<AttachObjectResponse, RusotoError<AttachObjectError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/attach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8642,38 +8626,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| AttachObjectError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachObjectResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AttachObjectError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AttachObjectResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<AttachObjectError>())
-                            .and_then(|response| Err(AttachObjectError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AttachObjectError::from_response(response))
+        }
     }
 
     /// <p>Attaches a policy object to a regular object. An object can have a limited number of attached policies.</p>
-    fn attach_policy(
+    async fn attach_policy(
         &self,
         input: AttachPolicyRequest,
-    ) -> RusotoFuture<AttachPolicyResponse, AttachPolicyError> {
+    ) -> Result<AttachPolicyResponse, RusotoError<AttachPolicyError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/policy/attach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8683,38 +8657,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| AttachPolicyError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachPolicyResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AttachPolicyError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AttachPolicyResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<AttachPolicyError>())
-                            .and_then(|response| Err(AttachPolicyError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AttachPolicyError::from_response(response))
+        }
     }
 
     /// <p>Attaches the specified object to the specified index.</p>
-    fn attach_to_index(
+    async fn attach_to_index(
         &self,
         input: AttachToIndexRequest,
-    ) -> RusotoFuture<AttachToIndexResponse, AttachToIndexError> {
+    ) -> Result<AttachToIndexResponse, RusotoError<AttachToIndexError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/index/attach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8724,38 +8688,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| AttachToIndexError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachToIndexResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AttachToIndexError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AttachToIndexResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<AttachToIndexError>())
-                            .and_then(|response| Err(AttachToIndexError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AttachToIndexError::from_response(response))
+        }
     }
 
     /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn attach_typed_link(
+    async fn attach_typed_link(
         &self,
         input: AttachTypedLinkRequest,
-    ) -> RusotoFuture<AttachTypedLinkResponse, AttachTypedLinkError> {
+    ) -> Result<AttachTypedLinkResponse, RusotoError<AttachTypedLinkError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/attach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8765,38 +8719,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| AttachTypedLinkError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachTypedLinkResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AttachTypedLinkError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AttachTypedLinkResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<AttachTypedLinkError>())
-                            .and_then(|response| Err(AttachTypedLinkError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AttachTypedLinkError::from_response(response))
+        }
     }
 
     /// <p>Performs all the read operations in a batch. </p>
-    fn batch_read(
+    async fn batch_read(
         &self,
         input: BatchReadRequest,
-    ) -> RusotoFuture<BatchReadResponse, BatchReadError> {
+    ) -> Result<BatchReadResponse, RusotoError<BatchReadError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/batchread";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -8810,38 +8754,28 @@ impl CloudDirectory for CloudDirectoryClient {
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| BatchReadError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchReadResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchReadError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<BatchReadResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<BatchReadError>())
-                            .and_then(|response| Err(BatchReadError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchReadError::from_response(response))
+        }
     }
 
     /// <p>Performs all the write operations in a batch. Either all the operations succeed or none.</p>
-    fn batch_write(
+    async fn batch_write(
         &self,
         input: BatchWriteRequest,
-    ) -> RusotoFuture<BatchWriteResponse, BatchWriteError> {
+    ) -> Result<BatchWriteResponse, RusotoError<BatchWriteError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/batchwrite";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8851,38 +8785,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| BatchWriteError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchWriteResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchWriteError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<BatchWriteResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<BatchWriteError>())
-                            .and_then(|response| Err(BatchWriteError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchWriteError::from_response(response))
+        }
     }
 
     /// <p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p>
-    fn create_directory(
+    async fn create_directory(
         &self,
         input: CreateDirectoryRequest,
-    ) -> RusotoFuture<CreateDirectoryResponse, CreateDirectoryError> {
+    ) -> Result<CreateDirectoryResponse, RusotoError<CreateDirectoryError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/create";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8892,38 +8816,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateDirectoryError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDirectoryResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDirectoryError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDirectoryResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateDirectoryError>())
-                            .and_then(|response| Err(CreateDirectoryError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDirectoryError::from_response(response))
+        }
     }
 
     /// <p>Creates a new <a>Facet</a> in a schema. Facet creation is allowed only in development or applied schemas.</p>
-    fn create_facet(
+    async fn create_facet(
         &self,
         input: CreateFacetRequest,
-    ) -> RusotoFuture<CreateFacetResponse, CreateFacetError> {
+    ) -> Result<CreateFacetResponse, RusotoError<CreateFacetError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/facet/create";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8933,38 +8847,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateFacetError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateFacetResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateFacetError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateFacetResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateFacetError>())
-                            .and_then(|response| Err(CreateFacetError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateFacetError::from_response(response))
+        }
     }
 
     /// <p>Creates an index object. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_indexing.html">Indexing</a> for more information.</p>
-    fn create_index(
+    async fn create_index(
         &self,
         input: CreateIndexRequest,
-    ) -> RusotoFuture<CreateIndexResponse, CreateIndexError> {
+    ) -> Result<CreateIndexResponse, RusotoError<CreateIndexError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/index";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -8974,38 +8878,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateIndexError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateIndexResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateIndexError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateIndexResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateIndexError>())
-                            .and_then(|response| Err(CreateIndexError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateIndexError::from_response(response))
+        }
     }
 
     /// <p>Creates an object in a <a>Directory</a>. Additionally attaches the object to a parent, if a parent reference and <code>LinkName</code> is specified. An object is simply a collection of <a>Facet</a> attributes. You can also use this API call to create a policy object, if the facet from which you create the object is a policy facet. </p>
-    fn create_object(
+    async fn create_object(
         &self,
         input: CreateObjectRequest,
-    ) -> RusotoFuture<CreateObjectResponse, CreateObjectError> {
+    ) -> Result<CreateObjectResponse, RusotoError<CreateObjectError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9015,38 +8909,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateObjectError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateObjectResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateObjectError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateObjectResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateObjectError>())
-                            .and_then(|response| Err(CreateObjectError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateObjectError::from_response(response))
+        }
     }
 
     /// <p><p>Creates a new schema in a development state. A schema can exist in three phases:</p> <ul> <li> <p> <i>Development:</i> This is a mutable phase of the schema. All new schemas are in the development phase. Once the schema is finalized, it can be published.</p> </li> <li> <p> <i>Published:</i> Published schemas are immutable and have a version associated with them.</p> </li> <li> <p> <i>Applied:</i> Applied schemas are mutable in a way that allows you to add new schema facets. You can also add new, nonrequired attributes to existing schema facets. You can apply only published schemas to directories. </p> </li> </ul></p>
-    fn create_schema(
+    async fn create_schema(
         &self,
         input: CreateSchemaRequest,
-    ) -> RusotoFuture<CreateSchemaResponse, CreateSchemaError> {
+    ) -> Result<CreateSchemaResponse, RusotoError<CreateSchemaError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/create";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9055,38 +8939,28 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateSchemaError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSchemaResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateSchemaError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSchemaResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateSchemaError>())
-                            .and_then(|response| Err(CreateSchemaError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSchemaError::from_response(response))
+        }
     }
 
     /// <p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn create_typed_link_facet(
+    async fn create_typed_link_facet(
         &self,
         input: CreateTypedLinkFacetRequest,
-    ) -> RusotoFuture<CreateTypedLinkFacetResponse, CreateTypedLinkFacetError> {
+    ) -> Result<CreateTypedLinkFacetResponse, RusotoError<CreateTypedLinkFacetError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/create";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9096,40 +8970,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateTypedLinkFacetError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTypedLinkFacetResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateTypedLinkFacetError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateTypedLinkFacetResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateTypedLinkFacetError>())
-                            .and_then(|response| {
-                                Err(CreateTypedLinkFacetError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateTypedLinkFacetError::from_response(response))
+        }
     }
 
     /// <p>Deletes a directory. Only disabled directories can be deleted. A deleted directory cannot be undone. Exercise extreme caution when deleting directories.</p>
-    fn delete_directory(
+    async fn delete_directory(
         &self,
         input: DeleteDirectoryRequest,
-    ) -> RusotoFuture<DeleteDirectoryResponse, DeleteDirectoryError> {
+    ) -> Result<DeleteDirectoryResponse, RusotoError<DeleteDirectoryError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/directory";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9137,38 +8999,28 @@ impl CloudDirectory for CloudDirectoryClient {
 
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteDirectoryError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDirectoryResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDirectoryError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteDirectoryResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteDirectoryError>())
-                            .and_then(|response| Err(DeleteDirectoryError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDirectoryError::from_response(response))
+        }
     }
 
     /// <p>Deletes a given <a>Facet</a>. All attributes and <a>Rule</a>s that are associated with the facet will be deleted. Only development schema facets are allowed deletion.</p>
-    fn delete_facet(
+    async fn delete_facet(
         &self,
         input: DeleteFacetRequest,
-    ) -> RusotoFuture<DeleteFacetResponse, DeleteFacetError> {
+    ) -> Result<DeleteFacetResponse, RusotoError<DeleteFacetError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/facet/delete";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9178,38 +9030,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteFacetError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteFacetResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteFacetError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteFacetResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteFacetError>())
-                            .and_then(|response| Err(DeleteFacetError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteFacetError::from_response(response))
+        }
     }
 
     /// <p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted.</p>
-    fn delete_object(
+    async fn delete_object(
         &self,
         input: DeleteObjectRequest,
-    ) -> RusotoFuture<DeleteObjectResponse, DeleteObjectError> {
+    ) -> Result<DeleteObjectResponse, RusotoError<DeleteObjectError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/delete";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9219,38 +9061,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteObjectError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteObjectResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteObjectError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteObjectResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteObjectError>())
-                            .and_then(|response| Err(DeleteObjectError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteObjectError::from_response(response))
+        }
     }
 
     /// <p>Deletes a given schema. Schemas in a development and published state can only be deleted. </p>
-    fn delete_schema(
+    async fn delete_schema(
         &self,
         input: DeleteSchemaRequest,
-    ) -> RusotoFuture<DeleteSchemaResponse, DeleteSchemaError> {
+    ) -> Result<DeleteSchemaResponse, RusotoError<DeleteSchemaError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9258,38 +9090,28 @@ impl CloudDirectory for CloudDirectoryClient {
 
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteSchemaError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSchemaResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteSchemaError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteSchemaResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteSchemaError>())
-                            .and_then(|response| Err(DeleteSchemaError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSchemaError::from_response(response))
+        }
     }
 
     /// <p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn delete_typed_link_facet(
+    async fn delete_typed_link_facet(
         &self,
         input: DeleteTypedLinkFacetRequest,
-    ) -> RusotoFuture<DeleteTypedLinkFacetResponse, DeleteTypedLinkFacetError> {
+    ) -> Result<DeleteTypedLinkFacetResponse, RusotoError<DeleteTypedLinkFacetError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/delete";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9299,40 +9121,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteTypedLinkFacetError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTypedLinkFacetResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteTypedLinkFacetError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteTypedLinkFacetResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteTypedLinkFacetError>())
-                            .and_then(|response| {
-                                Err(DeleteTypedLinkFacetError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTypedLinkFacetError::from_response(response))
+        }
     }
 
     /// <p>Detaches the specified object from the specified index.</p>
-    fn detach_from_index(
+    async fn detach_from_index(
         &self,
         input: DetachFromIndexRequest,
-    ) -> RusotoFuture<DetachFromIndexResponse, DetachFromIndexError> {
+    ) -> Result<DetachFromIndexResponse, RusotoError<DetachFromIndexError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/index/detach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9342,38 +9152,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DetachFromIndexError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetachFromIndexResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DetachFromIndexError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DetachFromIndexResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DetachFromIndexError>())
-                            .and_then(|response| Err(DetachFromIndexError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DetachFromIndexError::from_response(response))
+        }
     }
 
     /// <p>Detaches a given object from the parent object. The object that is to be detached from the parent is specified by the link name.</p>
-    fn detach_object(
+    async fn detach_object(
         &self,
         input: DetachObjectRequest,
-    ) -> RusotoFuture<DetachObjectResponse, DetachObjectError> {
+    ) -> Result<DetachObjectResponse, RusotoError<DetachObjectError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/detach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9383,38 +9183,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DetachObjectError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetachObjectResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DetachObjectError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DetachObjectResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DetachObjectError>())
-                            .and_then(|response| Err(DetachObjectError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DetachObjectError::from_response(response))
+        }
     }
 
     /// <p>Detaches a policy from an object.</p>
-    fn detach_policy(
+    async fn detach_policy(
         &self,
         input: DetachPolicyRequest,
-    ) -> RusotoFuture<DetachPolicyResponse, DetachPolicyError> {
+    ) -> Result<DetachPolicyResponse, RusotoError<DetachPolicyError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/policy/detach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9424,38 +9214,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DetachPolicyError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetachPolicyResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DetachPolicyError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DetachPolicyResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DetachPolicyError>())
-                            .and_then(|response| Err(DetachPolicyError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DetachPolicyError::from_response(response))
+        }
     }
 
     /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn detach_typed_link(
+    async fn detach_typed_link(
         &self,
         input: DetachTypedLinkRequest,
-    ) -> RusotoFuture<(), DetachTypedLinkError> {
+    ) -> Result<(), RusotoError<DetachTypedLinkError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/detach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9465,37 +9245,27 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DetachTypedLinkError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DetachTypedLinkError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DetachTypedLinkError>())
-                            .and_then(|response| Err(DetachTypedLinkError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DetachTypedLinkError::from_response(response))
+        }
     }
 
     /// <p>Disables the specified directory. Disabled directories cannot be read or written to. Only enabled directories can be disabled. Disabled directories may be reenabled.</p>
-    fn disable_directory(
+    async fn disable_directory(
         &self,
         input: DisableDirectoryRequest,
-    ) -> RusotoFuture<DisableDirectoryResponse, DisableDirectoryError> {
+    ) -> Result<DisableDirectoryResponse, RusotoError<DisableDirectoryError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/disable";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9503,40 +9273,28 @@ impl CloudDirectory for CloudDirectoryClient {
 
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DisableDirectoryError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisableDirectoryResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DisableDirectoryError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisableDirectoryResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DisableDirectoryError>())
-                            .and_then(|response| {
-                                Err(DisableDirectoryError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisableDirectoryError::from_response(response))
+        }
     }
 
     /// <p>Enables the specified directory. Only disabled directories can be enabled. Once enabled, the directory can then be read and written to.</p>
-    fn enable_directory(
+    async fn enable_directory(
         &self,
         input: EnableDirectoryRequest,
-    ) -> RusotoFuture<EnableDirectoryResponse, EnableDirectoryError> {
+    ) -> Result<EnableDirectoryResponse, RusotoError<EnableDirectoryError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/enable";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -9544,38 +9302,28 @@ impl CloudDirectory for CloudDirectoryClient {
 
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| EnableDirectoryError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EnableDirectoryResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(EnableDirectoryError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<EnableDirectoryResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<EnableDirectoryError>())
-                            .and_then(|response| Err(EnableDirectoryError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(EnableDirectoryError::from_response(response))
+        }
     }
 
     /// <p>Returns current applied schema version ARN, including the minor version in use.</p>
-    fn get_applied_schema_version(
+    async fn get_applied_schema_version(
         &self,
         input: GetAppliedSchemaVersionRequest,
-    ) -> RusotoFuture<GetAppliedSchemaVersionResponse, GetAppliedSchemaVersionError> {
+    ) -> Result<GetAppliedSchemaVersionResponse, RusotoError<GetAppliedSchemaVersionError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/getappliedschema";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9584,40 +9332,28 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetAppliedSchemaVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAppliedSchemaVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetAppliedSchemaVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAppliedSchemaVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetAppliedSchemaVersionError>())
-                            .and_then(|response| {
-                                Err(GetAppliedSchemaVersionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAppliedSchemaVersionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves metadata about a directory.</p>
-    fn get_directory(
+    async fn get_directory(
         &self,
         input: GetDirectoryRequest,
-    ) -> RusotoFuture<GetDirectoryResponse, GetDirectoryError> {
+    ) -> Result<GetDirectoryResponse, RusotoError<GetDirectoryError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/get";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9625,35 +9361,28 @@ impl CloudDirectory for CloudDirectoryClient {
 
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetDirectoryError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDirectoryResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDirectoryError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDirectoryResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetDirectoryError>())
-                            .and_then(|response| Err(GetDirectoryError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDirectoryError::from_response(response))
+        }
     }
 
     /// <p>Gets details of the <a>Facet</a>, such as facet name, attributes, <a>Rule</a>s, or <code>ObjectType</code>. You can call this on all kinds of schema facets -- published, development, or applied.</p>
-    fn get_facet(&self, input: GetFacetRequest) -> RusotoFuture<GetFacetResponse, GetFacetError> {
+    async fn get_facet(
+        &self,
+        input: GetFacetRequest,
+    ) -> Result<GetFacetResponse, RusotoError<GetFacetError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/facet";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9663,38 +9392,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetFacetError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFacetResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetFacetError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<GetFacetResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetFacetError>())
-                            .and_then(|response| Err(GetFacetError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetFacetError::from_response(response))
+        }
     }
 
     /// <p>Retrieves attributes that are associated with a typed link.</p>
-    fn get_link_attributes(
+    async fn get_link_attributes(
         &self,
         input: GetLinkAttributesRequest,
-    ) -> RusotoFuture<GetLinkAttributesResponse, GetLinkAttributesError> {
+    ) -> Result<GetLinkAttributesResponse, RusotoError<GetLinkAttributesError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/attributes/get";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9704,40 +9423,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetLinkAttributesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLinkAttributesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetLinkAttributesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetLinkAttributesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetLinkAttributesError>())
-                            .and_then(|response| {
-                                Err(GetLinkAttributesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetLinkAttributesError::from_response(response))
+        }
     }
 
     /// <p>Retrieves attributes within a facet that are associated with an object.</p>
-    fn get_object_attributes(
+    async fn get_object_attributes(
         &self,
         input: GetObjectAttributesRequest,
-    ) -> RusotoFuture<GetObjectAttributesResponse, GetObjectAttributesError> {
+    ) -> Result<GetObjectAttributesResponse, RusotoError<GetObjectAttributesError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/attributes/get";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9751,40 +9458,28 @@ impl CloudDirectory for CloudDirectoryClient {
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetObjectAttributesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetObjectAttributesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectAttributesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetObjectAttributesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetObjectAttributesError>())
-                            .and_then(|response| {
-                                Err(GetObjectAttributesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetObjectAttributesError::from_response(response))
+        }
     }
 
     /// <p>Retrieves metadata about an object.</p>
-    fn get_object_information(
+    async fn get_object_information(
         &self,
         input: GetObjectInformationRequest,
-    ) -> RusotoFuture<GetObjectInformationResponse, GetObjectInformationError> {
+    ) -> Result<GetObjectInformationResponse, RusotoError<GetObjectInformationError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/information";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9798,40 +9493,28 @@ impl CloudDirectory for CloudDirectoryClient {
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetObjectInformationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetObjectInformationResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectInformationError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetObjectInformationResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetObjectInformationError>())
-                            .and_then(|response| {
-                                Err(GetObjectInformationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetObjectInformationError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a JSON representation of the schema. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
-    fn get_schema_as_json(
+    async fn get_schema_as_json(
         &self,
         input: GetSchemaAsJsonRequest,
-    ) -> RusotoFuture<GetSchemaAsJsonResponse, GetSchemaAsJsonError> {
+    ) -> Result<GetSchemaAsJsonResponse, RusotoError<GetSchemaAsJsonError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/json";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9839,38 +9522,29 @@ impl CloudDirectory for CloudDirectoryClient {
 
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetSchemaAsJsonError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSchemaAsJsonResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSchemaAsJsonError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetSchemaAsJsonResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetSchemaAsJsonError>())
-                            .and_then(|response| Err(GetSchemaAsJsonError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSchemaAsJsonError::from_response(response))
+        }
     }
 
     /// <p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn get_typed_link_facet_information(
+    async fn get_typed_link_facet_information(
         &self,
         input: GetTypedLinkFacetInformationRequest,
-    ) -> RusotoFuture<GetTypedLinkFacetInformationResponse, GetTypedLinkFacetInformationError> {
+    ) -> Result<GetTypedLinkFacetInformationResponse, RusotoError<GetTypedLinkFacetInformationError>>
+    {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/get";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9880,40 +9554,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetTypedLinkFacetInformationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTypedLinkFacetInformationResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetTypedLinkFacetInformationError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetTypedLinkFacetInformationResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetTypedLinkFacetInformationError>())
-                            .and_then(|response| {
-                                Err(GetTypedLinkFacetInformationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTypedLinkFacetInformationError::from_response(response))
+        }
     }
 
     /// <p>Lists schema major versions applied to a directory. If <code>SchemaArn</code> is provided, lists the minor version.</p>
-    fn list_applied_schema_arns(
+    async fn list_applied_schema_arns(
         &self,
         input: ListAppliedSchemaArnsRequest,
-    ) -> RusotoFuture<ListAppliedSchemaArnsResponse, ListAppliedSchemaArnsError> {
+    ) -> Result<ListAppliedSchemaArnsResponse, RusotoError<ListAppliedSchemaArnsError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/applied";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9922,40 +9584,28 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListAppliedSchemaArnsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAppliedSchemaArnsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListAppliedSchemaArnsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAppliedSchemaArnsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListAppliedSchemaArnsError>())
-                            .and_then(|response| {
-                                Err(ListAppliedSchemaArnsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAppliedSchemaArnsError::from_response(response))
+        }
     }
 
     /// <p>Lists indices attached to the specified object.</p>
-    fn list_attached_indices(
+    async fn list_attached_indices(
         &self,
         input: ListAttachedIndicesRequest,
-    ) -> RusotoFuture<ListAttachedIndicesResponse, ListAttachedIndicesError> {
+    ) -> Result<ListAttachedIndicesResponse, RusotoError<ListAttachedIndicesError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/indices";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -9969,40 +9619,29 @@ impl CloudDirectory for CloudDirectoryClient {
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListAttachedIndicesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAttachedIndicesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListAttachedIndicesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAttachedIndicesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListAttachedIndicesError>())
-                            .and_then(|response| {
-                                Err(ListAttachedIndicesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAttachedIndicesError::from_response(response))
+        }
     }
 
     /// <p>Retrieves each Amazon Resource Name (ARN) of schemas in the development state.</p>
-    fn list_development_schema_arns(
+    async fn list_development_schema_arns(
         &self,
         input: ListDevelopmentSchemaArnsRequest,
-    ) -> RusotoFuture<ListDevelopmentSchemaArnsResponse, ListDevelopmentSchemaArnsError> {
+    ) -> Result<ListDevelopmentSchemaArnsResponse, RusotoError<ListDevelopmentSchemaArnsError>>
+    {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/development";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10011,40 +9650,28 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListDevelopmentSchemaArnsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDevelopmentSchemaArnsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDevelopmentSchemaArnsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDevelopmentSchemaArnsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListDevelopmentSchemaArnsError>())
-                            .and_then(|response| {
-                                Err(ListDevelopmentSchemaArnsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDevelopmentSchemaArnsError::from_response(response))
+        }
     }
 
     /// <p>Lists directories created within an account.</p>
-    fn list_directories(
+    async fn list_directories(
         &self,
         input: ListDirectoriesRequest,
-    ) -> RusotoFuture<ListDirectoriesResponse, ListDirectoriesError> {
+    ) -> Result<ListDirectoriesResponse, RusotoError<ListDirectoriesError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/list";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10053,38 +9680,28 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListDirectoriesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDirectoriesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDirectoriesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDirectoriesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListDirectoriesError>())
-                            .and_then(|response| Err(ListDirectoriesError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDirectoriesError::from_response(response))
+        }
     }
 
     /// <p>Retrieves attributes attached to the facet.</p>
-    fn list_facet_attributes(
+    async fn list_facet_attributes(
         &self,
         input: ListFacetAttributesRequest,
-    ) -> RusotoFuture<ListFacetAttributesResponse, ListFacetAttributesError> {
+    ) -> Result<ListFacetAttributesResponse, RusotoError<ListFacetAttributesError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/facet/attributes";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10094,40 +9711,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListFacetAttributesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFacetAttributesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListFacetAttributesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListFacetAttributesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListFacetAttributesError>())
-                            .and_then(|response| {
-                                Err(ListFacetAttributesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListFacetAttributesError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the names of facets that exist in a schema.</p>
-    fn list_facet_names(
+    async fn list_facet_names(
         &self,
         input: ListFacetNamesRequest,
-    ) -> RusotoFuture<ListFacetNamesResponse, ListFacetNamesError> {
+    ) -> Result<ListFacetNamesResponse, RusotoError<ListFacetNamesError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/facet/list";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10137,38 +9742,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListFacetNamesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFacetNamesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListFacetNamesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListFacetNamesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListFacetNamesError>())
-                            .and_then(|response| Err(ListFacetNamesError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListFacetNamesError::from_response(response))
+        }
     }
 
     /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn list_incoming_typed_links(
+    async fn list_incoming_typed_links(
         &self,
         input: ListIncomingTypedLinksRequest,
-    ) -> RusotoFuture<ListIncomingTypedLinksResponse, ListIncomingTypedLinksError> {
+    ) -> Result<ListIncomingTypedLinksResponse, RusotoError<ListIncomingTypedLinksError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/incoming";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10178,40 +9773,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListIncomingTypedLinksError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListIncomingTypedLinksResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListIncomingTypedLinksError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListIncomingTypedLinksResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListIncomingTypedLinksError>())
-                            .and_then(|response| {
-                                Err(ListIncomingTypedLinksError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListIncomingTypedLinksError::from_response(response))
+        }
     }
 
     /// <p>Lists objects attached to the specified index.</p>
-    fn list_index(
+    async fn list_index(
         &self,
         input: ListIndexRequest,
-    ) -> RusotoFuture<ListIndexResponse, ListIndexError> {
+    ) -> Result<ListIndexResponse, RusotoError<ListIndexError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/index/targets";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10225,38 +9808,28 @@ impl CloudDirectory for CloudDirectoryClient {
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListIndexError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListIndexResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListIndexError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<ListIndexResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListIndexError>())
-                            .and_then(|response| Err(ListIndexError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListIndexError::from_response(response))
+        }
     }
 
     /// <p>Lists all attributes that are associated with an object. </p>
-    fn list_object_attributes(
+    async fn list_object_attributes(
         &self,
         input: ListObjectAttributesRequest,
-    ) -> RusotoFuture<ListObjectAttributesResponse, ListObjectAttributesError> {
+    ) -> Result<ListObjectAttributesResponse, RusotoError<ListObjectAttributesError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/attributes";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10270,40 +9843,28 @@ impl CloudDirectory for CloudDirectoryClient {
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListObjectAttributesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListObjectAttributesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListObjectAttributesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListObjectAttributesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListObjectAttributesError>())
-                            .and_then(|response| {
-                                Err(ListObjectAttributesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListObjectAttributesError::from_response(response))
+        }
     }
 
     /// <p>Returns a paginated list of child objects that are associated with a given object.</p>
-    fn list_object_children(
+    async fn list_object_children(
         &self,
         input: ListObjectChildrenRequest,
-    ) -> RusotoFuture<ListObjectChildrenResponse, ListObjectChildrenError> {
+    ) -> Result<ListObjectChildrenResponse, RusotoError<ListObjectChildrenError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/children";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10317,40 +9878,28 @@ impl CloudDirectory for CloudDirectoryClient {
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListObjectChildrenError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListObjectChildrenResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListObjectChildrenError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListObjectChildrenResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListObjectChildrenError>())
-                            .and_then(|response| {
-                                Err(ListObjectChildrenError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListObjectChildrenError::from_response(response))
+        }
     }
 
     /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>
-    fn list_object_parent_paths(
+    async fn list_object_parent_paths(
         &self,
         input: ListObjectParentPathsRequest,
-    ) -> RusotoFuture<ListObjectParentPathsResponse, ListObjectParentPathsError> {
+    ) -> Result<ListObjectParentPathsResponse, RusotoError<ListObjectParentPathsError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/parentpaths";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10360,40 +9909,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListObjectParentPathsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListObjectParentPathsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListObjectParentPathsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListObjectParentPathsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListObjectParentPathsError>())
-                            .and_then(|response| {
-                                Err(ListObjectParentPathsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListObjectParentPathsError::from_response(response))
+        }
     }
 
     /// <p>Lists parent objects that are associated with a given object in pagination fashion.</p>
-    fn list_object_parents(
+    async fn list_object_parents(
         &self,
         input: ListObjectParentsRequest,
-    ) -> RusotoFuture<ListObjectParentsResponse, ListObjectParentsError> {
+    ) -> Result<ListObjectParentsResponse, RusotoError<ListObjectParentsError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/parent";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10407,40 +9944,28 @@ impl CloudDirectory for CloudDirectoryClient {
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListObjectParentsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListObjectParentsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListObjectParentsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListObjectParentsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListObjectParentsError>())
-                            .and_then(|response| {
-                                Err(ListObjectParentsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListObjectParentsError::from_response(response))
+        }
     }
 
     /// <p>Returns policies attached to an object in pagination fashion.</p>
-    fn list_object_policies(
+    async fn list_object_policies(
         &self,
         input: ListObjectPoliciesRequest,
-    ) -> RusotoFuture<ListObjectPoliciesResponse, ListObjectPoliciesError> {
+    ) -> Result<ListObjectPoliciesResponse, RusotoError<ListObjectPoliciesError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/policy";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10454,40 +9979,28 @@ impl CloudDirectory for CloudDirectoryClient {
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListObjectPoliciesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListObjectPoliciesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListObjectPoliciesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListObjectPoliciesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListObjectPoliciesError>())
-                            .and_then(|response| {
-                                Err(ListObjectPoliciesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListObjectPoliciesError::from_response(response))
+        }
     }
 
     /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn list_outgoing_typed_links(
+    async fn list_outgoing_typed_links(
         &self,
         input: ListOutgoingTypedLinksRequest,
-    ) -> RusotoFuture<ListOutgoingTypedLinksResponse, ListOutgoingTypedLinksError> {
+    ) -> Result<ListOutgoingTypedLinksResponse, RusotoError<ListOutgoingTypedLinksError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/outgoing";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10497,40 +10010,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListOutgoingTypedLinksError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOutgoingTypedLinksResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListOutgoingTypedLinksError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListOutgoingTypedLinksResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListOutgoingTypedLinksError>())
-                            .and_then(|response| {
-                                Err(ListOutgoingTypedLinksError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListOutgoingTypedLinksError::from_response(response))
+        }
     }
 
     /// <p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached.</p>
-    fn list_policy_attachments(
+    async fn list_policy_attachments(
         &self,
         input: ListPolicyAttachmentsRequest,
-    ) -> RusotoFuture<ListPolicyAttachmentsResponse, ListPolicyAttachmentsError> {
+    ) -> Result<ListPolicyAttachmentsResponse, RusotoError<ListPolicyAttachmentsError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/policy/attachment";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10544,40 +10045,28 @@ impl CloudDirectory for CloudDirectoryClient {
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListPolicyAttachmentsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPolicyAttachmentsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListPolicyAttachmentsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPolicyAttachmentsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListPolicyAttachmentsError>())
-                            .and_then(|response| {
-                                Err(ListPolicyAttachmentsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPolicyAttachmentsError::from_response(response))
+        }
     }
 
     /// <p>Lists the major version families of each published schema. If a major version ARN is provided as <code>SchemaArn</code>, the minor version revisions in that family are listed instead.</p>
-    fn list_published_schema_arns(
+    async fn list_published_schema_arns(
         &self,
         input: ListPublishedSchemaArnsRequest,
-    ) -> RusotoFuture<ListPublishedSchemaArnsResponse, ListPublishedSchemaArnsError> {
+    ) -> Result<ListPublishedSchemaArnsResponse, RusotoError<ListPublishedSchemaArnsError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/published";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10586,40 +10075,28 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListPublishedSchemaArnsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPublishedSchemaArnsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListPublishedSchemaArnsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPublishedSchemaArnsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListPublishedSchemaArnsError>())
-                            .and_then(|response| {
-                                Err(ListPublishedSchemaArnsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPublishedSchemaArnsError::from_response(response))
+        }
     }
 
     /// <p>Returns tags for a resource. Tagging is currently supported only for directories with a limit of 50 tags per directory. All 50 tags are returned for a given directory with this API call.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/tags";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10628,40 +10105,29 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListTagsForResourceError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListTagsForResourceError>())
-                            .and_then(|response| {
-                                Err(ListTagsForResourceError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn list_typed_link_facet_attributes(
+    async fn list_typed_link_facet_attributes(
         &self,
         input: ListTypedLinkFacetAttributesRequest,
-    ) -> RusotoFuture<ListTypedLinkFacetAttributesResponse, ListTypedLinkFacetAttributesError> {
+    ) -> Result<ListTypedLinkFacetAttributesResponse, RusotoError<ListTypedLinkFacetAttributesError>>
+    {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/attributes";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10671,40 +10137,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListTypedLinkFacetAttributesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTypedLinkFacetAttributesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTypedLinkFacetAttributesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTypedLinkFacetAttributesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListTypedLinkFacetAttributesError>())
-                            .and_then(|response| {
-                                Err(ListTypedLinkFacetAttributesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTypedLinkFacetAttributesError::from_response(response))
+        }
     }
 
     /// <p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn list_typed_link_facet_names(
+    async fn list_typed_link_facet_names(
         &self,
         input: ListTypedLinkFacetNamesRequest,
-    ) -> RusotoFuture<ListTypedLinkFacetNamesResponse, ListTypedLinkFacetNamesError> {
+    ) -> Result<ListTypedLinkFacetNamesResponse, RusotoError<ListTypedLinkFacetNamesError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/list";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10714,40 +10168,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListTypedLinkFacetNamesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTypedLinkFacetNamesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTypedLinkFacetNamesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTypedLinkFacetNamesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListTypedLinkFacetNamesError>())
-                            .and_then(|response| {
-                                Err(ListTypedLinkFacetNamesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTypedLinkFacetNamesError::from_response(response))
+        }
     }
 
     /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
-    fn lookup_policy(
+    async fn lookup_policy(
         &self,
         input: LookupPolicyRequest,
-    ) -> RusotoFuture<LookupPolicyResponse, LookupPolicyError> {
+    ) -> Result<LookupPolicyResponse, RusotoError<LookupPolicyError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/policy/lookup";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10757,38 +10199,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| LookupPolicyError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<LookupPolicyResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(LookupPolicyError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<LookupPolicyResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<LookupPolicyError>())
-                            .and_then(|response| Err(LookupPolicyError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(LookupPolicyError::from_response(response))
+        }
     }
 
     /// <p>Publishes a development schema with a major version and a recommended minor version.</p>
-    fn publish_schema(
+    async fn publish_schema(
         &self,
         input: PublishSchemaRequest,
-    ) -> RusotoFuture<PublishSchemaResponse, PublishSchemaError> {
+    ) -> Result<PublishSchemaResponse, RusotoError<PublishSchemaError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/publish";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10798,38 +10230,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.development_schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| PublishSchemaError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PublishSchemaResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PublishSchemaError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PublishSchemaResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<PublishSchemaError>())
-                            .and_then(|response| Err(PublishSchemaError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PublishSchemaError::from_response(response))
+        }
     }
 
     /// <p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
-    fn put_schema_from_json(
+    async fn put_schema_from_json(
         &self,
         input: PutSchemaFromJsonRequest,
-    ) -> RusotoFuture<PutSchemaFromJsonResponse, PutSchemaFromJsonError> {
+    ) -> Result<PutSchemaFromJsonResponse, RusotoError<PutSchemaFromJsonError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/json";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10839,40 +10261,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| PutSchemaFromJsonError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutSchemaFromJsonResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutSchemaFromJsonError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutSchemaFromJsonResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<PutSchemaFromJsonError>())
-                            .and_then(|response| {
-                                Err(PutSchemaFromJsonError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutSchemaFromJsonError::from_response(response))
+        }
     }
 
     /// <p>Removes the specified facet from the specified object.</p>
-    fn remove_facet_from_object(
+    async fn remove_facet_from_object(
         &self,
         input: RemoveFacetFromObjectRequest,
-    ) -> RusotoFuture<RemoveFacetFromObjectResponse, RemoveFacetFromObjectError> {
+    ) -> Result<RemoveFacetFromObjectResponse, RusotoError<RemoveFacetFromObjectError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/facets/delete";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10882,40 +10292,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| RemoveFacetFromObjectError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveFacetFromObjectResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RemoveFacetFromObjectError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RemoveFacetFromObjectResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<RemoveFacetFromObjectError>())
-                            .and_then(|response| {
-                                Err(RemoveFacetFromObjectError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveFacetFromObjectError::from_response(response))
+        }
     }
 
     /// <p>An API operation for adding tags to a resource.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/tags/add";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10924,38 +10322,28 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| TagResourceError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagResourceError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TagResourceResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<TagResourceError>())
-                            .and_then(|response| Err(TagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p>An API operation for removing tags from a resource.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/tags/remove";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10964,38 +10352,28 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UntagResourceError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagResourceError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UntagResourceResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UntagResourceError>())
-                            .and_then(|response| Err(UntagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <p><p>Does the following:</p> <ol> <li> <p>Adds new <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Updates existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Deletes existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> </ol></p>
-    fn update_facet(
+    async fn update_facet(
         &self,
         input: UpdateFacetRequest,
-    ) -> RusotoFuture<UpdateFacetResponse, UpdateFacetError> {
+    ) -> Result<UpdateFacetResponse, RusotoError<UpdateFacetError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/facet";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11005,38 +10383,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateFacetError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateFacetResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateFacetError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateFacetResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateFacetError>())
-                            .and_then(|response| Err(UpdateFacetError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateFacetError::from_response(response))
+        }
     }
 
     /// <p>Updates a given typed link’s attributes. Attributes to be updated must not contribute to the typed link’s identity, as defined by its <code>IdentityAttributeOrder</code>.</p>
-    fn update_link_attributes(
+    async fn update_link_attributes(
         &self,
         input: UpdateLinkAttributesRequest,
-    ) -> RusotoFuture<UpdateLinkAttributesResponse, UpdateLinkAttributesError> {
+    ) -> Result<UpdateLinkAttributesResponse, RusotoError<UpdateLinkAttributesError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/attributes/update";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -11046,40 +10414,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateLinkAttributesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateLinkAttributesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateLinkAttributesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateLinkAttributesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateLinkAttributesError>())
-                            .and_then(|response| {
-                                Err(UpdateLinkAttributesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateLinkAttributesError::from_response(response))
+        }
     }
 
     /// <p>Updates a given object's attributes.</p>
-    fn update_object_attributes(
+    async fn update_object_attributes(
         &self,
         input: UpdateObjectAttributesRequest,
-    ) -> RusotoFuture<UpdateObjectAttributesResponse, UpdateObjectAttributesError> {
+    ) -> Result<UpdateObjectAttributesResponse, RusotoError<UpdateObjectAttributesError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/update";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11089,40 +10445,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateObjectAttributesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateObjectAttributesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateObjectAttributesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateObjectAttributesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateObjectAttributesError>())
-                            .and_then(|response| {
-                                Err(UpdateObjectAttributesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateObjectAttributesError::from_response(response))
+        }
     }
 
     /// <p>Updates the schema name with a new name. Only development schema names can be updated.</p>
-    fn update_schema(
+    async fn update_schema(
         &self,
         input: UpdateSchemaRequest,
-    ) -> RusotoFuture<UpdateSchemaResponse, UpdateSchemaError> {
+    ) -> Result<UpdateSchemaResponse, RusotoError<UpdateSchemaError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/update";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11132,38 +10476,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateSchemaError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSchemaResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateSchemaError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSchemaResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateSchemaError>())
-                            .and_then(|response| Err(UpdateSchemaError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSchemaError::from_response(response))
+        }
     }
 
     /// <p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn update_typed_link_facet(
+    async fn update_typed_link_facet(
         &self,
         input: UpdateTypedLinkFacetRequest,
-    ) -> RusotoFuture<UpdateTypedLinkFacetResponse, UpdateTypedLinkFacetError> {
+    ) -> Result<UpdateTypedLinkFacetResponse, RusotoError<UpdateTypedLinkFacetError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11173,40 +10507,28 @@ impl CloudDirectory for CloudDirectoryClient {
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateTypedLinkFacetError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateTypedLinkFacetResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateTypedLinkFacetError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateTypedLinkFacetResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateTypedLinkFacetError>())
-                            .and_then(|response| {
-                                Err(UpdateTypedLinkFacetError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateTypedLinkFacetError::from_response(response))
+        }
     }
 
     /// <p>Upgrades a single directory in-place using the <code>PublishedSchemaArn</code> with schema updates found in <code>MinorVersion</code>. Backwards-compatible minor version upgrades are instantaneously available for readers on all objects in the directory. Note: This is a synchronous API call and upgrades only one schema on a given directory per call. To upgrade multiple directories from one schema, you would need to call this API on each directory.</p>
-    fn upgrade_applied_schema(
+    async fn upgrade_applied_schema(
         &self,
         input: UpgradeAppliedSchemaRequest,
-    ) -> RusotoFuture<UpgradeAppliedSchemaResponse, UpgradeAppliedSchemaError> {
+    ) -> Result<UpgradeAppliedSchemaResponse, RusotoError<UpgradeAppliedSchemaError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/upgradeapplied";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11215,40 +10537,28 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpgradeAppliedSchemaError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpgradeAppliedSchemaResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpgradeAppliedSchemaError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpgradeAppliedSchemaResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpgradeAppliedSchemaError>())
-                            .and_then(|response| {
-                                Err(UpgradeAppliedSchemaError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpgradeAppliedSchemaError::from_response(response))
+        }
     }
 
     /// <p>Upgrades a published schema under a new minor version revision using the current contents of <code>DevelopmentSchemaArn</code>.</p>
-    fn upgrade_published_schema(
+    async fn upgrade_published_schema(
         &self,
         input: UpgradePublishedSchemaRequest,
-    ) -> RusotoFuture<UpgradePublishedSchemaResponse, UpgradePublishedSchemaError> {
+    ) -> Result<UpgradePublishedSchemaResponse, RusotoError<UpgradePublishedSchemaError>> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/upgradepublished";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11257,32 +10567,20 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpgradePublishedSchemaError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpgradePublishedSchemaResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpgradePublishedSchemaError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpgradePublishedSchemaResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpgradePublishedSchemaError>())
-                            .and_then(|response| {
-                                Err(UpgradePublishedSchemaError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpgradePublishedSchemaError::from_response(response))
+        }
     }
 }

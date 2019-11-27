@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
@@ -18316,510 +18317,553 @@ impl Error for UploadPartCopyError {
     }
 }
 /// Trait representing the capabilities of the Amazon S3 API. Amazon S3 clients implement this trait.
+#[async_trait]
 pub trait S3 {
     /// <p>Aborts a multipart upload.</p> <p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>
-    fn abort_multipart_upload(
+    async fn abort_multipart_upload(
         &self,
         input: AbortMultipartUploadRequest,
-    ) -> RusotoFuture<AbortMultipartUploadOutput, AbortMultipartUploadError>;
+    ) -> Result<AbortMultipartUploadOutput, RusotoError<AbortMultipartUploadError>>;
 
     /// <p>Completes a multipart upload by assembling previously uploaded parts.</p>
-    fn complete_multipart_upload(
+    async fn complete_multipart_upload(
         &self,
         input: CompleteMultipartUploadRequest,
-    ) -> RusotoFuture<CompleteMultipartUploadOutput, CompleteMultipartUploadError>;
+    ) -> Result<CompleteMultipartUploadOutput, RusotoError<CompleteMultipartUploadError>>;
 
     /// <p>Creates a copy of an object that is already stored in Amazon S3.</p>
-    fn copy_object(
+    async fn copy_object(
         &self,
         input: CopyObjectRequest,
-    ) -> RusotoFuture<CopyObjectOutput, CopyObjectError>;
+    ) -> Result<CopyObjectOutput, RusotoError<CopyObjectError>>;
 
     /// <p>Creates a new bucket.</p>
-    fn create_bucket(
+    async fn create_bucket(
         &self,
         input: CreateBucketRequest,
-    ) -> RusotoFuture<CreateBucketOutput, CreateBucketError>;
+    ) -> Result<CreateBucketOutput, RusotoError<CreateBucketError>>;
 
     /// <p>Initiates a multipart upload and returns an upload ID.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
-    fn create_multipart_upload(
+    async fn create_multipart_upload(
         &self,
         input: CreateMultipartUploadRequest,
-    ) -> RusotoFuture<CreateMultipartUploadOutput, CreateMultipartUploadError>;
+    ) -> Result<CreateMultipartUploadOutput, RusotoError<CreateMultipartUploadError>>;
 
     /// <p>Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted.</p>
-    fn delete_bucket(&self, input: DeleteBucketRequest) -> RusotoFuture<(), DeleteBucketError>;
+    async fn delete_bucket(
+        &self,
+        input: DeleteBucketRequest,
+    ) -> Result<(), RusotoError<DeleteBucketError>>;
 
     /// <p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p> <p>To use this operation, you must have permissions to perform the s3:PutAnalyticsConfiguration action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. </p>
-    fn delete_bucket_analytics_configuration(
+    async fn delete_bucket_analytics_configuration(
         &self,
         input: DeleteBucketAnalyticsConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteBucketAnalyticsConfigurationError>;
+    ) -> Result<(), RusotoError<DeleteBucketAnalyticsConfigurationError>>;
 
     /// <p>Deletes the CORS configuration information set for the bucket.</p>
-    fn delete_bucket_cors(
+    async fn delete_bucket_cors(
         &self,
         input: DeleteBucketCorsRequest,
-    ) -> RusotoFuture<(), DeleteBucketCorsError>;
+    ) -> Result<(), RusotoError<DeleteBucketCorsError>>;
 
     /// <p>Deletes the server-side encryption configuration from the bucket.</p>
-    fn delete_bucket_encryption(
+    async fn delete_bucket_encryption(
         &self,
         input: DeleteBucketEncryptionRequest,
-    ) -> RusotoFuture<(), DeleteBucketEncryptionError>;
+    ) -> Result<(), RusotoError<DeleteBucketEncryptionError>>;
 
     /// <p>Deletes an inventory configuration (identified by the inventory ID) from the bucket.</p>
-    fn delete_bucket_inventory_configuration(
+    async fn delete_bucket_inventory_configuration(
         &self,
         input: DeleteBucketInventoryConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteBucketInventoryConfigurationError>;
+    ) -> Result<(), RusotoError<DeleteBucketInventoryConfigurationError>>;
 
     /// <p>Deletes the lifecycle configuration from the bucket.</p>
-    fn delete_bucket_lifecycle(
+    async fn delete_bucket_lifecycle(
         &self,
         input: DeleteBucketLifecycleRequest,
-    ) -> RusotoFuture<(), DeleteBucketLifecycleError>;
+    ) -> Result<(), RusotoError<DeleteBucketLifecycleError>>;
 
     /// <p>Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
-    fn delete_bucket_metrics_configuration(
+    async fn delete_bucket_metrics_configuration(
         &self,
         input: DeleteBucketMetricsConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteBucketMetricsConfigurationError>;
+    ) -> Result<(), RusotoError<DeleteBucketMetricsConfigurationError>>;
 
     /// <p>Deletes the policy from the bucket.</p>
-    fn delete_bucket_policy(
+    async fn delete_bucket_policy(
         &self,
         input: DeleteBucketPolicyRequest,
-    ) -> RusotoFuture<(), DeleteBucketPolicyError>;
+    ) -> Result<(), RusotoError<DeleteBucketPolicyError>>;
 
     /// <p> Deletes the replication configuration from the bucket. For information about replication configuration, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
-    fn delete_bucket_replication(
+    async fn delete_bucket_replication(
         &self,
         input: DeleteBucketReplicationRequest,
-    ) -> RusotoFuture<(), DeleteBucketReplicationError>;
+    ) -> Result<(), RusotoError<DeleteBucketReplicationError>>;
 
     /// <p>Deletes the tags from the bucket.</p>
-    fn delete_bucket_tagging(
+    async fn delete_bucket_tagging(
         &self,
         input: DeleteBucketTaggingRequest,
-    ) -> RusotoFuture<(), DeleteBucketTaggingError>;
+    ) -> Result<(), RusotoError<DeleteBucketTaggingError>>;
 
     /// <p>This operation removes the website configuration from the bucket.</p>
-    fn delete_bucket_website(
+    async fn delete_bucket_website(
         &self,
         input: DeleteBucketWebsiteRequest,
-    ) -> RusotoFuture<(), DeleteBucketWebsiteError>;
+    ) -> Result<(), RusotoError<DeleteBucketWebsiteError>>;
 
     /// <p>Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects.</p>
-    fn delete_object(
+    async fn delete_object(
         &self,
         input: DeleteObjectRequest,
-    ) -> RusotoFuture<DeleteObjectOutput, DeleteObjectError>;
+    ) -> Result<DeleteObjectOutput, RusotoError<DeleteObjectError>>;
 
     /// <p>Removes the tag-set from an existing object.</p>
-    fn delete_object_tagging(
+    async fn delete_object_tagging(
         &self,
         input: DeleteObjectTaggingRequest,
-    ) -> RusotoFuture<DeleteObjectTaggingOutput, DeleteObjectTaggingError>;
+    ) -> Result<DeleteObjectTaggingOutput, RusotoError<DeleteObjectTaggingError>>;
 
     /// <p>This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys.</p>
-    fn delete_objects(
+    async fn delete_objects(
         &self,
         input: DeleteObjectsRequest,
-    ) -> RusotoFuture<DeleteObjectsOutput, DeleteObjectsError>;
+    ) -> Result<DeleteObjectsOutput, RusotoError<DeleteObjectsError>>;
 
     /// <p>Removes the <code>PublicAccessBlock</code> configuration from an Amazon S3 bucket.</p>
-    fn delete_public_access_block(
+    async fn delete_public_access_block(
         &self,
         input: DeletePublicAccessBlockRequest,
-    ) -> RusotoFuture<(), DeletePublicAccessBlockError>;
+    ) -> Result<(), RusotoError<DeletePublicAccessBlockError>>;
 
     /// <p>Returns the accelerate configuration of a bucket.</p>
-    fn get_bucket_accelerate_configuration(
+    async fn get_bucket_accelerate_configuration(
         &self,
         input: GetBucketAccelerateConfigurationRequest,
-    ) -> RusotoFuture<GetBucketAccelerateConfigurationOutput, GetBucketAccelerateConfigurationError>;
+    ) -> Result<
+        GetBucketAccelerateConfigurationOutput,
+        RusotoError<GetBucketAccelerateConfigurationError>,
+    >;
 
     /// <p>Gets the access control policy for the bucket.</p>
-    fn get_bucket_acl(
+    async fn get_bucket_acl(
         &self,
         input: GetBucketAclRequest,
-    ) -> RusotoFuture<GetBucketAclOutput, GetBucketAclError>;
+    ) -> Result<GetBucketAclOutput, RusotoError<GetBucketAclError>>;
 
     /// <p>Gets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
-    fn get_bucket_analytics_configuration(
+    async fn get_bucket_analytics_configuration(
         &self,
         input: GetBucketAnalyticsConfigurationRequest,
-    ) -> RusotoFuture<GetBucketAnalyticsConfigurationOutput, GetBucketAnalyticsConfigurationError>;
+    ) -> Result<
+        GetBucketAnalyticsConfigurationOutput,
+        RusotoError<GetBucketAnalyticsConfigurationError>,
+    >;
 
     /// <p>Returns the CORS configuration for the bucket.</p>
-    fn get_bucket_cors(
+    async fn get_bucket_cors(
         &self,
         input: GetBucketCorsRequest,
-    ) -> RusotoFuture<GetBucketCorsOutput, GetBucketCorsError>;
+    ) -> Result<GetBucketCorsOutput, RusotoError<GetBucketCorsError>>;
 
     /// <p>Returns the server-side encryption configuration of a bucket.</p>
-    fn get_bucket_encryption(
+    async fn get_bucket_encryption(
         &self,
         input: GetBucketEncryptionRequest,
-    ) -> RusotoFuture<GetBucketEncryptionOutput, GetBucketEncryptionError>;
+    ) -> Result<GetBucketEncryptionOutput, RusotoError<GetBucketEncryptionError>>;
 
     /// <p>Returns an inventory configuration (identified by the inventory ID) from the bucket.</p>
-    fn get_bucket_inventory_configuration(
+    async fn get_bucket_inventory_configuration(
         &self,
         input: GetBucketInventoryConfigurationRequest,
-    ) -> RusotoFuture<GetBucketInventoryConfigurationOutput, GetBucketInventoryConfigurationError>;
+    ) -> Result<
+        GetBucketInventoryConfigurationOutput,
+        RusotoError<GetBucketInventoryConfigurationError>,
+    >;
 
     /// <p> No longer used, see the GetBucketLifecycleConfiguration operation.</p>
-    fn get_bucket_lifecycle(
+    async fn get_bucket_lifecycle(
         &self,
         input: GetBucketLifecycleRequest,
-    ) -> RusotoFuture<GetBucketLifecycleOutput, GetBucketLifecycleError>;
+    ) -> Result<GetBucketLifecycleOutput, RusotoError<GetBucketLifecycleError>>;
 
     /// <p>Returns the lifecycle configuration information set on the bucket.</p>
-    fn get_bucket_lifecycle_configuration(
+    async fn get_bucket_lifecycle_configuration(
         &self,
         input: GetBucketLifecycleConfigurationRequest,
-    ) -> RusotoFuture<GetBucketLifecycleConfigurationOutput, GetBucketLifecycleConfigurationError>;
+    ) -> Result<
+        GetBucketLifecycleConfigurationOutput,
+        RusotoError<GetBucketLifecycleConfigurationError>,
+    >;
 
     /// <p>Returns the region the bucket resides in.</p>
-    fn get_bucket_location(
+    async fn get_bucket_location(
         &self,
         input: GetBucketLocationRequest,
-    ) -> RusotoFuture<GetBucketLocationOutput, GetBucketLocationError>;
+    ) -> Result<GetBucketLocationOutput, RusotoError<GetBucketLocationError>>;
 
     /// <p>Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner.</p>
-    fn get_bucket_logging(
+    async fn get_bucket_logging(
         &self,
         input: GetBucketLoggingRequest,
-    ) -> RusotoFuture<GetBucketLoggingOutput, GetBucketLoggingError>;
+    ) -> Result<GetBucketLoggingOutput, RusotoError<GetBucketLoggingError>>;
 
     /// <p>Gets a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
-    fn get_bucket_metrics_configuration(
+    async fn get_bucket_metrics_configuration(
         &self,
         input: GetBucketMetricsConfigurationRequest,
-    ) -> RusotoFuture<GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationError>;
+    ) -> Result<GetBucketMetricsConfigurationOutput, RusotoError<GetBucketMetricsConfigurationError>>;
 
     /// <p> No longer used, see the GetBucketNotificationConfiguration operation.</p>
-    fn get_bucket_notification(
+    async fn get_bucket_notification(
         &self,
         input: GetBucketNotificationConfigurationRequest,
-    ) -> RusotoFuture<NotificationConfigurationDeprecated, GetBucketNotificationError>;
+    ) -> Result<NotificationConfigurationDeprecated, RusotoError<GetBucketNotificationError>>;
 
     /// <p>Returns the notification configuration of a bucket.</p>
-    fn get_bucket_notification_configuration(
+    async fn get_bucket_notification_configuration(
         &self,
         input: GetBucketNotificationConfigurationRequest,
-    ) -> RusotoFuture<NotificationConfiguration, GetBucketNotificationConfigurationError>;
+    ) -> Result<NotificationConfiguration, RusotoError<GetBucketNotificationConfigurationError>>;
 
     /// <p>Returns the policy of a specified bucket.</p>
-    fn get_bucket_policy(
+    async fn get_bucket_policy(
         &self,
         input: GetBucketPolicyRequest,
-    ) -> RusotoFuture<GetBucketPolicyOutput, GetBucketPolicyError>;
+    ) -> Result<GetBucketPolicyOutput, RusotoError<GetBucketPolicyError>>;
 
     /// <p>Retrieves the policy status for an Amazon S3 bucket, indicating whether the bucket is public.</p>
-    fn get_bucket_policy_status(
+    async fn get_bucket_policy_status(
         &self,
         input: GetBucketPolicyStatusRequest,
-    ) -> RusotoFuture<GetBucketPolicyStatusOutput, GetBucketPolicyStatusError>;
+    ) -> Result<GetBucketPolicyStatusOutput, RusotoError<GetBucketPolicyStatusError>>;
 
     /// <p><p>Returns the replication configuration of a bucket.</p> <note> <p> It can take a while to propagate the put or delete a replication configuration to all Amazon S3 systems. Therefore, a get request soon after put or delete can return a wrong result. </p> </note></p>
-    fn get_bucket_replication(
+    async fn get_bucket_replication(
         &self,
         input: GetBucketReplicationRequest,
-    ) -> RusotoFuture<GetBucketReplicationOutput, GetBucketReplicationError>;
+    ) -> Result<GetBucketReplicationOutput, RusotoError<GetBucketReplicationError>>;
 
     /// <p>Returns the request payment configuration of a bucket.</p>
-    fn get_bucket_request_payment(
+    async fn get_bucket_request_payment(
         &self,
         input: GetBucketRequestPaymentRequest,
-    ) -> RusotoFuture<GetBucketRequestPaymentOutput, GetBucketRequestPaymentError>;
+    ) -> Result<GetBucketRequestPaymentOutput, RusotoError<GetBucketRequestPaymentError>>;
 
     /// <p>Returns the tag set associated with the bucket.</p>
-    fn get_bucket_tagging(
+    async fn get_bucket_tagging(
         &self,
         input: GetBucketTaggingRequest,
-    ) -> RusotoFuture<GetBucketTaggingOutput, GetBucketTaggingError>;
+    ) -> Result<GetBucketTaggingOutput, RusotoError<GetBucketTaggingError>>;
 
     /// <p>Returns the versioning state of a bucket.</p>
-    fn get_bucket_versioning(
+    async fn get_bucket_versioning(
         &self,
         input: GetBucketVersioningRequest,
-    ) -> RusotoFuture<GetBucketVersioningOutput, GetBucketVersioningError>;
+    ) -> Result<GetBucketVersioningOutput, RusotoError<GetBucketVersioningError>>;
 
     /// <p>Returns the website configuration for a bucket.</p>
-    fn get_bucket_website(
+    async fn get_bucket_website(
         &self,
         input: GetBucketWebsiteRequest,
-    ) -> RusotoFuture<GetBucketWebsiteOutput, GetBucketWebsiteError>;
+    ) -> Result<GetBucketWebsiteOutput, RusotoError<GetBucketWebsiteError>>;
 
     /// <p>Retrieves objects from Amazon S3.</p>
-    fn get_object(&self, input: GetObjectRequest) -> RusotoFuture<GetObjectOutput, GetObjectError>;
+    async fn get_object(
+        &self,
+        input: GetObjectRequest,
+    ) -> Result<GetObjectOutput, RusotoError<GetObjectError>>;
 
     /// <p>Returns the access control list (ACL) of an object.</p>
-    fn get_object_acl(
+    async fn get_object_acl(
         &self,
         input: GetObjectAclRequest,
-    ) -> RusotoFuture<GetObjectAclOutput, GetObjectAclError>;
+    ) -> Result<GetObjectAclOutput, RusotoError<GetObjectAclError>>;
 
     /// <p>Gets an object's current Legal Hold status.</p>
-    fn get_object_legal_hold(
+    async fn get_object_legal_hold(
         &self,
         input: GetObjectLegalHoldRequest,
-    ) -> RusotoFuture<GetObjectLegalHoldOutput, GetObjectLegalHoldError>;
+    ) -> Result<GetObjectLegalHoldOutput, RusotoError<GetObjectLegalHoldError>>;
 
     /// <p>Gets the object lock configuration for a bucket. The rule specified in the object lock configuration will be applied by default to every new object placed in the specified bucket.</p>
-    fn get_object_lock_configuration(
+    async fn get_object_lock_configuration(
         &self,
         input: GetObjectLockConfigurationRequest,
-    ) -> RusotoFuture<GetObjectLockConfigurationOutput, GetObjectLockConfigurationError>;
+    ) -> Result<GetObjectLockConfigurationOutput, RusotoError<GetObjectLockConfigurationError>>;
 
     /// <p>Retrieves an object's retention settings.</p>
-    fn get_object_retention(
+    async fn get_object_retention(
         &self,
         input: GetObjectRetentionRequest,
-    ) -> RusotoFuture<GetObjectRetentionOutput, GetObjectRetentionError>;
+    ) -> Result<GetObjectRetentionOutput, RusotoError<GetObjectRetentionError>>;
 
     /// <p>Returns the tag-set of an object.</p>
-    fn get_object_tagging(
+    async fn get_object_tagging(
         &self,
         input: GetObjectTaggingRequest,
-    ) -> RusotoFuture<GetObjectTaggingOutput, GetObjectTaggingError>;
+    ) -> Result<GetObjectTaggingOutput, RusotoError<GetObjectTaggingError>>;
 
     /// <p>Return torrent files from a bucket.</p>
-    fn get_object_torrent(
+    async fn get_object_torrent(
         &self,
         input: GetObjectTorrentRequest,
-    ) -> RusotoFuture<GetObjectTorrentOutput, GetObjectTorrentError>;
+    ) -> Result<GetObjectTorrentOutput, RusotoError<GetObjectTorrentError>>;
 
     /// <p>Retrieves the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>
-    fn get_public_access_block(
+    async fn get_public_access_block(
         &self,
         input: GetPublicAccessBlockRequest,
-    ) -> RusotoFuture<GetPublicAccessBlockOutput, GetPublicAccessBlockError>;
+    ) -> Result<GetPublicAccessBlockOutput, RusotoError<GetPublicAccessBlockError>>;
 
     /// <p>This operation is useful to determine if a bucket exists and you have permission to access it.</p>
-    fn head_bucket(&self, input: HeadBucketRequest) -> RusotoFuture<(), HeadBucketError>;
+    async fn head_bucket(
+        &self,
+        input: HeadBucketRequest,
+    ) -> Result<(), RusotoError<HeadBucketError>>;
 
     /// <p>The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object.</p>
-    fn head_object(
+    async fn head_object(
         &self,
         input: HeadObjectRequest,
-    ) -> RusotoFuture<HeadObjectOutput, HeadObjectError>;
+    ) -> Result<HeadObjectOutput, RusotoError<HeadObjectError>>;
 
     /// <p>Lists the analytics configurations for the bucket.</p>
-    fn list_bucket_analytics_configurations(
+    async fn list_bucket_analytics_configurations(
         &self,
         input: ListBucketAnalyticsConfigurationsRequest,
-    ) -> RusotoFuture<ListBucketAnalyticsConfigurationsOutput, ListBucketAnalyticsConfigurationsError>;
+    ) -> Result<
+        ListBucketAnalyticsConfigurationsOutput,
+        RusotoError<ListBucketAnalyticsConfigurationsError>,
+    >;
 
     /// <p>Returns a list of inventory configurations for the bucket.</p>
-    fn list_bucket_inventory_configurations(
+    async fn list_bucket_inventory_configurations(
         &self,
         input: ListBucketInventoryConfigurationsRequest,
-    ) -> RusotoFuture<ListBucketInventoryConfigurationsOutput, ListBucketInventoryConfigurationsError>;
+    ) -> Result<
+        ListBucketInventoryConfigurationsOutput,
+        RusotoError<ListBucketInventoryConfigurationsError>,
+    >;
 
     /// <p>Lists the metrics configurations for the bucket.</p>
-    fn list_bucket_metrics_configurations(
+    async fn list_bucket_metrics_configurations(
         &self,
         input: ListBucketMetricsConfigurationsRequest,
-    ) -> RusotoFuture<ListBucketMetricsConfigurationsOutput, ListBucketMetricsConfigurationsError>;
+    ) -> Result<
+        ListBucketMetricsConfigurationsOutput,
+        RusotoError<ListBucketMetricsConfigurationsError>,
+    >;
 
     /// <p>Returns a list of all buckets owned by the authenticated sender of the request.</p>
-    fn list_buckets(&self) -> RusotoFuture<ListBucketsOutput, ListBucketsError>;
+    async fn list_buckets(&self) -> Result<ListBucketsOutput, RusotoError<ListBucketsError>>;
 
     /// <p>This operation lists in-progress multipart uploads.</p>
-    fn list_multipart_uploads(
+    async fn list_multipart_uploads(
         &self,
         input: ListMultipartUploadsRequest,
-    ) -> RusotoFuture<ListMultipartUploadsOutput, ListMultipartUploadsError>;
+    ) -> Result<ListMultipartUploadsOutput, RusotoError<ListMultipartUploadsError>>;
 
     /// <p>Returns metadata about all of the versions of objects in a bucket.</p>
-    fn list_object_versions(
+    async fn list_object_versions(
         &self,
         input: ListObjectVersionsRequest,
-    ) -> RusotoFuture<ListObjectVersionsOutput, ListObjectVersionsError>;
+    ) -> Result<ListObjectVersionsOutput, RusotoError<ListObjectVersionsError>>;
 
     /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket.</p>
-    fn list_objects(
+    async fn list_objects(
         &self,
         input: ListObjectsRequest,
-    ) -> RusotoFuture<ListObjectsOutput, ListObjectsError>;
+    ) -> Result<ListObjectsOutput, RusotoError<ListObjectsError>>;
 
     /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development.</p>
-    fn list_objects_v2(
+    async fn list_objects_v2(
         &self,
         input: ListObjectsV2Request,
-    ) -> RusotoFuture<ListObjectsV2Output, ListObjectsV2Error>;
+    ) -> Result<ListObjectsV2Output, RusotoError<ListObjectsV2Error>>;
 
     /// <p>Lists the parts that have been uploaded for a specific multipart upload.</p>
-    fn list_parts(&self, input: ListPartsRequest) -> RusotoFuture<ListPartsOutput, ListPartsError>;
+    async fn list_parts(
+        &self,
+        input: ListPartsRequest,
+    ) -> Result<ListPartsOutput, RusotoError<ListPartsError>>;
 
     /// <p>Sets the accelerate configuration of an existing bucket.</p>
-    fn put_bucket_accelerate_configuration(
+    async fn put_bucket_accelerate_configuration(
         &self,
         input: PutBucketAccelerateConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketAccelerateConfigurationError>;
+    ) -> Result<(), RusotoError<PutBucketAccelerateConfigurationError>>;
 
     /// <p>Sets the permissions on a bucket using access control lists (ACL).</p>
-    fn put_bucket_acl(&self, input: PutBucketAclRequest) -> RusotoFuture<(), PutBucketAclError>;
+    async fn put_bucket_acl(
+        &self,
+        input: PutBucketAclRequest,
+    ) -> Result<(), RusotoError<PutBucketAclError>>;
 
     /// <p>Sets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
-    fn put_bucket_analytics_configuration(
+    async fn put_bucket_analytics_configuration(
         &self,
         input: PutBucketAnalyticsConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketAnalyticsConfigurationError>;
+    ) -> Result<(), RusotoError<PutBucketAnalyticsConfigurationError>>;
 
     /// <p>Sets the CORS configuration for a bucket.</p>
-    fn put_bucket_cors(&self, input: PutBucketCorsRequest) -> RusotoFuture<(), PutBucketCorsError>;
+    async fn put_bucket_cors(
+        &self,
+        input: PutBucketCorsRequest,
+    ) -> Result<(), RusotoError<PutBucketCorsError>>;
 
     /// <p>Creates a new server-side encryption configuration (or replaces an existing one, if present).</p>
-    fn put_bucket_encryption(
+    async fn put_bucket_encryption(
         &self,
         input: PutBucketEncryptionRequest,
-    ) -> RusotoFuture<(), PutBucketEncryptionError>;
+    ) -> Result<(), RusotoError<PutBucketEncryptionError>>;
 
     /// <p>Adds an inventory configuration (identified by the inventory ID) from the bucket.</p>
-    fn put_bucket_inventory_configuration(
+    async fn put_bucket_inventory_configuration(
         &self,
         input: PutBucketInventoryConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketInventoryConfigurationError>;
+    ) -> Result<(), RusotoError<PutBucketInventoryConfigurationError>>;
 
     /// <p> No longer used, see the PutBucketLifecycleConfiguration operation.</p>
-    fn put_bucket_lifecycle(
+    async fn put_bucket_lifecycle(
         &self,
         input: PutBucketLifecycleRequest,
-    ) -> RusotoFuture<(), PutBucketLifecycleError>;
+    ) -> Result<(), RusotoError<PutBucketLifecycleError>>;
 
     /// <p>Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it.</p>
-    fn put_bucket_lifecycle_configuration(
+    async fn put_bucket_lifecycle_configuration(
         &self,
         input: PutBucketLifecycleConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketLifecycleConfigurationError>;
+    ) -> Result<(), RusotoError<PutBucketLifecycleConfigurationError>>;
 
     /// <p>Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner.</p>
-    fn put_bucket_logging(
+    async fn put_bucket_logging(
         &self,
         input: PutBucketLoggingRequest,
-    ) -> RusotoFuture<(), PutBucketLoggingError>;
+    ) -> Result<(), RusotoError<PutBucketLoggingError>>;
 
     /// <p>Sets a metrics configuration (specified by the metrics configuration ID) for the bucket.</p>
-    fn put_bucket_metrics_configuration(
+    async fn put_bucket_metrics_configuration(
         &self,
         input: PutBucketMetricsConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketMetricsConfigurationError>;
+    ) -> Result<(), RusotoError<PutBucketMetricsConfigurationError>>;
 
     /// <p> No longer used, see the PutBucketNotificationConfiguration operation.</p>
-    fn put_bucket_notification(
+    async fn put_bucket_notification(
         &self,
         input: PutBucketNotificationRequest,
-    ) -> RusotoFuture<(), PutBucketNotificationError>;
+    ) -> Result<(), RusotoError<PutBucketNotificationError>>;
 
     /// <p>Enables notifications of specified events for a bucket.</p>
-    fn put_bucket_notification_configuration(
+    async fn put_bucket_notification_configuration(
         &self,
         input: PutBucketNotificationConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketNotificationConfigurationError>;
+    ) -> Result<(), RusotoError<PutBucketNotificationConfigurationError>>;
 
     /// <p>Applies an Amazon S3 bucket policy to an Amazon S3 bucket.</p>
-    fn put_bucket_policy(
+    async fn put_bucket_policy(
         &self,
         input: PutBucketPolicyRequest,
-    ) -> RusotoFuture<(), PutBucketPolicyError>;
+    ) -> Result<(), RusotoError<PutBucketPolicyError>>;
 
     /// <p> Creates a replication configuration or replaces an existing one. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
-    fn put_bucket_replication(
+    async fn put_bucket_replication(
         &self,
         input: PutBucketReplicationRequest,
-    ) -> RusotoFuture<(), PutBucketReplicationError>;
+    ) -> Result<(), RusotoError<PutBucketReplicationError>>;
 
     /// <p>Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html</p>
-    fn put_bucket_request_payment(
+    async fn put_bucket_request_payment(
         &self,
         input: PutBucketRequestPaymentRequest,
-    ) -> RusotoFuture<(), PutBucketRequestPaymentError>;
+    ) -> Result<(), RusotoError<PutBucketRequestPaymentError>>;
 
     /// <p>Sets the tags for a bucket.</p>
-    fn put_bucket_tagging(
+    async fn put_bucket_tagging(
         &self,
         input: PutBucketTaggingRequest,
-    ) -> RusotoFuture<(), PutBucketTaggingError>;
+    ) -> Result<(), RusotoError<PutBucketTaggingError>>;
 
     /// <p>Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner.</p>
-    fn put_bucket_versioning(
+    async fn put_bucket_versioning(
         &self,
         input: PutBucketVersioningRequest,
-    ) -> RusotoFuture<(), PutBucketVersioningError>;
+    ) -> Result<(), RusotoError<PutBucketVersioningError>>;
 
     /// <p>Set the website configuration for a bucket.</p>
-    fn put_bucket_website(
+    async fn put_bucket_website(
         &self,
         input: PutBucketWebsiteRequest,
-    ) -> RusotoFuture<(), PutBucketWebsiteError>;
+    ) -> Result<(), RusotoError<PutBucketWebsiteError>>;
 
     /// <p>Adds an object to a bucket.</p>
-    fn put_object(&self, input: PutObjectRequest) -> RusotoFuture<PutObjectOutput, PutObjectError>;
+    async fn put_object(
+        &self,
+        input: PutObjectRequest,
+    ) -> Result<PutObjectOutput, RusotoError<PutObjectError>>;
 
     /// <p>uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket</p>
-    fn put_object_acl(
+    async fn put_object_acl(
         &self,
         input: PutObjectAclRequest,
-    ) -> RusotoFuture<PutObjectAclOutput, PutObjectAclError>;
+    ) -> Result<PutObjectAclOutput, RusotoError<PutObjectAclError>>;
 
     /// <p>Applies a Legal Hold configuration to the specified object.</p>
-    fn put_object_legal_hold(
+    async fn put_object_legal_hold(
         &self,
         input: PutObjectLegalHoldRequest,
-    ) -> RusotoFuture<PutObjectLegalHoldOutput, PutObjectLegalHoldError>;
+    ) -> Result<PutObjectLegalHoldOutput, RusotoError<PutObjectLegalHoldError>>;
 
     /// <p>Places an object lock configuration on the specified bucket. The rule specified in the object lock configuration will be applied by default to every new object placed in the specified bucket.</p>
-    fn put_object_lock_configuration(
+    async fn put_object_lock_configuration(
         &self,
         input: PutObjectLockConfigurationRequest,
-    ) -> RusotoFuture<PutObjectLockConfigurationOutput, PutObjectLockConfigurationError>;
+    ) -> Result<PutObjectLockConfigurationOutput, RusotoError<PutObjectLockConfigurationError>>;
 
     /// <p>Places an Object Retention configuration on an object.</p>
-    fn put_object_retention(
+    async fn put_object_retention(
         &self,
         input: PutObjectRetentionRequest,
-    ) -> RusotoFuture<PutObjectRetentionOutput, PutObjectRetentionError>;
+    ) -> Result<PutObjectRetentionOutput, RusotoError<PutObjectRetentionError>>;
 
     /// <p>Sets the supplied tag-set to an object that already exists in a bucket</p>
-    fn put_object_tagging(
+    async fn put_object_tagging(
         &self,
         input: PutObjectTaggingRequest,
-    ) -> RusotoFuture<PutObjectTaggingOutput, PutObjectTaggingError>;
+    ) -> Result<PutObjectTaggingOutput, RusotoError<PutObjectTaggingError>>;
 
     /// <p>Creates or modifies the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>
-    fn put_public_access_block(
+    async fn put_public_access_block(
         &self,
         input: PutPublicAccessBlockRequest,
-    ) -> RusotoFuture<(), PutPublicAccessBlockError>;
+    ) -> Result<(), RusotoError<PutPublicAccessBlockError>>;
 
     /// <p>Restores an archived copy of an object back into Amazon S3</p>
-    fn restore_object(
+    async fn restore_object(
         &self,
         input: RestoreObjectRequest,
-    ) -> RusotoFuture<RestoreObjectOutput, RestoreObjectError>;
+    ) -> Result<RestoreObjectOutput, RusotoError<RestoreObjectError>>;
 
     /// <p>This operation filters the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response.</p>
-    fn select_object_content(
+    async fn select_object_content(
         &self,
         input: SelectObjectContentRequest,
-    ) -> RusotoFuture<SelectObjectContentOutput, SelectObjectContentError>;
+    ) -> Result<SelectObjectContentOutput, RusotoError<SelectObjectContentError>>;
 
     /// <p>Uploads a part in a multipart upload.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
-    fn upload_part(
+    async fn upload_part(
         &self,
         input: UploadPartRequest,
-    ) -> RusotoFuture<UploadPartOutput, UploadPartError>;
+    ) -> Result<UploadPartOutput, RusotoError<UploadPartError>>;
 
     /// <p>Uploads a part by copying data from an existing object as data source.</p>
-    fn upload_part_copy(
+    async fn upload_part_copy(
         &self,
         input: UploadPartCopyRequest,
-    ) -> RusotoFuture<UploadPartCopyOutput, UploadPartCopyError>;
+    ) -> Result<UploadPartCopyOutput, RusotoError<UploadPartCopyError>>;
 }
 /// A client for the Amazon S3 API.
 #[derive(Clone)]
@@ -18855,13 +18899,14 @@ impl S3Client {
     }
 }
 
+#[async_trait]
 impl S3 for S3Client {
     /// <p>Aborts a multipart upload.</p> <p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>
     #[allow(unused_variables, warnings)]
-    fn abort_multipart_upload(
+    async fn abort_multipart_upload(
         &self,
         input: AbortMultipartUploadRequest,
-    ) -> RusotoFuture<AbortMultipartUploadOutput, AbortMultipartUploadError> {
+    ) -> Result<AbortMultipartUploadOutput, RusotoError<AbortMultipartUploadError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -18873,50 +18918,45 @@ impl S3 for S3Client {
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(AbortMultipartUploadError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AbortMultipartUploadError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(AbortMultipartUploadOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = AbortMultipartUploadOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = AbortMultipartUploadOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                AbortMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Completes a multipart upload by assembling previously uploaded parts.</p>
     #[allow(unused_variables, warnings)]
-    fn complete_multipart_upload(
+    async fn complete_multipart_upload(
         &self,
         input: CompleteMultipartUploadRequest,
-    ) -> RusotoFuture<CompleteMultipartUploadOutput, CompleteMultipartUploadError> {
+    ) -> Result<CompleteMultipartUploadOutput, RusotoError<CompleteMultipartUploadError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
@@ -18939,71 +18979,66 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(CompleteMultipartUploadError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CompleteMultipartUploadError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CompleteMultipartUploadOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = CompleteMultipartUploadOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(expiration) = response.headers.get("x-amz-expiration") {
-                        let value = expiration.to_owned();
-                        result.expiration = Some(value)
-                    };
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    };
-                    if let Some(ssekms_key_id) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id")
-                    {
-                        let value = ssekms_key_id.to_owned();
-                        result.ssekms_key_id = Some(value)
-                    };
-                    if let Some(server_side_encryption) =
-                        response.headers.get("x-amz-server-side-encryption")
-                    {
-                        let value = server_side_encryption.to_owned();
-                        result.server_side_encryption = Some(value)
-                    };
-                    if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                        let value = version_id.to_owned();
-                        result.version_id = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CompleteMultipartUploadOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CompleteMultipartUploadOutputDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(expiration) = response.headers.get("x-amz-expiration") {
+            let value = expiration.to_owned();
+            result.expiration = Some(value)
+        };
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        };
+        if let Some(ssekms_key_id) = response
+            .headers
+            .get("x-amz-server-side-encryption-aws-kms-key-id")
+        {
+            let value = ssekms_key_id.to_owned();
+            result.ssekms_key_id = Some(value)
+        };
+        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
+            let value = server_side_encryption.to_owned();
+            result.server_side_encryption = Some(value)
+        };
+        if let Some(version_id) = response.headers.get("x-amz-version-id") {
+            let value = version_id.to_owned();
+            result.version_id = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a copy of an object that is already stored in Amazon S3.</p>
     #[allow(unused_variables, warnings)]
-    fn copy_object(
+    async fn copy_object(
         &self,
         input: CopyObjectRequest,
-    ) -> RusotoFuture<CopyObjectOutput, CopyObjectError> {
+    ) -> Result<CopyObjectOutput, RusotoError<CopyObjectError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -19191,89 +19226,81 @@ impl S3 for S3Client {
             );
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(CopyObjectError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CopyObjectError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CopyObjectOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result =
-                            CopyObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack);
-                    }
-                    if let Some(copy_source_version_id) =
-                        response.headers.get("x-amz-copy-source-version-id")
-                    {
-                        let value = copy_source_version_id.to_owned();
-                        result.copy_source_version_id = Some(value)
-                    };
-                    if let Some(expiration) = response.headers.get("x-amz-expiration") {
-                        let value = expiration.to_owned();
-                        result.expiration = Some(value)
-                    };
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    };
-                    if let Some(sse_customer_algorithm) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm")
-                    {
-                        let value = sse_customer_algorithm.to_owned();
-                        result.sse_customer_algorithm = Some(value)
-                    };
-                    if let Some(sse_customer_key_md5) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5")
-                    {
-                        let value = sse_customer_key_md5.to_owned();
-                        result.sse_customer_key_md5 = Some(value)
-                    };
-                    if let Some(ssekms_key_id) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id")
-                    {
-                        let value = ssekms_key_id.to_owned();
-                        result.ssekms_key_id = Some(value)
-                    };
-                    if let Some(server_side_encryption) =
-                        response.headers.get("x-amz-server-side-encryption")
-                    {
-                        let value = server_side_encryption.to_owned();
-                        result.server_side_encryption = Some(value)
-                    };
-                    if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                        let value = version_id.to_owned();
-                        result.version_id = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CopyObjectOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CopyObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(copy_source_version_id) = response.headers.get("x-amz-copy-source-version-id") {
+            let value = copy_source_version_id.to_owned();
+            result.copy_source_version_id = Some(value)
+        };
+        if let Some(expiration) = response.headers.get("x-amz-expiration") {
+            let value = expiration.to_owned();
+            result.expiration = Some(value)
+        };
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        };
+        if let Some(sse_customer_algorithm) = response
+            .headers
+            .get("x-amz-server-side-encryption-customer-algorithm")
+        {
+            let value = sse_customer_algorithm.to_owned();
+            result.sse_customer_algorithm = Some(value)
+        };
+        if let Some(sse_customer_key_md5) = response
+            .headers
+            .get("x-amz-server-side-encryption-customer-key-MD5")
+        {
+            let value = sse_customer_key_md5.to_owned();
+            result.sse_customer_key_md5 = Some(value)
+        };
+        if let Some(ssekms_key_id) = response
+            .headers
+            .get("x-amz-server-side-encryption-aws-kms-key-id")
+        {
+            let value = ssekms_key_id.to_owned();
+            result.ssekms_key_id = Some(value)
+        };
+        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
+            let value = server_side_encryption.to_owned();
+            result.server_side_encryption = Some(value)
+        };
+        if let Some(version_id) = response.headers.get("x-amz-version-id") {
+            let value = version_id.to_owned();
+            result.version_id = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a new bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn create_bucket(
+    async fn create_bucket(
         &self,
         input: CreateBucketRequest,
-    ) -> RusotoFuture<CreateBucketOutput, CreateBucketError> {
+    ) -> Result<CreateBucketOutput, RusotoError<CreateBucketError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -19321,50 +19348,44 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(CreateBucketError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateBucketError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateBucketOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = CreateBucketOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(location) = response.headers.get("Location") {
-                        let value = location.to_owned();
-                        result.location = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateBucketOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = CreateBucketOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(location) = response.headers.get("Location") {
+            let value = location.to_owned();
+            result.location = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Initiates a multipart upload and returns an upload ID.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
     #[allow(unused_variables, warnings)]
-    fn create_multipart_upload(
+    async fn create_multipart_upload(
         &self,
         input: CreateMultipartUploadRequest,
-    ) -> RusotoFuture<CreateMultipartUploadOutput, CreateMultipartUploadError> {
+    ) -> Result<CreateMultipartUploadOutput, RusotoError<CreateMultipartUploadError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
@@ -19495,104 +19516,101 @@ impl S3 for S3Client {
         params.put_key("uploads");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(CreateMultipartUploadError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateMultipartUploadError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateMultipartUploadOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = CreateMultipartUploadOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
-                        let value = abort_date.to_owned();
-                        result.abort_date = Some(value)
-                    };
-                    if let Some(abort_rule_id) = response.headers.get("x-amz-abort-rule-id") {
-                        let value = abort_rule_id.to_owned();
-                        result.abort_rule_id = Some(value)
-                    };
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    };
-                    if let Some(sse_customer_algorithm) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm")
-                    {
-                        let value = sse_customer_algorithm.to_owned();
-                        result.sse_customer_algorithm = Some(value)
-                    };
-                    if let Some(sse_customer_key_md5) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5")
-                    {
-                        let value = sse_customer_key_md5.to_owned();
-                        result.sse_customer_key_md5 = Some(value)
-                    };
-                    if let Some(ssekms_key_id) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id")
-                    {
-                        let value = ssekms_key_id.to_owned();
-                        result.ssekms_key_id = Some(value)
-                    };
-                    if let Some(server_side_encryption) =
-                        response.headers.get("x-amz-server-side-encryption")
-                    {
-                        let value = server_side_encryption.to_owned();
-                        result.server_side_encryption = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateMultipartUploadOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                CreateMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
+            let value = abort_date.to_owned();
+            result.abort_date = Some(value)
+        };
+        if let Some(abort_rule_id) = response.headers.get("x-amz-abort-rule-id") {
+            let value = abort_rule_id.to_owned();
+            result.abort_rule_id = Some(value)
+        };
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        };
+        if let Some(sse_customer_algorithm) = response
+            .headers
+            .get("x-amz-server-side-encryption-customer-algorithm")
+        {
+            let value = sse_customer_algorithm.to_owned();
+            result.sse_customer_algorithm = Some(value)
+        };
+        if let Some(sse_customer_key_md5) = response
+            .headers
+            .get("x-amz-server-side-encryption-customer-key-MD5")
+        {
+            let value = sse_customer_key_md5.to_owned();
+            result.sse_customer_key_md5 = Some(value)
+        };
+        if let Some(ssekms_key_id) = response
+            .headers
+            .get("x-amz-server-side-encryption-aws-kms-key-id")
+        {
+            let value = ssekms_key_id.to_owned();
+            result.ssekms_key_id = Some(value)
+        };
+        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
+            let value = server_side_encryption.to_owned();
+            result.server_side_encryption = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_bucket(&self, input: DeleteBucketRequest) -> RusotoFuture<(), DeleteBucketError> {
+    async fn delete_bucket(
+        &self,
+        input: DeleteBucketRequest,
+    ) -> Result<(), RusotoError<DeleteBucketError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(DeleteBucketError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteBucketError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p> <p>To use this operation, you must have permissions to perform the s3:PutAnalyticsConfiguration action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. </p>
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_analytics_configuration(
+    async fn delete_bucket_analytics_configuration(
         &self,
         input: DeleteBucketAnalyticsConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteBucketAnalyticsConfigurationError> {
+    ) -> Result<(), RusotoError<DeleteBucketAnalyticsConfigurationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19602,28 +19620,27 @@ impl S3 for S3Client {
         params.put_key("analytics");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(DeleteBucketAnalyticsConfigurationError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteBucketAnalyticsConfigurationError::from_response(
+                response,
+            ));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes the CORS configuration information set for the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_cors(
+    async fn delete_bucket_cors(
         &self,
         input: DeleteBucketCorsRequest,
-    ) -> RusotoFuture<(), DeleteBucketCorsError> {
+    ) -> Result<(), RusotoError<DeleteBucketCorsError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19632,24 +19649,25 @@ impl S3 for S3Client {
         params.put_key("cors");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(DeleteBucketCorsError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteBucketCorsError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes the server-side encryption configuration from the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_encryption(
+    async fn delete_bucket_encryption(
         &self,
         input: DeleteBucketEncryptionRequest,
-    ) -> RusotoFuture<(), DeleteBucketEncryptionError> {
+    ) -> Result<(), RusotoError<DeleteBucketEncryptionError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19658,24 +19676,25 @@ impl S3 for S3Client {
         params.put_key("encryption");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(DeleteBucketEncryptionError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteBucketEncryptionError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes an inventory configuration (identified by the inventory ID) from the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_inventory_configuration(
+    async fn delete_bucket_inventory_configuration(
         &self,
         input: DeleteBucketInventoryConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteBucketInventoryConfigurationError> {
+    ) -> Result<(), RusotoError<DeleteBucketInventoryConfigurationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19685,28 +19704,27 @@ impl S3 for S3Client {
         params.put_key("inventory");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(DeleteBucketInventoryConfigurationError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteBucketInventoryConfigurationError::from_response(
+                response,
+            ));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes the lifecycle configuration from the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_lifecycle(
+    async fn delete_bucket_lifecycle(
         &self,
         input: DeleteBucketLifecycleRequest,
-    ) -> RusotoFuture<(), DeleteBucketLifecycleError> {
+    ) -> Result<(), RusotoError<DeleteBucketLifecycleError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19715,24 +19733,25 @@ impl S3 for S3Client {
         params.put_key("lifecycle");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(DeleteBucketLifecycleError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteBucketLifecycleError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_metrics_configuration(
+    async fn delete_bucket_metrics_configuration(
         &self,
         input: DeleteBucketMetricsConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteBucketMetricsConfigurationError> {
+    ) -> Result<(), RusotoError<DeleteBucketMetricsConfigurationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19742,28 +19761,27 @@ impl S3 for S3Client {
         params.put_key("metrics");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(DeleteBucketMetricsConfigurationError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteBucketMetricsConfigurationError::from_response(
+                response,
+            ));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes the policy from the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_policy(
+    async fn delete_bucket_policy(
         &self,
         input: DeleteBucketPolicyRequest,
-    ) -> RusotoFuture<(), DeleteBucketPolicyError> {
+    ) -> Result<(), RusotoError<DeleteBucketPolicyError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19772,24 +19790,25 @@ impl S3 for S3Client {
         params.put_key("policy");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(DeleteBucketPolicyError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteBucketPolicyError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p> Deletes the replication configuration from the bucket. For information about replication configuration, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_replication(
+    async fn delete_bucket_replication(
         &self,
         input: DeleteBucketReplicationRequest,
-    ) -> RusotoFuture<(), DeleteBucketReplicationError> {
+    ) -> Result<(), RusotoError<DeleteBucketReplicationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19798,24 +19817,25 @@ impl S3 for S3Client {
         params.put_key("replication");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(DeleteBucketReplicationError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteBucketReplicationError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes the tags from the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_tagging(
+    async fn delete_bucket_tagging(
         &self,
         input: DeleteBucketTaggingRequest,
-    ) -> RusotoFuture<(), DeleteBucketTaggingError> {
+    ) -> Result<(), RusotoError<DeleteBucketTaggingError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19824,24 +19844,25 @@ impl S3 for S3Client {
         params.put_key("tagging");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(DeleteBucketTaggingError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteBucketTaggingError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>This operation removes the website configuration from the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_bucket_website(
+    async fn delete_bucket_website(
         &self,
         input: DeleteBucketWebsiteRequest,
-    ) -> RusotoFuture<(), DeleteBucketWebsiteError> {
+    ) -> Result<(), RusotoError<DeleteBucketWebsiteError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19850,24 +19871,25 @@ impl S3 for S3Client {
         params.put_key("website");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(DeleteBucketWebsiteError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteBucketWebsiteError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_object(
+    async fn delete_object(
         &self,
         input: DeleteObjectRequest,
-    ) -> RusotoFuture<DeleteObjectOutput, DeleteObjectError> {
+    ) -> Result<DeleteObjectOutput, RusotoError<DeleteObjectError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19892,58 +19914,52 @@ impl S3 for S3Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(DeleteObjectError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteObjectError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteObjectOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = DeleteObjectOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
-                        let value = delete_marker.to_owned();
-                        result.delete_marker = Some(value.parse::<bool>().unwrap())
-                    };
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    };
-                    if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                        let value = version_id.to_owned();
-                        result.version_id = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteObjectOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = DeleteObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
+            let value = delete_marker.to_owned();
+            result.delete_marker = Some(value.parse::<bool>().unwrap())
+        };
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        };
+        if let Some(version_id) = response.headers.get("x-amz-version-id") {
+            let value = version_id.to_owned();
+            result.version_id = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Removes the tag-set from an existing object.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_object_tagging(
+    async fn delete_object_tagging(
         &self,
         input: DeleteObjectTaggingRequest,
-    ) -> RusotoFuture<DeleteObjectTaggingOutput, DeleteObjectTaggingError> {
+    ) -> Result<DeleteObjectTaggingOutput, RusotoError<DeleteObjectTaggingError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -19955,50 +19971,45 @@ impl S3 for S3Client {
         params.put_key("tagging");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(DeleteObjectTaggingError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteObjectTaggingError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteObjectTaggingOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = DeleteObjectTaggingOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                        let value = version_id.to_owned();
-                        result.version_id = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteObjectTaggingOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                DeleteObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(version_id) = response.headers.get("x-amz-version-id") {
+            let value = version_id.to_owned();
+            result.version_id = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_objects(
+    async fn delete_objects(
         &self,
         input: DeleteObjectsRequest,
-    ) -> RusotoFuture<DeleteObjectsOutput, DeleteObjectsError> {
+    ) -> Result<DeleteObjectsOutput, RusotoError<DeleteObjectsError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
@@ -20025,50 +20036,44 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(DeleteObjectsError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteObjectsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeleteObjectsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = DeleteObjectsOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteObjectsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = DeleteObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Removes the <code>PublicAccessBlock</code> configuration from an Amazon S3 bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn delete_public_access_block(
+    async fn delete_public_access_block(
         &self,
         input: DeletePublicAccessBlockRequest,
-    ) -> RusotoFuture<(), DeletePublicAccessBlockError> {
+    ) -> Result<(), RusotoError<DeletePublicAccessBlockError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
@@ -20077,25 +20082,28 @@ impl S3 for S3Client {
         params.put_key("publicAccessBlock");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(DeletePublicAccessBlockError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeletePublicAccessBlockError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Returns the accelerate configuration of a bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_accelerate_configuration(
+    async fn get_bucket_accelerate_configuration(
         &self,
         input: GetBucketAccelerateConfigurationRequest,
-    ) -> RusotoFuture<GetBucketAccelerateConfigurationOutput, GetBucketAccelerateConfigurationError>
-    {
+    ) -> Result<
+        GetBucketAccelerateConfigurationOutput,
+        RusotoError<GetBucketAccelerateConfigurationError>,
+    > {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20104,51 +20112,46 @@ impl S3 for S3Client {
         params.put_key("accelerate");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(GetBucketAccelerateConfigurationError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketAccelerateConfigurationError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketAccelerateConfigurationOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketAccelerateConfigurationOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketAccelerateConfigurationOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetBucketAccelerateConfigurationOutputDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets the access control policy for the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_acl(
+    async fn get_bucket_acl(
         &self,
         input: GetBucketAclRequest,
-    ) -> RusotoFuture<GetBucketAclOutput, GetBucketAclError> {
+    ) -> Result<GetBucketAclOutput, RusotoError<GetBucketAclError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20157,48 +20160,44 @@ impl S3 for S3Client {
         params.put_key("acl");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetBucketAclError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketAclError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketAclOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketAclOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketAclOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetBucketAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_analytics_configuration(
+    async fn get_bucket_analytics_configuration(
         &self,
         input: GetBucketAnalyticsConfigurationRequest,
-    ) -> RusotoFuture<GetBucketAnalyticsConfigurationOutput, GetBucketAnalyticsConfigurationError>
-    {
+    ) -> Result<
+        GetBucketAnalyticsConfigurationOutput,
+        RusotoError<GetBucketAnalyticsConfigurationError>,
+    > {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20208,51 +20207,46 @@ impl S3 for S3Client {
         params.put_key("analytics");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(GetBucketAnalyticsConfigurationError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketAnalyticsConfigurationError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketAnalyticsConfigurationOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketAnalyticsConfigurationOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the CORS configuration for the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_cors(
+    async fn get_bucket_cors(
         &self,
         input: GetBucketCorsRequest,
-    ) -> RusotoFuture<GetBucketCorsOutput, GetBucketCorsError> {
+    ) -> Result<GetBucketCorsOutput, RusotoError<GetBucketCorsError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20261,47 +20255,41 @@ impl S3 for S3Client {
         params.put_key("cors");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetBucketCorsError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketCorsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketCorsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketCorsOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketCorsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetBucketCorsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the server-side encryption configuration of a bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_encryption(
+    async fn get_bucket_encryption(
         &self,
         input: GetBucketEncryptionRequest,
-    ) -> RusotoFuture<GetBucketEncryptionOutput, GetBucketEncryptionError> {
+    ) -> Result<GetBucketEncryptionOutput, RusotoError<GetBucketEncryptionError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20310,48 +20298,45 @@ impl S3 for S3Client {
         params.put_key("encryption");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetBucketEncryptionError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketEncryptionError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketEncryptionOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketEncryptionOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketEncryptionOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetBucketEncryptionOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns an inventory configuration (identified by the inventory ID) from the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_inventory_configuration(
+    async fn get_bucket_inventory_configuration(
         &self,
         input: GetBucketInventoryConfigurationRequest,
-    ) -> RusotoFuture<GetBucketInventoryConfigurationOutput, GetBucketInventoryConfigurationError>
-    {
+    ) -> Result<
+        GetBucketInventoryConfigurationOutput,
+        RusotoError<GetBucketInventoryConfigurationError>,
+    > {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20361,51 +20346,46 @@ impl S3 for S3Client {
         params.put_key("inventory");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(GetBucketInventoryConfigurationError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketInventoryConfigurationError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketInventoryConfigurationOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketInventoryConfigurationOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketInventoryConfigurationOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetBucketInventoryConfigurationOutputDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p> No longer used, see the GetBucketLifecycleConfiguration operation.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_lifecycle(
+    async fn get_bucket_lifecycle(
         &self,
         input: GetBucketLifecycleRequest,
-    ) -> RusotoFuture<GetBucketLifecycleOutput, GetBucketLifecycleError> {
+    ) -> Result<GetBucketLifecycleOutput, RusotoError<GetBucketLifecycleError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20414,48 +20394,45 @@ impl S3 for S3Client {
         params.put_key("lifecycle");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetBucketLifecycleError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketLifecycleError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketLifecycleOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketLifecycleOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketLifecycleOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetBucketLifecycleOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the lifecycle configuration information set on the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_lifecycle_configuration(
+    async fn get_bucket_lifecycle_configuration(
         &self,
         input: GetBucketLifecycleConfigurationRequest,
-    ) -> RusotoFuture<GetBucketLifecycleConfigurationOutput, GetBucketLifecycleConfigurationError>
-    {
+    ) -> Result<
+        GetBucketLifecycleConfigurationOutput,
+        RusotoError<GetBucketLifecycleConfigurationError>,
+    > {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20464,51 +20441,46 @@ impl S3 for S3Client {
         params.put_key("lifecycle");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(GetBucketLifecycleConfigurationError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketLifecycleConfigurationError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketLifecycleConfigurationOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketLifecycleConfigurationOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketLifecycleConfigurationOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetBucketLifecycleConfigurationOutputDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the region the bucket resides in.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_location(
+    async fn get_bucket_location(
         &self,
         input: GetBucketLocationRequest,
-    ) -> RusotoFuture<GetBucketLocationOutput, GetBucketLocationError> {
+    ) -> Result<GetBucketLocationOutput, RusotoError<GetBucketLocationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20517,47 +20489,42 @@ impl S3 for S3Client {
         params.put_key("location");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetBucketLocationError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketLocationError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketLocationOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketLocationOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketLocationOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetBucketLocationOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_logging(
+    async fn get_bucket_logging(
         &self,
         input: GetBucketLoggingRequest,
-    ) -> RusotoFuture<GetBucketLoggingOutput, GetBucketLoggingError> {
+    ) -> Result<GetBucketLoggingOutput, RusotoError<GetBucketLoggingError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20566,47 +20533,42 @@ impl S3 for S3Client {
         params.put_key("logging");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetBucketLoggingError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketLoggingError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketLoggingOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketLoggingOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketLoggingOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetBucketLoggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_metrics_configuration(
+    async fn get_bucket_metrics_configuration(
         &self,
         input: GetBucketMetricsConfigurationRequest,
-    ) -> RusotoFuture<GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationError> {
+    ) -> Result<GetBucketMetricsConfigurationOutput, RusotoError<GetBucketMetricsConfigurationError>>
+    {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20616,49 +20578,44 @@ impl S3 for S3Client {
         params.put_key("metrics");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(GetBucketMetricsConfigurationError::from_response(response))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketMetricsConfigurationError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketMetricsConfigurationOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketMetricsConfigurationOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketMetricsConfigurationOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetBucketMetricsConfigurationOutputDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p> No longer used, see the GetBucketNotificationConfiguration operation.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_notification(
+    async fn get_bucket_notification(
         &self,
         input: GetBucketNotificationConfigurationRequest,
-    ) -> RusotoFuture<NotificationConfigurationDeprecated, GetBucketNotificationError> {
+    ) -> Result<NotificationConfigurationDeprecated, RusotoError<GetBucketNotificationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20667,47 +20624,45 @@ impl S3 for S3Client {
         params.put_key("notification");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetBucketNotificationError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketNotificationError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(NotificationConfigurationDeprecated::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = NotificationConfigurationDeprecatedDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = NotificationConfigurationDeprecated::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = NotificationConfigurationDeprecatedDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the notification configuration of a bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_notification_configuration(
+    async fn get_bucket_notification_configuration(
         &self,
         input: GetBucketNotificationConfigurationRequest,
-    ) -> RusotoFuture<NotificationConfiguration, GetBucketNotificationConfigurationError> {
+    ) -> Result<NotificationConfiguration, RusotoError<GetBucketNotificationConfigurationError>>
+    {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20716,51 +20671,44 @@ impl S3 for S3Client {
         params.put_key("notification");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(GetBucketNotificationConfigurationError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketNotificationConfigurationError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(NotificationConfiguration::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = NotificationConfigurationDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = NotificationConfiguration::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                NotificationConfigurationDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the policy of a specified bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_policy(
+    async fn get_bucket_policy(
         &self,
         input: GetBucketPolicyRequest,
-    ) -> RusotoFuture<GetBucketPolicyOutput, GetBucketPolicyError> {
+    ) -> Result<GetBucketPolicyOutput, RusotoError<GetBucketPolicyError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20769,35 +20717,29 @@ impl S3 for S3Client {
         params.put_key("policy");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetBucketPolicyError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketPolicyError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .map(move |try_response| {
-                    try_response.map(move |response| {
-                        let mut result = GetBucketPolicyOutput::default();
-                        result.policy =
-                            Some(String::from_utf8_lossy(response.body.as_ref()).into());
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result = GetBucketPolicyOutput::default();
+        result.policy = Some(String::from_utf8_lossy(response.body.as_ref()).into());
 
-                        result
-                    })
-                })
-                .boxed()
-        })
+        Ok(result)
     }
 
     /// <p>Retrieves the policy status for an Amazon S3 bucket, indicating whether the bucket is public.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_policy_status(
+    async fn get_bucket_policy_status(
         &self,
         input: GetBucketPolicyStatusRequest,
-    ) -> RusotoFuture<GetBucketPolicyStatusOutput, GetBucketPolicyStatusError> {
+    ) -> Result<GetBucketPolicyStatusOutput, RusotoError<GetBucketPolicyStatusError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20806,47 +20748,42 @@ impl S3 for S3Client {
         params.put_key("policyStatus");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetBucketPolicyStatusError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketPolicyStatusError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketPolicyStatusOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketPolicyStatusOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketPolicyStatusOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetBucketPolicyStatusOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Returns the replication configuration of a bucket.</p> <note> <p> It can take a while to propagate the put or delete a replication configuration to all Amazon S3 systems. Therefore, a get request soon after put or delete can return a wrong result. </p> </note></p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_replication(
+    async fn get_bucket_replication(
         &self,
         input: GetBucketReplicationRequest,
-    ) -> RusotoFuture<GetBucketReplicationOutput, GetBucketReplicationError> {
+    ) -> Result<GetBucketReplicationOutput, RusotoError<GetBucketReplicationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20855,47 +20792,42 @@ impl S3 for S3Client {
         params.put_key("replication");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetBucketReplicationError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketReplicationError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketReplicationOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketReplicationOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketReplicationOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetBucketReplicationOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the request payment configuration of a bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_request_payment(
+    async fn get_bucket_request_payment(
         &self,
         input: GetBucketRequestPaymentRequest,
-    ) -> RusotoFuture<GetBucketRequestPaymentOutput, GetBucketRequestPaymentError> {
+    ) -> Result<GetBucketRequestPaymentOutput, RusotoError<GetBucketRequestPaymentError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20904,47 +20836,44 @@ impl S3 for S3Client {
         params.put_key("requestPayment");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetBucketRequestPaymentError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketRequestPaymentError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketRequestPaymentOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketRequestPaymentOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketRequestPaymentOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetBucketRequestPaymentOutputDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the tag set associated with the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_tagging(
+    async fn get_bucket_tagging(
         &self,
         input: GetBucketTaggingRequest,
-    ) -> RusotoFuture<GetBucketTaggingOutput, GetBucketTaggingError> {
+    ) -> Result<GetBucketTaggingOutput, RusotoError<GetBucketTaggingError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -20953,47 +20882,41 @@ impl S3 for S3Client {
         params.put_key("tagging");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetBucketTaggingError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketTaggingError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketTaggingOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketTaggingOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketTaggingOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetBucketTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the versioning state of a bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_versioning(
+    async fn get_bucket_versioning(
         &self,
         input: GetBucketVersioningRequest,
-    ) -> RusotoFuture<GetBucketVersioningOutput, GetBucketVersioningError> {
+    ) -> Result<GetBucketVersioningOutput, RusotoError<GetBucketVersioningError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21002,47 +20925,42 @@ impl S3 for S3Client {
         params.put_key("versioning");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetBucketVersioningError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketVersioningError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketVersioningOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketVersioningOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketVersioningOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetBucketVersioningOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the website configuration for a bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_bucket_website(
+    async fn get_bucket_website(
         &self,
         input: GetBucketWebsiteRequest,
-    ) -> RusotoFuture<GetBucketWebsiteOutput, GetBucketWebsiteError> {
+    ) -> Result<GetBucketWebsiteOutput, RusotoError<GetBucketWebsiteError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21051,44 +20969,41 @@ impl S3 for S3Client {
         params.put_key("website");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetBucketWebsiteError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetBucketWebsiteError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetBucketWebsiteOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetBucketWebsiteOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetBucketWebsiteOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetBucketWebsiteOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Retrieves objects from Amazon S3.</p>
     #[allow(unused_variables, warnings)]
-    fn get_object(&self, input: GetObjectRequest) -> RusotoFuture<GetObjectOutput, GetObjectError> {
+    async fn get_object(
+        &self,
+        input: GetObjectRequest,
+    ) -> Result<GetObjectOutput, RusotoError<GetObjectError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21164,169 +21079,168 @@ impl S3 for S3Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetObjectError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetObjectError::from_response(response));
+        }
 
-            let mut result = GetObjectOutput::default();
-            result.body = Some(response.body);
-            if let Some(accept_ranges) = response.headers.get("accept-ranges") {
-                let value = accept_ranges.to_owned();
-                result.accept_ranges = Some(value)
-            };
-            if let Some(cache_control) = response.headers.get("Cache-Control") {
-                let value = cache_control.to_owned();
-                result.cache_control = Some(value)
-            };
-            if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-                let value = content_disposition.to_owned();
-                result.content_disposition = Some(value)
-            };
-            if let Some(content_encoding) = response.headers.get("Content-Encoding") {
-                let value = content_encoding.to_owned();
-                result.content_encoding = Some(value)
-            };
-            if let Some(content_language) = response.headers.get("Content-Language") {
-                let value = content_language.to_owned();
-                result.content_language = Some(value)
-            };
-            if let Some(content_length) = response.headers.get("Content-Length") {
-                let value = content_length.to_owned();
-                result.content_length = Some(value.parse::<i64>().unwrap())
-            };
-            if let Some(content_range) = response.headers.get("Content-Range") {
-                let value = content_range.to_owned();
-                result.content_range = Some(value)
-            };
-            if let Some(content_type) = response.headers.get("Content-Type") {
-                let value = content_type.to_owned();
-                result.content_type = Some(value)
-            };
-            if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
-                let value = delete_marker.to_owned();
-                result.delete_marker = Some(value.parse::<bool>().unwrap())
-            };
-            if let Some(e_tag) = response.headers.get("ETag") {
-                let value = e_tag.to_owned();
-                result.e_tag = Some(value)
-            };
-            if let Some(expiration) = response.headers.get("x-amz-expiration") {
-                let value = expiration.to_owned();
-                result.expiration = Some(value)
-            };
-            if let Some(expires) = response.headers.get("Expires") {
-                let value = expires.to_owned();
-                result.expires = Some(value)
-            };
-            if let Some(last_modified) = response.headers.get("Last-Modified") {
-                let value = last_modified.to_owned();
-                result.last_modified = Some(value)
-            };
-            let mut values = ::std::collections::HashMap::new();
-            for (key, value) in response.headers.iter() {
-                if key.as_str().starts_with("x-amz-meta-") {
-                    values.insert(
-                        key.as_str()["x-amz-meta-".len()..].to_owned(),
-                        value.to_owned(),
-                    );
-                }
+        let mut result = GetObjectOutput::default();
+        result.body = Some(response.body);
+        if let Some(accept_ranges) = response.headers.get("accept-ranges") {
+            let value = accept_ranges.to_owned();
+            result.accept_ranges = Some(value)
+        };
+        if let Some(cache_control) = response.headers.get("Cache-Control") {
+            let value = cache_control.to_owned();
+            result.cache_control = Some(value)
+        };
+        if let Some(content_disposition) = response.headers.get("Content-Disposition") {
+            let value = content_disposition.to_owned();
+            result.content_disposition = Some(value)
+        };
+        if let Some(content_encoding) = response.headers.get("Content-Encoding") {
+            let value = content_encoding.to_owned();
+            result.content_encoding = Some(value)
+        };
+        if let Some(content_language) = response.headers.get("Content-Language") {
+            let value = content_language.to_owned();
+            result.content_language = Some(value)
+        };
+        if let Some(content_length) = response.headers.get("Content-Length") {
+            let value = content_length.to_owned();
+            result.content_length = Some(value.parse::<i64>().unwrap())
+        };
+        if let Some(content_range) = response.headers.get("Content-Range") {
+            let value = content_range.to_owned();
+            result.content_range = Some(value)
+        };
+        if let Some(content_type) = response.headers.get("Content-Type") {
+            let value = content_type.to_owned();
+            result.content_type = Some(value)
+        };
+        if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
+            let value = delete_marker.to_owned();
+            result.delete_marker = Some(value.parse::<bool>().unwrap())
+        };
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        };
+        if let Some(expiration) = response.headers.get("x-amz-expiration") {
+            let value = expiration.to_owned();
+            result.expiration = Some(value)
+        };
+        if let Some(expires) = response.headers.get("Expires") {
+            let value = expires.to_owned();
+            result.expires = Some(value)
+        };
+        if let Some(last_modified) = response.headers.get("Last-Modified") {
+            let value = last_modified.to_owned();
+            result.last_modified = Some(value)
+        };
+        let mut values = ::std::collections::HashMap::new();
+        for (key, value) in response.headers.iter() {
+            if key.as_str().starts_with("x-amz-meta-") {
+                values.insert(
+                    key.as_str()["x-amz-meta-".len()..].to_owned(),
+                    value.to_owned(),
+                );
             }
-            result.metadata = Some(values);
-            if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
-                let value = missing_meta.to_owned();
-                result.missing_meta = Some(value.parse::<i64>().unwrap())
-            };
-            if let Some(object_lock_legal_hold_status) =
-                response.headers.get("x-amz-object-lock-legal-hold")
-            {
-                let value = object_lock_legal_hold_status.to_owned();
-                result.object_lock_legal_hold_status = Some(value)
-            };
-            if let Some(object_lock_mode) = response.headers.get("x-amz-object-lock-mode") {
-                let value = object_lock_mode.to_owned();
-                result.object_lock_mode = Some(value)
-            };
-            if let Some(object_lock_retain_until_date) =
-                response.headers.get("x-amz-object-lock-retain-until-date")
-            {
-                let value = object_lock_retain_until_date.to_owned();
-                result.object_lock_retain_until_date = Some(value)
-            };
-            if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
-                let value = parts_count.to_owned();
-                result.parts_count = Some(value.parse::<i64>().unwrap())
-            };
-            if let Some(replication_status) = response.headers.get("x-amz-replication-status") {
-                let value = replication_status.to_owned();
-                result.replication_status = Some(value)
-            };
-            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                let value = request_charged.to_owned();
-                result.request_charged = Some(value)
-            };
-            if let Some(restore) = response.headers.get("x-amz-restore") {
-                let value = restore.to_owned();
-                result.restore = Some(value)
-            };
-            if let Some(sse_customer_algorithm) = response
-                .headers
-                .get("x-amz-server-side-encryption-customer-algorithm")
-            {
-                let value = sse_customer_algorithm.to_owned();
-                result.sse_customer_algorithm = Some(value)
-            };
-            if let Some(sse_customer_key_md5) = response
-                .headers
-                .get("x-amz-server-side-encryption-customer-key-MD5")
-            {
-                let value = sse_customer_key_md5.to_owned();
-                result.sse_customer_key_md5 = Some(value)
-            };
-            if let Some(ssekms_key_id) = response
-                .headers
-                .get("x-amz-server-side-encryption-aws-kms-key-id")
-            {
-                let value = ssekms_key_id.to_owned();
-                result.ssekms_key_id = Some(value)
-            };
-            if let Some(server_side_encryption) =
-                response.headers.get("x-amz-server-side-encryption")
-            {
-                let value = server_side_encryption.to_owned();
-                result.server_side_encryption = Some(value)
-            };
-            if let Some(storage_class) = response.headers.get("x-amz-storage-class") {
-                let value = storage_class.to_owned();
-                result.storage_class = Some(value)
-            };
-            if let Some(tag_count) = response.headers.get("x-amz-tagging-count") {
-                let value = tag_count.to_owned();
-                result.tag_count = Some(value.parse::<i64>().unwrap())
-            };
-            if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                let value = version_id.to_owned();
-                result.version_id = Some(value)
-            };
-            if let Some(website_redirect_location) =
-                response.headers.get("x-amz-website-redirect-location")
-            {
-                let value = website_redirect_location.to_owned();
-                result.website_redirect_location = Some(value)
-            };
-            futures::future::ready(result).boxed()
-        })
+        }
+        result.metadata = Some(values);
+        if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
+            let value = missing_meta.to_owned();
+            result.missing_meta = Some(value.parse::<i64>().unwrap())
+        };
+        if let Some(object_lock_legal_hold_status) =
+            response.headers.get("x-amz-object-lock-legal-hold")
+        {
+            let value = object_lock_legal_hold_status.to_owned();
+            result.object_lock_legal_hold_status = Some(value)
+        };
+        if let Some(object_lock_mode) = response.headers.get("x-amz-object-lock-mode") {
+            let value = object_lock_mode.to_owned();
+            result.object_lock_mode = Some(value)
+        };
+        if let Some(object_lock_retain_until_date) =
+            response.headers.get("x-amz-object-lock-retain-until-date")
+        {
+            let value = object_lock_retain_until_date.to_owned();
+            result.object_lock_retain_until_date = Some(value)
+        };
+        if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
+            let value = parts_count.to_owned();
+            result.parts_count = Some(value.parse::<i64>().unwrap())
+        };
+        if let Some(replication_status) = response.headers.get("x-amz-replication-status") {
+            let value = replication_status.to_owned();
+            result.replication_status = Some(value)
+        };
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        };
+        if let Some(restore) = response.headers.get("x-amz-restore") {
+            let value = restore.to_owned();
+            result.restore = Some(value)
+        };
+        if let Some(sse_customer_algorithm) = response
+            .headers
+            .get("x-amz-server-side-encryption-customer-algorithm")
+        {
+            let value = sse_customer_algorithm.to_owned();
+            result.sse_customer_algorithm = Some(value)
+        };
+        if let Some(sse_customer_key_md5) = response
+            .headers
+            .get("x-amz-server-side-encryption-customer-key-MD5")
+        {
+            let value = sse_customer_key_md5.to_owned();
+            result.sse_customer_key_md5 = Some(value)
+        };
+        if let Some(ssekms_key_id) = response
+            .headers
+            .get("x-amz-server-side-encryption-aws-kms-key-id")
+        {
+            let value = ssekms_key_id.to_owned();
+            result.ssekms_key_id = Some(value)
+        };
+        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
+            let value = server_side_encryption.to_owned();
+            result.server_side_encryption = Some(value)
+        };
+        if let Some(storage_class) = response.headers.get("x-amz-storage-class") {
+            let value = storage_class.to_owned();
+            result.storage_class = Some(value)
+        };
+        if let Some(tag_count) = response.headers.get("x-amz-tagging-count") {
+            let value = tag_count.to_owned();
+            result.tag_count = Some(value.parse::<i64>().unwrap())
+        };
+        if let Some(version_id) = response.headers.get("x-amz-version-id") {
+            let value = version_id.to_owned();
+            result.version_id = Some(value)
+        };
+        if let Some(website_redirect_location) =
+            response.headers.get("x-amz-website-redirect-location")
+        {
+            let value = website_redirect_location.to_owned();
+            result.website_redirect_location = Some(value)
+        };
+        Ok(result)
     }
 
     /// <p>Returns the access control list (ACL) of an object.</p>
     #[allow(unused_variables, warnings)]
-    fn get_object_acl(
+    async fn get_object_acl(
         &self,
         input: GetObjectAclRequest,
-    ) -> RusotoFuture<GetObjectAclOutput, GetObjectAclError> {
+    ) -> Result<GetObjectAclOutput, RusotoError<GetObjectAclError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21341,50 +21255,44 @@ impl S3 for S3Client {
         params.put_key("acl");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetObjectAclError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetObjectAclError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetObjectAclOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetObjectAclOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetObjectAclOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets an object's current Legal Hold status.</p>
     #[allow(unused_variables, warnings)]
-    fn get_object_legal_hold(
+    async fn get_object_legal_hold(
         &self,
         input: GetObjectLegalHoldRequest,
-    ) -> RusotoFuture<GetObjectLegalHoldOutput, GetObjectLegalHoldError> {
+    ) -> Result<GetObjectLegalHoldOutput, RusotoError<GetObjectLegalHoldError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21399,47 +21307,43 @@ impl S3 for S3Client {
         params.put_key("legal-hold");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetObjectLegalHoldError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetObjectLegalHoldError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetObjectLegalHoldOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetObjectLegalHoldOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetObjectLegalHoldOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetObjectLegalHoldOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets the object lock configuration for a bucket. The rule specified in the object lock configuration will be applied by default to every new object placed in the specified bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_object_lock_configuration(
+    async fn get_object_lock_configuration(
         &self,
         input: GetObjectLockConfigurationRequest,
-    ) -> RusotoFuture<GetObjectLockConfigurationOutput, GetObjectLockConfigurationError> {
+    ) -> Result<GetObjectLockConfigurationOutput, RusotoError<GetObjectLockConfigurationError>>
+    {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21448,49 +21352,44 @@ impl S3 for S3Client {
         params.put_key("object-lock");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(GetObjectLockConfigurationError::from_response(response))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetObjectLockConfigurationError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetObjectLockConfigurationOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetObjectLockConfigurationOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetObjectLockConfigurationOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetObjectLockConfigurationOutputDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Retrieves an object's retention settings.</p>
     #[allow(unused_variables, warnings)]
-    fn get_object_retention(
+    async fn get_object_retention(
         &self,
         input: GetObjectRetentionRequest,
-    ) -> RusotoFuture<GetObjectRetentionOutput, GetObjectRetentionError> {
+    ) -> Result<GetObjectRetentionOutput, RusotoError<GetObjectRetentionError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21505,47 +21404,42 @@ impl S3 for S3Client {
         params.put_key("retention");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetObjectRetentionError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetObjectRetentionError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetObjectRetentionOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetObjectRetentionOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetObjectRetentionOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetObjectRetentionOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the tag-set of an object.</p>
     #[allow(unused_variables, warnings)]
-    fn get_object_tagging(
+    async fn get_object_tagging(
         &self,
         input: GetObjectTaggingRequest,
-    ) -> RusotoFuture<GetObjectTaggingOutput, GetObjectTaggingError> {
+    ) -> Result<GetObjectTaggingOutput, RusotoError<GetObjectTaggingError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21557,50 +21451,44 @@ impl S3 for S3Client {
         params.put_key("tagging");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetObjectTaggingError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetObjectTaggingError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetObjectTaggingOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetObjectTaggingOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                        let value = version_id.to_owned();
-                        result.version_id = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetObjectTaggingOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = GetObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(version_id) = response.headers.get("x-amz-version-id") {
+            let value = version_id.to_owned();
+            result.version_id = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Return torrent files from a bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_object_torrent(
+    async fn get_object_torrent(
         &self,
         input: GetObjectTorrentRequest,
-    ) -> RusotoFuture<GetObjectTorrentOutput, GetObjectTorrentError> {
+    ) -> Result<GetObjectTorrentOutput, RusotoError<GetObjectTorrentError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21612,30 +21500,31 @@ impl S3 for S3Client {
         params.put_key("torrent");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetObjectTorrentError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetObjectTorrentError::from_response(response));
+        }
 
-            let mut result = GetObjectTorrentOutput::default();
-            result.body = Some(response.body);
-            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                let value = request_charged.to_owned();
-                result.request_charged = Some(value)
-            };
-            futures::future::ready(result).boxed()
-        })
+        let mut result = GetObjectTorrentOutput::default();
+        result.body = Some(response.body);
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        };
+        Ok(result)
     }
 
     /// <p>Retrieves the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn get_public_access_block(
+    async fn get_public_access_block(
         &self,
         input: GetPublicAccessBlockRequest,
-    ) -> RusotoFuture<GetPublicAccessBlockOutput, GetPublicAccessBlockError> {
+    ) -> Result<GetPublicAccessBlockOutput, RusotoError<GetPublicAccessBlockError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21644,66 +21533,65 @@ impl S3 for S3Client {
         params.put_key("publicAccessBlock");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(GetPublicAccessBlockError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetPublicAccessBlockError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetPublicAccessBlockOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = GetPublicAccessBlockOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetPublicAccessBlockOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                GetPublicAccessBlockOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>This operation is useful to determine if a bucket exists and you have permission to access it.</p>
     #[allow(unused_variables, warnings)]
-    fn head_bucket(&self, input: HeadBucketRequest) -> RusotoFuture<(), HeadBucketError> {
+    async fn head_bucket(
+        &self,
+        input: HeadBucketRequest,
+    ) -> Result<(), RusotoError<HeadBucketError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(HeadBucketError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(HeadBucketError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object.</p>
     #[allow(unused_variables, warnings)]
-    fn head_object(
+    async fn head_object(
         &self,
         input: HeadObjectRequest,
-    ) -> RusotoFuture<HeadObjectOutput, HeadObjectError> {
+    ) -> Result<HeadObjectOutput, RusotoError<HeadObjectError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
@@ -21761,182 +21649,176 @@ impl S3 for S3Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(HeadObjectError::from_response(response)))
-                    .boxed();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(HeadObjectError::from_response(response));
+        }
+
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
+
+        if xml_response.body.is_empty() {
+            result = HeadObjectOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = HeadObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(accept_ranges) = response.headers.get("accept-ranges") {
+            let value = accept_ranges.to_owned();
+            result.accept_ranges = Some(value)
+        };
+        if let Some(cache_control) = response.headers.get("Cache-Control") {
+            let value = cache_control.to_owned();
+            result.cache_control = Some(value)
+        };
+        if let Some(content_disposition) = response.headers.get("Content-Disposition") {
+            let value = content_disposition.to_owned();
+            result.content_disposition = Some(value)
+        };
+        if let Some(content_encoding) = response.headers.get("Content-Encoding") {
+            let value = content_encoding.to_owned();
+            result.content_encoding = Some(value)
+        };
+        if let Some(content_language) = response.headers.get("Content-Language") {
+            let value = content_language.to_owned();
+            result.content_language = Some(value)
+        };
+        if let Some(content_length) = response.headers.get("Content-Length") {
+            let value = content_length.to_owned();
+            result.content_length = Some(value.parse::<i64>().unwrap())
+        };
+        if let Some(content_type) = response.headers.get("Content-Type") {
+            let value = content_type.to_owned();
+            result.content_type = Some(value)
+        };
+        if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
+            let value = delete_marker.to_owned();
+            result.delete_marker = Some(value.parse::<bool>().unwrap())
+        };
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        };
+        if let Some(expiration) = response.headers.get("x-amz-expiration") {
+            let value = expiration.to_owned();
+            result.expiration = Some(value)
+        };
+        if let Some(expires) = response.headers.get("Expires") {
+            let value = expires.to_owned();
+            result.expires = Some(value)
+        };
+        if let Some(last_modified) = response.headers.get("Last-Modified") {
+            let value = last_modified.to_owned();
+            result.last_modified = Some(value)
+        };
+        let mut values = ::std::collections::HashMap::new();
+        for (key, value) in response.headers.iter() {
+            if key.as_str().starts_with("x-amz-meta-") {
+                values.insert(
+                    key.as_str()["x-amz-meta-".len()..].to_owned(),
+                    value.to_owned(),
+                );
             }
-
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
-
-                    if xml_response.body.is_empty() {
-                        result = Ok(HeadObjectOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result =
-                            HeadObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack);
-                    }
-                    if let Some(accept_ranges) = response.headers.get("accept-ranges") {
-                        let value = accept_ranges.to_owned();
-                        result.accept_ranges = Some(value)
-                    };
-                    if let Some(cache_control) = response.headers.get("Cache-Control") {
-                        let value = cache_control.to_owned();
-                        result.cache_control = Some(value)
-                    };
-                    if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-                        let value = content_disposition.to_owned();
-                        result.content_disposition = Some(value)
-                    };
-                    if let Some(content_encoding) = response.headers.get("Content-Encoding") {
-                        let value = content_encoding.to_owned();
-                        result.content_encoding = Some(value)
-                    };
-                    if let Some(content_language) = response.headers.get("Content-Language") {
-                        let value = content_language.to_owned();
-                        result.content_language = Some(value)
-                    };
-                    if let Some(content_length) = response.headers.get("Content-Length") {
-                        let value = content_length.to_owned();
-                        result.content_length = Some(value.parse::<i64>().unwrap())
-                    };
-                    if let Some(content_type) = response.headers.get("Content-Type") {
-                        let value = content_type.to_owned();
-                        result.content_type = Some(value)
-                    };
-                    if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
-                        let value = delete_marker.to_owned();
-                        result.delete_marker = Some(value.parse::<bool>().unwrap())
-                    };
-                    if let Some(e_tag) = response.headers.get("ETag") {
-                        let value = e_tag.to_owned();
-                        result.e_tag = Some(value)
-                    };
-                    if let Some(expiration) = response.headers.get("x-amz-expiration") {
-                        let value = expiration.to_owned();
-                        result.expiration = Some(value)
-                    };
-                    if let Some(expires) = response.headers.get("Expires") {
-                        let value = expires.to_owned();
-                        result.expires = Some(value)
-                    };
-                    if let Some(last_modified) = response.headers.get("Last-Modified") {
-                        let value = last_modified.to_owned();
-                        result.last_modified = Some(value)
-                    };
-                    let mut values = ::std::collections::HashMap::new();
-                    for (key, value) in response.headers.iter() {
-                        if key.as_str().starts_with("x-amz-meta-") {
-                            values.insert(
-                                key.as_str()["x-amz-meta-".len()..].to_owned(),
-                                value.to_owned(),
-                            );
-                        }
-                    }
-                    result.metadata = Some(values);
-                    if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
-                        let value = missing_meta.to_owned();
-                        result.missing_meta = Some(value.parse::<i64>().unwrap())
-                    };
-                    if let Some(object_lock_legal_hold_status) =
-                        response.headers.get("x-amz-object-lock-legal-hold")
-                    {
-                        let value = object_lock_legal_hold_status.to_owned();
-                        result.object_lock_legal_hold_status = Some(value)
-                    };
-                    if let Some(object_lock_mode) = response.headers.get("x-amz-object-lock-mode") {
-                        let value = object_lock_mode.to_owned();
-                        result.object_lock_mode = Some(value)
-                    };
-                    if let Some(object_lock_retain_until_date) =
-                        response.headers.get("x-amz-object-lock-retain-until-date")
-                    {
-                        let value = object_lock_retain_until_date.to_owned();
-                        result.object_lock_retain_until_date = Some(value)
-                    };
-                    if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
-                        let value = parts_count.to_owned();
-                        result.parts_count = Some(value.parse::<i64>().unwrap())
-                    };
-                    if let Some(replication_status) =
-                        response.headers.get("x-amz-replication-status")
-                    {
-                        let value = replication_status.to_owned();
-                        result.replication_status = Some(value)
-                    };
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    };
-                    if let Some(restore) = response.headers.get("x-amz-restore") {
-                        let value = restore.to_owned();
-                        result.restore = Some(value)
-                    };
-                    if let Some(sse_customer_algorithm) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm")
-                    {
-                        let value = sse_customer_algorithm.to_owned();
-                        result.sse_customer_algorithm = Some(value)
-                    };
-                    if let Some(sse_customer_key_md5) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5")
-                    {
-                        let value = sse_customer_key_md5.to_owned();
-                        result.sse_customer_key_md5 = Some(value)
-                    };
-                    if let Some(ssekms_key_id) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id")
-                    {
-                        let value = ssekms_key_id.to_owned();
-                        result.ssekms_key_id = Some(value)
-                    };
-                    if let Some(server_side_encryption) =
-                        response.headers.get("x-amz-server-side-encryption")
-                    {
-                        let value = server_side_encryption.to_owned();
-                        result.server_side_encryption = Some(value)
-                    };
-                    if let Some(storage_class) = response.headers.get("x-amz-storage-class") {
-                        let value = storage_class.to_owned();
-                        result.storage_class = Some(value)
-                    };
-                    if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                        let value = version_id.to_owned();
-                        result.version_id = Some(value)
-                    };
-                    if let Some(website_redirect_location) =
-                        response.headers.get("x-amz-website-redirect-location")
-                    {
-                        let value = website_redirect_location.to_owned();
-                        result.website_redirect_location = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        }
+        result.metadata = Some(values);
+        if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
+            let value = missing_meta.to_owned();
+            result.missing_meta = Some(value.parse::<i64>().unwrap())
+        };
+        if let Some(object_lock_legal_hold_status) =
+            response.headers.get("x-amz-object-lock-legal-hold")
+        {
+            let value = object_lock_legal_hold_status.to_owned();
+            result.object_lock_legal_hold_status = Some(value)
+        };
+        if let Some(object_lock_mode) = response.headers.get("x-amz-object-lock-mode") {
+            let value = object_lock_mode.to_owned();
+            result.object_lock_mode = Some(value)
+        };
+        if let Some(object_lock_retain_until_date) =
+            response.headers.get("x-amz-object-lock-retain-until-date")
+        {
+            let value = object_lock_retain_until_date.to_owned();
+            result.object_lock_retain_until_date = Some(value)
+        };
+        if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
+            let value = parts_count.to_owned();
+            result.parts_count = Some(value.parse::<i64>().unwrap())
+        };
+        if let Some(replication_status) = response.headers.get("x-amz-replication-status") {
+            let value = replication_status.to_owned();
+            result.replication_status = Some(value)
+        };
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        };
+        if let Some(restore) = response.headers.get("x-amz-restore") {
+            let value = restore.to_owned();
+            result.restore = Some(value)
+        };
+        if let Some(sse_customer_algorithm) = response
+            .headers
+            .get("x-amz-server-side-encryption-customer-algorithm")
+        {
+            let value = sse_customer_algorithm.to_owned();
+            result.sse_customer_algorithm = Some(value)
+        };
+        if let Some(sse_customer_key_md5) = response
+            .headers
+            .get("x-amz-server-side-encryption-customer-key-MD5")
+        {
+            let value = sse_customer_key_md5.to_owned();
+            result.sse_customer_key_md5 = Some(value)
+        };
+        if let Some(ssekms_key_id) = response
+            .headers
+            .get("x-amz-server-side-encryption-aws-kms-key-id")
+        {
+            let value = ssekms_key_id.to_owned();
+            result.ssekms_key_id = Some(value)
+        };
+        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
+            let value = server_side_encryption.to_owned();
+            result.server_side_encryption = Some(value)
+        };
+        if let Some(storage_class) = response.headers.get("x-amz-storage-class") {
+            let value = storage_class.to_owned();
+            result.storage_class = Some(value)
+        };
+        if let Some(version_id) = response.headers.get("x-amz-version-id") {
+            let value = version_id.to_owned();
+            result.version_id = Some(value)
+        };
+        if let Some(website_redirect_location) =
+            response.headers.get("x-amz-website-redirect-location")
+        {
+            let value = website_redirect_location.to_owned();
+            result.website_redirect_location = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists the analytics configurations for the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn list_bucket_analytics_configurations(
+    async fn list_bucket_analytics_configurations(
         &self,
         input: ListBucketAnalyticsConfigurationsRequest,
-    ) -> RusotoFuture<ListBucketAnalyticsConfigurationsOutput, ListBucketAnalyticsConfigurationsError>
-    {
+    ) -> Result<
+        ListBucketAnalyticsConfigurationsOutput,
+        RusotoError<ListBucketAnalyticsConfigurationsError>,
+    > {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -21948,52 +21830,49 @@ impl S3 for S3Client {
         params.put_key("analytics");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(ListBucketAnalyticsConfigurationsError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListBucketAnalyticsConfigurationsError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListBucketAnalyticsConfigurationsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListBucketAnalyticsConfigurationsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of inventory configurations for the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn list_bucket_inventory_configurations(
+    async fn list_bucket_inventory_configurations(
         &self,
         input: ListBucketInventoryConfigurationsRequest,
-    ) -> RusotoFuture<ListBucketInventoryConfigurationsOutput, ListBucketInventoryConfigurationsError>
-    {
+    ) -> Result<
+        ListBucketInventoryConfigurationsOutput,
+        RusotoError<ListBucketInventoryConfigurationsError>,
+    > {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -22005,52 +21884,49 @@ impl S3 for S3Client {
         params.put_key("inventory");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(ListBucketInventoryConfigurationsError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListBucketInventoryConfigurationsError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListBucketInventoryConfigurationsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = ListBucketInventoryConfigurationsOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListBucketInventoryConfigurationsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListBucketInventoryConfigurationsOutputDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists the metrics configurations for the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn list_bucket_metrics_configurations(
+    async fn list_bucket_metrics_configurations(
         &self,
         input: ListBucketMetricsConfigurationsRequest,
-    ) -> RusotoFuture<ListBucketMetricsConfigurationsOutput, ListBucketMetricsConfigurationsError>
-    {
+    ) -> Result<
+        ListBucketMetricsConfigurationsOutput,
+        RusotoError<ListBucketMetricsConfigurationsError>,
+    > {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -22062,93 +21938,82 @@ impl S3 for S3Client {
         params.put_key("metrics");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(ListBucketMetricsConfigurationsError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListBucketMetricsConfigurationsError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListBucketMetricsConfigurationsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = ListBucketMetricsConfigurationsOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListBucketMetricsConfigurationsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListBucketMetricsConfigurationsOutputDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of all buckets owned by the authenticated sender of the request.</p>
     #[allow(unused_variables, warnings)]
-    fn list_buckets(&self) -> RusotoFuture<ListBucketsOutput, ListBucketsError> {
+    async fn list_buckets(&self) -> Result<ListBucketsOutput, RusotoError<ListBucketsError>> {
         let request_uri = "/";
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(ListBucketsError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListBucketsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListBucketsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = ListBucketsOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListBucketsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListBucketsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>This operation lists in-progress multipart uploads.</p>
     #[allow(unused_variables, warnings)]
-    fn list_multipart_uploads(
+    async fn list_multipart_uploads(
         &self,
         input: ListMultipartUploadsRequest,
-    ) -> RusotoFuture<ListMultipartUploadsOutput, ListMultipartUploadsError> {
+    ) -> Result<ListMultipartUploadsOutput, RusotoError<ListMultipartUploadsError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -22175,47 +22040,42 @@ impl S3 for S3Client {
         params.put_key("uploads");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(ListMultipartUploadsError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListMultipartUploadsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListMultipartUploadsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = ListMultipartUploadsOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListMultipartUploadsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                ListMultipartUploadsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns metadata about all of the versions of objects in a bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn list_object_versions(
+    async fn list_object_versions(
         &self,
         input: ListObjectVersionsRequest,
-    ) -> RusotoFuture<ListObjectVersionsOutput, ListObjectVersionsError> {
+    ) -> Result<ListObjectVersionsOutput, RusotoError<ListObjectVersionsError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -22242,47 +22102,42 @@ impl S3 for S3Client {
         params.put_key("versions");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(ListObjectVersionsError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListObjectVersionsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListObjectVersionsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = ListObjectVersionsOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListObjectVersionsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                ListObjectVersionsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn list_objects(
+    async fn list_objects(
         &self,
         input: ListObjectsRequest,
-    ) -> RusotoFuture<ListObjectsOutput, ListObjectsError> {
+    ) -> Result<ListObjectsOutput, RusotoError<ListObjectsError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -22308,47 +22163,41 @@ impl S3 for S3Client {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(ListObjectsError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListObjectsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListObjectsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = ListObjectsOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListObjectsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development.</p>
     #[allow(unused_variables, warnings)]
-    fn list_objects_v2(
+    async fn list_objects_v2(
         &self,
         input: ListObjectsV2Request,
-    ) -> RusotoFuture<ListObjectsV2Output, ListObjectsV2Error> {
+    ) -> Result<ListObjectsV2Output, RusotoError<ListObjectsV2Error>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -22381,44 +22230,41 @@ impl S3 for S3Client {
         params.put("list-type", "2");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(ListObjectsV2Error::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListObjectsV2Error::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListObjectsV2Output::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = ListObjectsV2OutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListObjectsV2Output::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListObjectsV2OutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists the parts that have been uploaded for a specific multipart upload.</p>
     #[allow(unused_variables, warnings)]
-    fn list_parts(&self, input: ListPartsRequest) -> RusotoFuture<ListPartsOutput, ListPartsError> {
+    async fn list_parts(
+        &self,
+        input: ListPartsRequest,
+    ) -> Result<ListPartsOutput, RusotoError<ListPartsError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
@@ -22436,56 +22282,52 @@ impl S3 for S3Client {
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(ListPartsError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListPartsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListPartsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result =
-                            ListPartsOutputDeserializer::deserialize(&actual_tag_name, &mut stack);
-                    }
-                    if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
-                        let value = abort_date.to_owned();
-                        result.abort_date = Some(value)
-                    };
-                    if let Some(abort_rule_id) = response.headers.get("x-amz-abort-rule-id") {
-                        let value = abort_rule_id.to_owned();
-                        result.abort_rule_id = Some(value)
-                    };
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListPartsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = ListPartsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
+            let value = abort_date.to_owned();
+            result.abort_date = Some(value)
+        };
+        if let Some(abort_rule_id) = response.headers.get("x-amz-abort-rule-id") {
+            let value = abort_rule_id.to_owned();
+            result.abort_rule_id = Some(value)
+        };
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Sets the accelerate configuration of an existing bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_accelerate_configuration(
+    async fn put_bucket_accelerate_configuration(
         &self,
         input: PutBucketAccelerateConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketAccelerateConfigurationError> {
+    ) -> Result<(), RusotoError<PutBucketAccelerateConfigurationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22501,25 +22343,27 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(PutBucketAccelerateConfigurationError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketAccelerateConfigurationError::from_response(
+                response,
+            ));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Sets the permissions on a bucket using access control lists (ACL).</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_acl(&self, input: PutBucketAclRequest) -> RusotoFuture<(), PutBucketAclError> {
+    async fn put_bucket_acl(
+        &self,
+        input: PutBucketAclRequest,
+    ) -> Result<(), RusotoError<PutBucketAclError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22566,24 +22410,25 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutBucketAclError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketAclError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Sets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_analytics_configuration(
+    async fn put_bucket_analytics_configuration(
         &self,
         input: PutBucketAnalyticsConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketAnalyticsConfigurationError> {
+    ) -> Result<(), RusotoError<PutBucketAnalyticsConfigurationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22600,25 +22445,27 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(PutBucketAnalyticsConfigurationError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketAnalyticsConfigurationError::from_response(
+                response,
+            ));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Sets the CORS configuration for a bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_cors(&self, input: PutBucketCorsRequest) -> RusotoFuture<(), PutBucketCorsError> {
+    async fn put_bucket_cors(
+        &self,
+        input: PutBucketCorsRequest,
+    ) -> Result<(), RusotoError<PutBucketCorsError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22638,24 +22485,25 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutBucketCorsError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketCorsError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Creates a new server-side encryption configuration (or replaces an existing one, if present).</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_encryption(
+    async fn put_bucket_encryption(
         &self,
         input: PutBucketEncryptionRequest,
-    ) -> RusotoFuture<(), PutBucketEncryptionError> {
+    ) -> Result<(), RusotoError<PutBucketEncryptionError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22674,24 +22522,25 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutBucketEncryptionError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketEncryptionError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Adds an inventory configuration (identified by the inventory ID) from the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_inventory_configuration(
+    async fn put_bucket_inventory_configuration(
         &self,
         input: PutBucketInventoryConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketInventoryConfigurationError> {
+    ) -> Result<(), RusotoError<PutBucketInventoryConfigurationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22708,28 +22557,27 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(PutBucketInventoryConfigurationError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketInventoryConfigurationError::from_response(
+                response,
+            ));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p> No longer used, see the PutBucketLifecycleConfiguration operation.</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_lifecycle(
+    async fn put_bucket_lifecycle(
         &self,
         input: PutBucketLifecycleRequest,
-    ) -> RusotoFuture<(), PutBucketLifecycleError> {
+    ) -> Result<(), RusotoError<PutBucketLifecycleError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22753,24 +22601,25 @@ impl S3 for S3Client {
         }
         request.set_content_md5_header();
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutBucketLifecycleError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketLifecycleError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it.</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_lifecycle_configuration(
+    async fn put_bucket_lifecycle_configuration(
         &self,
         input: PutBucketLifecycleConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketLifecycleConfigurationError> {
+    ) -> Result<(), RusotoError<PutBucketLifecycleConfigurationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22791,28 +22640,27 @@ impl S3 for S3Client {
         }
         request.set_content_md5_header();
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(PutBucketLifecycleConfigurationError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketLifecycleConfigurationError::from_response(
+                response,
+            ));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner.</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_logging(
+    async fn put_bucket_logging(
         &self,
         input: PutBucketLoggingRequest,
-    ) -> RusotoFuture<(), PutBucketLoggingError> {
+    ) -> Result<(), RusotoError<PutBucketLoggingError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22831,24 +22679,25 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutBucketLoggingError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketLoggingError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Sets a metrics configuration (specified by the metrics configuration ID) for the bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_metrics_configuration(
+    async fn put_bucket_metrics_configuration(
         &self,
         input: PutBucketMetricsConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketMetricsConfigurationError> {
+    ) -> Result<(), RusotoError<PutBucketMetricsConfigurationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22865,26 +22714,25 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(PutBucketMetricsConfigurationError::from_response(response))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketMetricsConfigurationError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p> No longer used, see the PutBucketNotificationConfiguration operation.</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_notification(
+    async fn put_bucket_notification(
         &self,
         input: PutBucketNotificationRequest,
-    ) -> RusotoFuture<(), PutBucketNotificationError> {
+    ) -> Result<(), RusotoError<PutBucketNotificationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22903,24 +22751,25 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutBucketNotificationError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketNotificationError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Enables notifications of specified events for a bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_notification_configuration(
+    async fn put_bucket_notification_configuration(
         &self,
         input: PutBucketNotificationConfigurationRequest,
-    ) -> RusotoFuture<(), PutBucketNotificationConfigurationError> {
+    ) -> Result<(), RusotoError<PutBucketNotificationConfigurationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22936,28 +22785,27 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(PutBucketNotificationConfigurationError::from_response(
-                            response,
-                        ))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketNotificationConfigurationError::from_response(
+                response,
+            ));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Applies an Amazon S3 bucket policy to an Amazon S3 bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_policy(
+    async fn put_bucket_policy(
         &self,
         input: PutBucketPolicyRequest,
-    ) -> RusotoFuture<(), PutBucketPolicyError> {
+    ) -> Result<(), RusotoError<PutBucketPolicyError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -22978,24 +22826,25 @@ impl S3 for S3Client {
         request.set_params(params);
         request.set_payload(Some(input.policy.into_bytes()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutBucketPolicyError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketPolicyError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p> Creates a replication configuration or replaces an existing one. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_replication(
+    async fn put_bucket_replication(
         &self,
         input: PutBucketReplicationRequest,
-    ) -> RusotoFuture<(), PutBucketReplicationError> {
+    ) -> Result<(), RusotoError<PutBucketReplicationError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23019,24 +22868,25 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutBucketReplicationError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketReplicationError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_request_payment(
+    async fn put_bucket_request_payment(
         &self,
         input: PutBucketRequestPaymentRequest,
-    ) -> RusotoFuture<(), PutBucketRequestPaymentError> {
+    ) -> Result<(), RusotoError<PutBucketRequestPaymentError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23055,24 +22905,25 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutBucketRequestPaymentError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketRequestPaymentError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Sets the tags for a bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_tagging(
+    async fn put_bucket_tagging(
         &self,
         input: PutBucketTaggingRequest,
-    ) -> RusotoFuture<(), PutBucketTaggingError> {
+    ) -> Result<(), RusotoError<PutBucketTaggingError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23088,24 +22939,25 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutBucketTaggingError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketTaggingError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner.</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_versioning(
+    async fn put_bucket_versioning(
         &self,
         input: PutBucketVersioningRequest,
-    ) -> RusotoFuture<(), PutBucketVersioningError> {
+    ) -> Result<(), RusotoError<PutBucketVersioningError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23128,24 +22980,25 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutBucketVersioningError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketVersioningError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Set the website configuration for a bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn put_bucket_website(
+    async fn put_bucket_website(
         &self,
         input: PutBucketWebsiteRequest,
-    ) -> RusotoFuture<(), PutBucketWebsiteError> {
+    ) -> Result<(), RusotoError<PutBucketWebsiteError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23164,21 +23017,25 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutBucketWebsiteError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutBucketWebsiteError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Adds an object to a bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn put_object(&self, input: PutObjectRequest) -> RusotoFuture<PutObjectOutput, PutObjectError> {
+    async fn put_object(
+        &self,
+        input: PutObjectRequest,
+    ) -> Result<PutObjectOutput, RusotoError<PutObjectError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23318,87 +23175,81 @@ impl S3 for S3Client {
             request.set_payload_stream(__body);
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutObjectError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutObjectError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(PutObjectOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result =
-                            PutObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack);
-                    }
-                    if let Some(e_tag) = response.headers.get("ETag") {
-                        let value = e_tag.to_owned();
-                        result.e_tag = Some(value)
-                    };
-                    if let Some(expiration) = response.headers.get("x-amz-expiration") {
-                        let value = expiration.to_owned();
-                        result.expiration = Some(value)
-                    };
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    };
-                    if let Some(sse_customer_algorithm) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm")
-                    {
-                        let value = sse_customer_algorithm.to_owned();
-                        result.sse_customer_algorithm = Some(value)
-                    };
-                    if let Some(sse_customer_key_md5) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5")
-                    {
-                        let value = sse_customer_key_md5.to_owned();
-                        result.sse_customer_key_md5 = Some(value)
-                    };
-                    if let Some(ssekms_key_id) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id")
-                    {
-                        let value = ssekms_key_id.to_owned();
-                        result.ssekms_key_id = Some(value)
-                    };
-                    if let Some(server_side_encryption) =
-                        response.headers.get("x-amz-server-side-encryption")
-                    {
-                        let value = server_side_encryption.to_owned();
-                        result.server_side_encryption = Some(value)
-                    };
-                    if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                        let value = version_id.to_owned();
-                        result.version_id = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = PutObjectOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = PutObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        };
+        if let Some(expiration) = response.headers.get("x-amz-expiration") {
+            let value = expiration.to_owned();
+            result.expiration = Some(value)
+        };
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        };
+        if let Some(sse_customer_algorithm) = response
+            .headers
+            .get("x-amz-server-side-encryption-customer-algorithm")
+        {
+            let value = sse_customer_algorithm.to_owned();
+            result.sse_customer_algorithm = Some(value)
+        };
+        if let Some(sse_customer_key_md5) = response
+            .headers
+            .get("x-amz-server-side-encryption-customer-key-MD5")
+        {
+            let value = sse_customer_key_md5.to_owned();
+            result.sse_customer_key_md5 = Some(value)
+        };
+        if let Some(ssekms_key_id) = response
+            .headers
+            .get("x-amz-server-side-encryption-aws-kms-key-id")
+        {
+            let value = ssekms_key_id.to_owned();
+            result.ssekms_key_id = Some(value)
+        };
+        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
+            let value = server_side_encryption.to_owned();
+            result.server_side_encryption = Some(value)
+        };
+        if let Some(version_id) = response.headers.get("x-amz-version-id") {
+            let value = version_id.to_owned();
+            result.version_id = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket</p>
     #[allow(unused_variables, warnings)]
-    fn put_object_acl(
+    async fn put_object_acl(
         &self,
         input: PutObjectAclRequest,
-    ) -> RusotoFuture<PutObjectAclOutput, PutObjectAclError> {
+    ) -> Result<PutObjectAclOutput, RusotoError<PutObjectAclError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23452,50 +23303,44 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutObjectAclError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutObjectAclError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(PutObjectAclOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = PutObjectAclOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = PutObjectAclOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = PutObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Applies a Legal Hold configuration to the specified object.</p>
     #[allow(unused_variables, warnings)]
-    fn put_object_legal_hold(
+    async fn put_object_legal_hold(
         &self,
         input: PutObjectLegalHoldRequest,
-    ) -> RusotoFuture<PutObjectLegalHoldOutput, PutObjectLegalHoldError> {
+    ) -> Result<PutObjectLegalHoldOutput, RusotoError<PutObjectLegalHoldError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23525,50 +23370,46 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutObjectLegalHoldError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutObjectLegalHoldError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(PutObjectLegalHoldOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = PutObjectLegalHoldOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = PutObjectLegalHoldOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                PutObjectLegalHoldOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Places an object lock configuration on the specified bucket. The rule specified in the object lock configuration will be applied by default to every new object placed in the specified bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn put_object_lock_configuration(
+    async fn put_object_lock_configuration(
         &self,
         input: PutObjectLockConfigurationRequest,
-    ) -> RusotoFuture<PutObjectLockConfigurationOutput, PutObjectLockConfigurationError> {
+    ) -> Result<PutObjectLockConfigurationOutput, RusotoError<PutObjectLockConfigurationError>>
+    {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23599,52 +23440,47 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| {
-                        Err(PutObjectLockConfigurationError::from_response(response))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutObjectLockConfigurationError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(PutObjectLockConfigurationOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = PutObjectLockConfigurationOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = PutObjectLockConfigurationOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = PutObjectLockConfigurationOutputDeserializer::deserialize(
+                &actual_tag_name,
+                &mut stack,
+            )?;
+        }
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Places an Object Retention configuration on an object.</p>
     #[allow(unused_variables, warnings)]
-    fn put_object_retention(
+    async fn put_object_retention(
         &self,
         input: PutObjectRetentionRequest,
-    ) -> RusotoFuture<PutObjectRetentionOutput, PutObjectRetentionError> {
+    ) -> Result<PutObjectRetentionOutput, RusotoError<PutObjectRetentionError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23681,50 +23517,45 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutObjectRetentionError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutObjectRetentionError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(PutObjectRetentionOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = PutObjectRetentionOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = PutObjectRetentionOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                PutObjectRetentionOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Sets the supplied tag-set to an object that already exists in a bucket</p>
     #[allow(unused_variables, warnings)]
-    fn put_object_tagging(
+    async fn put_object_tagging(
         &self,
         input: PutObjectTaggingRequest,
-    ) -> RusotoFuture<PutObjectTaggingOutput, PutObjectTaggingError> {
+    ) -> Result<PutObjectTaggingOutput, RusotoError<PutObjectTaggingError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23742,50 +23573,44 @@ impl S3 for S3Client {
         TaggingSerializer::serialize(&mut writer, "Tagging", &input.tagging);
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutObjectTaggingError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutObjectTaggingError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(PutObjectTaggingOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = PutObjectTaggingOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                        let value = version_id.to_owned();
-                        result.version_id = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = PutObjectTaggingOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = PutObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(version_id) = response.headers.get("x-amz-version-id") {
+            let value = version_id.to_owned();
+            result.version_id = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates or modifies the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>
     #[allow(unused_variables, warnings)]
-    fn put_public_access_block(
+    async fn put_public_access_block(
         &self,
         input: PutPublicAccessBlockRequest,
-    ) -> RusotoFuture<(), PutPublicAccessBlockError> {
+    ) -> Result<(), RusotoError<PutPublicAccessBlockError>> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -23804,24 +23629,25 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(PutPublicAccessBlockError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutPublicAccessBlockError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Restores an archived copy of an object back into Amazon S3</p>
     #[allow(unused_variables, warnings)]
-    fn restore_object(
+    async fn restore_object(
         &self,
         input: RestoreObjectRequest,
-    ) -> RusotoFuture<RestoreObjectOutput, RestoreObjectError> {
+    ) -> Result<RestoreObjectOutput, RusotoError<RestoreObjectError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
@@ -23847,56 +23673,48 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(RestoreObjectError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RestoreObjectError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(RestoreObjectOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = RestoreObjectOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    };
-                    if let Some(restore_output_path) =
-                        response.headers.get("x-amz-restore-output-path")
-                    {
-                        let value = restore_output_path.to_owned();
-                        result.restore_output_path = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = RestoreObjectOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = RestoreObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        };
+        if let Some(restore_output_path) = response.headers.get("x-amz-restore-output-path") {
+            let value = restore_output_path.to_owned();
+            result.restore_output_path = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>This operation filters the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response.</p>
     #[allow(unused_variables, warnings)]
-    fn select_object_content(
+    async fn select_object_content(
         &self,
         input: SelectObjectContentRequest,
-    ) -> RusotoFuture<SelectObjectContentOutput, SelectObjectContentError> {
+    ) -> Result<SelectObjectContentOutput, RusotoError<SelectObjectContentError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
@@ -23933,47 +23751,42 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(SelectObjectContentError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SelectObjectContentError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(SelectObjectContentOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = SelectObjectContentOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = SelectObjectContentOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result =
+                SelectObjectContentOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Uploads a part in a multipart upload.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
     #[allow(unused_variables, warnings)]
-    fn upload_part(
+    async fn upload_part(
         &self,
         input: UploadPartRequest,
-    ) -> RusotoFuture<UploadPartOutput, UploadPartError> {
+    ) -> Result<UploadPartOutput, RusotoError<UploadPartError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -24018,79 +23831,73 @@ impl S3 for S3Client {
             request.set_payload_stream(__body);
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(UploadPartError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UploadPartError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(UploadPartOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result =
-                            UploadPartOutputDeserializer::deserialize(&actual_tag_name, &mut stack);
-                    }
-                    if let Some(e_tag) = response.headers.get("ETag") {
-                        let value = e_tag.to_owned();
-                        result.e_tag = Some(value)
-                    };
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    };
-                    if let Some(sse_customer_algorithm) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm")
-                    {
-                        let value = sse_customer_algorithm.to_owned();
-                        result.sse_customer_algorithm = Some(value)
-                    };
-                    if let Some(sse_customer_key_md5) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5")
-                    {
-                        let value = sse_customer_key_md5.to_owned();
-                        result.sse_customer_key_md5 = Some(value)
-                    };
-                    if let Some(ssekms_key_id) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id")
-                    {
-                        let value = ssekms_key_id.to_owned();
-                        result.ssekms_key_id = Some(value)
-                    };
-                    if let Some(server_side_encryption) =
-                        response.headers.get("x-amz-server-side-encryption")
-                    {
-                        let value = server_side_encryption.to_owned();
-                        result.server_side_encryption = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = UploadPartOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = UploadPartOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(e_tag) = response.headers.get("ETag") {
+            let value = e_tag.to_owned();
+            result.e_tag = Some(value)
+        };
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        };
+        if let Some(sse_customer_algorithm) = response
+            .headers
+            .get("x-amz-server-side-encryption-customer-algorithm")
+        {
+            let value = sse_customer_algorithm.to_owned();
+            result.sse_customer_algorithm = Some(value)
+        };
+        if let Some(sse_customer_key_md5) = response
+            .headers
+            .get("x-amz-server-side-encryption-customer-key-MD5")
+        {
+            let value = sse_customer_key_md5.to_owned();
+            result.sse_customer_key_md5 = Some(value)
+        };
+        if let Some(ssekms_key_id) = response
+            .headers
+            .get("x-amz-server-side-encryption-aws-kms-key-id")
+        {
+            let value = ssekms_key_id.to_owned();
+            result.ssekms_key_id = Some(value)
+        };
+        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
+            let value = server_side_encryption.to_owned();
+            result.server_side_encryption = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 
     /// <p>Uploads a part by copying data from an existing object as data source.</p>
     #[allow(unused_variables, warnings)]
-    fn upload_part_copy(
+    async fn upload_part_copy(
         &self,
         input: UploadPartCopyRequest,
-    ) -> RusotoFuture<UploadPartCopyOutput, UploadPartCopyError> {
+    ) -> Result<UploadPartCopyOutput, RusotoError<UploadPartCopyError>> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
@@ -24181,75 +23988,65 @@ impl S3 for S3Client {
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .and_then(|response| Err(UploadPartCopyError::from_response(response)))
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UploadPartCopyError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let mut result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(UploadPartCopyOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        result = UploadPartCopyOutputDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        );
-                    }
-                    if let Some(copy_source_version_id) =
-                        response.headers.get("x-amz-copy-source-version-id")
-                    {
-                        let value = copy_source_version_id.to_owned();
-                        result.copy_source_version_id = Some(value)
-                    };
-                    if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                        let value = request_charged.to_owned();
-                        result.request_charged = Some(value)
-                    };
-                    if let Some(sse_customer_algorithm) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm")
-                    {
-                        let value = sse_customer_algorithm.to_owned();
-                        result.sse_customer_algorithm = Some(value)
-                    };
-                    if let Some(sse_customer_key_md5) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5")
-                    {
-                        let value = sse_customer_key_md5.to_owned();
-                        result.sse_customer_key_md5 = Some(value)
-                    };
-                    if let Some(ssekms_key_id) = response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id")
-                    {
-                        let value = ssekms_key_id.to_owned();
-                        result.ssekms_key_id = Some(value)
-                    };
-                    if let Some(server_side_encryption) =
-                        response.headers.get("x-amz-server-side-encryption")
-                    {
-                        let value = server_side_encryption.to_owned();
-                        result.server_side_encryption = Some(value)
-                    }; // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = UploadPartCopyOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            result = UploadPartCopyOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+        }
+        if let Some(copy_source_version_id) = response.headers.get("x-amz-copy-source-version-id") {
+            let value = copy_source_version_id.to_owned();
+            result.copy_source_version_id = Some(value)
+        };
+        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+            let value = request_charged.to_owned();
+            result.request_charged = Some(value)
+        };
+        if let Some(sse_customer_algorithm) = response
+            .headers
+            .get("x-amz-server-side-encryption-customer-algorithm")
+        {
+            let value = sse_customer_algorithm.to_owned();
+            result.sse_customer_algorithm = Some(value)
+        };
+        if let Some(sse_customer_key_md5) = response
+            .headers
+            .get("x-amz-server-side-encryption-customer-key-MD5")
+        {
+            let value = sse_customer_key_md5.to_owned();
+            result.sse_customer_key_md5 = Some(value)
+        };
+        if let Some(ssekms_key_id) = response
+            .headers
+            .get("x-amz-server-side-encryption-aws-kms-key-id")
+        {
+            let value = ssekms_key_id.to_owned();
+            result.ssekms_key_id = Some(value)
+        };
+        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
+            let value = server_side_encryption.to_owned();
+            result.server_side_encryption = Some(value)
+        }; // parse non-payload
+        Ok(result)
     }
 }
 
@@ -24262,8 +24059,8 @@ mod protocol_tests {
     use super::*;
     use rusoto_core::Region as rusoto_region;
 
-    #[test]
-    fn test_parse_error_s3_create_bucket() {
+    #[tokio::test]
+    async fn test_parse_error_s3_create_bucket() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/error",
             "s3-create-bucket.xml",
@@ -24271,12 +24068,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateBucketRequest::default();
-        let result = client.create_bucket(request).sync();
+        let result = client.create_bucket(request).await;
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_error_s3_list_objects() {
+    #[tokio::test]
+    async fn test_parse_error_s3_list_objects() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/error",
             "s3-list-objects.xml",
@@ -24284,12 +24081,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListObjectsRequest::default();
-        let result = client.list_objects(request).sync();
+        let result = client.list_objects(request).await;
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_s3_get_bucket_acl() {
+    #[tokio::test]
+    async fn test_parse_valid_s3_get_bucket_acl() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "s3-get-bucket-acl.xml",
@@ -24297,12 +24094,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetBucketAclRequest::default();
-        let result = client.get_bucket_acl(request).sync();
+        let result = client.get_bucket_acl(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_s3_get_bucket_location() {
+    #[tokio::test]
+    async fn test_parse_valid_s3_get_bucket_location() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "s3-get-bucket-location.xml",
@@ -24310,12 +24107,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetBucketLocationRequest::default();
-        let result = client.get_bucket_location(request).sync();
+        let result = client.get_bucket_location(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_s3_get_bucket_logging() {
+    #[tokio::test]
+    async fn test_parse_valid_s3_get_bucket_logging() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "s3-get-bucket-logging.xml",
@@ -24323,12 +24120,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetBucketLoggingRequest::default();
-        let result = client.get_bucket_logging(request).sync();
+        let result = client.get_bucket_logging(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_s3_get_bucket_policy() {
+    #[tokio::test]
+    async fn test_parse_valid_s3_get_bucket_policy() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "s3-get-bucket-policy.xml",
@@ -24336,12 +24133,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetBucketPolicyRequest::default();
-        let result = client.get_bucket_policy(request).sync();
+        let result = client.get_bucket_policy(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_s3_list_buckets() {
+    #[tokio::test]
+    async fn test_parse_valid_s3_list_buckets() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "s3-list-buckets.xml",
@@ -24349,12 +24146,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.list_buckets().sync();
+        let result = client.list_buckets().await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_s3_list_multipart_uploads() {
+    #[tokio::test]
+    async fn test_parse_valid_s3_list_multipart_uploads() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "s3-list-multipart-uploads.xml",
@@ -24362,12 +24159,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListMultipartUploadsRequest::default();
-        let result = client.list_multipart_uploads(request).sync();
+        let result = client.list_multipart_uploads(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_s3_list_object_versions() {
+    #[tokio::test]
+    async fn test_parse_valid_s3_list_object_versions() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "s3-list-object-versions.xml",
@@ -24375,12 +24172,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListObjectVersionsRequest::default();
-        let result = client.list_object_versions(request).sync();
+        let result = client.list_object_versions(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_s3_list_objects() {
+    #[tokio::test]
+    async fn test_parse_valid_s3_list_objects() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "s3-list-objects.xml",
@@ -24388,7 +24185,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListObjectsRequest::default();
-        let result = client.list_objects(request).sync();
+        let result = client.list_objects(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

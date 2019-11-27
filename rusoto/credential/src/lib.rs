@@ -299,7 +299,7 @@ pub struct AutoRefreshingProviderFuture {
 impl Future for AutoRefreshingProviderFuture {
     type Output = Result<AwsCredentials, CredentialsError>;
 
-    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         let this = self.project();
         match this.inner {
             AutoRefreshingFutureInner::Cached(ref creds) => Poll::Ready(Ok(creds.deref().clone())),

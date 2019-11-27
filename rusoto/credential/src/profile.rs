@@ -10,7 +10,7 @@ use dirs::home_dir;
 use futures::FutureExt;
 use regex::Regex;
 use serde::Deserialize;
-use tokio_net::process::Command;
+use tokio::net::process::Command;
 
 use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
 

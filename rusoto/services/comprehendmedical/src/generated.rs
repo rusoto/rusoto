@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -303,18 +304,19 @@ impl Error for DetectPHIError {
     }
 }
 /// Trait representing the capabilities of the ComprehendMedical API. ComprehendMedical clients implement this trait.
+#[async_trait]
 pub trait ComprehendMedical {
     /// <p> Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information .</p>
-    fn detect_entities(
+    async fn detect_entities(
         &self,
         input: DetectEntitiesRequest,
-    ) -> RusotoFuture<DetectEntitiesResponse, DetectEntitiesError>;
+    ) -> Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>>;
 
     /// <p> Inspects the clinical text for personal health information (PHI) entities and entity category, location, and confidence score on that information.</p>
-    fn detect_phi(
+    async fn detect_phi(
         &self,
         input: DetectPHIRequest,
-    ) -> RusotoFuture<DetectPHIResponse, DetectPHIError>;
+    ) -> Result<DetectPHIResponse, RusotoError<DetectPHIError>>;
 }
 /// A client for the ComprehendMedical API.
 #[derive(Clone)]
@@ -350,12 +352,13 @@ impl ComprehendMedicalClient {
     }
 }
 
+#[async_trait]
 impl ComprehendMedical for ComprehendMedicalClient {
     /// <p> Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information .</p>
-    fn detect_entities(
+    async fn detect_entities(
         &self,
         input: DetectEntitiesRequest,
-    ) -> RusotoFuture<DetectEntitiesResponse, DetectEntitiesError> {
+    ) -> Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>> {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -363,42 +366,26 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DetectEntitiesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DetectEntitiesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DetectEntitiesResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DetectEntitiesError>
-                            })
-                            .and_then(|response| Err(DetectEntitiesError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DetectEntitiesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DetectEntitiesError::from_response(response))
+        }
     }
 
     /// <p> Inspects the clinical text for personal health information (PHI) entities and entity category, location, and confidence score on that information.</p>
-    fn detect_phi(
+    async fn detect_phi(
         &self,
         input: DetectPHIRequest,
-    ) -> RusotoFuture<DetectPHIResponse, DetectPHIError> {
+    ) -> Result<DetectPHIResponse, RusotoError<DetectPHIError>> {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -406,34 +393,18 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DetectPHIError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DetectPHIError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DetectPHIResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DetectPHIError>
-                            })
-                            .and_then(|response| Err(DetectPHIError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DetectPHIResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DetectPHIError::from_response(response))
+        }
     }
 }

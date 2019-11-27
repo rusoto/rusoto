@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
@@ -3774,221 +3775,240 @@ impl Error for UpdateFunctionConfigurationError {
     }
 }
 /// Trait representing the capabilities of the AWS Lambda API. AWS Lambda clients implement this trait.
+#[async_trait]
 pub trait Lambda {
     /// <p>Adds permissions to the resource-based policy of a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Use this action to grant layer usage permission to other accounts. You can grant permission to a single account, all AWS accounts, or all accounts in an organization.</p> <p>To revoke permission, call <a>RemoveLayerVersionPermission</a> with the statement ID that you specified when you added it.</p>
-    fn add_layer_version_permission(
+    async fn add_layer_version_permission(
         &self,
         input: AddLayerVersionPermissionRequest,
-    ) -> RusotoFuture<AddLayerVersionPermissionResponse, AddLayerVersionPermissionError>;
+    ) -> Result<AddLayerVersionPermissionResponse, RusotoError<AddLayerVersionPermissionError>>;
 
     /// <p>Grants an AWS service or another account permission to use a function. You can apply the policy at the function level, or specify a qualifier to restrict access to a single version or alias. If you use a qualifier, the invoker must use the full Amazon Resource Name (ARN) of that version or alias to invoke the function.</p> <p>To grant permission to another account, specify the account ID as the <code>Principal</code>. For AWS services, the principal is a domain-style identifier defined by the service, like <code>s3.amazonaws.com</code> or <code>sns.amazonaws.com</code>. For AWS services, you can also specify the ARN or owning account of the associated resource as the <code>SourceArn</code> or <code>SourceAccount</code>. If you grant permission to a service principal without specifying the source, other accounts could potentially configure resources in their account to invoke your Lambda function.</p> <p>This action adds a statement to a resource-based permission policy for the function. For more information about function policies, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html">Lambda Function Policies</a>. </p>
-    fn add_permission(
+    async fn add_permission(
         &self,
         input: AddPermissionRequest,
-    ) -> RusotoFuture<AddPermissionResponse, AddPermissionError>;
+    ) -> Result<AddPermissionResponse, RusotoError<AddPermissionError>>;
 
     /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a> for a Lambda function version. Use aliases to provide clients with a function identifier that you can update to invoke a different version.</p> <p>You can also map an alias to split invocation requests between two versions. Use the <code>RoutingConfig</code> parameter to specify a second version and the percentage of invocation requests that it receives.</p>
-    fn create_alias(
+    async fn create_alias(
         &self,
         input: CreateAliasRequest,
-    ) -> RusotoFuture<AliasConfiguration, CreateAliasError>;
+    ) -> Result<AliasConfiguration, RusotoError<CreateAliasError>>;
 
     /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> </ul></p>
-    fn create_event_source_mapping(
+    async fn create_event_source_mapping(
         &self,
         input: CreateEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, CreateEventSourceMappingError>;
+    ) -> Result<EventSourceMappingConfiguration, RusotoError<CreateEventSourceMappingError>>;
 
     /// <p>Creates a Lambda function. To create a function, you need a <a href="https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html">deployment package</a> and an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role">execution role</a>. The deployment package contains your function code. The execution role grants the function permission to use AWS services, such as Amazon CloudWatch Logs for log streaming and AWS X-Ray for request tracing.</p> <p>A function has an unpublished version, and can have published versions and aliases. The unpublished version changes when you update your function's code and configuration. A published version is a snapshot of your function code and configuration that can't be changed. An alias is a named resource that maps to a version, and can be changed to map to a different version. Use the <code>Publish</code> parameter to create version <code>1</code> of your function from its initial configuration.</p> <p>The other parameters let you configure version-specific and function-level settings. You can modify version-specific settings later with <a>UpdateFunctionConfiguration</a>. Function-level settings apply to both the unpublished and published versions of the function, and include tags (<a>TagResource</a>) and per-function concurrency limits (<a>PutFunctionConcurrency</a>).</p> <p>If another account or an AWS service invokes your function, use <a>AddPermission</a> to grant permission by creating a resource-based IAM policy. You can grant permissions at the function level, on a version, or on an alias.</p> <p>To invoke your function directly, use <a>Invoke</a>. To invoke your function in response to events in other AWS services, create an event source mapping (<a>CreateEventSourceMapping</a>), or configure a function trigger in the other service. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-functions.html">Invoking Functions</a>.</p>
-    fn create_function(
+    async fn create_function(
         &self,
         input: CreateFunctionRequest,
-    ) -> RusotoFuture<FunctionConfiguration, CreateFunctionError>;
+    ) -> Result<FunctionConfiguration, RusotoError<CreateFunctionError>>;
 
     /// <p>Deletes a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
-    fn delete_alias(&self, input: DeleteAliasRequest) -> RusotoFuture<(), DeleteAliasError>;
+    async fn delete_alias(
+        &self,
+        input: DeleteAliasRequest,
+    ) -> Result<(), RusotoError<DeleteAliasError>>;
 
     /// <p>Deletes an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-invocation-modes.html">event source mapping</a>. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p>
-    fn delete_event_source_mapping(
+    async fn delete_event_source_mapping(
         &self,
         input: DeleteEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, DeleteEventSourceMappingError>;
+    ) -> Result<EventSourceMappingConfiguration, RusotoError<DeleteEventSourceMappingError>>;
 
     /// <p>Deletes a Lambda function. To delete a specific function version, use the <code>Qualifier</code> parameter. Otherwise, all versions and aliases are deleted.</p> <p>To delete Lambda event source mappings that invoke a function, use <a>DeleteEventSourceMapping</a>. For AWS services and resources that invoke your function directly, delete the trigger in the service where you originally configured it.</p>
-    fn delete_function(
+    async fn delete_function(
         &self,
         input: DeleteFunctionRequest,
-    ) -> RusotoFuture<(), DeleteFunctionError>;
+    ) -> Result<(), RusotoError<DeleteFunctionError>>;
 
     /// <p>Removes a concurrent execution limit from a function.</p>
-    fn delete_function_concurrency(
+    async fn delete_function_concurrency(
         &self,
         input: DeleteFunctionConcurrencyRequest,
-    ) -> RusotoFuture<(), DeleteFunctionConcurrencyError>;
+    ) -> Result<(), RusotoError<DeleteFunctionConcurrencyError>>;
 
     /// <p>Deletes a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Deleted versions can no longer be viewed or added to functions. To avoid breaking functions, a copy of the version remains in Lambda until no functions refer to it.</p>
-    fn delete_layer_version(
+    async fn delete_layer_version(
         &self,
         input: DeleteLayerVersionRequest,
-    ) -> RusotoFuture<(), DeleteLayerVersionError>;
+    ) -> Result<(), RusotoError<DeleteLayerVersionError>>;
 
     /// <p>Retrieves details about your account's <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limits</a> and usage in an AWS Region.</p>
-    fn get_account_settings(
+    async fn get_account_settings(
         &self,
-    ) -> RusotoFuture<GetAccountSettingsResponse, GetAccountSettingsError>;
+    ) -> Result<GetAccountSettingsResponse, RusotoError<GetAccountSettingsError>>;
 
     /// <p>Returns details about a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
-    fn get_alias(&self, input: GetAliasRequest) -> RusotoFuture<AliasConfiguration, GetAliasError>;
+    async fn get_alias(
+        &self,
+        input: GetAliasRequest,
+    ) -> Result<AliasConfiguration, RusotoError<GetAliasError>>;
 
     /// <p>Returns details about an event source mapping. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p>
-    fn get_event_source_mapping(
+    async fn get_event_source_mapping(
         &self,
         input: GetEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, GetEventSourceMappingError>;
+    ) -> Result<EventSourceMappingConfiguration, RusotoError<GetEventSourceMappingError>>;
 
     /// <p>Returns information about the function or function version, with a link to download the deployment package that's valid for 10 minutes. If you specify a function version, only details that are specific to that version are returned.</p>
-    fn get_function(
+    async fn get_function(
         &self,
         input: GetFunctionRequest,
-    ) -> RusotoFuture<GetFunctionResponse, GetFunctionError>;
+    ) -> Result<GetFunctionResponse, RusotoError<GetFunctionError>>;
 
     /// <p>Returns the version-specific settings of a Lambda function or version. The output includes only options that can vary between versions of a function. To modify these settings, use <a>UpdateFunctionConfiguration</a>.</p> <p>To get all of a function's details, including function-level settings, use <a>GetFunction</a>.</p>
-    fn get_function_configuration(
+    async fn get_function_configuration(
         &self,
         input: GetFunctionConfigurationRequest,
-    ) -> RusotoFuture<FunctionConfiguration, GetFunctionConfigurationError>;
+    ) -> Result<FunctionConfiguration, RusotoError<GetFunctionConfigurationError>>;
 
     /// <p>Returns information about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>, with a link to download the layer archive that's valid for 10 minutes.</p>
-    fn get_layer_version(
+    async fn get_layer_version(
         &self,
         input: GetLayerVersionRequest,
-    ) -> RusotoFuture<GetLayerVersionResponse, GetLayerVersionError>;
+    ) -> Result<GetLayerVersionResponse, RusotoError<GetLayerVersionError>>;
 
     /// <p>Returns information about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>, with a link to download the layer archive that's valid for 10 minutes.</p>
-    fn get_layer_version_by_arn(
+    async fn get_layer_version_by_arn(
         &self,
         input: GetLayerVersionByArnRequest,
-    ) -> RusotoFuture<GetLayerVersionResponse, GetLayerVersionByArnError>;
+    ) -> Result<GetLayerVersionResponse, RusotoError<GetLayerVersionByArnError>>;
 
     /// <p>Returns the permission policy for a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. For more information, see <a>AddLayerVersionPermission</a>.</p>
-    fn get_layer_version_policy(
+    async fn get_layer_version_policy(
         &self,
         input: GetLayerVersionPolicyRequest,
-    ) -> RusotoFuture<GetLayerVersionPolicyResponse, GetLayerVersionPolicyError>;
+    ) -> Result<GetLayerVersionPolicyResponse, RusotoError<GetLayerVersionPolicyError>>;
 
     /// <p>Returns the <a href="https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html">resource-based IAM policy</a> for a function, version, or alias.</p>
-    fn get_policy(
+    async fn get_policy(
         &self,
         input: GetPolicyRequest,
-    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError>;
+    ) -> Result<GetPolicyResponse, RusotoError<GetPolicyError>>;
 
     /// <p>Invokes a Lambda function. You can invoke a function synchronously (and wait for the response), or asynchronously. To invoke a function asynchronously, set <code>InvocationType</code> to <code>Event</code>.</p> <p>For synchronous invocation, details about the function response, including errors, are included in the response body and headers. For either invocation type, you can find more information in the <a href="https://docs.aws.amazon.com/lambda/latest/dg/monitoring-functions.html">execution log</a> and <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">trace</a>. To record function errors for asynchronous invocations, configure your function with a <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">dead letter queue</a>.</p> <p>When an error occurs, your function may be invoked multiple times. Retry behavior varies by error type, client, event source, and invocation type. For example, if you invoke a function asynchronously and it returns an error, Lambda executes the function up to two more times. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/retries-on-errors.html">Retry Behavior</a>.</p> <p>The status code in the API response doesn't reflect function errors. Error codes are reserved for errors that prevent your function from executing, such as permissions errors, <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limit errors</a>, or issues with your function's code and configuration. For example, Lambda returns <code>TooManyRequestsException</code> if executing the function would cause you to exceed a concurrency limit at either the account level (<code>ConcurrentInvocationLimitExceeded</code>) or function level (<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p> <p>For functions with a long timeout, your client might be disconnected during synchronous invocation while it waits for a response. Configure your HTTP client, SDK, firewall, proxy, or operating system to allow for long connections with timeout or keep-alive settings.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
-    fn invoke(&self, input: InvocationRequest) -> RusotoFuture<InvocationResponse, InvokeError>;
+    async fn invoke(
+        &self,
+        input: InvocationRequest,
+    ) -> Result<InvocationResponse, RusotoError<InvokeError>>;
 
     /// <p><important> <p>For asynchronous function invocation, use <a>Invoke</a>.</p> </important> <p>Invokes a function asynchronously.</p></p>
-    fn invoke_async(
+    async fn invoke_async(
         &self,
         input: InvokeAsyncRequest,
-    ) -> RusotoFuture<InvokeAsyncResponse, InvokeAsyncError>;
+    ) -> Result<InvokeAsyncResponse, RusotoError<InvokeAsyncError>>;
 
     /// <p>Returns a list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">aliases</a> for a Lambda function.</p>
-    fn list_aliases(
+    async fn list_aliases(
         &self,
         input: ListAliasesRequest,
-    ) -> RusotoFuture<ListAliasesResponse, ListAliasesError>;
+    ) -> Result<ListAliasesResponse, RusotoError<ListAliasesError>>;
 
     /// <p>Lists event source mappings. Specify an <code>EventSourceArn</code> to only show event source mappings for a single event source.</p>
-    fn list_event_source_mappings(
+    async fn list_event_source_mappings(
         &self,
         input: ListEventSourceMappingsRequest,
-    ) -> RusotoFuture<ListEventSourceMappingsResponse, ListEventSourceMappingsError>;
+    ) -> Result<ListEventSourceMappingsResponse, RusotoError<ListEventSourceMappingsError>>;
 
     /// <p>Returns a list of Lambda functions, with the version-specific configuration of each.</p> <p>Set <code>FunctionVersion</code> to <code>ALL</code> to include all published versions of each function in addition to the unpublished version. To get more information about a function or version, use <a>GetFunction</a>.</p>
-    fn list_functions(
+    async fn list_functions(
         &self,
         input: ListFunctionsRequest,
-    ) -> RusotoFuture<ListFunctionsResponse, ListFunctionsError>;
+    ) -> Result<ListFunctionsResponse, RusotoError<ListFunctionsError>>;
 
     /// <p>Lists the versions of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Versions that have been deleted aren't listed. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only versions that indicate that they're compatible with that runtime.</p>
-    fn list_layer_versions(
+    async fn list_layer_versions(
         &self,
         input: ListLayerVersionsRequest,
-    ) -> RusotoFuture<ListLayerVersionsResponse, ListLayerVersionsError>;
+    ) -> Result<ListLayerVersionsResponse, RusotoError<ListLayerVersionsError>>;
 
     /// <p>Lists <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layers</a> and shows information about the latest version of each. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only layers that indicate that they're compatible with that runtime.</p>
-    fn list_layers(
+    async fn list_layers(
         &self,
         input: ListLayersRequest,
-    ) -> RusotoFuture<ListLayersResponse, ListLayersError>;
+    ) -> Result<ListLayersResponse, RusotoError<ListLayersError>>;
 
     /// <p>Returns a function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a>. You can also view tags with <a>GetFunction</a>.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
+    async fn list_tags(
+        &self,
+        input: ListTagsRequest,
+    ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
 
     /// <p>Returns a list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">versions</a>, with the version-specific configuration of each. </p>
-    fn list_versions_by_function(
+    async fn list_versions_by_function(
         &self,
         input: ListVersionsByFunctionRequest,
-    ) -> RusotoFuture<ListVersionsByFunctionResponse, ListVersionsByFunctionError>;
+    ) -> Result<ListVersionsByFunctionResponse, RusotoError<ListVersionsByFunctionError>>;
 
     /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a> from a ZIP archive. Each time you call <code>PublishLayerVersion</code> with the same version name, a new version is created.</p> <p>Add layers to your function with <a>CreateFunction</a> or <a>UpdateFunctionConfiguration</a>.</p>
-    fn publish_layer_version(
+    async fn publish_layer_version(
         &self,
         input: PublishLayerVersionRequest,
-    ) -> RusotoFuture<PublishLayerVersionResponse, PublishLayerVersionError>;
+    ) -> Result<PublishLayerVersionResponse, RusotoError<PublishLayerVersionError>>;
 
     /// <p>Creates a <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">version</a> from the current code and configuration of a function. Use versions to create a snapshot of your function code and configuration that doesn't change.</p> <p>AWS Lambda doesn't publish a version if the function's configuration and code haven't changed since the last version. Use <a>UpdateFunctionCode</a> or <a>UpdateFunctionConfiguration</a> to update the function before publishing a version.</p> <p>Clients can invoke versions directly or with an alias. To create an alias, use <a>CreateAlias</a>.</p>
-    fn publish_version(
+    async fn publish_version(
         &self,
         input: PublishVersionRequest,
-    ) -> RusotoFuture<FunctionConfiguration, PublishVersionError>;
+    ) -> Result<FunctionConfiguration, RusotoError<PublishVersionError>>;
 
     /// <p>Sets the maximum number of simultaneous executions for a function, and reserves capacity for that concurrency level.</p> <p>Concurrency settings apply to the function as a whole, including all published versions and the unpublished version. Reserving concurrency both ensures that your function has capacity to process the specified number of events simultaneously, and prevents it from scaling beyond that level. Use <a>GetFunction</a> to see the current setting for a function.</p> <p>Use <a>GetAccountSettings</a> to see your regional concurrency limit. You can reserve concurrency for as many functions as you like, as long as you leave at least 100 simultaneous executions unreserved for functions that aren't configured with a per-function limit. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html">Managing Concurrency</a>.</p>
-    fn put_function_concurrency(
+    async fn put_function_concurrency(
         &self,
         input: PutFunctionConcurrencyRequest,
-    ) -> RusotoFuture<Concurrency, PutFunctionConcurrencyError>;
+    ) -> Result<Concurrency, RusotoError<PutFunctionConcurrencyError>>;
 
     /// <p>Removes a statement from the permissions policy for a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. For more information, see <a>AddLayerVersionPermission</a>.</p>
-    fn remove_layer_version_permission(
+    async fn remove_layer_version_permission(
         &self,
         input: RemoveLayerVersionPermissionRequest,
-    ) -> RusotoFuture<(), RemoveLayerVersionPermissionError>;
+    ) -> Result<(), RusotoError<RemoveLayerVersionPermissionError>>;
 
     /// <p>Revokes function-use permission from an AWS service or another account. You can get the ID of the statement from the output of <a>GetPolicy</a>.</p>
-    fn remove_permission(
+    async fn remove_permission(
         &self,
         input: RemovePermissionRequest,
-    ) -> RusotoFuture<(), RemovePermissionError>;
+    ) -> Result<(), RusotoError<RemovePermissionError>>;
 
     /// <p>Adds <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a> to a function.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>>;
 
     /// <p>Removes <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a> from a function.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>>;
 
     /// <p>Updates the configuration of a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
-    fn update_alias(
+    async fn update_alias(
         &self,
         input: UpdateAliasRequest,
-    ) -> RusotoFuture<AliasConfiguration, UpdateAliasError>;
+    ) -> Result<AliasConfiguration, RusotoError<UpdateAliasError>>;
 
     /// <p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p>
-    fn update_event_source_mapping(
+    async fn update_event_source_mapping(
         &self,
         input: UpdateEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, UpdateEventSourceMappingError>;
+    ) -> Result<EventSourceMappingConfiguration, RusotoError<UpdateEventSourceMappingError>>;
 
     /// <p>Updates a Lambda function's code.</p> <p>The function's code is locked when you publish a version. You can't modify the code of a published version, only the unpublished version.</p>
-    fn update_function_code(
+    async fn update_function_code(
         &self,
         input: UpdateFunctionCodeRequest,
-    ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionCodeError>;
+    ) -> Result<FunctionConfiguration, RusotoError<UpdateFunctionCodeError>>;
 
     /// <p>Modify the version-specific settings of a Lambda function.</p> <p>These settings can vary between versions of a function and are locked when you publish a version. You can't modify the configuration of a published version, only the unpublished version.</p> <p>To configure function concurrency, use <a>PutFunctionConcurrency</a>. To grant invoke permissions to an account or AWS service, use <a>AddPermission</a>.</p>
-    fn update_function_configuration(
+    async fn update_function_configuration(
         &self,
         input: UpdateFunctionConfigurationRequest,
-    ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionConfigurationError>;
+    ) -> Result<FunctionConfiguration, RusotoError<UpdateFunctionConfigurationError>>;
 }
 /// A client for the AWS Lambda API.
 #[derive(Clone)]
@@ -4024,12 +4044,14 @@ impl LambdaClient {
     }
 }
 
+#[async_trait]
 impl Lambda for LambdaClient {
     /// <p>Adds permissions to the resource-based policy of a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Use this action to grant layer usage permission to other accounts. You can grant permission to a single account, all AWS accounts, or all accounts in an organization.</p> <p>To revoke permission, call <a>RemoveLayerVersionPermission</a> with the statement ID that you specified when you added it.</p>
-    fn add_layer_version_permission(
+    async fn add_layer_version_permission(
         &self,
         input: AddLayerVersionPermissionRequest,
-    ) -> RusotoFuture<AddLayerVersionPermissionResponse, AddLayerVersionPermissionError> {
+    ) -> Result<AddLayerVersionPermissionResponse, RusotoError<AddLayerVersionPermissionError>>
+    {
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}/policy",
             layer_name = input.layer_name,
@@ -4048,40 +4070,28 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                response
-                    .buffer()
-                    .map_err(|e| AddLayerVersionPermissionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddLayerVersionPermissionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AddLayerVersionPermissionError::SignAndDispatch)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AddLayerVersionPermissionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<AddLayerVersionPermissionError>())
-                            .and_then(|response| {
-                                Err(AddLayerVersionPermissionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AddLayerVersionPermissionError::from_response(response))
+        }
     }
 
     /// <p>Grants an AWS service or another account permission to use a function. You can apply the policy at the function level, or specify a qualifier to restrict access to a single version or alias. If you use a qualifier, the invoker must use the full Amazon Resource Name (ARN) of that version or alias to invoke the function.</p> <p>To grant permission to another account, specify the account ID as the <code>Principal</code>. For AWS services, the principal is a domain-style identifier defined by the service, like <code>s3.amazonaws.com</code> or <code>sns.amazonaws.com</code>. For AWS services, you can also specify the ARN or owning account of the associated resource as the <code>SourceArn</code> or <code>SourceAccount</code>. If you grant permission to a service principal without specifying the source, other accounts could potentially configure resources in their account to invoke your Lambda function.</p> <p>This action adds a statement to a resource-based permission policy for the function. For more information about function policies, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html">Lambda Function Policies</a>. </p>
-    fn add_permission(
+    async fn add_permission(
         &self,
         input: AddPermissionRequest,
-    ) -> RusotoFuture<AddPermissionResponse, AddPermissionError> {
+    ) -> Result<AddPermissionResponse, RusotoError<AddPermissionError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/policy",
             function_name = input.function_name
@@ -4099,38 +4109,28 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                response
-                    .buffer()
-                    .map_err(|e| AddPermissionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddPermissionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AddPermissionError::SignAndDispatch)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AddPermissionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<AddPermissionError>())
-                            .and_then(|response| Err(AddPermissionError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AddPermissionError::from_response(response))
+        }
     }
 
     /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a> for a Lambda function version. Use aliases to provide clients with a function identifier that you can update to invoke a different version.</p> <p>You can also map an alias to split invocation requests between two versions. Use the <code>RoutingConfig</code> parameter to specify a second version and the percentage of invocation requests that it receives.</p>
-    fn create_alias(
+    async fn create_alias(
         &self,
         input: CreateAliasRequest,
-    ) -> RusotoFuture<AliasConfiguration, CreateAliasError> {
+    ) -> Result<AliasConfiguration, RusotoError<CreateAliasError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases",
             function_name = input.function_name
@@ -4142,38 +4142,28 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateAliasError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AliasConfiguration, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateAliasError::SignAndDispatch)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<AliasConfiguration, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateAliasError>())
-                            .and_then(|response| Err(CreateAliasError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAliasError::from_response(response))
+        }
     }
 
     /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> </ul></p>
-    fn create_event_source_mapping(
+    async fn create_event_source_mapping(
         &self,
         input: CreateEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, CreateEventSourceMappingError> {
+    ) -> Result<EventSourceMappingConfiguration, RusotoError<CreateEventSourceMappingError>> {
         let request_uri = "/2015-03-31/event-source-mappings/";
 
         let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
@@ -4182,40 +4172,28 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 202 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateEventSourceMappingError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EventSourceMappingConfiguration, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateEventSourceMappingError::SignAndDispatch)?;
+        if response.status.as_u16() == 202 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<EventSourceMappingConfiguration, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateEventSourceMappingError>())
-                            .and_then(|response| {
-                                Err(CreateEventSourceMappingError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateEventSourceMappingError::from_response(response))
+        }
     }
 
     /// <p>Creates a Lambda function. To create a function, you need a <a href="https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html">deployment package</a> and an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role">execution role</a>. The deployment package contains your function code. The execution role grants the function permission to use AWS services, such as Amazon CloudWatch Logs for log streaming and AWS X-Ray for request tracing.</p> <p>A function has an unpublished version, and can have published versions and aliases. The unpublished version changes when you update your function's code and configuration. A published version is a snapshot of your function code and configuration that can't be changed. An alias is a named resource that maps to a version, and can be changed to map to a different version. Use the <code>Publish</code> parameter to create version <code>1</code> of your function from its initial configuration.</p> <p>The other parameters let you configure version-specific and function-level settings. You can modify version-specific settings later with <a>UpdateFunctionConfiguration</a>. Function-level settings apply to both the unpublished and published versions of the function, and include tags (<a>TagResource</a>) and per-function concurrency limits (<a>PutFunctionConcurrency</a>).</p> <p>If another account or an AWS service invokes your function, use <a>AddPermission</a> to grant permission by creating a resource-based IAM policy. You can grant permissions at the function level, on a version, or on an alias.</p> <p>To invoke your function directly, use <a>Invoke</a>. To invoke your function in response to events in other AWS services, create an event source mapping (<a>CreateEventSourceMapping</a>), or configure a function trigger in the other service. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-functions.html">Invoking Functions</a>.</p>
-    fn create_function(
+    async fn create_function(
         &self,
         input: CreateFunctionRequest,
-    ) -> RusotoFuture<FunctionConfiguration, CreateFunctionError> {
+    ) -> Result<FunctionConfiguration, RusotoError<CreateFunctionError>> {
         let request_uri = "/2015-03-31/functions";
 
         let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
@@ -4224,35 +4202,28 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateFunctionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<FunctionConfiguration, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateFunctionError::SignAndDispatch)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<FunctionConfiguration, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateFunctionError>())
-                            .and_then(|response| Err(CreateFunctionError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateFunctionError::from_response(response))
+        }
     }
 
     /// <p>Deletes a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
-    fn delete_alias(&self, input: DeleteAliasRequest) -> RusotoFuture<(), DeleteAliasError> {
+    async fn delete_alias(
+        &self,
+        input: DeleteAliasRequest,
+    ) -> Result<(), RusotoError<DeleteAliasError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases/{name}",
             function_name = input.function_name,
@@ -4262,37 +4233,27 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteAliasError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteAliasError::SignAndDispatch)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteAliasError>())
-                            .and_then(|response| Err(DeleteAliasError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAliasError::from_response(response))
+        }
     }
 
     /// <p>Deletes an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-invocation-modes.html">event source mapping</a>. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p>
-    fn delete_event_source_mapping(
+    async fn delete_event_source_mapping(
         &self,
         input: DeleteEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, DeleteEventSourceMappingError> {
+    ) -> Result<EventSourceMappingConfiguration, RusotoError<DeleteEventSourceMappingError>> {
         let request_uri = format!(
             "/2015-03-31/event-source-mappings/{uuid}",
             uuid = input.uuid
@@ -4301,40 +4262,28 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 202 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteEventSourceMappingError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EventSourceMappingConfiguration, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteEventSourceMappingError::SignAndDispatch)?;
+        if response.status.as_u16() == 202 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<EventSourceMappingConfiguration, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteEventSourceMappingError>())
-                            .and_then(|response| {
-                                Err(DeleteEventSourceMappingError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteEventSourceMappingError::from_response(response))
+        }
     }
 
     /// <p>Deletes a Lambda function. To delete a specific function version, use the <code>Qualifier</code> parameter. Otherwise, all versions and aliases are deleted.</p> <p>To delete Lambda event source mappings that invoke a function, use <a>DeleteEventSourceMapping</a>. For AWS services and resources that invoke your function directly, delete the trigger in the service where you originally configured it.</p>
-    fn delete_function(
+    async fn delete_function(
         &self,
         input: DeleteFunctionRequest,
-    ) -> RusotoFuture<(), DeleteFunctionError> {
+    ) -> Result<(), RusotoError<DeleteFunctionError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}",
             function_name = input.function_name
@@ -4349,37 +4298,27 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteFunctionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteFunctionError::SignAndDispatch)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteFunctionError>())
-                            .and_then(|response| Err(DeleteFunctionError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteFunctionError::from_response(response))
+        }
     }
 
     /// <p>Removes a concurrent execution limit from a function.</p>
-    fn delete_function_concurrency(
+    async fn delete_function_concurrency(
         &self,
         input: DeleteFunctionConcurrencyRequest,
-    ) -> RusotoFuture<(), DeleteFunctionConcurrencyError> {
+    ) -> Result<(), RusotoError<DeleteFunctionConcurrencyError>> {
         let request_uri = format!(
             "/2017-10-31/functions/{function_name}/concurrency",
             function_name = input.function_name
@@ -4388,39 +4327,27 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteFunctionConcurrencyError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteFunctionConcurrencyError::SignAndDispatch)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteFunctionConcurrencyError>())
-                            .and_then(|response| {
-                                Err(DeleteFunctionConcurrencyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteFunctionConcurrencyError::from_response(response))
+        }
     }
 
     /// <p>Deletes a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Deleted versions can no longer be viewed or added to functions. To avoid breaking functions, a copy of the version remains in Lambda until no functions refer to it.</p>
-    fn delete_layer_version(
+    async fn delete_layer_version(
         &self,
         input: DeleteLayerVersionRequest,
-    ) -> RusotoFuture<(), DeleteLayerVersionError> {
+    ) -> Result<(), RusotoError<DeleteLayerVersionError>> {
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}",
             layer_name = input.layer_name,
@@ -4430,74 +4357,53 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteLayerVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteLayerVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteLayerVersionError>())
-                            .and_then(|response| {
-                                Err(DeleteLayerVersionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteLayerVersionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves details about your account's <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limits</a> and usage in an AWS Region.</p>
-    fn get_account_settings(
+    async fn get_account_settings(
         &self,
-    ) -> RusotoFuture<GetAccountSettingsResponse, GetAccountSettingsError> {
+    ) -> Result<GetAccountSettingsResponse, RusotoError<GetAccountSettingsError>> {
         let request_uri = "/2016-08-19/account-settings/";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetAccountSettingsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAccountSettingsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetAccountSettingsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAccountSettingsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetAccountSettingsError>())
-                            .and_then(|response| {
-                                Err(GetAccountSettingsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAccountSettingsError::from_response(response))
+        }
     }
 
     /// <p>Returns details about a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
-    fn get_alias(&self, input: GetAliasRequest) -> RusotoFuture<AliasConfiguration, GetAliasError> {
+    async fn get_alias(
+        &self,
+        input: GetAliasRequest,
+    ) -> Result<AliasConfiguration, RusotoError<GetAliasError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases/{name}",
             function_name = input.function_name,
@@ -4507,38 +4413,28 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetAliasError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AliasConfiguration, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetAliasError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<AliasConfiguration, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetAliasError>())
-                            .and_then(|response| Err(GetAliasError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAliasError::from_response(response))
+        }
     }
 
     /// <p>Returns details about an event source mapping. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p>
-    fn get_event_source_mapping(
+    async fn get_event_source_mapping(
         &self,
         input: GetEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, GetEventSourceMappingError> {
+    ) -> Result<EventSourceMappingConfiguration, RusotoError<GetEventSourceMappingError>> {
         let request_uri = format!(
             "/2015-03-31/event-source-mappings/{uuid}",
             uuid = input.uuid
@@ -4547,40 +4443,28 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetEventSourceMappingError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EventSourceMappingConfiguration, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetEventSourceMappingError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<EventSourceMappingConfiguration, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetEventSourceMappingError>())
-                            .and_then(|response| {
-                                Err(GetEventSourceMappingError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetEventSourceMappingError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the function or function version, with a link to download the deployment package that's valid for 10 minutes. If you specify a function version, only details that are specific to that version are returned.</p>
-    fn get_function(
+    async fn get_function(
         &self,
         input: GetFunctionRequest,
-    ) -> RusotoFuture<GetFunctionResponse, GetFunctionError> {
+    ) -> Result<GetFunctionResponse, RusotoError<GetFunctionError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}",
             function_name = input.function_name
@@ -4595,38 +4479,28 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetFunctionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFunctionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetFunctionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetFunctionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetFunctionError>())
-                            .and_then(|response| Err(GetFunctionError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetFunctionError::from_response(response))
+        }
     }
 
     /// <p>Returns the version-specific settings of a Lambda function or version. The output includes only options that can vary between versions of a function. To modify these settings, use <a>UpdateFunctionConfiguration</a>.</p> <p>To get all of a function's details, including function-level settings, use <a>GetFunction</a>.</p>
-    fn get_function_configuration(
+    async fn get_function_configuration(
         &self,
         input: GetFunctionConfigurationRequest,
-    ) -> RusotoFuture<FunctionConfiguration, GetFunctionConfigurationError> {
+    ) -> Result<FunctionConfiguration, RusotoError<GetFunctionConfigurationError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/configuration",
             function_name = input.function_name
@@ -4641,40 +4515,28 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetFunctionConfigurationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<FunctionConfiguration, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetFunctionConfigurationError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<FunctionConfiguration, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetFunctionConfigurationError>())
-                            .and_then(|response| {
-                                Err(GetFunctionConfigurationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetFunctionConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Returns information about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>, with a link to download the layer archive that's valid for 10 minutes.</p>
-    fn get_layer_version(
+    async fn get_layer_version(
         &self,
         input: GetLayerVersionRequest,
-    ) -> RusotoFuture<GetLayerVersionResponse, GetLayerVersionError> {
+    ) -> Result<GetLayerVersionResponse, RusotoError<GetLayerVersionError>> {
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}",
             layer_name = input.layer_name,
@@ -4684,38 +4546,28 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetLayerVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLayerVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetLayerVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetLayerVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetLayerVersionError>())
-                            .and_then(|response| Err(GetLayerVersionError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetLayerVersionError::from_response(response))
+        }
     }
 
     /// <p>Returns information about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>, with a link to download the layer archive that's valid for 10 minutes.</p>
-    fn get_layer_version_by_arn(
+    async fn get_layer_version_by_arn(
         &self,
         input: GetLayerVersionByArnRequest,
-    ) -> RusotoFuture<GetLayerVersionResponse, GetLayerVersionByArnError> {
+    ) -> Result<GetLayerVersionResponse, RusotoError<GetLayerVersionByArnError>> {
         let request_uri = "/2018-10-31/layers";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
@@ -4726,40 +4578,28 @@ impl Lambda for LambdaClient {
         params.put("find", "LayerVersion");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetLayerVersionByArnError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLayerVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetLayerVersionByArnError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetLayerVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetLayerVersionByArnError>())
-                            .and_then(|response| {
-                                Err(GetLayerVersionByArnError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetLayerVersionByArnError::from_response(response))
+        }
     }
 
     /// <p>Returns the permission policy for a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. For more information, see <a>AddLayerVersionPermission</a>.</p>
-    fn get_layer_version_policy(
+    async fn get_layer_version_policy(
         &self,
         input: GetLayerVersionPolicyRequest,
-    ) -> RusotoFuture<GetLayerVersionPolicyResponse, GetLayerVersionPolicyError> {
+    ) -> Result<GetLayerVersionPolicyResponse, RusotoError<GetLayerVersionPolicyError>> {
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}/policy",
             layer_name = input.layer_name,
@@ -4769,40 +4609,28 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetLayerVersionPolicyError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLayerVersionPolicyResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetLayerVersionPolicyError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetLayerVersionPolicyResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetLayerVersionPolicyError>())
-                            .and_then(|response| {
-                                Err(GetLayerVersionPolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetLayerVersionPolicyError::from_response(response))
+        }
     }
 
     /// <p>Returns the <a href="https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html">resource-based IAM policy</a> for a function, version, or alias.</p>
-    fn get_policy(
+    async fn get_policy(
         &self,
         input: GetPolicyRequest,
-    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError> {
+    ) -> Result<GetPolicyResponse, RusotoError<GetPolicyError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/policy",
             function_name = input.function_name
@@ -4817,35 +4645,28 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetPolicyError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPolicyResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetPolicyError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<GetPolicyResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetPolicyError>())
-                            .and_then(|response| Err(GetPolicyError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetPolicyError::from_response(response))
+        }
     }
 
     /// <p>Invokes a Lambda function. You can invoke a function synchronously (and wait for the response), or asynchronously. To invoke a function asynchronously, set <code>InvocationType</code> to <code>Event</code>.</p> <p>For synchronous invocation, details about the function response, including errors, are included in the response body and headers. For either invocation type, you can find more information in the <a href="https://docs.aws.amazon.com/lambda/latest/dg/monitoring-functions.html">execution log</a> and <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">trace</a>. To record function errors for asynchronous invocations, configure your function with a <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">dead letter queue</a>.</p> <p>When an error occurs, your function may be invoked multiple times. Retry behavior varies by error type, client, event source, and invocation type. For example, if you invoke a function asynchronously and it returns an error, Lambda executes the function up to two more times. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/retries-on-errors.html">Retry Behavior</a>.</p> <p>The status code in the API response doesn't reflect function errors. Error codes are reserved for errors that prevent your function from executing, such as permissions errors, <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limit errors</a>, or issues with your function's code and configuration. For example, Lambda returns <code>TooManyRequestsException</code> if executing the function would cause you to exceed a concurrency limit at either the account level (<code>ConcurrentInvocationLimitExceeded</code>) or function level (<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p> <p>For functions with a long timeout, your client might be disconnected during synchronous invocation while it waits for a response. Configure your HTTP client, SDK, firewall, proxy, or operating system to allow for long connections with timeout or keep-alive settings.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
-    fn invoke(&self, input: InvocationRequest) -> RusotoFuture<InvocationResponse, InvokeError> {
+    async fn invoke(
+        &self,
+        input: InvocationRequest,
+    ) -> Result<InvocationResponse, RusotoError<InvokeError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/invocations",
             function_name = input.function_name
@@ -4878,55 +4699,42 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| InvokeError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let mut result = InvocationResponse::default();
-                            result.payload = Some(response.body);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(InvokeError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-                            if let Some(executed_version) =
-                                response.headers.get("X-Amz-Executed-Version")
-                            {
-                                let value = executed_version.to_owned();
-                                result.executed_version = Some(value)
-                            };
-                            if let Some(function_error) =
-                                response.headers.get("X-Amz-Function-Error")
-                            {
-                                let value = function_error.to_owned();
-                                result.function_error = Some(value)
-                            };
-                            if let Some(log_result) = response.headers.get("X-Amz-Log-Result") {
-                                let value = log_result.to_owned();
-                                result.log_result = Some(value)
-                            };
-                            result.status_code = Some(response.status.as_u16() as i64);
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<InvokeError>())
-                            .and_then(|response| Err(InvokeError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            let mut result = InvocationResponse::default();
+            result.payload = Some(response.body);
+
+            if let Some(executed_version) = response.headers.get("X-Amz-Executed-Version") {
+                let value = executed_version.to_owned();
+                result.executed_version = Some(value)
+            };
+            if let Some(function_error) = response.headers.get("X-Amz-Function-Error") {
+                let value = function_error.to_owned();
+                result.function_error = Some(value)
+            };
+            if let Some(log_result) = response.headers.get("X-Amz-Log-Result") {
+                let value = log_result.to_owned();
+                result.log_result = Some(value)
+            };
+            result.status_code = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(InvokeError::from_response(response))
+        }
     }
 
     /// <p><important> <p>For asynchronous function invocation, use <a>Invoke</a>.</p> </important> <p>Invokes a function asynchronously.</p></p>
-    fn invoke_async(
+    async fn invoke_async(
         &self,
         input: InvokeAsyncRequest,
-    ) -> RusotoFuture<InvokeAsyncResponse, InvokeAsyncError> {
+    ) -> Result<InvokeAsyncResponse, RusotoError<InvokeAsyncError>> {
         let request_uri = format!(
             "/2014-11-13/functions/{function_name}/invoke-async/",
             function_name = input.function_name
@@ -4938,39 +4746,29 @@ impl Lambda for LambdaClient {
         let encoded = Some(input.invoke_args.to_owned());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 202 {
-                response
-                    .buffer()
-                    .map_err(|e| InvokeAsyncError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let mut result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InvokeAsyncResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(InvokeAsyncError::SignAndDispatch)?;
+        if response.status.as_u16() == 202 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<InvokeAsyncResponse, _>();
 
-                            result.status = Some(response.status.as_u16() as i64);
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<InvokeAsyncError>())
-                            .and_then(|response| Err(InvokeAsyncError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(InvokeAsyncError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">aliases</a> for a Lambda function.</p>
-    fn list_aliases(
+    async fn list_aliases(
         &self,
         input: ListAliasesRequest,
-    ) -> RusotoFuture<ListAliasesResponse, ListAliasesError> {
+    ) -> Result<ListAliasesResponse, RusotoError<ListAliasesError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases",
             function_name = input.function_name
@@ -4991,38 +4789,28 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListAliasesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAliasesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListAliasesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAliasesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListAliasesError>())
-                            .and_then(|response| Err(ListAliasesError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAliasesError::from_response(response))
+        }
     }
 
     /// <p>Lists event source mappings. Specify an <code>EventSourceArn</code> to only show event source mappings for a single event source.</p>
-    fn list_event_source_mappings(
+    async fn list_event_source_mappings(
         &self,
         input: ListEventSourceMappingsRequest,
-    ) -> RusotoFuture<ListEventSourceMappingsResponse, ListEventSourceMappingsError> {
+    ) -> Result<ListEventSourceMappingsResponse, RusotoError<ListEventSourceMappingsError>> {
         let request_uri = "/2015-03-31/event-source-mappings/";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
@@ -5043,40 +4831,28 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListEventSourceMappingsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListEventSourceMappingsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListEventSourceMappingsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListEventSourceMappingsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListEventSourceMappingsError>())
-                            .and_then(|response| {
-                                Err(ListEventSourceMappingsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListEventSourceMappingsError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of Lambda functions, with the version-specific configuration of each.</p> <p>Set <code>FunctionVersion</code> to <code>ALL</code> to include all published versions of each function in addition to the unpublished version. To get more information about a function or version, use <a>GetFunction</a>.</p>
-    fn list_functions(
+    async fn list_functions(
         &self,
         input: ListFunctionsRequest,
-    ) -> RusotoFuture<ListFunctionsResponse, ListFunctionsError> {
+    ) -> Result<ListFunctionsResponse, RusotoError<ListFunctionsError>> {
         let request_uri = "/2015-03-31/functions/";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
@@ -5097,38 +4873,28 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListFunctionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFunctionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListFunctionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListFunctionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListFunctionsError>())
-                            .and_then(|response| Err(ListFunctionsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListFunctionsError::from_response(response))
+        }
     }
 
     /// <p>Lists the versions of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Versions that have been deleted aren't listed. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only versions that indicate that they're compatible with that runtime.</p>
-    fn list_layer_versions(
+    async fn list_layer_versions(
         &self,
         input: ListLayerVersionsRequest,
-    ) -> RusotoFuture<ListLayerVersionsResponse, ListLayerVersionsError> {
+    ) -> Result<ListLayerVersionsResponse, RusotoError<ListLayerVersionsError>> {
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions",
             layer_name = input.layer_name
@@ -5149,40 +4915,28 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListLayerVersionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLayerVersionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListLayerVersionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListLayerVersionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListLayerVersionsError>())
-                            .and_then(|response| {
-                                Err(ListLayerVersionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListLayerVersionsError::from_response(response))
+        }
     }
 
     /// <p>Lists <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layers</a> and shows information about the latest version of each. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only layers that indicate that they're compatible with that runtime.</p>
-    fn list_layers(
+    async fn list_layers(
         &self,
         input: ListLayersRequest,
-    ) -> RusotoFuture<ListLayersResponse, ListLayersError> {
+    ) -> Result<ListLayersResponse, RusotoError<ListLayersError>> {
         let request_uri = "/2018-10-31/layers";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
@@ -5200,72 +4954,55 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListLayersError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLayersResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListLayersError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<ListLayersResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListLayersError>())
-                            .and_then(|response| Err(ListLayersError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListLayersError::from_response(response))
+        }
     }
 
     /// <p>Returns a function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a>. You can also view tags with <a>GetFunction</a>.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
+    async fn list_tags(
+        &self,
+        input: ListTagsRequest,
+    ) -> Result<ListTagsResponse, RusotoError<ListTagsError>> {
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListTagsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTagsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListTagsError>())
-                            .and_then(|response| Err(ListTagsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">versions</a>, with the version-specific configuration of each. </p>
-    fn list_versions_by_function(
+    async fn list_versions_by_function(
         &self,
         input: ListVersionsByFunctionRequest,
-    ) -> RusotoFuture<ListVersionsByFunctionResponse, ListVersionsByFunctionError> {
+    ) -> Result<ListVersionsByFunctionResponse, RusotoError<ListVersionsByFunctionError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/versions",
             function_name = input.function_name
@@ -5283,40 +5020,28 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListVersionsByFunctionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListVersionsByFunctionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListVersionsByFunctionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListVersionsByFunctionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListVersionsByFunctionError>())
-                            .and_then(|response| {
-                                Err(ListVersionsByFunctionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListVersionsByFunctionError::from_response(response))
+        }
     }
 
     /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a> from a ZIP archive. Each time you call <code>PublishLayerVersion</code> with the same version name, a new version is created.</p> <p>Add layers to your function with <a>CreateFunction</a> or <a>UpdateFunctionConfiguration</a>.</p>
-    fn publish_layer_version(
+    async fn publish_layer_version(
         &self,
         input: PublishLayerVersionRequest,
-    ) -> RusotoFuture<PublishLayerVersionResponse, PublishLayerVersionError> {
+    ) -> Result<PublishLayerVersionResponse, RusotoError<PublishLayerVersionError>> {
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions",
             layer_name = input.layer_name
@@ -5328,40 +5053,28 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                response
-                    .buffer()
-                    .map_err(|e| PublishLayerVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PublishLayerVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PublishLayerVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PublishLayerVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<PublishLayerVersionError>())
-                            .and_then(|response| {
-                                Err(PublishLayerVersionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PublishLayerVersionError::from_response(response))
+        }
     }
 
     /// <p>Creates a <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">version</a> from the current code and configuration of a function. Use versions to create a snapshot of your function code and configuration that doesn't change.</p> <p>AWS Lambda doesn't publish a version if the function's configuration and code haven't changed since the last version. Use <a>UpdateFunctionCode</a> or <a>UpdateFunctionConfiguration</a> to update the function before publishing a version.</p> <p>Clients can invoke versions directly or with an alias. To create an alias, use <a>CreateAlias</a>.</p>
-    fn publish_version(
+    async fn publish_version(
         &self,
         input: PublishVersionRequest,
-    ) -> RusotoFuture<FunctionConfiguration, PublishVersionError> {
+    ) -> Result<FunctionConfiguration, RusotoError<PublishVersionError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/versions",
             function_name = input.function_name
@@ -5373,38 +5086,28 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 201 {
-                response
-                    .buffer()
-                    .map_err(|e| PublishVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<FunctionConfiguration, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PublishVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<FunctionConfiguration, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<PublishVersionError>())
-                            .and_then(|response| Err(PublishVersionError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PublishVersionError::from_response(response))
+        }
     }
 
     /// <p>Sets the maximum number of simultaneous executions for a function, and reserves capacity for that concurrency level.</p> <p>Concurrency settings apply to the function as a whole, including all published versions and the unpublished version. Reserving concurrency both ensures that your function has capacity to process the specified number of events simultaneously, and prevents it from scaling beyond that level. Use <a>GetFunction</a> to see the current setting for a function.</p> <p>Use <a>GetAccountSettings</a> to see your regional concurrency limit. You can reserve concurrency for as many functions as you like, as long as you leave at least 100 simultaneous executions unreserved for functions that aren't configured with a per-function limit. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html">Managing Concurrency</a>.</p>
-    fn put_function_concurrency(
+    async fn put_function_concurrency(
         &self,
         input: PutFunctionConcurrencyRequest,
-    ) -> RusotoFuture<Concurrency, PutFunctionConcurrencyError> {
+    ) -> Result<Concurrency, RusotoError<PutFunctionConcurrencyError>> {
         let request_uri = format!(
             "/2017-10-31/functions/{function_name}/concurrency",
             function_name = input.function_name
@@ -5416,40 +5119,28 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| PutFunctionConcurrencyError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Concurrency, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutFunctionConcurrencyError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<Concurrency, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<PutFunctionConcurrencyError>())
-                            .and_then(|response| {
-                                Err(PutFunctionConcurrencyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutFunctionConcurrencyError::from_response(response))
+        }
     }
 
     /// <p>Removes a statement from the permissions policy for a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. For more information, see <a>AddLayerVersionPermission</a>.</p>
-    fn remove_layer_version_permission(
+    async fn remove_layer_version_permission(
         &self,
         input: RemoveLayerVersionPermissionRequest,
-    ) -> RusotoFuture<(), RemoveLayerVersionPermissionError> {
+    ) -> Result<(), RusotoError<RemoveLayerVersionPermissionError>> {
         let request_uri = format!(
             "/2018-10-31/layers/{layer_name}/versions/{version_number}/policy/{statement_id}",
             layer_name = input.layer_name,
@@ -5466,39 +5157,27 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                response
-                    .buffer()
-                    .map_err(|e| RemoveLayerVersionPermissionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RemoveLayerVersionPermissionError::SignAndDispatch)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<RemoveLayerVersionPermissionError>())
-                            .and_then(|response| {
-                                Err(RemoveLayerVersionPermissionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveLayerVersionPermissionError::from_response(response))
+        }
     }
 
     /// <p>Revokes function-use permission from an AWS service or another account. You can get the ID of the statement from the output of <a>GetPolicy</a>.</p>
-    fn remove_permission(
+    async fn remove_permission(
         &self,
         input: RemovePermissionRequest,
-    ) -> RusotoFuture<(), RemovePermissionError> {
+    ) -> Result<(), RusotoError<RemovePermissionError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/policy/{statement_id}",
             function_name = input.function_name,
@@ -5517,36 +5196,27 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                response
-                    .buffer()
-                    .map_err(|e| RemovePermissionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RemovePermissionError::SignAndDispatch)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<RemovePermissionError>())
-                            .and_then(|response| {
-                                Err(RemovePermissionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RemovePermissionError::from_response(response))
+        }
     }
 
     /// <p>Adds <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a> to a function.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>> {
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
         let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
@@ -5555,34 +5225,27 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                response
-                    .buffer()
-                    .map_err(|e| TagResourceError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagResourceError::SignAndDispatch)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<TagResourceError>())
-                            .and_then(|response| Err(TagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p>Removes <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a> from a function.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>> {
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
@@ -5594,37 +5257,27 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                response
-                    .buffer()
-                    .map_err(|e| UntagResourceError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagResourceError::SignAndDispatch)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UntagResourceError>())
-                            .and_then(|response| Err(UntagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <p>Updates the configuration of a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
-    fn update_alias(
+    async fn update_alias(
         &self,
         input: UpdateAliasRequest,
-    ) -> RusotoFuture<AliasConfiguration, UpdateAliasError> {
+    ) -> Result<AliasConfiguration, RusotoError<UpdateAliasError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases/{name}",
             function_name = input.function_name,
@@ -5637,38 +5290,28 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateAliasError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AliasConfiguration, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateAliasError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<AliasConfiguration, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateAliasError>())
-                            .and_then(|response| Err(UpdateAliasError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAliasError::from_response(response))
+        }
     }
 
     /// <p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p>
-    fn update_event_source_mapping(
+    async fn update_event_source_mapping(
         &self,
         input: UpdateEventSourceMappingRequest,
-    ) -> RusotoFuture<EventSourceMappingConfiguration, UpdateEventSourceMappingError> {
+    ) -> Result<EventSourceMappingConfiguration, RusotoError<UpdateEventSourceMappingError>> {
         let request_uri = format!(
             "/2015-03-31/event-source-mappings/{uuid}",
             uuid = input.uuid
@@ -5680,40 +5323,28 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 202 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateEventSourceMappingError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EventSourceMappingConfiguration, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateEventSourceMappingError::SignAndDispatch)?;
+        if response.status.as_u16() == 202 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<EventSourceMappingConfiguration, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateEventSourceMappingError>())
-                            .and_then(|response| {
-                                Err(UpdateEventSourceMappingError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateEventSourceMappingError::from_response(response))
+        }
     }
 
     /// <p>Updates a Lambda function's code.</p> <p>The function's code is locked when you publish a version. You can't modify the code of a published version, only the unpublished version.</p>
-    fn update_function_code(
+    async fn update_function_code(
         &self,
         input: UpdateFunctionCodeRequest,
-    ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionCodeError> {
+    ) -> Result<FunctionConfiguration, RusotoError<UpdateFunctionCodeError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/code",
             function_name = input.function_name
@@ -5725,40 +5356,28 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateFunctionCodeError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<FunctionConfiguration, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateFunctionCodeError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<FunctionConfiguration, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateFunctionCodeError>())
-                            .and_then(|response| {
-                                Err(UpdateFunctionCodeError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateFunctionCodeError::from_response(response))
+        }
     }
 
     /// <p>Modify the version-specific settings of a Lambda function.</p> <p>These settings can vary between versions of a function and are locked when you publish a version. You can't modify the configuration of a published version, only the unpublished version.</p> <p>To configure function concurrency, use <a>PutFunctionConcurrency</a>. To grant invoke permissions to an account or AWS service, use <a>AddPermission</a>.</p>
-    fn update_function_configuration(
+    async fn update_function_configuration(
         &self,
         input: UpdateFunctionConfigurationRequest,
-    ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionConfigurationError> {
+    ) -> Result<FunctionConfiguration, RusotoError<UpdateFunctionConfigurationError>> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/configuration",
             function_name = input.function_name
@@ -5770,32 +5389,20 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateFunctionConfigurationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<FunctionConfiguration, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateFunctionConfigurationError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<FunctionConfiguration, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateFunctionConfigurationError>())
-                            .and_then(|response| {
-                                Err(UpdateFunctionConfigurationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateFunctionConfigurationError::from_response(response))
+        }
     }
 }

@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
@@ -2023,101 +2024,111 @@ impl Error for UpdateResourceShareError {
     }
 }
 /// Trait representing the capabilities of the RAM API. RAM clients implement this trait.
+#[async_trait]
 pub trait Ram {
     /// <p>Accepts an invitation to a resource share from another AWS account.</p>
-    fn accept_resource_share_invitation(
+    async fn accept_resource_share_invitation(
         &self,
         input: AcceptResourceShareInvitationRequest,
-    ) -> RusotoFuture<AcceptResourceShareInvitationResponse, AcceptResourceShareInvitationError>;
+    ) -> Result<
+        AcceptResourceShareInvitationResponse,
+        RusotoError<AcceptResourceShareInvitationError>,
+    >;
 
     /// <p>Associates the specified resource share with the specified principals and resources.</p>
-    fn associate_resource_share(
+    async fn associate_resource_share(
         &self,
         input: AssociateResourceShareRequest,
-    ) -> RusotoFuture<AssociateResourceShareResponse, AssociateResourceShareError>;
+    ) -> Result<AssociateResourceShareResponse, RusotoError<AssociateResourceShareError>>;
 
     /// <p>Creates a resource share.</p>
-    fn create_resource_share(
+    async fn create_resource_share(
         &self,
         input: CreateResourceShareRequest,
-    ) -> RusotoFuture<CreateResourceShareResponse, CreateResourceShareError>;
+    ) -> Result<CreateResourceShareResponse, RusotoError<CreateResourceShareError>>;
 
     /// <p>Deletes the specified resource share.</p>
-    fn delete_resource_share(
+    async fn delete_resource_share(
         &self,
         input: DeleteResourceShareRequest,
-    ) -> RusotoFuture<DeleteResourceShareResponse, DeleteResourceShareError>;
+    ) -> Result<DeleteResourceShareResponse, RusotoError<DeleteResourceShareError>>;
 
     /// <p>Disassociates the specified principals or resources from the specified resource share.</p>
-    fn disassociate_resource_share(
+    async fn disassociate_resource_share(
         &self,
         input: DisassociateResourceShareRequest,
-    ) -> RusotoFuture<DisassociateResourceShareResponse, DisassociateResourceShareError>;
+    ) -> Result<DisassociateResourceShareResponse, RusotoError<DisassociateResourceShareError>>;
 
     /// <p>Enables resource sharing within your organization.</p>
-    fn enable_sharing_with_aws_organization(
+    async fn enable_sharing_with_aws_organization(
         &self,
-    ) -> RusotoFuture<EnableSharingWithAwsOrganizationResponse, EnableSharingWithAwsOrganizationError>;
+    ) -> Result<
+        EnableSharingWithAwsOrganizationResponse,
+        RusotoError<EnableSharingWithAwsOrganizationError>,
+    >;
 
     /// <p>Gets the policies for the specifies resources.</p>
-    fn get_resource_policies(
+    async fn get_resource_policies(
         &self,
         input: GetResourcePoliciesRequest,
-    ) -> RusotoFuture<GetResourcePoliciesResponse, GetResourcePoliciesError>;
+    ) -> Result<GetResourcePoliciesResponse, RusotoError<GetResourcePoliciesError>>;
 
     /// <p>Gets the associations for the specified resource share.</p>
-    fn get_resource_share_associations(
+    async fn get_resource_share_associations(
         &self,
         input: GetResourceShareAssociationsRequest,
-    ) -> RusotoFuture<GetResourceShareAssociationsResponse, GetResourceShareAssociationsError>;
+    ) -> Result<GetResourceShareAssociationsResponse, RusotoError<GetResourceShareAssociationsError>>;
 
     /// <p>Gets the specified invitations for resource sharing.</p>
-    fn get_resource_share_invitations(
+    async fn get_resource_share_invitations(
         &self,
         input: GetResourceShareInvitationsRequest,
-    ) -> RusotoFuture<GetResourceShareInvitationsResponse, GetResourceShareInvitationsError>;
+    ) -> Result<GetResourceShareInvitationsResponse, RusotoError<GetResourceShareInvitationsError>>;
 
     /// <p>Gets the specified resource shares or all of your resource shares.</p>
-    fn get_resource_shares(
+    async fn get_resource_shares(
         &self,
         input: GetResourceSharesRequest,
-    ) -> RusotoFuture<GetResourceSharesResponse, GetResourceSharesError>;
+    ) -> Result<GetResourceSharesResponse, RusotoError<GetResourceSharesError>>;
 
     /// <p>Lists the principals with access to the specified resource.</p>
-    fn list_principals(
+    async fn list_principals(
         &self,
         input: ListPrincipalsRequest,
-    ) -> RusotoFuture<ListPrincipalsResponse, ListPrincipalsError>;
+    ) -> Result<ListPrincipalsResponse, RusotoError<ListPrincipalsError>>;
 
     /// <p>Lists the resources that the specified principal can access.</p>
-    fn list_resources(
+    async fn list_resources(
         &self,
         input: ListResourcesRequest,
-    ) -> RusotoFuture<ListResourcesResponse, ListResourcesError>;
+    ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>>;
 
     /// <p>Rejects an invitation to a resource share from another AWS account.</p>
-    fn reject_resource_share_invitation(
+    async fn reject_resource_share_invitation(
         &self,
         input: RejectResourceShareInvitationRequest,
-    ) -> RusotoFuture<RejectResourceShareInvitationResponse, RejectResourceShareInvitationError>;
+    ) -> Result<
+        RejectResourceShareInvitationResponse,
+        RusotoError<RejectResourceShareInvitationError>,
+    >;
 
     /// <p>Adds the specified tags to the specified resource share.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
     /// <p>Removes the specified tags from the specified resource share.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Updates the specified resource share.</p>
-    fn update_resource_share(
+    async fn update_resource_share(
         &self,
         input: UpdateResourceShareRequest,
-    ) -> RusotoFuture<UpdateResourceShareResponse, UpdateResourceShareError>;
+    ) -> Result<UpdateResourceShareResponse, RusotoError<UpdateResourceShareError>>;
 }
 /// A client for the RAM API.
 #[derive(Clone)]
@@ -2153,13 +2164,16 @@ impl RamClient {
     }
 }
 
+#[async_trait]
 impl Ram for RamClient {
     /// <p>Accepts an invitation to a resource share from another AWS account.</p>
-    fn accept_resource_share_invitation(
+    async fn accept_resource_share_invitation(
         &self,
         input: AcceptResourceShareInvitationRequest,
-    ) -> RusotoFuture<AcceptResourceShareInvitationResponse, AcceptResourceShareInvitationError>
-    {
+    ) -> Result<
+        AcceptResourceShareInvitationResponse,
+        RusotoError<AcceptResourceShareInvitationError>,
+    > {
         let request_uri = "/acceptresourceshareinvitation";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -2168,40 +2182,28 @@ impl Ram for RamClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| AcceptResourceShareInvitationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AcceptResourceShareInvitationResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AcceptResourceShareInvitationError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AcceptResourceShareInvitationResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<AcceptResourceShareInvitationError>())
-                            .and_then(|response| {
-                                Err(AcceptResourceShareInvitationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AcceptResourceShareInvitationError::from_response(response))
+        }
     }
 
     /// <p>Associates the specified resource share with the specified principals and resources.</p>
-    fn associate_resource_share(
+    async fn associate_resource_share(
         &self,
         input: AssociateResourceShareRequest,
-    ) -> RusotoFuture<AssociateResourceShareResponse, AssociateResourceShareError> {
+    ) -> Result<AssociateResourceShareResponse, RusotoError<AssociateResourceShareError>> {
         let request_uri = "/associateresourceshare";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -2210,40 +2212,28 @@ impl Ram for RamClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| AssociateResourceShareError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateResourceShareResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AssociateResourceShareError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateResourceShareResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<AssociateResourceShareError>())
-                            .and_then(|response| {
-                                Err(AssociateResourceShareError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateResourceShareError::from_response(response))
+        }
     }
 
     /// <p>Creates a resource share.</p>
-    fn create_resource_share(
+    async fn create_resource_share(
         &self,
         input: CreateResourceShareRequest,
-    ) -> RusotoFuture<CreateResourceShareResponse, CreateResourceShareError> {
+    ) -> Result<CreateResourceShareResponse, RusotoError<CreateResourceShareError>> {
         let request_uri = "/createresourceshare";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -2252,40 +2242,28 @@ impl Ram for RamClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateResourceShareError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateResourceShareResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateResourceShareError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateResourceShareResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateResourceShareError>())
-                            .and_then(|response| {
-                                Err(CreateResourceShareError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateResourceShareError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified resource share.</p>
-    fn delete_resource_share(
+    async fn delete_resource_share(
         &self,
         input: DeleteResourceShareRequest,
-    ) -> RusotoFuture<DeleteResourceShareResponse, DeleteResourceShareError> {
+    ) -> Result<DeleteResourceShareResponse, RusotoError<DeleteResourceShareError>> {
         let request_uri = "/deleteresourceshare";
 
         let mut request = SignedRequest::new("DELETE", "ram", &self.region, &request_uri);
@@ -2298,40 +2276,29 @@ impl Ram for RamClient {
         params.put("resourceShareArn", &input.resource_share_arn);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteResourceShareError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteResourceShareResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteResourceShareError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteResourceShareResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteResourceShareError>())
-                            .and_then(|response| {
-                                Err(DeleteResourceShareError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteResourceShareError::from_response(response))
+        }
     }
 
     /// <p>Disassociates the specified principals or resources from the specified resource share.</p>
-    fn disassociate_resource_share(
+    async fn disassociate_resource_share(
         &self,
         input: DisassociateResourceShareRequest,
-    ) -> RusotoFuture<DisassociateResourceShareResponse, DisassociateResourceShareError> {
+    ) -> Result<DisassociateResourceShareResponse, RusotoError<DisassociateResourceShareError>>
+    {
         let request_uri = "/disassociateresourceshare";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -2340,82 +2307,59 @@ impl Ram for RamClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DisassociateResourceShareError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateResourceShareResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DisassociateResourceShareError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateResourceShareResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DisassociateResourceShareError>())
-                            .and_then(|response| {
-                                Err(DisassociateResourceShareError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateResourceShareError::from_response(response))
+        }
     }
 
     /// <p>Enables resource sharing within your organization.</p>
-    fn enable_sharing_with_aws_organization(
+    async fn enable_sharing_with_aws_organization(
         &self,
-    ) -> RusotoFuture<EnableSharingWithAwsOrganizationResponse, EnableSharingWithAwsOrganizationError>
-    {
+    ) -> Result<
+        EnableSharingWithAwsOrganizationResponse,
+        RusotoError<EnableSharingWithAwsOrganizationError>,
+    > {
         let request_uri = "/enablesharingwithawsorganization";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| EnableSharingWithAwsOrganizationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EnableSharingWithAwsOrganizationResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(EnableSharingWithAwsOrganizationError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<EnableSharingWithAwsOrganizationResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<EnableSharingWithAwsOrganizationError>())
-                            .and_then(|response| {
-                                Err(EnableSharingWithAwsOrganizationError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(EnableSharingWithAwsOrganizationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Gets the policies for the specifies resources.</p>
-    fn get_resource_policies(
+    async fn get_resource_policies(
         &self,
         input: GetResourcePoliciesRequest,
-    ) -> RusotoFuture<GetResourcePoliciesResponse, GetResourcePoliciesError> {
+    ) -> Result<GetResourcePoliciesResponse, RusotoError<GetResourcePoliciesError>> {
         let request_uri = "/getresourcepolicies";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -2424,40 +2368,29 @@ impl Ram for RamClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetResourcePoliciesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourcePoliciesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetResourcePoliciesError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetResourcePoliciesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetResourcePoliciesError>())
-                            .and_then(|response| {
-                                Err(GetResourcePoliciesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetResourcePoliciesError::from_response(response))
+        }
     }
 
     /// <p>Gets the associations for the specified resource share.</p>
-    fn get_resource_share_associations(
+    async fn get_resource_share_associations(
         &self,
         input: GetResourceShareAssociationsRequest,
-    ) -> RusotoFuture<GetResourceShareAssociationsResponse, GetResourceShareAssociationsError> {
+    ) -> Result<GetResourceShareAssociationsResponse, RusotoError<GetResourceShareAssociationsError>>
+    {
         let request_uri = "/getresourceshareassociations";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -2466,40 +2399,29 @@ impl Ram for RamClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetResourceShareAssociationsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourceShareAssociationsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetResourceShareAssociationsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetResourceShareAssociationsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetResourceShareAssociationsError>())
-                            .and_then(|response| {
-                                Err(GetResourceShareAssociationsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetResourceShareAssociationsError::from_response(response))
+        }
     }
 
     /// <p>Gets the specified invitations for resource sharing.</p>
-    fn get_resource_share_invitations(
+    async fn get_resource_share_invitations(
         &self,
         input: GetResourceShareInvitationsRequest,
-    ) -> RusotoFuture<GetResourceShareInvitationsResponse, GetResourceShareInvitationsError> {
+    ) -> Result<GetResourceShareInvitationsResponse, RusotoError<GetResourceShareInvitationsError>>
+    {
         let request_uri = "/getresourceshareinvitations";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -2508,40 +2430,28 @@ impl Ram for RamClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetResourceShareInvitationsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourceShareInvitationsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetResourceShareInvitationsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetResourceShareInvitationsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetResourceShareInvitationsError>())
-                            .and_then(|response| {
-                                Err(GetResourceShareInvitationsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetResourceShareInvitationsError::from_response(response))
+        }
     }
 
     /// <p>Gets the specified resource shares or all of your resource shares.</p>
-    fn get_resource_shares(
+    async fn get_resource_shares(
         &self,
         input: GetResourceSharesRequest,
-    ) -> RusotoFuture<GetResourceSharesResponse, GetResourceSharesError> {
+    ) -> Result<GetResourceSharesResponse, RusotoError<GetResourceSharesError>> {
         let request_uri = "/getresourceshares";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -2550,40 +2460,28 @@ impl Ram for RamClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetResourceSharesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourceSharesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetResourceSharesError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetResourceSharesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetResourceSharesError>())
-                            .and_then(|response| {
-                                Err(GetResourceSharesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetResourceSharesError::from_response(response))
+        }
     }
 
     /// <p>Lists the principals with access to the specified resource.</p>
-    fn list_principals(
+    async fn list_principals(
         &self,
         input: ListPrincipalsRequest,
-    ) -> RusotoFuture<ListPrincipalsResponse, ListPrincipalsError> {
+    ) -> Result<ListPrincipalsResponse, RusotoError<ListPrincipalsError>> {
         let request_uri = "/listprincipals";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -2592,38 +2490,28 @@ impl Ram for RamClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListPrincipalsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPrincipalsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListPrincipalsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPrincipalsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListPrincipalsError>())
-                            .and_then(|response| Err(ListPrincipalsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPrincipalsError::from_response(response))
+        }
     }
 
     /// <p>Lists the resources that the specified principal can access.</p>
-    fn list_resources(
+    async fn list_resources(
         &self,
         input: ListResourcesRequest,
-    ) -> RusotoFuture<ListResourcesResponse, ListResourcesError> {
+    ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>> {
         let request_uri = "/listresources";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -2632,39 +2520,31 @@ impl Ram for RamClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListResourcesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourcesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListResourcesError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListResourcesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListResourcesError>())
-                            .and_then(|response| Err(ListResourcesError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListResourcesError::from_response(response))
+        }
     }
 
     /// <p>Rejects an invitation to a resource share from another AWS account.</p>
-    fn reject_resource_share_invitation(
+    async fn reject_resource_share_invitation(
         &self,
         input: RejectResourceShareInvitationRequest,
-    ) -> RusotoFuture<RejectResourceShareInvitationResponse, RejectResourceShareInvitationError>
-    {
+    ) -> Result<
+        RejectResourceShareInvitationResponse,
+        RusotoError<RejectResourceShareInvitationError>,
+    > {
         let request_uri = "/rejectresourceshareinvitation";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -2673,40 +2553,28 @@ impl Ram for RamClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| RejectResourceShareInvitationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RejectResourceShareInvitationResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RejectResourceShareInvitationError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RejectResourceShareInvitationResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<RejectResourceShareInvitationError>())
-                            .and_then(|response| {
-                                Err(RejectResourceShareInvitationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RejectResourceShareInvitationError::from_response(response))
+        }
     }
 
     /// <p>Adds the specified tags to the specified resource share.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
         let request_uri = "/tagresource";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -2715,38 +2583,28 @@ impl Ram for RamClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| TagResourceError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagResourceError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TagResourceResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<TagResourceError>())
-                            .and_then(|response| Err(TagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p>Removes the specified tags from the specified resource share.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
         let request_uri = "/untagresource";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -2755,38 +2613,28 @@ impl Ram for RamClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UntagResourceError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagResourceError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UntagResourceResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UntagResourceError>())
-                            .and_then(|response| Err(UntagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <p>Updates the specified resource share.</p>
-    fn update_resource_share(
+    async fn update_resource_share(
         &self,
         input: UpdateResourceShareRequest,
-    ) -> RusotoFuture<UpdateResourceShareResponse, UpdateResourceShareError> {
+    ) -> Result<UpdateResourceShareResponse, RusotoError<UpdateResourceShareError>> {
         let request_uri = "/updateresourceshare";
 
         let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
@@ -2795,32 +2643,20 @@ impl Ram for RamClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateResourceShareError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateResourceShareResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateResourceShareError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateResourceShareResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateResourceShareError>())
-                            .and_then(|response| {
-                                Err(UpdateResourceShareError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateResourceShareError::from_response(response))
+        }
     }
 }

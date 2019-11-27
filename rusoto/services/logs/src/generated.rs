@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -3222,234 +3223,241 @@ impl Error for UntagLogGroupError {
     }
 }
 /// Trait representing the capabilities of the Amazon CloudWatch Logs API. Amazon CloudWatch Logs clients implement this trait.
+#[async_trait]
 pub trait CloudWatchLogs {
     /// <p>Associates the specified AWS Key Management Service (AWS KMS) customer master key (CMK) with the specified log group.</p> <p>Associating an AWS KMS CMK with a log group overrides any existing associations between the log group and a CMK. After a CMK is associated with a log group, all newly ingested data for the log group is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p> <p>If you attempt to associate a CMK with a log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>
-    fn associate_kms_key(
+    async fn associate_kms_key(
         &self,
         input: AssociateKmsKeyRequest,
-    ) -> RusotoFuture<(), AssociateKmsKeyError>;
+    ) -> Result<(), RusotoError<AssociateKmsKeyError>>;
 
     /// <p>Cancels the specified export task.</p> <p>The task must be in the <code>PENDING</code> or <code>RUNNING</code> state.</p>
-    fn cancel_export_task(
+    async fn cancel_export_task(
         &self,
         input: CancelExportTaskRequest,
-    ) -> RusotoFuture<(), CancelExportTaskError>;
+    ) -> Result<(), RusotoError<CancelExportTaskError>>;
 
     /// <p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix to be used as the Amazon S3 key prefix for all exported objects.</p>
-    fn create_export_task(
+    async fn create_export_task(
         &self,
         input: CreateExportTaskRequest,
-    ) -> RusotoFuture<CreateExportTaskResponse, CreateExportTaskError>;
+    ) -> Result<CreateExportTaskResponse, RusotoError<CreateExportTaskError>>;
 
     /// <p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).</p> </li> </ul> <p>If you associate a AWS Key Management Service (AWS KMS) customer master key (CMK) with the log group, ingested data is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>If you attempt to associate a CMK with the log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>
-    fn create_log_group(
+    async fn create_log_group(
         &self,
         input: CreateLogGroupRequest,
-    ) -> RusotoFuture<(), CreateLogGroupError>;
+    ) -> Result<(), RusotoError<CreateLogGroupError>>;
 
     /// <p><p>Creates a log stream for the specified log group.</p> <p>There is no limit on the number of log streams that you can create for a log group.</p> <p>You must use the following guidelines when naming a log stream:</p> <ul> <li> <p>Log stream names must be unique within the log group.</p> </li> <li> <p>Log stream names can be between 1 and 512 characters long.</p> </li> <li> <p>The &#39;:&#39; (colon) and &#39;*&#39; (asterisk) characters are not allowed.</p> </li> </ul></p>
-    fn create_log_stream(
+    async fn create_log_stream(
         &self,
         input: CreateLogStreamRequest,
-    ) -> RusotoFuture<(), CreateLogStreamError>;
+    ) -> Result<(), RusotoError<CreateLogStreamError>>;
 
     /// <p>Deletes the specified destination, and eventually disables all the subscription filters that publish to it. This operation does not delete the physical resource encapsulated by the destination.</p>
-    fn delete_destination(
+    async fn delete_destination(
         &self,
         input: DeleteDestinationRequest,
-    ) -> RusotoFuture<(), DeleteDestinationError>;
+    ) -> Result<(), RusotoError<DeleteDestinationError>>;
 
     /// <p>Deletes the specified log group and permanently deletes all the archived log events associated with the log group.</p>
-    fn delete_log_group(
+    async fn delete_log_group(
         &self,
         input: DeleteLogGroupRequest,
-    ) -> RusotoFuture<(), DeleteLogGroupError>;
+    ) -> Result<(), RusotoError<DeleteLogGroupError>>;
 
     /// <p>Deletes the specified log stream and permanently deletes all the archived log events associated with the log stream.</p>
-    fn delete_log_stream(
+    async fn delete_log_stream(
         &self,
         input: DeleteLogStreamRequest,
-    ) -> RusotoFuture<(), DeleteLogStreamError>;
+    ) -> Result<(), RusotoError<DeleteLogStreamError>>;
 
     /// <p>Deletes the specified metric filter.</p>
-    fn delete_metric_filter(
+    async fn delete_metric_filter(
         &self,
         input: DeleteMetricFilterRequest,
-    ) -> RusotoFuture<(), DeleteMetricFilterError>;
+    ) -> Result<(), RusotoError<DeleteMetricFilterError>>;
 
     /// <p>Deletes a resource policy from this account. This revokes the access of the identities in that policy to put log events to this account.</p>
-    fn delete_resource_policy(
+    async fn delete_resource_policy(
         &self,
         input: DeleteResourcePolicyRequest,
-    ) -> RusotoFuture<(), DeleteResourcePolicyError>;
+    ) -> Result<(), RusotoError<DeleteResourcePolicyError>>;
 
     /// <p>Deletes the specified retention policy.</p> <p>Log events do not expire if they belong to log groups without a retention policy.</p>
-    fn delete_retention_policy(
+    async fn delete_retention_policy(
         &self,
         input: DeleteRetentionPolicyRequest,
-    ) -> RusotoFuture<(), DeleteRetentionPolicyError>;
+    ) -> Result<(), RusotoError<DeleteRetentionPolicyError>>;
 
     /// <p>Deletes the specified subscription filter.</p>
-    fn delete_subscription_filter(
+    async fn delete_subscription_filter(
         &self,
         input: DeleteSubscriptionFilterRequest,
-    ) -> RusotoFuture<(), DeleteSubscriptionFilterError>;
+    ) -> Result<(), RusotoError<DeleteSubscriptionFilterError>>;
 
     /// <p>Lists all your destinations. The results are ASCII-sorted by destination name.</p>
-    fn describe_destinations(
+    async fn describe_destinations(
         &self,
         input: DescribeDestinationsRequest,
-    ) -> RusotoFuture<DescribeDestinationsResponse, DescribeDestinationsError>;
+    ) -> Result<DescribeDestinationsResponse, RusotoError<DescribeDestinationsError>>;
 
     /// <p>Lists the specified export tasks. You can list all your export tasks or filter the results based on task ID or task status.</p>
-    fn describe_export_tasks(
+    async fn describe_export_tasks(
         &self,
         input: DescribeExportTasksRequest,
-    ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError>;
+    ) -> Result<DescribeExportTasksResponse, RusotoError<DescribeExportTasksError>>;
 
     /// <p>Lists the specified log groups. You can list all your log groups or filter the results by prefix. The results are ASCII-sorted by log group name.</p>
-    fn describe_log_groups(
+    async fn describe_log_groups(
         &self,
         input: DescribeLogGroupsRequest,
-    ) -> RusotoFuture<DescribeLogGroupsResponse, DescribeLogGroupsError>;
+    ) -> Result<DescribeLogGroupsResponse, RusotoError<DescribeLogGroupsError>>;
 
     /// <p>Lists the log streams for the specified log group. You can list all the log streams or filter the results by prefix. You can also control how the results are ordered.</p> <p>This operation has a limit of five transactions per second, after which transactions are throttled.</p>
-    fn describe_log_streams(
+    async fn describe_log_streams(
         &self,
         input: DescribeLogStreamsRequest,
-    ) -> RusotoFuture<DescribeLogStreamsResponse, DescribeLogStreamsError>;
+    ) -> Result<DescribeLogStreamsResponse, RusotoError<DescribeLogStreamsError>>;
 
     /// <p>Lists the specified metric filters. You can list all the metric filters or filter the results by log name, prefix, metric name, or metric namespace. The results are ASCII-sorted by filter name.</p>
-    fn describe_metric_filters(
+    async fn describe_metric_filters(
         &self,
         input: DescribeMetricFiltersRequest,
-    ) -> RusotoFuture<DescribeMetricFiltersResponse, DescribeMetricFiltersError>;
+    ) -> Result<DescribeMetricFiltersResponse, RusotoError<DescribeMetricFiltersError>>;
 
     /// <p>Returns a list of CloudWatch Logs Insights queries that are scheduled, executing, or have been executed recently in this account. You can request all queries, or limit it to queries of a specific log group or queries with a certain status.</p>
-    fn describe_queries(
+    async fn describe_queries(
         &self,
         input: DescribeQueriesRequest,
-    ) -> RusotoFuture<DescribeQueriesResponse, DescribeQueriesError>;
+    ) -> Result<DescribeQueriesResponse, RusotoError<DescribeQueriesError>>;
 
     /// <p>Lists the resource policies in this account.</p>
-    fn describe_resource_policies(
+    async fn describe_resource_policies(
         &self,
         input: DescribeResourcePoliciesRequest,
-    ) -> RusotoFuture<DescribeResourcePoliciesResponse, DescribeResourcePoliciesError>;
+    ) -> Result<DescribeResourcePoliciesResponse, RusotoError<DescribeResourcePoliciesError>>;
 
     /// <p>Lists the subscription filters for the specified log group. You can list all the subscription filters or filter the results by prefix. The results are ASCII-sorted by filter name.</p>
-    fn describe_subscription_filters(
+    async fn describe_subscription_filters(
         &self,
         input: DescribeSubscriptionFiltersRequest,
-    ) -> RusotoFuture<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError>;
+    ) -> Result<DescribeSubscriptionFiltersResponse, RusotoError<DescribeSubscriptionFiltersError>>;
 
     /// <p>Disassociates the associated AWS Key Management Service (AWS KMS) customer master key (CMK) from the specified log group.</p> <p>After the AWS KMS CMK is disassociated from the log group, AWS CloudWatch Logs stops encrypting newly ingested data for the log group. All previously ingested data remains encrypted, and AWS CloudWatch Logs requires permissions for the CMK whenever the encrypted data is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p>
-    fn disassociate_kms_key(
+    async fn disassociate_kms_key(
         &self,
         input: DisassociateKmsKeyRequest,
-    ) -> RusotoFuture<(), DisassociateKmsKeyError>;
+    ) -> Result<(), RusotoError<DisassociateKmsKeyError>>;
 
     /// <p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1 MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>
-    fn filter_log_events(
+    async fn filter_log_events(
         &self,
         input: FilterLogEventsRequest,
-    ) -> RusotoFuture<FilterLogEventsResponse, FilterLogEventsError>;
+    ) -> Result<FilterLogEventsResponse, RusotoError<FilterLogEventsError>>;
 
     /// <p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). You can get additional log events by specifying one of the tokens in a subsequent call.</p>
-    fn get_log_events(
+    async fn get_log_events(
         &self,
         input: GetLogEventsRequest,
-    ) -> RusotoFuture<GetLogEventsResponse, GetLogEventsError>;
+    ) -> Result<GetLogEventsResponse, RusotoError<GetLogEventsError>>;
 
     /// <p>Returns a list of the fields that are included in log events in the specified log group, along with the percentage of log events that contain each field. The search is limited to a time period that you specify.</p> <p>In the results, fields that start with @ are fields generated by CloudWatch Logs. For example, <code>@timestamp</code> is the timestamp of each log event.</p> <p>The response results are sorted by the frequency percentage, starting with the highest percentage.</p>
-    fn get_log_group_fields(
+    async fn get_log_group_fields(
         &self,
         input: GetLogGroupFieldsRequest,
-    ) -> RusotoFuture<GetLogGroupFieldsResponse, GetLogGroupFieldsError>;
+    ) -> Result<GetLogGroupFieldsResponse, RusotoError<GetLogGroupFieldsError>>;
 
     /// <p>Retrieves all the fields and values of a single log event. All fields are retrieved, even if the original query that produced the <code>logRecordPointer</code> retrieved only a subset of fields. Fields are returned as field name/field value pairs.</p> <p>Additionally, the entire unparsed log event is returned within <code>@message</code>.</p>
-    fn get_log_record(
+    async fn get_log_record(
         &self,
         input: GetLogRecordRequest,
-    ) -> RusotoFuture<GetLogRecordResponse, GetLogRecordError>;
+    ) -> Result<GetLogRecordResponse, RusotoError<GetLogRecordError>>;
 
     /// <p>Returns the results from the specified query. If the query is in progress, partial results of that current execution are returned.</p> <p>Only the fields requested in the query are returned, along with a <code>@ptr</code> field which is the identifier for the log record. You can use the value of <code>@ptr</code> in a operation to get the full log record.</p> <p> <code>GetQueryResults</code> does not start a query execution. To run a query, use .</p>
-    fn get_query_results(
+    async fn get_query_results(
         &self,
         input: GetQueryResultsRequest,
-    ) -> RusotoFuture<GetQueryResultsResponse, GetQueryResultsError>;
+    ) -> Result<GetQueryResultsResponse, RusotoError<GetQueryResultsError>>;
 
     /// <p>Lists the tags for the specified log group.</p>
-    fn list_tags_log_group(
+    async fn list_tags_log_group(
         &self,
         input: ListTagsLogGroupRequest,
-    ) -> RusotoFuture<ListTagsLogGroupResponse, ListTagsLogGroupError>;
+    ) -> Result<ListTagsLogGroupResponse, RusotoError<ListTagsLogGroupError>>;
 
     /// <p>Creates or updates a destination. A destination encapsulates a physical resource (such as an Amazon Kinesis stream) and enables you to subscribe to a real-time stream of log events for a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Kinesis stream belonging to the same account as the destination.</p> <p>Through an access policy, a destination controls what is written to its Kinesis stream. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>
-    fn put_destination(
+    async fn put_destination(
         &self,
         input: PutDestinationRequest,
-    ) -> RusotoFuture<PutDestinationResponse, PutDestinationError>;
+    ) -> Result<PutDestinationResponse, RusotoError<PutDestinationError>>;
 
     /// <p>Creates or updates an access policy associated with an existing destination. An access policy is an <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies_overview.html">IAM policy document</a> that is used to authorize claims to register a subscription filter against a given destination.</p>
-    fn put_destination_policy(
+    async fn put_destination_policy(
         &self,
         input: PutDestinationPolicyRequest,
-    ) -> RusotoFuture<(), PutDestinationPolicyError>;
+    ) -> Result<(), RusotoError<PutDestinationPolicyError>>;
 
     /// <p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or older than the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp. The timestamp is the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. (In AWS Tools for PowerShell and the AWS SDK for .NET, the timestamp is specified in .NET format: yyyy-mm-ddThh:mm:ss. For example, 2017-09-15T13:45:30.) </p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul> <p>If a call to PutLogEvents returns "UnrecognizedClientException" the most likely cause is an invalid AWS access key ID or secret key. </p>
-    fn put_log_events(
+    async fn put_log_events(
         &self,
         input: PutLogEventsRequest,
-    ) -> RusotoFuture<PutLogEventsResponse, PutLogEventsError>;
+    ) -> Result<PutLogEventsResponse, RusotoError<PutLogEventsError>>;
 
     /// <p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a>PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>
-    fn put_metric_filter(
+    async fn put_metric_filter(
         &self,
         input: PutMetricFilterRequest,
-    ) -> RusotoFuture<(), PutMetricFilterError>;
+    ) -> Result<(), RusotoError<PutMetricFilterError>>;
 
     /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 10 resource policies per region.</p>
-    fn put_resource_policy(
+    async fn put_resource_policy(
         &self,
         input: PutResourcePolicyRequest,
-    ) -> RusotoFuture<PutResourcePolicyResponse, PutResourcePolicyError>;
+    ) -> Result<PutResourcePolicyResponse, RusotoError<PutResourcePolicyError>>;
 
     /// <p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days for which to retain log events in the specified log group.</p>
-    fn put_retention_policy(
+    async fn put_retention_policy(
         &self,
         input: PutRetentionPolicyRequest,
-    ) -> RusotoFuture<(), PutRetentionPolicyError>;
+    ) -> Result<(), RusotoError<PutRetentionPolicyError>>;
 
     /// <p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group.</p>
-    fn put_subscription_filter(
+    async fn put_subscription_filter(
         &self,
         input: PutSubscriptionFilterRequest,
-    ) -> RusotoFuture<(), PutSubscriptionFilterError>;
+    ) -> Result<(), RusotoError<PutSubscriptionFilterError>>;
 
     /// <p>Schedules a query of a log group using CloudWatch Logs Insights. You specify the log group and time range to query, and the query string to use.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html">CloudWatch Logs Insights Query Syntax</a>.</p> <p>Queries time out after 15 minutes of execution. If your queries are timing out, reduce the time range being searched, or partition your query into a number of queries.</p>
-    fn start_query(
+    async fn start_query(
         &self,
         input: StartQueryRequest,
-    ) -> RusotoFuture<StartQueryResponse, StartQueryError>;
+    ) -> Result<StartQueryResponse, RusotoError<StartQueryError>>;
 
     /// <p>Stops a CloudWatch Logs Insights query that is in progress. If the query has already ended, the operation returns an error indicating that the specified query is not running.</p>
-    fn stop_query(
+    async fn stop_query(
         &self,
         input: StopQueryRequest,
-    ) -> RusotoFuture<StopQueryResponse, StopQueryError>;
+    ) -> Result<StopQueryResponse, RusotoError<StopQueryError>>;
 
     /// <p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>
-    fn tag_log_group(&self, input: TagLogGroupRequest) -> RusotoFuture<(), TagLogGroupError>;
+    async fn tag_log_group(
+        &self,
+        input: TagLogGroupRequest,
+    ) -> Result<(), RusotoError<TagLogGroupError>>;
 
     /// <p>Tests the filter pattern of a metric filter against a sample of log event messages. You can use this operation to validate the correctness of a metric filter pattern.</p>
-    fn test_metric_filter(
+    async fn test_metric_filter(
         &self,
         input: TestMetricFilterRequest,
-    ) -> RusotoFuture<TestMetricFilterResponse, TestMetricFilterError>;
+    ) -> Result<TestMetricFilterResponse, RusotoError<TestMetricFilterError>>;
 
     /// <p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To add tags, use <a>UntagLogGroup</a>.</p>
-    fn untag_log_group(&self, input: UntagLogGroupRequest) -> RusotoFuture<(), UntagLogGroupError>;
+    async fn untag_log_group(
+        &self,
+        input: UntagLogGroupRequest,
+    ) -> Result<(), RusotoError<UntagLogGroupError>>;
 }
 /// A client for the Amazon CloudWatch Logs API.
 #[derive(Clone)]
@@ -3485,12 +3493,13 @@ impl CloudWatchLogsClient {
     }
 }
 
+#[async_trait]
 impl CloudWatchLogs for CloudWatchLogsClient {
     /// <p>Associates the specified AWS Key Management Service (AWS KMS) customer master key (CMK) with the specified log group.</p> <p>Associating an AWS KMS CMK with a log group overrides any existing associations between the log group and a CMK. After a CMK is associated with a log group, all newly ingested data for the log group is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p> <p>If you attempt to associate a CMK with a log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>
-    fn associate_kms_key(
+    async fn associate_kms_key(
         &self,
         input: AssociateKmsKeyRequest,
-    ) -> RusotoFuture<(), AssociateKmsKeyError> {
+    ) -> Result<(), RusotoError<AssociateKmsKeyError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3498,29 +3507,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<AssociateKmsKeyError>
-                            })
-                            .and_then(|response| Err(AssociateKmsKeyError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateKmsKeyError::from_response(response))
+        }
     }
 
     /// <p>Cancels the specified export task.</p> <p>The task must be in the <code>PENDING</code> or <code>RUNNING</code> state.</p>
-    fn cancel_export_task(
+    async fn cancel_export_task(
         &self,
         input: CancelExportTaskRequest,
-    ) -> RusotoFuture<(), CancelExportTaskError> {
+    ) -> Result<(), RusotoError<CancelExportTaskError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3528,31 +3533,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CancelExportTaskError>
-                            })
-                            .and_then(|response| {
-                                Err(CancelExportTaskError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelExportTaskError::from_response(response))
+        }
     }
 
     /// <p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix to be used as the Amazon S3 key prefix for all exported objects.</p>
-    fn create_export_task(
+    async fn create_export_task(
         &self,
         input: CreateExportTaskRequest,
-    ) -> RusotoFuture<CreateExportTaskResponse, CreateExportTaskError> {
+    ) -> Result<CreateExportTaskResponse, RusotoError<CreateExportTaskError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3560,44 +3559,27 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateExportTaskError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateExportTaskError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<CreateExportTaskResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateExportTaskError>
-                            })
-                            .and_then(|response| {
-                                Err(CreateExportTaskError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateExportTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateExportTaskError::from_response(response))
+        }
     }
 
     /// <p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).</p> </li> </ul> <p>If you associate a AWS Key Management Service (AWS KMS) customer master key (CMK) with the log group, ingested data is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>If you attempt to associate a CMK with the log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>
-    fn create_log_group(
+    async fn create_log_group(
         &self,
         input: CreateLogGroupRequest,
-    ) -> RusotoFuture<(), CreateLogGroupError> {
+    ) -> Result<(), RusotoError<CreateLogGroupError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3605,29 +3587,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateLogGroupError>
-                            })
-                            .and_then(|response| Err(CreateLogGroupError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateLogGroupError::from_response(response))
+        }
     }
 
     /// <p><p>Creates a log stream for the specified log group.</p> <p>There is no limit on the number of log streams that you can create for a log group.</p> <p>You must use the following guidelines when naming a log stream:</p> <ul> <li> <p>Log stream names must be unique within the log group.</p> </li> <li> <p>Log stream names can be between 1 and 512 characters long.</p> </li> <li> <p>The &#39;:&#39; (colon) and &#39;*&#39; (asterisk) characters are not allowed.</p> </li> </ul></p>
-    fn create_log_stream(
+    async fn create_log_stream(
         &self,
         input: CreateLogStreamRequest,
-    ) -> RusotoFuture<(), CreateLogStreamError> {
+    ) -> Result<(), RusotoError<CreateLogStreamError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3635,29 +3613,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<CreateLogStreamError>
-                            })
-                            .and_then(|response| Err(CreateLogStreamError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateLogStreamError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified destination, and eventually disables all the subscription filters that publish to it. This operation does not delete the physical resource encapsulated by the destination.</p>
-    fn delete_destination(
+    async fn delete_destination(
         &self,
         input: DeleteDestinationRequest,
-    ) -> RusotoFuture<(), DeleteDestinationError> {
+    ) -> Result<(), RusotoError<DeleteDestinationError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3665,31 +3639,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDestinationError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteDestinationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDestinationError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified log group and permanently deletes all the archived log events associated with the log group.</p>
-    fn delete_log_group(
+    async fn delete_log_group(
         &self,
         input: DeleteLogGroupRequest,
-    ) -> RusotoFuture<(), DeleteLogGroupError> {
+    ) -> Result<(), RusotoError<DeleteLogGroupError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3697,29 +3665,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteLogGroupError>
-                            })
-                            .and_then(|response| Err(DeleteLogGroupError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteLogGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified log stream and permanently deletes all the archived log events associated with the log stream.</p>
-    fn delete_log_stream(
+    async fn delete_log_stream(
         &self,
         input: DeleteLogStreamRequest,
-    ) -> RusotoFuture<(), DeleteLogStreamError> {
+    ) -> Result<(), RusotoError<DeleteLogStreamError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3727,29 +3691,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteLogStreamError>
-                            })
-                            .and_then(|response| Err(DeleteLogStreamError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteLogStreamError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified metric filter.</p>
-    fn delete_metric_filter(
+    async fn delete_metric_filter(
         &self,
         input: DeleteMetricFilterRequest,
-    ) -> RusotoFuture<(), DeleteMetricFilterError> {
+    ) -> Result<(), RusotoError<DeleteMetricFilterError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3757,31 +3717,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteMetricFilterError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteMetricFilterError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteMetricFilterError::from_response(response))
+        }
     }
 
     /// <p>Deletes a resource policy from this account. This revokes the access of the identities in that policy to put log events to this account.</p>
-    fn delete_resource_policy(
+    async fn delete_resource_policy(
         &self,
         input: DeleteResourcePolicyRequest,
-    ) -> RusotoFuture<(), DeleteResourcePolicyError> {
+    ) -> Result<(), RusotoError<DeleteResourcePolicyError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3789,32 +3743,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteResourcePolicyError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteResourcePolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteResourcePolicyError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified retention policy.</p> <p>Log events do not expire if they belong to log groups without a retention policy.</p>
-    fn delete_retention_policy(
+    async fn delete_retention_policy(
         &self,
         input: DeleteRetentionPolicyRequest,
-    ) -> RusotoFuture<(), DeleteRetentionPolicyError> {
+    ) -> Result<(), RusotoError<DeleteRetentionPolicyError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3822,32 +3769,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteRetentionPolicyError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteRetentionPolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRetentionPolicyError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified subscription filter.</p>
-    fn delete_subscription_filter(
+    async fn delete_subscription_filter(
         &self,
         input: DeleteSubscriptionFilterRequest,
-    ) -> RusotoFuture<(), DeleteSubscriptionFilterError> {
+    ) -> Result<(), RusotoError<DeleteSubscriptionFilterError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3855,32 +3795,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteSubscriptionFilterError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteSubscriptionFilterError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSubscriptionFilterError::from_response(response))
+        }
     }
 
     /// <p>Lists all your destinations. The results are ASCII-sorted by destination name.</p>
-    fn describe_destinations(
+    async fn describe_destinations(
         &self,
         input: DescribeDestinationsRequest,
-    ) -> RusotoFuture<DescribeDestinationsResponse, DescribeDestinationsError> {
+    ) -> Result<DescribeDestinationsResponse, RusotoError<DescribeDestinationsError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3888,46 +3821,27 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeDestinationsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeDestinationsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeDestinationsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeDestinationsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeDestinationsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDestinationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDestinationsError::from_response(response))
+        }
     }
 
     /// <p>Lists the specified export tasks. You can list all your export tasks or filter the results based on task ID or task status.</p>
-    fn describe_export_tasks(
+    async fn describe_export_tasks(
         &self,
         input: DescribeExportTasksRequest,
-    ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError> {
+    ) -> Result<DescribeExportTasksResponse, RusotoError<DescribeExportTasksError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3935,46 +3849,27 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeExportTasksError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeExportTasksError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeExportTasksResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeExportTasksError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeExportTasksError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeExportTasksResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeExportTasksError::from_response(response))
+        }
     }
 
     /// <p>Lists the specified log groups. You can list all your log groups or filter the results by prefix. The results are ASCII-sorted by log group name.</p>
-    fn describe_log_groups(
+    async fn describe_log_groups(
         &self,
         input: DescribeLogGroupsRequest,
-    ) -> RusotoFuture<DescribeLogGroupsResponse, DescribeLogGroupsError> {
+    ) -> Result<DescribeLogGroupsResponse, RusotoError<DescribeLogGroupsError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3982,44 +3877,27 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeLogGroupsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLogGroupsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeLogGroupsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLogGroupsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeLogGroupsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeLogGroupsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeLogGroupsError::from_response(response))
+        }
     }
 
     /// <p>Lists the log streams for the specified log group. You can list all the log streams or filter the results by prefix. You can also control how the results are ordered.</p> <p>This operation has a limit of five transactions per second, after which transactions are throttled.</p>
-    fn describe_log_streams(
+    async fn describe_log_streams(
         &self,
         input: DescribeLogStreamsRequest,
-    ) -> RusotoFuture<DescribeLogStreamsResponse, DescribeLogStreamsError> {
+    ) -> Result<DescribeLogStreamsResponse, RusotoError<DescribeLogStreamsError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4027,44 +3905,27 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeLogStreamsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLogStreamsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeLogStreamsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLogStreamsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeLogStreamsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeLogStreamsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeLogStreamsError::from_response(response))
+        }
     }
 
     /// <p>Lists the specified metric filters. You can list all the metric filters or filter the results by log name, prefix, metric name, or metric namespace. The results are ASCII-sorted by filter name.</p>
-    fn describe_metric_filters(
+    async fn describe_metric_filters(
         &self,
         input: DescribeMetricFiltersRequest,
-    ) -> RusotoFuture<DescribeMetricFiltersResponse, DescribeMetricFiltersError> {
+    ) -> Result<DescribeMetricFiltersResponse, RusotoError<DescribeMetricFiltersError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4072,46 +3933,27 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeMetricFiltersError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeMetricFiltersError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeMetricFiltersResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeMetricFiltersError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeMetricFiltersError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeMetricFiltersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeMetricFiltersError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of CloudWatch Logs Insights queries that are scheduled, executing, or have been executed recently in this account. You can request all queries, or limit it to queries of a specific log group or queries with a certain status.</p>
-    fn describe_queries(
+    async fn describe_queries(
         &self,
         input: DescribeQueriesRequest,
-    ) -> RusotoFuture<DescribeQueriesResponse, DescribeQueriesError> {
+    ) -> Result<DescribeQueriesResponse, RusotoError<DescribeQueriesError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4119,42 +3961,26 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeQueriesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeQueriesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeQueriesResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DescribeQueriesError>
-                            })
-                            .and_then(|response| Err(DescribeQueriesError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeQueriesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeQueriesError::from_response(response))
+        }
     }
 
     /// <p>Lists the resource policies in this account.</p>
-    fn describe_resource_policies(
+    async fn describe_resource_policies(
         &self,
         input: DescribeResourcePoliciesRequest,
-    ) -> RusotoFuture<DescribeResourcePoliciesResponse, DescribeResourcePoliciesError> {
+    ) -> Result<DescribeResourcePoliciesResponse, RusotoError<DescribeResourcePoliciesError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4162,46 +3988,28 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeResourcePoliciesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeResourcePoliciesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeResourcePoliciesResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeResourcePoliciesError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeResourcePoliciesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeResourcePoliciesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeResourcePoliciesError::from_response(response))
+        }
     }
 
     /// <p>Lists the subscription filters for the specified log group. You can list all the subscription filters or filter the results by prefix. The results are ASCII-sorted by filter name.</p>
-    fn describe_subscription_filters(
+    async fn describe_subscription_filters(
         &self,
         input: DescribeSubscriptionFiltersRequest,
-    ) -> RusotoFuture<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError> {
+    ) -> Result<DescribeSubscriptionFiltersResponse, RusotoError<DescribeSubscriptionFiltersError>>
+    {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4209,46 +4017,27 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeSubscriptionFiltersError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeSubscriptionFiltersError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeSubscriptionFiltersResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeSubscriptionFiltersError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeSubscriptionFiltersError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeSubscriptionFiltersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeSubscriptionFiltersError::from_response(response))
+        }
     }
 
     /// <p>Disassociates the associated AWS Key Management Service (AWS KMS) customer master key (CMK) from the specified log group.</p> <p>After the AWS KMS CMK is disassociated from the log group, AWS CloudWatch Logs stops encrypting newly ingested data for the log group. All previously ingested data remains encrypted, and AWS CloudWatch Logs requires permissions for the CMK whenever the encrypted data is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p>
-    fn disassociate_kms_key(
+    async fn disassociate_kms_key(
         &self,
         input: DisassociateKmsKeyRequest,
-    ) -> RusotoFuture<(), DisassociateKmsKeyError> {
+    ) -> Result<(), RusotoError<DisassociateKmsKeyError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4256,31 +4045,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DisassociateKmsKeyError>
-                            })
-                            .and_then(|response| {
-                                Err(DisassociateKmsKeyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateKmsKeyError::from_response(response))
+        }
     }
 
     /// <p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1 MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>
-    fn filter_log_events(
+    async fn filter_log_events(
         &self,
         input: FilterLogEventsRequest,
-    ) -> RusotoFuture<FilterLogEventsResponse, FilterLogEventsError> {
+    ) -> Result<FilterLogEventsResponse, RusotoError<FilterLogEventsError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4288,42 +4071,26 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| FilterLogEventsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<FilterLogEventsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<FilterLogEventsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<FilterLogEventsError>
-                            })
-                            .and_then(|response| Err(FilterLogEventsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<FilterLogEventsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(FilterLogEventsError::from_response(response))
+        }
     }
 
     /// <p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). You can get additional log events by specifying one of the tokens in a subsequent call.</p>
-    fn get_log_events(
+    async fn get_log_events(
         &self,
         input: GetLogEventsRequest,
-    ) -> RusotoFuture<GetLogEventsResponse, GetLogEventsError> {
+    ) -> Result<GetLogEventsResponse, RusotoError<GetLogEventsError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4331,42 +4098,26 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetLogEventsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetLogEventsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetLogEventsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetLogEventsError>
-                            })
-                            .and_then(|response| Err(GetLogEventsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetLogEventsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetLogEventsError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of the fields that are included in log events in the specified log group, along with the percentage of log events that contain each field. The search is limited to a time period that you specify.</p> <p>In the results, fields that start with @ are fields generated by CloudWatch Logs. For example, <code>@timestamp</code> is the timestamp of each log event.</p> <p>The response results are sorted by the frequency percentage, starting with the highest percentage.</p>
-    fn get_log_group_fields(
+    async fn get_log_group_fields(
         &self,
         input: GetLogGroupFieldsRequest,
-    ) -> RusotoFuture<GetLogGroupFieldsResponse, GetLogGroupFieldsError> {
+    ) -> Result<GetLogGroupFieldsResponse, RusotoError<GetLogGroupFieldsError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4374,44 +4125,27 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetLogGroupFieldsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetLogGroupFieldsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetLogGroupFieldsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetLogGroupFieldsError>
-                            })
-                            .and_then(|response| {
-                                Err(GetLogGroupFieldsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetLogGroupFieldsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetLogGroupFieldsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves all the fields and values of a single log event. All fields are retrieved, even if the original query that produced the <code>logRecordPointer</code> retrieved only a subset of fields. Fields are returned as field name/field value pairs.</p> <p>Additionally, the entire unparsed log event is returned within <code>@message</code>.</p>
-    fn get_log_record(
+    async fn get_log_record(
         &self,
         input: GetLogRecordRequest,
-    ) -> RusotoFuture<GetLogRecordResponse, GetLogRecordError> {
+    ) -> Result<GetLogRecordResponse, RusotoError<GetLogRecordError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4419,42 +4153,26 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetLogRecordError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetLogRecordError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetLogRecordResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetLogRecordError>
-                            })
-                            .and_then(|response| Err(GetLogRecordError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetLogRecordResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetLogRecordError::from_response(response))
+        }
     }
 
     /// <p>Returns the results from the specified query. If the query is in progress, partial results of that current execution are returned.</p> <p>Only the fields requested in the query are returned, along with a <code>@ptr</code> field which is the identifier for the log record. You can use the value of <code>@ptr</code> in a operation to get the full log record.</p> <p> <code>GetQueryResults</code> does not start a query execution. To run a query, use .</p>
-    fn get_query_results(
+    async fn get_query_results(
         &self,
         input: GetQueryResultsRequest,
-    ) -> RusotoFuture<GetQueryResultsResponse, GetQueryResultsError> {
+    ) -> Result<GetQueryResultsResponse, RusotoError<GetQueryResultsError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4462,42 +4180,26 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetQueryResultsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetQueryResultsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetQueryResultsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetQueryResultsError>
-                            })
-                            .and_then(|response| Err(GetQueryResultsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetQueryResultsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetQueryResultsError::from_response(response))
+        }
     }
 
     /// <p>Lists the tags for the specified log group.</p>
-    fn list_tags_log_group(
+    async fn list_tags_log_group(
         &self,
         input: ListTagsLogGroupRequest,
-    ) -> RusotoFuture<ListTagsLogGroupResponse, ListTagsLogGroupError> {
+    ) -> Result<ListTagsLogGroupResponse, RusotoError<ListTagsLogGroupError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4505,44 +4207,27 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListTagsLogGroupError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ListTagsLogGroupError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListTagsLogGroupResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<ListTagsLogGroupError>
-                            })
-                            .and_then(|response| {
-                                Err(ListTagsLogGroupError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsLogGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsLogGroupError::from_response(response))
+        }
     }
 
     /// <p>Creates or updates a destination. A destination encapsulates a physical resource (such as an Amazon Kinesis stream) and enables you to subscribe to a real-time stream of log events for a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Kinesis stream belonging to the same account as the destination.</p> <p>Through an access policy, a destination controls what is written to its Kinesis stream. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>
-    fn put_destination(
+    async fn put_destination(
         &self,
         input: PutDestinationRequest,
-    ) -> RusotoFuture<PutDestinationResponse, PutDestinationError> {
+    ) -> Result<PutDestinationResponse, RusotoError<PutDestinationError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4550,42 +4235,26 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutDestinationError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutDestinationError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<PutDestinationResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutDestinationError>
-                            })
-                            .and_then(|response| Err(PutDestinationError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<PutDestinationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutDestinationError::from_response(response))
+        }
     }
 
     /// <p>Creates or updates an access policy associated with an existing destination. An access policy is an <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies_overview.html">IAM policy document</a> that is used to authorize claims to register a subscription filter against a given destination.</p>
-    fn put_destination_policy(
+    async fn put_destination_policy(
         &self,
         input: PutDestinationPolicyRequest,
-    ) -> RusotoFuture<(), PutDestinationPolicyError> {
+    ) -> Result<(), RusotoError<PutDestinationPolicyError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4593,32 +4262,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<PutDestinationPolicyError>
-                            })
-                            .and_then(|response| {
-                                Err(PutDestinationPolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutDestinationPolicyError::from_response(response))
+        }
     }
 
     /// <p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or older than the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp. The timestamp is the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. (In AWS Tools for PowerShell and the AWS SDK for .NET, the timestamp is specified in .NET format: yyyy-mm-ddThh:mm:ss. For example, 2017-09-15T13:45:30.) </p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul> <p>If a call to PutLogEvents returns "UnrecognizedClientException" the most likely cause is an invalid AWS access key ID or secret key. </p>
-    fn put_log_events(
+    async fn put_log_events(
         &self,
         input: PutLogEventsRequest,
-    ) -> RusotoFuture<PutLogEventsResponse, PutLogEventsError> {
+    ) -> Result<PutLogEventsResponse, RusotoError<PutLogEventsError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4626,42 +4288,26 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutLogEventsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutLogEventsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<PutLogEventsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutLogEventsError>
-                            })
-                            .and_then(|response| Err(PutLogEventsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<PutLogEventsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutLogEventsError::from_response(response))
+        }
     }
 
     /// <p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a>PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>
-    fn put_metric_filter(
+    async fn put_metric_filter(
         &self,
         input: PutMetricFilterRequest,
-    ) -> RusotoFuture<(), PutMetricFilterError> {
+    ) -> Result<(), RusotoError<PutMetricFilterError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4669,29 +4315,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutMetricFilterError>
-                            })
-                            .and_then(|response| Err(PutMetricFilterError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutMetricFilterError::from_response(response))
+        }
     }
 
     /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 10 resource policies per region.</p>
-    fn put_resource_policy(
+    async fn put_resource_policy(
         &self,
         input: PutResourcePolicyRequest,
-    ) -> RusotoFuture<PutResourcePolicyResponse, PutResourcePolicyError> {
+    ) -> Result<PutResourcePolicyResponse, RusotoError<PutResourcePolicyError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4699,44 +4341,27 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutResourcePolicyError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutResourcePolicyError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<PutResourcePolicyResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutResourcePolicyError>
-                            })
-                            .and_then(|response| {
-                                Err(PutResourcePolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutResourcePolicyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutResourcePolicyError::from_response(response))
+        }
     }
 
     /// <p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days for which to retain log events in the specified log group.</p>
-    fn put_retention_policy(
+    async fn put_retention_policy(
         &self,
         input: PutRetentionPolicyRequest,
-    ) -> RusotoFuture<(), PutRetentionPolicyError> {
+    ) -> Result<(), RusotoError<PutRetentionPolicyError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4744,31 +4369,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutRetentionPolicyError>
-                            })
-                            .and_then(|response| {
-                                Err(PutRetentionPolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutRetentionPolicyError::from_response(response))
+        }
     }
 
     /// <p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group.</p>
-    fn put_subscription_filter(
+    async fn put_subscription_filter(
         &self,
         input: PutSubscriptionFilterRequest,
-    ) -> RusotoFuture<(), PutSubscriptionFilterError> {
+    ) -> Result<(), RusotoError<PutSubscriptionFilterError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4776,32 +4395,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<PutSubscriptionFilterError>
-                            })
-                            .and_then(|response| {
-                                Err(PutSubscriptionFilterError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutSubscriptionFilterError::from_response(response))
+        }
     }
 
     /// <p>Schedules a query of a log group using CloudWatch Logs Insights. You specify the log group and time range to query, and the query string to use.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html">CloudWatch Logs Insights Query Syntax</a>.</p> <p>Queries time out after 15 minutes of execution. If your queries are timing out, reduce the time range being searched, or partition your query into a number of queries.</p>
-    fn start_query(
+    async fn start_query(
         &self,
         input: StartQueryRequest,
-    ) -> RusotoFuture<StartQueryResponse, StartQueryError> {
+    ) -> Result<StartQueryResponse, RusotoError<StartQueryError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4809,42 +4421,26 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| StartQueryError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<StartQueryError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<StartQueryResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<StartQueryError>
-                            })
-                            .and_then(|response| Err(StartQueryError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StartQueryResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartQueryError::from_response(response))
+        }
     }
 
     /// <p>Stops a CloudWatch Logs Insights query that is in progress. If the query has already ended, the operation returns an error indicating that the specified query is not running.</p>
-    fn stop_query(
+    async fn stop_query(
         &self,
         input: StopQueryRequest,
-    ) -> RusotoFuture<StopQueryResponse, StopQueryError> {
+    ) -> Result<StopQueryResponse, RusotoError<StopQueryError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4852,39 +4448,26 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| StopQueryError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<StopQueryError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<StopQueryResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<StopQueryError>
-                            })
-                            .and_then(|response| Err(StopQueryError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StopQueryResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopQueryError::from_response(response))
+        }
     }
 
     /// <p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>
-    fn tag_log_group(&self, input: TagLogGroupRequest) -> RusotoFuture<(), TagLogGroupError> {
+    async fn tag_log_group(
+        &self,
+        input: TagLogGroupRequest,
+    ) -> Result<(), RusotoError<TagLogGroupError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4892,29 +4475,25 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<TagLogGroupError>
-                            })
-                            .and_then(|response| Err(TagLogGroupError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagLogGroupError::from_response(response))
+        }
     }
 
     /// <p>Tests the filter pattern of a metric filter against a sample of log event messages. You can use this operation to validate the correctness of a metric filter pattern.</p>
-    fn test_metric_filter(
+    async fn test_metric_filter(
         &self,
         input: TestMetricFilterRequest,
-    ) -> RusotoFuture<TestMetricFilterResponse, TestMetricFilterError> {
+    ) -> Result<TestMetricFilterResponse, RusotoError<TestMetricFilterError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4922,41 +4501,27 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| TestMetricFilterError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<TestMetricFilterError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<TestMetricFilterResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<TestMetricFilterError>
-                            })
-                            .and_then(|response| {
-                                Err(TestMetricFilterError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<TestMetricFilterResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TestMetricFilterError::from_response(response))
+        }
     }
 
     /// <p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To add tags, use <a>UntagLogGroup</a>.</p>
-    fn untag_log_group(&self, input: UntagLogGroupRequest) -> RusotoFuture<(), UntagLogGroupError> {
+    async fn untag_log_group(
+        &self,
+        input: UntagLogGroupRequest,
+    ) -> Result<(), RusotoError<UntagLogGroupError>> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4964,21 +4529,17 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<UntagLogGroupError>
-                            })
-                            .and_then(|response| Err(UntagLogGroupError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagLogGroupError::from_response(response))
+        }
     }
 }

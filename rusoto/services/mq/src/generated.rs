@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
@@ -2285,129 +2286,145 @@ impl Error for UpdateUserError {
     }
 }
 /// Trait representing the capabilities of the AmazonMQ API. AmazonMQ clients implement this trait.
+#[async_trait]
 pub trait MQ {
     /// <p>Creates a broker. Note: This API is asynchronous.</p>
-    fn create_broker(
+    async fn create_broker(
         &self,
         input: CreateBrokerRequest,
-    ) -> RusotoFuture<CreateBrokerResponse, CreateBrokerError>;
+    ) -> Result<CreateBrokerResponse, RusotoError<CreateBrokerError>>;
 
     /// <p>Creates a new configuration for the specified configuration name. Amazon MQ uses the default configuration (the engine type and version).</p>
-    fn create_configuration(
+    async fn create_configuration(
         &self,
         input: CreateConfigurationRequest,
-    ) -> RusotoFuture<CreateConfigurationResponse, CreateConfigurationError>;
+    ) -> Result<CreateConfigurationResponse, RusotoError<CreateConfigurationError>>;
 
     /// <p>Add a tag to a resource.</p>
-    fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError>;
+    async fn create_tags(
+        &self,
+        input: CreateTagsRequest,
+    ) -> Result<(), RusotoError<CreateTagsError>>;
 
     /// <p>Creates an ActiveMQ user.</p>
-    fn create_user(
+    async fn create_user(
         &self,
         input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResponse, CreateUserError>;
+    ) -> Result<CreateUserResponse, RusotoError<CreateUserError>>;
 
     /// <p>Deletes a broker. Note: This API is asynchronous.</p>
-    fn delete_broker(
+    async fn delete_broker(
         &self,
         input: DeleteBrokerRequest,
-    ) -> RusotoFuture<DeleteBrokerResponse, DeleteBrokerError>;
+    ) -> Result<DeleteBrokerResponse, RusotoError<DeleteBrokerError>>;
 
     /// <p>Removes a tag from a resource.</p>
-    fn delete_tags(&self, input: DeleteTagsRequest) -> RusotoFuture<(), DeleteTagsError>;
+    async fn delete_tags(
+        &self,
+        input: DeleteTagsRequest,
+    ) -> Result<(), RusotoError<DeleteTagsError>>;
 
     /// <p>Deletes an ActiveMQ user.</p>
-    fn delete_user(
+    async fn delete_user(
         &self,
         input: DeleteUserRequest,
-    ) -> RusotoFuture<DeleteUserResponse, DeleteUserError>;
+    ) -> Result<DeleteUserResponse, RusotoError<DeleteUserError>>;
 
     /// <p>Returns information about the specified broker.</p>
-    fn describe_broker(
+    async fn describe_broker(
         &self,
         input: DescribeBrokerRequest,
-    ) -> RusotoFuture<DescribeBrokerResponse, DescribeBrokerError>;
+    ) -> Result<DescribeBrokerResponse, RusotoError<DescribeBrokerError>>;
 
     /// <p>Describe available engine types and versions.</p>
-    fn describe_broker_engine_types(
+    async fn describe_broker_engine_types(
         &self,
         input: DescribeBrokerEngineTypesRequest,
-    ) -> RusotoFuture<DescribeBrokerEngineTypesResponse, DescribeBrokerEngineTypesError>;
+    ) -> Result<DescribeBrokerEngineTypesResponse, RusotoError<DescribeBrokerEngineTypesError>>;
 
     /// <p>Describe available broker instance options.</p>
-    fn describe_broker_instance_options(
+    async fn describe_broker_instance_options(
         &self,
         input: DescribeBrokerInstanceOptionsRequest,
-    ) -> RusotoFuture<DescribeBrokerInstanceOptionsResponse, DescribeBrokerInstanceOptionsError>;
+    ) -> Result<
+        DescribeBrokerInstanceOptionsResponse,
+        RusotoError<DescribeBrokerInstanceOptionsError>,
+    >;
 
     /// <p>Returns information about the specified configuration.</p>
-    fn describe_configuration(
+    async fn describe_configuration(
         &self,
         input: DescribeConfigurationRequest,
-    ) -> RusotoFuture<DescribeConfigurationResponse, DescribeConfigurationError>;
+    ) -> Result<DescribeConfigurationResponse, RusotoError<DescribeConfigurationError>>;
 
     /// <p>Returns the specified configuration revision for the specified configuration.</p>
-    fn describe_configuration_revision(
+    async fn describe_configuration_revision(
         &self,
         input: DescribeConfigurationRevisionRequest,
-    ) -> RusotoFuture<DescribeConfigurationRevisionResponse, DescribeConfigurationRevisionError>;
+    ) -> Result<
+        DescribeConfigurationRevisionResponse,
+        RusotoError<DescribeConfigurationRevisionError>,
+    >;
 
     /// <p>Returns information about an ActiveMQ user.</p>
-    fn describe_user(
+    async fn describe_user(
         &self,
         input: DescribeUserRequest,
-    ) -> RusotoFuture<DescribeUserResponse, DescribeUserError>;
+    ) -> Result<DescribeUserResponse, RusotoError<DescribeUserError>>;
 
     /// <p>Returns a list of all brokers.</p>
-    fn list_brokers(
+    async fn list_brokers(
         &self,
         input: ListBrokersRequest,
-    ) -> RusotoFuture<ListBrokersResponse, ListBrokersError>;
+    ) -> Result<ListBrokersResponse, RusotoError<ListBrokersError>>;
 
     /// <p>Returns a list of all revisions for the specified configuration.</p>
-    fn list_configuration_revisions(
+    async fn list_configuration_revisions(
         &self,
         input: ListConfigurationRevisionsRequest,
-    ) -> RusotoFuture<ListConfigurationRevisionsResponse, ListConfigurationRevisionsError>;
+    ) -> Result<ListConfigurationRevisionsResponse, RusotoError<ListConfigurationRevisionsError>>;
 
     /// <p>Returns a list of all configurations.</p>
-    fn list_configurations(
+    async fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
-    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError>;
+    ) -> Result<ListConfigurationsResponse, RusotoError<ListConfigurationsError>>;
 
     /// <p>Lists tags for a resource.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
+    async fn list_tags(
+        &self,
+        input: ListTagsRequest,
+    ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
 
     /// <p>Returns a list of all ActiveMQ users.</p>
-    fn list_users(
+    async fn list_users(
         &self,
         input: ListUsersRequest,
-    ) -> RusotoFuture<ListUsersResponse, ListUsersError>;
+    ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
 
     /// <p>Reboots a broker. Note: This API is asynchronous.</p>
-    fn reboot_broker(
+    async fn reboot_broker(
         &self,
         input: RebootBrokerRequest,
-    ) -> RusotoFuture<RebootBrokerResponse, RebootBrokerError>;
+    ) -> Result<RebootBrokerResponse, RusotoError<RebootBrokerError>>;
 
     /// <p>Adds a pending configuration change to a broker.</p>
-    fn update_broker(
+    async fn update_broker(
         &self,
         input: UpdateBrokerRequest,
-    ) -> RusotoFuture<UpdateBrokerResponse, UpdateBrokerError>;
+    ) -> Result<UpdateBrokerResponse, RusotoError<UpdateBrokerError>>;
 
     /// <p>Updates the specified configuration.</p>
-    fn update_configuration(
+    async fn update_configuration(
         &self,
         input: UpdateConfigurationRequest,
-    ) -> RusotoFuture<UpdateConfigurationResponse, UpdateConfigurationError>;
+    ) -> Result<UpdateConfigurationResponse, RusotoError<UpdateConfigurationError>>;
 
     /// <p>Updates the information for an ActiveMQ user.</p>
-    fn update_user(
+    async fn update_user(
         &self,
         input: UpdateUserRequest,
-    ) -> RusotoFuture<UpdateUserResponse, UpdateUserError>;
+    ) -> Result<UpdateUserResponse, RusotoError<UpdateUserError>>;
 }
 /// A client for the AmazonMQ API.
 #[derive(Clone)]
@@ -2443,12 +2460,13 @@ impl MQClient {
     }
 }
 
+#[async_trait]
 impl MQ for MQClient {
     /// <p>Creates a broker. Note: This API is asynchronous.</p>
-    fn create_broker(
+    async fn create_broker(
         &self,
         input: CreateBrokerRequest,
-    ) -> RusotoFuture<CreateBrokerResponse, CreateBrokerError> {
+    ) -> Result<CreateBrokerResponse, RusotoError<CreateBrokerError>> {
         let request_uri = "/v1/brokers";
 
         let mut request = SignedRequest::new("POST", "mq", &self.region, &request_uri);
@@ -2457,38 +2475,28 @@ impl MQ for MQClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateBrokerError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateBrokerResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateBrokerError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateBrokerResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateBrokerError>())
-                            .and_then(|response| Err(CreateBrokerError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateBrokerError::from_response(response))
+        }
     }
 
     /// <p>Creates a new configuration for the specified configuration name. Amazon MQ uses the default configuration (the engine type and version).</p>
-    fn create_configuration(
+    async fn create_configuration(
         &self,
         input: CreateConfigurationRequest,
-    ) -> RusotoFuture<CreateConfigurationResponse, CreateConfigurationError> {
+    ) -> Result<CreateConfigurationResponse, RusotoError<CreateConfigurationError>> {
         let request_uri = "/v1/configurations";
 
         let mut request = SignedRequest::new("POST", "mq", &self.region, &request_uri);
@@ -2497,37 +2505,28 @@ impl MQ for MQClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateConfigurationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateConfigurationResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateConfigurationError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateConfigurationResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateConfigurationError>())
-                            .and_then(|response| {
-                                Err(CreateConfigurationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Add a tag to a resource.</p>
-    fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError> {
+    async fn create_tags(
+        &self,
+        input: CreateTagsRequest,
+    ) -> Result<(), RusotoError<CreateTagsError>> {
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "mq", &self.region, &request_uri);
@@ -2536,37 +2535,27 @@ impl MQ for MQClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateTagsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateTagsError::SignAndDispatch)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateTagsError>())
-                            .and_then(|response| Err(CreateTagsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateTagsError::from_response(response))
+        }
     }
 
     /// <p>Creates an ActiveMQ user.</p>
-    fn create_user(
+    async fn create_user(
         &self,
         input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
+    ) -> Result<CreateUserResponse, RusotoError<CreateUserError>> {
         let request_uri = format!(
             "/v1/brokers/{broker_id}/users/{username}",
             broker_id = input.broker_id,
@@ -2579,72 +2568,55 @@ impl MQ for MQClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateUserError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUserResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateUserError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateUserResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateUserError>())
-                            .and_then(|response| Err(CreateUserError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateUserError::from_response(response))
+        }
     }
 
     /// <p>Deletes a broker. Note: This API is asynchronous.</p>
-    fn delete_broker(
+    async fn delete_broker(
         &self,
         input: DeleteBrokerRequest,
-    ) -> RusotoFuture<DeleteBrokerResponse, DeleteBrokerError> {
+    ) -> Result<DeleteBrokerResponse, RusotoError<DeleteBrokerError>> {
         let request_uri = format!("/v1/brokers/{broker_id}", broker_id = input.broker_id);
 
         let mut request = SignedRequest::new("DELETE", "mq", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteBrokerError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteBrokerResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBrokerError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteBrokerResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteBrokerError>())
-                            .and_then(|response| Err(DeleteBrokerError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteBrokerError::from_response(response))
+        }
     }
 
     /// <p>Removes a tag from a resource.</p>
-    fn delete_tags(&self, input: DeleteTagsRequest) -> RusotoFuture<(), DeleteTagsError> {
+    async fn delete_tags(
+        &self,
+        input: DeleteTagsRequest,
+    ) -> Result<(), RusotoError<DeleteTagsError>> {
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "mq", &self.region, &request_uri);
@@ -2656,37 +2628,27 @@ impl MQ for MQClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteTagsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteTagsError::SignAndDispatch)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteTagsError>())
-                            .and_then(|response| Err(DeleteTagsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTagsError::from_response(response))
+        }
     }
 
     /// <p>Deletes an ActiveMQ user.</p>
-    fn delete_user(
+    async fn delete_user(
         &self,
         input: DeleteUserRequest,
-    ) -> RusotoFuture<DeleteUserResponse, DeleteUserError> {
+    ) -> Result<DeleteUserResponse, RusotoError<DeleteUserError>> {
         let request_uri = format!(
             "/v1/brokers/{broker_id}/users/{username}",
             broker_id = input.broker_id,
@@ -2696,75 +2658,56 @@ impl MQ for MQClient {
         let mut request = SignedRequest::new("DELETE", "mq", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteUserError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteUserResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteUserError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteUserResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteUserError>())
-                            .and_then(|response| Err(DeleteUserError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteUserError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the specified broker.</p>
-    fn describe_broker(
+    async fn describe_broker(
         &self,
         input: DescribeBrokerRequest,
-    ) -> RusotoFuture<DescribeBrokerResponse, DescribeBrokerError> {
+    ) -> Result<DescribeBrokerResponse, RusotoError<DescribeBrokerError>> {
         let request_uri = format!("/v1/brokers/{broker_id}", broker_id = input.broker_id);
 
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeBrokerError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBrokerResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeBrokerError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeBrokerResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeBrokerError>())
-                            .and_then(|response| Err(DescribeBrokerError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeBrokerError::from_response(response))
+        }
     }
 
     /// <p>Describe available engine types and versions.</p>
-    fn describe_broker_engine_types(
+    async fn describe_broker_engine_types(
         &self,
         input: DescribeBrokerEngineTypesRequest,
-    ) -> RusotoFuture<DescribeBrokerEngineTypesResponse, DescribeBrokerEngineTypesError> {
+    ) -> Result<DescribeBrokerEngineTypesResponse, RusotoError<DescribeBrokerEngineTypesError>>
+    {
         let request_uri = "/v1/broker-engine-types";
 
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
@@ -2782,41 +2725,31 @@ impl MQ for MQClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeBrokerEngineTypesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBrokerEngineTypesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeBrokerEngineTypesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeBrokerEngineTypesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeBrokerEngineTypesError>())
-                            .and_then(|response| {
-                                Err(DescribeBrokerEngineTypesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeBrokerEngineTypesError::from_response(response))
+        }
     }
 
     /// <p>Describe available broker instance options.</p>
-    fn describe_broker_instance_options(
+    async fn describe_broker_instance_options(
         &self,
         input: DescribeBrokerInstanceOptionsRequest,
-    ) -> RusotoFuture<DescribeBrokerInstanceOptionsResponse, DescribeBrokerInstanceOptionsError>
-    {
+    ) -> Result<
+        DescribeBrokerInstanceOptionsResponse,
+        RusotoError<DescribeBrokerInstanceOptionsError>,
+    > {
         let request_uri = "/v1/broker-instance-options";
 
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
@@ -2837,40 +2770,28 @@ impl MQ for MQClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeBrokerInstanceOptionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBrokerInstanceOptionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeBrokerInstanceOptionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeBrokerInstanceOptionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeBrokerInstanceOptionsError>())
-                            .and_then(|response| {
-                                Err(DescribeBrokerInstanceOptionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeBrokerInstanceOptionsError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the specified configuration.</p>
-    fn describe_configuration(
+    async fn describe_configuration(
         &self,
         input: DescribeConfigurationRequest,
-    ) -> RusotoFuture<DescribeConfigurationResponse, DescribeConfigurationError> {
+    ) -> Result<DescribeConfigurationResponse, RusotoError<DescribeConfigurationError>> {
         let request_uri = format!(
             "/v1/configurations/{configuration_id}",
             configuration_id = input.configuration_id
@@ -2879,41 +2800,31 @@ impl MQ for MQClient {
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeConfigurationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConfigurationResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeConfigurationError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConfigurationResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeConfigurationError>())
-                            .and_then(|response| {
-                                Err(DescribeConfigurationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Returns the specified configuration revision for the specified configuration.</p>
-    fn describe_configuration_revision(
+    async fn describe_configuration_revision(
         &self,
         input: DescribeConfigurationRevisionRequest,
-    ) -> RusotoFuture<DescribeConfigurationRevisionResponse, DescribeConfigurationRevisionError>
-    {
+    ) -> Result<
+        DescribeConfigurationRevisionResponse,
+        RusotoError<DescribeConfigurationRevisionError>,
+    > {
         let request_uri = format!(
             "/v1/configurations/{configuration_id}/revisions/{configuration_revision}",
             configuration_id = input.configuration_id,
@@ -2923,40 +2834,28 @@ impl MQ for MQClient {
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeConfigurationRevisionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConfigurationRevisionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeConfigurationRevisionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConfigurationRevisionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeConfigurationRevisionError>())
-                            .and_then(|response| {
-                                Err(DescribeConfigurationRevisionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConfigurationRevisionError::from_response(response))
+        }
     }
 
     /// <p>Returns information about an ActiveMQ user.</p>
-    fn describe_user(
+    async fn describe_user(
         &self,
         input: DescribeUserRequest,
-    ) -> RusotoFuture<DescribeUserResponse, DescribeUserError> {
+    ) -> Result<DescribeUserResponse, RusotoError<DescribeUserError>> {
         let request_uri = format!(
             "/v1/brokers/{broker_id}/users/{username}",
             broker_id = input.broker_id,
@@ -2966,38 +2865,28 @@ impl MQ for MQClient {
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeUserError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUserResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeUserError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeUserResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeUserError>())
-                            .and_then(|response| Err(DescribeUserError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeUserError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of all brokers.</p>
-    fn list_brokers(
+    async fn list_brokers(
         &self,
         input: ListBrokersRequest,
-    ) -> RusotoFuture<ListBrokersResponse, ListBrokersError> {
+    ) -> Result<ListBrokersResponse, RusotoError<ListBrokersError>> {
         let request_uri = "/v1/brokers";
 
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
@@ -3012,38 +2901,29 @@ impl MQ for MQClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListBrokersError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBrokersResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBrokersError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListBrokersResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListBrokersError>())
-                            .and_then(|response| Err(ListBrokersError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListBrokersError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of all revisions for the specified configuration.</p>
-    fn list_configuration_revisions(
+    async fn list_configuration_revisions(
         &self,
         input: ListConfigurationRevisionsRequest,
-    ) -> RusotoFuture<ListConfigurationRevisionsResponse, ListConfigurationRevisionsError> {
+    ) -> Result<ListConfigurationRevisionsResponse, RusotoError<ListConfigurationRevisionsError>>
+    {
         let request_uri = format!(
             "/v1/configurations/{configuration_id}/revisions",
             configuration_id = input.configuration_id
@@ -3061,40 +2941,28 @@ impl MQ for MQClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListConfigurationRevisionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListConfigurationRevisionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListConfigurationRevisionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListConfigurationRevisionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListConfigurationRevisionsError>())
-                            .and_then(|response| {
-                                Err(ListConfigurationRevisionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListConfigurationRevisionsError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of all configurations.</p>
-    fn list_configurations(
+    async fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
-    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError> {
+    ) -> Result<ListConfigurationsResponse, RusotoError<ListConfigurationsError>> {
         let request_uri = "/v1/configurations";
 
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
@@ -3109,74 +2977,55 @@ impl MQ for MQClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListConfigurationsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListConfigurationsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListConfigurationsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListConfigurationsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListConfigurationsError>())
-                            .and_then(|response| {
-                                Err(ListConfigurationsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListConfigurationsError::from_response(response))
+        }
     }
 
     /// <p>Lists tags for a resource.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
+    async fn list_tags(
+        &self,
+        input: ListTagsRequest,
+    ) -> Result<ListTagsResponse, RusotoError<ListTagsError>> {
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListTagsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTagsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListTagsError>())
-                            .and_then(|response| Err(ListTagsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of all ActiveMQ users.</p>
-    fn list_users(
+    async fn list_users(
         &self,
         input: ListUsersRequest,
-    ) -> RusotoFuture<ListUsersResponse, ListUsersError> {
+    ) -> Result<ListUsersResponse, RusotoError<ListUsersError>> {
         let request_uri = format!("/v1/brokers/{broker_id}/users", broker_id = input.broker_id);
 
         let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
@@ -3191,38 +3040,28 @@ impl MQ for MQClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListUsersError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUsersResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListUsersError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<ListUsersResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListUsersError>())
-                            .and_then(|response| Err(ListUsersError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListUsersError::from_response(response))
+        }
     }
 
     /// <p>Reboots a broker. Note: This API is asynchronous.</p>
-    fn reboot_broker(
+    async fn reboot_broker(
         &self,
         input: RebootBrokerRequest,
-    ) -> RusotoFuture<RebootBrokerResponse, RebootBrokerError> {
+    ) -> Result<RebootBrokerResponse, RusotoError<RebootBrokerError>> {
         let request_uri = format!(
             "/v1/brokers/{broker_id}/reboot",
             broker_id = input.broker_id
@@ -3231,38 +3070,28 @@ impl MQ for MQClient {
         let mut request = SignedRequest::new("POST", "mq", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| RebootBrokerError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RebootBrokerResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RebootBrokerError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RebootBrokerResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<RebootBrokerError>())
-                            .and_then(|response| Err(RebootBrokerError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RebootBrokerError::from_response(response))
+        }
     }
 
     /// <p>Adds a pending configuration change to a broker.</p>
-    fn update_broker(
+    async fn update_broker(
         &self,
         input: UpdateBrokerRequest,
-    ) -> RusotoFuture<UpdateBrokerResponse, UpdateBrokerError> {
+    ) -> Result<UpdateBrokerResponse, RusotoError<UpdateBrokerError>> {
         let request_uri = format!("/v1/brokers/{broker_id}", broker_id = input.broker_id);
 
         let mut request = SignedRequest::new("PUT", "mq", &self.region, &request_uri);
@@ -3271,38 +3100,28 @@ impl MQ for MQClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateBrokerError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateBrokerResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateBrokerError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateBrokerResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateBrokerError>())
-                            .and_then(|response| Err(UpdateBrokerError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateBrokerError::from_response(response))
+        }
     }
 
     /// <p>Updates the specified configuration.</p>
-    fn update_configuration(
+    async fn update_configuration(
         &self,
         input: UpdateConfigurationRequest,
-    ) -> RusotoFuture<UpdateConfigurationResponse, UpdateConfigurationError> {
+    ) -> Result<UpdateConfigurationResponse, RusotoError<UpdateConfigurationError>> {
         let request_uri = format!(
             "/v1/configurations/{configuration_id}",
             configuration_id = input.configuration_id
@@ -3314,40 +3133,28 @@ impl MQ for MQClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateConfigurationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateConfigurationResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateConfigurationError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateConfigurationResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateConfigurationError>())
-                            .and_then(|response| {
-                                Err(UpdateConfigurationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Updates the information for an ActiveMQ user.</p>
-    fn update_user(
+    async fn update_user(
         &self,
         input: UpdateUserRequest,
-    ) -> RusotoFuture<UpdateUserResponse, UpdateUserError> {
+    ) -> Result<UpdateUserResponse, RusotoError<UpdateUserError>> {
         let request_uri = format!(
             "/v1/brokers/{broker_id}/users/{username}",
             broker_id = input.broker_id,
@@ -3360,30 +3167,20 @@ impl MQ for MQClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateUserError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateUserResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateUserError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<UpdateUserResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateUserError>())
-                            .and_then(|response| Err(UpdateUserError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateUserError::from_response(response))
+        }
     }
 }

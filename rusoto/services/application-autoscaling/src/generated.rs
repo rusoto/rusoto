@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -1150,66 +1151,67 @@ impl Error for RegisterScalableTargetError {
     }
 }
 /// Trait representing the capabilities of the Application Auto Scaling API. Application Auto Scaling clients implement this trait.
+#[async_trait]
 pub trait ApplicationAutoScaling {
     /// <p>Deletes the specified Application Auto Scaling scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the CloudWatch alarm associated with the scaling policy, even if it no longer has an associated action.</p> <p>To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>.</p>
-    fn delete_scaling_policy(
+    async fn delete_scaling_policy(
         &self,
         input: DeleteScalingPolicyRequest,
-    ) -> RusotoFuture<DeleteScalingPolicyResponse, DeleteScalingPolicyError>;
+    ) -> Result<DeleteScalingPolicyResponse, RusotoError<DeleteScalingPolicyError>>;
 
     /// <p>Deletes the specified Application Auto Scaling scheduled action.</p>
-    fn delete_scheduled_action(
+    async fn delete_scheduled_action(
         &self,
         input: DeleteScheduledActionRequest,
-    ) -> RusotoFuture<DeleteScheduledActionResponse, DeleteScheduledActionError>;
+    ) -> Result<DeleteScheduledActionResponse, RusotoError<DeleteScheduledActionError>>;
 
     /// <p>Deregisters a scalable target.</p> <p>Deregistering a scalable target deletes the scaling policies that are associated with it.</p> <p>To create a scalable target or update an existing one, see <a>RegisterScalableTarget</a>. </p>
-    fn deregister_scalable_target(
+    async fn deregister_scalable_target(
         &self,
         input: DeregisterScalableTargetRequest,
-    ) -> RusotoFuture<DeregisterScalableTargetResponse, DeregisterScalableTargetError>;
+    ) -> Result<DeregisterScalableTargetResponse, RusotoError<DeregisterScalableTargetError>>;
 
     /// <p>Gets information about the scalable targets in the specified namespace.</p> <p>You can filter the results using the <code>ResourceIds</code> and <code>ScalableDimension</code> parameters.</p> <p>To create a scalable target or update an existing one, see <a>RegisterScalableTarget</a>. If you are no longer using a scalable target, you can deregister it using <a>DeregisterScalableTarget</a>.</p>
-    fn describe_scalable_targets(
+    async fn describe_scalable_targets(
         &self,
         input: DescribeScalableTargetsRequest,
-    ) -> RusotoFuture<DescribeScalableTargetsResponse, DescribeScalableTargetsError>;
+    ) -> Result<DescribeScalableTargetsResponse, RusotoError<DescribeScalableTargetsError>>;
 
     /// <p>Provides descriptive information about the scaling activities in the specified namespace from the previous six weeks.</p> <p>You can filter the results using the <code>ResourceId</code> and <code>ScalableDimension</code> parameters.</p> <p>Scaling activities are triggered by CloudWatch alarms that are associated with scaling policies. To view the scaling policies for a service namespace, see <a>DescribeScalingPolicies</a>. To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>.</p>
-    fn describe_scaling_activities(
+    async fn describe_scaling_activities(
         &self,
         input: DescribeScalingActivitiesRequest,
-    ) -> RusotoFuture<DescribeScalingActivitiesResponse, DescribeScalingActivitiesError>;
+    ) -> Result<DescribeScalingActivitiesResponse, RusotoError<DescribeScalingActivitiesError>>;
 
     /// <p>Describes the scaling policies for the specified service namespace.</p> <p>You can filter the results using the <code>ResourceId</code>, <code>ScalableDimension</code>, and <code>PolicyNames</code> parameters.</p> <p>To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>. If you are no longer using a scaling policy, you can delete it using <a>DeleteScalingPolicy</a>.</p>
-    fn describe_scaling_policies(
+    async fn describe_scaling_policies(
         &self,
         input: DescribeScalingPoliciesRequest,
-    ) -> RusotoFuture<DescribeScalingPoliciesResponse, DescribeScalingPoliciesError>;
+    ) -> Result<DescribeScalingPoliciesResponse, RusotoError<DescribeScalingPoliciesError>>;
 
     /// <p>Describes the scheduled actions for the specified service namespace.</p> <p>You can filter the results using the <code>ResourceId</code>, <code>ScalableDimension</code>, and <code>ScheduledActionNames</code> parameters.</p> <p>To create a scheduled action or update an existing one, see <a>PutScheduledAction</a>. If you are no longer using a scheduled action, you can delete it using <a>DeleteScheduledAction</a>.</p>
-    fn describe_scheduled_actions(
+    async fn describe_scheduled_actions(
         &self,
         input: DescribeScheduledActionsRequest,
-    ) -> RusotoFuture<DescribeScheduledActionsResponse, DescribeScheduledActionsError>;
+    ) -> Result<DescribeScheduledActionsResponse, RusotoError<DescribeScheduledActionsError>>;
 
     /// <p>Creates or updates a policy for an Application Auto Scaling scalable target.</p> <p>Each scalable target is identified by a service namespace, resource ID, and scalable dimension. A scaling policy applies to the scalable target identified by those three attributes. You cannot create a scaling policy until you have registered the resource as a scalable target using <a>RegisterScalableTarget</a>.</p> <p>To update a policy, specify its policy name and the parameters that you want to change. Any parameters that you don't specify are not changed by this update request.</p> <p>You can view the scaling policies for a service namespace using <a>DescribeScalingPolicies</a>. If you are no longer using a scaling policy, you can delete it using <a>DeleteScalingPolicy</a>.</p> <p>Multiple scaling policies can be in force at the same time for the same scalable target. You can have one or more target tracking scaling policies, one or more step scaling policies, or both. However, there is a chance that multiple policies could conflict, instructing the scalable target to scale out or in at the same time. Application Auto Scaling gives precedence to the policy that provides the largest capacity for both scale in and scale out. For example, if one policy increases capacity by 3, another policy increases capacity by 200 percent, and the current capacity is 10, Application Auto Scaling uses the policy with the highest calculated capacity (200% of 10 = 20) and scales out to 30. </p> <p>Learn more about how to work with scaling policies in the <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/what-is-application-auto-scaling.html">Application Auto Scaling User Guide</a>.</p>
-    fn put_scaling_policy(
+    async fn put_scaling_policy(
         &self,
         input: PutScalingPolicyRequest,
-    ) -> RusotoFuture<PutScalingPolicyResponse, PutScalingPolicyError>;
+    ) -> Result<PutScalingPolicyResponse, RusotoError<PutScalingPolicyError>>;
 
     /// <p>Creates or updates a scheduled action for an Application Auto Scaling scalable target.</p> <p>Each scalable target is identified by a service namespace, resource ID, and scalable dimension. A scheduled action applies to the scalable target identified by those three attributes. You cannot create a scheduled action until you have registered the resource as a scalable target using <a>RegisterScalableTarget</a>. </p> <p>To update an action, specify its name and the parameters that you want to change. If you don't specify start and end times, the old values are deleted. Any other parameters that you don't specify are not changed by this update request.</p> <p>You can view the scheduled actions using <a>DescribeScheduledActions</a>. If you are no longer using a scheduled action, you can delete it using <a>DeleteScheduledAction</a>.</p> <p>Learn more about how to work with scheduled actions in the <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/what-is-application-auto-scaling.html">Application Auto Scaling User Guide</a>.</p>
-    fn put_scheduled_action(
+    async fn put_scheduled_action(
         &self,
         input: PutScheduledActionRequest,
-    ) -> RusotoFuture<PutScheduledActionResponse, PutScheduledActionError>;
+    ) -> Result<PutScheduledActionResponse, RusotoError<PutScheduledActionError>>;
 
     /// <p>Registers or updates a scalable target. A scalable target is a resource that Application Auto Scaling can scale out and scale in. Each scalable target has a resource ID, scalable dimension, and namespace, as well as values for minimum and maximum capacity. </p> <p>After you register a scalable target, you do not need to register it again to use other Application Auto Scaling operations. To see which resources have been registered, use <a>DescribeScalableTargets</a>. You can also view the scaling policies for a service namespace using <a>DescribeScalableTargets</a>. </p> <p>If you no longer need a scalable target, you can deregister it using <a>DeregisterScalableTarget</a>.</p>
-    fn register_scalable_target(
+    async fn register_scalable_target(
         &self,
         input: RegisterScalableTargetRequest,
-    ) -> RusotoFuture<RegisterScalableTargetResponse, RegisterScalableTargetError>;
+    ) -> Result<RegisterScalableTargetResponse, RusotoError<RegisterScalableTargetError>>;
 }
 /// A client for the Application Auto Scaling API.
 #[derive(Clone)]
@@ -1245,12 +1247,13 @@ impl ApplicationAutoScalingClient {
     }
 }
 
+#[async_trait]
 impl ApplicationAutoScaling for ApplicationAutoScalingClient {
     /// <p>Deletes the specified Application Auto Scaling scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the CloudWatch alarm associated with the scaling policy, even if it no longer has an associated action.</p> <p>To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>.</p>
-    fn delete_scaling_policy(
+    async fn delete_scaling_policy(
         &self,
         input: DeleteScalingPolicyRequest,
-    ) -> RusotoFuture<DeleteScalingPolicyResponse, DeleteScalingPolicyError> {
+    ) -> Result<DeleteScalingPolicyResponse, RusotoError<DeleteScalingPolicyError>> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1261,46 +1264,27 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteScalingPolicyError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteScalingPolicyError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteScalingPolicyResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteScalingPolicyError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteScalingPolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteScalingPolicyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteScalingPolicyError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified Application Auto Scaling scheduled action.</p>
-    fn delete_scheduled_action(
+    async fn delete_scheduled_action(
         &self,
         input: DeleteScheduledActionRequest,
-    ) -> RusotoFuture<DeleteScheduledActionResponse, DeleteScheduledActionError> {
+    ) -> Result<DeleteScheduledActionResponse, RusotoError<DeleteScheduledActionError>> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1311,46 +1295,27 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteScheduledActionError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteScheduledActionError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteScheduledActionResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteScheduledActionError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteScheduledActionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteScheduledActionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteScheduledActionError::from_response(response))
+        }
     }
 
     /// <p>Deregisters a scalable target.</p> <p>Deregistering a scalable target deletes the scaling policies that are associated with it.</p> <p>To create a scalable target or update an existing one, see <a>RegisterScalableTarget</a>. </p>
-    fn deregister_scalable_target(
+    async fn deregister_scalable_target(
         &self,
         input: DeregisterScalableTargetRequest,
-    ) -> RusotoFuture<DeregisterScalableTargetResponse, DeregisterScalableTargetError> {
+    ) -> Result<DeregisterScalableTargetResponse, RusotoError<DeregisterScalableTargetError>> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1361,46 +1326,27 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeregisterScalableTargetError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeregisterScalableTargetError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeregisterScalableTargetResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeregisterScalableTargetError>
-                            })
-                            .and_then(|response| {
-                                Err(DeregisterScalableTargetError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeregisterScalableTargetResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeregisterScalableTargetError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the scalable targets in the specified namespace.</p> <p>You can filter the results using the <code>ResourceIds</code> and <code>ScalableDimension</code> parameters.</p> <p>To create a scalable target or update an existing one, see <a>RegisterScalableTarget</a>. If you are no longer using a scalable target, you can deregister it using <a>DeregisterScalableTarget</a>.</p>
-    fn describe_scalable_targets(
+    async fn describe_scalable_targets(
         &self,
         input: DescribeScalableTargetsRequest,
-    ) -> RusotoFuture<DescribeScalableTargetsResponse, DescribeScalableTargetsError> {
+    ) -> Result<DescribeScalableTargetsResponse, RusotoError<DescribeScalableTargetsError>> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1411,46 +1357,28 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeScalableTargetsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeScalableTargetsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeScalableTargetsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeScalableTargetsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeScalableTargetsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeScalableTargetsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeScalableTargetsError::from_response(response))
+        }
     }
 
     /// <p>Provides descriptive information about the scaling activities in the specified namespace from the previous six weeks.</p> <p>You can filter the results using the <code>ResourceId</code> and <code>ScalableDimension</code> parameters.</p> <p>Scaling activities are triggered by CloudWatch alarms that are associated with scaling policies. To view the scaling policies for a service namespace, see <a>DescribeScalingPolicies</a>. To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>.</p>
-    fn describe_scaling_activities(
+    async fn describe_scaling_activities(
         &self,
         input: DescribeScalingActivitiesRequest,
-    ) -> RusotoFuture<DescribeScalingActivitiesResponse, DescribeScalingActivitiesError> {
+    ) -> Result<DescribeScalingActivitiesResponse, RusotoError<DescribeScalingActivitiesError>>
+    {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1461,46 +1389,27 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeScalingActivitiesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeScalingActivitiesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeScalingActivitiesResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeScalingActivitiesError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeScalingActivitiesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeScalingActivitiesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeScalingActivitiesError::from_response(response))
+        }
     }
 
     /// <p>Describes the scaling policies for the specified service namespace.</p> <p>You can filter the results using the <code>ResourceId</code>, <code>ScalableDimension</code>, and <code>PolicyNames</code> parameters.</p> <p>To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>. If you are no longer using a scaling policy, you can delete it using <a>DeleteScalingPolicy</a>.</p>
-    fn describe_scaling_policies(
+    async fn describe_scaling_policies(
         &self,
         input: DescribeScalingPoliciesRequest,
-    ) -> RusotoFuture<DescribeScalingPoliciesResponse, DescribeScalingPoliciesError> {
+    ) -> Result<DescribeScalingPoliciesResponse, RusotoError<DescribeScalingPoliciesError>> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1511,46 +1420,27 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeScalingPoliciesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeScalingPoliciesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeScalingPoliciesResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeScalingPoliciesError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeScalingPoliciesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeScalingPoliciesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeScalingPoliciesError::from_response(response))
+        }
     }
 
     /// <p>Describes the scheduled actions for the specified service namespace.</p> <p>You can filter the results using the <code>ResourceId</code>, <code>ScalableDimension</code>, and <code>ScheduledActionNames</code> parameters.</p> <p>To create a scheduled action or update an existing one, see <a>PutScheduledAction</a>. If you are no longer using a scheduled action, you can delete it using <a>DeleteScheduledAction</a>.</p>
-    fn describe_scheduled_actions(
+    async fn describe_scheduled_actions(
         &self,
         input: DescribeScheduledActionsRequest,
-    ) -> RusotoFuture<DescribeScheduledActionsResponse, DescribeScheduledActionsError> {
+    ) -> Result<DescribeScheduledActionsResponse, RusotoError<DescribeScheduledActionsError>> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1561,46 +1451,27 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeScheduledActionsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeScheduledActionsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeScheduledActionsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeScheduledActionsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeScheduledActionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeScheduledActionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeScheduledActionsError::from_response(response))
+        }
     }
 
     /// <p>Creates or updates a policy for an Application Auto Scaling scalable target.</p> <p>Each scalable target is identified by a service namespace, resource ID, and scalable dimension. A scaling policy applies to the scalable target identified by those three attributes. You cannot create a scaling policy until you have registered the resource as a scalable target using <a>RegisterScalableTarget</a>.</p> <p>To update a policy, specify its policy name and the parameters that you want to change. Any parameters that you don't specify are not changed by this update request.</p> <p>You can view the scaling policies for a service namespace using <a>DescribeScalingPolicies</a>. If you are no longer using a scaling policy, you can delete it using <a>DeleteScalingPolicy</a>.</p> <p>Multiple scaling policies can be in force at the same time for the same scalable target. You can have one or more target tracking scaling policies, one or more step scaling policies, or both. However, there is a chance that multiple policies could conflict, instructing the scalable target to scale out or in at the same time. Application Auto Scaling gives precedence to the policy that provides the largest capacity for both scale in and scale out. For example, if one policy increases capacity by 3, another policy increases capacity by 200 percent, and the current capacity is 10, Application Auto Scaling uses the policy with the highest calculated capacity (200% of 10 = 20) and scales out to 30. </p> <p>Learn more about how to work with scaling policies in the <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/what-is-application-auto-scaling.html">Application Auto Scaling User Guide</a>.</p>
-    fn put_scaling_policy(
+    async fn put_scaling_policy(
         &self,
         input: PutScalingPolicyRequest,
-    ) -> RusotoFuture<PutScalingPolicyResponse, PutScalingPolicyError> {
+    ) -> Result<PutScalingPolicyResponse, RusotoError<PutScalingPolicyError>> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1608,44 +1479,27 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutScalingPolicyError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutScalingPolicyError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<PutScalingPolicyResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutScalingPolicyError>
-                            })
-                            .and_then(|response| {
-                                Err(PutScalingPolicyError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutScalingPolicyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutScalingPolicyError::from_response(response))
+        }
     }
 
     /// <p>Creates or updates a scheduled action for an Application Auto Scaling scalable target.</p> <p>Each scalable target is identified by a service namespace, resource ID, and scalable dimension. A scheduled action applies to the scalable target identified by those three attributes. You cannot create a scheduled action until you have registered the resource as a scalable target using <a>RegisterScalableTarget</a>. </p> <p>To update an action, specify its name and the parameters that you want to change. If you don't specify start and end times, the old values are deleted. Any other parameters that you don't specify are not changed by this update request.</p> <p>You can view the scheduled actions using <a>DescribeScheduledActions</a>. If you are no longer using a scheduled action, you can delete it using <a>DeleteScheduledAction</a>.</p> <p>Learn more about how to work with scheduled actions in the <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/what-is-application-auto-scaling.html">Application Auto Scaling User Guide</a>.</p>
-    fn put_scheduled_action(
+    async fn put_scheduled_action(
         &self,
         input: PutScheduledActionRequest,
-    ) -> RusotoFuture<PutScheduledActionResponse, PutScheduledActionError> {
+    ) -> Result<PutScheduledActionResponse, RusotoError<PutScheduledActionError>> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1653,44 +1507,27 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutScheduledActionError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutScheduledActionError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<PutScheduledActionResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutScheduledActionError>
-                            })
-                            .and_then(|response| {
-                                Err(PutScheduledActionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutScheduledActionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutScheduledActionError::from_response(response))
+        }
     }
 
     /// <p>Registers or updates a scalable target. A scalable target is a resource that Application Auto Scaling can scale out and scale in. Each scalable target has a resource ID, scalable dimension, and namespace, as well as values for minimum and maximum capacity. </p> <p>After you register a scalable target, you do not need to register it again to use other Application Auto Scaling operations. To see which resources have been registered, use <a>DescribeScalableTargets</a>. You can also view the scaling policies for a service namespace using <a>DescribeScalableTargets</a>. </p> <p>If you no longer need a scalable target, you can deregister it using <a>DeregisterScalableTarget</a>.</p>
-    fn register_scalable_target(
+    async fn register_scalable_target(
         &self,
         input: RegisterScalableTargetRequest,
-    ) -> RusotoFuture<RegisterScalableTargetResponse, RegisterScalableTargetError> {
+    ) -> Result<RegisterScalableTargetResponse, RusotoError<RegisterScalableTargetError>> {
         let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
         request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1701,38 +1538,19 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| RegisterScalableTargetError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<RegisterScalableTargetError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<RegisterScalableTargetResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<RegisterScalableTargetError>
-                            })
-                            .and_then(|response| {
-                                Err(RegisterScalableTargetError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RegisterScalableTargetResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterScalableTargetError::from_response(response))
+        }
     }
 }

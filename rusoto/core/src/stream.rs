@@ -59,7 +59,7 @@ impl Stream for ByteStream {
     type Item = Result<Bytes, io::Error>;
 
     fn poll_next(
-        mut self: Pin<&mut Self>,
+        self: Pin<&mut Self>,
         cx: &mut Context<'_>,
     ) -> Poll<Option<Self::Item>> {
         let this = self.project();
@@ -85,7 +85,7 @@ impl ImplAsyncRead {
 
 impl AsyncRead for ImplAsyncRead {
     fn poll_read(
-        mut self: Pin<&mut Self>,
+        self: Pin<&mut Self>,
         cx: &mut Context<'_>,
         buf: &mut [u8],
     ) -> Poll<io::Result<usize>> {

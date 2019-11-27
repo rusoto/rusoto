@@ -43,7 +43,7 @@ pub fn generate_response_parser(
     parse_non_payload: &str,
 ) -> String {
     if operation.output.is_none() {
-        return "futures::future::ready(Ok(std::mem::drop(response))).boxed()".to_string();
+        return "Ok(std::mem::drop(response))".to_string();
     }
 
     let shape_name = &operation
@@ -113,14 +113,11 @@ fn payload_body_parser(
     match payload_type {
         ShapeType::Blob if !streaming => {
             format!("
-                response.buffer().map(move |try_response| {{
-                    try_response.map(move |response| {{
-                        let mut result = {output_shape}::default();
-                        result.{payload_member} = Some(response.body);
-                        {parse_non_payload}
-                        result
-                    }})
-                }}).boxed()
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = {output_shape}::default();
+                result.{payload_member} = Some(response.body);
+                {parse_non_payload}
+                Ok(result)
                 ",
                     output_shape = output_shape,
                     payload_member = payload_member.to_snake_case(),
@@ -131,7 +128,7 @@ fn payload_body_parser(
                 let mut result = {output_shape}::default();
                 result.{payload_member} = Some(response.body);
                 {parse_non_payload}
-                futures::future::ready(result).boxed()
+                Ok(result)
                 ",
                     output_shape = output_shape,
                     payload_member = payload_member.to_snake_case(),
@@ -139,14 +136,11 @@ fn payload_body_parser(
         },
         _ => {
             format!("
-                response.buffer().map(move |try_response| {{
-                    try_response.map(move |response| {{
-                        let mut result = {output_shape}::default();
-                        result.{payload_member} = Some(String::from_utf8_lossy(response.body.as_ref()).into());
-                        {parse_non_payload}
-                        result
-                    }})
-                }}).boxed()
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = {output_shape}::default();
+                result.{payload_member} = Some(String::from_utf8_lossy(response.body.as_ref()).into());
+                {parse_non_payload}
+                Ok(result)
                 ",
                     output_shape = output_shape,
                     payload_member = payload_member.to_snake_case(),
@@ -170,37 +164,36 @@ fn xml_body_parser(
     let deserialize = match *result_wrapper {
         Some(ref tag_name) => format!(
             "start_element(&actual_tag_name, &mut stack)?;
-                     result = {output_shape}Deserializer::deserialize(\"{tag_name}\", &mut stack);
+                     result = {output_shape}Deserializer::deserialize(\"{tag_name}\", &mut stack)?;
                      skip_tree(&mut stack);
                      end_element(&actual_tag_name, &mut stack)?;",
             output_shape = output_shape,
             tag_name = tag_name
         ),
         None => format!(
-            "result = {output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack);",
+            "result = {output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack)?;",
             output_shape = output_shape
         ),
     };
 
     format!(
-        "response.buffer().and_then(move |xml_response| {{
-            {let_result}
+        "let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        {let_result}
 
-            if xml_response.body.is_empty() {{
-                result = Ok({output_shape}::default());
-            }} else {{
-                let reader = EventReader::new_with_config(
-                    xml_response.body.as_ref(),
-                    ParserConfig::new().trim_whitespace(true)
-                );
-                let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                let _start_document = stack.next();
-                let actual_tag_name = peek_at_name(&mut stack)?;
-                {deserialize}
-            }}
-            {parse_non_payload} // parse non-payload
-            futures::future::ready(Ok(result))
-        }}).boxed()",
+        if xml_response.body.is_empty() {{
+            result = {output_shape}::default();
+        }} else {{
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true)
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            {deserialize}
+        }}
+        {parse_non_payload} // parse non-payload
+        Ok(result)",
         let_result = let_result,
         output_shape = output_shape,
         deserialize = deserialize,

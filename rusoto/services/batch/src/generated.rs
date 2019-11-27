@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -1895,99 +1896,103 @@ impl Error for UpdateJobQueueError {
     }
 }
 /// Trait representing the capabilities of the AWS Batch API. AWS Batch clients implement this trait.
+#[async_trait]
 pub trait Batch {
     /// <p>Cancels a job in an AWS Batch job queue. Jobs that are in the <code>SUBMITTED</code>, <code>PENDING</code>, or <code>RUNNABLE</code> state are cancelled. Jobs that have progressed to <code>STARTING</code> or <code>RUNNING</code> are not cancelled (but the API operation still succeeds, even if no job is cancelled); these jobs must be terminated with the <a>TerminateJob</a> operation.</p>
-    fn cancel_job(
+    async fn cancel_job(
         &self,
         input: CancelJobRequest,
-    ) -> RusotoFuture<CancelJobResponse, CancelJobError>;
+    ) -> Result<CancelJobResponse, RusotoError<CancelJobError>>;
 
     /// <p><p>Creates an AWS Batch compute environment. You can create <code>MANAGED</code> or <code>UNMANAGED</code> compute environments.</p> <p>In a managed compute environment, AWS Batch manages the capacity and instance types of the compute resources within the environment. This is based on the compute resource specification that you define or the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">launch template</a> that you specify when you create the compute environment. You can choose to use Amazon EC2 On-Demand Instances or Spot Instances in your managed compute environment. You can optionally set a maximum price so that Spot Instances only launch when the Spot Instance price is below a specified percentage of the On-Demand price.</p> <note> <p>Multi-node parallel jobs are not supported on Spot Instances.</p> </note> <p>In an unmanaged compute environment, you can manage your own compute resources. This provides more compute resource configuration options, such as using a custom AMI, but you must ensure that your AMI meets the Amazon ECS container instance AMI specification. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/container_instance_AMIs.html">Container Instance AMIs</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. After you have created your unmanaged compute environment, you can use the <a>DescribeComputeEnvironments</a> operation to find the Amazon ECS cluster that is associated with it. Then, manually launch your container instances into that Amazon ECS cluster. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html">Launching an Amazon ECS Container Instance</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>AWS Batch does not upgrade the AMIs in a compute environment after it is created (for example, when a newer version of the Amazon ECS-optimized AMI is available). You are responsible for the management of the guest operating system (including updates and security patches) and any additional application software or utilities that you install on the compute resources. To use a new AMI for your AWS Batch jobs:</p> <ol> <li> <p>Create a new compute environment with the new AMI.</p> </li> <li> <p>Add the compute environment to an existing job queue.</p> </li> <li> <p>Remove the old compute environment from your job queue.</p> </li> <li> <p>Delete the old compute environment.</p> </li> </ol> </note></p>
-    fn create_compute_environment(
+    async fn create_compute_environment(
         &self,
         input: CreateComputeEnvironmentRequest,
-    ) -> RusotoFuture<CreateComputeEnvironmentResponse, CreateComputeEnvironmentError>;
+    ) -> Result<CreateComputeEnvironmentResponse, RusotoError<CreateComputeEnvironmentError>>;
 
     /// <p>Creates an AWS Batch job queue. When you create a job queue, you associate one or more compute environments to the queue and assign an order of preference for the compute environments.</p> <p>You also set a priority to the job queue that determines the order in which the AWS Batch scheduler places jobs onto its associated compute environments. For example, if a compute environment is associated with more than one job queue, the job queue with a higher priority is given preference for scheduling jobs to that compute environment.</p>
-    fn create_job_queue(
+    async fn create_job_queue(
         &self,
         input: CreateJobQueueRequest,
-    ) -> RusotoFuture<CreateJobQueueResponse, CreateJobQueueError>;
+    ) -> Result<CreateJobQueueResponse, RusotoError<CreateJobQueueError>>;
 
     /// <p>Deletes an AWS Batch compute environment.</p> <p>Before you can delete a compute environment, you must set its state to <code>DISABLED</code> with the <a>UpdateComputeEnvironment</a> API operation and disassociate it from any job queues with the <a>UpdateJobQueue</a> API operation.</p>
-    fn delete_compute_environment(
+    async fn delete_compute_environment(
         &self,
         input: DeleteComputeEnvironmentRequest,
-    ) -> RusotoFuture<DeleteComputeEnvironmentResponse, DeleteComputeEnvironmentError>;
+    ) -> Result<DeleteComputeEnvironmentResponse, RusotoError<DeleteComputeEnvironmentError>>;
 
     /// <p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation. All jobs in the queue are terminated when you delete a job queue.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request. </p>
-    fn delete_job_queue(
+    async fn delete_job_queue(
         &self,
         input: DeleteJobQueueRequest,
-    ) -> RusotoFuture<DeleteJobQueueResponse, DeleteJobQueueError>;
+    ) -> Result<DeleteJobQueueResponse, RusotoError<DeleteJobQueueError>>;
 
     /// <p>Deregisters an AWS Batch job definition.</p>
-    fn deregister_job_definition(
+    async fn deregister_job_definition(
         &self,
         input: DeregisterJobDefinitionRequest,
-    ) -> RusotoFuture<DeregisterJobDefinitionResponse, DeregisterJobDefinitionError>;
+    ) -> Result<DeregisterJobDefinitionResponse, RusotoError<DeregisterJobDefinitionError>>;
 
     /// <p>Describes one or more of your compute environments.</p> <p>If you are using an unmanaged compute environment, you can use the <code>DescribeComputeEnvironment</code> operation to determine the <code>ecsClusterArn</code> that you should launch your Amazon ECS container instances into.</p>
-    fn describe_compute_environments(
+    async fn describe_compute_environments(
         &self,
         input: DescribeComputeEnvironmentsRequest,
-    ) -> RusotoFuture<DescribeComputeEnvironmentsResponse, DescribeComputeEnvironmentsError>;
+    ) -> Result<DescribeComputeEnvironmentsResponse, RusotoError<DescribeComputeEnvironmentsError>>;
 
     /// <p>Describes a list of job definitions. You can specify a <code>status</code> (such as <code>ACTIVE</code>) to only return job definitions that match that status.</p>
-    fn describe_job_definitions(
+    async fn describe_job_definitions(
         &self,
         input: DescribeJobDefinitionsRequest,
-    ) -> RusotoFuture<DescribeJobDefinitionsResponse, DescribeJobDefinitionsError>;
+    ) -> Result<DescribeJobDefinitionsResponse, RusotoError<DescribeJobDefinitionsError>>;
 
     /// <p>Describes one or more of your job queues.</p>
-    fn describe_job_queues(
+    async fn describe_job_queues(
         &self,
         input: DescribeJobQueuesRequest,
-    ) -> RusotoFuture<DescribeJobQueuesResponse, DescribeJobQueuesError>;
+    ) -> Result<DescribeJobQueuesResponse, RusotoError<DescribeJobQueuesError>>;
 
     /// <p>Describes a list of AWS Batch jobs.</p>
-    fn describe_jobs(
+    async fn describe_jobs(
         &self,
         input: DescribeJobsRequest,
-    ) -> RusotoFuture<DescribeJobsResponse, DescribeJobsError>;
+    ) -> Result<DescribeJobsResponse, RusotoError<DescribeJobsError>>;
 
     /// <p>Returns a list of AWS Batch jobs.</p> <p>You must specify only one of the following:</p> <ul> <li> <p>a job queue ID to return a list of jobs in that job queue</p> </li> <li> <p>a multi-node parallel job ID to return a list of that job's nodes</p> </li> <li> <p>an array job ID to return a list of that job's children</p> </li> </ul> <p>You can filter the results by job status with the <code>jobStatus</code> parameter. If you do not specify a status, only <code>RUNNING</code> jobs are returned.</p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError>;
+    async fn list_jobs(
+        &self,
+        input: ListJobsRequest,
+    ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
 
     /// <p>Registers an AWS Batch job definition. </p>
-    fn register_job_definition(
+    async fn register_job_definition(
         &self,
         input: RegisterJobDefinitionRequest,
-    ) -> RusotoFuture<RegisterJobDefinitionResponse, RegisterJobDefinitionError>;
+    ) -> Result<RegisterJobDefinitionResponse, RusotoError<RegisterJobDefinitionError>>;
 
     /// <p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition. </p>
-    fn submit_job(
+    async fn submit_job(
         &self,
         input: SubmitJobRequest,
-    ) -> RusotoFuture<SubmitJobResponse, SubmitJobError>;
+    ) -> Result<SubmitJobResponse, RusotoError<SubmitJobError>>;
 
     /// <p>Terminates a job in a job queue. Jobs that are in the <code>STARTING</code> or <code>RUNNING</code> state are terminated, which causes them to transition to <code>FAILED</code>. Jobs that have not progressed to the <code>STARTING</code> state are cancelled.</p>
-    fn terminate_job(
+    async fn terminate_job(
         &self,
         input: TerminateJobRequest,
-    ) -> RusotoFuture<TerminateJobResponse, TerminateJobError>;
+    ) -> Result<TerminateJobResponse, RusotoError<TerminateJobError>>;
 
     /// <p>Updates an AWS Batch compute environment.</p>
-    fn update_compute_environment(
+    async fn update_compute_environment(
         &self,
         input: UpdateComputeEnvironmentRequest,
-    ) -> RusotoFuture<UpdateComputeEnvironmentResponse, UpdateComputeEnvironmentError>;
+    ) -> Result<UpdateComputeEnvironmentResponse, RusotoError<UpdateComputeEnvironmentError>>;
 
     /// <p>Updates a job queue.</p>
-    fn update_job_queue(
+    async fn update_job_queue(
         &self,
         input: UpdateJobQueueRequest,
-    ) -> RusotoFuture<UpdateJobQueueResponse, UpdateJobQueueError>;
+    ) -> Result<UpdateJobQueueResponse, RusotoError<UpdateJobQueueError>>;
 }
 /// A client for the AWS Batch API.
 #[derive(Clone)]
@@ -2023,12 +2028,13 @@ impl BatchClient {
     }
 }
 
+#[async_trait]
 impl Batch for BatchClient {
     /// <p>Cancels a job in an AWS Batch job queue. Jobs that are in the <code>SUBMITTED</code>, <code>PENDING</code>, or <code>RUNNABLE</code> state are cancelled. Jobs that have progressed to <code>STARTING</code> or <code>RUNNING</code> are not cancelled (but the API operation still succeeds, even if no job is cancelled); these jobs must be terminated with the <a>TerminateJob</a> operation.</p>
-    fn cancel_job(
+    async fn cancel_job(
         &self,
         input: CancelJobRequest,
-    ) -> RusotoFuture<CancelJobResponse, CancelJobError> {
+    ) -> Result<CancelJobResponse, RusotoError<CancelJobError>> {
         let request_uri = "/v1/canceljob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2037,38 +2043,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CancelJobError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelJobResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CancelJobError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<CancelJobResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CancelJobError>())
-                            .and_then(|response| Err(CancelJobError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelJobError::from_response(response))
+        }
     }
 
     /// <p><p>Creates an AWS Batch compute environment. You can create <code>MANAGED</code> or <code>UNMANAGED</code> compute environments.</p> <p>In a managed compute environment, AWS Batch manages the capacity and instance types of the compute resources within the environment. This is based on the compute resource specification that you define or the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">launch template</a> that you specify when you create the compute environment. You can choose to use Amazon EC2 On-Demand Instances or Spot Instances in your managed compute environment. You can optionally set a maximum price so that Spot Instances only launch when the Spot Instance price is below a specified percentage of the On-Demand price.</p> <note> <p>Multi-node parallel jobs are not supported on Spot Instances.</p> </note> <p>In an unmanaged compute environment, you can manage your own compute resources. This provides more compute resource configuration options, such as using a custom AMI, but you must ensure that your AMI meets the Amazon ECS container instance AMI specification. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/container_instance_AMIs.html">Container Instance AMIs</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. After you have created your unmanaged compute environment, you can use the <a>DescribeComputeEnvironments</a> operation to find the Amazon ECS cluster that is associated with it. Then, manually launch your container instances into that Amazon ECS cluster. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html">Launching an Amazon ECS Container Instance</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>AWS Batch does not upgrade the AMIs in a compute environment after it is created (for example, when a newer version of the Amazon ECS-optimized AMI is available). You are responsible for the management of the guest operating system (including updates and security patches) and any additional application software or utilities that you install on the compute resources. To use a new AMI for your AWS Batch jobs:</p> <ol> <li> <p>Create a new compute environment with the new AMI.</p> </li> <li> <p>Add the compute environment to an existing job queue.</p> </li> <li> <p>Remove the old compute environment from your job queue.</p> </li> <li> <p>Delete the old compute environment.</p> </li> </ol> </note></p>
-    fn create_compute_environment(
+    async fn create_compute_environment(
         &self,
         input: CreateComputeEnvironmentRequest,
-    ) -> RusotoFuture<CreateComputeEnvironmentResponse, CreateComputeEnvironmentError> {
+    ) -> Result<CreateComputeEnvironmentResponse, RusotoError<CreateComputeEnvironmentError>> {
         let request_uri = "/v1/createcomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2077,40 +2073,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateComputeEnvironmentError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateComputeEnvironmentResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateComputeEnvironmentError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateComputeEnvironmentResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateComputeEnvironmentError>())
-                            .and_then(|response| {
-                                Err(CreateComputeEnvironmentError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateComputeEnvironmentError::from_response(response))
+        }
     }
 
     /// <p>Creates an AWS Batch job queue. When you create a job queue, you associate one or more compute environments to the queue and assign an order of preference for the compute environments.</p> <p>You also set a priority to the job queue that determines the order in which the AWS Batch scheduler places jobs onto its associated compute environments. For example, if a compute environment is associated with more than one job queue, the job queue with a higher priority is given preference for scheduling jobs to that compute environment.</p>
-    fn create_job_queue(
+    async fn create_job_queue(
         &self,
         input: CreateJobQueueRequest,
-    ) -> RusotoFuture<CreateJobQueueResponse, CreateJobQueueError> {
+    ) -> Result<CreateJobQueueResponse, RusotoError<CreateJobQueueError>> {
         let request_uri = "/v1/createjobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2119,38 +2103,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateJobQueueError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateJobQueueResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateJobQueueError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateJobQueueResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateJobQueueError>())
-                            .and_then(|response| Err(CreateJobQueueError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateJobQueueError::from_response(response))
+        }
     }
 
     /// <p>Deletes an AWS Batch compute environment.</p> <p>Before you can delete a compute environment, you must set its state to <code>DISABLED</code> with the <a>UpdateComputeEnvironment</a> API operation and disassociate it from any job queues with the <a>UpdateJobQueue</a> API operation.</p>
-    fn delete_compute_environment(
+    async fn delete_compute_environment(
         &self,
         input: DeleteComputeEnvironmentRequest,
-    ) -> RusotoFuture<DeleteComputeEnvironmentResponse, DeleteComputeEnvironmentError> {
+    ) -> Result<DeleteComputeEnvironmentResponse, RusotoError<DeleteComputeEnvironmentError>> {
         let request_uri = "/v1/deletecomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2159,40 +2133,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteComputeEnvironmentError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteComputeEnvironmentResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteComputeEnvironmentError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteComputeEnvironmentResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteComputeEnvironmentError>())
-                            .and_then(|response| {
-                                Err(DeleteComputeEnvironmentError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteComputeEnvironmentError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation. All jobs in the queue are terminated when you delete a job queue.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request. </p>
-    fn delete_job_queue(
+    async fn delete_job_queue(
         &self,
         input: DeleteJobQueueRequest,
-    ) -> RusotoFuture<DeleteJobQueueResponse, DeleteJobQueueError> {
+    ) -> Result<DeleteJobQueueResponse, RusotoError<DeleteJobQueueError>> {
         let request_uri = "/v1/deletejobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2201,38 +2163,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteJobQueueError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteJobQueueResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteJobQueueError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteJobQueueResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteJobQueueError>())
-                            .and_then(|response| Err(DeleteJobQueueError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteJobQueueError::from_response(response))
+        }
     }
 
     /// <p>Deregisters an AWS Batch job definition.</p>
-    fn deregister_job_definition(
+    async fn deregister_job_definition(
         &self,
         input: DeregisterJobDefinitionRequest,
-    ) -> RusotoFuture<DeregisterJobDefinitionResponse, DeregisterJobDefinitionError> {
+    ) -> Result<DeregisterJobDefinitionResponse, RusotoError<DeregisterJobDefinitionError>> {
         let request_uri = "/v1/deregisterjobdefinition";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2241,40 +2193,29 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeregisterJobDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeregisterJobDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeregisterJobDefinitionError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeregisterJobDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeregisterJobDefinitionError>())
-                            .and_then(|response| {
-                                Err(DeregisterJobDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeregisterJobDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Describes one or more of your compute environments.</p> <p>If you are using an unmanaged compute environment, you can use the <code>DescribeComputeEnvironment</code> operation to determine the <code>ecsClusterArn</code> that you should launch your Amazon ECS container instances into.</p>
-    fn describe_compute_environments(
+    async fn describe_compute_environments(
         &self,
         input: DescribeComputeEnvironmentsRequest,
-    ) -> RusotoFuture<DescribeComputeEnvironmentsResponse, DescribeComputeEnvironmentsError> {
+    ) -> Result<DescribeComputeEnvironmentsResponse, RusotoError<DescribeComputeEnvironmentsError>>
+    {
         let request_uri = "/v1/describecomputeenvironments";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2283,40 +2224,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeComputeEnvironmentsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeComputeEnvironmentsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeComputeEnvironmentsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeComputeEnvironmentsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeComputeEnvironmentsError>())
-                            .and_then(|response| {
-                                Err(DescribeComputeEnvironmentsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeComputeEnvironmentsError::from_response(response))
+        }
     }
 
     /// <p>Describes a list of job definitions. You can specify a <code>status</code> (such as <code>ACTIVE</code>) to only return job definitions that match that status.</p>
-    fn describe_job_definitions(
+    async fn describe_job_definitions(
         &self,
         input: DescribeJobDefinitionsRequest,
-    ) -> RusotoFuture<DescribeJobDefinitionsResponse, DescribeJobDefinitionsError> {
+    ) -> Result<DescribeJobDefinitionsResponse, RusotoError<DescribeJobDefinitionsError>> {
         let request_uri = "/v1/describejobdefinitions";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2325,40 +2254,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeJobDefinitionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeJobDefinitionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeJobDefinitionsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeJobDefinitionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeJobDefinitionsError>())
-                            .and_then(|response| {
-                                Err(DescribeJobDefinitionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeJobDefinitionsError::from_response(response))
+        }
     }
 
     /// <p>Describes one or more of your job queues.</p>
-    fn describe_job_queues(
+    async fn describe_job_queues(
         &self,
         input: DescribeJobQueuesRequest,
-    ) -> RusotoFuture<DescribeJobQueuesResponse, DescribeJobQueuesError> {
+    ) -> Result<DescribeJobQueuesResponse, RusotoError<DescribeJobQueuesError>> {
         let request_uri = "/v1/describejobqueues";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2367,40 +2284,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeJobQueuesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeJobQueuesResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeJobQueuesError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeJobQueuesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeJobQueuesError>())
-                            .and_then(|response| {
-                                Err(DescribeJobQueuesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeJobQueuesError::from_response(response))
+        }
     }
 
     /// <p>Describes a list of AWS Batch jobs.</p>
-    fn describe_jobs(
+    async fn describe_jobs(
         &self,
         input: DescribeJobsRequest,
-    ) -> RusotoFuture<DescribeJobsResponse, DescribeJobsError> {
+    ) -> Result<DescribeJobsResponse, RusotoError<DescribeJobsError>> {
         let request_uri = "/v1/describejobs";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2409,35 +2314,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeJobsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeJobsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeJobsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeJobsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeJobsError>())
-                            .and_then(|response| Err(DescribeJobsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeJobsError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of AWS Batch jobs.</p> <p>You must specify only one of the following:</p> <ul> <li> <p>a job queue ID to return a list of jobs in that job queue</p> </li> <li> <p>a multi-node parallel job ID to return a list of that job's nodes</p> </li> <li> <p>an array job ID to return a list of that job's children</p> </li> </ul> <p>You can filter the results by job status with the <code>jobStatus</code> parameter. If you do not specify a status, only <code>RUNNING</code> jobs are returned.</p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
+    async fn list_jobs(
+        &self,
+        input: ListJobsRequest,
+    ) -> Result<ListJobsResponse, RusotoError<ListJobsError>> {
         let request_uri = "/v1/listjobs";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2446,38 +2344,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListJobsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListJobsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListJobsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListJobsError>())
-                            .and_then(|response| Err(ListJobsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListJobsError::from_response(response))
+        }
     }
 
     /// <p>Registers an AWS Batch job definition. </p>
-    fn register_job_definition(
+    async fn register_job_definition(
         &self,
         input: RegisterJobDefinitionRequest,
-    ) -> RusotoFuture<RegisterJobDefinitionResponse, RegisterJobDefinitionError> {
+    ) -> Result<RegisterJobDefinitionResponse, RusotoError<RegisterJobDefinitionError>> {
         let request_uri = "/v1/registerjobdefinition";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2486,40 +2374,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| RegisterJobDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterJobDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RegisterJobDefinitionError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RegisterJobDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<RegisterJobDefinitionError>())
-                            .and_then(|response| {
-                                Err(RegisterJobDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterJobDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition. </p>
-    fn submit_job(
+    async fn submit_job(
         &self,
         input: SubmitJobRequest,
-    ) -> RusotoFuture<SubmitJobResponse, SubmitJobError> {
+    ) -> Result<SubmitJobResponse, RusotoError<SubmitJobError>> {
         let request_uri = "/v1/submitjob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2528,38 +2404,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| SubmitJobError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SubmitJobResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(SubmitJobError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<SubmitJobResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<SubmitJobError>())
-                            .and_then(|response| Err(SubmitJobError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SubmitJobError::from_response(response))
+        }
     }
 
     /// <p>Terminates a job in a job queue. Jobs that are in the <code>STARTING</code> or <code>RUNNING</code> state are terminated, which causes them to transition to <code>FAILED</code>. Jobs that have not progressed to the <code>STARTING</code> state are cancelled.</p>
-    fn terminate_job(
+    async fn terminate_job(
         &self,
         input: TerminateJobRequest,
-    ) -> RusotoFuture<TerminateJobResponse, TerminateJobError> {
+    ) -> Result<TerminateJobResponse, RusotoError<TerminateJobError>> {
         let request_uri = "/v1/terminatejob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2568,38 +2434,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| TerminateJobError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TerminateJobResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TerminateJobError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TerminateJobResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<TerminateJobError>())
-                            .and_then(|response| Err(TerminateJobError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TerminateJobError::from_response(response))
+        }
     }
 
     /// <p>Updates an AWS Batch compute environment.</p>
-    fn update_compute_environment(
+    async fn update_compute_environment(
         &self,
         input: UpdateComputeEnvironmentRequest,
-    ) -> RusotoFuture<UpdateComputeEnvironmentResponse, UpdateComputeEnvironmentError> {
+    ) -> Result<UpdateComputeEnvironmentResponse, RusotoError<UpdateComputeEnvironmentError>> {
         let request_uri = "/v1/updatecomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2608,40 +2464,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateComputeEnvironmentError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateComputeEnvironmentResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateComputeEnvironmentError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateComputeEnvironmentResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateComputeEnvironmentError>())
-                            .and_then(|response| {
-                                Err(UpdateComputeEnvironmentError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateComputeEnvironmentError::from_response(response))
+        }
     }
 
     /// <p>Updates a job queue.</p>
-    fn update_job_queue(
+    async fn update_job_queue(
         &self,
         input: UpdateJobQueueRequest,
-    ) -> RusotoFuture<UpdateJobQueueResponse, UpdateJobQueueError> {
+    ) -> Result<UpdateJobQueueResponse, RusotoError<UpdateJobQueueError>> {
         let request_uri = "/v1/updatejobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2650,30 +2494,20 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateJobQueueError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateJobQueueResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateJobQueueError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateJobQueueResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateJobQueueError>())
-                            .and_then(|response| Err(UpdateJobQueueError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateJobQueueError::from_response(response))
+        }
     }
 }

@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -2323,119 +2324,129 @@ impl Error for UpdateSamplingRuleError {
     }
 }
 /// Trait representing the capabilities of the AWS X-Ray API. AWS X-Ray clients implement this trait.
+#[async_trait]
 pub trait XRay {
     /// <p>Retrieves a list of traces specified by ID. Each trace is a collection of segment documents that originates from a single request. Use <code>GetTraceSummaries</code> to get a list of trace IDs.</p>
-    fn batch_get_traces(
+    async fn batch_get_traces(
         &self,
         input: BatchGetTracesRequest,
-    ) -> RusotoFuture<BatchGetTracesResult, BatchGetTracesError>;
+    ) -> Result<BatchGetTracesResult, RusotoError<BatchGetTracesError>>;
 
     /// <p>Creates a group resource with a name and a filter expression. </p>
-    fn create_group(
+    async fn create_group(
         &self,
         input: CreateGroupRequest,
-    ) -> RusotoFuture<CreateGroupResult, CreateGroupError>;
+    ) -> Result<CreateGroupResult, RusotoError<CreateGroupError>>;
 
     /// <p>Creates a rule to control sampling behavior for instrumented applications. Services retrieve rules with <a>GetSamplingRules</a>, and evaluate each rule in ascending order of <i>priority</i> for each request. If a rule matches, the service records a trace, borrowing it from the reservoir size. After 10 seconds, the service reports back to X-Ray with <a>GetSamplingTargets</a> to get updated versions of each in-use rule. The updated rule contains a trace quota that the service can use instead of borrowing from the reservoir.</p>
-    fn create_sampling_rule(
+    async fn create_sampling_rule(
         &self,
         input: CreateSamplingRuleRequest,
-    ) -> RusotoFuture<CreateSamplingRuleResult, CreateSamplingRuleError>;
+    ) -> Result<CreateSamplingRuleResult, RusotoError<CreateSamplingRuleError>>;
 
     /// <p>Deletes a group resource.</p>
-    fn delete_group(
+    async fn delete_group(
         &self,
         input: DeleteGroupRequest,
-    ) -> RusotoFuture<DeleteGroupResult, DeleteGroupError>;
+    ) -> Result<DeleteGroupResult, RusotoError<DeleteGroupError>>;
 
     /// <p>Deletes a sampling rule.</p>
-    fn delete_sampling_rule(
+    async fn delete_sampling_rule(
         &self,
         input: DeleteSamplingRuleRequest,
-    ) -> RusotoFuture<DeleteSamplingRuleResult, DeleteSamplingRuleError>;
+    ) -> Result<DeleteSamplingRuleResult, RusotoError<DeleteSamplingRuleError>>;
 
     /// <p>Retrieves the current encryption configuration for X-Ray data.</p>
-    fn get_encryption_config(
+    async fn get_encryption_config(
         &self,
-    ) -> RusotoFuture<GetEncryptionConfigResult, GetEncryptionConfigError>;
+    ) -> Result<GetEncryptionConfigResult, RusotoError<GetEncryptionConfigError>>;
 
     /// <p>Retrieves group resource details.</p>
-    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResult, GetGroupError>;
+    async fn get_group(
+        &self,
+        input: GetGroupRequest,
+    ) -> Result<GetGroupResult, RusotoError<GetGroupError>>;
 
     /// <p>Retrieves all active group details.</p>
-    fn get_groups(&self, input: GetGroupsRequest) -> RusotoFuture<GetGroupsResult, GetGroupsError>;
+    async fn get_groups(
+        &self,
+        input: GetGroupsRequest,
+    ) -> Result<GetGroupsResult, RusotoError<GetGroupsError>>;
 
     /// <p>Retrieves all sampling rules.</p>
-    fn get_sampling_rules(
+    async fn get_sampling_rules(
         &self,
         input: GetSamplingRulesRequest,
-    ) -> RusotoFuture<GetSamplingRulesResult, GetSamplingRulesError>;
+    ) -> Result<GetSamplingRulesResult, RusotoError<GetSamplingRulesError>>;
 
     /// <p>Retrieves information about recent sampling results for all sampling rules.</p>
-    fn get_sampling_statistic_summaries(
+    async fn get_sampling_statistic_summaries(
         &self,
         input: GetSamplingStatisticSummariesRequest,
-    ) -> RusotoFuture<GetSamplingStatisticSummariesResult, GetSamplingStatisticSummariesError>;
+    ) -> Result<GetSamplingStatisticSummariesResult, RusotoError<GetSamplingStatisticSummariesError>>;
 
     /// <p>Requests a sampling quota for rules that the service is using to sample requests. </p>
-    fn get_sampling_targets(
+    async fn get_sampling_targets(
         &self,
         input: GetSamplingTargetsRequest,
-    ) -> RusotoFuture<GetSamplingTargetsResult, GetSamplingTargetsError>;
+    ) -> Result<GetSamplingTargetsResult, RusotoError<GetSamplingTargetsError>>;
 
     /// <p>Retrieves a document that describes services that process incoming requests, and downstream services that they call as a result. Root services process incoming requests and make calls to downstream services. Root services are applications that use the AWS X-Ray SDK. Downstream services can be other applications, AWS resources, HTTP web APIs, or SQL databases.</p>
-    fn get_service_graph(
+    async fn get_service_graph(
         &self,
         input: GetServiceGraphRequest,
-    ) -> RusotoFuture<GetServiceGraphResult, GetServiceGraphError>;
+    ) -> Result<GetServiceGraphResult, RusotoError<GetServiceGraphError>>;
 
     /// <p>Get an aggregation of service statistics defined by a specific time range.</p>
-    fn get_time_series_service_statistics(
+    async fn get_time_series_service_statistics(
         &self,
         input: GetTimeSeriesServiceStatisticsRequest,
-    ) -> RusotoFuture<GetTimeSeriesServiceStatisticsResult, GetTimeSeriesServiceStatisticsError>;
+    ) -> Result<
+        GetTimeSeriesServiceStatisticsResult,
+        RusotoError<GetTimeSeriesServiceStatisticsError>,
+    >;
 
     /// <p>Retrieves a service graph for one or more specific trace IDs.</p>
-    fn get_trace_graph(
+    async fn get_trace_graph(
         &self,
         input: GetTraceGraphRequest,
-    ) -> RusotoFuture<GetTraceGraphResult, GetTraceGraphError>;
+    ) -> Result<GetTraceGraphResult, RusotoError<GetTraceGraphError>>;
 
     /// <p>Retrieves IDs and metadata for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service("api.example.com")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = "12345"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
-    fn get_trace_summaries(
+    async fn get_trace_summaries(
         &self,
         input: GetTraceSummariesRequest,
-    ) -> RusotoFuture<GetTraceSummariesResult, GetTraceSummariesError>;
+    ) -> Result<GetTraceSummariesResult, RusotoError<GetTraceSummariesError>>;
 
     /// <p>Updates the encryption configuration for X-Ray data.</p>
-    fn put_encryption_config(
+    async fn put_encryption_config(
         &self,
         input: PutEncryptionConfigRequest,
-    ) -> RusotoFuture<PutEncryptionConfigResult, PutEncryptionConfigError>;
+    ) -> Result<PutEncryptionConfigResult, RusotoError<PutEncryptionConfigError>>;
 
     /// <p>Used by the AWS X-Ray daemon to upload telemetry.</p>
-    fn put_telemetry_records(
+    async fn put_telemetry_records(
         &self,
         input: PutTelemetryRecordsRequest,
-    ) -> RusotoFuture<PutTelemetryRecordsResult, PutTelemetryRecordsError>;
+    ) -> Result<PutTelemetryRecordsResult, RusotoError<PutTelemetryRecordsError>>;
 
     /// <p><p>Uploads segment documents to AWS X-Ray. The X-Ray SDK generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class="title"> <b>Required Segment Document Fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace<em>id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start</em>time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end<em>time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end</em>time</code> or <code>in<em>progress</code>.</p> </li> <li> <p> <code>in</em>progress</code> - Set to <code>true</code> instead of specifying an <code>end<em>time</code> to record that a segment has been started, but is not complete. Send an in progress segment when your application receives a request that will take a long time to serve, to trace the fact that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace</em>id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class="title"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, i.e. <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul></p>
-    fn put_trace_segments(
+    async fn put_trace_segments(
         &self,
         input: PutTraceSegmentsRequest,
-    ) -> RusotoFuture<PutTraceSegmentsResult, PutTraceSegmentsError>;
+    ) -> Result<PutTraceSegmentsResult, RusotoError<PutTraceSegmentsError>>;
 
     /// <p>Updates a group resource.</p>
-    fn update_group(
+    async fn update_group(
         &self,
         input: UpdateGroupRequest,
-    ) -> RusotoFuture<UpdateGroupResult, UpdateGroupError>;
+    ) -> Result<UpdateGroupResult, RusotoError<UpdateGroupError>>;
 
     /// <p>Modifies a sampling rule's configuration.</p>
-    fn update_sampling_rule(
+    async fn update_sampling_rule(
         &self,
         input: UpdateSamplingRuleRequest,
-    ) -> RusotoFuture<UpdateSamplingRuleResult, UpdateSamplingRuleError>;
+    ) -> Result<UpdateSamplingRuleResult, RusotoError<UpdateSamplingRuleError>>;
 }
 /// A client for the AWS X-Ray API.
 #[derive(Clone)]
@@ -2471,12 +2482,13 @@ impl XRayClient {
     }
 }
 
+#[async_trait]
 impl XRay for XRayClient {
     /// <p>Retrieves a list of traces specified by ID. Each trace is a collection of segment documents that originates from a single request. Use <code>GetTraceSummaries</code> to get a list of trace IDs.</p>
-    fn batch_get_traces(
+    async fn batch_get_traces(
         &self,
         input: BatchGetTracesRequest,
-    ) -> RusotoFuture<BatchGetTracesResult, BatchGetTracesError> {
+    ) -> Result<BatchGetTracesResult, RusotoError<BatchGetTracesError>> {
         let request_uri = "/Traces";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -2485,38 +2497,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| BatchGetTracesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetTracesResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetTracesError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchGetTracesResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<BatchGetTracesError>())
-                            .and_then(|response| Err(BatchGetTracesError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchGetTracesError::from_response(response))
+        }
     }
 
     /// <p>Creates a group resource with a name and a filter expression. </p>
-    fn create_group(
+    async fn create_group(
         &self,
         input: CreateGroupRequest,
-    ) -> RusotoFuture<CreateGroupResult, CreateGroupError> {
+    ) -> Result<CreateGroupResult, RusotoError<CreateGroupError>> {
         let request_uri = "/CreateGroup";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -2525,38 +2527,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateGroupError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGroupResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateGroupError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateGroupResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateGroupError>())
-                            .and_then(|response| Err(CreateGroupError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateGroupError::from_response(response))
+        }
     }
 
     /// <p>Creates a rule to control sampling behavior for instrumented applications. Services retrieve rules with <a>GetSamplingRules</a>, and evaluate each rule in ascending order of <i>priority</i> for each request. If a rule matches, the service records a trace, borrowing it from the reservoir size. After 10 seconds, the service reports back to X-Ray with <a>GetSamplingTargets</a> to get updated versions of each in-use rule. The updated rule contains a trace quota that the service can use instead of borrowing from the reservoir.</p>
-    fn create_sampling_rule(
+    async fn create_sampling_rule(
         &self,
         input: CreateSamplingRuleRequest,
-    ) -> RusotoFuture<CreateSamplingRuleResult, CreateSamplingRuleError> {
+    ) -> Result<CreateSamplingRuleResult, RusotoError<CreateSamplingRuleError>> {
         let request_uri = "/CreateSamplingRule";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -2565,40 +2557,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateSamplingRuleError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSamplingRuleResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateSamplingRuleError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSamplingRuleResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateSamplingRuleError>())
-                            .and_then(|response| {
-                                Err(CreateSamplingRuleError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSamplingRuleError::from_response(response))
+        }
     }
 
     /// <p>Deletes a group resource.</p>
-    fn delete_group(
+    async fn delete_group(
         &self,
         input: DeleteGroupRequest,
-    ) -> RusotoFuture<DeleteGroupResult, DeleteGroupError> {
+    ) -> Result<DeleteGroupResult, RusotoError<DeleteGroupError>> {
         let request_uri = "/DeleteGroup";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -2607,38 +2587,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteGroupError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteGroupResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteGroupError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteGroupResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteGroupError>())
-                            .and_then(|response| Err(DeleteGroupError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes a sampling rule.</p>
-    fn delete_sampling_rule(
+    async fn delete_sampling_rule(
         &self,
         input: DeleteSamplingRuleRequest,
-    ) -> RusotoFuture<DeleteSamplingRuleResult, DeleteSamplingRuleError> {
+    ) -> Result<DeleteSamplingRuleResult, RusotoError<DeleteSamplingRuleError>> {
         let request_uri = "/DeleteSamplingRule";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -2647,75 +2617,54 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteSamplingRuleError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSamplingRuleResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteSamplingRuleError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteSamplingRuleResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteSamplingRuleError>())
-                            .and_then(|response| {
-                                Err(DeleteSamplingRuleError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSamplingRuleError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the current encryption configuration for X-Ray data.</p>
-    fn get_encryption_config(
+    async fn get_encryption_config(
         &self,
-    ) -> RusotoFuture<GetEncryptionConfigResult, GetEncryptionConfigError> {
+    ) -> Result<GetEncryptionConfigResult, RusotoError<GetEncryptionConfigError>> {
         let request_uri = "/EncryptionConfig";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetEncryptionConfigError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetEncryptionConfigResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetEncryptionConfigError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetEncryptionConfigResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetEncryptionConfigError>())
-                            .and_then(|response| {
-                                Err(GetEncryptionConfigError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetEncryptionConfigError::from_response(response))
+        }
     }
 
     /// <p>Retrieves group resource details.</p>
-    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResult, GetGroupError> {
+    async fn get_group(
+        &self,
+        input: GetGroupRequest,
+    ) -> Result<GetGroupResult, RusotoError<GetGroupError>> {
         let request_uri = "/GetGroup";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -2724,35 +2673,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetGroupError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGroupResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetGroupError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<GetGroupResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetGroupError>())
-                            .and_then(|response| Err(GetGroupError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetGroupError::from_response(response))
+        }
     }
 
     /// <p>Retrieves all active group details.</p>
-    fn get_groups(&self, input: GetGroupsRequest) -> RusotoFuture<GetGroupsResult, GetGroupsError> {
+    async fn get_groups(
+        &self,
+        input: GetGroupsRequest,
+    ) -> Result<GetGroupsResult, RusotoError<GetGroupsError>> {
         let request_uri = "/Groups";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -2761,38 +2703,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetGroupsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGroupsResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetGroupsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<GetGroupsResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetGroupsError>())
-                            .and_then(|response| Err(GetGroupsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetGroupsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves all sampling rules.</p>
-    fn get_sampling_rules(
+    async fn get_sampling_rules(
         &self,
         input: GetSamplingRulesRequest,
-    ) -> RusotoFuture<GetSamplingRulesResult, GetSamplingRulesError> {
+    ) -> Result<GetSamplingRulesResult, RusotoError<GetSamplingRulesError>> {
         let request_uri = "/GetSamplingRules";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -2801,40 +2733,29 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetSamplingRulesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSamplingRulesResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSamplingRulesError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetSamplingRulesResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetSamplingRulesError>())
-                            .and_then(|response| {
-                                Err(GetSamplingRulesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSamplingRulesError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about recent sampling results for all sampling rules.</p>
-    fn get_sampling_statistic_summaries(
+    async fn get_sampling_statistic_summaries(
         &self,
         input: GetSamplingStatisticSummariesRequest,
-    ) -> RusotoFuture<GetSamplingStatisticSummariesResult, GetSamplingStatisticSummariesError> {
+    ) -> Result<GetSamplingStatisticSummariesResult, RusotoError<GetSamplingStatisticSummariesError>>
+    {
         let request_uri = "/SamplingStatisticSummaries";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -2843,40 +2764,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetSamplingStatisticSummariesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSamplingStatisticSummariesResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSamplingStatisticSummariesError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetSamplingStatisticSummariesResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetSamplingStatisticSummariesError>())
-                            .and_then(|response| {
-                                Err(GetSamplingStatisticSummariesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSamplingStatisticSummariesError::from_response(response))
+        }
     }
 
     /// <p>Requests a sampling quota for rules that the service is using to sample requests. </p>
-    fn get_sampling_targets(
+    async fn get_sampling_targets(
         &self,
         input: GetSamplingTargetsRequest,
-    ) -> RusotoFuture<GetSamplingTargetsResult, GetSamplingTargetsError> {
+    ) -> Result<GetSamplingTargetsResult, RusotoError<GetSamplingTargetsError>> {
         let request_uri = "/SamplingTargets";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -2885,40 +2794,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetSamplingTargetsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSamplingTargetsResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSamplingTargetsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetSamplingTargetsResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetSamplingTargetsError>())
-                            .and_then(|response| {
-                                Err(GetSamplingTargetsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSamplingTargetsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a document that describes services that process incoming requests, and downstream services that they call as a result. Root services process incoming requests and make calls to downstream services. Root services are applications that use the AWS X-Ray SDK. Downstream services can be other applications, AWS resources, HTTP web APIs, or SQL databases.</p>
-    fn get_service_graph(
+    async fn get_service_graph(
         &self,
         input: GetServiceGraphRequest,
-    ) -> RusotoFuture<GetServiceGraphResult, GetServiceGraphError> {
+    ) -> Result<GetServiceGraphResult, RusotoError<GetServiceGraphError>> {
         let request_uri = "/ServiceGraph";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -2927,39 +2824,31 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetServiceGraphError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetServiceGraphResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetServiceGraphError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetServiceGraphResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetServiceGraphError>())
-                            .and_then(|response| Err(GetServiceGraphError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetServiceGraphError::from_response(response))
+        }
     }
 
     /// <p>Get an aggregation of service statistics defined by a specific time range.</p>
-    fn get_time_series_service_statistics(
+    async fn get_time_series_service_statistics(
         &self,
         input: GetTimeSeriesServiceStatisticsRequest,
-    ) -> RusotoFuture<GetTimeSeriesServiceStatisticsResult, GetTimeSeriesServiceStatisticsError>
-    {
+    ) -> Result<
+        GetTimeSeriesServiceStatisticsResult,
+        RusotoError<GetTimeSeriesServiceStatisticsError>,
+    > {
         let request_uri = "/TimeSeriesServiceStatistics";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -2968,40 +2857,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetTimeSeriesServiceStatisticsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTimeSeriesServiceStatisticsResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetTimeSeriesServiceStatisticsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetTimeSeriesServiceStatisticsResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetTimeSeriesServiceStatisticsError>())
-                            .and_then(|response| {
-                                Err(GetTimeSeriesServiceStatisticsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTimeSeriesServiceStatisticsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a service graph for one or more specific trace IDs.</p>
-    fn get_trace_graph(
+    async fn get_trace_graph(
         &self,
         input: GetTraceGraphRequest,
-    ) -> RusotoFuture<GetTraceGraphResult, GetTraceGraphError> {
+    ) -> Result<GetTraceGraphResult, RusotoError<GetTraceGraphError>> {
         let request_uri = "/TraceGraph";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3010,38 +2887,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetTraceGraphError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTraceGraphResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetTraceGraphError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetTraceGraphResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetTraceGraphError>())
-                            .and_then(|response| Err(GetTraceGraphError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTraceGraphError::from_response(response))
+        }
     }
 
     /// <p>Retrieves IDs and metadata for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service("api.example.com")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = "12345"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
-    fn get_trace_summaries(
+    async fn get_trace_summaries(
         &self,
         input: GetTraceSummariesRequest,
-    ) -> RusotoFuture<GetTraceSummariesResult, GetTraceSummariesError> {
+    ) -> Result<GetTraceSummariesResult, RusotoError<GetTraceSummariesError>> {
         let request_uri = "/TraceSummaries";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3050,40 +2917,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetTraceSummariesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTraceSummariesResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetTraceSummariesError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetTraceSummariesResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetTraceSummariesError>())
-                            .and_then(|response| {
-                                Err(GetTraceSummariesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTraceSummariesError::from_response(response))
+        }
     }
 
     /// <p>Updates the encryption configuration for X-Ray data.</p>
-    fn put_encryption_config(
+    async fn put_encryption_config(
         &self,
         input: PutEncryptionConfigRequest,
-    ) -> RusotoFuture<PutEncryptionConfigResult, PutEncryptionConfigError> {
+    ) -> Result<PutEncryptionConfigResult, RusotoError<PutEncryptionConfigError>> {
         let request_uri = "/PutEncryptionConfig";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3092,40 +2947,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutEncryptionConfigError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutEncryptionConfigResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutEncryptionConfigError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutEncryptionConfigResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<PutEncryptionConfigError>())
-                            .and_then(|response| {
-                                Err(PutEncryptionConfigError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutEncryptionConfigError::from_response(response))
+        }
     }
 
     /// <p>Used by the AWS X-Ray daemon to upload telemetry.</p>
-    fn put_telemetry_records(
+    async fn put_telemetry_records(
         &self,
         input: PutTelemetryRecordsRequest,
-    ) -> RusotoFuture<PutTelemetryRecordsResult, PutTelemetryRecordsError> {
+    ) -> Result<PutTelemetryRecordsResult, RusotoError<PutTelemetryRecordsError>> {
         let request_uri = "/TelemetryRecords";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3134,40 +2977,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutTelemetryRecordsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutTelemetryRecordsResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutTelemetryRecordsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutTelemetryRecordsResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<PutTelemetryRecordsError>())
-                            .and_then(|response| {
-                                Err(PutTelemetryRecordsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutTelemetryRecordsError::from_response(response))
+        }
     }
 
     /// <p><p>Uploads segment documents to AWS X-Ray. The X-Ray SDK generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class="title"> <b>Required Segment Document Fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace<em>id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start</em>time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end<em>time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end</em>time</code> or <code>in<em>progress</code>.</p> </li> <li> <p> <code>in</em>progress</code> - Set to <code>true</code> instead of specifying an <code>end<em>time</code> to record that a segment has been started, but is not complete. Send an in progress segment when your application receives a request that will take a long time to serve, to trace the fact that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace</em>id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class="title"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, i.e. <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul></p>
-    fn put_trace_segments(
+    async fn put_trace_segments(
         &self,
         input: PutTraceSegmentsRequest,
-    ) -> RusotoFuture<PutTraceSegmentsResult, PutTraceSegmentsError> {
+    ) -> Result<PutTraceSegmentsResult, RusotoError<PutTraceSegmentsError>> {
         let request_uri = "/TraceSegments";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3176,40 +3007,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutTraceSegmentsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutTraceSegmentsResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutTraceSegmentsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutTraceSegmentsResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<PutTraceSegmentsError>())
-                            .and_then(|response| {
-                                Err(PutTraceSegmentsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutTraceSegmentsError::from_response(response))
+        }
     }
 
     /// <p>Updates a group resource.</p>
-    fn update_group(
+    async fn update_group(
         &self,
         input: UpdateGroupRequest,
-    ) -> RusotoFuture<UpdateGroupResult, UpdateGroupError> {
+    ) -> Result<UpdateGroupResult, RusotoError<UpdateGroupError>> {
         let request_uri = "/UpdateGroup";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3218,38 +3037,28 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateGroupError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGroupResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateGroupError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<UpdateGroupResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateGroupError>())
-                            .and_then(|response| Err(UpdateGroupError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateGroupError::from_response(response))
+        }
     }
 
     /// <p>Modifies a sampling rule's configuration.</p>
-    fn update_sampling_rule(
+    async fn update_sampling_rule(
         &self,
         input: UpdateSamplingRuleRequest,
-    ) -> RusotoFuture<UpdateSamplingRuleResult, UpdateSamplingRuleError> {
+    ) -> Result<UpdateSamplingRuleResult, RusotoError<UpdateSamplingRuleError>> {
         let request_uri = "/UpdateSamplingRule";
 
         let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
@@ -3258,32 +3067,20 @@ impl XRay for XRayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateSamplingRuleError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSamplingRuleResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateSamplingRuleError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSamplingRuleResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateSamplingRuleError>())
-                            .and_then(|response| {
-                                Err(UpdateSamplingRuleError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSamplingRuleError::from_response(response))
+        }
     }
 }

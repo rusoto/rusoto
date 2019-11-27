@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
@@ -9638,273 +9639,286 @@ impl Error for ValidateConfigurationSettingsError {
     }
 }
 /// Trait representing the capabilities of the Elastic Beanstalk API. Elastic Beanstalk clients implement this trait.
+#[async_trait]
 pub trait ElasticBeanstalk {
     /// <p>Cancels in-progress environment configuration update or application version deployment.</p>
-    fn abort_environment_update(
+    async fn abort_environment_update(
         &self,
         input: AbortEnvironmentUpdateMessage,
-    ) -> RusotoFuture<(), AbortEnvironmentUpdateError>;
+    ) -> Result<(), RusotoError<AbortEnvironmentUpdateError>>;
 
     /// <p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>
-    fn apply_environment_managed_action(
+    async fn apply_environment_managed_action(
         &self,
         input: ApplyEnvironmentManagedActionRequest,
-    ) -> RusotoFuture<ApplyEnvironmentManagedActionResult, ApplyEnvironmentManagedActionError>;
+    ) -> Result<ApplyEnvironmentManagedActionResult, RusotoError<ApplyEnvironmentManagedActionError>>;
 
     /// <p>Checks if the specified CNAME is available.</p>
-    fn check_dns_availability(
+    async fn check_dns_availability(
         &self,
         input: CheckDNSAvailabilityMessage,
-    ) -> RusotoFuture<CheckDNSAvailabilityResultMessage, CheckDNSAvailabilityError>;
+    ) -> Result<CheckDNSAvailabilityResultMessage, RusotoError<CheckDNSAvailabilityError>>;
 
     /// <p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html">Compose Environments</a> for details.</p>
-    fn compose_environments(
+    async fn compose_environments(
         &self,
         input: ComposeEnvironmentsMessage,
-    ) -> RusotoFuture<EnvironmentDescriptionsMessage, ComposeEnvironmentsError>;
+    ) -> Result<EnvironmentDescriptionsMessage, RusotoError<ComposeEnvironmentsError>>;
 
     /// <p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>
-    fn create_application(
+    async fn create_application(
         &self,
         input: CreateApplicationMessage,
-    ) -> RusotoFuture<ApplicationDescriptionMessage, CreateApplicationError>;
+    ) -> Result<ApplicationDescriptionMessage, RusotoError<CreateApplicationError>>;
 
     /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
-    fn create_application_version(
+    async fn create_application_version(
         &self,
         input: CreateApplicationVersionMessage,
-    ) -> RusotoFuture<ApplicationVersionDescriptionMessage, CreateApplicationVersionError>;
+    ) -> Result<ApplicationVersionDescriptionMessage, RusotoError<CreateApplicationVersionError>>;
 
     /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Templates aren&#39;t associated with any environment. The <code>EnvironmentName</code> response element is always <code>null</code>.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
-    fn create_configuration_template(
+    async fn create_configuration_template(
         &self,
         input: CreateConfigurationTemplateMessage,
-    ) -> RusotoFuture<ConfigurationSettingsDescription, CreateConfigurationTemplateError>;
+    ) -> Result<ConfigurationSettingsDescription, RusotoError<CreateConfigurationTemplateError>>;
 
     /// <p>Launches an environment for the specified application using the specified configuration.</p>
-    fn create_environment(
+    async fn create_environment(
         &self,
         input: CreateEnvironmentMessage,
-    ) -> RusotoFuture<EnvironmentDescription, CreateEnvironmentError>;
+    ) -> Result<EnvironmentDescription, RusotoError<CreateEnvironmentError>>;
 
     /// <p>Create a new version of your custom platform.</p>
-    fn create_platform_version(
+    async fn create_platform_version(
         &self,
         input: CreatePlatformVersionRequest,
-    ) -> RusotoFuture<CreatePlatformVersionResult, CreatePlatformVersionError>;
+    ) -> Result<CreatePlatformVersionResult, RusotoError<CreatePlatformVersionError>>;
 
     /// <p>Creates a bucket in Amazon S3 to store application versions, logs, and other files used by Elastic Beanstalk environments. The Elastic Beanstalk console and EB CLI call this API the first time you create an environment in a region. If the storage location already exists, <code>CreateStorageLocation</code> still returns the bucket name but does not create a new bucket.</p>
-    fn create_storage_location(
+    async fn create_storage_location(
         &self,
-    ) -> RusotoFuture<CreateStorageLocationResultMessage, CreateStorageLocationError>;
+    ) -> Result<CreateStorageLocationResultMessage, RusotoError<CreateStorageLocationError>>;
 
     /// <p><p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note></p>
-    fn delete_application(
+    async fn delete_application(
         &self,
         input: DeleteApplicationMessage,
-    ) -> RusotoFuture<(), DeleteApplicationError>;
+    ) -> Result<(), RusotoError<DeleteApplicationError>>;
 
     /// <p><p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note></p>
-    fn delete_application_version(
+    async fn delete_application_version(
         &self,
         input: DeleteApplicationVersionMessage,
-    ) -> RusotoFuture<(), DeleteApplicationVersionError>;
+    ) -> Result<(), RusotoError<DeleteApplicationVersionError>>;
 
     /// <p><p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment&#39;s copy of the template without affecting the running environment.</p> </note></p>
-    fn delete_configuration_template(
+    async fn delete_configuration_template(
         &self,
         input: DeleteConfigurationTemplateMessage,
-    ) -> RusotoFuture<(), DeleteConfigurationTemplateError>;
+    ) -> Result<(), RusotoError<DeleteConfigurationTemplateError>>;
 
     /// <p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>
-    fn delete_environment_configuration(
+    async fn delete_environment_configuration(
         &self,
         input: DeleteEnvironmentConfigurationMessage,
-    ) -> RusotoFuture<(), DeleteEnvironmentConfigurationError>;
+    ) -> Result<(), RusotoError<DeleteEnvironmentConfigurationError>>;
 
     /// <p>Deletes the specified version of a custom platform.</p>
-    fn delete_platform_version(
+    async fn delete_platform_version(
         &self,
         input: DeletePlatformVersionRequest,
-    ) -> RusotoFuture<DeletePlatformVersionResult, DeletePlatformVersionError>;
+    ) -> Result<DeletePlatformVersionResult, RusotoError<DeletePlatformVersionError>>;
 
     /// <p>Returns attributes related to AWS Elastic Beanstalk that are associated with the calling AWS account.</p> <p>The result currently has one set of attributes—resource quotas.</p>
-    fn describe_account_attributes(
+    async fn describe_account_attributes(
         &self,
-    ) -> RusotoFuture<DescribeAccountAttributesResult, DescribeAccountAttributesError>;
+    ) -> Result<DescribeAccountAttributesResult, RusotoError<DescribeAccountAttributesError>>;
 
     /// <p>Retrieve a list of application versions.</p>
-    fn describe_application_versions(
+    async fn describe_application_versions(
         &self,
         input: DescribeApplicationVersionsMessage,
-    ) -> RusotoFuture<ApplicationVersionDescriptionsMessage, DescribeApplicationVersionsError>;
+    ) -> Result<ApplicationVersionDescriptionsMessage, RusotoError<DescribeApplicationVersionsError>>;
 
     /// <p>Returns the descriptions of existing applications.</p>
-    fn describe_applications(
+    async fn describe_applications(
         &self,
         input: DescribeApplicationsMessage,
-    ) -> RusotoFuture<ApplicationDescriptionsMessage, DescribeApplicationsError>;
+    ) -> Result<ApplicationDescriptionsMessage, RusotoError<DescribeApplicationsError>>;
 
     /// <p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>
-    fn describe_configuration_options(
+    async fn describe_configuration_options(
         &self,
         input: DescribeConfigurationOptionsMessage,
-    ) -> RusotoFuture<ConfigurationOptionsDescription, DescribeConfigurationOptionsError>;
+    ) -> Result<ConfigurationOptionsDescription, RusotoError<DescribeConfigurationOptionsError>>;
 
     /// <p><p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul></p>
-    fn describe_configuration_settings(
+    async fn describe_configuration_settings(
         &self,
         input: DescribeConfigurationSettingsMessage,
-    ) -> RusotoFuture<ConfigurationSettingsDescriptions, DescribeConfigurationSettingsError>;
+    ) -> Result<ConfigurationSettingsDescriptions, RusotoError<DescribeConfigurationSettingsError>>;
 
     /// <p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>
-    fn describe_environment_health(
+    async fn describe_environment_health(
         &self,
         input: DescribeEnvironmentHealthRequest,
-    ) -> RusotoFuture<DescribeEnvironmentHealthResult, DescribeEnvironmentHealthError>;
+    ) -> Result<DescribeEnvironmentHealthResult, RusotoError<DescribeEnvironmentHealthError>>;
 
     /// <p>Lists an environment's completed and failed managed actions.</p>
-    fn describe_environment_managed_action_history(
+    async fn describe_environment_managed_action_history(
         &self,
         input: DescribeEnvironmentManagedActionHistoryRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeEnvironmentManagedActionHistoryResult,
-        DescribeEnvironmentManagedActionHistoryError,
+        RusotoError<DescribeEnvironmentManagedActionHistoryError>,
     >;
 
     /// <p>Lists an environment's upcoming and in-progress managed actions.</p>
-    fn describe_environment_managed_actions(
+    async fn describe_environment_managed_actions(
         &self,
         input: DescribeEnvironmentManagedActionsRequest,
-    ) -> RusotoFuture<DescribeEnvironmentManagedActionsResult, DescribeEnvironmentManagedActionsError>;
+    ) -> Result<
+        DescribeEnvironmentManagedActionsResult,
+        RusotoError<DescribeEnvironmentManagedActionsError>,
+    >;
 
     /// <p>Returns AWS resources for this environment.</p>
-    fn describe_environment_resources(
+    async fn describe_environment_resources(
         &self,
         input: DescribeEnvironmentResourcesMessage,
-    ) -> RusotoFuture<EnvironmentResourceDescriptionsMessage, DescribeEnvironmentResourcesError>;
+    ) -> Result<
+        EnvironmentResourceDescriptionsMessage,
+        RusotoError<DescribeEnvironmentResourcesError>,
+    >;
 
     /// <p>Returns descriptions for existing environments.</p>
-    fn describe_environments(
+    async fn describe_environments(
         &self,
         input: DescribeEnvironmentsMessage,
-    ) -> RusotoFuture<EnvironmentDescriptionsMessage, DescribeEnvironmentsError>;
+    ) -> Result<EnvironmentDescriptionsMessage, RusotoError<DescribeEnvironmentsError>>;
 
     /// <p><p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note></p>
-    fn describe_events(
+    async fn describe_events(
         &self,
         input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventDescriptionsMessage, DescribeEventsError>;
+    ) -> Result<EventDescriptionsMessage, RusotoError<DescribeEventsError>>;
 
     /// <p>Retrieves detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
-    fn describe_instances_health(
+    async fn describe_instances_health(
         &self,
         input: DescribeInstancesHealthRequest,
-    ) -> RusotoFuture<DescribeInstancesHealthResult, DescribeInstancesHealthError>;
+    ) -> Result<DescribeInstancesHealthResult, RusotoError<DescribeInstancesHealthError>>;
 
     /// <p>Describes the version of the platform.</p>
-    fn describe_platform_version(
+    async fn describe_platform_version(
         &self,
         input: DescribePlatformVersionRequest,
-    ) -> RusotoFuture<DescribePlatformVersionResult, DescribePlatformVersionError>;
+    ) -> Result<DescribePlatformVersionResult, RusotoError<DescribePlatformVersionError>>;
 
     /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>
-    fn list_available_solution_stacks(
+    async fn list_available_solution_stacks(
         &self,
-    ) -> RusotoFuture<ListAvailableSolutionStacksResultMessage, ListAvailableSolutionStacksError>;
+    ) -> Result<
+        ListAvailableSolutionStacksResultMessage,
+        RusotoError<ListAvailableSolutionStacksError>,
+    >;
 
     /// <p>Lists the available platforms.</p>
-    fn list_platform_versions(
+    async fn list_platform_versions(
         &self,
         input: ListPlatformVersionsRequest,
-    ) -> RusotoFuture<ListPlatformVersionsResult, ListPlatformVersionsError>;
+    ) -> Result<ListPlatformVersionsResult, RusotoError<ListPlatformVersionsError>>;
 
     /// <p>Returns the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<ResourceTagsDescriptionMessage, ListTagsForResourceError>;
+    ) -> Result<ResourceTagsDescriptionMessage, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>
-    fn rebuild_environment(
+    async fn rebuild_environment(
         &self,
         input: RebuildEnvironmentMessage,
-    ) -> RusotoFuture<(), RebuildEnvironmentError>;
+    ) -> Result<(), RusotoError<RebuildEnvironmentError>>;
 
     /// <p><p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul></p>
-    fn request_environment_info(
+    async fn request_environment_info(
         &self,
         input: RequestEnvironmentInfoMessage,
-    ) -> RusotoFuture<(), RequestEnvironmentInfoError>;
+    ) -> Result<(), RusotoError<RequestEnvironmentInfoError>>;
 
     /// <p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>
-    fn restart_app_server(
+    async fn restart_app_server(
         &self,
         input: RestartAppServerMessage,
-    ) -> RusotoFuture<(), RestartAppServerError>;
+    ) -> Result<(), RusotoError<RestartAppServerError>>;
 
     /// <p><p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul></p>
-    fn retrieve_environment_info(
+    async fn retrieve_environment_info(
         &self,
         input: RetrieveEnvironmentInfoMessage,
-    ) -> RusotoFuture<RetrieveEnvironmentInfoResultMessage, RetrieveEnvironmentInfoError>;
+    ) -> Result<RetrieveEnvironmentInfoResultMessage, RusotoError<RetrieveEnvironmentInfoError>>;
 
     /// <p>Swaps the CNAMEs of two environments.</p>
-    fn swap_environment_cnam_es(
+    async fn swap_environment_cnam_es(
         &self,
         input: SwapEnvironmentCNAMEsMessage,
-    ) -> RusotoFuture<(), SwapEnvironmentCNAMEsError>;
+    ) -> Result<(), RusotoError<SwapEnvironmentCNAMEsError>>;
 
     /// <p>Terminates the specified environment.</p>
-    fn terminate_environment(
+    async fn terminate_environment(
         &self,
         input: TerminateEnvironmentMessage,
-    ) -> RusotoFuture<EnvironmentDescription, TerminateEnvironmentError>;
+    ) -> Result<EnvironmentDescription, RusotoError<TerminateEnvironmentError>>;
 
     /// <p><p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note></p>
-    fn update_application(
+    async fn update_application(
         &self,
         input: UpdateApplicationMessage,
-    ) -> RusotoFuture<ApplicationDescriptionMessage, UpdateApplicationError>;
+    ) -> Result<ApplicationDescriptionMessage, RusotoError<UpdateApplicationError>>;
 
     /// <p>Modifies lifecycle settings for an application.</p>
-    fn update_application_resource_lifecycle(
+    async fn update_application_resource_lifecycle(
         &self,
         input: UpdateApplicationResourceLifecycleMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         ApplicationResourceLifecycleDescriptionMessage,
-        UpdateApplicationResourceLifecycleError,
+        RusotoError<UpdateApplicationResourceLifecycleError>,
     >;
 
     /// <p><p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note></p>
-    fn update_application_version(
+    async fn update_application_version(
         &self,
         input: UpdateApplicationVersionMessage,
-    ) -> RusotoFuture<ApplicationVersionDescriptionMessage, UpdateApplicationVersionError>;
+    ) -> Result<ApplicationVersionDescriptionMessage, RusotoError<UpdateApplicationVersionError>>;
 
     /// <p><p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul></p>
-    fn update_configuration_template(
+    async fn update_configuration_template(
         &self,
         input: UpdateConfigurationTemplateMessage,
-    ) -> RusotoFuture<ConfigurationSettingsDescription, UpdateConfigurationTemplateError>;
+    ) -> Result<ConfigurationSettingsDescription, RusotoError<UpdateConfigurationTemplateError>>;
 
     /// <p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>
-    fn update_environment(
+    async fn update_environment(
         &self,
         input: UpdateEnvironmentMessage,
-    ) -> RusotoFuture<EnvironmentDescription, UpdateEnvironmentError>;
+    ) -> Result<EnvironmentDescription, RusotoError<UpdateEnvironmentError>>;
 
     /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
-    fn update_tags_for_resource(
+    async fn update_tags_for_resource(
         &self,
         input: UpdateTagsForResourceMessage,
-    ) -> RusotoFuture<(), UpdateTagsForResourceError>;
+    ) -> Result<(), RusotoError<UpdateTagsForResourceError>>;
 
     /// <p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>
-    fn validate_configuration_settings(
+    async fn validate_configuration_settings(
         &self,
         input: ValidateConfigurationSettingsMessage,
-    ) -> RusotoFuture<ConfigurationSettingsValidationMessages, ValidateConfigurationSettingsError>;
+    ) -> Result<
+        ConfigurationSettingsValidationMessages,
+        RusotoError<ValidateConfigurationSettingsError>,
+    >;
 }
 /// A client for the Elastic Beanstalk API.
 #[derive(Clone)]
@@ -9940,12 +9954,13 @@ impl ElasticBeanstalkClient {
     }
 }
 
+#[async_trait]
 impl ElasticBeanstalk for ElasticBeanstalkClient {
     /// <p>Cancels in-progress environment configuration update or application version deployment.</p>
-    fn abort_environment_update(
+    async fn abort_environment_update(
         &self,
         input: AbortEnvironmentUpdateMessage,
-    ) -> RusotoFuture<(), AbortEnvironmentUpdateError> {
+    ) -> Result<(), RusotoError<AbortEnvironmentUpdateError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -9955,30 +9970,25 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<AbortEnvironmentUpdateError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(AbortEnvironmentUpdateError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AbortEnvironmentUpdateError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>
-    fn apply_environment_managed_action(
+    async fn apply_environment_managed_action(
         &self,
         input: ApplyEnvironmentManagedActionRequest,
-    ) -> RusotoFuture<ApplyEnvironmentManagedActionResult, ApplyEnvironmentManagedActionError> {
+    ) -> Result<ApplyEnvironmentManagedActionResult, RusotoError<ApplyEnvironmentManagedActionError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -9988,57 +9998,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<ApplyEnvironmentManagedActionError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ApplyEnvironmentManagedActionError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ApplyEnvironmentManagedActionError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ApplyEnvironmentManagedActionResult::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ApplyEnvironmentManagedActionResultDeserializer::deserialize(
-                            "ApplyEnvironmentManagedActionResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ApplyEnvironmentManagedActionResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ApplyEnvironmentManagedActionResultDeserializer::deserialize(
+                "ApplyEnvironmentManagedActionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Checks if the specified CNAME is available.</p>
-    fn check_dns_availability(
+    async fn check_dns_availability(
         &self,
         input: CheckDNSAvailabilityMessage,
-    ) -> RusotoFuture<CheckDNSAvailabilityResultMessage, CheckDNSAvailabilityError> {
+    ) -> Result<CheckDNSAvailabilityResultMessage, RusotoError<CheckDNSAvailabilityError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10048,56 +10047,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CheckDNSAvailabilityError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CheckDNSAvailabilityError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CheckDNSAvailabilityError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CheckDNSAvailabilityResultMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CheckDNSAvailabilityResultMessageDeserializer::deserialize(
-                            "CheckDNSAvailabilityResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CheckDNSAvailabilityResultMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CheckDNSAvailabilityResultMessageDeserializer::deserialize(
+                "CheckDNSAvailabilityResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html">Compose Environments</a> for details.</p>
-    fn compose_environments(
+    async fn compose_environments(
         &self,
         input: ComposeEnvironmentsMessage,
-    ) -> RusotoFuture<EnvironmentDescriptionsMessage, ComposeEnvironmentsError> {
+    ) -> Result<EnvironmentDescriptionsMessage, RusotoError<ComposeEnvironmentsError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10107,56 +10096,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ComposeEnvironmentsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ComposeEnvironmentsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ComposeEnvironmentsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(EnvironmentDescriptionsMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = EnvironmentDescriptionsMessageDeserializer::deserialize(
-                            "ComposeEnvironmentsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = EnvironmentDescriptionsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = EnvironmentDescriptionsMessageDeserializer::deserialize(
+                "ComposeEnvironmentsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>
-    fn create_application(
+    async fn create_application(
         &self,
         input: CreateApplicationMessage,
-    ) -> RusotoFuture<ApplicationDescriptionMessage, CreateApplicationError> {
+    ) -> Result<ApplicationDescriptionMessage, RusotoError<CreateApplicationError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10166,56 +10145,47 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CreateApplicationError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreateApplicationError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateApplicationError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ApplicationDescriptionMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ApplicationDescriptionMessageDeserializer::deserialize(
-                            "CreateApplicationResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ApplicationDescriptionMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ApplicationDescriptionMessageDeserializer::deserialize(
+                "CreateApplicationResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
-    fn create_application_version(
+    async fn create_application_version(
         &self,
         input: CreateApplicationVersionMessage,
-    ) -> RusotoFuture<ApplicationVersionDescriptionMessage, CreateApplicationVersionError> {
+    ) -> Result<ApplicationVersionDescriptionMessage, RusotoError<CreateApplicationVersionError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10225,56 +10195,47 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CreateApplicationVersionError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreateApplicationVersionError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateApplicationVersionError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ApplicationVersionDescriptionMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
-                            "CreateApplicationVersionResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ApplicationVersionDescriptionMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
+                "CreateApplicationVersionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Templates aren&#39;t associated with any environment. The <code>EnvironmentName</code> response element is always <code>null</code>.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
-    fn create_configuration_template(
+    async fn create_configuration_template(
         &self,
         input: CreateConfigurationTemplateMessage,
-    ) -> RusotoFuture<ConfigurationSettingsDescription, CreateConfigurationTemplateError> {
+    ) -> Result<ConfigurationSettingsDescription, RusotoError<CreateConfigurationTemplateError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10284,57 +10245,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<CreateConfigurationTemplateError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreateConfigurationTemplateError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateConfigurationTemplateError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ConfigurationSettingsDescription::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ConfigurationSettingsDescriptionDeserializer::deserialize(
-                            "CreateConfigurationTemplateResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ConfigurationSettingsDescription::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ConfigurationSettingsDescriptionDeserializer::deserialize(
+                "CreateConfigurationTemplateResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Launches an environment for the specified application using the specified configuration.</p>
-    fn create_environment(
+    async fn create_environment(
         &self,
         input: CreateEnvironmentMessage,
-    ) -> RusotoFuture<EnvironmentDescription, CreateEnvironmentError> {
+    ) -> Result<EnvironmentDescription, RusotoError<CreateEnvironmentError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10344,56 +10294,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CreateEnvironmentError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreateEnvironmentError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateEnvironmentError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(EnvironmentDescription::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = EnvironmentDescriptionDeserializer::deserialize(
-                            "CreateEnvironmentResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = EnvironmentDescription::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = EnvironmentDescriptionDeserializer::deserialize(
+                "CreateEnvironmentResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Create a new version of your custom platform.</p>
-    fn create_platform_version(
+    async fn create_platform_version(
         &self,
         input: CreatePlatformVersionRequest,
-    ) -> RusotoFuture<CreatePlatformVersionResult, CreatePlatformVersionError> {
+    ) -> Result<CreatePlatformVersionResult, RusotoError<CreatePlatformVersionError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10403,55 +10343,45 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CreatePlatformVersionError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreatePlatformVersionError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreatePlatformVersionError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreatePlatformVersionResult::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CreatePlatformVersionResultDeserializer::deserialize(
-                            "CreatePlatformVersionResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreatePlatformVersionResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreatePlatformVersionResultDeserializer::deserialize(
+                "CreatePlatformVersionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a bucket in Amazon S3 to store application versions, logs, and other files used by Elastic Beanstalk environments. The Elastic Beanstalk console and EB CLI call this API the first time you create an environment in a region. If the storage location already exists, <code>CreateStorageLocation</code> still returns the bucket name but does not create a new bucket.</p>
-    fn create_storage_location(
+    async fn create_storage_location(
         &self,
-    ) -> RusotoFuture<CreateStorageLocationResultMessage, CreateStorageLocationError> {
+    ) -> Result<CreateStorageLocationResultMessage, RusotoError<CreateStorageLocationError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10461,56 +10391,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<CreateStorageLocationError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(CreateStorageLocationError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateStorageLocationError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateStorageLocationResultMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = CreateStorageLocationResultMessageDeserializer::deserialize(
-                            "CreateStorageLocationResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateStorageLocationResultMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateStorageLocationResultMessageDeserializer::deserialize(
+                "CreateStorageLocationResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note></p>
-    fn delete_application(
+    async fn delete_application(
         &self,
         input: DeleteApplicationMessage,
-    ) -> RusotoFuture<(), DeleteApplicationError> {
+    ) -> Result<(), RusotoError<DeleteApplicationError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10520,30 +10440,24 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteApplicationError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteApplicationError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p><p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note></p>
-    fn delete_application_version(
+    async fn delete_application_version(
         &self,
         input: DeleteApplicationVersionMessage,
-    ) -> RusotoFuture<(), DeleteApplicationVersionError> {
+    ) -> Result<(), RusotoError<DeleteApplicationVersionError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10553,30 +10467,24 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationVersionError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteApplicationVersionError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteApplicationVersionError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p><p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment&#39;s copy of the template without affecting the running environment.</p> </note></p>
-    fn delete_configuration_template(
+    async fn delete_configuration_template(
         &self,
         input: DeleteConfigurationTemplateMessage,
-    ) -> RusotoFuture<(), DeleteConfigurationTemplateError> {
+    ) -> Result<(), RusotoError<DeleteConfigurationTemplateError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10586,31 +10494,24 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DeleteConfigurationTemplateError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteConfigurationTemplateError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteConfigurationTemplateError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>
-    fn delete_environment_configuration(
+    async fn delete_environment_configuration(
         &self,
         input: DeleteEnvironmentConfigurationMessage,
-    ) -> RusotoFuture<(), DeleteEnvironmentConfigurationError> {
+    ) -> Result<(), RusotoError<DeleteEnvironmentConfigurationError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10620,31 +10521,24 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DeleteEnvironmentConfigurationError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeleteEnvironmentConfigurationError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteEnvironmentConfigurationError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes the specified version of a custom platform.</p>
-    fn delete_platform_version(
+    async fn delete_platform_version(
         &self,
         input: DeletePlatformVersionRequest,
-    ) -> RusotoFuture<DeletePlatformVersionResult, DeletePlatformVersionError> {
+    ) -> Result<DeletePlatformVersionResult, RusotoError<DeletePlatformVersionError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10654,55 +10548,45 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DeletePlatformVersionError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DeletePlatformVersionError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeletePlatformVersionError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DeletePlatformVersionResult::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DeletePlatformVersionResultDeserializer::deserialize(
-                            "DeletePlatformVersionResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DeletePlatformVersionResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeletePlatformVersionResultDeserializer::deserialize(
+                "DeletePlatformVersionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns attributes related to AWS Elastic Beanstalk that are associated with the calling AWS account.</p> <p>The result currently has one set of attributes—resource quotas.</p>
-    fn describe_account_attributes(
+    async fn describe_account_attributes(
         &self,
-    ) -> RusotoFuture<DescribeAccountAttributesResult, DescribeAccountAttributesError> {
+    ) -> Result<DescribeAccountAttributesResult, RusotoError<DescribeAccountAttributesError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10712,56 +10596,47 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribeAccountAttributesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeAccountAttributesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeAccountAttributesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeAccountAttributesResult::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeAccountAttributesResultDeserializer::deserialize(
-                            "DescribeAccountAttributesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeAccountAttributesResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeAccountAttributesResultDeserializer::deserialize(
+                "DescribeAccountAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Retrieve a list of application versions.</p>
-    fn describe_application_versions(
+    async fn describe_application_versions(
         &self,
         input: DescribeApplicationVersionsMessage,
-    ) -> RusotoFuture<ApplicationVersionDescriptionsMessage, DescribeApplicationVersionsError> {
+    ) -> Result<ApplicationVersionDescriptionsMessage, RusotoError<DescribeApplicationVersionsError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10771,57 +10646,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DescribeApplicationVersionsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeApplicationVersionsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeApplicationVersionsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ApplicationVersionDescriptionsMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ApplicationVersionDescriptionsMessageDeserializer::deserialize(
-                            "DescribeApplicationVersionsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ApplicationVersionDescriptionsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ApplicationVersionDescriptionsMessageDeserializer::deserialize(
+                "DescribeApplicationVersionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the descriptions of existing applications.</p>
-    fn describe_applications(
+    async fn describe_applications(
         &self,
         input: DescribeApplicationsMessage,
-    ) -> RusotoFuture<ApplicationDescriptionsMessage, DescribeApplicationsError> {
+    ) -> Result<ApplicationDescriptionsMessage, RusotoError<DescribeApplicationsError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10831,56 +10695,47 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribeApplicationsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeApplicationsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeApplicationsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ApplicationDescriptionsMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ApplicationDescriptionsMessageDeserializer::deserialize(
-                            "DescribeApplicationsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ApplicationDescriptionsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ApplicationDescriptionsMessageDeserializer::deserialize(
+                "DescribeApplicationsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>
-    fn describe_configuration_options(
+    async fn describe_configuration_options(
         &self,
         input: DescribeConfigurationOptionsMessage,
-    ) -> RusotoFuture<ConfigurationOptionsDescription, DescribeConfigurationOptionsError> {
+    ) -> Result<ConfigurationOptionsDescription, RusotoError<DescribeConfigurationOptionsError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10890,57 +10745,47 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DescribeConfigurationOptionsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeConfigurationOptionsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeConfigurationOptionsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ConfigurationOptionsDescription::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ConfigurationOptionsDescriptionDeserializer::deserialize(
-                            "DescribeConfigurationOptionsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ConfigurationOptionsDescription::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ConfigurationOptionsDescriptionDeserializer::deserialize(
+                "DescribeConfigurationOptionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul></p>
-    fn describe_configuration_settings(
+    async fn describe_configuration_settings(
         &self,
         input: DescribeConfigurationSettingsMessage,
-    ) -> RusotoFuture<ConfigurationSettingsDescriptions, DescribeConfigurationSettingsError> {
+    ) -> Result<ConfigurationSettingsDescriptions, RusotoError<DescribeConfigurationSettingsError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -10950,57 +10795,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DescribeConfigurationSettingsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeConfigurationSettingsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeConfigurationSettingsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ConfigurationSettingsDescriptions::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ConfigurationSettingsDescriptionsDeserializer::deserialize(
-                            "DescribeConfigurationSettingsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ConfigurationSettingsDescriptions::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ConfigurationSettingsDescriptionsDeserializer::deserialize(
+                "DescribeConfigurationSettingsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>
-    fn describe_environment_health(
+    async fn describe_environment_health(
         &self,
         input: DescribeEnvironmentHealthRequest,
-    ) -> RusotoFuture<DescribeEnvironmentHealthResult, DescribeEnvironmentHealthError> {
+    ) -> Result<DescribeEnvironmentHealthResult, RusotoError<DescribeEnvironmentHealthError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11010,58 +10844,48 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribeEnvironmentHealthError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeEnvironmentHealthError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeEnvironmentHealthError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeEnvironmentHealthResult::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeEnvironmentHealthResultDeserializer::deserialize(
-                            "DescribeEnvironmentHealthResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeEnvironmentHealthResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeEnvironmentHealthResultDeserializer::deserialize(
+                "DescribeEnvironmentHealthResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists an environment's completed and failed managed actions.</p>
-    fn describe_environment_managed_action_history(
+    async fn describe_environment_managed_action_history(
         &self,
         input: DescribeEnvironmentManagedActionHistoryRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeEnvironmentManagedActionHistoryResult,
-        DescribeEnvironmentManagedActionHistoryError,
+        RusotoError<DescribeEnvironmentManagedActionHistoryError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -11076,61 +10900,51 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DescribeEnvironmentManagedActionHistoryError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeEnvironmentManagedActionHistoryError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeEnvironmentManagedActionHistoryError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeEnvironmentManagedActionHistoryResult::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            DescribeEnvironmentManagedActionHistoryResultDeserializer::deserialize(
-                                "DescribeEnvironmentManagedActionHistoryResult",
-                                &mut stack,
-                            );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeEnvironmentManagedActionHistoryResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeEnvironmentManagedActionHistoryResultDeserializer::deserialize(
+                "DescribeEnvironmentManagedActionHistoryResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists an environment's upcoming and in-progress managed actions.</p>
-    fn describe_environment_managed_actions(
+    async fn describe_environment_managed_actions(
         &self,
         input: DescribeEnvironmentManagedActionsRequest,
-    ) -> RusotoFuture<DescribeEnvironmentManagedActionsResult, DescribeEnvironmentManagedActionsError>
-    {
+    ) -> Result<
+        DescribeEnvironmentManagedActionsResult,
+        RusotoError<DescribeEnvironmentManagedActionsError>,
+    > {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11140,60 +10954,51 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DescribeEnvironmentManagedActionsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeEnvironmentManagedActionsError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeEnvironmentManagedActionsError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeEnvironmentManagedActionsResult::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeEnvironmentManagedActionsResultDeserializer::deserialize(
-                            "DescribeEnvironmentManagedActionsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeEnvironmentManagedActionsResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeEnvironmentManagedActionsResultDeserializer::deserialize(
+                "DescribeEnvironmentManagedActionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns AWS resources for this environment.</p>
-    fn describe_environment_resources(
+    async fn describe_environment_resources(
         &self,
         input: DescribeEnvironmentResourcesMessage,
-    ) -> RusotoFuture<EnvironmentResourceDescriptionsMessage, DescribeEnvironmentResourcesError>
-    {
+    ) -> Result<
+        EnvironmentResourceDescriptionsMessage,
+        RusotoError<DescribeEnvironmentResourcesError>,
+    > {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11203,57 +11008,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<DescribeEnvironmentResourcesError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeEnvironmentResourcesError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeEnvironmentResourcesError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(EnvironmentResourceDescriptionsMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = EnvironmentResourceDescriptionsMessageDeserializer::deserialize(
-                            "DescribeEnvironmentResourcesResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = EnvironmentResourceDescriptionsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = EnvironmentResourceDescriptionsMessageDeserializer::deserialize(
+                "DescribeEnvironmentResourcesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns descriptions for existing environments.</p>
-    fn describe_environments(
+    async fn describe_environments(
         &self,
         input: DescribeEnvironmentsMessage,
-    ) -> RusotoFuture<EnvironmentDescriptionsMessage, DescribeEnvironmentsError> {
+    ) -> Result<EnvironmentDescriptionsMessage, RusotoError<DescribeEnvironmentsError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11263,56 +11057,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribeEnvironmentsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeEnvironmentsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeEnvironmentsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(EnvironmentDescriptionsMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = EnvironmentDescriptionsMessageDeserializer::deserialize(
-                            "DescribeEnvironmentsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = EnvironmentDescriptionsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = EnvironmentDescriptionsMessageDeserializer::deserialize(
+                "DescribeEnvironmentsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note></p>
-    fn describe_events(
+    async fn describe_events(
         &self,
         input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventDescriptionsMessage, DescribeEventsError> {
+    ) -> Result<EventDescriptionsMessage, RusotoError<DescribeEventsError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11322,54 +11106,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeEventsError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(DescribeEventsError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeEventsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(EventDescriptionsMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = EventDescriptionsMessageDeserializer::deserialize(
-                            "DescribeEventsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = EventDescriptionsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = EventDescriptionsMessageDeserializer::deserialize(
+                "DescribeEventsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Retrieves detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
-    fn describe_instances_health(
+    async fn describe_instances_health(
         &self,
         input: DescribeInstancesHealthRequest,
-    ) -> RusotoFuture<DescribeInstancesHealthResult, DescribeInstancesHealthError> {
+    ) -> Result<DescribeInstancesHealthResult, RusotoError<DescribeInstancesHealthError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11379,56 +11155,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribeInstancesHealthError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribeInstancesHealthError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeInstancesHealthError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribeInstancesHealthResult::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribeInstancesHealthResultDeserializer::deserialize(
-                            "DescribeInstancesHealthResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeInstancesHealthResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeInstancesHealthResultDeserializer::deserialize(
+                "DescribeInstancesHealthResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the version of the platform.</p>
-    fn describe_platform_version(
+    async fn describe_platform_version(
         &self,
         input: DescribePlatformVersionRequest,
-    ) -> RusotoFuture<DescribePlatformVersionResult, DescribePlatformVersionError> {
+    ) -> Result<DescribePlatformVersionResult, RusotoError<DescribePlatformVersionError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11438,56 +11204,48 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<DescribePlatformVersionError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(DescribePlatformVersionError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribePlatformVersionError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(DescribePlatformVersionResult::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = DescribePlatformVersionResultDeserializer::deserialize(
-                            "DescribePlatformVersionResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = DescribePlatformVersionResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribePlatformVersionResultDeserializer::deserialize(
+                "DescribePlatformVersionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>
-    fn list_available_solution_stacks(
+    async fn list_available_solution_stacks(
         &self,
-    ) -> RusotoFuture<ListAvailableSolutionStacksResultMessage, ListAvailableSolutionStacksError>
-    {
+    ) -> Result<
+        ListAvailableSolutionStacksResultMessage,
+        RusotoError<ListAvailableSolutionStacksError>,
+    > {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11497,57 +11255,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<ListAvailableSolutionStacksError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListAvailableSolutionStacksError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListAvailableSolutionStacksError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListAvailableSolutionStacksResultMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListAvailableSolutionStacksResultMessageDeserializer::deserialize(
-                            "ListAvailableSolutionStacksResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListAvailableSolutionStacksResultMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListAvailableSolutionStacksResultMessageDeserializer::deserialize(
+                "ListAvailableSolutionStacksResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists the available platforms.</p>
-    fn list_platform_versions(
+    async fn list_platform_versions(
         &self,
         input: ListPlatformVersionsRequest,
-    ) -> RusotoFuture<ListPlatformVersionsResult, ListPlatformVersionsError> {
+    ) -> Result<ListPlatformVersionsResult, RusotoError<ListPlatformVersionsError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11557,56 +11304,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ListPlatformVersionsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListPlatformVersionsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListPlatformVersionsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListPlatformVersionsResult::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ListPlatformVersionsResultDeserializer::deserialize(
-                            "ListPlatformVersionsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListPlatformVersionsResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListPlatformVersionsResultDeserializer::deserialize(
+                "ListPlatformVersionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<ResourceTagsDescriptionMessage, ListTagsForResourceError> {
+    ) -> Result<ResourceTagsDescriptionMessage, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11616,56 +11353,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<ListTagsForResourceError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ListTagsForResourceError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListTagsForResourceError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ResourceTagsDescriptionMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ResourceTagsDescriptionMessageDeserializer::deserialize(
-                            "ListTagsForResourceResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ResourceTagsDescriptionMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ResourceTagsDescriptionMessageDeserializer::deserialize(
+                "ListTagsForResourceResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>
-    fn rebuild_environment(
+    async fn rebuild_environment(
         &self,
         input: RebuildEnvironmentMessage,
-    ) -> RusotoFuture<(), RebuildEnvironmentError> {
+    ) -> Result<(), RusotoError<RebuildEnvironmentError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11675,30 +11402,24 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<RebuildEnvironmentError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(RebuildEnvironmentError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RebuildEnvironmentError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p><p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul></p>
-    fn request_environment_info(
+    async fn request_environment_info(
         &self,
         input: RequestEnvironmentInfoMessage,
-    ) -> RusotoFuture<(), RequestEnvironmentInfoError> {
+    ) -> Result<(), RusotoError<RequestEnvironmentInfoError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11708,30 +11429,24 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<RequestEnvironmentInfoError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(RequestEnvironmentInfoError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RequestEnvironmentInfoError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>
-    fn restart_app_server(
+    async fn restart_app_server(
         &self,
         input: RestartAppServerMessage,
-    ) -> RusotoFuture<(), RestartAppServerError> {
+    ) -> Result<(), RusotoError<RestartAppServerError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11741,28 +11456,25 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<RestartAppServerError>)
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(RestartAppServerError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RestartAppServerError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p><p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul></p>
-    fn retrieve_environment_info(
+    async fn retrieve_environment_info(
         &self,
         input: RetrieveEnvironmentInfoMessage,
-    ) -> RusotoFuture<RetrieveEnvironmentInfoResultMessage, RetrieveEnvironmentInfoError> {
+    ) -> Result<RetrieveEnvironmentInfoResultMessage, RusotoError<RetrieveEnvironmentInfoError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11772,56 +11484,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<RetrieveEnvironmentInfoError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(RetrieveEnvironmentInfoError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RetrieveEnvironmentInfoError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(RetrieveEnvironmentInfoResultMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = RetrieveEnvironmentInfoResultMessageDeserializer::deserialize(
-                            "RetrieveEnvironmentInfoResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = RetrieveEnvironmentInfoResultMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = RetrieveEnvironmentInfoResultMessageDeserializer::deserialize(
+                "RetrieveEnvironmentInfoResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Swaps the CNAMEs of two environments.</p>
-    fn swap_environment_cnam_es(
+    async fn swap_environment_cnam_es(
         &self,
         input: SwapEnvironmentCNAMEsMessage,
-    ) -> RusotoFuture<(), SwapEnvironmentCNAMEsError> {
+    ) -> Result<(), RusotoError<SwapEnvironmentCNAMEsError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11831,30 +11533,24 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<SwapEnvironmentCNAMEsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(SwapEnvironmentCNAMEsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SwapEnvironmentCNAMEsError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Terminates the specified environment.</p>
-    fn terminate_environment(
+    async fn terminate_environment(
         &self,
         input: TerminateEnvironmentMessage,
-    ) -> RusotoFuture<EnvironmentDescription, TerminateEnvironmentError> {
+    ) -> Result<EnvironmentDescription, RusotoError<TerminateEnvironmentError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11864,56 +11560,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<TerminateEnvironmentError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(TerminateEnvironmentError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(TerminateEnvironmentError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(EnvironmentDescription::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = EnvironmentDescriptionDeserializer::deserialize(
-                            "TerminateEnvironmentResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = EnvironmentDescription::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = EnvironmentDescriptionDeserializer::deserialize(
+                "TerminateEnvironmentResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note></p>
-    fn update_application(
+    async fn update_application(
         &self,
         input: UpdateApplicationMessage,
-    ) -> RusotoFuture<ApplicationDescriptionMessage, UpdateApplicationError> {
+    ) -> Result<ApplicationDescriptionMessage, RusotoError<UpdateApplicationError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -11923,58 +11609,48 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<UpdateApplicationError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(UpdateApplicationError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateApplicationError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ApplicationDescriptionMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ApplicationDescriptionMessageDeserializer::deserialize(
-                            "UpdateApplicationResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ApplicationDescriptionMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ApplicationDescriptionMessageDeserializer::deserialize(
+                "UpdateApplicationResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies lifecycle settings for an application.</p>
-    fn update_application_resource_lifecycle(
+    async fn update_application_resource_lifecycle(
         &self,
         input: UpdateApplicationResourceLifecycleMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         ApplicationResourceLifecycleDescriptionMessage,
-        UpdateApplicationResourceLifecycleError,
+        RusotoError<UpdateApplicationResourceLifecycleError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -11985,60 +11661,49 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<UpdateApplicationResourceLifecycleError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(UpdateApplicationResourceLifecycleError::from_response(
-                                response,
-                            ))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateApplicationResourceLifecycleError::from_response(
+                response,
+            ));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ApplicationResourceLifecycleDescriptionMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            ApplicationResourceLifecycleDescriptionMessageDeserializer::deserialize(
-                                "UpdateApplicationResourceLifecycleResult",
-                                &mut stack,
-                            );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ApplicationResourceLifecycleDescriptionMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ApplicationResourceLifecycleDescriptionMessageDeserializer::deserialize(
+                "UpdateApplicationResourceLifecycleResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note></p>
-    fn update_application_version(
+    async fn update_application_version(
         &self,
         input: UpdateApplicationVersionMessage,
-    ) -> RusotoFuture<ApplicationVersionDescriptionMessage, UpdateApplicationVersionError> {
+    ) -> Result<ApplicationVersionDescriptionMessage, RusotoError<UpdateApplicationVersionError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -12048,56 +11713,47 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<UpdateApplicationVersionError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(UpdateApplicationVersionError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateApplicationVersionError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ApplicationVersionDescriptionMessage::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
-                            "UpdateApplicationVersionResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ApplicationVersionDescriptionMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
+                "UpdateApplicationVersionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul></p>
-    fn update_configuration_template(
+    async fn update_configuration_template(
         &self,
         input: UpdateConfigurationTemplateMessage,
-    ) -> RusotoFuture<ConfigurationSettingsDescription, UpdateConfigurationTemplateError> {
+    ) -> Result<ConfigurationSettingsDescription, RusotoError<UpdateConfigurationTemplateError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -12107,57 +11763,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<UpdateConfigurationTemplateError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(UpdateConfigurationTemplateError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateConfigurationTemplateError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ConfigurationSettingsDescription::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ConfigurationSettingsDescriptionDeserializer::deserialize(
-                            "UpdateConfigurationTemplateResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ConfigurationSettingsDescription::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ConfigurationSettingsDescriptionDeserializer::deserialize(
+                "UpdateConfigurationTemplateResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>
-    fn update_environment(
+    async fn update_environment(
         &self,
         input: UpdateEnvironmentMessage,
-    ) -> RusotoFuture<EnvironmentDescription, UpdateEnvironmentError> {
+    ) -> Result<EnvironmentDescription, RusotoError<UpdateEnvironmentError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -12167,56 +11812,46 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<UpdateEnvironmentError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(UpdateEnvironmentError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateEnvironmentError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(EnvironmentDescription::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = EnvironmentDescriptionDeserializer::deserialize(
-                            "UpdateEnvironmentResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = EnvironmentDescription::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = EnvironmentDescriptionDeserializer::deserialize(
+                "UpdateEnvironmentResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
-    fn update_tags_for_resource(
+    async fn update_tags_for_resource(
         &self,
         input: UpdateTagsForResourceMessage,
-    ) -> RusotoFuture<(), UpdateTagsForResourceError> {
+    ) -> Result<(), RusotoError<UpdateTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -12226,31 +11861,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e) as RusotoError<UpdateTagsForResourceError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(UpdateTagsForResourceError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateTagsForResourceError::from_response(response));
+        }
 
-            futures::future::ready(Ok(std::mem::drop(response))).boxed()
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>
-    fn validate_configuration_settings(
+    async fn validate_configuration_settings(
         &self,
         input: ValidateConfigurationSettingsMessage,
-    ) -> RusotoFuture<ConfigurationSettingsValidationMessages, ValidateConfigurationSettingsError>
-    {
+    ) -> Result<
+        ConfigurationSettingsValidationMessages,
+        RusotoError<ValidateConfigurationSettingsError>,
+    > {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -12260,50 +11891,39 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| {
-                        RusotoError::HttpDispatch(e)
-                            as RusotoError<ValidateConfigurationSettingsError>
-                    })
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(ValidateConfigurationSettingsError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ValidateConfigurationSettingsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ConfigurationSettingsValidationMessages::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = ConfigurationSettingsValidationMessagesDeserializer::deserialize(
-                            "ValidateConfigurationSettingsResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ConfigurationSettingsValidationMessages::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ConfigurationSettingsValidationMessagesDeserializer::deserialize(
+                "ValidateConfigurationSettingsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 }
 
@@ -12316,8 +11936,8 @@ mod protocol_tests {
     use super::*;
     use rusoto_core::Region as rusoto_region;
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_check_dns_availability() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_check_dns_availability() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-check-dns-availability.xml",
@@ -12326,12 +11946,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CheckDNSAvailabilityMessage::default();
-        let result = client.check_dns_availability(request).sync();
+        let result = client.check_dns_availability(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_create_application_version() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_create_application_version() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-create-application-version.xml",
@@ -12340,12 +11960,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateApplicationVersionMessage::default();
-        let result = client.create_application_version(request).sync();
+        let result = client.create_application_version(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_create_application() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_create_application() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-create-application.xml",
@@ -12354,12 +11974,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateApplicationMessage::default();
-        let result = client.create_application(request).sync();
+        let result = client.create_application(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_create_configuration_template() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_create_configuration_template() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-create-configuration-template.xml",
@@ -12368,12 +11988,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateConfigurationTemplateMessage::default();
-        let result = client.create_configuration_template(request).sync();
+        let result = client.create_configuration_template(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_create_environment() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_create_environment() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-create-environment.xml",
@@ -12382,12 +12002,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateEnvironmentMessage::default();
-        let result = client.create_environment(request).sync();
+        let result = client.create_environment(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_create_storage_location() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_create_storage_location() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-create-storage-location.xml",
@@ -12396,12 +12016,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.create_storage_location().sync();
+        let result = client.create_storage_location().await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_delete_application() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_delete_application() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-delete-application.xml",
@@ -12410,12 +12030,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeleteApplicationMessage::default();
-        let result = client.delete_application(request).sync();
+        let result = client.delete_application(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_describe_application_versions() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_describe_application_versions() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-describe-application-versions.xml",
@@ -12424,12 +12044,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeApplicationVersionsMessage::default();
-        let result = client.describe_application_versions(request).sync();
+        let result = client.describe_application_versions(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_describe_applications() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_describe_applications() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-describe-applications.xml",
@@ -12438,12 +12058,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeApplicationsMessage::default();
-        let result = client.describe_applications(request).sync();
+        let result = client.describe_applications(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_describe_configuration_options() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_describe_configuration_options() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-describe-configuration-options.xml",
@@ -12452,12 +12072,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeConfigurationOptionsMessage::default();
-        let result = client.describe_configuration_options(request).sync();
+        let result = client.describe_configuration_options(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_describe_environments() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_describe_environments() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-describe-environments.xml",
@@ -12466,12 +12086,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeEnvironmentsMessage::default();
-        let result = client.describe_environments(request).sync();
+        let result = client.describe_environments(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_describe_events() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_describe_events() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-describe-events.xml",
@@ -12480,12 +12100,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeEventsMessage::default();
-        let result = client.describe_events(request).sync();
+        let result = client.describe_events(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_list_available_solution_stacks() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_list_available_solution_stacks() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-list-available-solution-stacks.xml",
@@ -12494,12 +12114,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.list_available_solution_stacks().sync();
+        let result = client.list_available_solution_stacks().await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_retrieve_environment_info() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_retrieve_environment_info() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-retrieve-environment-info.xml",
@@ -12508,12 +12128,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = RetrieveEnvironmentInfoMessage::default();
-        let result = client.retrieve_environment_info(request).sync();
+        let result = client.retrieve_environment_info(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_terminate_environment() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_terminate_environment() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-terminate-environment.xml",
@@ -12522,12 +12142,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = TerminateEnvironmentMessage::default();
-        let result = client.terminate_environment(request).sync();
+        let result = client.terminate_environment(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_update_application_version() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_update_application_version() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-update-application-version.xml",
@@ -12536,12 +12156,12 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = UpdateApplicationVersionMessage::default();
-        let result = client.update_application_version(request).sync();
+        let result = client.update_application_version(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elasticbeanstalk_update_application() {
+    #[tokio::test]
+    async fn test_parse_valid_elasticbeanstalk_update_application() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elasticbeanstalk-update-application.xml",
@@ -12550,7 +12170,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = UpdateApplicationMessage::default();
-        let result = client.update_application(request).sync();
+        let result = client.update_application(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

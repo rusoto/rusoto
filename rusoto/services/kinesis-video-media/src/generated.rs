@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -131,9 +132,13 @@ impl Error for GetMediaError {
     }
 }
 /// Trait representing the capabilities of the Kinesis Video Media API. Kinesis Video Media clients implement this trait.
+#[async_trait]
 pub trait KinesisVideoMedia {
     /// <p><p> Use this API to retrieve media content from a Kinesis video stream. In the request, you identify the stream name or stream Amazon Resource Name (ARN), and the starting chunk. Kinesis Video Streams then returns a stream of chunks in order by fragment number.</p> <note> <p>You must first call the <code>GetDataEndpoint</code> API to get an endpoint. Then send the <code>GetMedia</code> requests to this endpoint using the <a href="https://docs.aws.amazon.com/cli/latest/reference/">--endpoint-url parameter</a>. </p> </note> <p>When you put media data (fragments) on a stream, Kinesis Video Streams stores each incoming fragment and related metadata in what is called a &quot;chunk.&quot; For more information, see . The <code>GetMedia</code> API returns a stream of these chunks starting from the chunk that you specify in the request. </p> <p>The following limits apply when using the <code>GetMedia</code> API:</p> <ul> <li> <p>A client can call <code>GetMedia</code> up to five times per second per stream. </p> </li> <li> <p>Kinesis Video Streams sends media data at a rate of up to 25 megabytes per second (or 200 megabits per second) during a <code>GetMedia</code> session. </p> </li> </ul></p>
-    fn get_media(&self, input: GetMediaInput) -> RusotoFuture<GetMediaOutput, GetMediaError>;
+    async fn get_media(
+        &self,
+        input: GetMediaInput,
+    ) -> Result<GetMediaOutput, RusotoError<GetMediaError>>;
 }
 /// A client for the Kinesis Video Media API.
 #[derive(Clone)]
@@ -169,9 +174,13 @@ impl KinesisVideoMediaClient {
     }
 }
 
+#[async_trait]
 impl KinesisVideoMedia for KinesisVideoMediaClient {
     /// <p><p> Use this API to retrieve media content from a Kinesis video stream. In the request, you identify the stream name or stream Amazon Resource Name (ARN), and the starting chunk. Kinesis Video Streams then returns a stream of chunks in order by fragment number.</p> <note> <p>You must first call the <code>GetDataEndpoint</code> API to get an endpoint. Then send the <code>GetMedia</code> requests to this endpoint using the <a href="https://docs.aws.amazon.com/cli/latest/reference/">--endpoint-url parameter</a>. </p> </note> <p>When you put media data (fragments) on a stream, Kinesis Video Streams stores each incoming fragment and related metadata in what is called a &quot;chunk.&quot; For more information, see . The <code>GetMedia</code> API returns a stream of these chunks starting from the chunk that you specify in the request. </p> <p>The following limits apply when using the <code>GetMedia</code> API:</p> <ul> <li> <p>A client can call <code>GetMedia</code> up to five times per second per stream. </p> </li> <li> <p>Kinesis Video Streams sends media data at a rate of up to 25 megabytes per second (or 200 megabits per second) during a <code>GetMedia</code> session. </p> </li> </ul></p>
-    fn get_media(&self, input: GetMediaInput) -> RusotoFuture<GetMediaOutput, GetMediaError> {
+    async fn get_media(
+        &self,
+        input: GetMediaInput,
+    ) -> Result<GetMediaOutput, RusotoError<GetMediaError>> {
         let request_uri = "/getMedia";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -180,35 +189,26 @@ impl KinesisVideoMedia for KinesisVideoMediaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetMediaError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let mut result = GetMediaOutput::default();
-                            result.payload = Some(response.body);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetMediaError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-                            if let Some(content_type) = response.headers.get("Content-Type") {
-                                let value = content_type.to_owned();
-                                result.content_type = Some(value)
-                            };
+            let mut result = GetMediaOutput::default();
+            result.payload = Some(response.body);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetMediaError>())
-                            .and_then(|response| Err(GetMediaError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            if let Some(content_type) = response.headers.get("Content-Type") {
+                let value = content_type.to_owned();
+                result.content_type = Some(value)
+            };
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetMediaError::from_response(response))
+        }
     }
 }

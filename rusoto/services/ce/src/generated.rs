@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -1405,48 +1406,52 @@ impl Error for GetTagsError {
     }
 }
 /// Trait representing the capabilities of the AWS Cost Explorer API. AWS Cost Explorer clients implement this trait.
+#[async_trait]
 pub trait CostExplorer {
     /// <p>Retrieves cost and usage metrics for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Master accounts in an organization in AWS Organizations have access to all member accounts.</p>
-    fn get_cost_and_usage(
+    async fn get_cost_and_usage(
         &self,
         input: GetCostAndUsageRequest,
-    ) -> RusotoFuture<GetCostAndUsageResponse, GetCostAndUsageError>;
+    ) -> Result<GetCostAndUsageResponse, RusotoError<GetCostAndUsageError>>;
 
     /// <p>Retrieves a forecast for how much Amazon Web Services predicts that you will spend over the forecast time period that you select, based on your past costs. </p>
-    fn get_cost_forecast(
+    async fn get_cost_forecast(
         &self,
         input: GetCostForecastRequest,
-    ) -> RusotoFuture<GetCostForecastResponse, GetCostForecastError>;
+    ) -> Result<GetCostForecastResponse, RusotoError<GetCostForecastError>>;
 
     /// <p>Retrieves all available filter values for a specified filter over a period of time. You can search the dimension values for an arbitrary string. </p>
-    fn get_dimension_values(
+    async fn get_dimension_values(
         &self,
         input: GetDimensionValuesRequest,
-    ) -> RusotoFuture<GetDimensionValuesResponse, GetDimensionValuesError>;
+    ) -> Result<GetDimensionValuesResponse, RusotoError<GetDimensionValuesError>>;
 
     /// <p>Retrieves the reservation coverage for your account. This enables you to see how much of your Amazon Elastic Compute Cloud, Amazon ElastiCache, Amazon Relational Database Service, or Amazon Redshift usage is covered by a reservation. An organization's master account can see the coverage of the associated member accounts. For any time period, you can filter data about reservation usage by the following dimensions:</p> <ul> <li> <p>AZ</p> </li> <li> <p>CACHE_ENGINE</p> </li> <li> <p>DATABASE_ENGINE</p> </li> <li> <p>DEPLOYMENT_OPTION</p> </li> <li> <p>INSTANCE_TYPE</p> </li> <li> <p>LINKED_ACCOUNT</p> </li> <li> <p>OPERATING_SYSTEM</p> </li> <li> <p>PLATFORM</p> </li> <li> <p>REGION</p> </li> <li> <p>SERVICE</p> </li> <li> <p>TAG</p> </li> <li> <p>TENANCY</p> </li> </ul> <p>To determine valid values for a dimension, use the <code>GetDimensionValues</code> operation. </p>
-    fn get_reservation_coverage(
+    async fn get_reservation_coverage(
         &self,
         input: GetReservationCoverageRequest,
-    ) -> RusotoFuture<GetReservationCoverageResponse, GetReservationCoverageError>;
+    ) -> Result<GetReservationCoverageResponse, RusotoError<GetReservationCoverageError>>;
 
     /// <p>Gets recommendations for which reservations to purchase. These recommendations could help you reduce your costs. Reservations provide a discounted hourly rate (up to 75%) compared to On-Demand pricing.</p> <p>AWS generates your recommendations by identifying your On-Demand usage during a specific time period and collecting your usage into categories that are eligible for a reservation. After AWS has these categories, it simulates every combination of reservations in each category of usage to identify the best number of each type of RI to purchase to maximize your estimated savings. </p> <p>For example, AWS automatically aggregates your Amazon EC2 Linux, shared tenancy, and c4 family usage in the US West (Oregon) Region and recommends that you buy size-flexible regional reservations to apply to the c4 family usage. AWS recommends the smallest size instance in an instance family. This makes it easier to purchase a size-flexible RI. AWS also shows the equal number of normalized units so that you can purchase any instance size that you want. For this example, your RI recommendation would be for <code>c4.large</code> because that is the smallest size instance in the c4 instance family.</p>
-    fn get_reservation_purchase_recommendation(
+    async fn get_reservation_purchase_recommendation(
         &self,
         input: GetReservationPurchaseRecommendationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetReservationPurchaseRecommendationResponse,
-        GetReservationPurchaseRecommendationError,
+        RusotoError<GetReservationPurchaseRecommendationError>,
     >;
 
     /// <p>Retrieves the reservation utilization for your account. Master accounts in an organization have access to member accounts. You can filter data by dimensions in a time period. You can use <code>GetDimensionValues</code> to determine the possible dimension values. Currently, you can group only by <code>SUBSCRIPTION_ID</code>. </p>
-    fn get_reservation_utilization(
+    async fn get_reservation_utilization(
         &self,
         input: GetReservationUtilizationRequest,
-    ) -> RusotoFuture<GetReservationUtilizationResponse, GetReservationUtilizationError>;
+    ) -> Result<GetReservationUtilizationResponse, RusotoError<GetReservationUtilizationError>>;
 
     /// <p>Queries for available tag keys and tag values for a specified period. You can search the tag values for an arbitrary string. </p>
-    fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<GetTagsResponse, GetTagsError>;
+    async fn get_tags(
+        &self,
+        input: GetTagsRequest,
+    ) -> Result<GetTagsResponse, RusotoError<GetTagsError>>;
 }
 /// A client for the AWS Cost Explorer API.
 #[derive(Clone)]
@@ -1482,12 +1487,13 @@ impl CostExplorerClient {
     }
 }
 
+#[async_trait]
 impl CostExplorer for CostExplorerClient {
     /// <p>Retrieves cost and usage metrics for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Master accounts in an organization in AWS Organizations have access to all member accounts.</p>
-    fn get_cost_and_usage(
+    async fn get_cost_and_usage(
         &self,
         input: GetCostAndUsageRequest,
-    ) -> RusotoFuture<GetCostAndUsageResponse, GetCostAndUsageError> {
+    ) -> Result<GetCostAndUsageResponse, RusotoError<GetCostAndUsageError>> {
         let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1495,42 +1501,26 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetCostAndUsageError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetCostAndUsageError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetCostAndUsageResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetCostAndUsageError>
-                            })
-                            .and_then(|response| Err(GetCostAndUsageError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetCostAndUsageResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetCostAndUsageError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a forecast for how much Amazon Web Services predicts that you will spend over the forecast time period that you select, based on your past costs. </p>
-    fn get_cost_forecast(
+    async fn get_cost_forecast(
         &self,
         input: GetCostForecastRequest,
-    ) -> RusotoFuture<GetCostForecastResponse, GetCostForecastError> {
+    ) -> Result<GetCostForecastResponse, RusotoError<GetCostForecastError>> {
         let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1538,42 +1528,26 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetCostForecastError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetCostForecastError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetCostForecastResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetCostForecastError>
-                            })
-                            .and_then(|response| Err(GetCostForecastError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetCostForecastResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetCostForecastError::from_response(response))
+        }
     }
 
     /// <p>Retrieves all available filter values for a specified filter over a period of time. You can search the dimension values for an arbitrary string. </p>
-    fn get_dimension_values(
+    async fn get_dimension_values(
         &self,
         input: GetDimensionValuesRequest,
-    ) -> RusotoFuture<GetDimensionValuesResponse, GetDimensionValuesError> {
+    ) -> Result<GetDimensionValuesResponse, RusotoError<GetDimensionValuesError>> {
         let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1581,44 +1555,27 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetDimensionValuesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetDimensionValuesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetDimensionValuesResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<GetDimensionValuesError>
-                            })
-                            .and_then(|response| {
-                                Err(GetDimensionValuesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDimensionValuesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDimensionValuesError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the reservation coverage for your account. This enables you to see how much of your Amazon Elastic Compute Cloud, Amazon ElastiCache, Amazon Relational Database Service, or Amazon Redshift usage is covered by a reservation. An organization's master account can see the coverage of the associated member accounts. For any time period, you can filter data about reservation usage by the following dimensions:</p> <ul> <li> <p>AZ</p> </li> <li> <p>CACHE_ENGINE</p> </li> <li> <p>DATABASE_ENGINE</p> </li> <li> <p>DEPLOYMENT_OPTION</p> </li> <li> <p>INSTANCE_TYPE</p> </li> <li> <p>LINKED_ACCOUNT</p> </li> <li> <p>OPERATING_SYSTEM</p> </li> <li> <p>PLATFORM</p> </li> <li> <p>REGION</p> </li> <li> <p>SERVICE</p> </li> <li> <p>TAG</p> </li> <li> <p>TENANCY</p> </li> </ul> <p>To determine valid values for a dimension, use the <code>GetDimensionValues</code> operation. </p>
-    fn get_reservation_coverage(
+    async fn get_reservation_coverage(
         &self,
         input: GetReservationCoverageRequest,
-    ) -> RusotoFuture<GetReservationCoverageResponse, GetReservationCoverageError> {
+    ) -> Result<GetReservationCoverageResponse, RusotoError<GetReservationCoverageError>> {
         let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1629,48 +1586,29 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetReservationCoverageError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetReservationCoverageError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetReservationCoverageResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetReservationCoverageError>
-                            })
-                            .and_then(|response| {
-                                Err(GetReservationCoverageError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetReservationCoverageResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetReservationCoverageError::from_response(response))
+        }
     }
 
     /// <p>Gets recommendations for which reservations to purchase. These recommendations could help you reduce your costs. Reservations provide a discounted hourly rate (up to 75%) compared to On-Demand pricing.</p> <p>AWS generates your recommendations by identifying your On-Demand usage during a specific time period and collecting your usage into categories that are eligible for a reservation. After AWS has these categories, it simulates every combination of reservations in each category of usage to identify the best number of each type of RI to purchase to maximize your estimated savings. </p> <p>For example, AWS automatically aggregates your Amazon EC2 Linux, shared tenancy, and c4 family usage in the US West (Oregon) Region and recommends that you buy size-flexible regional reservations to apply to the c4 family usage. AWS recommends the smallest size instance in an instance family. This makes it easier to purchase a size-flexible RI. AWS also shows the equal number of normalized units so that you can purchase any instance size that you want. For this example, your RI recommendation would be for <code>c4.large</code> because that is the smallest size instance in the c4 instance family.</p>
-    fn get_reservation_purchase_recommendation(
+    async fn get_reservation_purchase_recommendation(
         &self,
         input: GetReservationPurchaseRecommendationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetReservationPurchaseRecommendationResponse,
-        GetReservationPurchaseRecommendationError,
+        RusotoError<GetReservationPurchaseRecommendationError>,
     > {
         let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
 
@@ -1682,34 +1620,30 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            response.buffer()
-                .map_err(|e| GetReservationPurchaseRecommendationError::from(e))
-                .map(|try_response| {
-                    try_response
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetReservationPurchaseRecommendationError>)
-                    .and_then(|response| {
-                        proto::json::ResponsePayload::new(&response).deserialize::<GetReservationPurchaseRecommendationResponse, _>()
-                    })
-                }).boxed()
-                        } else {
-                            response.buffer().map(|try_response| {
-                                try_response
-                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetReservationPurchaseRecommendationError>)
-                                    .and_then(|response| {
-                                        Err(GetReservationPurchaseRecommendationError::from_response(response))
-                                    })
-                            }).boxed()
-                        }
-                    })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetReservationPurchaseRecommendationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetReservationPurchaseRecommendationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Retrieves the reservation utilization for your account. Master accounts in an organization have access to member accounts. You can filter data by dimensions in a time period. You can use <code>GetDimensionValues</code> to determine the possible dimension values. Currently, you can group only by <code>SUBSCRIPTION_ID</code>. </p>
-    fn get_reservation_utilization(
+    async fn get_reservation_utilization(
         &self,
         input: GetReservationUtilizationRequest,
-    ) -> RusotoFuture<GetReservationUtilizationResponse, GetReservationUtilizationError> {
+    ) -> Result<GetReservationUtilizationResponse, RusotoError<GetReservationUtilizationError>>
+    {
         let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1720,43 +1654,27 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetReservationUtilizationError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetReservationUtilizationError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetReservationUtilizationResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetReservationUtilizationError>
-                            })
-                            .and_then(|response| {
-                                Err(GetReservationUtilizationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetReservationUtilizationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetReservationUtilizationError::from_response(response))
+        }
     }
 
     /// <p>Queries for available tag keys and tag values for a specified period. You can search the tag values for an arbitrary string. </p>
-    fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<GetTagsResponse, GetTagsError> {
+    async fn get_tags(
+        &self,
+        input: GetTagsRequest,
+    ) -> Result<GetTagsResponse, RusotoError<GetTagsError>> {
         let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1764,30 +1682,18 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetTagsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetTagsError>)
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetTagsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetTagsError>)
-                            .and_then(|response| Err(GetTagsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetTagsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTagsError::from_response(response))
+        }
     }
 }

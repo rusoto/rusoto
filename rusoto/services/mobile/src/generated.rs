@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
@@ -912,60 +913,61 @@ impl Error for UpdateProjectError {
     }
 }
 /// Trait representing the capabilities of the AWS Mobile API. AWS Mobile clients implement this trait.
+#[async_trait]
 pub trait Mobile {
     /// <p> Creates an AWS Mobile Hub project. </p>
-    fn create_project(
+    async fn create_project(
         &self,
         input: CreateProjectRequest,
-    ) -> RusotoFuture<CreateProjectResult, CreateProjectError>;
+    ) -> Result<CreateProjectResult, RusotoError<CreateProjectError>>;
 
     /// <p> Delets a project in AWS Mobile Hub. </p>
-    fn delete_project(
+    async fn delete_project(
         &self,
         input: DeleteProjectRequest,
-    ) -> RusotoFuture<DeleteProjectResult, DeleteProjectError>;
+    ) -> Result<DeleteProjectResult, RusotoError<DeleteProjectError>>;
 
     /// <p> Get the bundle details for the requested bundle id. </p>
-    fn describe_bundle(
+    async fn describe_bundle(
         &self,
         input: DescribeBundleRequest,
-    ) -> RusotoFuture<DescribeBundleResult, DescribeBundleError>;
+    ) -> Result<DescribeBundleResult, RusotoError<DescribeBundleError>>;
 
     /// <p> Gets details about a project in AWS Mobile Hub. </p>
-    fn describe_project(
+    async fn describe_project(
         &self,
         input: DescribeProjectRequest,
-    ) -> RusotoFuture<DescribeProjectResult, DescribeProjectError>;
+    ) -> Result<DescribeProjectResult, RusotoError<DescribeProjectError>>;
 
     /// <p> Generates customized software development kit (SDK) and or tool packages used to integrate mobile web or mobile app clients with backend AWS resources. </p>
-    fn export_bundle(
+    async fn export_bundle(
         &self,
         input: ExportBundleRequest,
-    ) -> RusotoFuture<ExportBundleResult, ExportBundleError>;
+    ) -> Result<ExportBundleResult, RusotoError<ExportBundleError>>;
 
     /// <p> Exports project configuration to a snapshot which can be downloaded and shared. Note that mobile app push credentials are encrypted in exported projects, so they can only be shared successfully within the same AWS account. </p>
-    fn export_project(
+    async fn export_project(
         &self,
         input: ExportProjectRequest,
-    ) -> RusotoFuture<ExportProjectResult, ExportProjectError>;
+    ) -> Result<ExportProjectResult, RusotoError<ExportProjectError>>;
 
     /// <p> List all available bundles. </p>
-    fn list_bundles(
+    async fn list_bundles(
         &self,
         input: ListBundlesRequest,
-    ) -> RusotoFuture<ListBundlesResult, ListBundlesError>;
+    ) -> Result<ListBundlesResult, RusotoError<ListBundlesError>>;
 
     /// <p> Lists projects in AWS Mobile Hub. </p>
-    fn list_projects(
+    async fn list_projects(
         &self,
         input: ListProjectsRequest,
-    ) -> RusotoFuture<ListProjectsResult, ListProjectsError>;
+    ) -> Result<ListProjectsResult, RusotoError<ListProjectsError>>;
 
     /// <p> Update an existing project. </p>
-    fn update_project(
+    async fn update_project(
         &self,
         input: UpdateProjectRequest,
-    ) -> RusotoFuture<UpdateProjectResult, UpdateProjectError>;
+    ) -> Result<UpdateProjectResult, RusotoError<UpdateProjectError>>;
 }
 /// A client for the AWS Mobile API.
 #[derive(Clone)]
@@ -1001,12 +1003,13 @@ impl MobileClient {
     }
 }
 
+#[async_trait]
 impl Mobile for MobileClient {
     /// <p> Creates an AWS Mobile Hub project. </p>
-    fn create_project(
+    async fn create_project(
         &self,
         input: CreateProjectRequest,
-    ) -> RusotoFuture<CreateProjectResult, CreateProjectError> {
+    ) -> Result<CreateProjectResult, RusotoError<CreateProjectError>> {
         let request_uri = "/projects";
 
         let mut request =
@@ -1033,38 +1036,28 @@ impl Mobile for MobileClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| CreateProjectError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateProjectResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateProjectError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateProjectResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateProjectError>())
-                            .and_then(|response| Err(CreateProjectError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateProjectError::from_response(response))
+        }
     }
 
     /// <p> Delets a project in AWS Mobile Hub. </p>
-    fn delete_project(
+    async fn delete_project(
         &self,
         input: DeleteProjectRequest,
-    ) -> RusotoFuture<DeleteProjectResult, DeleteProjectError> {
+    ) -> Result<DeleteProjectResult, RusotoError<DeleteProjectError>> {
         let request_uri = format!("/projects/{project_id}", project_id = input.project_id);
 
         let mut request =
@@ -1073,38 +1066,28 @@ impl Mobile for MobileClient {
 
         request.set_endpoint_prefix("mobile".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteProjectError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteProjectResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteProjectError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteProjectResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteProjectError>())
-                            .and_then(|response| Err(DeleteProjectError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteProjectError::from_response(response))
+        }
     }
 
     /// <p> Get the bundle details for the requested bundle id. </p>
-    fn describe_bundle(
+    async fn describe_bundle(
         &self,
         input: DescribeBundleRequest,
-    ) -> RusotoFuture<DescribeBundleResult, DescribeBundleError> {
+    ) -> Result<DescribeBundleResult, RusotoError<DescribeBundleError>> {
         let request_uri = format!("/bundles/{bundle_id}", bundle_id = input.bundle_id);
 
         let mut request =
@@ -1113,38 +1096,28 @@ impl Mobile for MobileClient {
 
         request.set_endpoint_prefix("mobile".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeBundleError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBundleResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeBundleError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeBundleResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeBundleError>())
-                            .and_then(|response| Err(DescribeBundleError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeBundleError::from_response(response))
+        }
     }
 
     /// <p> Gets details about a project in AWS Mobile Hub. </p>
-    fn describe_project(
+    async fn describe_project(
         &self,
         input: DescribeProjectRequest,
-    ) -> RusotoFuture<DescribeProjectResult, DescribeProjectError> {
+    ) -> Result<DescribeProjectResult, RusotoError<DescribeProjectError>> {
         let request_uri = "/project";
 
         let mut request =
@@ -1160,38 +1133,28 @@ impl Mobile for MobileClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeProjectError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeProjectResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeProjectError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeProjectResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeProjectError>())
-                            .and_then(|response| Err(DescribeProjectError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeProjectError::from_response(response))
+        }
     }
 
     /// <p> Generates customized software development kit (SDK) and or tool packages used to integrate mobile web or mobile app clients with backend AWS resources. </p>
-    fn export_bundle(
+    async fn export_bundle(
         &self,
         input: ExportBundleRequest,
-    ) -> RusotoFuture<ExportBundleResult, ExportBundleError> {
+    ) -> Result<ExportBundleResult, RusotoError<ExportBundleError>> {
         let request_uri = format!("/bundles/{bundle_id}", bundle_id = input.bundle_id);
 
         let mut request =
@@ -1209,38 +1172,28 @@ impl Mobile for MobileClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ExportBundleError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ExportBundleResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ExportBundleError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<ExportBundleResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ExportBundleError>())
-                            .and_then(|response| Err(ExportBundleError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ExportBundleError::from_response(response))
+        }
     }
 
     /// <p> Exports project configuration to a snapshot which can be downloaded and shared. Note that mobile app push credentials are encrypted in exported projects, so they can only be shared successfully within the same AWS account. </p>
-    fn export_project(
+    async fn export_project(
         &self,
         input: ExportProjectRequest,
-    ) -> RusotoFuture<ExportProjectResult, ExportProjectError> {
+    ) -> Result<ExportProjectResult, RusotoError<ExportProjectError>> {
         let request_uri = format!("/exports/{project_id}", project_id = input.project_id);
 
         let mut request =
@@ -1249,38 +1202,28 @@ impl Mobile for MobileClient {
 
         request.set_endpoint_prefix("mobile".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ExportProjectError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ExportProjectResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ExportProjectError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ExportProjectResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ExportProjectError>())
-                            .and_then(|response| Err(ExportProjectError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ExportProjectError::from_response(response))
+        }
     }
 
     /// <p> List all available bundles. </p>
-    fn list_bundles(
+    async fn list_bundles(
         &self,
         input: ListBundlesRequest,
-    ) -> RusotoFuture<ListBundlesResult, ListBundlesError> {
+    ) -> Result<ListBundlesResult, RusotoError<ListBundlesError>> {
         let request_uri = "/bundles";
 
         let mut request =
@@ -1298,38 +1241,28 @@ impl Mobile for MobileClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListBundlesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBundlesResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBundlesError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<ListBundlesResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListBundlesError>())
-                            .and_then(|response| Err(ListBundlesError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListBundlesError::from_response(response))
+        }
     }
 
     /// <p> Lists projects in AWS Mobile Hub. </p>
-    fn list_projects(
+    async fn list_projects(
         &self,
         input: ListProjectsRequest,
-    ) -> RusotoFuture<ListProjectsResult, ListProjectsError> {
+    ) -> Result<ListProjectsResult, RusotoError<ListProjectsError>> {
         let request_uri = "/projects";
 
         let mut request =
@@ -1347,38 +1280,28 @@ impl Mobile for MobileClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListProjectsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListProjectsResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListProjectsError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<ListProjectsResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListProjectsError>())
-                            .and_then(|response| Err(ListProjectsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListProjectsError::from_response(response))
+        }
     }
 
     /// <p> Update an existing project. </p>
-    fn update_project(
+    async fn update_project(
         &self,
         input: UpdateProjectRequest,
-    ) -> RusotoFuture<UpdateProjectResult, UpdateProjectError> {
+    ) -> Result<UpdateProjectResult, RusotoError<UpdateProjectError>> {
         let request_uri = "/update";
 
         let mut request =
@@ -1397,30 +1320,20 @@ impl Mobile for MobileClient {
         params.put("projectId", &input.project_id);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateProjectError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateProjectResult, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateProjectError::SignAndDispatch)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateProjectResult, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateProjectError>())
-                            .and_then(|response| Err(UpdateProjectError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateProjectError::from_response(response))
+        }
     }
 }

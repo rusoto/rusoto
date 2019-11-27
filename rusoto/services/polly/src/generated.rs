@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
@@ -929,60 +930,61 @@ impl Error for SynthesizeSpeechError {
     }
 }
 /// Trait representing the capabilities of the Amazon Polly API. Amazon Polly clients implement this trait.
+#[async_trait]
 pub trait Polly {
     /// <p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn delete_lexicon(
+    async fn delete_lexicon(
         &self,
         input: DeleteLexiconInput,
-    ) -> RusotoFuture<DeleteLexiconOutput, DeleteLexiconError>;
+    ) -> Result<DeleteLexiconOutput, RusotoError<DeleteLexiconError>>;
 
     /// <p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>
-    fn describe_voices(
+    async fn describe_voices(
         &self,
         input: DescribeVoicesInput,
-    ) -> RusotoFuture<DescribeVoicesOutput, DescribeVoicesError>;
+    ) -> Result<DescribeVoicesOutput, RusotoError<DescribeVoicesError>>;
 
     /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn get_lexicon(
+    async fn get_lexicon(
         &self,
         input: GetLexiconInput,
-    ) -> RusotoFuture<GetLexiconOutput, GetLexiconError>;
+    ) -> Result<GetLexiconOutput, RusotoError<GetLexiconError>>;
 
     /// <p>Retrieves a specific SpeechSynthesisTask object based on its TaskID. This object contains information about the given speech synthesis task, including the status of the task, and a link to the S3 bucket containing the output of the task.</p>
-    fn get_speech_synthesis_task(
+    async fn get_speech_synthesis_task(
         &self,
         input: GetSpeechSynthesisTaskInput,
-    ) -> RusotoFuture<GetSpeechSynthesisTaskOutput, GetSpeechSynthesisTaskError>;
+    ) -> Result<GetSpeechSynthesisTaskOutput, RusotoError<GetSpeechSynthesisTaskError>>;
 
     /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn list_lexicons(
+    async fn list_lexicons(
         &self,
         input: ListLexiconsInput,
-    ) -> RusotoFuture<ListLexiconsOutput, ListLexiconsError>;
+    ) -> Result<ListLexiconsOutput, RusotoError<ListLexiconsError>>;
 
     /// <p>Returns a list of SpeechSynthesisTask objects ordered by their creation date. This operation can filter the tasks by their status, for example, allowing users to list only tasks that are completed.</p>
-    fn list_speech_synthesis_tasks(
+    async fn list_speech_synthesis_tasks(
         &self,
         input: ListSpeechSynthesisTasksInput,
-    ) -> RusotoFuture<ListSpeechSynthesisTasksOutput, ListSpeechSynthesisTasksError>;
+    ) -> Result<ListSpeechSynthesisTasksOutput, RusotoError<ListSpeechSynthesisTasksError>>;
 
     /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn put_lexicon(
+    async fn put_lexicon(
         &self,
         input: PutLexiconInput,
-    ) -> RusotoFuture<PutLexiconOutput, PutLexiconError>;
+    ) -> Result<PutLexiconOutput, RusotoError<PutLexiconError>>;
 
     /// <p>Allows the creation of an asynchronous synthesis task, by starting a new <code>SpeechSynthesisTask</code>. This operation requires all the standard information needed for speech synthesis, plus the name of an Amazon S3 bucket for the service to store the output of the synthesis task and two optional parameters (OutputS3KeyPrefix and SnsTopicArn). Once the synthesis task is created, this operation will return a SpeechSynthesisTask object, which will include an identifier of this task as well as the current status.</p>
-    fn start_speech_synthesis_task(
+    async fn start_speech_synthesis_task(
         &self,
         input: StartSpeechSynthesisTaskInput,
-    ) -> RusotoFuture<StartSpeechSynthesisTaskOutput, StartSpeechSynthesisTaskError>;
+    ) -> Result<StartSpeechSynthesisTaskOutput, RusotoError<StartSpeechSynthesisTaskError>>;
 
     /// <p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html">How it Works</a>.</p>
-    fn synthesize_speech(
+    async fn synthesize_speech(
         &self,
         input: SynthesizeSpeechInput,
-    ) -> RusotoFuture<SynthesizeSpeechOutput, SynthesizeSpeechError>;
+    ) -> Result<SynthesizeSpeechOutput, RusotoError<SynthesizeSpeechError>>;
 }
 /// A client for the Amazon Polly API.
 #[derive(Clone)]
@@ -1018,49 +1020,40 @@ impl PollyClient {
     }
 }
 
+#[async_trait]
 impl Polly for PollyClient {
     /// <p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn delete_lexicon(
+    async fn delete_lexicon(
         &self,
         input: DeleteLexiconInput,
-    ) -> RusotoFuture<DeleteLexiconOutput, DeleteLexiconError> {
+    ) -> Result<DeleteLexiconOutput, RusotoError<DeleteLexiconError>> {
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteLexiconError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteLexiconOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteLexiconError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteLexiconOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteLexiconError>())
-                            .and_then(|response| Err(DeleteLexiconError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteLexiconError::from_response(response))
+        }
     }
 
     /// <p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>
-    fn describe_voices(
+    async fn describe_voices(
         &self,
         input: DescribeVoicesInput,
-    ) -> RusotoFuture<DescribeVoicesOutput, DescribeVoicesError> {
+    ) -> Result<DescribeVoicesOutput, RusotoError<DescribeVoicesError>> {
         let request_uri = "/v1/voices";
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
@@ -1078,114 +1071,82 @@ impl Polly for PollyClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeVoicesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeVoicesOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeVoicesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeVoicesOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DescribeVoicesError>())
-                            .and_then(|response| Err(DescribeVoicesError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeVoicesError::from_response(response))
+        }
     }
 
     /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn get_lexicon(
+    async fn get_lexicon(
         &self,
         input: GetLexiconInput,
-    ) -> RusotoFuture<GetLexiconOutput, GetLexiconError> {
+    ) -> Result<GetLexiconOutput, RusotoError<GetLexiconError>> {
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetLexiconError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLexiconOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetLexiconError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<GetLexiconOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetLexiconError>())
-                            .and_then(|response| Err(GetLexiconError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetLexiconError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a specific SpeechSynthesisTask object based on its TaskID. This object contains information about the given speech synthesis task, including the status of the task, and a link to the S3 bucket containing the output of the task.</p>
-    fn get_speech_synthesis_task(
+    async fn get_speech_synthesis_task(
         &self,
         input: GetSpeechSynthesisTaskInput,
-    ) -> RusotoFuture<GetSpeechSynthesisTaskOutput, GetSpeechSynthesisTaskError> {
+    ) -> Result<GetSpeechSynthesisTaskOutput, RusotoError<GetSpeechSynthesisTaskError>> {
         let request_uri = format!("/v1/synthesisTasks/{task_id}", task_id = input.task_id);
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetSpeechSynthesisTaskError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSpeechSynthesisTaskOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSpeechSynthesisTaskError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetSpeechSynthesisTaskOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetSpeechSynthesisTaskError>())
-                            .and_then(|response| {
-                                Err(GetSpeechSynthesisTaskError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSpeechSynthesisTaskError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn list_lexicons(
+    async fn list_lexicons(
         &self,
         input: ListLexiconsInput,
-    ) -> RusotoFuture<ListLexiconsOutput, ListLexiconsError> {
+    ) -> Result<ListLexiconsOutput, RusotoError<ListLexiconsError>> {
         let request_uri = "/v1/lexicons";
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
@@ -1197,38 +1158,28 @@ impl Polly for PollyClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListLexiconsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLexiconsOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListLexiconsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<ListLexiconsOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListLexiconsError>())
-                            .and_then(|response| Err(ListLexiconsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListLexiconsError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of SpeechSynthesisTask objects ordered by their creation date. This operation can filter the tasks by their status, for example, allowing users to list only tasks that are completed.</p>
-    fn list_speech_synthesis_tasks(
+    async fn list_speech_synthesis_tasks(
         &self,
         input: ListSpeechSynthesisTasksInput,
-    ) -> RusotoFuture<ListSpeechSynthesisTasksOutput, ListSpeechSynthesisTasksError> {
+    ) -> Result<ListSpeechSynthesisTasksOutput, RusotoError<ListSpeechSynthesisTasksError>> {
         let request_uri = "/v1/synthesisTasks";
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
@@ -1246,40 +1197,28 @@ impl Polly for PollyClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListSpeechSynthesisTasksError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSpeechSynthesisTasksOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListSpeechSynthesisTasksError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSpeechSynthesisTasksOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListSpeechSynthesisTasksError>())
-                            .and_then(|response| {
-                                Err(ListSpeechSynthesisTasksError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSpeechSynthesisTasksError::from_response(response))
+        }
     }
 
     /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn put_lexicon(
+    async fn put_lexicon(
         &self,
         input: PutLexiconInput,
-    ) -> RusotoFuture<PutLexiconOutput, PutLexiconError> {
+    ) -> Result<PutLexiconOutput, RusotoError<PutLexiconError>> {
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
         let mut request = SignedRequest::new("PUT", "polly", &self.region, &request_uri);
@@ -1288,38 +1227,28 @@ impl Polly for PollyClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| PutLexiconError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutLexiconOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutLexiconError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<PutLexiconOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<PutLexiconError>())
-                            .and_then(|response| Err(PutLexiconError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutLexiconError::from_response(response))
+        }
     }
 
     /// <p>Allows the creation of an asynchronous synthesis task, by starting a new <code>SpeechSynthesisTask</code>. This operation requires all the standard information needed for speech synthesis, plus the name of an Amazon S3 bucket for the service to store the output of the synthesis task and two optional parameters (OutputS3KeyPrefix and SnsTopicArn). Once the synthesis task is created, this operation will return a SpeechSynthesisTask object, which will include an identifier of this task as well as the current status.</p>
-    fn start_speech_synthesis_task(
+    async fn start_speech_synthesis_task(
         &self,
         input: StartSpeechSynthesisTaskInput,
-    ) -> RusotoFuture<StartSpeechSynthesisTaskOutput, StartSpeechSynthesisTaskError> {
+    ) -> Result<StartSpeechSynthesisTaskOutput, RusotoError<StartSpeechSynthesisTaskError>> {
         let request_uri = "/v1/synthesisTasks";
 
         let mut request = SignedRequest::new("POST", "polly", &self.region, &request_uri);
@@ -1328,40 +1257,28 @@ impl Polly for PollyClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| StartSpeechSynthesisTaskError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartSpeechSynthesisTaskOutput, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartSpeechSynthesisTaskError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartSpeechSynthesisTaskOutput, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<StartSpeechSynthesisTaskError>())
-                            .and_then(|response| {
-                                Err(StartSpeechSynthesisTaskError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(StartSpeechSynthesisTaskError::from_response(response))
+        }
     }
 
     /// <p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html">How it Works</a>.</p>
-    fn synthesize_speech(
+    async fn synthesize_speech(
         &self,
         input: SynthesizeSpeechInput,
-    ) -> RusotoFuture<SynthesizeSpeechOutput, SynthesizeSpeechError> {
+    ) -> Result<SynthesizeSpeechOutput, RusotoError<SynthesizeSpeechError>> {
         let request_uri = "/v1/speech";
 
         let mut request = SignedRequest::new("POST", "polly", &self.region, &request_uri);
@@ -1370,43 +1287,30 @@ impl Polly for PollyClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| SynthesizeSpeechError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let mut result = SynthesizeSpeechOutput::default();
-                            result.audio_stream = Some(response.body);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(SynthesizeSpeechError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-                            if let Some(content_type) = response.headers.get("Content-Type") {
-                                let value = content_type.to_owned();
-                                result.content_type = Some(value)
-                            };
-                            if let Some(request_characters) =
-                                response.headers.get("x-amzn-RequestCharacters")
-                            {
-                                let value = request_characters.to_owned();
-                                result.request_characters = Some(value.parse::<i64>().unwrap())
-                            };
+            let mut result = SynthesizeSpeechOutput::default();
+            result.audio_stream = Some(response.body);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<SynthesizeSpeechError>())
-                            .and_then(|response| {
-                                Err(SynthesizeSpeechError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            if let Some(content_type) = response.headers.get("Content-Type") {
+                let value = content_type.to_owned();
+                result.content_type = Some(value)
+            };
+            if let Some(request_characters) = response.headers.get("x-amzn-RequestCharacters") {
+                let value = request_characters.to_owned();
+                result.request_characters = Some(value.parse::<i64>().unwrap())
+            };
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SynthesizeSpeechError::from_response(response))
+        }
     }
 }

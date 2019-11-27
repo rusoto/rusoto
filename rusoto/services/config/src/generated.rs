@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -5069,368 +5070,411 @@ impl Error for UntagResourceError {
     }
 }
 /// Trait representing the capabilities of the Config Service API. Config Service clients implement this trait.
+#[async_trait]
 pub trait ConfigService {
     /// <p><p>Returns the current configuration items for resources that are present in your AWS Config aggregator. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty <code>unprocessedResourceIdentifiers</code> list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return tags and relationships.</p> </li> </ul> </note></p>
-    fn batch_get_aggregate_resource_config(
+    async fn batch_get_aggregate_resource_config(
         &self,
         input: BatchGetAggregateResourceConfigRequest,
-    ) -> RusotoFuture<BatchGetAggregateResourceConfigResponse, BatchGetAggregateResourceConfigError>;
+    ) -> Result<
+        BatchGetAggregateResourceConfigResponse,
+        RusotoError<BatchGetAggregateResourceConfigError>,
+    >;
 
     /// <p><p>Returns the current configuration for one or more requested resources. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty unprocessedResourceKeys list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return any tags for the requested resources. This information is filtered out of the supplementaryConfiguration section of the API response.</p> </li> </ul> </note></p>
-    fn batch_get_resource_config(
+    async fn batch_get_resource_config(
         &self,
         input: BatchGetResourceConfigRequest,
-    ) -> RusotoFuture<BatchGetResourceConfigResponse, BatchGetResourceConfigError>;
+    ) -> Result<BatchGetResourceConfigResponse, RusotoError<BatchGetResourceConfigError>>;
 
     /// <p>Deletes the authorization granted to the specified configuration aggregator account in a specified region.</p>
-    fn delete_aggregation_authorization(
+    async fn delete_aggregation_authorization(
         &self,
         input: DeleteAggregationAuthorizationRequest,
-    ) -> RusotoFuture<(), DeleteAggregationAuthorizationError>;
+    ) -> Result<(), RusotoError<DeleteAggregationAuthorizationError>>;
 
     /// <p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>
-    fn delete_config_rule(
+    async fn delete_config_rule(
         &self,
         input: DeleteConfigRuleRequest,
-    ) -> RusotoFuture<(), DeleteConfigRuleError>;
+    ) -> Result<(), RusotoError<DeleteConfigRuleError>>;
 
     /// <p>Deletes the specified configuration aggregator and the aggregated data associated with the aggregator.</p>
-    fn delete_configuration_aggregator(
+    async fn delete_configuration_aggregator(
         &self,
         input: DeleteConfigurationAggregatorRequest,
-    ) -> RusotoFuture<(), DeleteConfigurationAggregatorError>;
+    ) -> Result<(), RusotoError<DeleteConfigurationAggregatorError>>;
 
     /// <p>Deletes the configuration recorder.</p> <p>After the configuration recorder is deleted, AWS Config will not record resource configuration changes until you create a new configuration recorder.</p> <p>This action does not delete the configuration information that was previously recorded. You will be able to access the previously recorded information by using the <code>GetResourceConfigHistory</code> action, but you will not be able to access this information in the AWS Config console until you create a new configuration recorder.</p>
-    fn delete_configuration_recorder(
+    async fn delete_configuration_recorder(
         &self,
         input: DeleteConfigurationRecorderRequest,
-    ) -> RusotoFuture<(), DeleteConfigurationRecorderError>;
+    ) -> Result<(), RusotoError<DeleteConfigurationRecorderError>>;
 
     /// <p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>
-    fn delete_delivery_channel(
+    async fn delete_delivery_channel(
         &self,
         input: DeleteDeliveryChannelRequest,
-    ) -> RusotoFuture<(), DeleteDeliveryChannelError>;
+    ) -> Result<(), RusotoError<DeleteDeliveryChannelError>>;
 
     /// <p>Deletes the evaluation results for the specified AWS Config rule. You can specify one AWS Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>
-    fn delete_evaluation_results(
+    async fn delete_evaluation_results(
         &self,
         input: DeleteEvaluationResultsRequest,
-    ) -> RusotoFuture<DeleteEvaluationResultsResponse, DeleteEvaluationResultsError>;
+    ) -> Result<DeleteEvaluationResultsResponse, RusotoError<DeleteEvaluationResultsError>>;
 
     /// <p>Deletes pending authorization requests for a specified aggregator account in a specified region.</p>
-    fn delete_pending_aggregation_request(
+    async fn delete_pending_aggregation_request(
         &self,
         input: DeletePendingAggregationRequestRequest,
-    ) -> RusotoFuture<(), DeletePendingAggregationRequestError>;
+    ) -> Result<(), RusotoError<DeletePendingAggregationRequestError>>;
 
     /// <p>Deletes the remediation configuration.</p>
-    fn delete_remediation_configuration(
+    async fn delete_remediation_configuration(
         &self,
         input: DeleteRemediationConfigurationRequest,
-    ) -> RusotoFuture<DeleteRemediationConfigurationResponse, DeleteRemediationConfigurationError>;
+    ) -> Result<
+        DeleteRemediationConfigurationResponse,
+        RusotoError<DeleteRemediationConfigurationError>,
+    >;
 
     /// <p>Deletes the retention configuration.</p>
-    fn delete_retention_configuration(
+    async fn delete_retention_configuration(
         &self,
         input: DeleteRetentionConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteRetentionConfigurationError>;
+    ) -> Result<(), RusotoError<DeleteRetentionConfigurationError>>;
 
     /// <p><p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends the following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of the start of the delivery.</p> </li> <li> <p>Notification of the completion of the delivery, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed.</p> </li> </ul></p>
-    fn deliver_config_snapshot(
+    async fn deliver_config_snapshot(
         &self,
         input: DeliverConfigSnapshotRequest,
-    ) -> RusotoFuture<DeliverConfigSnapshotResponse, DeliverConfigSnapshotError>;
+    ) -> Result<DeliverConfigSnapshotResponse, RusotoError<DeliverConfigSnapshotError>>;
 
     /// <p><p>Returns a list of compliant and noncompliant rules with the number of resources for compliant and noncompliant rules. </p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
-    fn describe_aggregate_compliance_by_config_rules(
+    async fn describe_aggregate_compliance_by_config_rules(
         &self,
         input: DescribeAggregateComplianceByConfigRulesRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeAggregateComplianceByConfigRulesResponse,
-        DescribeAggregateComplianceByConfigRulesError,
+        RusotoError<DescribeAggregateComplianceByConfigRulesError>,
     >;
 
     /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
-    fn describe_aggregation_authorizations(
+    async fn describe_aggregation_authorizations(
         &self,
         input: DescribeAggregationAuthorizationsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeAggregationAuthorizationsResponse,
-        DescribeAggregationAuthorizationsError,
+        RusotoError<DescribeAggregationAuthorizationsError>,
     >;
 
     /// <p><p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it. It is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
-    fn describe_compliance_by_config_rule(
+    async fn describe_compliance_by_config_rule(
         &self,
         input: DescribeComplianceByConfigRuleRequest,
-    ) -> RusotoFuture<DescribeComplianceByConfigRuleResponse, DescribeComplianceByConfigRuleError>;
+    ) -> Result<
+        DescribeComplianceByConfigRuleResponse,
+        RusotoError<DescribeComplianceByConfigRuleError>,
+    >;
 
     /// <p><p>Indicates whether the specified AWS resources are compliant. If a resource is noncompliant, this action returns the number of AWS Config rules that the resource does not comply with.</p> <p>A resource is compliant if it complies with all the AWS Config rules that evaluate it. It is noncompliant if it does not comply with one or more of these rules.</p> <p>If AWS Config has no current evaluation results for the resource, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions about the rules that evaluate the resource:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
-    fn describe_compliance_by_resource(
+    async fn describe_compliance_by_resource(
         &self,
         input: DescribeComplianceByResourceRequest,
-    ) -> RusotoFuture<DescribeComplianceByResourceResponse, DescribeComplianceByResourceError>;
+    ) -> Result<DescribeComplianceByResourceResponse, RusotoError<DescribeComplianceByResourceError>>;
 
     /// <p>Returns status information for each of your AWS managed Config rules. The status includes information such as the last time AWS Config invoked the rule, the last time AWS Config failed to invoke the rule, and the related error for the last failure.</p>
-    fn describe_config_rule_evaluation_status(
+    async fn describe_config_rule_evaluation_status(
         &self,
         input: DescribeConfigRuleEvaluationStatusRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeConfigRuleEvaluationStatusResponse,
-        DescribeConfigRuleEvaluationStatusError,
+        RusotoError<DescribeConfigRuleEvaluationStatusError>,
     >;
 
     /// <p>Returns details about your AWS Config rules.</p>
-    fn describe_config_rules(
+    async fn describe_config_rules(
         &self,
         input: DescribeConfigRulesRequest,
-    ) -> RusotoFuture<DescribeConfigRulesResponse, DescribeConfigRulesError>;
+    ) -> Result<DescribeConfigRulesResponse, RusotoError<DescribeConfigRulesError>>;
 
     /// <p>Returns status information for sources within an aggregator. The status includes information about the last time AWS Config verified authorization between the source account and an aggregator account. In case of a failure, the status contains the related error code or message. </p>
-    fn describe_configuration_aggregator_sources_status(
+    async fn describe_configuration_aggregator_sources_status(
         &self,
         input: DescribeConfigurationAggregatorSourcesStatusRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeConfigurationAggregatorSourcesStatusResponse,
-        DescribeConfigurationAggregatorSourcesStatusError,
+        RusotoError<DescribeConfigurationAggregatorSourcesStatusError>,
     >;
 
     /// <p>Returns the details of one or more configuration aggregators. If the configuration aggregator is not specified, this action returns the details for all the configuration aggregators associated with the account. </p>
-    fn describe_configuration_aggregators(
+    async fn describe_configuration_aggregators(
         &self,
         input: DescribeConfigurationAggregatorsRequest,
-    ) -> RusotoFuture<DescribeConfigurationAggregatorsResponse, DescribeConfigurationAggregatorsError>;
+    ) -> Result<
+        DescribeConfigurationAggregatorsResponse,
+        RusotoError<DescribeConfigurationAggregatorsError>,
+    >;
 
     /// <p><p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
-    fn describe_configuration_recorder_status(
+    async fn describe_configuration_recorder_status(
         &self,
         input: DescribeConfigurationRecorderStatusRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeConfigurationRecorderStatusResponse,
-        DescribeConfigurationRecorderStatusError,
+        RusotoError<DescribeConfigurationRecorderStatusError>,
     >;
 
     /// <p><p>Returns the details for the specified configuration recorders. If the configuration recorder is not specified, this action returns the details for all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
-    fn describe_configuration_recorders(
+    async fn describe_configuration_recorders(
         &self,
         input: DescribeConfigurationRecordersRequest,
-    ) -> RusotoFuture<DescribeConfigurationRecordersResponse, DescribeConfigurationRecordersError>;
+    ) -> Result<
+        DescribeConfigurationRecordersResponse,
+        RusotoError<DescribeConfigurationRecordersError>,
+    >;
 
     /// <p><p>Returns the current status of the specified delivery channel. If a delivery channel is not specified, this action returns the current status of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note></p>
-    fn describe_delivery_channel_status(
+    async fn describe_delivery_channel_status(
         &self,
         input: DescribeDeliveryChannelStatusRequest,
-    ) -> RusotoFuture<DescribeDeliveryChannelStatusResponse, DescribeDeliveryChannelStatusError>;
+    ) -> Result<
+        DescribeDeliveryChannelStatusResponse,
+        RusotoError<DescribeDeliveryChannelStatusError>,
+    >;
 
     /// <p><p>Returns details about the specified delivery channel. If a delivery channel is not specified, this action returns the details of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note></p>
-    fn describe_delivery_channels(
+    async fn describe_delivery_channels(
         &self,
         input: DescribeDeliveryChannelsRequest,
-    ) -> RusotoFuture<DescribeDeliveryChannelsResponse, DescribeDeliveryChannelsError>;
+    ) -> Result<DescribeDeliveryChannelsResponse, RusotoError<DescribeDeliveryChannelsError>>;
 
     /// <p>Returns a list of all pending aggregation requests.</p>
-    fn describe_pending_aggregation_requests(
+    async fn describe_pending_aggregation_requests(
         &self,
         input: DescribePendingAggregationRequestsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribePendingAggregationRequestsResponse,
-        DescribePendingAggregationRequestsError,
+        RusotoError<DescribePendingAggregationRequestsError>,
     >;
 
     /// <p>Returns the details of one or more remediation configurations.</p>
-    fn describe_remediation_configurations(
+    async fn describe_remediation_configurations(
         &self,
         input: DescribeRemediationConfigurationsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeRemediationConfigurationsResponse,
-        DescribeRemediationConfigurationsError,
+        RusotoError<DescribeRemediationConfigurationsError>,
     >;
 
     /// <p>Provides a detailed view of a Remediation Execution for a set of resources including state, timestamps for when steps for the remediation execution occur, and any error messages for steps that have failed. When you specify the limit and the next token, you receive a paginated response.</p>
-    fn describe_remediation_execution_status(
+    async fn describe_remediation_execution_status(
         &self,
         input: DescribeRemediationExecutionStatusRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeRemediationExecutionStatusResponse,
-        DescribeRemediationExecutionStatusError,
+        RusotoError<DescribeRemediationExecutionStatusError>,
     >;
 
     /// <p><p>Returns the details of one or more retention configurations. If the retention configuration name is not specified, this action returns the details for all the retention configurations for that account.</p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
-    fn describe_retention_configurations(
+    async fn describe_retention_configurations(
         &self,
         input: DescribeRetentionConfigurationsRequest,
-    ) -> RusotoFuture<DescribeRetentionConfigurationsResponse, DescribeRetentionConfigurationsError>;
+    ) -> Result<
+        DescribeRetentionConfigurationsResponse,
+        RusotoError<DescribeRetentionConfigurationsError>,
+    >;
 
     /// <p><p>Returns the evaluation results for the specified AWS Config rule for a specific resource in a rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule. </p> <note> <p>The results can return an empty result page. But if you have a nextToken, the results are displayed on the next page.</p> </note></p>
-    fn get_aggregate_compliance_details_by_config_rule(
+    async fn get_aggregate_compliance_details_by_config_rule(
         &self,
         input: GetAggregateComplianceDetailsByConfigRuleRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetAggregateComplianceDetailsByConfigRuleResponse,
-        GetAggregateComplianceDetailsByConfigRuleError,
+        RusotoError<GetAggregateComplianceDetailsByConfigRuleError>,
     >;
 
     /// <p><p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
-    fn get_aggregate_config_rule_compliance_summary(
+    async fn get_aggregate_config_rule_compliance_summary(
         &self,
         input: GetAggregateConfigRuleComplianceSummaryRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetAggregateConfigRuleComplianceSummaryResponse,
-        GetAggregateConfigRuleComplianceSummaryError,
+        RusotoError<GetAggregateConfigRuleComplianceSummaryError>,
     >;
 
     /// <p>Returns the resource counts across accounts and regions that are present in your AWS Config aggregator. You can request the resource counts by providing filters and GroupByKey.</p> <p>For example, if the input contains accountID 12345678910 and region us-east-1 in filters, the API returns the count of resources in account ID 12345678910 and region us-east-1. If the input contains ACCOUNT_ID as a GroupByKey, the API returns resource counts for all source accounts that are present in your aggregator.</p>
-    fn get_aggregate_discovered_resource_counts(
+    async fn get_aggregate_discovered_resource_counts(
         &self,
         input: GetAggregateDiscoveredResourceCountsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetAggregateDiscoveredResourceCountsResponse,
-        GetAggregateDiscoveredResourceCountsError,
+        RusotoError<GetAggregateDiscoveredResourceCountsError>,
     >;
 
     /// <p>Returns configuration item that is aggregated for your specific resource in a specific source account and region.</p>
-    fn get_aggregate_resource_config(
+    async fn get_aggregate_resource_config(
         &self,
         input: GetAggregateResourceConfigRequest,
-    ) -> RusotoFuture<GetAggregateResourceConfigResponse, GetAggregateResourceConfigError>;
+    ) -> Result<GetAggregateResourceConfigResponse, RusotoError<GetAggregateResourceConfigError>>;
 
     /// <p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>
-    fn get_compliance_details_by_config_rule(
+    async fn get_compliance_details_by_config_rule(
         &self,
         input: GetComplianceDetailsByConfigRuleRequest,
-    ) -> RusotoFuture<GetComplianceDetailsByConfigRuleResponse, GetComplianceDetailsByConfigRuleError>;
+    ) -> Result<
+        GetComplianceDetailsByConfigRuleResponse,
+        RusotoError<GetComplianceDetailsByConfigRuleError>,
+    >;
 
     /// <p>Returns the evaluation results for the specified AWS resource. The results indicate which AWS Config rules were used to evaluate the resource, when each rule was last used, and whether the resource complies with each rule.</p>
-    fn get_compliance_details_by_resource(
+    async fn get_compliance_details_by_resource(
         &self,
         input: GetComplianceDetailsByResourceRequest,
-    ) -> RusotoFuture<GetComplianceDetailsByResourceResponse, GetComplianceDetailsByResourceError>;
+    ) -> Result<
+        GetComplianceDetailsByResourceResponse,
+        RusotoError<GetComplianceDetailsByResourceError>,
+    >;
 
     /// <p>Returns the number of AWS Config rules that are compliant and noncompliant, up to a maximum of 25 for each.</p>
-    fn get_compliance_summary_by_config_rule(
+    async fn get_compliance_summary_by_config_rule(
         &self,
-    ) -> RusotoFuture<GetComplianceSummaryByConfigRuleResponse, GetComplianceSummaryByConfigRuleError>;
+    ) -> Result<
+        GetComplianceSummaryByConfigRuleResponse,
+        RusotoError<GetComplianceSummaryByConfigRuleError>,
+    >;
 
     /// <p>Returns the number of resources that are compliant and the number that are noncompliant. You can specify one or more resource types to get these numbers for each resource type. The maximum number returned is 100.</p>
-    fn get_compliance_summary_by_resource_type(
+    async fn get_compliance_summary_by_resource_type(
         &self,
         input: GetComplianceSummaryByResourceTypeRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetComplianceSummaryByResourceTypeResponse,
-        GetComplianceSummaryByResourceTypeError,
+        RusotoError<GetComplianceSummaryByResourceTypeError>,
     >;
 
     /// <p><p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets).</p> </li> <li> <p>The number of each resource type (25, 20, and 15).</p> </li> <li> <p>The total number of all resources (60).</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you might not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer.</p> </li> <li> <p>You just enabled resource recording.</p> </li> </ul> <p>It might take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note></p>
-    fn get_discovered_resource_counts(
+    async fn get_discovered_resource_counts(
         &self,
         input: GetDiscoveredResourceCountsRequest,
-    ) -> RusotoFuture<GetDiscoveredResourceCountsResponse, GetDiscoveredResourceCountsError>;
+    ) -> Result<GetDiscoveredResourceCountsResponse, RusotoError<GetDiscoveredResourceCountsError>>;
 
     /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval. If you specified a retention period to retain your <code>ConfigurationItems</code> between a minimum of 30 days and a maximum of 7 years (2557 days), AWS Config returns the <code>ConfigurationItems</code> for the specified retention period. </p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
-    fn get_resource_config_history(
+    async fn get_resource_config_history(
         &self,
         input: GetResourceConfigHistoryRequest,
-    ) -> RusotoFuture<GetResourceConfigHistoryResponse, GetResourceConfigHistoryError>;
+    ) -> Result<GetResourceConfigHistoryResponse, RusotoError<GetResourceConfigHistoryError>>;
 
     /// <p>Accepts a resource type and returns a list of resource identifiers that are aggregated for a specific resource type across accounts and regions. A resource identifier includes the resource type, ID, (if available) the custom resource name, source account, and source region. You can narrow the results to include only resources that have specific resource IDs, or a resource name, or source account ID, or source region.</p> <p>For example, if the input consists of accountID 12345678910 and the region is us-east-1 for resource type <code>AWS::EC2::Instance</code> then the API returns all the EC2 instance identifiers of accountID 12345678910 and region us-east-1.</p>
-    fn list_aggregate_discovered_resources(
+    async fn list_aggregate_discovered_resources(
         &self,
         input: ListAggregateDiscoveredResourcesRequest,
-    ) -> RusotoFuture<ListAggregateDiscoveredResourcesResponse, ListAggregateDiscoveredResourcesError>;
+    ) -> Result<
+        ListAggregateDiscoveredResourcesResponse,
+        RusotoError<ListAggregateDiscoveredResourcesError>,
+    >;
 
     /// <p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name, but not both, in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>
-    fn list_discovered_resources(
+    async fn list_discovered_resources(
         &self,
         input: ListDiscoveredResourcesRequest,
-    ) -> RusotoFuture<ListDiscoveredResourcesResponse, ListDiscoveredResourcesError>;
+    ) -> Result<ListDiscoveredResourcesResponse, RusotoError<ListDiscoveredResourcesError>>;
 
     /// <p>List the tags for AWS Config resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Authorizes the aggregator account and region to collect data from the source account and region. </p>
-    fn put_aggregation_authorization(
+    async fn put_aggregation_authorization(
         &self,
         input: PutAggregationAuthorizationRequest,
-    ) -> RusotoFuture<PutAggregationAuthorizationResponse, PutAggregationAuthorizationError>;
+    ) -> Result<PutAggregationAuthorizationResponse, RusotoError<PutAggregationAuthorizationError>>;
 
     /// <p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom AWS Config rules and AWS managed Config rules. A custom AWS Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom AWS Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 150.</p> <p>For information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
-    fn put_config_rule(&self, input: PutConfigRuleRequest) -> RusotoFuture<(), PutConfigRuleError>;
+    async fn put_config_rule(
+        &self,
+        input: PutConfigRuleRequest,
+    ) -> Result<(), RusotoError<PutConfigRuleError>>;
 
     /// <p><p>Creates and updates the configuration aggregator with the selected source accounts and regions. The source account can be individual account(s) or an organization.</p> <note> <p>AWS Config should be enabled in source accounts and regions you want to aggregate.</p> <p>If your source type is an organization, you must be signed in to the master account and all features must be enabled in your organization. AWS Config calls <code>EnableAwsServiceAccess</code> API to enable integration between AWS Config and AWS Organizations. </p> </note></p>
-    fn put_configuration_aggregator(
+    async fn put_configuration_aggregator(
         &self,
         input: PutConfigurationAggregatorRequest,
-    ) -> RusotoFuture<PutConfigurationAggregatorResponse, PutConfigurationAggregatorError>;
+    ) -> Result<PutConfigurationAggregatorResponse, RusotoError<PutConfigurationAggregatorError>>;
 
     /// <p><p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note></p>
-    fn put_configuration_recorder(
+    async fn put_configuration_recorder(
         &self,
         input: PutConfigurationRecorderRequest,
-    ) -> RusotoFuture<(), PutConfigurationRecorderError>;
+    ) -> Result<(), RusotoError<PutConfigurationRecorderError>>;
 
     /// <p><p>Creates a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.</p> <p>Before you can create a delivery channel, you must create a configuration recorder.</p> <p>You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.</p> <note> <p>You can have only one delivery channel per region in your account.</p> </note></p>
-    fn put_delivery_channel(
+    async fn put_delivery_channel(
         &self,
         input: PutDeliveryChannelRequest,
-    ) -> RusotoFuture<(), PutDeliveryChannelError>;
+    ) -> Result<(), RusotoError<PutDeliveryChannelError>>;
 
     /// <p>Used by an AWS Lambda function to deliver evaluation results to AWS Config. This action is required in every AWS Lambda function that is invoked by an AWS Config rule.</p>
-    fn put_evaluations(
+    async fn put_evaluations(
         &self,
         input: PutEvaluationsRequest,
-    ) -> RusotoFuture<PutEvaluationsResponse, PutEvaluationsError>;
+    ) -> Result<PutEvaluationsResponse, RusotoError<PutEvaluationsError>>;
 
     /// <p>Adds or updates the remediation configuration with a specific AWS Config rule with the selected target or action. The API creates the <code>RemediationConfiguration</code> object for the AWS Config rule. The AWS Config rule must already exist for you to add a remediation configuration. The target (SSM document) must exist and have permissions to use the target. </p>
-    fn put_remediation_configurations(
+    async fn put_remediation_configurations(
         &self,
         input: PutRemediationConfigurationsRequest,
-    ) -> RusotoFuture<PutRemediationConfigurationsResponse, PutRemediationConfigurationsError>;
+    ) -> Result<PutRemediationConfigurationsResponse, RusotoError<PutRemediationConfigurationsError>>;
 
     /// <p><p>Creates and updates the retention configuration with details about retention period (number of days) that AWS Config stores your historical information. The API creates the <code>RetentionConfiguration</code> object and names the object as <b>default</b>. When you have a <code>RetentionConfiguration</code> object named <b>default</b>, calling the API modifies the default object. </p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
-    fn put_retention_configuration(
+    async fn put_retention_configuration(
         &self,
         input: PutRetentionConfigurationRequest,
-    ) -> RusotoFuture<PutRetentionConfigurationResponse, PutRetentionConfigurationError>;
+    ) -> Result<PutRetentionConfigurationResponse, RusotoError<PutRetentionConfigurationError>>;
 
     /// <p>Accepts a structured query language (SQL) <code>SELECT</code> command, performs the corresponding search, and returns resource configurations matching the properties.</p> <p>For more information about query components, see the <a href="https://docs.aws.amazon.com/config/latest/developerguide/query-components.html"> <b>Query Components</b> </a> section in the AWS Config Developer Guide.</p>
-    fn select_resource_config(
+    async fn select_resource_config(
         &self,
         input: SelectResourceConfigRequest,
-    ) -> RusotoFuture<SelectResourceConfigResponse, SelectResourceConfigError>;
+    ) -> Result<SelectResourceConfigResponse, RusotoError<SelectResourceConfigError>>;
 
     /// <p><p>Runs an on-demand evaluation for the specified AWS Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test that a rule you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources. It re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 AWS Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call for the specified rules must complete before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don&#39;t need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a rule, AWS Config evaluates your resources against the rule automatically. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol></p>
-    fn start_config_rules_evaluation(
+    async fn start_config_rules_evaluation(
         &self,
         input: StartConfigRulesEvaluationRequest,
-    ) -> RusotoFuture<StartConfigRulesEvaluationResponse, StartConfigRulesEvaluationError>;
+    ) -> Result<StartConfigRulesEvaluationResponse, RusotoError<StartConfigRulesEvaluationError>>;
 
     /// <p>Starts recording configurations of the AWS resources you have selected to record in your AWS account.</p> <p>You must have created at least one delivery channel to successfully start the configuration recorder.</p>
-    fn start_configuration_recorder(
+    async fn start_configuration_recorder(
         &self,
         input: StartConfigurationRecorderRequest,
-    ) -> RusotoFuture<(), StartConfigurationRecorderError>;
+    ) -> Result<(), RusotoError<StartConfigurationRecorderError>>;
 
     /// <p>Runs an on-demand remediation for the specified AWS Config rules against the last known remediation configuration. It runs an execution against the current state of your resources. Remediation execution is asynchronous.</p> <p>You can specify up to 100 resource keys per request. An existing StartRemediationExecution call for the specified resource keys must complete before you can call the API again.</p>
-    fn start_remediation_execution(
+    async fn start_remediation_execution(
         &self,
         input: StartRemediationExecutionRequest,
-    ) -> RusotoFuture<StartRemediationExecutionResponse, StartRemediationExecutionError>;
+    ) -> Result<StartRemediationExecutionResponse, RusotoError<StartRemediationExecutionError>>;
 
     /// <p>Stops recording configurations of the AWS resources you have selected to record in your AWS account.</p>
-    fn stop_configuration_recorder(
+    async fn stop_configuration_recorder(
         &self,
         input: StopConfigurationRecorderRequest,
-    ) -> RusotoFuture<(), StopConfigurationRecorderError>;
+    ) -> Result<(), RusotoError<StopConfigurationRecorderError>>;
 
     /// <p>Associates the specified tags to a resource with the specified resourceArn. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>>;
 
     /// <p>Deletes specified tags from a resource.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>>;
 }
 /// A client for the Config Service API.
 #[derive(Clone)]
@@ -5466,13 +5510,16 @@ impl ConfigServiceClient {
     }
 }
 
+#[async_trait]
 impl ConfigService for ConfigServiceClient {
     /// <p><p>Returns the current configuration items for resources that are present in your AWS Config aggregator. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty <code>unprocessedResourceIdentifiers</code> list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return tags and relationships.</p> </li> </ul> </note></p>
-    fn batch_get_aggregate_resource_config(
+    async fn batch_get_aggregate_resource_config(
         &self,
         input: BatchGetAggregateResourceConfigRequest,
-    ) -> RusotoFuture<BatchGetAggregateResourceConfigResponse, BatchGetAggregateResourceConfigError>
-    {
+    ) -> Result<
+        BatchGetAggregateResourceConfigResponse,
+        RusotoError<BatchGetAggregateResourceConfigError>,
+    > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5483,48 +5530,29 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| BatchGetAggregateResourceConfigError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetAggregateResourceConfigError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<BatchGetAggregateResourceConfigResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetAggregateResourceConfigError>
-                            })
-                            .and_then(|response| {
-                                Err(BatchGetAggregateResourceConfigError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchGetAggregateResourceConfigResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchGetAggregateResourceConfigError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p><p>Returns the current configuration for one or more requested resources. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty unprocessedResourceKeys list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return any tags for the requested resources. This information is filtered out of the supplementaryConfiguration section of the API response.</p> </li> </ul> </note></p>
-    fn batch_get_resource_config(
+    async fn batch_get_resource_config(
         &self,
         input: BatchGetResourceConfigRequest,
-    ) -> RusotoFuture<BatchGetResourceConfigResponse, BatchGetResourceConfigError> {
+    ) -> Result<BatchGetResourceConfigResponse, RusotoError<BatchGetResourceConfigError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5532,46 +5560,27 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| BatchGetResourceConfigError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetResourceConfigError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<BatchGetResourceConfigResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<BatchGetResourceConfigError>
-                            })
-                            .and_then(|response| {
-                                Err(BatchGetResourceConfigError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchGetResourceConfigResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchGetResourceConfigError::from_response(response))
+        }
     }
 
     /// <p>Deletes the authorization granted to the specified configuration aggregator account in a specified region.</p>
-    fn delete_aggregation_authorization(
+    async fn delete_aggregation_authorization(
         &self,
         input: DeleteAggregationAuthorizationRequest,
-    ) -> RusotoFuture<(), DeleteAggregationAuthorizationError> {
+    ) -> Result<(), RusotoError<DeleteAggregationAuthorizationError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5582,32 +5591,25 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteAggregationAuthorizationError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteAggregationAuthorizationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAggregationAuthorizationError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>
-    fn delete_config_rule(
+    async fn delete_config_rule(
         &self,
         input: DeleteConfigRuleRequest,
-    ) -> RusotoFuture<(), DeleteConfigRuleError> {
+    ) -> Result<(), RusotoError<DeleteConfigRuleError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5615,31 +5617,25 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<DeleteConfigRuleError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteConfigRuleError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteConfigRuleError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified configuration aggregator and the aggregated data associated with the aggregator.</p>
-    fn delete_configuration_aggregator(
+    async fn delete_configuration_aggregator(
         &self,
         input: DeleteConfigurationAggregatorRequest,
-    ) -> RusotoFuture<(), DeleteConfigurationAggregatorError> {
+    ) -> Result<(), RusotoError<DeleteConfigurationAggregatorError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5650,32 +5646,25 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteConfigurationAggregatorError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteConfigurationAggregatorError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteConfigurationAggregatorError::from_response(response))
+        }
     }
 
     /// <p>Deletes the configuration recorder.</p> <p>After the configuration recorder is deleted, AWS Config will not record resource configuration changes until you create a new configuration recorder.</p> <p>This action does not delete the configuration information that was previously recorded. You will be able to access the previously recorded information by using the <code>GetResourceConfigHistory</code> action, but you will not be able to access this information in the AWS Config console until you create a new configuration recorder.</p>
-    fn delete_configuration_recorder(
+    async fn delete_configuration_recorder(
         &self,
         input: DeleteConfigurationRecorderRequest,
-    ) -> RusotoFuture<(), DeleteConfigurationRecorderError> {
+    ) -> Result<(), RusotoError<DeleteConfigurationRecorderError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5686,32 +5675,25 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteConfigurationRecorderError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteConfigurationRecorderError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteConfigurationRecorderError::from_response(response))
+        }
     }
 
     /// <p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>
-    fn delete_delivery_channel(
+    async fn delete_delivery_channel(
         &self,
         input: DeleteDeliveryChannelRequest,
-    ) -> RusotoFuture<(), DeleteDeliveryChannelError> {
+    ) -> Result<(), RusotoError<DeleteDeliveryChannelError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5719,32 +5701,25 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteDeliveryChannelError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteDeliveryChannelError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDeliveryChannelError::from_response(response))
+        }
     }
 
     /// <p>Deletes the evaluation results for the specified AWS Config rule. You can specify one AWS Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>
-    fn delete_evaluation_results(
+    async fn delete_evaluation_results(
         &self,
         input: DeleteEvaluationResultsRequest,
-    ) -> RusotoFuture<DeleteEvaluationResultsResponse, DeleteEvaluationResultsError> {
+    ) -> Result<DeleteEvaluationResultsResponse, RusotoError<DeleteEvaluationResultsError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5755,46 +5730,27 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteEvaluationResultsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteEvaluationResultsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteEvaluationResultsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteEvaluationResultsError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteEvaluationResultsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteEvaluationResultsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteEvaluationResultsError::from_response(response))
+        }
     }
 
     /// <p>Deletes pending authorization requests for a specified aggregator account in a specified region.</p>
-    fn delete_pending_aggregation_request(
+    async fn delete_pending_aggregation_request(
         &self,
         input: DeletePendingAggregationRequestRequest,
-    ) -> RusotoFuture<(), DeletePendingAggregationRequestError> {
+    ) -> Result<(), RusotoError<DeletePendingAggregationRequestError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5805,35 +5761,30 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeletePendingAggregationRequestError>
-                            })
-                            .and_then(|response| {
-                                Err(DeletePendingAggregationRequestError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeletePendingAggregationRequestError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Deletes the remediation configuration.</p>
-    fn delete_remediation_configuration(
+    async fn delete_remediation_configuration(
         &self,
         input: DeleteRemediationConfigurationRequest,
-    ) -> RusotoFuture<DeleteRemediationConfigurationResponse, DeleteRemediationConfigurationError>
-    {
+    ) -> Result<
+        DeleteRemediationConfigurationResponse,
+        RusotoError<DeleteRemediationConfigurationError>,
+    > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5844,46 +5795,27 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteRemediationConfigurationError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteRemediationConfigurationError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeleteRemediationConfigurationResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteRemediationConfigurationError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteRemediationConfigurationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteRemediationConfigurationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRemediationConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Deletes the retention configuration.</p>
-    fn delete_retention_configuration(
+    async fn delete_retention_configuration(
         &self,
         input: DeleteRetentionConfigurationRequest,
-    ) -> RusotoFuture<(), DeleteRetentionConfigurationError> {
+    ) -> Result<(), RusotoError<DeleteRetentionConfigurationError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5894,32 +5826,25 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeleteRetentionConfigurationError>
-                            })
-                            .and_then(|response| {
-                                Err(DeleteRetentionConfigurationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRetentionConfigurationError::from_response(response))
+        }
     }
 
     /// <p><p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends the following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of the start of the delivery.</p> </li> <li> <p>Notification of the completion of the delivery, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed.</p> </li> </ul></p>
-    fn deliver_config_snapshot(
+    async fn deliver_config_snapshot(
         &self,
         input: DeliverConfigSnapshotRequest,
-    ) -> RusotoFuture<DeliverConfigSnapshotResponse, DeliverConfigSnapshotError> {
+    ) -> Result<DeliverConfigSnapshotResponse, RusotoError<DeliverConfigSnapshotError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5927,48 +5852,29 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DeliverConfigSnapshotError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeliverConfigSnapshotError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DeliverConfigSnapshotResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DeliverConfigSnapshotError>
-                            })
-                            .and_then(|response| {
-                                Err(DeliverConfigSnapshotError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeliverConfigSnapshotResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeliverConfigSnapshotError::from_response(response))
+        }
     }
 
     /// <p><p>Returns a list of compliant and noncompliant rules with the number of resources for compliant and noncompliant rules. </p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
-    fn describe_aggregate_compliance_by_config_rules(
+    async fn describe_aggregate_compliance_by_config_rules(
         &self,
         input: DescribeAggregateComplianceByConfigRulesRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeAggregateComplianceByConfigRulesResponse,
-        DescribeAggregateComplianceByConfigRulesError,
+        RusotoError<DescribeAggregateComplianceByConfigRulesError>,
     > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
@@ -5980,36 +5886,29 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            response.buffer()
-                .map_err(|e| DescribeAggregateComplianceByConfigRulesError::from(e))
-                .map(|try_response| {
-                    try_response
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeAggregateComplianceByConfigRulesError>)
-                    .and_then(|response| {
-                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeAggregateComplianceByConfigRulesResponse, _>()
-                    })
-                }).boxed()
-                        } else {
-                            response.buffer().map(|try_response| {
-                                try_response
-                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeAggregateComplianceByConfigRulesError>)
-                                    .and_then(|response| {
-                                        Err(DescribeAggregateComplianceByConfigRulesError::from_response(response))
-                                    })
-                            }).boxed()
-                        }
-                    })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAggregateComplianceByConfigRulesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAggregateComplianceByConfigRulesError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
-    fn describe_aggregation_authorizations(
+    async fn describe_aggregation_authorizations(
         &self,
         input: DescribeAggregationAuthorizationsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeAggregationAuthorizationsResponse,
-        DescribeAggregationAuthorizationsError,
+        RusotoError<DescribeAggregationAuthorizationsError>,
     > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
@@ -6021,49 +5920,32 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeAggregationAuthorizationsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeAggregationAuthorizationsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeAggregationAuthorizationsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeAggregationAuthorizationsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeAggregationAuthorizationsError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAggregationAuthorizationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAggregationAuthorizationsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p><p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it. It is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
-    fn describe_compliance_by_config_rule(
+    async fn describe_compliance_by_config_rule(
         &self,
         input: DescribeComplianceByConfigRuleRequest,
-    ) -> RusotoFuture<DescribeComplianceByConfigRuleResponse, DescribeComplianceByConfigRuleError>
-    {
+    ) -> Result<
+        DescribeComplianceByConfigRuleResponse,
+        RusotoError<DescribeComplianceByConfigRuleError>,
+    > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6074,46 +5956,28 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeComplianceByConfigRuleError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeComplianceByConfigRuleError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeComplianceByConfigRuleResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeComplianceByConfigRuleError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeComplianceByConfigRuleError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeComplianceByConfigRuleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeComplianceByConfigRuleError::from_response(response))
+        }
     }
 
     /// <p><p>Indicates whether the specified AWS resources are compliant. If a resource is noncompliant, this action returns the number of AWS Config rules that the resource does not comply with.</p> <p>A resource is compliant if it complies with all the AWS Config rules that evaluate it. It is noncompliant if it does not comply with one or more of these rules.</p> <p>If AWS Config has no current evaluation results for the resource, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions about the rules that evaluate the resource:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
-    fn describe_compliance_by_resource(
+    async fn describe_compliance_by_resource(
         &self,
         input: DescribeComplianceByResourceRequest,
-    ) -> RusotoFuture<DescribeComplianceByResourceResponse, DescribeComplianceByResourceError> {
+    ) -> Result<DescribeComplianceByResourceResponse, RusotoError<DescribeComplianceByResourceError>>
+    {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6124,48 +5988,29 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeComplianceByResourceError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeComplianceByResourceError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeComplianceByResourceResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeComplianceByResourceError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeComplianceByResourceError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeComplianceByResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeComplianceByResourceError::from_response(response))
+        }
     }
 
     /// <p>Returns status information for each of your AWS managed Config rules. The status includes information such as the last time AWS Config invoked the rule, the last time AWS Config failed to invoke the rule, and the related error for the last failure.</p>
-    fn describe_config_rule_evaluation_status(
+    async fn describe_config_rule_evaluation_status(
         &self,
         input: DescribeConfigRuleEvaluationStatusRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeConfigRuleEvaluationStatusResponse,
-        DescribeConfigRuleEvaluationStatusError,
+        RusotoError<DescribeConfigRuleEvaluationStatusError>,
     > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
@@ -6177,48 +6022,29 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeConfigRuleEvaluationStatusError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeConfigRuleEvaluationStatusError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeConfigRuleEvaluationStatusResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeConfigRuleEvaluationStatusError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeConfigRuleEvaluationStatusError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConfigRuleEvaluationStatusResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConfigRuleEvaluationStatusError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns details about your AWS Config rules.</p>
-    fn describe_config_rules(
+    async fn describe_config_rules(
         &self,
         input: DescribeConfigRulesRequest,
-    ) -> RusotoFuture<DescribeConfigRulesResponse, DescribeConfigRulesError> {
+    ) -> Result<DescribeConfigRulesResponse, RusotoError<DescribeConfigRulesError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6226,48 +6052,29 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeConfigRulesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeConfigRulesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeConfigRulesResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeConfigRulesError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeConfigRulesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConfigRulesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConfigRulesError::from_response(response))
+        }
     }
 
     /// <p>Returns status information for sources within an aggregator. The status includes information about the last time AWS Config verified authorization between the source account and an aggregator account. In case of a failure, the status contains the related error code or message. </p>
-    fn describe_configuration_aggregator_sources_status(
+    async fn describe_configuration_aggregator_sources_status(
         &self,
         input: DescribeConfigurationAggregatorSourcesStatusRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeConfigurationAggregatorSourcesStatusResponse,
-        DescribeConfigurationAggregatorSourcesStatusError,
+        RusotoError<DescribeConfigurationAggregatorSourcesStatusError>,
     > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
@@ -6279,35 +6086,30 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            response.buffer()
-                .map_err(|e| DescribeConfigurationAggregatorSourcesStatusError::from(e))
-                .map(|try_response| {
-                    try_response
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeConfigurationAggregatorSourcesStatusError>)
-                    .and_then(|response| {
-                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeConfigurationAggregatorSourcesStatusResponse, _>()
-                    })
-                }).boxed()
-                        } else {
-                            response.buffer().map(|try_response| {
-                                try_response
-                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeConfigurationAggregatorSourcesStatusError>)
-                                    .and_then(|response| {
-                                        Err(DescribeConfigurationAggregatorSourcesStatusError::from_response(response))
-                                    })
-                            }).boxed()
-                        }
-                    })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConfigurationAggregatorSourcesStatusResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConfigurationAggregatorSourcesStatusError::from_response(response))
+        }
     }
 
     /// <p>Returns the details of one or more configuration aggregators. If the configuration aggregator is not specified, this action returns the details for all the configuration aggregators associated with the account. </p>
-    fn describe_configuration_aggregators(
+    async fn describe_configuration_aggregators(
         &self,
         input: DescribeConfigurationAggregatorsRequest,
-    ) -> RusotoFuture<DescribeConfigurationAggregatorsResponse, DescribeConfigurationAggregatorsError>
-    {
+    ) -> Result<
+        DescribeConfigurationAggregatorsResponse,
+        RusotoError<DescribeConfigurationAggregatorsError>,
+    > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6318,50 +6120,31 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeConfigurationAggregatorsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeConfigurationAggregatorsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeConfigurationAggregatorsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeConfigurationAggregatorsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeConfigurationAggregatorsError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConfigurationAggregatorsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConfigurationAggregatorsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p><p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
-    fn describe_configuration_recorder_status(
+    async fn describe_configuration_recorder_status(
         &self,
         input: DescribeConfigurationRecorderStatusRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeConfigurationRecorderStatusResponse,
-        DescribeConfigurationRecorderStatusError,
+        RusotoError<DescribeConfigurationRecorderStatusError>,
     > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
@@ -6373,49 +6156,32 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeConfigurationRecorderStatusError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeConfigurationRecorderStatusError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeConfigurationRecorderStatusResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeConfigurationRecorderStatusError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeConfigurationRecorderStatusError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConfigurationRecorderStatusResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConfigurationRecorderStatusError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p><p>Returns the details for the specified configuration recorders. If the configuration recorder is not specified, this action returns the details for all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
-    fn describe_configuration_recorders(
+    async fn describe_configuration_recorders(
         &self,
         input: DescribeConfigurationRecordersRequest,
-    ) -> RusotoFuture<DescribeConfigurationRecordersResponse, DescribeConfigurationRecordersError>
-    {
+    ) -> Result<
+        DescribeConfigurationRecordersResponse,
+        RusotoError<DescribeConfigurationRecordersError>,
+    > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6426,47 +6192,30 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeConfigurationRecordersError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeConfigurationRecordersError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeConfigurationRecordersResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeConfigurationRecordersError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeConfigurationRecordersError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConfigurationRecordersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConfigurationRecordersError::from_response(response))
+        }
     }
 
     /// <p><p>Returns the current status of the specified delivery channel. If a delivery channel is not specified, this action returns the current status of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note></p>
-    fn describe_delivery_channel_status(
+    async fn describe_delivery_channel_status(
         &self,
         input: DescribeDeliveryChannelStatusRequest,
-    ) -> RusotoFuture<DescribeDeliveryChannelStatusResponse, DescribeDeliveryChannelStatusError>
-    {
+    ) -> Result<
+        DescribeDeliveryChannelStatusResponse,
+        RusotoError<DescribeDeliveryChannelStatusError>,
+    > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6477,46 +6226,27 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeDeliveryChannelStatusError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeDeliveryChannelStatusError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeDeliveryChannelStatusResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeDeliveryChannelStatusError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeDeliveryChannelStatusError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDeliveryChannelStatusResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDeliveryChannelStatusError::from_response(response))
+        }
     }
 
     /// <p><p>Returns details about the specified delivery channel. If a delivery channel is not specified, this action returns the details of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note></p>
-    fn describe_delivery_channels(
+    async fn describe_delivery_channels(
         &self,
         input: DescribeDeliveryChannelsRequest,
-    ) -> RusotoFuture<DescribeDeliveryChannelsResponse, DescribeDeliveryChannelsError> {
+    ) -> Result<DescribeDeliveryChannelsResponse, RusotoError<DescribeDeliveryChannelsError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6527,48 +6257,29 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeDeliveryChannelsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeDeliveryChannelsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeDeliveryChannelsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeDeliveryChannelsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeDeliveryChannelsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDeliveryChannelsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDeliveryChannelsError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of all pending aggregation requests.</p>
-    fn describe_pending_aggregation_requests(
+    async fn describe_pending_aggregation_requests(
         &self,
         input: DescribePendingAggregationRequestsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribePendingAggregationRequestsResponse,
-        DescribePendingAggregationRequestsError,
+        RusotoError<DescribePendingAggregationRequestsError>,
     > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
@@ -6580,50 +6291,31 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribePendingAggregationRequestsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribePendingAggregationRequestsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribePendingAggregationRequestsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribePendingAggregationRequestsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribePendingAggregationRequestsError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribePendingAggregationRequestsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribePendingAggregationRequestsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns the details of one or more remediation configurations.</p>
-    fn describe_remediation_configurations(
+    async fn describe_remediation_configurations(
         &self,
         input: DescribeRemediationConfigurationsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeRemediationConfigurationsResponse,
-        DescribeRemediationConfigurationsError,
+        RusotoError<DescribeRemediationConfigurationsError>,
     > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
@@ -6635,50 +6327,31 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeRemediationConfigurationsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeRemediationConfigurationsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeRemediationConfigurationsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeRemediationConfigurationsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeRemediationConfigurationsError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeRemediationConfigurationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeRemediationConfigurationsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Provides a detailed view of a Remediation Execution for a set of resources including state, timestamps for when steps for the remediation execution occur, and any error messages for steps that have failed. When you specify the limit and the next token, you receive a paginated response.</p>
-    fn describe_remediation_execution_status(
+    async fn describe_remediation_execution_status(
         &self,
         input: DescribeRemediationExecutionStatusRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeRemediationExecutionStatusResponse,
-        DescribeRemediationExecutionStatusError,
+        RusotoError<DescribeRemediationExecutionStatusError>,
     > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
@@ -6690,49 +6363,32 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeRemediationExecutionStatusError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeRemediationExecutionStatusError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeRemediationExecutionStatusResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeRemediationExecutionStatusError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeRemediationExecutionStatusError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeRemediationExecutionStatusResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeRemediationExecutionStatusError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p><p>Returns the details of one or more retention configurations. If the retention configuration name is not specified, this action returns the details for all the retention configurations for that account.</p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
-    fn describe_retention_configurations(
+    async fn describe_retention_configurations(
         &self,
         input: DescribeRetentionConfigurationsRequest,
-    ) -> RusotoFuture<DescribeRetentionConfigurationsResponse, DescribeRetentionConfigurationsError>
-    {
+    ) -> Result<
+        DescribeRetentionConfigurationsResponse,
+        RusotoError<DescribeRetentionConfigurationsError>,
+    > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6743,50 +6399,31 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| DescribeRetentionConfigurationsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeRetentionConfigurationsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<DescribeRetentionConfigurationsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<DescribeRetentionConfigurationsError>
-                            })
-                            .and_then(|response| {
-                                Err(DescribeRetentionConfigurationsError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeRetentionConfigurationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeRetentionConfigurationsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p><p>Returns the evaluation results for the specified AWS Config rule for a specific resource in a rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule. </p> <note> <p>The results can return an empty result page. But if you have a nextToken, the results are displayed on the next page.</p> </note></p>
-    fn get_aggregate_compliance_details_by_config_rule(
+    async fn get_aggregate_compliance_details_by_config_rule(
         &self,
         input: GetAggregateComplianceDetailsByConfigRuleRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetAggregateComplianceDetailsByConfigRuleResponse,
-        GetAggregateComplianceDetailsByConfigRuleError,
+        RusotoError<GetAggregateComplianceDetailsByConfigRuleError>,
     > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
@@ -6798,36 +6435,29 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            response.buffer()
-                .map_err(|e| GetAggregateComplianceDetailsByConfigRuleError::from(e))
-                .map(|try_response| {
-                    try_response
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetAggregateComplianceDetailsByConfigRuleError>)
-                    .and_then(|response| {
-                        proto::json::ResponsePayload::new(&response).deserialize::<GetAggregateComplianceDetailsByConfigRuleResponse, _>()
-                    })
-                }).boxed()
-                        } else {
-                            response.buffer().map(|try_response| {
-                                try_response
-                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetAggregateComplianceDetailsByConfigRuleError>)
-                                    .and_then(|response| {
-                                        Err(GetAggregateComplianceDetailsByConfigRuleError::from_response(response))
-                                    })
-                            }).boxed()
-                        }
-                    })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAggregateComplianceDetailsByConfigRuleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAggregateComplianceDetailsByConfigRuleError::from_response(response))
+        }
     }
 
     /// <p><p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
-    fn get_aggregate_config_rule_compliance_summary(
+    async fn get_aggregate_config_rule_compliance_summary(
         &self,
         input: GetAggregateConfigRuleComplianceSummaryRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetAggregateConfigRuleComplianceSummaryResponse,
-        GetAggregateConfigRuleComplianceSummaryError,
+        RusotoError<GetAggregateConfigRuleComplianceSummaryError>,
     > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
@@ -6839,36 +6469,31 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            response.buffer()
-                .map_err(|e| GetAggregateConfigRuleComplianceSummaryError::from(e))
-                .map(|try_response| {
-                    try_response
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetAggregateConfigRuleComplianceSummaryError>)
-                    .and_then(|response| {
-                        proto::json::ResponsePayload::new(&response).deserialize::<GetAggregateConfigRuleComplianceSummaryResponse, _>()
-                    })
-                }).boxed()
-                        } else {
-                            response.buffer().map(|try_response| {
-                                try_response
-                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetAggregateConfigRuleComplianceSummaryError>)
-                                    .and_then(|response| {
-                                        Err(GetAggregateConfigRuleComplianceSummaryError::from_response(response))
-                                    })
-                            }).boxed()
-                        }
-                    })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAggregateConfigRuleComplianceSummaryResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAggregateConfigRuleComplianceSummaryError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns the resource counts across accounts and regions that are present in your AWS Config aggregator. You can request the resource counts by providing filters and GroupByKey.</p> <p>For example, if the input contains accountID 12345678910 and region us-east-1 in filters, the API returns the count of resources in account ID 12345678910 and region us-east-1. If the input contains ACCOUNT_ID as a GroupByKey, the API returns resource counts for all source accounts that are present in your aggregator.</p>
-    fn get_aggregate_discovered_resource_counts(
+    async fn get_aggregate_discovered_resource_counts(
         &self,
         input: GetAggregateDiscoveredResourceCountsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetAggregateDiscoveredResourceCountsResponse,
-        GetAggregateDiscoveredResourceCountsError,
+        RusotoError<GetAggregateDiscoveredResourceCountsError>,
     > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
@@ -6880,34 +6505,30 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            response.buffer()
-                .map_err(|e| GetAggregateDiscoveredResourceCountsError::from(e))
-                .map(|try_response| {
-                    try_response
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetAggregateDiscoveredResourceCountsError>)
-                    .and_then(|response| {
-                        proto::json::ResponsePayload::new(&response).deserialize::<GetAggregateDiscoveredResourceCountsResponse, _>()
-                    })
-                }).boxed()
-                        } else {
-                            response.buffer().map(|try_response| {
-                                try_response
-                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetAggregateDiscoveredResourceCountsError>)
-                                    .and_then(|response| {
-                                        Err(GetAggregateDiscoveredResourceCountsError::from_response(response))
-                                    })
-                            }).boxed()
-                        }
-                    })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAggregateDiscoveredResourceCountsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAggregateDiscoveredResourceCountsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns configuration item that is aggregated for your specific resource in a specific source account and region.</p>
-    fn get_aggregate_resource_config(
+    async fn get_aggregate_resource_config(
         &self,
         input: GetAggregateResourceConfigRequest,
-    ) -> RusotoFuture<GetAggregateResourceConfigResponse, GetAggregateResourceConfigError> {
+    ) -> Result<GetAggregateResourceConfigResponse, RusotoError<GetAggregateResourceConfigError>>
+    {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6918,47 +6539,30 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetAggregateResourceConfigError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetAggregateResourceConfigError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetAggregateResourceConfigResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetAggregateResourceConfigError>
-                            })
-                            .and_then(|response| {
-                                Err(GetAggregateResourceConfigError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAggregateResourceConfigResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAggregateResourceConfigError::from_response(response))
+        }
     }
 
     /// <p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>
-    fn get_compliance_details_by_config_rule(
+    async fn get_compliance_details_by_config_rule(
         &self,
         input: GetComplianceDetailsByConfigRuleRequest,
-    ) -> RusotoFuture<GetComplianceDetailsByConfigRuleResponse, GetComplianceDetailsByConfigRuleError>
-    {
+    ) -> Result<
+        GetComplianceDetailsByConfigRuleResponse,
+        RusotoError<GetComplianceDetailsByConfigRuleError>,
+    > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6969,49 +6573,32 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetComplianceDetailsByConfigRuleError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetComplianceDetailsByConfigRuleError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetComplianceDetailsByConfigRuleResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetComplianceDetailsByConfigRuleError>
-                            })
-                            .and_then(|response| {
-                                Err(GetComplianceDetailsByConfigRuleError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetComplianceDetailsByConfigRuleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetComplianceDetailsByConfigRuleError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns the evaluation results for the specified AWS resource. The results indicate which AWS Config rules were used to evaluate the resource, when each rule was last used, and whether the resource complies with each rule.</p>
-    fn get_compliance_details_by_resource(
+    async fn get_compliance_details_by_resource(
         &self,
         input: GetComplianceDetailsByResourceRequest,
-    ) -> RusotoFuture<GetComplianceDetailsByResourceResponse, GetComplianceDetailsByResourceError>
-    {
+    ) -> Result<
+        GetComplianceDetailsByResourceResponse,
+        RusotoError<GetComplianceDetailsByResourceError>,
+    > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7022,46 +6609,29 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetComplianceDetailsByResourceError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetComplianceDetailsByResourceError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetComplianceDetailsByResourceResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetComplianceDetailsByResourceError>
-                            })
-                            .and_then(|response| {
-                                Err(GetComplianceDetailsByResourceError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetComplianceDetailsByResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetComplianceDetailsByResourceError::from_response(response))
+        }
     }
 
     /// <p>Returns the number of AWS Config rules that are compliant and noncompliant, up to a maximum of 25 for each.</p>
-    fn get_compliance_summary_by_config_rule(
+    async fn get_compliance_summary_by_config_rule(
         &self,
-    ) -> RusotoFuture<GetComplianceSummaryByConfigRuleResponse, GetComplianceSummaryByConfigRuleError>
-    {
+    ) -> Result<
+        GetComplianceSummaryByConfigRuleResponse,
+        RusotoError<GetComplianceSummaryByConfigRuleError>,
+    > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7071,50 +6641,31 @@ impl ConfigService for ConfigServiceClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetComplianceSummaryByConfigRuleError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetComplianceSummaryByConfigRuleError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetComplianceSummaryByConfigRuleResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetComplianceSummaryByConfigRuleError>
-                            })
-                            .and_then(|response| {
-                                Err(GetComplianceSummaryByConfigRuleError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetComplianceSummaryByConfigRuleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetComplianceSummaryByConfigRuleError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns the number of resources that are compliant and the number that are noncompliant. You can specify one or more resource types to get these numbers for each resource type. The maximum number returned is 100.</p>
-    fn get_compliance_summary_by_resource_type(
+    async fn get_compliance_summary_by_resource_type(
         &self,
         input: GetComplianceSummaryByResourceTypeRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetComplianceSummaryByResourceTypeResponse,
-        GetComplianceSummaryByResourceTypeError,
+        RusotoError<GetComplianceSummaryByResourceTypeError>,
     > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
@@ -7126,48 +6677,30 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetComplianceSummaryByResourceTypeError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetComplianceSummaryByResourceTypeError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetComplianceSummaryByResourceTypeResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetComplianceSummaryByResourceTypeError>
-                            })
-                            .and_then(|response| {
-                                Err(GetComplianceSummaryByResourceTypeError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetComplianceSummaryByResourceTypeResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetComplianceSummaryByResourceTypeError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p><p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets).</p> </li> <li> <p>The number of each resource type (25, 20, and 15).</p> </li> <li> <p>The total number of all resources (60).</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you might not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer.</p> </li> <li> <p>You just enabled resource recording.</p> </li> </ul> <p>It might take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note></p>
-    fn get_discovered_resource_counts(
+    async fn get_discovered_resource_counts(
         &self,
         input: GetDiscoveredResourceCountsRequest,
-    ) -> RusotoFuture<GetDiscoveredResourceCountsResponse, GetDiscoveredResourceCountsError> {
+    ) -> Result<GetDiscoveredResourceCountsResponse, RusotoError<GetDiscoveredResourceCountsError>>
+    {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7178,46 +6711,27 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetDiscoveredResourceCountsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetDiscoveredResourceCountsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetDiscoveredResourceCountsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetDiscoveredResourceCountsError>
-                            })
-                            .and_then(|response| {
-                                Err(GetDiscoveredResourceCountsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDiscoveredResourceCountsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDiscoveredResourceCountsError::from_response(response))
+        }
     }
 
     /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval. If you specified a retention period to retain your <code>ConfigurationItems</code> between a minimum of 30 days and a maximum of 7 years (2557 days), AWS Config returns the <code>ConfigurationItems</code> for the specified retention period. </p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
-    fn get_resource_config_history(
+    async fn get_resource_config_history(
         &self,
         input: GetResourceConfigHistoryRequest,
-    ) -> RusotoFuture<GetResourceConfigHistoryResponse, GetResourceConfigHistoryError> {
+    ) -> Result<GetResourceConfigHistoryResponse, RusotoError<GetResourceConfigHistoryError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7228,47 +6742,30 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| GetResourceConfigHistoryError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetResourceConfigHistoryError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<GetResourceConfigHistoryResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<GetResourceConfigHistoryError>
-                            })
-                            .and_then(|response| {
-                                Err(GetResourceConfigHistoryError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetResourceConfigHistoryResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetResourceConfigHistoryError::from_response(response))
+        }
     }
 
     /// <p>Accepts a resource type and returns a list of resource identifiers that are aggregated for a specific resource type across accounts and regions. A resource identifier includes the resource type, ID, (if available) the custom resource name, source account, and source region. You can narrow the results to include only resources that have specific resource IDs, or a resource name, or source account ID, or source region.</p> <p>For example, if the input consists of accountID 12345678910 and the region is us-east-1 for resource type <code>AWS::EC2::Instance</code> then the API returns all the EC2 instance identifiers of accountID 12345678910 and region us-east-1.</p>
-    fn list_aggregate_discovered_resources(
+    async fn list_aggregate_discovered_resources(
         &self,
         input: ListAggregateDiscoveredResourcesRequest,
-    ) -> RusotoFuture<ListAggregateDiscoveredResourcesResponse, ListAggregateDiscoveredResourcesError>
-    {
+    ) -> Result<
+        ListAggregateDiscoveredResourcesResponse,
+        RusotoError<ListAggregateDiscoveredResourcesError>,
+    > {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7279,48 +6776,29 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListAggregateDiscoveredResourcesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListAggregateDiscoveredResourcesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListAggregateDiscoveredResourcesResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListAggregateDiscoveredResourcesError>
-                            })
-                            .and_then(|response| {
-                                Err(ListAggregateDiscoveredResourcesError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAggregateDiscoveredResourcesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAggregateDiscoveredResourcesError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name, but not both, in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>
-    fn list_discovered_resources(
+    async fn list_discovered_resources(
         &self,
         input: ListDiscoveredResourcesRequest,
-    ) -> RusotoFuture<ListDiscoveredResourcesResponse, ListDiscoveredResourcesError> {
+    ) -> Result<ListDiscoveredResourcesResponse, RusotoError<ListDiscoveredResourcesError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7331,46 +6809,27 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListDiscoveredResourcesError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListDiscoveredResourcesError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListDiscoveredResourcesResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListDiscoveredResourcesError>
-                            })
-                            .and_then(|response| {
-                                Err(ListDiscoveredResourcesError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDiscoveredResourcesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDiscoveredResourcesError::from_response(response))
+        }
     }
 
     /// <p>List the tags for AWS Config resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7378,46 +6837,28 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| ListTagsForResourceError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListTagsForResourceError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<ListTagsForResourceResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<ListTagsForResourceError>
-                            })
-                            .and_then(|response| {
-                                Err(ListTagsForResourceError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p>Authorizes the aggregator account and region to collect data from the source account and region. </p>
-    fn put_aggregation_authorization(
+    async fn put_aggregation_authorization(
         &self,
         input: PutAggregationAuthorizationRequest,
-    ) -> RusotoFuture<PutAggregationAuthorizationResponse, PutAggregationAuthorizationError> {
+    ) -> Result<PutAggregationAuthorizationResponse, RusotoError<PutAggregationAuthorizationError>>
+    {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7428,43 +6869,27 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutAggregationAuthorizationError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<PutAggregationAuthorizationError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<PutAggregationAuthorizationResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<PutAggregationAuthorizationError>
-                            })
-                            .and_then(|response| {
-                                Err(PutAggregationAuthorizationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutAggregationAuthorizationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutAggregationAuthorizationError::from_response(response))
+        }
     }
 
     /// <p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom AWS Config rules and AWS managed Config rules. A custom AWS Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom AWS Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 150.</p> <p>For information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
-    fn put_config_rule(&self, input: PutConfigRuleRequest) -> RusotoFuture<(), PutConfigRuleError> {
+    async fn put_config_rule(
+        &self,
+        input: PutConfigRuleRequest,
+    ) -> Result<(), RusotoError<PutConfigRuleError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7472,29 +6897,26 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutConfigRuleError>
-                            })
-                            .and_then(|response| Err(PutConfigRuleError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutConfigRuleError::from_response(response))
+        }
     }
 
     /// <p><p>Creates and updates the configuration aggregator with the selected source accounts and regions. The source account can be individual account(s) or an organization.</p> <note> <p>AWS Config should be enabled in source accounts and regions you want to aggregate.</p> <p>If your source type is an organization, you must be signed in to the master account and all features must be enabled in your organization. AWS Config calls <code>EnableAwsServiceAccess</code> API to enable integration between AWS Config and AWS Organizations. </p> </note></p>
-    fn put_configuration_aggregator(
+    async fn put_configuration_aggregator(
         &self,
         input: PutConfigurationAggregatorRequest,
-    ) -> RusotoFuture<PutConfigurationAggregatorResponse, PutConfigurationAggregatorError> {
+    ) -> Result<PutConfigurationAggregatorResponse, RusotoError<PutConfigurationAggregatorError>>
+    {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7505,46 +6927,27 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutConfigurationAggregatorError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<PutConfigurationAggregatorError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<PutConfigurationAggregatorResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<PutConfigurationAggregatorError>
-                            })
-                            .and_then(|response| {
-                                Err(PutConfigurationAggregatorError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutConfigurationAggregatorResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutConfigurationAggregatorError::from_response(response))
+        }
     }
 
     /// <p><p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note></p>
-    fn put_configuration_recorder(
+    async fn put_configuration_recorder(
         &self,
         input: PutConfigurationRecorderRequest,
-    ) -> RusotoFuture<(), PutConfigurationRecorderError> {
+    ) -> Result<(), RusotoError<PutConfigurationRecorderError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7555,32 +6958,25 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<PutConfigurationRecorderError>
-                            })
-                            .and_then(|response| {
-                                Err(PutConfigurationRecorderError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutConfigurationRecorderError::from_response(response))
+        }
     }
 
     /// <p><p>Creates a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.</p> <p>Before you can create a delivery channel, you must create a configuration recorder.</p> <p>You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.</p> <note> <p>You can have only one delivery channel per region in your account.</p> </note></p>
-    fn put_delivery_channel(
+    async fn put_delivery_channel(
         &self,
         input: PutDeliveryChannelRequest,
-    ) -> RusotoFuture<(), PutDeliveryChannelError> {
+    ) -> Result<(), RusotoError<PutDeliveryChannelError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7588,31 +6984,25 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutDeliveryChannelError>
-                            })
-                            .and_then(|response| {
-                                Err(PutDeliveryChannelError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutDeliveryChannelError::from_response(response))
+        }
     }
 
     /// <p>Used by an AWS Lambda function to deliver evaluation results to AWS Config. This action is required in every AWS Lambda function that is invoked by an AWS Config rule.</p>
-    fn put_evaluations(
+    async fn put_evaluations(
         &self,
         input: PutEvaluationsRequest,
-    ) -> RusotoFuture<PutEvaluationsResponse, PutEvaluationsError> {
+    ) -> Result<PutEvaluationsResponse, RusotoError<PutEvaluationsError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7620,42 +7010,27 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutEvaluationsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutEvaluationsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<PutEvaluationsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<PutEvaluationsError>
-                            })
-                            .and_then(|response| Err(PutEvaluationsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<PutEvaluationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutEvaluationsError::from_response(response))
+        }
     }
 
     /// <p>Adds or updates the remediation configuration with a specific AWS Config rule with the selected target or action. The API creates the <code>RemediationConfiguration</code> object for the AWS Config rule. The AWS Config rule must already exist for you to add a remediation configuration. The target (SSM document) must exist and have permissions to use the target. </p>
-    fn put_remediation_configurations(
+    async fn put_remediation_configurations(
         &self,
         input: PutRemediationConfigurationsRequest,
-    ) -> RusotoFuture<PutRemediationConfigurationsResponse, PutRemediationConfigurationsError> {
+    ) -> Result<PutRemediationConfigurationsResponse, RusotoError<PutRemediationConfigurationsError>>
+    {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7666,46 +7041,28 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutRemediationConfigurationsError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<PutRemediationConfigurationsError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<PutRemediationConfigurationsResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<PutRemediationConfigurationsError>
-                            })
-                            .and_then(|response| {
-                                Err(PutRemediationConfigurationsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutRemediationConfigurationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutRemediationConfigurationsError::from_response(response))
+        }
     }
 
     /// <p><p>Creates and updates the retention configuration with details about retention period (number of days) that AWS Config stores your historical information. The API creates the <code>RetentionConfiguration</code> object and names the object as <b>default</b>. When you have a <code>RetentionConfiguration</code> object named <b>default</b>, calling the API modifies the default object. </p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
-    fn put_retention_configuration(
+    async fn put_retention_configuration(
         &self,
         input: PutRetentionConfigurationRequest,
-    ) -> RusotoFuture<PutRetentionConfigurationResponse, PutRetentionConfigurationError> {
+    ) -> Result<PutRetentionConfigurationResponse, RusotoError<PutRetentionConfigurationError>>
+    {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7716,46 +7073,27 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| PutRetentionConfigurationError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<PutRetentionConfigurationError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<PutRetentionConfigurationResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<PutRetentionConfigurationError>
-                            })
-                            .and_then(|response| {
-                                Err(PutRetentionConfigurationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutRetentionConfigurationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutRetentionConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Accepts a structured query language (SQL) <code>SELECT</code> command, performs the corresponding search, and returns resource configurations matching the properties.</p> <p>For more information about query components, see the <a href="https://docs.aws.amazon.com/config/latest/developerguide/query-components.html"> <b>Query Components</b> </a> section in the AWS Config Developer Guide.</p>
-    fn select_resource_config(
+    async fn select_resource_config(
         &self,
         input: SelectResourceConfigRequest,
-    ) -> RusotoFuture<SelectResourceConfigResponse, SelectResourceConfigError> {
+    ) -> Result<SelectResourceConfigResponse, RusotoError<SelectResourceConfigError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7763,46 +7101,28 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| SelectResourceConfigError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<SelectResourceConfigError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<SelectResourceConfigResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<SelectResourceConfigError>
-                            })
-                            .and_then(|response| {
-                                Err(SelectResourceConfigError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<SelectResourceConfigResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SelectResourceConfigError::from_response(response))
+        }
     }
 
     /// <p><p>Runs an on-demand evaluation for the specified AWS Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test that a rule you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources. It re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 AWS Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call for the specified rules must complete before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don&#39;t need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a rule, AWS Config evaluates your resources against the rule automatically. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol></p>
-    fn start_config_rules_evaluation(
+    async fn start_config_rules_evaluation(
         &self,
         input: StartConfigRulesEvaluationRequest,
-    ) -> RusotoFuture<StartConfigRulesEvaluationResponse, StartConfigRulesEvaluationError> {
+    ) -> Result<StartConfigRulesEvaluationResponse, RusotoError<StartConfigRulesEvaluationError>>
+    {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7813,46 +7133,27 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| StartConfigRulesEvaluationError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<StartConfigRulesEvaluationError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<StartConfigRulesEvaluationResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<StartConfigRulesEvaluationError>
-                            })
-                            .and_then(|response| {
-                                Err(StartConfigRulesEvaluationError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartConfigRulesEvaluationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartConfigRulesEvaluationError::from_response(response))
+        }
     }
 
     /// <p>Starts recording configurations of the AWS resources you have selected to record in your AWS account.</p> <p>You must have created at least one delivery channel to successfully start the configuration recorder.</p>
-    fn start_configuration_recorder(
+    async fn start_configuration_recorder(
         &self,
         input: StartConfigurationRecorderRequest,
-    ) -> RusotoFuture<(), StartConfigurationRecorderError> {
+    ) -> Result<(), RusotoError<StartConfigurationRecorderError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7863,32 +7164,26 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<StartConfigurationRecorderError>
-                            })
-                            .and_then(|response| {
-                                Err(StartConfigurationRecorderError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartConfigurationRecorderError::from_response(response))
+        }
     }
 
     /// <p>Runs an on-demand remediation for the specified AWS Config rules against the last known remediation configuration. It runs an execution against the current state of your resources. Remediation execution is asynchronous.</p> <p>You can specify up to 100 resource keys per request. An existing StartRemediationExecution call for the specified resource keys must complete before you can call the API again.</p>
-    fn start_remediation_execution(
+    async fn start_remediation_execution(
         &self,
         input: StartRemediationExecutionRequest,
-    ) -> RusotoFuture<StartRemediationExecutionResponse, StartRemediationExecutionError> {
+    ) -> Result<StartRemediationExecutionResponse, RusotoError<StartRemediationExecutionError>>
+    {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7899,46 +7194,27 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                response
-                    .buffer()
-                    .map_err(|e| StartRemediationExecutionError::from(e))
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<StartRemediationExecutionError>
-                            })
-                            .and_then(|response| {
-                                proto::json::ResponsePayload::new(&response)
-                                    .deserialize::<StartRemediationExecutionResponse, _>()
-                            })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<StartRemediationExecutionError>
-                            })
-                            .and_then(|response| {
-                                Err(StartRemediationExecutionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartRemediationExecutionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartRemediationExecutionError::from_response(response))
+        }
     }
 
     /// <p>Stops recording configurations of the AWS resources you have selected to record in your AWS account.</p>
-    fn stop_configuration_recorder(
+    async fn stop_configuration_recorder(
         &self,
         input: StopConfigurationRecorderRequest,
-    ) -> RusotoFuture<(), StopConfigurationRecorderError> {
+    ) -> Result<(), RusotoError<StopConfigurationRecorderError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7949,29 +7225,25 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e)
-                                    as RusotoError<StopConfigurationRecorderError>
-                            })
-                            .and_then(|response| {
-                                Err(StopConfigurationRecorderError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopConfigurationRecorderError::from_response(response))
+        }
     }
 
     /// <p>Associates the specified tags to a resource with the specified resourceArn. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7979,26 +7251,25 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
-                            })
-                            .and_then(|response| Err(TagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p>Deletes specified tags from a resource.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8006,21 +7277,17 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                futures::future::ready(Ok(std::mem::drop(response))).boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| {
-                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
-                            })
-                            .and_then(|response| Err(UntagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 }

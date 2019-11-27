@@ -115,17 +115,21 @@ impl<'b> Service<'b> {
         let mut dependencies = BTreeMap::new();
 
         dependencies.insert(
+            "async-trait".to_owned(),
+            cargo::Dependency::Simple("0.1".into()),
+        );
+        dependencies.insert(
             "bytes".to_owned(),
-            cargo::Dependency::Simple("0.4.12".into()),
+            cargo::Dependency::Simple("0.4".into()),
         );
         dependencies.insert(
             "futures-preview".to_owned(),
             cargo::Dependency::Extended{
                 path: None,
-                version: Some("0.3.0-alpha.18".to_owned()),
+                version: Some("0.3.0-alpha.19".to_owned()),
                 optional: None,
                 default_features: None,
-                features: Some(vec!["async-await".to_owned(), "nightly".to_owned()]),
+                features: None,
             },
         );
         dependencies.insert(

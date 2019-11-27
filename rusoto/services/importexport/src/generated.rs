@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
@@ -1545,27 +1546,43 @@ impl Error for UpdateJobError {
     }
 }
 /// Trait representing the capabilities of the AWS Import/Export API. AWS Import/Export clients implement this trait.
+#[async_trait]
 pub trait ImportExport {
     /// <p>This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete.</p>
-    fn cancel_job(&self, input: CancelJobInput) -> RusotoFuture<CancelJobOutput, CancelJobError>;
+    async fn cancel_job(
+        &self,
+        input: CancelJobInput,
+    ) -> Result<CancelJobOutput, RusotoError<CancelJobError>>;
 
     /// <p>This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device.</p>
-    fn create_job(&self, input: CreateJobInput) -> RusotoFuture<CreateJobOutput, CreateJobError>;
+    async fn create_job(
+        &self,
+        input: CreateJobInput,
+    ) -> Result<CreateJobOutput, RusotoError<CreateJobError>>;
 
     /// <p>This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing.</p>
-    fn get_shipping_label(
+    async fn get_shipping_label(
         &self,
         input: GetShippingLabelInput,
-    ) -> RusotoFuture<GetShippingLabelOutput, GetShippingLabelError>;
+    ) -> Result<GetShippingLabelOutput, RusotoError<GetShippingLabelError>>;
 
     /// <p>This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own.</p>
-    fn get_status(&self, input: GetStatusInput) -> RusotoFuture<GetStatusOutput, GetStatusError>;
+    async fn get_status(
+        &self,
+        input: GetStatusInput,
+    ) -> Result<GetStatusOutput, RusotoError<GetStatusError>>;
 
     /// <p>This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1.</p>
-    fn list_jobs(&self, input: ListJobsInput) -> RusotoFuture<ListJobsOutput, ListJobsError>;
+    async fn list_jobs(
+        &self,
+        input: ListJobsInput,
+    ) -> Result<ListJobsOutput, RusotoError<ListJobsError>>;
 
     /// <p>You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own.</p>
-    fn update_job(&self, input: UpdateJobInput) -> RusotoFuture<UpdateJobOutput, UpdateJobError>;
+    async fn update_job(
+        &self,
+        input: UpdateJobInput,
+    ) -> Result<UpdateJobOutput, RusotoError<UpdateJobError>>;
 }
 /// A client for the AWS Import/Export API.
 #[derive(Clone)]
@@ -1601,9 +1618,13 @@ impl ImportExportClient {
     }
 }
 
+#[async_trait]
 impl ImportExport for ImportExportClient {
     /// <p>This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete.</p>
-    fn cancel_job(&self, input: CancelJobInput) -> RusotoFuture<CancelJobOutput, CancelJobError> {
+    async fn cancel_job(
+        &self,
+        input: CancelJobInput,
+    ) -> Result<CancelJobOutput, RusotoError<CancelJobError>> {
         let mut request = SignedRequest::new(
             "POST",
             "importexport",
@@ -1618,49 +1639,43 @@ impl ImportExport for ImportExportClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CancelJobError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(CancelJobError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CancelJobError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CancelJobOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            CancelJobOutputDeserializer::deserialize("CancelJobResult", &mut stack);
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CancelJobOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CancelJobOutputDeserializer::deserialize("CancelJobResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device.</p>
-    fn create_job(&self, input: CreateJobInput) -> RusotoFuture<CreateJobOutput, CreateJobError> {
+    async fn create_job(
+        &self,
+        input: CreateJobInput,
+    ) -> Result<CreateJobOutput, RusotoError<CreateJobError>> {
         let mut request = SignedRequest::new(
             "POST",
             "importexport",
@@ -1675,52 +1690,43 @@ impl ImportExport for ImportExportClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CreateJobError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(CreateJobError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateJobError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(CreateJobOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            CreateJobOutputDeserializer::deserialize("CreateJobResult", &mut stack);
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = CreateJobOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateJobOutputDeserializer::deserialize("CreateJobResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing.</p>
-    fn get_shipping_label(
+    async fn get_shipping_label(
         &self,
         input: GetShippingLabelInput,
-    ) -> RusotoFuture<GetShippingLabelOutput, GetShippingLabelError> {
+    ) -> Result<GetShippingLabelOutput, RusotoError<GetShippingLabelError>> {
         let mut request = SignedRequest::new(
             "POST",
             "importexport",
@@ -1735,51 +1741,46 @@ impl ImportExport for ImportExportClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetShippingLabelError>)
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            Err(GetShippingLabelError::from_response(response))
-                        })
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetShippingLabelError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetShippingLabelOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result = GetShippingLabelOutputDeserializer::deserialize(
-                            "GetShippingLabelResult",
-                            &mut stack,
-                        );
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetShippingLabelOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetShippingLabelOutputDeserializer::deserialize(
+                "GetShippingLabelResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own.</p>
-    fn get_status(&self, input: GetStatusInput) -> RusotoFuture<GetStatusOutput, GetStatusError> {
+    async fn get_status(
+        &self,
+        input: GetStatusInput,
+    ) -> Result<GetStatusOutput, RusotoError<GetStatusError>> {
         let mut request = SignedRequest::new(
             "POST",
             "importexport",
@@ -1794,49 +1795,43 @@ impl ImportExport for ImportExportClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetStatusError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(GetStatusError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(GetStatusError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(GetStatusOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            GetStatusOutputDeserializer::deserialize("GetStatusResult", &mut stack);
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = GetStatusOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = GetStatusOutputDeserializer::deserialize("GetStatusResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1.</p>
-    fn list_jobs(&self, input: ListJobsInput) -> RusotoFuture<ListJobsOutput, ListJobsError> {
+    async fn list_jobs(
+        &self,
+        input: ListJobsInput,
+    ) -> Result<ListJobsOutput, RusotoError<ListJobsError>> {
         let mut request =
             SignedRequest::new("POST", "importexport", &self.region, "/?Operation=ListJobs");
         let mut params = Params::new();
@@ -1847,49 +1842,43 @@ impl ImportExport for ImportExportClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListJobsError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(ListJobsError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListJobsError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(ListJobsOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            ListJobsOutputDeserializer::deserialize("ListJobsResult", &mut stack);
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = ListJobsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListJobsOutputDeserializer::deserialize("ListJobsResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own.</p>
-    fn update_job(&self, input: UpdateJobInput) -> RusotoFuture<UpdateJobOutput, UpdateJobError> {
+    async fn update_job(
+        &self,
+        input: UpdateJobInput,
+    ) -> Result<UpdateJobOutput, RusotoError<UpdateJobError>> {
         let mut request = SignedRequest::new(
             "POST",
             "importexport",
@@ -1904,45 +1893,36 @@ impl ImportExport for ImportExportClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return response
-                    .buffer()
-                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<UpdateJobError>)
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into())
-                            .and_then(|response| Err(UpdateJobError::from_response(response)))
-                    })
-                    .boxed();
-            }
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateJobError::from_response(response));
+        }
 
-            response
-                .buffer()
-                .and_then(move |xml_response| {
-                    let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                    if xml_response.body.is_empty() {
-                        result = Ok(UpdateJobOutput::default());
-                    } else {
-                        let reader = EventReader::new_with_config(
-                            xml_response.body.as_ref(),
-                            ParserConfig::new().trim_whitespace(true),
-                        );
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let actual_tag_name = peek_at_name(&mut stack)?;
-                        start_element(&actual_tag_name, &mut stack)?;
-                        result =
-                            UpdateJobOutputDeserializer::deserialize("UpdateJobResult", &mut stack);
-                        skip_tree(&mut stack);
-                        end_element(&actual_tag_name, &mut stack)?;
-                    }
-                    // parse non-payload
-                    futures::future::ready(Ok(result))
-                })
-                .boxed()
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateJobOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = UpdateJobOutputDeserializer::deserialize("UpdateJobResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 }
 
@@ -1955,8 +1935,8 @@ mod protocol_tests {
     use super::*;
     use rusoto_core::Region as rusoto_region;
 
-    #[test]
-    fn test_parse_error_importexport_get_status() {
+    #[tokio::test]
+    async fn test_parse_error_importexport_get_status() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/error",
             "importexport-get-status.xml",
@@ -1965,12 +1945,12 @@ mod protocol_tests {
         let client =
             ImportExportClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetStatusInput::default();
-        let result = client.get_status(request).sync();
+        let result = client.get_status(request).await;
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_importexport_list_jobs() {
+    #[tokio::test]
+    async fn test_parse_valid_importexport_list_jobs() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "importexport-list-jobs.xml",
@@ -1979,7 +1959,7 @@ mod protocol_tests {
         let client =
             ImportExportClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListJobsInput::default();
-        let result = client.list_jobs(request).sync();
+        let result = client.list_jobs(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

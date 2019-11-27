@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
@@ -90,12 +91,13 @@ impl Error for PostToConnectionError {
     }
 }
 /// Trait representing the capabilities of the AmazonApiGatewayManagementApi API. AmazonApiGatewayManagementApi clients implement this trait.
+#[async_trait]
 pub trait ApiGatewayManagementApi {
     /// <p>Sends the provided data to the specified connection.</p>
-    fn post_to_connection(
+    async fn post_to_connection(
         &self,
         input: PostToConnectionRequest,
-    ) -> RusotoFuture<(), PostToConnectionError>;
+    ) -> Result<(), RusotoError<PostToConnectionError>>;
 }
 /// A client for the AmazonApiGatewayManagementApi API.
 #[derive(Clone)]
@@ -131,12 +133,13 @@ impl ApiGatewayManagementApiClient {
     }
 }
 
+#[async_trait]
 impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
     /// <p>Sends the provided data to the specified connection.</p>
-    fn post_to_connection(
+    async fn post_to_connection(
         &self,
         input: PostToConnectionRequest,
-    ) -> RusotoFuture<(), PostToConnectionError> {
+    ) -> Result<(), RusotoError<PostToConnectionError>> {
         let request_uri = format!(
             "/@connections/{connection_id}",
             connection_id = input.connection_id
@@ -148,31 +151,19 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
         let encoded = Some(input.data.to_owned());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| PostToConnectionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PostToConnectionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<PostToConnectionError>())
-                            .and_then(|response| {
-                                Err(PostToConnectionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PostToConnectionError::from_response(response))
+        }
     }
 }

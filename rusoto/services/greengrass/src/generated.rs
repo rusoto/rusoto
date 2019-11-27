@@ -13,11 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
 
 use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
@@ -6509,550 +6510,602 @@ impl Error for UpdateSubscriptionDefinitionError {
     }
 }
 /// Trait representing the capabilities of the AWS Greengrass API. AWS Greengrass clients implement this trait.
+#[async_trait]
 pub trait GreenGrass {
     /// <p>Associates a role with a group. Your Greengrass core will use the role to access AWS cloud services. The role&#39;s permissions should allow Greengrass core Lambda functions to perform actions against the cloud.</p>
-    fn associate_role_to_group(
+    async fn associate_role_to_group(
         &self,
         input: AssociateRoleToGroupRequest,
-    ) -> RusotoFuture<AssociateRoleToGroupResponse, AssociateRoleToGroupError>;
+    ) -> Result<AssociateRoleToGroupResponse, RusotoError<AssociateRoleToGroupError>>;
 
     /// <p>Associates a role with your account. AWS IoT Greengrass will use the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. The role must have at least minimum permissions in the policy &#39;&#39;AWSGreengrassResourceAccessRolePolicy&#39;&#39;.</p>
-    fn associate_service_role_to_account(
+    async fn associate_service_role_to_account(
         &self,
         input: AssociateServiceRoleToAccountRequest,
-    ) -> RusotoFuture<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError>;
+    ) -> Result<
+        AssociateServiceRoleToAccountResponse,
+        RusotoError<AssociateServiceRoleToAccountError>,
+    >;
 
     /// <p>Creates a connector definition. You may provide the initial version of the connector definition now or use &#39;&#39;CreateConnectorDefinitionVersion&#39;&#39; at a later time.</p>
-    fn create_connector_definition(
+    async fn create_connector_definition(
         &self,
         input: CreateConnectorDefinitionRequest,
-    ) -> RusotoFuture<CreateConnectorDefinitionResponse, CreateConnectorDefinitionError>;
+    ) -> Result<CreateConnectorDefinitionResponse, RusotoError<CreateConnectorDefinitionError>>;
 
     /// <p>Creates a version of a connector definition which has already been defined.</p>
-    fn create_connector_definition_version(
+    async fn create_connector_definition_version(
         &self,
         input: CreateConnectorDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateConnectorDefinitionVersionResponse, CreateConnectorDefinitionVersionError>;
+    ) -> Result<
+        CreateConnectorDefinitionVersionResponse,
+        RusotoError<CreateConnectorDefinitionVersionError>,
+    >;
 
     /// <p>Creates a core definition. You may provide the initial version of the core definition now or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. Greengrass groups must each contain exactly one Greengrass core.</p>
-    fn create_core_definition(
+    async fn create_core_definition(
         &self,
         input: CreateCoreDefinitionRequest,
-    ) -> RusotoFuture<CreateCoreDefinitionResponse, CreateCoreDefinitionError>;
+    ) -> Result<CreateCoreDefinitionResponse, RusotoError<CreateCoreDefinitionError>>;
 
     /// <p>Creates a version of a core definition that has already been defined. Greengrass groups must each contain exactly one Greengrass core.</p>
-    fn create_core_definition_version(
+    async fn create_core_definition_version(
         &self,
         input: CreateCoreDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError>;
+    ) -> Result<CreateCoreDefinitionVersionResponse, RusotoError<CreateCoreDefinitionVersionError>>;
 
     /// <p>Creates a deployment. &#39;&#39;CreateDeployment&#39;&#39; requests are idempotent with respect to the &#39;&#39;X-Amzn-Client-Token&#39;&#39; token and the request parameters.</p>
-    fn create_deployment(
+    async fn create_deployment(
         &self,
         input: CreateDeploymentRequest,
-    ) -> RusotoFuture<CreateDeploymentResponse, CreateDeploymentError>;
+    ) -> Result<CreateDeploymentResponse, RusotoError<CreateDeploymentError>>;
 
     /// <p>Creates a device definition. You may provide the initial version of the device definition now or use &#39;&#39;CreateDeviceDefinitionVersion&#39;&#39; at a later time.</p>
-    fn create_device_definition(
+    async fn create_device_definition(
         &self,
         input: CreateDeviceDefinitionRequest,
-    ) -> RusotoFuture<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError>;
+    ) -> Result<CreateDeviceDefinitionResponse, RusotoError<CreateDeviceDefinitionError>>;
 
     /// <p>Creates a version of a device definition that has already been defined.</p>
-    fn create_device_definition_version(
+    async fn create_device_definition_version(
         &self,
         input: CreateDeviceDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError>;
+    ) -> Result<
+        CreateDeviceDefinitionVersionResponse,
+        RusotoError<CreateDeviceDefinitionVersionError>,
+    >;
 
     /// <p>Creates a Lambda function definition which contains a list of Lambda functions and their configurations to be used in a group. You can create an initial version of the definition by providing a list of Lambda functions and their configurations now, or use &#39;&#39;CreateFunctionDefinitionVersion&#39;&#39; later.</p>
-    fn create_function_definition(
+    async fn create_function_definition(
         &self,
         input: CreateFunctionDefinitionRequest,
-    ) -> RusotoFuture<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError>;
+    ) -> Result<CreateFunctionDefinitionResponse, RusotoError<CreateFunctionDefinitionError>>;
 
     /// <p>Creates a version of a Lambda function definition that has already been defined.</p>
-    fn create_function_definition_version(
+    async fn create_function_definition_version(
         &self,
         input: CreateFunctionDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError>;
+    ) -> Result<
+        CreateFunctionDefinitionVersionResponse,
+        RusotoError<CreateFunctionDefinitionVersionError>,
+    >;
 
     /// <p>Creates a group. You may provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time. Tip: You can use the &#39;&#39;gg<em>group</em>setup&#39;&#39; package (https://github.com/awslabs/aws-greengrass-group-setup) as a library or command-line application to create and deploy Greengrass groups.</p>
-    fn create_group(
+    async fn create_group(
         &self,
         input: CreateGroupRequest,
-    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError>;
+    ) -> Result<CreateGroupResponse, RusotoError<CreateGroupError>>;
 
     /// <p>Creates a CA for the group. If a CA already exists, it will rotate the existing CA.</p>
-    fn create_group_certificate_authority(
+    async fn create_group_certificate_authority(
         &self,
         input: CreateGroupCertificateAuthorityRequest,
-    ) -> RusotoFuture<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError>;
+    ) -> Result<
+        CreateGroupCertificateAuthorityResponse,
+        RusotoError<CreateGroupCertificateAuthorityError>,
+    >;
 
     /// <p>Creates a version of a group which has already been defined.</p>
-    fn create_group_version(
+    async fn create_group_version(
         &self,
         input: CreateGroupVersionRequest,
-    ) -> RusotoFuture<CreateGroupVersionResponse, CreateGroupVersionError>;
+    ) -> Result<CreateGroupVersionResponse, RusotoError<CreateGroupVersionError>>;
 
     /// <p>Creates a logger definition. You may provide the initial version of the logger definition now or use &#39;&#39;CreateLoggerDefinitionVersion&#39;&#39; at a later time.</p>
-    fn create_logger_definition(
+    async fn create_logger_definition(
         &self,
         input: CreateLoggerDefinitionRequest,
-    ) -> RusotoFuture<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError>;
+    ) -> Result<CreateLoggerDefinitionResponse, RusotoError<CreateLoggerDefinitionError>>;
 
     /// <p>Creates a version of a logger definition that has already been defined.</p>
-    fn create_logger_definition_version(
+    async fn create_logger_definition_version(
         &self,
         input: CreateLoggerDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError>;
+    ) -> Result<
+        CreateLoggerDefinitionVersionResponse,
+        RusotoError<CreateLoggerDefinitionVersionError>,
+    >;
 
     /// <p>Creates a resource definition which contains a list of resources to be used in a group. You can create an initial version of the definition by providing a list of resources now, or use &#39;&#39;CreateResourceDefinitionVersion&#39;&#39; later.</p>
-    fn create_resource_definition(
+    async fn create_resource_definition(
         &self,
         input: CreateResourceDefinitionRequest,
-    ) -> RusotoFuture<CreateResourceDefinitionResponse, CreateResourceDefinitionError>;
+    ) -> Result<CreateResourceDefinitionResponse, RusotoError<CreateResourceDefinitionError>>;
 
     /// <p>Creates a version of a resource definition that has already been defined.</p>
-    fn create_resource_definition_version(
+    async fn create_resource_definition_version(
         &self,
         input: CreateResourceDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateResourceDefinitionVersionResponse, CreateResourceDefinitionVersionError>;
+    ) -> Result<
+        CreateResourceDefinitionVersionResponse,
+        RusotoError<CreateResourceDefinitionVersionError>,
+    >;
 
     /// <p>Creates a software update for a core or group of cores (specified as an IoT thing group.) Use this to update the OTA Agent as well as the Greengrass core software. It makes use of the IoT Jobs feature which provides additional commands to manage a Greengrass core software update job.</p>
-    fn create_software_update_job(
+    async fn create_software_update_job(
         &self,
         input: CreateSoftwareUpdateJobRequest,
-    ) -> RusotoFuture<CreateSoftwareUpdateJobResponse, CreateSoftwareUpdateJobError>;
+    ) -> Result<CreateSoftwareUpdateJobResponse, RusotoError<CreateSoftwareUpdateJobError>>;
 
     /// <p>Creates a subscription definition. You may provide the initial version of the subscription definition now or use &#39;&#39;CreateSubscriptionDefinitionVersion&#39;&#39; at a later time.</p>
-    fn create_subscription_definition(
+    async fn create_subscription_definition(
         &self,
         input: CreateSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError>;
+    ) -> Result<CreateSubscriptionDefinitionResponse, RusotoError<CreateSubscriptionDefinitionError>>;
 
     /// <p>Creates a version of a subscription definition which has already been defined.</p>
-    fn create_subscription_definition_version(
+    async fn create_subscription_definition_version(
         &self,
         input: CreateSubscriptionDefinitionVersionRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateSubscriptionDefinitionVersionResponse,
-        CreateSubscriptionDefinitionVersionError,
+        RusotoError<CreateSubscriptionDefinitionVersionError>,
     >;
 
     /// <p>Deletes a connector definition.</p>
-    fn delete_connector_definition(
+    async fn delete_connector_definition(
         &self,
         input: DeleteConnectorDefinitionRequest,
-    ) -> RusotoFuture<DeleteConnectorDefinitionResponse, DeleteConnectorDefinitionError>;
+    ) -> Result<DeleteConnectorDefinitionResponse, RusotoError<DeleteConnectorDefinitionError>>;
 
     /// <p>Deletes a core definition.</p>
-    fn delete_core_definition(
+    async fn delete_core_definition(
         &self,
         input: DeleteCoreDefinitionRequest,
-    ) -> RusotoFuture<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError>;
+    ) -> Result<DeleteCoreDefinitionResponse, RusotoError<DeleteCoreDefinitionError>>;
 
     /// <p>Deletes a device definition.</p>
-    fn delete_device_definition(
+    async fn delete_device_definition(
         &self,
         input: DeleteDeviceDefinitionRequest,
-    ) -> RusotoFuture<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError>;
+    ) -> Result<DeleteDeviceDefinitionResponse, RusotoError<DeleteDeviceDefinitionError>>;
 
     /// <p>Deletes a Lambda function definition.</p>
-    fn delete_function_definition(
+    async fn delete_function_definition(
         &self,
         input: DeleteFunctionDefinitionRequest,
-    ) -> RusotoFuture<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError>;
+    ) -> Result<DeleteFunctionDefinitionResponse, RusotoError<DeleteFunctionDefinitionError>>;
 
     /// <p>Deletes a group.</p>
-    fn delete_group(
+    async fn delete_group(
         &self,
         input: DeleteGroupRequest,
-    ) -> RusotoFuture<DeleteGroupResponse, DeleteGroupError>;
+    ) -> Result<DeleteGroupResponse, RusotoError<DeleteGroupError>>;
 
     /// <p>Deletes a logger definition.</p>
-    fn delete_logger_definition(
+    async fn delete_logger_definition(
         &self,
         input: DeleteLoggerDefinitionRequest,
-    ) -> RusotoFuture<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError>;
+    ) -> Result<DeleteLoggerDefinitionResponse, RusotoError<DeleteLoggerDefinitionError>>;
 
     /// <p>Deletes a resource definition.</p>
-    fn delete_resource_definition(
+    async fn delete_resource_definition(
         &self,
         input: DeleteResourceDefinitionRequest,
-    ) -> RusotoFuture<DeleteResourceDefinitionResponse, DeleteResourceDefinitionError>;
+    ) -> Result<DeleteResourceDefinitionResponse, RusotoError<DeleteResourceDefinitionError>>;
 
     /// <p>Deletes a subscription definition.</p>
-    fn delete_subscription_definition(
+    async fn delete_subscription_definition(
         &self,
         input: DeleteSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError>;
+    ) -> Result<DeleteSubscriptionDefinitionResponse, RusotoError<DeleteSubscriptionDefinitionError>>;
 
     /// <p>Disassociates the role from a group.</p>
-    fn disassociate_role_from_group(
+    async fn disassociate_role_from_group(
         &self,
         input: DisassociateRoleFromGroupRequest,
-    ) -> RusotoFuture<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError>;
+    ) -> Result<DisassociateRoleFromGroupResponse, RusotoError<DisassociateRoleFromGroupError>>;
 
     /// <p>Disassociates the service role from your account. Without a service role, deployments will not work.</p>
-    fn disassociate_service_role_from_account(
+    async fn disassociate_service_role_from_account(
         &self,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociateServiceRoleFromAccountResponse,
-        DisassociateServiceRoleFromAccountError,
+        RusotoError<DisassociateServiceRoleFromAccountError>,
     >;
 
     /// <p>Retrieves the role associated with a particular group.</p>
-    fn get_associated_role(
+    async fn get_associated_role(
         &self,
         input: GetAssociatedRoleRequest,
-    ) -> RusotoFuture<GetAssociatedRoleResponse, GetAssociatedRoleError>;
+    ) -> Result<GetAssociatedRoleResponse, RusotoError<GetAssociatedRoleError>>;
 
     /// <p>Returns the status of a bulk deployment.</p>
-    fn get_bulk_deployment_status(
+    async fn get_bulk_deployment_status(
         &self,
         input: GetBulkDeploymentStatusRequest,
-    ) -> RusotoFuture<GetBulkDeploymentStatusResponse, GetBulkDeploymentStatusError>;
+    ) -> Result<GetBulkDeploymentStatusResponse, RusotoError<GetBulkDeploymentStatusError>>;
 
     /// <p>Retrieves the connectivity information for a core.</p>
-    fn get_connectivity_info(
+    async fn get_connectivity_info(
         &self,
         input: GetConnectivityInfoRequest,
-    ) -> RusotoFuture<GetConnectivityInfoResponse, GetConnectivityInfoError>;
+    ) -> Result<GetConnectivityInfoResponse, RusotoError<GetConnectivityInfoError>>;
 
     /// <p>Retrieves information about a connector definition.</p>
-    fn get_connector_definition(
+    async fn get_connector_definition(
         &self,
         input: GetConnectorDefinitionRequest,
-    ) -> RusotoFuture<GetConnectorDefinitionResponse, GetConnectorDefinitionError>;
+    ) -> Result<GetConnectorDefinitionResponse, RusotoError<GetConnectorDefinitionError>>;
 
     /// <p>Retrieves information about a connector definition version, including the connectors that the version contains. Connectors are prebuilt modules that interact with local infrastructure, device protocols, AWS, and other cloud services.</p>
-    fn get_connector_definition_version(
+    async fn get_connector_definition_version(
         &self,
         input: GetConnectorDefinitionVersionRequest,
-    ) -> RusotoFuture<GetConnectorDefinitionVersionResponse, GetConnectorDefinitionVersionError>;
+    ) -> Result<
+        GetConnectorDefinitionVersionResponse,
+        RusotoError<GetConnectorDefinitionVersionError>,
+    >;
 
     /// <p>Retrieves information about a core definition version.</p>
-    fn get_core_definition(
+    async fn get_core_definition(
         &self,
         input: GetCoreDefinitionRequest,
-    ) -> RusotoFuture<GetCoreDefinitionResponse, GetCoreDefinitionError>;
+    ) -> Result<GetCoreDefinitionResponse, RusotoError<GetCoreDefinitionError>>;
 
     /// <p>Retrieves information about a core definition version.</p>
-    fn get_core_definition_version(
+    async fn get_core_definition_version(
         &self,
         input: GetCoreDefinitionVersionRequest,
-    ) -> RusotoFuture<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError>;
+    ) -> Result<GetCoreDefinitionVersionResponse, RusotoError<GetCoreDefinitionVersionError>>;
 
     /// <p>Returns the status of a deployment.</p>
-    fn get_deployment_status(
+    async fn get_deployment_status(
         &self,
         input: GetDeploymentStatusRequest,
-    ) -> RusotoFuture<GetDeploymentStatusResponse, GetDeploymentStatusError>;
+    ) -> Result<GetDeploymentStatusResponse, RusotoError<GetDeploymentStatusError>>;
 
     /// <p>Retrieves information about a device definition.</p>
-    fn get_device_definition(
+    async fn get_device_definition(
         &self,
         input: GetDeviceDefinitionRequest,
-    ) -> RusotoFuture<GetDeviceDefinitionResponse, GetDeviceDefinitionError>;
+    ) -> Result<GetDeviceDefinitionResponse, RusotoError<GetDeviceDefinitionError>>;
 
     /// <p>Retrieves information about a device definition version.</p>
-    fn get_device_definition_version(
+    async fn get_device_definition_version(
         &self,
         input: GetDeviceDefinitionVersionRequest,
-    ) -> RusotoFuture<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError>;
+    ) -> Result<GetDeviceDefinitionVersionResponse, RusotoError<GetDeviceDefinitionVersionError>>;
 
     /// <p>Retrieves information about a Lambda function definition, including its creation time and latest version.</p>
-    fn get_function_definition(
+    async fn get_function_definition(
         &self,
         input: GetFunctionDefinitionRequest,
-    ) -> RusotoFuture<GetFunctionDefinitionResponse, GetFunctionDefinitionError>;
+    ) -> Result<GetFunctionDefinitionResponse, RusotoError<GetFunctionDefinitionError>>;
 
     /// <p>Retrieves information about a Lambda function definition version, including which Lambda functions are included in the version and their configurations.</p>
-    fn get_function_definition_version(
+    async fn get_function_definition_version(
         &self,
         input: GetFunctionDefinitionVersionRequest,
-    ) -> RusotoFuture<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError>;
+    ) -> Result<GetFunctionDefinitionVersionResponse, RusotoError<GetFunctionDefinitionVersionError>>;
 
     /// <p>Retrieves information about a group.</p>
-    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError>;
+    async fn get_group(
+        &self,
+        input: GetGroupRequest,
+    ) -> Result<GetGroupResponse, RusotoError<GetGroupError>>;
 
     /// <p>Retreives the CA associated with a group. Returns the public key of the CA.</p>
-    fn get_group_certificate_authority(
+    async fn get_group_certificate_authority(
         &self,
         input: GetGroupCertificateAuthorityRequest,
-    ) -> RusotoFuture<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError>;
+    ) -> Result<GetGroupCertificateAuthorityResponse, RusotoError<GetGroupCertificateAuthorityError>>;
 
     /// <p>Retrieves the current configuration for the CA used by the group.</p>
-    fn get_group_certificate_configuration(
+    async fn get_group_certificate_configuration(
         &self,
         input: GetGroupCertificateConfigurationRequest,
-    ) -> RusotoFuture<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError>;
+    ) -> Result<
+        GetGroupCertificateConfigurationResponse,
+        RusotoError<GetGroupCertificateConfigurationError>,
+    >;
 
     /// <p>Retrieves information about a group version.</p>
-    fn get_group_version(
+    async fn get_group_version(
         &self,
         input: GetGroupVersionRequest,
-    ) -> RusotoFuture<GetGroupVersionResponse, GetGroupVersionError>;
+    ) -> Result<GetGroupVersionResponse, RusotoError<GetGroupVersionError>>;
 
     /// <p>Retrieves information about a logger definition.</p>
-    fn get_logger_definition(
+    async fn get_logger_definition(
         &self,
         input: GetLoggerDefinitionRequest,
-    ) -> RusotoFuture<GetLoggerDefinitionResponse, GetLoggerDefinitionError>;
+    ) -> Result<GetLoggerDefinitionResponse, RusotoError<GetLoggerDefinitionError>>;
 
     /// <p>Retrieves information about a logger definition version.</p>
-    fn get_logger_definition_version(
+    async fn get_logger_definition_version(
         &self,
         input: GetLoggerDefinitionVersionRequest,
-    ) -> RusotoFuture<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError>;
+    ) -> Result<GetLoggerDefinitionVersionResponse, RusotoError<GetLoggerDefinitionVersionError>>;
 
     /// <p>Retrieves information about a resource definition, including its creation time and latest version.</p>
-    fn get_resource_definition(
+    async fn get_resource_definition(
         &self,
         input: GetResourceDefinitionRequest,
-    ) -> RusotoFuture<GetResourceDefinitionResponse, GetResourceDefinitionError>;
+    ) -> Result<GetResourceDefinitionResponse, RusotoError<GetResourceDefinitionError>>;
 
     /// <p>Retrieves information about a resource definition version, including which resources are included in the version.</p>
-    fn get_resource_definition_version(
+    async fn get_resource_definition_version(
         &self,
         input: GetResourceDefinitionVersionRequest,
-    ) -> RusotoFuture<GetResourceDefinitionVersionResponse, GetResourceDefinitionVersionError>;
+    ) -> Result<GetResourceDefinitionVersionResponse, RusotoError<GetResourceDefinitionVersionError>>;
 
     /// <p>Retrieves the service role that is attached to your account.</p>
-    fn get_service_role_for_account(
+    async fn get_service_role_for_account(
         &self,
-    ) -> RusotoFuture<GetServiceRoleForAccountResponse, GetServiceRoleForAccountError>;
+    ) -> Result<GetServiceRoleForAccountResponse, RusotoError<GetServiceRoleForAccountError>>;
 
     /// <p>Retrieves information about a subscription definition.</p>
-    fn get_subscription_definition(
+    async fn get_subscription_definition(
         &self,
         input: GetSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError>;
+    ) -> Result<GetSubscriptionDefinitionResponse, RusotoError<GetSubscriptionDefinitionError>>;
 
     /// <p>Retrieves information about a subscription definition version.</p>
-    fn get_subscription_definition_version(
+    async fn get_subscription_definition_version(
         &self,
         input: GetSubscriptionDefinitionVersionRequest,
-    ) -> RusotoFuture<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>;
+    ) -> Result<
+        GetSubscriptionDefinitionVersionResponse,
+        RusotoError<GetSubscriptionDefinitionVersionError>,
+    >;
 
     /// <p>Gets a paginated list of the deployments that have been started in a bulk deployment operation, and their current deployment status.</p>
-    fn list_bulk_deployment_detailed_reports(
+    async fn list_bulk_deployment_detailed_reports(
         &self,
         input: ListBulkDeploymentDetailedReportsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListBulkDeploymentDetailedReportsResponse,
-        ListBulkDeploymentDetailedReportsError,
+        RusotoError<ListBulkDeploymentDetailedReportsError>,
     >;
 
     /// <p>Returns a list of bulk deployments.</p>
-    fn list_bulk_deployments(
+    async fn list_bulk_deployments(
         &self,
         input: ListBulkDeploymentsRequest,
-    ) -> RusotoFuture<ListBulkDeploymentsResponse, ListBulkDeploymentsError>;
+    ) -> Result<ListBulkDeploymentsResponse, RusotoError<ListBulkDeploymentsError>>;
 
     /// <p>Lists the versions of a connector definition, which are containers for connectors. Connectors run on the Greengrass core and contain built-in integration with local infrastructure, device protocols, AWS, and other cloud services.</p>
-    fn list_connector_definition_versions(
+    async fn list_connector_definition_versions(
         &self,
         input: ListConnectorDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListConnectorDefinitionVersionsResponse, ListConnectorDefinitionVersionsError>;
+    ) -> Result<
+        ListConnectorDefinitionVersionsResponse,
+        RusotoError<ListConnectorDefinitionVersionsError>,
+    >;
 
     /// <p>Retrieves a list of connector definitions.</p>
-    fn list_connector_definitions(
+    async fn list_connector_definitions(
         &self,
         input: ListConnectorDefinitionsRequest,
-    ) -> RusotoFuture<ListConnectorDefinitionsResponse, ListConnectorDefinitionsError>;
+    ) -> Result<ListConnectorDefinitionsResponse, RusotoError<ListConnectorDefinitionsError>>;
 
     /// <p>Lists the versions of a core definition.</p>
-    fn list_core_definition_versions(
+    async fn list_core_definition_versions(
         &self,
         input: ListCoreDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError>;
+    ) -> Result<ListCoreDefinitionVersionsResponse, RusotoError<ListCoreDefinitionVersionsError>>;
 
     /// <p>Retrieves a list of core definitions.</p>
-    fn list_core_definitions(
+    async fn list_core_definitions(
         &self,
         input: ListCoreDefinitionsRequest,
-    ) -> RusotoFuture<ListCoreDefinitionsResponse, ListCoreDefinitionsError>;
+    ) -> Result<ListCoreDefinitionsResponse, RusotoError<ListCoreDefinitionsError>>;
 
     /// <p>Returns a history of deployments for the group.</p>
-    fn list_deployments(
+    async fn list_deployments(
         &self,
         input: ListDeploymentsRequest,
-    ) -> RusotoFuture<ListDeploymentsResponse, ListDeploymentsError>;
+    ) -> Result<ListDeploymentsResponse, RusotoError<ListDeploymentsError>>;
 
     /// <p>Lists the versions of a device definition.</p>
-    fn list_device_definition_versions(
+    async fn list_device_definition_versions(
         &self,
         input: ListDeviceDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError>;
+    ) -> Result<ListDeviceDefinitionVersionsResponse, RusotoError<ListDeviceDefinitionVersionsError>>;
 
     /// <p>Retrieves a list of device definitions.</p>
-    fn list_device_definitions(
+    async fn list_device_definitions(
         &self,
         input: ListDeviceDefinitionsRequest,
-    ) -> RusotoFuture<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError>;
+    ) -> Result<ListDeviceDefinitionsResponse, RusotoError<ListDeviceDefinitionsError>>;
 
     /// <p>Lists the versions of a Lambda function definition.</p>
-    fn list_function_definition_versions(
+    async fn list_function_definition_versions(
         &self,
         input: ListFunctionDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError>;
+    ) -> Result<
+        ListFunctionDefinitionVersionsResponse,
+        RusotoError<ListFunctionDefinitionVersionsError>,
+    >;
 
     /// <p>Retrieves a list of Lambda function definitions.</p>
-    fn list_function_definitions(
+    async fn list_function_definitions(
         &self,
         input: ListFunctionDefinitionsRequest,
-    ) -> RusotoFuture<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError>;
+    ) -> Result<ListFunctionDefinitionsResponse, RusotoError<ListFunctionDefinitionsError>>;
 
     /// <p>Retrieves the current CAs for a group.</p>
-    fn list_group_certificate_authorities(
+    async fn list_group_certificate_authorities(
         &self,
         input: ListGroupCertificateAuthoritiesRequest,
-    ) -> RusotoFuture<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError>;
+    ) -> Result<
+        ListGroupCertificateAuthoritiesResponse,
+        RusotoError<ListGroupCertificateAuthoritiesError>,
+    >;
 
     /// <p>Lists the versions of a group.</p>
-    fn list_group_versions(
+    async fn list_group_versions(
         &self,
         input: ListGroupVersionsRequest,
-    ) -> RusotoFuture<ListGroupVersionsResponse, ListGroupVersionsError>;
+    ) -> Result<ListGroupVersionsResponse, RusotoError<ListGroupVersionsError>>;
 
     /// <p>Retrieves a list of groups.</p>
-    fn list_groups(
+    async fn list_groups(
         &self,
         input: ListGroupsRequest,
-    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError>;
+    ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>>;
 
     /// <p>Lists the versions of a logger definition.</p>
-    fn list_logger_definition_versions(
+    async fn list_logger_definition_versions(
         &self,
         input: ListLoggerDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError>;
+    ) -> Result<ListLoggerDefinitionVersionsResponse, RusotoError<ListLoggerDefinitionVersionsError>>;
 
     /// <p>Retrieves a list of logger definitions.</p>
-    fn list_logger_definitions(
+    async fn list_logger_definitions(
         &self,
         input: ListLoggerDefinitionsRequest,
-    ) -> RusotoFuture<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError>;
+    ) -> Result<ListLoggerDefinitionsResponse, RusotoError<ListLoggerDefinitionsError>>;
 
     /// <p>Lists the versions of a resource definition.</p>
-    fn list_resource_definition_versions(
+    async fn list_resource_definition_versions(
         &self,
         input: ListResourceDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListResourceDefinitionVersionsResponse, ListResourceDefinitionVersionsError>;
+    ) -> Result<
+        ListResourceDefinitionVersionsResponse,
+        RusotoError<ListResourceDefinitionVersionsError>,
+    >;
 
     /// <p>Retrieves a list of resource definitions.</p>
-    fn list_resource_definitions(
+    async fn list_resource_definitions(
         &self,
         input: ListResourceDefinitionsRequest,
-    ) -> RusotoFuture<ListResourceDefinitionsResponse, ListResourceDefinitionsError>;
+    ) -> Result<ListResourceDefinitionsResponse, RusotoError<ListResourceDefinitionsError>>;
 
     /// <p>Lists the versions of a subscription definition.</p>
-    fn list_subscription_definition_versions(
+    async fn list_subscription_definition_versions(
         &self,
         input: ListSubscriptionDefinitionVersionsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListSubscriptionDefinitionVersionsResponse,
-        ListSubscriptionDefinitionVersionsError,
+        RusotoError<ListSubscriptionDefinitionVersionsError>,
     >;
 
     /// <p>Retrieves a list of subscription definitions.</p>
-    fn list_subscription_definitions(
+    async fn list_subscription_definitions(
         &self,
         input: ListSubscriptionDefinitionsRequest,
-    ) -> RusotoFuture<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError>;
+    ) -> Result<ListSubscriptionDefinitionsResponse, RusotoError<ListSubscriptionDefinitionsError>>;
 
     /// <p>Retrieves the tags for a resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Resets a group&#39;s deployments.</p>
-    fn reset_deployments(
+    async fn reset_deployments(
         &self,
         input: ResetDeploymentsRequest,
-    ) -> RusotoFuture<ResetDeploymentsResponse, ResetDeploymentsError>;
+    ) -> Result<ResetDeploymentsResponse, RusotoError<ResetDeploymentsError>>;
 
     /// <p>Deploys multiple groups in one operation. This action starts the bulk deployment of a specified set of group versions. Each group version deployment will be triggered with an adaptive rate that has a fixed upper limit. We recommend that you include an &#39;&#39;X-Amzn-Client-Token&#39;&#39; token in every &#39;&#39;StartBulkDeployment&#39;&#39; request. These requests are idempotent with respect to the token and the request parameters.</p>
-    fn start_bulk_deployment(
+    async fn start_bulk_deployment(
         &self,
         input: StartBulkDeploymentRequest,
-    ) -> RusotoFuture<StartBulkDeploymentResponse, StartBulkDeploymentError>;
+    ) -> Result<StartBulkDeploymentResponse, RusotoError<StartBulkDeploymentError>>;
 
     /// <p>Stops the execution of a bulk deployment. This action returns a status of &#39;&#39;Stopping&#39;&#39; until the deployment is stopped. You cannot start a new bulk deployment while a previous deployment is in the &#39;&#39;Stopping&#39;&#39; state. This action doesn&#39;t rollback completed deployments or cancel pending deployments.</p>
-    fn stop_bulk_deployment(
+    async fn stop_bulk_deployment(
         &self,
         input: StopBulkDeploymentRequest,
-    ) -> RusotoFuture<StopBulkDeploymentResponse, StopBulkDeploymentError>;
+    ) -> Result<StopBulkDeploymentResponse, RusotoError<StopBulkDeploymentError>>;
 
     /// <p>Add tags to a resource.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>>;
 
     /// <p>Remove tags with specified keys from a resource.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>>;
 
     /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
-    fn update_connectivity_info(
+    async fn update_connectivity_info(
         &self,
         input: UpdateConnectivityInfoRequest,
-    ) -> RusotoFuture<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError>;
+    ) -> Result<UpdateConnectivityInfoResponse, RusotoError<UpdateConnectivityInfoError>>;
 
     /// <p>Updates a connector definition.</p>
-    fn update_connector_definition(
+    async fn update_connector_definition(
         &self,
         input: UpdateConnectorDefinitionRequest,
-    ) -> RusotoFuture<UpdateConnectorDefinitionResponse, UpdateConnectorDefinitionError>;
+    ) -> Result<UpdateConnectorDefinitionResponse, RusotoError<UpdateConnectorDefinitionError>>;
 
     /// <p>Updates a core definition.</p>
-    fn update_core_definition(
+    async fn update_core_definition(
         &self,
         input: UpdateCoreDefinitionRequest,
-    ) -> RusotoFuture<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError>;
+    ) -> Result<UpdateCoreDefinitionResponse, RusotoError<UpdateCoreDefinitionError>>;
 
     /// <p>Updates a device definition.</p>
-    fn update_device_definition(
+    async fn update_device_definition(
         &self,
         input: UpdateDeviceDefinitionRequest,
-    ) -> RusotoFuture<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError>;
+    ) -> Result<UpdateDeviceDefinitionResponse, RusotoError<UpdateDeviceDefinitionError>>;
 
     /// <p>Updates a Lambda function definition.</p>
-    fn update_function_definition(
+    async fn update_function_definition(
         &self,
         input: UpdateFunctionDefinitionRequest,
-    ) -> RusotoFuture<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError>;
+    ) -> Result<UpdateFunctionDefinitionResponse, RusotoError<UpdateFunctionDefinitionError>>;
 
     /// <p>Updates a group.</p>
-    fn update_group(
+    async fn update_group(
         &self,
         input: UpdateGroupRequest,
-    ) -> RusotoFuture<UpdateGroupResponse, UpdateGroupError>;
+    ) -> Result<UpdateGroupResponse, RusotoError<UpdateGroupError>>;
 
     /// <p>Updates the Certificate expiry time for a group.</p>
-    fn update_group_certificate_configuration(
+    async fn update_group_certificate_configuration(
         &self,
         input: UpdateGroupCertificateConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateGroupCertificateConfigurationResponse,
-        UpdateGroupCertificateConfigurationError,
+        RusotoError<UpdateGroupCertificateConfigurationError>,
     >;
 
     /// <p>Updates a logger definition.</p>
-    fn update_logger_definition(
+    async fn update_logger_definition(
         &self,
         input: UpdateLoggerDefinitionRequest,
-    ) -> RusotoFuture<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError>;
+    ) -> Result<UpdateLoggerDefinitionResponse, RusotoError<UpdateLoggerDefinitionError>>;
 
     /// <p>Updates a resource definition.</p>
-    fn update_resource_definition(
+    async fn update_resource_definition(
         &self,
         input: UpdateResourceDefinitionRequest,
-    ) -> RusotoFuture<UpdateResourceDefinitionResponse, UpdateResourceDefinitionError>;
+    ) -> Result<UpdateResourceDefinitionResponse, RusotoError<UpdateResourceDefinitionError>>;
 
     /// <p>Updates a subscription definition.</p>
-    fn update_subscription_definition(
+    async fn update_subscription_definition(
         &self,
         input: UpdateSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError>;
+    ) -> Result<UpdateSubscriptionDefinitionResponse, RusotoError<UpdateSubscriptionDefinitionError>>;
 }
 /// A client for the AWS Greengrass API.
 #[derive(Clone)]
@@ -7088,12 +7141,13 @@ impl GreenGrassClient {
     }
 }
 
+#[async_trait]
 impl GreenGrass for GreenGrassClient {
     /// <p>Associates a role with a group. Your Greengrass core will use the role to access AWS cloud services. The role&#39;s permissions should allow Greengrass core Lambda functions to perform actions against the cloud.</p>
-    fn associate_role_to_group(
+    async fn associate_role_to_group(
         &self,
         input: AssociateRoleToGroupRequest,
-    ) -> RusotoFuture<AssociateRoleToGroupResponse, AssociateRoleToGroupError> {
+    ) -> Result<AssociateRoleToGroupResponse, RusotoError<AssociateRoleToGroupError>> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
             group_id = input.group_id
@@ -7105,41 +7159,31 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| AssociateRoleToGroupError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateRoleToGroupResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AssociateRoleToGroupError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateRoleToGroupResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<AssociateRoleToGroupError>())
-                            .and_then(|response| {
-                                Err(AssociateRoleToGroupError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateRoleToGroupError::from_response(response))
+        }
     }
 
     /// <p>Associates a role with your account. AWS IoT Greengrass will use the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. The role must have at least minimum permissions in the policy &#39;&#39;AWSGreengrassResourceAccessRolePolicy&#39;&#39;.</p>
-    fn associate_service_role_to_account(
+    async fn associate_service_role_to_account(
         &self,
         input: AssociateServiceRoleToAccountRequest,
-    ) -> RusotoFuture<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError>
-    {
+    ) -> Result<
+        AssociateServiceRoleToAccountResponse,
+        RusotoError<AssociateServiceRoleToAccountError>,
+    > {
         let request_uri = "/greengrass/servicerole";
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
@@ -7148,40 +7192,29 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| AssociateServiceRoleToAccountError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateServiceRoleToAccountResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AssociateServiceRoleToAccountError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateServiceRoleToAccountResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<AssociateServiceRoleToAccountError>())
-                            .and_then(|response| {
-                                Err(AssociateServiceRoleToAccountError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateServiceRoleToAccountError::from_response(response))
+        }
     }
 
     /// <p>Creates a connector definition. You may provide the initial version of the connector definition now or use &#39;&#39;CreateConnectorDefinitionVersion&#39;&#39; at a later time.</p>
-    fn create_connector_definition(
+    async fn create_connector_definition(
         &self,
         input: CreateConnectorDefinitionRequest,
-    ) -> RusotoFuture<CreateConnectorDefinitionResponse, CreateConnectorDefinitionError> {
+    ) -> Result<CreateConnectorDefinitionResponse, RusotoError<CreateConnectorDefinitionError>>
+    {
         let request_uri = "/greengrass/definition/connectors";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7194,41 +7227,31 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateConnectorDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateConnectorDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateConnectorDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateConnectorDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateConnectorDefinitionError>())
-                            .and_then(|response| {
-                                Err(CreateConnectorDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateConnectorDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Creates a version of a connector definition which has already been defined.</p>
-    fn create_connector_definition_version(
+    async fn create_connector_definition_version(
         &self,
         input: CreateConnectorDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateConnectorDefinitionVersionResponse, CreateConnectorDefinitionVersionError>
-    {
+    ) -> Result<
+        CreateConnectorDefinitionVersionResponse,
+        RusotoError<CreateConnectorDefinitionVersionError>,
+    > {
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}/versions",
             connector_definition_id = input.connector_definition_id
@@ -7244,43 +7267,30 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateConnectorDefinitionVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateConnectorDefinitionVersionResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateConnectorDefinitionVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateConnectorDefinitionVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateConnectorDefinitionVersionError>())
-                            .and_then(|response| {
-                                Err(CreateConnectorDefinitionVersionError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateConnectorDefinitionVersionError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Creates a core definition. You may provide the initial version of the core definition now or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. Greengrass groups must each contain exactly one Greengrass core.</p>
-    fn create_core_definition(
+    async fn create_core_definition(
         &self,
         input: CreateCoreDefinitionRequest,
-    ) -> RusotoFuture<CreateCoreDefinitionResponse, CreateCoreDefinitionError> {
+    ) -> Result<CreateCoreDefinitionResponse, RusotoError<CreateCoreDefinitionError>> {
         let request_uri = "/greengrass/definition/cores";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7293,40 +7303,29 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateCoreDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCoreDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateCoreDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateCoreDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateCoreDefinitionError>())
-                            .and_then(|response| {
-                                Err(CreateCoreDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateCoreDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Creates a version of a core definition that has already been defined. Greengrass groups must each contain exactly one Greengrass core.</p>
-    fn create_core_definition_version(
+    async fn create_core_definition_version(
         &self,
         input: CreateCoreDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError> {
+    ) -> Result<CreateCoreDefinitionVersionResponse, RusotoError<CreateCoreDefinitionVersionError>>
+    {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}/versions",
             core_definition_id = input.core_definition_id
@@ -7342,40 +7341,28 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateCoreDefinitionVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCoreDefinitionVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateCoreDefinitionVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateCoreDefinitionVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateCoreDefinitionVersionError>())
-                            .and_then(|response| {
-                                Err(CreateCoreDefinitionVersionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateCoreDefinitionVersionError::from_response(response))
+        }
     }
 
     /// <p>Creates a deployment. &#39;&#39;CreateDeployment&#39;&#39; requests are idempotent with respect to the &#39;&#39;X-Amzn-Client-Token&#39;&#39; token and the request parameters.</p>
-    fn create_deployment(
+    async fn create_deployment(
         &self,
         input: CreateDeploymentRequest,
-    ) -> RusotoFuture<CreateDeploymentResponse, CreateDeploymentError> {
+    ) -> Result<CreateDeploymentResponse, RusotoError<CreateDeploymentError>> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments",
             group_id = input.group_id
@@ -7391,40 +7378,28 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateDeploymentError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDeploymentResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDeploymentError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDeploymentResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateDeploymentError>())
-                            .and_then(|response| {
-                                Err(CreateDeploymentError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDeploymentError::from_response(response))
+        }
     }
 
     /// <p>Creates a device definition. You may provide the initial version of the device definition now or use &#39;&#39;CreateDeviceDefinitionVersion&#39;&#39; at a later time.</p>
-    fn create_device_definition(
+    async fn create_device_definition(
         &self,
         input: CreateDeviceDefinitionRequest,
-    ) -> RusotoFuture<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError> {
+    ) -> Result<CreateDeviceDefinitionResponse, RusotoError<CreateDeviceDefinitionError>> {
         let request_uri = "/greengrass/definition/devices";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7437,41 +7412,31 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateDeviceDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDeviceDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDeviceDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDeviceDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateDeviceDefinitionError>())
-                            .and_then(|response| {
-                                Err(CreateDeviceDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDeviceDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Creates a version of a device definition that has already been defined.</p>
-    fn create_device_definition_version(
+    async fn create_device_definition_version(
         &self,
         input: CreateDeviceDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError>
-    {
+    ) -> Result<
+        CreateDeviceDefinitionVersionResponse,
+        RusotoError<CreateDeviceDefinitionVersionError>,
+    > {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}/versions",
             device_definition_id = input.device_definition_id
@@ -7487,40 +7452,28 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateDeviceDefinitionVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDeviceDefinitionVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDeviceDefinitionVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDeviceDefinitionVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateDeviceDefinitionVersionError>())
-                            .and_then(|response| {
-                                Err(CreateDeviceDefinitionVersionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDeviceDefinitionVersionError::from_response(response))
+        }
     }
 
     /// <p>Creates a Lambda function definition which contains a list of Lambda functions and their configurations to be used in a group. You can create an initial version of the definition by providing a list of Lambda functions and their configurations now, or use &#39;&#39;CreateFunctionDefinitionVersion&#39;&#39; later.</p>
-    fn create_function_definition(
+    async fn create_function_definition(
         &self,
         input: CreateFunctionDefinitionRequest,
-    ) -> RusotoFuture<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError> {
+    ) -> Result<CreateFunctionDefinitionResponse, RusotoError<CreateFunctionDefinitionError>> {
         let request_uri = "/greengrass/definition/functions";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7533,41 +7486,31 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateFunctionDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateFunctionDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateFunctionDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateFunctionDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateFunctionDefinitionError>())
-                            .and_then(|response| {
-                                Err(CreateFunctionDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateFunctionDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Creates a version of a Lambda function definition that has already been defined.</p>
-    fn create_function_definition_version(
+    async fn create_function_definition_version(
         &self,
         input: CreateFunctionDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError>
-    {
+    ) -> Result<
+        CreateFunctionDefinitionVersionResponse,
+        RusotoError<CreateFunctionDefinitionVersionError>,
+    > {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}/versions",
             function_definition_id = input.function_definition_id
@@ -7583,43 +7526,30 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateFunctionDefinitionVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateFunctionDefinitionVersionResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateFunctionDefinitionVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateFunctionDefinitionVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateFunctionDefinitionVersionError>())
-                            .and_then(|response| {
-                                Err(CreateFunctionDefinitionVersionError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateFunctionDefinitionVersionError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Creates a group. You may provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time. Tip: You can use the &#39;&#39;gg<em>group</em>setup&#39;&#39; package (https://github.com/awslabs/aws-greengrass-group-setup) as a library or command-line application to create and deploy Greengrass groups.</p>
-    fn create_group(
+    async fn create_group(
         &self,
         input: CreateGroupRequest,
-    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError> {
+    ) -> Result<CreateGroupResponse, RusotoError<CreateGroupError>> {
         let request_uri = "/greengrass/groups";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7632,39 +7562,31 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateGroupError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGroupResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateGroupError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateGroupResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateGroupError>())
-                            .and_then(|response| Err(CreateGroupError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateGroupError::from_response(response))
+        }
     }
 
     /// <p>Creates a CA for the group. If a CA already exists, it will rotate the existing CA.</p>
-    fn create_group_certificate_authority(
+    async fn create_group_certificate_authority(
         &self,
         input: CreateGroupCertificateAuthorityRequest,
-    ) -> RusotoFuture<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError>
-    {
+    ) -> Result<
+        CreateGroupCertificateAuthorityResponse,
+        RusotoError<CreateGroupCertificateAuthorityError>,
+    > {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities",
             group_id = input.group_id
@@ -7677,43 +7599,30 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateGroupCertificateAuthorityError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGroupCertificateAuthorityResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateGroupCertificateAuthorityError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateGroupCertificateAuthorityResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateGroupCertificateAuthorityError>())
-                            .and_then(|response| {
-                                Err(CreateGroupCertificateAuthorityError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateGroupCertificateAuthorityError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Creates a version of a group which has already been defined.</p>
-    fn create_group_version(
+    async fn create_group_version(
         &self,
         input: CreateGroupVersionRequest,
-    ) -> RusotoFuture<CreateGroupVersionResponse, CreateGroupVersionError> {
+    ) -> Result<CreateGroupVersionResponse, RusotoError<CreateGroupVersionError>> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions",
             group_id = input.group_id
@@ -7729,40 +7638,28 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateGroupVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGroupVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateGroupVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateGroupVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateGroupVersionError>())
-                            .and_then(|response| {
-                                Err(CreateGroupVersionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateGroupVersionError::from_response(response))
+        }
     }
 
     /// <p>Creates a logger definition. You may provide the initial version of the logger definition now or use &#39;&#39;CreateLoggerDefinitionVersion&#39;&#39; at a later time.</p>
-    fn create_logger_definition(
+    async fn create_logger_definition(
         &self,
         input: CreateLoggerDefinitionRequest,
-    ) -> RusotoFuture<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError> {
+    ) -> Result<CreateLoggerDefinitionResponse, RusotoError<CreateLoggerDefinitionError>> {
         let request_uri = "/greengrass/definition/loggers";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7775,41 +7672,31 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateLoggerDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateLoggerDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateLoggerDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateLoggerDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateLoggerDefinitionError>())
-                            .and_then(|response| {
-                                Err(CreateLoggerDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateLoggerDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Creates a version of a logger definition that has already been defined.</p>
-    fn create_logger_definition_version(
+    async fn create_logger_definition_version(
         &self,
         input: CreateLoggerDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError>
-    {
+    ) -> Result<
+        CreateLoggerDefinitionVersionResponse,
+        RusotoError<CreateLoggerDefinitionVersionError>,
+    > {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}/versions",
             logger_definition_id = input.logger_definition_id
@@ -7825,40 +7712,28 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateLoggerDefinitionVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateLoggerDefinitionVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateLoggerDefinitionVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateLoggerDefinitionVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateLoggerDefinitionVersionError>())
-                            .and_then(|response| {
-                                Err(CreateLoggerDefinitionVersionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateLoggerDefinitionVersionError::from_response(response))
+        }
     }
 
     /// <p>Creates a resource definition which contains a list of resources to be used in a group. You can create an initial version of the definition by providing a list of resources now, or use &#39;&#39;CreateResourceDefinitionVersion&#39;&#39; later.</p>
-    fn create_resource_definition(
+    async fn create_resource_definition(
         &self,
         input: CreateResourceDefinitionRequest,
-    ) -> RusotoFuture<CreateResourceDefinitionResponse, CreateResourceDefinitionError> {
+    ) -> Result<CreateResourceDefinitionResponse, RusotoError<CreateResourceDefinitionError>> {
         let request_uri = "/greengrass/definition/resources";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7871,41 +7746,31 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateResourceDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateResourceDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateResourceDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateResourceDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateResourceDefinitionError>())
-                            .and_then(|response| {
-                                Err(CreateResourceDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateResourceDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Creates a version of a resource definition that has already been defined.</p>
-    fn create_resource_definition_version(
+    async fn create_resource_definition_version(
         &self,
         input: CreateResourceDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateResourceDefinitionVersionResponse, CreateResourceDefinitionVersionError>
-    {
+    ) -> Result<
+        CreateResourceDefinitionVersionResponse,
+        RusotoError<CreateResourceDefinitionVersionError>,
+    > {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}/versions",
             resource_definition_id = input.resource_definition_id
@@ -7921,43 +7786,30 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateResourceDefinitionVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateResourceDefinitionVersionResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateResourceDefinitionVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateResourceDefinitionVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateResourceDefinitionVersionError>())
-                            .and_then(|response| {
-                                Err(CreateResourceDefinitionVersionError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateResourceDefinitionVersionError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Creates a software update for a core or group of cores (specified as an IoT thing group.) Use this to update the OTA Agent as well as the Greengrass core software. It makes use of the IoT Jobs feature which provides additional commands to manage a Greengrass core software update job.</p>
-    fn create_software_update_job(
+    async fn create_software_update_job(
         &self,
         input: CreateSoftwareUpdateJobRequest,
-    ) -> RusotoFuture<CreateSoftwareUpdateJobResponse, CreateSoftwareUpdateJobError> {
+    ) -> Result<CreateSoftwareUpdateJobResponse, RusotoError<CreateSoftwareUpdateJobError>> {
         let request_uri = "/greengrass/updates";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -7970,40 +7822,29 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateSoftwareUpdateJobError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSoftwareUpdateJobResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateSoftwareUpdateJobError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSoftwareUpdateJobResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateSoftwareUpdateJobError>())
-                            .and_then(|response| {
-                                Err(CreateSoftwareUpdateJobError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSoftwareUpdateJobError::from_response(response))
+        }
     }
 
     /// <p>Creates a subscription definition. You may provide the initial version of the subscription definition now or use &#39;&#39;CreateSubscriptionDefinitionVersion&#39;&#39; at a later time.</p>
-    fn create_subscription_definition(
+    async fn create_subscription_definition(
         &self,
         input: CreateSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError> {
+    ) -> Result<CreateSubscriptionDefinitionResponse, RusotoError<CreateSubscriptionDefinitionError>>
+    {
         let request_uri = "/greengrass/definition/subscriptions";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -8016,42 +7857,30 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateSubscriptionDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSubscriptionDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateSubscriptionDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSubscriptionDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateSubscriptionDefinitionError>())
-                            .and_then(|response| {
-                                Err(CreateSubscriptionDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSubscriptionDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Creates a version of a subscription definition which has already been defined.</p>
-    fn create_subscription_definition_version(
+    async fn create_subscription_definition_version(
         &self,
         input: CreateSubscriptionDefinitionVersionRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateSubscriptionDefinitionVersionResponse,
-        CreateSubscriptionDefinitionVersionError,
+        RusotoError<CreateSubscriptionDefinitionVersionError>,
     > {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}/versions",
@@ -8068,43 +7897,31 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| CreateSubscriptionDefinitionVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSubscriptionDefinitionVersionResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateSubscriptionDefinitionVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSubscriptionDefinitionVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<CreateSubscriptionDefinitionVersionError>())
-                            .and_then(|response| {
-                                Err(CreateSubscriptionDefinitionVersionError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSubscriptionDefinitionVersionError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Deletes a connector definition.</p>
-    fn delete_connector_definition(
+    async fn delete_connector_definition(
         &self,
         input: DeleteConnectorDefinitionRequest,
-    ) -> RusotoFuture<DeleteConnectorDefinitionResponse, DeleteConnectorDefinitionError> {
+    ) -> Result<DeleteConnectorDefinitionResponse, RusotoError<DeleteConnectorDefinitionError>>
+    {
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}",
             connector_definition_id = input.connector_definition_id
@@ -8113,40 +7930,28 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteConnectorDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteConnectorDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteConnectorDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteConnectorDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteConnectorDefinitionError>())
-                            .and_then(|response| {
-                                Err(DeleteConnectorDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteConnectorDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Deletes a core definition.</p>
-    fn delete_core_definition(
+    async fn delete_core_definition(
         &self,
         input: DeleteCoreDefinitionRequest,
-    ) -> RusotoFuture<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError> {
+    ) -> Result<DeleteCoreDefinitionResponse, RusotoError<DeleteCoreDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
             core_definition_id = input.core_definition_id
@@ -8155,40 +7960,28 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteCoreDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteCoreDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteCoreDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteCoreDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteCoreDefinitionError>())
-                            .and_then(|response| {
-                                Err(DeleteCoreDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteCoreDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Deletes a device definition.</p>
-    fn delete_device_definition(
+    async fn delete_device_definition(
         &self,
         input: DeleteDeviceDefinitionRequest,
-    ) -> RusotoFuture<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError> {
+    ) -> Result<DeleteDeviceDefinitionResponse, RusotoError<DeleteDeviceDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
             device_definition_id = input.device_definition_id
@@ -8197,40 +7990,28 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteDeviceDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDeviceDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDeviceDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteDeviceDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteDeviceDefinitionError>())
-                            .and_then(|response| {
-                                Err(DeleteDeviceDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDeviceDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Deletes a Lambda function definition.</p>
-    fn delete_function_definition(
+    async fn delete_function_definition(
         &self,
         input: DeleteFunctionDefinitionRequest,
-    ) -> RusotoFuture<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError> {
+    ) -> Result<DeleteFunctionDefinitionResponse, RusotoError<DeleteFunctionDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
             function_definition_id = input.function_definition_id
@@ -8239,77 +8020,55 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteFunctionDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteFunctionDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteFunctionDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteFunctionDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteFunctionDefinitionError>())
-                            .and_then(|response| {
-                                Err(DeleteFunctionDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteFunctionDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Deletes a group.</p>
-    fn delete_group(
+    async fn delete_group(
         &self,
         input: DeleteGroupRequest,
-    ) -> RusotoFuture<DeleteGroupResponse, DeleteGroupError> {
+    ) -> Result<DeleteGroupResponse, RusotoError<DeleteGroupError>> {
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteGroupError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteGroupResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteGroupError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteGroupResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteGroupError>())
-                            .and_then(|response| Err(DeleteGroupError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes a logger definition.</p>
-    fn delete_logger_definition(
+    async fn delete_logger_definition(
         &self,
         input: DeleteLoggerDefinitionRequest,
-    ) -> RusotoFuture<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError> {
+    ) -> Result<DeleteLoggerDefinitionResponse, RusotoError<DeleteLoggerDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
             logger_definition_id = input.logger_definition_id
@@ -8318,40 +8077,28 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteLoggerDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteLoggerDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteLoggerDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteLoggerDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteLoggerDefinitionError>())
-                            .and_then(|response| {
-                                Err(DeleteLoggerDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteLoggerDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Deletes a resource definition.</p>
-    fn delete_resource_definition(
+    async fn delete_resource_definition(
         &self,
         input: DeleteResourceDefinitionRequest,
-    ) -> RusotoFuture<DeleteResourceDefinitionResponse, DeleteResourceDefinitionError> {
+    ) -> Result<DeleteResourceDefinitionResponse, RusotoError<DeleteResourceDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
             resource_definition_id = input.resource_definition_id
@@ -8360,40 +8107,29 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteResourceDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteResourceDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteResourceDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteResourceDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteResourceDefinitionError>())
-                            .and_then(|response| {
-                                Err(DeleteResourceDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteResourceDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Deletes a subscription definition.</p>
-    fn delete_subscription_definition(
+    async fn delete_subscription_definition(
         &self,
         input: DeleteSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError> {
+    ) -> Result<DeleteSubscriptionDefinitionResponse, RusotoError<DeleteSubscriptionDefinitionError>>
+    {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
             subscription_definition_id = input.subscription_definition_id
@@ -8402,40 +8138,29 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DeleteSubscriptionDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSubscriptionDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteSubscriptionDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteSubscriptionDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DeleteSubscriptionDefinitionError>())
-                            .and_then(|response| {
-                                Err(DeleteSubscriptionDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSubscriptionDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Disassociates the role from a group.</p>
-    fn disassociate_role_from_group(
+    async fn disassociate_role_from_group(
         &self,
         input: DisassociateRoleFromGroupRequest,
-    ) -> RusotoFuture<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError> {
+    ) -> Result<DisassociateRoleFromGroupResponse, RusotoError<DisassociateRoleFromGroupError>>
+    {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
             group_id = input.group_id
@@ -8444,84 +8169,59 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DisassociateRoleFromGroupError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateRoleFromGroupResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DisassociateRoleFromGroupError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateRoleFromGroupResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DisassociateRoleFromGroupError>())
-                            .and_then(|response| {
-                                Err(DisassociateRoleFromGroupError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateRoleFromGroupError::from_response(response))
+        }
     }
 
     /// <p>Disassociates the service role from your account. Without a service role, deployments will not work.</p>
-    fn disassociate_service_role_from_account(
+    async fn disassociate_service_role_from_account(
         &self,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociateServiceRoleFromAccountResponse,
-        DisassociateServiceRoleFromAccountError,
+        RusotoError<DisassociateServiceRoleFromAccountError>,
     > {
         let request_uri = "/greengrass/servicerole";
 
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| DisassociateServiceRoleFromAccountError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateServiceRoleFromAccountResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DisassociateServiceRoleFromAccountError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateServiceRoleFromAccountResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<DisassociateServiceRoleFromAccountError>())
-                            .and_then(|response| {
-                                Err(DisassociateServiceRoleFromAccountError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateServiceRoleFromAccountError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Retrieves the role associated with a particular group.</p>
-    fn get_associated_role(
+    async fn get_associated_role(
         &self,
         input: GetAssociatedRoleRequest,
-    ) -> RusotoFuture<GetAssociatedRoleResponse, GetAssociatedRoleError> {
+    ) -> Result<GetAssociatedRoleResponse, RusotoError<GetAssociatedRoleError>> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
             group_id = input.group_id
@@ -8530,40 +8230,28 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetAssociatedRoleError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAssociatedRoleResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetAssociatedRoleError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAssociatedRoleResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetAssociatedRoleError>())
-                            .and_then(|response| {
-                                Err(GetAssociatedRoleError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAssociatedRoleError::from_response(response))
+        }
     }
 
     /// <p>Returns the status of a bulk deployment.</p>
-    fn get_bulk_deployment_status(
+    async fn get_bulk_deployment_status(
         &self,
         input: GetBulkDeploymentStatusRequest,
-    ) -> RusotoFuture<GetBulkDeploymentStatusResponse, GetBulkDeploymentStatusError> {
+    ) -> Result<GetBulkDeploymentStatusResponse, RusotoError<GetBulkDeploymentStatusError>> {
         let request_uri = format!(
             "/greengrass/bulk/deployments/{bulk_deployment_id}/status",
             bulk_deployment_id = input.bulk_deployment_id
@@ -8572,40 +8260,28 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetBulkDeploymentStatusError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBulkDeploymentStatusResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBulkDeploymentStatusError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetBulkDeploymentStatusResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetBulkDeploymentStatusError>())
-                            .and_then(|response| {
-                                Err(GetBulkDeploymentStatusError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetBulkDeploymentStatusError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the connectivity information for a core.</p>
-    fn get_connectivity_info(
+    async fn get_connectivity_info(
         &self,
         input: GetConnectivityInfoRequest,
-    ) -> RusotoFuture<GetConnectivityInfoResponse, GetConnectivityInfoError> {
+    ) -> Result<GetConnectivityInfoResponse, RusotoError<GetConnectivityInfoError>> {
         let request_uri = format!(
             "/greengrass/things/{thing_name}/connectivityInfo",
             thing_name = input.thing_name
@@ -8614,40 +8290,28 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetConnectivityInfoError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetConnectivityInfoResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetConnectivityInfoError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetConnectivityInfoResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetConnectivityInfoError>())
-                            .and_then(|response| {
-                                Err(GetConnectivityInfoError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetConnectivityInfoError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a connector definition.</p>
-    fn get_connector_definition(
+    async fn get_connector_definition(
         &self,
         input: GetConnectorDefinitionRequest,
-    ) -> RusotoFuture<GetConnectorDefinitionResponse, GetConnectorDefinitionError> {
+    ) -> Result<GetConnectorDefinitionResponse, RusotoError<GetConnectorDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}",
             connector_definition_id = input.connector_definition_id
@@ -8656,41 +8320,31 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetConnectorDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetConnectorDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetConnectorDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetConnectorDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetConnectorDefinitionError>())
-                            .and_then(|response| {
-                                Err(GetConnectorDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetConnectorDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a connector definition version, including the connectors that the version contains. Connectors are prebuilt modules that interact with local infrastructure, device protocols, AWS, and other cloud services.</p>
-    fn get_connector_definition_version(
+    async fn get_connector_definition_version(
         &self,
         input: GetConnectorDefinitionVersionRequest,
-    ) -> RusotoFuture<GetConnectorDefinitionVersionResponse, GetConnectorDefinitionVersionError>
-    {
+    ) -> Result<
+        GetConnectorDefinitionVersionResponse,
+        RusotoError<GetConnectorDefinitionVersionError>,
+    > {
         let request_uri = format!("/greengrass/definition/connectors/{connector_definition_id}/versions/{connector_definition_version_id}", connector_definition_id = input.connector_definition_id, connector_definition_version_id = input.connector_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -8702,40 +8356,28 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetConnectorDefinitionVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetConnectorDefinitionVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetConnectorDefinitionVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetConnectorDefinitionVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetConnectorDefinitionVersionError>())
-                            .and_then(|response| {
-                                Err(GetConnectorDefinitionVersionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetConnectorDefinitionVersionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a core definition version.</p>
-    fn get_core_definition(
+    async fn get_core_definition(
         &self,
         input: GetCoreDefinitionRequest,
-    ) -> RusotoFuture<GetCoreDefinitionResponse, GetCoreDefinitionError> {
+    ) -> Result<GetCoreDefinitionResponse, RusotoError<GetCoreDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
             core_definition_id = input.core_definition_id
@@ -8744,79 +8386,55 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetCoreDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCoreDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetCoreDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetCoreDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetCoreDefinitionError>())
-                            .and_then(|response| {
-                                Err(GetCoreDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetCoreDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a core definition version.</p>
-    fn get_core_definition_version(
+    async fn get_core_definition_version(
         &self,
         input: GetCoreDefinitionVersionRequest,
-    ) -> RusotoFuture<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError> {
+    ) -> Result<GetCoreDefinitionVersionResponse, RusotoError<GetCoreDefinitionVersionError>> {
         let request_uri = format!("/greengrass/definition/cores/{core_definition_id}/versions/{core_definition_version_id}", core_definition_id = input.core_definition_id, core_definition_version_id = input.core_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetCoreDefinitionVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCoreDefinitionVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetCoreDefinitionVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetCoreDefinitionVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetCoreDefinitionVersionError>())
-                            .and_then(|response| {
-                                Err(GetCoreDefinitionVersionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetCoreDefinitionVersionError::from_response(response))
+        }
     }
 
     /// <p>Returns the status of a deployment.</p>
-    fn get_deployment_status(
+    async fn get_deployment_status(
         &self,
         input: GetDeploymentStatusRequest,
-    ) -> RusotoFuture<GetDeploymentStatusResponse, GetDeploymentStatusError> {
+    ) -> Result<GetDeploymentStatusResponse, RusotoError<GetDeploymentStatusError>> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments/{deployment_id}/status",
             deployment_id = input.deployment_id,
@@ -8826,40 +8444,28 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetDeploymentStatusError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeploymentStatusResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDeploymentStatusError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDeploymentStatusResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetDeploymentStatusError>())
-                            .and_then(|response| {
-                                Err(GetDeploymentStatusError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDeploymentStatusError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a device definition.</p>
-    fn get_device_definition(
+    async fn get_device_definition(
         &self,
         input: GetDeviceDefinitionRequest,
-    ) -> RusotoFuture<GetDeviceDefinitionResponse, GetDeviceDefinitionError> {
+    ) -> Result<GetDeviceDefinitionResponse, RusotoError<GetDeviceDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
             device_definition_id = input.device_definition_id
@@ -8868,40 +8474,29 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetDeviceDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeviceDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDeviceDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDeviceDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetDeviceDefinitionError>())
-                            .and_then(|response| {
-                                Err(GetDeviceDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDeviceDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a device definition version.</p>
-    fn get_device_definition_version(
+    async fn get_device_definition_version(
         &self,
         input: GetDeviceDefinitionVersionRequest,
-    ) -> RusotoFuture<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError> {
+    ) -> Result<GetDeviceDefinitionVersionResponse, RusotoError<GetDeviceDefinitionVersionError>>
+    {
         let request_uri = format!("/greengrass/definition/devices/{device_definition_id}/versions/{device_definition_version_id}", device_definition_id = input.device_definition_id, device_definition_version_id = input.device_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -8913,40 +8508,28 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetDeviceDefinitionVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeviceDefinitionVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDeviceDefinitionVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDeviceDefinitionVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetDeviceDefinitionVersionError>())
-                            .and_then(|response| {
-                                Err(GetDeviceDefinitionVersionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDeviceDefinitionVersionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a Lambda function definition, including its creation time and latest version.</p>
-    fn get_function_definition(
+    async fn get_function_definition(
         &self,
         input: GetFunctionDefinitionRequest,
-    ) -> RusotoFuture<GetFunctionDefinitionResponse, GetFunctionDefinitionError> {
+    ) -> Result<GetFunctionDefinitionResponse, RusotoError<GetFunctionDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
             function_definition_id = input.function_definition_id
@@ -8955,40 +8538,29 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetFunctionDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFunctionDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetFunctionDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetFunctionDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetFunctionDefinitionError>())
-                            .and_then(|response| {
-                                Err(GetFunctionDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetFunctionDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a Lambda function definition version, including which Lambda functions are included in the version and their configurations.</p>
-    fn get_function_definition_version(
+    async fn get_function_definition_version(
         &self,
         input: GetFunctionDefinitionVersionRequest,
-    ) -> RusotoFuture<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError> {
+    ) -> Result<GetFunctionDefinitionVersionResponse, RusotoError<GetFunctionDefinitionVersionError>>
+    {
         let request_uri = format!("/greengrass/definition/functions/{function_definition_id}/versions/{function_definition_version_id}", function_definition_id = input.function_definition_id, function_definition_version_id = input.function_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9000,74 +8572,56 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetFunctionDefinitionVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFunctionDefinitionVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetFunctionDefinitionVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetFunctionDefinitionVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetFunctionDefinitionVersionError>())
-                            .and_then(|response| {
-                                Err(GetFunctionDefinitionVersionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetFunctionDefinitionVersionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a group.</p>
-    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError> {
+    async fn get_group(
+        &self,
+        input: GetGroupRequest,
+    ) -> Result<GetGroupResponse, RusotoError<GetGroupError>> {
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetGroupError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGroupResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetGroupError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<GetGroupResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetGroupError>())
-                            .and_then(|response| Err(GetGroupError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetGroupError::from_response(response))
+        }
     }
 
     /// <p>Retreives the CA associated with a group. Returns the public key of the CA.</p>
-    fn get_group_certificate_authority(
+    async fn get_group_certificate_authority(
         &self,
         input: GetGroupCertificateAuthorityRequest,
-    ) -> RusotoFuture<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError> {
+    ) -> Result<GetGroupCertificateAuthorityResponse, RusotoError<GetGroupCertificateAuthorityError>>
+    {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities/{certificate_authority_id}",
             certificate_authority_id = input.certificate_authority_id,
@@ -9077,41 +8631,31 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetGroupCertificateAuthorityError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGroupCertificateAuthorityResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetGroupCertificateAuthorityError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetGroupCertificateAuthorityResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetGroupCertificateAuthorityError>())
-                            .and_then(|response| {
-                                Err(GetGroupCertificateAuthorityError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetGroupCertificateAuthorityError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the current configuration for the CA used by the group.</p>
-    fn get_group_certificate_configuration(
+    async fn get_group_certificate_configuration(
         &self,
         input: GetGroupCertificateConfigurationRequest,
-    ) -> RusotoFuture<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError>
-    {
+    ) -> Result<
+        GetGroupCertificateConfigurationResponse,
+        RusotoError<GetGroupCertificateConfigurationError>,
+    > {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities/configuration/expiry",
             group_id = input.group_id
@@ -9120,43 +8664,30 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetGroupCertificateConfigurationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGroupCertificateConfigurationResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetGroupCertificateConfigurationError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetGroupCertificateConfigurationResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetGroupCertificateConfigurationError>())
-                            .and_then(|response| {
-                                Err(GetGroupCertificateConfigurationError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetGroupCertificateConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Retrieves information about a group version.</p>
-    fn get_group_version(
+    async fn get_group_version(
         &self,
         input: GetGroupVersionRequest,
-    ) -> RusotoFuture<GetGroupVersionResponse, GetGroupVersionError> {
+    ) -> Result<GetGroupVersionResponse, RusotoError<GetGroupVersionError>> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions/{group_version_id}",
             group_id = input.group_id,
@@ -9166,38 +8697,28 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetGroupVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGroupVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetGroupVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetGroupVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetGroupVersionError>())
-                            .and_then(|response| Err(GetGroupVersionError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetGroupVersionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a logger definition.</p>
-    fn get_logger_definition(
+    async fn get_logger_definition(
         &self,
         input: GetLoggerDefinitionRequest,
-    ) -> RusotoFuture<GetLoggerDefinitionResponse, GetLoggerDefinitionError> {
+    ) -> Result<GetLoggerDefinitionResponse, RusotoError<GetLoggerDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
             logger_definition_id = input.logger_definition_id
@@ -9206,40 +8727,29 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetLoggerDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLoggerDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetLoggerDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetLoggerDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetLoggerDefinitionError>())
-                            .and_then(|response| {
-                                Err(GetLoggerDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetLoggerDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a logger definition version.</p>
-    fn get_logger_definition_version(
+    async fn get_logger_definition_version(
         &self,
         input: GetLoggerDefinitionVersionRequest,
-    ) -> RusotoFuture<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError> {
+    ) -> Result<GetLoggerDefinitionVersionResponse, RusotoError<GetLoggerDefinitionVersionError>>
+    {
         let request_uri = format!("/greengrass/definition/loggers/{logger_definition_id}/versions/{logger_definition_version_id}", logger_definition_id = input.logger_definition_id, logger_definition_version_id = input.logger_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9251,40 +8761,28 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetLoggerDefinitionVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLoggerDefinitionVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetLoggerDefinitionVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetLoggerDefinitionVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetLoggerDefinitionVersionError>())
-                            .and_then(|response| {
-                                Err(GetLoggerDefinitionVersionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetLoggerDefinitionVersionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a resource definition, including its creation time and latest version.</p>
-    fn get_resource_definition(
+    async fn get_resource_definition(
         &self,
         input: GetResourceDefinitionRequest,
-    ) -> RusotoFuture<GetResourceDefinitionResponse, GetResourceDefinitionError> {
+    ) -> Result<GetResourceDefinitionResponse, RusotoError<GetResourceDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
             resource_definition_id = input.resource_definition_id
@@ -9293,117 +8791,83 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetResourceDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourceDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetResourceDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetResourceDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetResourceDefinitionError>())
-                            .and_then(|response| {
-                                Err(GetResourceDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetResourceDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a resource definition version, including which resources are included in the version.</p>
-    fn get_resource_definition_version(
+    async fn get_resource_definition_version(
         &self,
         input: GetResourceDefinitionVersionRequest,
-    ) -> RusotoFuture<GetResourceDefinitionVersionResponse, GetResourceDefinitionVersionError> {
+    ) -> Result<GetResourceDefinitionVersionResponse, RusotoError<GetResourceDefinitionVersionError>>
+    {
         let request_uri = format!("/greengrass/definition/resources/{resource_definition_id}/versions/{resource_definition_version_id}", resource_definition_id = input.resource_definition_id, resource_definition_version_id = input.resource_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetResourceDefinitionVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourceDefinitionVersionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetResourceDefinitionVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetResourceDefinitionVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetResourceDefinitionVersionError>())
-                            .and_then(|response| {
-                                Err(GetResourceDefinitionVersionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetResourceDefinitionVersionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the service role that is attached to your account.</p>
-    fn get_service_role_for_account(
+    async fn get_service_role_for_account(
         &self,
-    ) -> RusotoFuture<GetServiceRoleForAccountResponse, GetServiceRoleForAccountError> {
+    ) -> Result<GetServiceRoleForAccountResponse, RusotoError<GetServiceRoleForAccountError>> {
         let request_uri = "/greengrass/servicerole";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetServiceRoleForAccountError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetServiceRoleForAccountResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetServiceRoleForAccountError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetServiceRoleForAccountResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetServiceRoleForAccountError>())
-                            .and_then(|response| {
-                                Err(GetServiceRoleForAccountError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetServiceRoleForAccountError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a subscription definition.</p>
-    fn get_subscription_definition(
+    async fn get_subscription_definition(
         &self,
         input: GetSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError> {
+    ) -> Result<GetSubscriptionDefinitionResponse, RusotoError<GetSubscriptionDefinitionError>>
+    {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
             subscription_definition_id = input.subscription_definition_id
@@ -9412,41 +8876,31 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetSubscriptionDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSubscriptionDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSubscriptionDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetSubscriptionDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetSubscriptionDefinitionError>())
-                            .and_then(|response| {
-                                Err(GetSubscriptionDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSubscriptionDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves information about a subscription definition version.</p>
-    fn get_subscription_definition_version(
+    async fn get_subscription_definition_version(
         &self,
         input: GetSubscriptionDefinitionVersionRequest,
-    ) -> RusotoFuture<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>
-    {
+    ) -> Result<
+        GetSubscriptionDefinitionVersionResponse,
+        RusotoError<GetSubscriptionDefinitionVersionError>,
+    > {
         let request_uri = format!("/greengrass/definition/subscriptions/{subscription_definition_id}/versions/{subscription_definition_version_id}", subscription_definition_id = input.subscription_definition_id, subscription_definition_version_id = input.subscription_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9458,45 +8912,32 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| GetSubscriptionDefinitionVersionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSubscriptionDefinitionVersionResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSubscriptionDefinitionVersionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetSubscriptionDefinitionVersionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<GetSubscriptionDefinitionVersionError>())
-                            .and_then(|response| {
-                                Err(GetSubscriptionDefinitionVersionError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSubscriptionDefinitionVersionError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Gets a paginated list of the deployments that have been started in a bulk deployment operation, and their current deployment status.</p>
-    fn list_bulk_deployment_detailed_reports(
+    async fn list_bulk_deployment_detailed_reports(
         &self,
         input: ListBulkDeploymentDetailedReportsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListBulkDeploymentDetailedReportsResponse,
-        ListBulkDeploymentDetailedReportsError,
+        RusotoError<ListBulkDeploymentDetailedReportsError>,
     > {
         let request_uri = format!(
             "/greengrass/bulk/deployments/{bulk_deployment_id}/detailed-reports",
@@ -9515,43 +8956,30 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListBulkDeploymentDetailedReportsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBulkDeploymentDetailedReportsResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBulkDeploymentDetailedReportsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListBulkDeploymentDetailedReportsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListBulkDeploymentDetailedReportsError>())
-                            .and_then(|response| {
-                                Err(ListBulkDeploymentDetailedReportsError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListBulkDeploymentDetailedReportsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns a list of bulk deployments.</p>
-    fn list_bulk_deployments(
+    async fn list_bulk_deployments(
         &self,
         input: ListBulkDeploymentsRequest,
-    ) -> RusotoFuture<ListBulkDeploymentsResponse, ListBulkDeploymentsError> {
+    ) -> Result<ListBulkDeploymentsResponse, RusotoError<ListBulkDeploymentsError>> {
         let request_uri = "/greengrass/bulk/deployments";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9566,41 +8994,31 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListBulkDeploymentsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBulkDeploymentsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBulkDeploymentsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListBulkDeploymentsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListBulkDeploymentsError>())
-                            .and_then(|response| {
-                                Err(ListBulkDeploymentsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListBulkDeploymentsError::from_response(response))
+        }
     }
 
     /// <p>Lists the versions of a connector definition, which are containers for connectors. Connectors run on the Greengrass core and contain built-in integration with local infrastructure, device protocols, AWS, and other cloud services.</p>
-    fn list_connector_definition_versions(
+    async fn list_connector_definition_versions(
         &self,
         input: ListConnectorDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListConnectorDefinitionVersionsResponse, ListConnectorDefinitionVersionsError>
-    {
+    ) -> Result<
+        ListConnectorDefinitionVersionsResponse,
+        RusotoError<ListConnectorDefinitionVersionsError>,
+    > {
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}/versions",
             connector_definition_id = input.connector_definition_id
@@ -9618,43 +9036,30 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListConnectorDefinitionVersionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListConnectorDefinitionVersionsResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListConnectorDefinitionVersionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListConnectorDefinitionVersionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListConnectorDefinitionVersionsError>())
-                            .and_then(|response| {
-                                Err(ListConnectorDefinitionVersionsError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListConnectorDefinitionVersionsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Retrieves a list of connector definitions.</p>
-    fn list_connector_definitions(
+    async fn list_connector_definitions(
         &self,
         input: ListConnectorDefinitionsRequest,
-    ) -> RusotoFuture<ListConnectorDefinitionsResponse, ListConnectorDefinitionsError> {
+    ) -> Result<ListConnectorDefinitionsResponse, RusotoError<ListConnectorDefinitionsError>> {
         let request_uri = "/greengrass/definition/connectors";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9669,40 +9074,29 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListConnectorDefinitionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListConnectorDefinitionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListConnectorDefinitionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListConnectorDefinitionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListConnectorDefinitionsError>())
-                            .and_then(|response| {
-                                Err(ListConnectorDefinitionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListConnectorDefinitionsError::from_response(response))
+        }
     }
 
     /// <p>Lists the versions of a core definition.</p>
-    fn list_core_definition_versions(
+    async fn list_core_definition_versions(
         &self,
         input: ListCoreDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError> {
+    ) -> Result<ListCoreDefinitionVersionsResponse, RusotoError<ListCoreDefinitionVersionsError>>
+    {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}/versions",
             core_definition_id = input.core_definition_id
@@ -9720,40 +9114,28 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListCoreDefinitionVersionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCoreDefinitionVersionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListCoreDefinitionVersionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListCoreDefinitionVersionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListCoreDefinitionVersionsError>())
-                            .and_then(|response| {
-                                Err(ListCoreDefinitionVersionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListCoreDefinitionVersionsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of core definitions.</p>
-    fn list_core_definitions(
+    async fn list_core_definitions(
         &self,
         input: ListCoreDefinitionsRequest,
-    ) -> RusotoFuture<ListCoreDefinitionsResponse, ListCoreDefinitionsError> {
+    ) -> Result<ListCoreDefinitionsResponse, RusotoError<ListCoreDefinitionsError>> {
         let request_uri = "/greengrass/definition/cores";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9768,40 +9150,28 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListCoreDefinitionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCoreDefinitionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListCoreDefinitionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListCoreDefinitionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListCoreDefinitionsError>())
-                            .and_then(|response| {
-                                Err(ListCoreDefinitionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListCoreDefinitionsError::from_response(response))
+        }
     }
 
     /// <p>Returns a history of deployments for the group.</p>
-    fn list_deployments(
+    async fn list_deployments(
         &self,
         input: ListDeploymentsRequest,
-    ) -> RusotoFuture<ListDeploymentsResponse, ListDeploymentsError> {
+    ) -> Result<ListDeploymentsResponse, RusotoError<ListDeploymentsError>> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments",
             group_id = input.group_id
@@ -9819,38 +9189,29 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListDeploymentsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeploymentsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDeploymentsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDeploymentsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListDeploymentsError>())
-                            .and_then(|response| Err(ListDeploymentsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDeploymentsError::from_response(response))
+        }
     }
 
     /// <p>Lists the versions of a device definition.</p>
-    fn list_device_definition_versions(
+    async fn list_device_definition_versions(
         &self,
         input: ListDeviceDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError> {
+    ) -> Result<ListDeviceDefinitionVersionsResponse, RusotoError<ListDeviceDefinitionVersionsError>>
+    {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}/versions",
             device_definition_id = input.device_definition_id
@@ -9868,40 +9229,28 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListDeviceDefinitionVersionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeviceDefinitionVersionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDeviceDefinitionVersionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDeviceDefinitionVersionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListDeviceDefinitionVersionsError>())
-                            .and_then(|response| {
-                                Err(ListDeviceDefinitionVersionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDeviceDefinitionVersionsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of device definitions.</p>
-    fn list_device_definitions(
+    async fn list_device_definitions(
         &self,
         input: ListDeviceDefinitionsRequest,
-    ) -> RusotoFuture<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError> {
+    ) -> Result<ListDeviceDefinitionsResponse, RusotoError<ListDeviceDefinitionsError>> {
         let request_uri = "/greengrass/definition/devices";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -9916,41 +9265,31 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListDeviceDefinitionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeviceDefinitionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDeviceDefinitionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDeviceDefinitionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListDeviceDefinitionsError>())
-                            .and_then(|response| {
-                                Err(ListDeviceDefinitionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDeviceDefinitionsError::from_response(response))
+        }
     }
 
     /// <p>Lists the versions of a Lambda function definition.</p>
-    fn list_function_definition_versions(
+    async fn list_function_definition_versions(
         &self,
         input: ListFunctionDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError>
-    {
+    ) -> Result<
+        ListFunctionDefinitionVersionsResponse,
+        RusotoError<ListFunctionDefinitionVersionsError>,
+    > {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}/versions",
             function_definition_id = input.function_definition_id
@@ -9968,41 +9307,28 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListFunctionDefinitionVersionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFunctionDefinitionVersionsResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListFunctionDefinitionVersionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListFunctionDefinitionVersionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListFunctionDefinitionVersionsError>())
-                            .and_then(|response| {
-                                Err(ListFunctionDefinitionVersionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListFunctionDefinitionVersionsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of Lambda function definitions.</p>
-    fn list_function_definitions(
+    async fn list_function_definitions(
         &self,
         input: ListFunctionDefinitionsRequest,
-    ) -> RusotoFuture<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError> {
+    ) -> Result<ListFunctionDefinitionsResponse, RusotoError<ListFunctionDefinitionsError>> {
         let request_uri = "/greengrass/definition/functions";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -10017,41 +9343,31 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListFunctionDefinitionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFunctionDefinitionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListFunctionDefinitionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListFunctionDefinitionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListFunctionDefinitionsError>())
-                            .and_then(|response| {
-                                Err(ListFunctionDefinitionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListFunctionDefinitionsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the current CAs for a group.</p>
-    fn list_group_certificate_authorities(
+    async fn list_group_certificate_authorities(
         &self,
         input: ListGroupCertificateAuthoritiesRequest,
-    ) -> RusotoFuture<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError>
-    {
+    ) -> Result<
+        ListGroupCertificateAuthoritiesResponse,
+        RusotoError<ListGroupCertificateAuthoritiesError>,
+    > {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities",
             group_id = input.group_id
@@ -10060,43 +9376,30 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListGroupCertificateAuthoritiesError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGroupCertificateAuthoritiesResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListGroupCertificateAuthoritiesError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListGroupCertificateAuthoritiesResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListGroupCertificateAuthoritiesError>())
-                            .and_then(|response| {
-                                Err(ListGroupCertificateAuthoritiesError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListGroupCertificateAuthoritiesError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Lists the versions of a group.</p>
-    fn list_group_versions(
+    async fn list_group_versions(
         &self,
         input: ListGroupVersionsRequest,
-    ) -> RusotoFuture<ListGroupVersionsResponse, ListGroupVersionsError> {
+    ) -> Result<ListGroupVersionsResponse, RusotoError<ListGroupVersionsError>> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions",
             group_id = input.group_id
@@ -10114,40 +9417,28 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListGroupVersionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGroupVersionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListGroupVersionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListGroupVersionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListGroupVersionsError>())
-                            .and_then(|response| {
-                                Err(ListGroupVersionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListGroupVersionsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of groups.</p>
-    fn list_groups(
+    async fn list_groups(
         &self,
         input: ListGroupsRequest,
-    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError> {
+    ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>> {
         let request_uri = "/greengrass/groups";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -10162,38 +9453,29 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListGroupsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGroupsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListGroupsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<ListGroupsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListGroupsError>())
-                            .and_then(|response| Err(ListGroupsError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListGroupsError::from_response(response))
+        }
     }
 
     /// <p>Lists the versions of a logger definition.</p>
-    fn list_logger_definition_versions(
+    async fn list_logger_definition_versions(
         &self,
         input: ListLoggerDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError> {
+    ) -> Result<ListLoggerDefinitionVersionsResponse, RusotoError<ListLoggerDefinitionVersionsError>>
+    {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}/versions",
             logger_definition_id = input.logger_definition_id
@@ -10211,40 +9493,28 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListLoggerDefinitionVersionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLoggerDefinitionVersionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListLoggerDefinitionVersionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListLoggerDefinitionVersionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListLoggerDefinitionVersionsError>())
-                            .and_then(|response| {
-                                Err(ListLoggerDefinitionVersionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListLoggerDefinitionVersionsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of logger definitions.</p>
-    fn list_logger_definitions(
+    async fn list_logger_definitions(
         &self,
         input: ListLoggerDefinitionsRequest,
-    ) -> RusotoFuture<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError> {
+    ) -> Result<ListLoggerDefinitionsResponse, RusotoError<ListLoggerDefinitionsError>> {
         let request_uri = "/greengrass/definition/loggers";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -10259,41 +9529,31 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListLoggerDefinitionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLoggerDefinitionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListLoggerDefinitionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListLoggerDefinitionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListLoggerDefinitionsError>())
-                            .and_then(|response| {
-                                Err(ListLoggerDefinitionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListLoggerDefinitionsError::from_response(response))
+        }
     }
 
     /// <p>Lists the versions of a resource definition.</p>
-    fn list_resource_definition_versions(
+    async fn list_resource_definition_versions(
         &self,
         input: ListResourceDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListResourceDefinitionVersionsResponse, ListResourceDefinitionVersionsError>
-    {
+    ) -> Result<
+        ListResourceDefinitionVersionsResponse,
+        RusotoError<ListResourceDefinitionVersionsError>,
+    > {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}/versions",
             resource_definition_id = input.resource_definition_id
@@ -10311,41 +9571,28 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListResourceDefinitionVersionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourceDefinitionVersionsResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListResourceDefinitionVersionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListResourceDefinitionVersionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListResourceDefinitionVersionsError>())
-                            .and_then(|response| {
-                                Err(ListResourceDefinitionVersionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListResourceDefinitionVersionsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of resource definitions.</p>
-    fn list_resource_definitions(
+    async fn list_resource_definitions(
         &self,
         input: ListResourceDefinitionsRequest,
-    ) -> RusotoFuture<ListResourceDefinitionsResponse, ListResourceDefinitionsError> {
+    ) -> Result<ListResourceDefinitionsResponse, RusotoError<ListResourceDefinitionsError>> {
         let request_uri = "/greengrass/definition/resources";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -10360,42 +9607,30 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListResourceDefinitionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourceDefinitionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListResourceDefinitionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListResourceDefinitionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListResourceDefinitionsError>())
-                            .and_then(|response| {
-                                Err(ListResourceDefinitionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListResourceDefinitionsError::from_response(response))
+        }
     }
 
     /// <p>Lists the versions of a subscription definition.</p>
-    fn list_subscription_definition_versions(
+    async fn list_subscription_definition_versions(
         &self,
         input: ListSubscriptionDefinitionVersionsRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListSubscriptionDefinitionVersionsResponse,
-        ListSubscriptionDefinitionVersionsError,
+        RusotoError<ListSubscriptionDefinitionVersionsError>,
     > {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}/versions",
@@ -10414,43 +9649,31 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListSubscriptionDefinitionVersionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSubscriptionDefinitionVersionsResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListSubscriptionDefinitionVersionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSubscriptionDefinitionVersionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListSubscriptionDefinitionVersionsError>())
-                            .and_then(|response| {
-                                Err(ListSubscriptionDefinitionVersionsError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSubscriptionDefinitionVersionsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Retrieves a list of subscription definitions.</p>
-    fn list_subscription_definitions(
+    async fn list_subscription_definitions(
         &self,
         input: ListSubscriptionDefinitionsRequest,
-    ) -> RusotoFuture<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError> {
+    ) -> Result<ListSubscriptionDefinitionsResponse, RusotoError<ListSubscriptionDefinitionsError>>
+    {
         let request_uri = "/greengrass/definition/subscriptions";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -10465,79 +9688,55 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListSubscriptionDefinitionsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSubscriptionDefinitionsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListSubscriptionDefinitionsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSubscriptionDefinitionsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListSubscriptionDefinitionsError>())
-                            .and_then(|response| {
-                                Err(ListSubscriptionDefinitionsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSubscriptionDefinitionsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the tags for a resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ListTagsForResourceError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ListTagsForResourceError>())
-                            .and_then(|response| {
-                                Err(ListTagsForResourceError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p>Resets a group&#39;s deployments.</p>
-    fn reset_deployments(
+    async fn reset_deployments(
         &self,
         input: ResetDeploymentsRequest,
-    ) -> RusotoFuture<ResetDeploymentsResponse, ResetDeploymentsError> {
+    ) -> Result<ResetDeploymentsResponse, RusotoError<ResetDeploymentsError>> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments/$reset",
             group_id = input.group_id
@@ -10553,40 +9752,28 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| ResetDeploymentsError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResetDeploymentsResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ResetDeploymentsError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ResetDeploymentsResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<ResetDeploymentsError>())
-                            .and_then(|response| {
-                                Err(ResetDeploymentsError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ResetDeploymentsError::from_response(response))
+        }
     }
 
     /// <p>Deploys multiple groups in one operation. This action starts the bulk deployment of a specified set of group versions. Each group version deployment will be triggered with an adaptive rate that has a fixed upper limit. We recommend that you include an &#39;&#39;X-Amzn-Client-Token&#39;&#39; token in every &#39;&#39;StartBulkDeployment&#39;&#39; request. These requests are idempotent with respect to the token and the request parameters.</p>
-    fn start_bulk_deployment(
+    async fn start_bulk_deployment(
         &self,
         input: StartBulkDeploymentRequest,
-    ) -> RusotoFuture<StartBulkDeploymentResponse, StartBulkDeploymentError> {
+    ) -> Result<StartBulkDeploymentResponse, RusotoError<StartBulkDeploymentError>> {
         let request_uri = "/greengrass/bulk/deployments";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -10599,40 +9786,28 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| StartBulkDeploymentError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartBulkDeploymentResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartBulkDeploymentError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartBulkDeploymentResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<StartBulkDeploymentError>())
-                            .and_then(|response| {
-                                Err(StartBulkDeploymentError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(StartBulkDeploymentError::from_response(response))
+        }
     }
 
     /// <p>Stops the execution of a bulk deployment. This action returns a status of &#39;&#39;Stopping&#39;&#39; until the deployment is stopped. You cannot start a new bulk deployment while a previous deployment is in the &#39;&#39;Stopping&#39;&#39; state. This action doesn&#39;t rollback completed deployments or cancel pending deployments.</p>
-    fn stop_bulk_deployment(
+    async fn stop_bulk_deployment(
         &self,
         input: StopBulkDeploymentRequest,
-    ) -> RusotoFuture<StopBulkDeploymentResponse, StopBulkDeploymentError> {
+    ) -> Result<StopBulkDeploymentResponse, RusotoError<StopBulkDeploymentError>> {
         let request_uri = format!(
             "/greengrass/bulk/deployments/{bulk_deployment_id}/$stop",
             bulk_deployment_id = input.bulk_deployment_id
@@ -10641,37 +9816,28 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| StopBulkDeploymentError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopBulkDeploymentResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StopBulkDeploymentError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<StopBulkDeploymentResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<StopBulkDeploymentError>())
-                            .and_then(|response| {
-                                Err(StopBulkDeploymentError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(StopBulkDeploymentError::from_response(response))
+        }
     }
 
     /// <p>Add tags to a resource.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -10680,34 +9846,27 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                response
-                    .buffer()
-                    .map_err(|e| TagResourceError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagResourceError::SignAndDispatch)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<TagResourceError>())
-                            .and_then(|response| Err(TagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p>Remove tags with specified keys from a resource.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
@@ -10719,37 +9878,27 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 204 {
-                response
-                    .buffer()
-                    .map_err(|e| UntagResourceError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = ::std::mem::drop(response);
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagResourceError::SignAndDispatch)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UntagResourceError>())
-                            .and_then(|response| Err(UntagResourceError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
-    fn update_connectivity_info(
+    async fn update_connectivity_info(
         &self,
         input: UpdateConnectivityInfoRequest,
-    ) -> RusotoFuture<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError> {
+    ) -> Result<UpdateConnectivityInfoResponse, RusotoError<UpdateConnectivityInfoError>> {
         let request_uri = format!(
             "/greengrass/things/{thing_name}/connectivityInfo",
             thing_name = input.thing_name
@@ -10761,40 +9910,29 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateConnectivityInfoError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateConnectivityInfoResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateConnectivityInfoError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateConnectivityInfoResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateConnectivityInfoError>())
-                            .and_then(|response| {
-                                Err(UpdateConnectivityInfoError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateConnectivityInfoError::from_response(response))
+        }
     }
 
     /// <p>Updates a connector definition.</p>
-    fn update_connector_definition(
+    async fn update_connector_definition(
         &self,
         input: UpdateConnectorDefinitionRequest,
-    ) -> RusotoFuture<UpdateConnectorDefinitionResponse, UpdateConnectorDefinitionError> {
+    ) -> Result<UpdateConnectorDefinitionResponse, RusotoError<UpdateConnectorDefinitionError>>
+    {
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}",
             connector_definition_id = input.connector_definition_id
@@ -10806,40 +9944,28 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateConnectorDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateConnectorDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateConnectorDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateConnectorDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateConnectorDefinitionError>())
-                            .and_then(|response| {
-                                Err(UpdateConnectorDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateConnectorDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Updates a core definition.</p>
-    fn update_core_definition(
+    async fn update_core_definition(
         &self,
         input: UpdateCoreDefinitionRequest,
-    ) -> RusotoFuture<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError> {
+    ) -> Result<UpdateCoreDefinitionResponse, RusotoError<UpdateCoreDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
             core_definition_id = input.core_definition_id
@@ -10851,40 +9977,28 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateCoreDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateCoreDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateCoreDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateCoreDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateCoreDefinitionError>())
-                            .and_then(|response| {
-                                Err(UpdateCoreDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateCoreDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Updates a device definition.</p>
-    fn update_device_definition(
+    async fn update_device_definition(
         &self,
         input: UpdateDeviceDefinitionRequest,
-    ) -> RusotoFuture<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError> {
+    ) -> Result<UpdateDeviceDefinitionResponse, RusotoError<UpdateDeviceDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
             device_definition_id = input.device_definition_id
@@ -10896,40 +10010,28 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateDeviceDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDeviceDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateDeviceDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateDeviceDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateDeviceDefinitionError>())
-                            .and_then(|response| {
-                                Err(UpdateDeviceDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDeviceDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Updates a Lambda function definition.</p>
-    fn update_function_definition(
+    async fn update_function_definition(
         &self,
         input: UpdateFunctionDefinitionRequest,
-    ) -> RusotoFuture<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError> {
+    ) -> Result<UpdateFunctionDefinitionResponse, RusotoError<UpdateFunctionDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
             function_definition_id = input.function_definition_id
@@ -10941,40 +10043,28 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateFunctionDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateFunctionDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateFunctionDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateFunctionDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateFunctionDefinitionError>())
-                            .and_then(|response| {
-                                Err(UpdateFunctionDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateFunctionDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Updates a group.</p>
-    fn update_group(
+    async fn update_group(
         &self,
         input: UpdateGroupRequest,
-    ) -> RusotoFuture<UpdateGroupResponse, UpdateGroupError> {
+    ) -> Result<UpdateGroupResponse, RusotoError<UpdateGroupError>> {
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
@@ -10983,40 +10073,30 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateGroupError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGroupResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateGroupError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateGroupResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateGroupError>())
-                            .and_then(|response| Err(UpdateGroupError::from_response(response)))
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateGroupError::from_response(response))
+        }
     }
 
     /// <p>Updates the Certificate expiry time for a group.</p>
-    fn update_group_certificate_configuration(
+    async fn update_group_certificate_configuration(
         &self,
         input: UpdateGroupCertificateConfigurationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateGroupCertificateConfigurationResponse,
-        UpdateGroupCertificateConfigurationError,
+        RusotoError<UpdateGroupCertificateConfigurationError>,
     > {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities/configuration/expiry",
@@ -11029,43 +10109,30 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateGroupCertificateConfigurationError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGroupCertificateConfigurationResponse, _>(
-                            );
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateGroupCertificateConfigurationError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateGroupCertificateConfigurationResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateGroupCertificateConfigurationError>())
-                            .and_then(|response| {
-                                Err(UpdateGroupCertificateConfigurationError::from_response(
-                                    response,
-                                ))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateGroupCertificateConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Updates a logger definition.</p>
-    fn update_logger_definition(
+    async fn update_logger_definition(
         &self,
         input: UpdateLoggerDefinitionRequest,
-    ) -> RusotoFuture<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError> {
+    ) -> Result<UpdateLoggerDefinitionResponse, RusotoError<UpdateLoggerDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
             logger_definition_id = input.logger_definition_id
@@ -11077,40 +10144,28 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateLoggerDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateLoggerDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateLoggerDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateLoggerDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateLoggerDefinitionError>())
-                            .and_then(|response| {
-                                Err(UpdateLoggerDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateLoggerDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Updates a resource definition.</p>
-    fn update_resource_definition(
+    async fn update_resource_definition(
         &self,
         input: UpdateResourceDefinitionRequest,
-    ) -> RusotoFuture<UpdateResourceDefinitionResponse, UpdateResourceDefinitionError> {
+    ) -> Result<UpdateResourceDefinitionResponse, RusotoError<UpdateResourceDefinitionError>> {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
             resource_definition_id = input.resource_definition_id
@@ -11122,40 +10177,29 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateResourceDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateResourceDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateResourceDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateResourceDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateResourceDefinitionError>())
-                            .and_then(|response| {
-                                Err(UpdateResourceDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateResourceDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Updates a subscription definition.</p>
-    fn update_subscription_definition(
+    async fn update_subscription_definition(
         &self,
         input: UpdateSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError> {
+    ) -> Result<UpdateSubscriptionDefinitionResponse, RusotoError<UpdateSubscriptionDefinitionError>>
+    {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
             subscription_definition_id = input.subscription_definition_id
@@ -11167,32 +10211,20 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.as_u16() == 200 {
-                response
-                    .buffer()
-                    .map_err(|e| UpdateSubscriptionDefinitionError::from(e))
-                    .map(|try_response| {
-                        try_response.map_err(|e| e.into()).and_then(|response| {
-                            let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSubscriptionDefinitionResponse, _>();
+        let response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateSubscriptionDefinitionError::SignAndDispatch)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSubscriptionDefinitionResponse, _>();
 
-                            result
-                        })
-                    })
-                    .boxed()
-            } else {
-                response
-                    .buffer()
-                    .map(|try_response| {
-                        try_response
-                            .map_err(|e| e.into::<UpdateSubscriptionDefinitionError>())
-                            .and_then(|response| {
-                                Err(UpdateSubscriptionDefinitionError::from_response(response))
-                            })
-                    })
-                    .boxed()
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSubscriptionDefinitionError::from_response(response))
+        }
     }
 }
