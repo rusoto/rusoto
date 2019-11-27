@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -2479,11 +2478,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateBrokerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateBrokerResponse, _>();
+                .deserialize::<CreateBrokerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2509,11 +2508,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateConfigurationResponse, _>();
+                .deserialize::<CreateConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2539,7 +2538,7 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateTagsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -2572,11 +2571,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateUserResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2599,11 +2598,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteBrokerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteBrokerResponse, _>();
+                .deserialize::<DeleteBrokerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2632,7 +2631,7 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteTagsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -2662,11 +2661,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<DeleteUserResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2689,11 +2688,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeBrokerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeBrokerResponse, _>();
+                .deserialize::<DescribeBrokerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2729,11 +2728,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeBrokerEngineTypesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeBrokerEngineTypesResponse, _>();
+                .deserialize::<DescribeBrokerEngineTypesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2774,11 +2773,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeBrokerInstanceOptionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeBrokerInstanceOptionsResponse, _>();
+                .deserialize::<DescribeBrokerInstanceOptionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2804,11 +2803,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigurationResponse, _>();
+                .deserialize::<DescribeConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2838,11 +2837,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeConfigurationRevisionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigurationRevisionResponse, _>();
+                .deserialize::<DescribeConfigurationRevisionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2869,11 +2868,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeUserResponse, _>();
+                .deserialize::<DescribeUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2905,11 +2904,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListBrokersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBrokersResponse, _>();
+                .deserialize::<ListBrokersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2945,11 +2944,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListConfigurationRevisionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListConfigurationRevisionsResponse, _>();
+                .deserialize::<ListConfigurationRevisionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2981,11 +2980,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListConfigurationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListConfigurationsResponse, _>();
+                .deserialize::<ListConfigurationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3008,11 +3007,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3044,11 +3043,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListUsersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListUsersResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListUsersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3074,11 +3073,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RebootBrokerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RebootBrokerResponse, _>();
+                .deserialize::<RebootBrokerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3104,11 +3103,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateBrokerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateBrokerResponse, _>();
+                .deserialize::<UpdateBrokerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3137,11 +3136,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateConfigurationResponse, _>();
+                .deserialize::<UpdateConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3171,11 +3170,11 @@ impl MQ for MQClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UpdateUserResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateUserResponse, _>()?;
 
             Ok(result)
         } else {

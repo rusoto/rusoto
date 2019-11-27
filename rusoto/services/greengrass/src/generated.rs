@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -7163,11 +7162,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AssociateRoleToGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateRoleToGroupResponse, _>();
+                .deserialize::<AssociateRoleToGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7196,11 +7195,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AssociateServiceRoleToAccountError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateServiceRoleToAccountResponse, _>();
+                .deserialize::<AssociateServiceRoleToAccountResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7231,11 +7230,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateConnectorDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateConnectorDefinitionResponse, _>();
+                .deserialize::<CreateConnectorDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7271,11 +7270,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateConnectorDefinitionVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateConnectorDefinitionVersionResponse, _>();
+                .deserialize::<CreateConnectorDefinitionVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7307,11 +7306,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateCoreDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateCoreDefinitionResponse, _>();
+                .deserialize::<CreateCoreDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7345,11 +7344,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateCoreDefinitionVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateCoreDefinitionVersionResponse, _>();
+                .deserialize::<CreateCoreDefinitionVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7382,11 +7381,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateDeploymentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDeploymentResponse, _>();
+                .deserialize::<CreateDeploymentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7416,11 +7415,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateDeviceDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDeviceDefinitionResponse, _>();
+                .deserialize::<CreateDeviceDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7456,11 +7455,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateDeviceDefinitionVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDeviceDefinitionVersionResponse, _>();
+                .deserialize::<CreateDeviceDefinitionVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7490,11 +7489,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateFunctionDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateFunctionDefinitionResponse, _>();
+                .deserialize::<CreateFunctionDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7530,11 +7529,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateFunctionDefinitionVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateFunctionDefinitionVersionResponse, _>();
+                .deserialize::<CreateFunctionDefinitionVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7566,11 +7565,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateGroupResponse, _>();
+                .deserialize::<CreateGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7603,11 +7602,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateGroupCertificateAuthorityError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateGroupCertificateAuthorityResponse, _>();
+                .deserialize::<CreateGroupCertificateAuthorityResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7642,11 +7641,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateGroupVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateGroupVersionResponse, _>();
+                .deserialize::<CreateGroupVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7676,11 +7675,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateLoggerDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLoggerDefinitionResponse, _>();
+                .deserialize::<CreateLoggerDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7716,11 +7715,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateLoggerDefinitionVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLoggerDefinitionVersionResponse, _>();
+                .deserialize::<CreateLoggerDefinitionVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7750,11 +7749,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateResourceDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateResourceDefinitionResponse, _>();
+                .deserialize::<CreateResourceDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7790,11 +7789,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateResourceDefinitionVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateResourceDefinitionVersionResponse, _>();
+                .deserialize::<CreateResourceDefinitionVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7826,11 +7825,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateSoftwareUpdateJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSoftwareUpdateJobResponse, _>();
+                .deserialize::<CreateSoftwareUpdateJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7861,11 +7860,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateSubscriptionDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSubscriptionDefinitionResponse, _>();
+                .deserialize::<CreateSubscriptionDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7901,11 +7900,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateSubscriptionDefinitionVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSubscriptionDefinitionVersionResponse, _>();
+                .deserialize::<CreateSubscriptionDefinitionVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7934,11 +7933,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteConnectorDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteConnectorDefinitionResponse, _>();
+                .deserialize::<DeleteConnectorDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7964,11 +7963,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteCoreDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteCoreDefinitionResponse, _>();
+                .deserialize::<DeleteCoreDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7994,11 +7993,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteDeviceDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDeviceDefinitionResponse, _>();
+                .deserialize::<DeleteDeviceDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8024,11 +8023,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteFunctionDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteFunctionDefinitionResponse, _>();
+                .deserialize::<DeleteFunctionDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8051,11 +8050,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteGroupResponse, _>();
+                .deserialize::<DeleteGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8081,11 +8080,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteLoggerDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteLoggerDefinitionResponse, _>();
+                .deserialize::<DeleteLoggerDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8111,11 +8110,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteResourceDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteResourceDefinitionResponse, _>();
+                .deserialize::<DeleteResourceDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8142,11 +8141,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteSubscriptionDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSubscriptionDefinitionResponse, _>();
+                .deserialize::<DeleteSubscriptionDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8173,11 +8172,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DisassociateRoleFromGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateRoleFromGroupResponse, _>();
+                .deserialize::<DisassociateRoleFromGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8202,11 +8201,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DisassociateServiceRoleFromAccountError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateServiceRoleFromAccountResponse, _>();
+                .deserialize::<DisassociateServiceRoleFromAccountResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8234,11 +8233,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetAssociatedRoleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAssociatedRoleResponse, _>();
+                .deserialize::<GetAssociatedRoleResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8264,11 +8263,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBulkDeploymentStatusError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBulkDeploymentStatusResponse, _>();
+                .deserialize::<GetBulkDeploymentStatusResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8294,11 +8293,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetConnectivityInfoError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConnectivityInfoResponse, _>();
+                .deserialize::<GetConnectivityInfoResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8324,11 +8323,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetConnectorDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConnectorDefinitionResponse, _>();
+                .deserialize::<GetConnectorDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8360,11 +8359,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetConnectorDefinitionVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConnectorDefinitionVersionResponse, _>();
+                .deserialize::<GetConnectorDefinitionVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8390,11 +8389,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetCoreDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCoreDefinitionResponse, _>();
+                .deserialize::<GetCoreDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8417,11 +8416,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetCoreDefinitionVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCoreDefinitionVersionResponse, _>();
+                .deserialize::<GetCoreDefinitionVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8448,11 +8447,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDeploymentStatusError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDeploymentStatusResponse, _>();
+                .deserialize::<GetDeploymentStatusResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8478,11 +8477,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDeviceDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDeviceDefinitionResponse, _>();
+                .deserialize::<GetDeviceDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8512,11 +8511,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDeviceDefinitionVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDeviceDefinitionVersionResponse, _>();
+                .deserialize::<GetDeviceDefinitionVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8542,11 +8541,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetFunctionDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFunctionDefinitionResponse, _>();
+                .deserialize::<GetFunctionDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8576,11 +8575,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetFunctionDefinitionVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFunctionDefinitionVersionResponse, _>();
+                .deserialize::<GetFunctionDefinitionVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8603,11 +8602,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetGroupResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8635,11 +8634,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetGroupCertificateAuthorityError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetGroupCertificateAuthorityResponse, _>();
+                .deserialize::<GetGroupCertificateAuthorityResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8668,11 +8667,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetGroupCertificateConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetGroupCertificateConfigurationResponse, _>();
+                .deserialize::<GetGroupCertificateConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8701,11 +8700,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetGroupVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetGroupVersionResponse, _>();
+                .deserialize::<GetGroupVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8731,11 +8730,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetLoggerDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetLoggerDefinitionResponse, _>();
+                .deserialize::<GetLoggerDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8765,11 +8764,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetLoggerDefinitionVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetLoggerDefinitionVersionResponse, _>();
+                .deserialize::<GetLoggerDefinitionVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8795,11 +8794,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetResourceDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResourceDefinitionResponse, _>();
+                .deserialize::<GetResourceDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8823,11 +8822,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetResourceDefinitionVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResourceDefinitionVersionResponse, _>();
+                .deserialize::<GetResourceDefinitionVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8849,11 +8848,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetServiceRoleForAccountError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetServiceRoleForAccountResponse, _>();
+                .deserialize::<GetServiceRoleForAccountResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8880,11 +8879,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetSubscriptionDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSubscriptionDefinitionResponse, _>();
+                .deserialize::<GetSubscriptionDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8916,11 +8915,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetSubscriptionDefinitionVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSubscriptionDefinitionVersionResponse, _>();
+                .deserialize::<GetSubscriptionDefinitionVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8960,11 +8959,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListBulkDeploymentDetailedReportsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBulkDeploymentDetailedReportsResponse, _>();
+                .deserialize::<ListBulkDeploymentDetailedReportsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8998,11 +8997,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListBulkDeploymentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBulkDeploymentsResponse, _>();
+                .deserialize::<ListBulkDeploymentsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9040,11 +9039,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListConnectorDefinitionVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListConnectorDefinitionVersionsResponse, _>();
+                .deserialize::<ListConnectorDefinitionVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9078,11 +9077,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListConnectorDefinitionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListConnectorDefinitionsResponse, _>();
+                .deserialize::<ListConnectorDefinitionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9118,11 +9117,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListCoreDefinitionVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListCoreDefinitionVersionsResponse, _>();
+                .deserialize::<ListCoreDefinitionVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9154,11 +9153,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListCoreDefinitionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListCoreDefinitionsResponse, _>();
+                .deserialize::<ListCoreDefinitionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9193,11 +9192,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDeploymentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDeploymentsResponse, _>();
+                .deserialize::<ListDeploymentsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9233,11 +9232,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDeviceDefinitionVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDeviceDefinitionVersionsResponse, _>();
+                .deserialize::<ListDeviceDefinitionVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9269,11 +9268,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDeviceDefinitionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDeviceDefinitionsResponse, _>();
+                .deserialize::<ListDeviceDefinitionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9311,11 +9310,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListFunctionDefinitionVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListFunctionDefinitionVersionsResponse, _>();
+                .deserialize::<ListFunctionDefinitionVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9347,11 +9346,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListFunctionDefinitionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListFunctionDefinitionsResponse, _>();
+                .deserialize::<ListFunctionDefinitionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9380,11 +9379,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListGroupCertificateAuthoritiesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListGroupCertificateAuthoritiesResponse, _>();
+                .deserialize::<ListGroupCertificateAuthoritiesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9421,11 +9420,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListGroupVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListGroupVersionsResponse, _>();
+                .deserialize::<ListGroupVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9457,11 +9456,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListGroupsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListGroupsResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListGroupsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9497,11 +9496,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListLoggerDefinitionVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListLoggerDefinitionVersionsResponse, _>();
+                .deserialize::<ListLoggerDefinitionVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9533,11 +9532,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListLoggerDefinitionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListLoggerDefinitionsResponse, _>();
+                .deserialize::<ListLoggerDefinitionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9575,11 +9574,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListResourceDefinitionVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResourceDefinitionVersionsResponse, _>();
+                .deserialize::<ListResourceDefinitionVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9611,11 +9610,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListResourceDefinitionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResourceDefinitionsResponse, _>();
+                .deserialize::<ListResourceDefinitionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9653,11 +9652,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListSubscriptionDefinitionVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSubscriptionDefinitionVersionsResponse, _>();
+                .deserialize::<ListSubscriptionDefinitionVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9692,11 +9691,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListSubscriptionDefinitionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSubscriptionDefinitionsResponse, _>();
+                .deserialize::<ListSubscriptionDefinitionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9719,11 +9718,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>();
+                .deserialize::<ListTagsForResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9756,11 +9755,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ResetDeploymentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ResetDeploymentsResponse, _>();
+                .deserialize::<ResetDeploymentsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9790,11 +9789,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StartBulkDeploymentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartBulkDeploymentResponse, _>();
+                .deserialize::<StartBulkDeploymentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9820,11 +9819,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StopBulkDeploymentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopBulkDeploymentResponse, _>();
+                .deserialize::<StopBulkDeploymentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9850,7 +9849,7 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -9882,7 +9881,7 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -9914,11 +9913,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateConnectivityInfoError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateConnectivityInfoResponse, _>();
+                .deserialize::<UpdateConnectivityInfoResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9948,11 +9947,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateConnectorDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateConnectorDefinitionResponse, _>();
+                .deserialize::<UpdateConnectorDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9981,11 +9980,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateCoreDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateCoreDefinitionResponse, _>();
+                .deserialize::<UpdateCoreDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10014,11 +10013,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDeviceDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDeviceDefinitionResponse, _>();
+                .deserialize::<UpdateDeviceDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10047,11 +10046,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateFunctionDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateFunctionDefinitionResponse, _>();
+                .deserialize::<UpdateFunctionDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10077,11 +10076,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateGroupResponse, _>();
+                .deserialize::<UpdateGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10113,11 +10112,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateGroupCertificateConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateGroupCertificateConfigurationResponse, _>();
+                .deserialize::<UpdateGroupCertificateConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10148,11 +10147,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateLoggerDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateLoggerDefinitionResponse, _>();
+                .deserialize::<UpdateLoggerDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10181,11 +10180,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateResourceDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateResourceDefinitionResponse, _>();
+                .deserialize::<UpdateResourceDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10215,11 +10214,11 @@ impl GreenGrass for GreenGrassClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateSubscriptionDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateSubscriptionDefinitionResponse, _>();
+                .deserialize::<UpdateSubscriptionDefinitionResponse, _>()?;
 
             Ok(result)
         } else {

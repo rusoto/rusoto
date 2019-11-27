@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -3666,11 +3665,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateApiKeyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateApiKeyResponse, _>();
+                .deserialize::<CreateApiKeyResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3696,11 +3695,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateDataSourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDataSourceResponse, _>();
+                .deserialize::<CreateDataSourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3726,11 +3725,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateFunctionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateFunctionResponse, _>();
+                .deserialize::<CreateFunctionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3756,11 +3755,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateGraphqlApiError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateGraphqlApiResponse, _>();
+                .deserialize::<CreateGraphqlApiResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3790,11 +3789,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateResolverError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateResolverResponse, _>();
+                .deserialize::<CreateResolverResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3820,11 +3819,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateTypeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateTypeResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateTypeResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3851,11 +3850,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteApiKeyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteApiKeyResponse, _>();
+                .deserialize::<DeleteApiKeyResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3882,11 +3881,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteDataSourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDataSourceResponse, _>();
+                .deserialize::<DeleteDataSourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3913,11 +3912,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteFunctionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteFunctionResponse, _>();
+                .deserialize::<DeleteFunctionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3940,11 +3939,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteGraphqlApiError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteGraphqlApiResponse, _>();
+                .deserialize::<DeleteGraphqlApiResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3972,11 +3971,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteResolverError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteResolverResponse, _>();
+                .deserialize::<DeleteResolverResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4003,11 +4002,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteTypeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<DeleteTypeResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteTypeResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4034,11 +4033,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDataSourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDataSourceResponse, _>();
+                .deserialize::<GetDataSourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4065,11 +4064,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetFunctionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFunctionResponse, _>();
+                .deserialize::<GetFunctionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4092,11 +4091,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetGraphqlApiError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetGraphqlApiResponse, _>();
+                .deserialize::<GetGraphqlApiResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4126,7 +4125,7 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetIntrospectionSchemaError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
@@ -4159,11 +4158,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetResolverError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResolverResponse, _>();
+                .deserialize::<GetResolverResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4186,11 +4185,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetSchemaCreationStatusError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSchemaCreationStatusResponse, _>();
+                .deserialize::<GetSchemaCreationStatusResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4221,11 +4220,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetTypeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetTypeResponse, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetTypeResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4257,11 +4256,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListApiKeysError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListApiKeysResponse, _>();
+                .deserialize::<ListApiKeysResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4293,11 +4292,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDataSourcesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDataSourcesResponse, _>();
+                .deserialize::<ListDataSourcesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4329,11 +4328,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListFunctionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListFunctionsResponse, _>();
+                .deserialize::<ListFunctionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4365,11 +4364,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListGraphqlApisError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListGraphqlApisResponse, _>();
+                .deserialize::<ListGraphqlApisResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4405,11 +4404,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListResolversError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResolversResponse, _>();
+                .deserialize::<ListResolversResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4445,11 +4444,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListResolversByFunctionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResolversByFunctionResponse, _>();
+                .deserialize::<ListResolversByFunctionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4472,11 +4471,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>();
+                .deserialize::<ListTagsForResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4509,11 +4508,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTypesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListTypesResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTypesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4539,11 +4538,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StartSchemaCreationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartSchemaCreationResponse, _>();
+                .deserialize::<StartSchemaCreationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4569,11 +4568,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>();
+                .deserialize::<TagResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4602,11 +4601,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>();
+                .deserialize::<UntagResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4636,11 +4635,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateApiKeyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateApiKeyResponse, _>();
+                .deserialize::<UpdateApiKeyResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4670,11 +4669,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDataSourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDataSourceResponse, _>();
+                .deserialize::<UpdateDataSourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4704,11 +4703,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateFunctionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateFunctionResponse, _>();
+                .deserialize::<UpdateFunctionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4734,11 +4733,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateGraphqlApiError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateGraphqlApiResponse, _>();
+                .deserialize::<UpdateGraphqlApiResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4769,11 +4768,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateResolverError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateResolverResponse, _>();
+                .deserialize::<UpdateResolverResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4803,11 +4802,11 @@ impl AppSync for AppSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateTypeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UpdateTypeResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateTypeResponse, _>()?;
 
             Ok(result)
         } else {

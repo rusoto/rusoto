@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -5848,11 +5847,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AssociateCertificateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateCertificateResponse, _>();
+                .deserialize::<AssociateCertificateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5875,11 +5874,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CancelJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CancelJobResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CancelJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5905,11 +5904,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateJobResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5935,11 +5934,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateJobTemplateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateJobTemplateResponse, _>();
+                .deserialize::<CreateJobTemplateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5965,11 +5964,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreatePresetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePresetResponse, _>();
+                .deserialize::<CreatePresetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5995,11 +5994,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateQueueError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateQueueResponse, _>();
+                .deserialize::<CreateQueueResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6022,11 +6021,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteJobTemplateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteJobTemplateResponse, _>();
+                .deserialize::<DeleteJobTemplateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6049,11 +6048,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeletePresetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePresetResponse, _>();
+                .deserialize::<DeletePresetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6076,11 +6075,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteQueueError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteQueueResponse, _>();
+                .deserialize::<DeleteQueueResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6106,11 +6105,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeEndpointsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEndpointsResponse, _>();
+                .deserialize::<DescribeEndpointsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6133,11 +6132,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DisassociateCertificateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateCertificateResponse, _>();
+                .deserialize::<DisassociateCertificateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6160,11 +6159,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetJobResponse, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6187,11 +6186,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetJobTemplateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetJobTemplateResponse, _>();
+                .deserialize::<GetJobTemplateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6214,11 +6213,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetPresetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetPresetResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetPresetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6241,11 +6240,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetQueueError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetQueueResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetQueueResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6286,11 +6285,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListJobTemplatesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJobTemplatesResponse, _>();
+                .deserialize::<ListJobTemplatesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6331,11 +6330,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListJobsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListJobsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6376,11 +6375,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPresetsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPresetsResponse, _>();
+                .deserialize::<ListPresetsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6418,11 +6417,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListQueuesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListQueuesResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListQueuesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6445,11 +6444,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>();
+                .deserialize::<ListTagsForResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6475,11 +6474,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>();
+                .deserialize::<TagResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6505,11 +6504,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>();
+                .deserialize::<UntagResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6535,11 +6534,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateJobTemplateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateJobTemplateResponse, _>();
+                .deserialize::<UpdateJobTemplateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6565,11 +6564,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdatePresetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePresetResponse, _>();
+                .deserialize::<UpdatePresetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6595,11 +6594,11 @@ impl MediaConvert for MediaConvertClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateQueueError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateQueueResponse, _>();
+                .deserialize::<UpdateQueueResponse, _>()?;
 
             Ok(result)
         } else {

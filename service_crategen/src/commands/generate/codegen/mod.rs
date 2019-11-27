@@ -140,7 +140,7 @@ where
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
         use rusoto_core::region;
         use rusoto_core::credential::ProvideAwsCredentials;
-        use rusoto_core::{{Client, HttpDispatchError, RusotoFuture, RusotoError}};
+        use rusoto_core::{{Client, RusotoError}};
     "
     )?;
 

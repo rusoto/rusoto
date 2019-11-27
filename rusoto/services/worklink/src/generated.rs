@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -3011,11 +3010,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AssociateDomainError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateDomainResponse, _>();
+                .deserialize::<AssociateDomainResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3044,11 +3043,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AssociateWebsiteAuthorizationProviderError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateWebsiteAuthorizationProviderResponse, _>();
+                .deserialize::<AssociateWebsiteAuthorizationProviderResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3079,11 +3078,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AssociateWebsiteCertificateAuthorityError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateWebsiteCertificateAuthorityResponse, _>();
+                .deserialize::<AssociateWebsiteCertificateAuthorityResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3111,11 +3110,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateFleetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateFleetResponse, _>();
+                .deserialize::<CreateFleetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3141,11 +3140,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteFleetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteFleetResponse, _>();
+                .deserialize::<DeleteFleetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3174,11 +3173,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeAuditStreamConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAuditStreamConfigurationResponse, _>();
+                .deserialize::<DescribeAuditStreamConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3209,11 +3208,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeCompanyNetworkConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeCompanyNetworkConfigurationResponse, _>();
+                .deserialize::<DescribeCompanyNetworkConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3241,11 +3240,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeDeviceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDeviceResponse, _>();
+                .deserialize::<DescribeDeviceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3274,11 +3273,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeDevicePolicyConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDevicePolicyConfigurationResponse, _>();
+                .deserialize::<DescribeDevicePolicyConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3306,11 +3305,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeDomainError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDomainResponse, _>();
+                .deserialize::<DescribeDomainResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3336,11 +3335,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeFleetMetadataError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeFleetMetadataResponse, _>();
+                .deserialize::<DescribeFleetMetadataResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3369,11 +3368,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeIdentityProviderConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeIdentityProviderConfigurationResponse, _>();
+                .deserialize::<DescribeIdentityProviderConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3404,11 +3403,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeWebsiteCertificateAuthorityError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeWebsiteCertificateAuthorityResponse, _>();
+                .deserialize::<DescribeWebsiteCertificateAuthorityResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3436,11 +3435,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DisassociateDomainError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateDomainResponse, _>();
+                .deserialize::<DisassociateDomainResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3469,11 +3468,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DisassociateWebsiteAuthorizationProviderError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateWebsiteAuthorizationProviderResponse, _>();
+                .deserialize::<DisassociateWebsiteAuthorizationProviderResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3502,11 +3501,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DisassociateWebsiteCertificateAuthorityError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateWebsiteCertificateAuthorityResponse, _>();
+                .deserialize::<DisassociateWebsiteCertificateAuthorityResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3534,11 +3533,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDevicesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDevicesResponse, _>();
+                .deserialize::<ListDevicesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3564,11 +3563,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDomainsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDomainsResponse, _>();
+                .deserialize::<ListDomainsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3594,11 +3593,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListFleetsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListFleetsResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListFleetsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3627,11 +3626,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListWebsiteAuthorizationProvidersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListWebsiteAuthorizationProvidersResponse, _>();
+                .deserialize::<ListWebsiteAuthorizationProvidersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3662,11 +3661,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListWebsiteCertificateAuthoritiesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListWebsiteCertificateAuthoritiesResponse, _>();
+                .deserialize::<ListWebsiteCertificateAuthoritiesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3694,11 +3693,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RestoreDomainAccessError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RestoreDomainAccessResponse, _>();
+                .deserialize::<RestoreDomainAccessResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3724,11 +3723,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RevokeDomainAccessError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RevokeDomainAccessResponse, _>();
+                .deserialize::<RevokeDomainAccessResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3754,11 +3753,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SignOutUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SignOutUserResponse, _>();
+                .deserialize::<SignOutUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3787,11 +3786,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateAuditStreamConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAuditStreamConfigurationResponse, _>();
+                .deserialize::<UpdateAuditStreamConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3820,11 +3819,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateCompanyNetworkConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateCompanyNetworkConfigurationResponse, _>();
+                .deserialize::<UpdateCompanyNetworkConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3855,11 +3854,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDevicePolicyConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDevicePolicyConfigurationResponse, _>();
+                .deserialize::<UpdateDevicePolicyConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3887,11 +3886,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDomainMetadataError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDomainMetadataResponse, _>();
+                .deserialize::<UpdateDomainMetadataResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3917,11 +3916,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateFleetMetadataError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateFleetMetadataResponse, _>();
+                .deserialize::<UpdateFleetMetadataResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3950,11 +3949,11 @@ impl Worklink for WorklinkClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateIdentityProviderConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateIdentityProviderConfigurationResponse, _>();
+                .deserialize::<UpdateIdentityProviderConfigurationResponse, _>()?;
 
             Ok(result)
         } else {

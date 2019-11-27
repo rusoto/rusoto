@@ -72,8 +72,7 @@ impl GenerateProtocol for JsonGenerator {
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         let res = writeln!(
             writer,
-            "use futures::{{FutureExt, TryFutureExt}};
-        use rusoto_core::proto;
+            "use rusoto_core::proto;
         use rusoto_core::signature::SignedRequest;
         use serde::{{Deserialize, Serialize}};"
         );

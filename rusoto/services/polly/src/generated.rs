@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1036,11 +1035,11 @@ impl Polly for PollyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteLexiconError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteLexiconOutput, _>();
+                .deserialize::<DeleteLexiconOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1075,11 +1074,11 @@ impl Polly for PollyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeVoicesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeVoicesOutput, _>();
+                .deserialize::<DescribeVoicesOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1102,11 +1101,11 @@ impl Polly for PollyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetLexiconError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetLexiconOutput, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetLexiconOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1129,11 +1128,11 @@ impl Polly for PollyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetSpeechSynthesisTaskError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSpeechSynthesisTaskOutput, _>();
+                .deserialize::<GetSpeechSynthesisTaskOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1162,11 +1161,11 @@ impl Polly for PollyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListLexiconsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListLexiconsOutput, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListLexiconsOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1201,11 +1200,11 @@ impl Polly for PollyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListSpeechSynthesisTasksError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSpeechSynthesisTasksOutput, _>();
+                .deserialize::<ListSpeechSynthesisTasksOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1231,11 +1230,11 @@ impl Polly for PollyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutLexiconError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<PutLexiconOutput, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutLexiconOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1261,11 +1260,11 @@ impl Polly for PollyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StartSpeechSynthesisTaskError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartSpeechSynthesisTaskOutput, _>();
+                .deserialize::<StartSpeechSynthesisTaskOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1291,7 +1290,7 @@ impl Polly for PollyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SynthesizeSpeechError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 

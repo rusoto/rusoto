@@ -69,8 +69,7 @@ impl GenerateProtocol for QueryGenerator {
 
     fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service<'_>) -> IoResult {
         writeln!(writer,
-                 "use futures::{{FutureExt, TryFutureExt}};
-            use std::str::FromStr;
+                 "use std::str::FromStr;
             use xml::EventReader;
             use xml::reader::ParserConfig;
             use rusoto_core::param::{{Params, ServiceParams}};

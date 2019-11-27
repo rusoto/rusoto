@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -2092,11 +2091,11 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateChannelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateChannelResponse, _>();
+                .deserialize::<CreateChannelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2122,11 +2121,11 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateOriginEndpointError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateOriginEndpointResponse, _>();
+                .deserialize::<CreateOriginEndpointResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2149,11 +2148,11 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteChannelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteChannelResponse, _>();
+                .deserialize::<DeleteChannelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2176,11 +2175,11 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteOriginEndpointError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteOriginEndpointResponse, _>();
+                .deserialize::<DeleteOriginEndpointResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2203,11 +2202,11 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeChannelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeChannelResponse, _>();
+                .deserialize::<DescribeChannelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2230,11 +2229,11 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeOriginEndpointError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeOriginEndpointResponse, _>();
+                .deserialize::<DescribeOriginEndpointResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2266,11 +2265,11 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListChannelsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListChannelsResponse, _>();
+                .deserialize::<ListChannelsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2305,11 +2304,11 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListOriginEndpointsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOriginEndpointsResponse, _>();
+                .deserialize::<ListOriginEndpointsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2331,11 +2330,11 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>();
+                .deserialize::<ListTagsForResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2358,11 +2357,11 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RotateChannelCredentialsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RotateChannelCredentialsResponse, _>();
+                .deserialize::<RotateChannelCredentialsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2392,11 +2391,11 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RotateIngestEndpointCredentialsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RotateIngestEndpointCredentialsResponse, _>();
+                .deserialize::<RotateIngestEndpointCredentialsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2423,7 +2422,7 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -2454,7 +2453,7 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -2483,11 +2482,11 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateChannelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateChannelResponse, _>();
+                .deserialize::<UpdateChannelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2513,11 +2512,11 @@ impl MediaPackage for MediaPackageClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateOriginEndpointError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateOriginEndpointResponse, _>();
+                .deserialize::<UpdateOriginEndpointResponse, _>()?;
 
             Ok(result)
         } else {

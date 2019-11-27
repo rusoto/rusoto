@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -4951,7 +4950,7 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AbortDocumentVersionUploadError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4984,11 +4983,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ActivateUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ActivateUserResponse, _>();
+                .deserialize::<ActivateUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5021,11 +5020,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AddResourcePermissionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddResourcePermissionsResponse, _>();
+                .deserialize::<AddResourcePermissionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5059,11 +5058,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateCommentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateCommentResponse, _>();
+                .deserialize::<CreateCommentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5101,11 +5100,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateCustomMetadataError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateCustomMetadataResponse, _>();
+                .deserialize::<CreateCustomMetadataResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5135,11 +5134,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateFolderError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateFolderResponse, _>();
+                .deserialize::<CreateFolderResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5172,11 +5171,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateLabelsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLabelsResponse, _>();
+                .deserialize::<CreateLabelsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5208,11 +5207,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateNotificationSubscriptionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateNotificationSubscriptionResponse, _>();
+                .deserialize::<CreateNotificationSubscriptionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5242,11 +5241,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateUserResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5276,7 +5275,7 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeactivateUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -5311,7 +5310,7 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteCommentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -5357,11 +5356,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteCustomMetadataError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteCustomMetadataResponse, _>();
+                .deserialize::<DeleteCustomMetadataResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5391,7 +5390,7 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteDocumentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -5421,7 +5420,7 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteFolderError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -5454,7 +5453,7 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteFolderContentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -5497,11 +5496,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteLabelsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteLabelsResponse, _>();
+                .deserialize::<DeleteLabelsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5528,7 +5527,7 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteNotificationSubscriptionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -5558,7 +5557,7 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -5617,11 +5616,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeActivitiesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeActivitiesResponse, _>();
+                .deserialize::<DescribeActivitiesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5660,11 +5659,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeCommentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeCommentsResponse, _>();
+                .deserialize::<DescribeCommentsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5708,11 +5707,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeDocumentVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDocumentVersionsResponse, _>();
+                .deserialize::<DescribeDocumentVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5762,11 +5761,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeFolderContentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeFolderContentsResponse, _>();
+                .deserialize::<DescribeFolderContentsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5805,11 +5804,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeGroupsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeGroupsResponse, _>();
+                .deserialize::<DescribeGroupsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5847,11 +5846,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeNotificationSubscriptionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeNotificationSubscriptionsResponse, _>();
+                .deserialize::<DescribeNotificationSubscriptionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5895,11 +5894,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeResourcePermissionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeResourcePermissionsResponse, _>();
+                .deserialize::<DescribeResourcePermissionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5932,11 +5931,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeRootFoldersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRootFoldersResponse, _>();
+                .deserialize::<DescribeRootFoldersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5992,11 +5991,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeUsersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeUsersResponse, _>();
+                .deserialize::<DescribeUsersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6021,11 +6020,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetCurrentUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCurrentUserResponse, _>();
+                .deserialize::<GetCurrentUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6060,11 +6059,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDocumentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDocumentResponse, _>();
+                .deserialize::<GetDocumentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6105,11 +6104,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDocumentPathError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDocumentPathResponse, _>();
+                .deserialize::<GetDocumentPathResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6148,11 +6147,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDocumentVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDocumentVersionResponse, _>();
+                .deserialize::<GetDocumentVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6184,11 +6183,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetFolderError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetFolderResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetFolderResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6229,11 +6228,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetFolderPathError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFolderPathResponse, _>();
+                .deserialize::<GetFolderPathResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6274,11 +6273,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetResourcesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResourcesResponse, _>();
+                .deserialize::<GetResourcesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6311,11 +6310,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(InitiateDocumentVersionUploadError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<InitiateDocumentVersionUploadResponse, _>();
+                .deserialize::<InitiateDocumentVersionUploadResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6345,7 +6344,7 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RemoveAllResourcePermissionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -6384,7 +6383,7 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RemoveResourcePermissionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -6420,7 +6419,7 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDocumentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -6457,7 +6456,7 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDocumentVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -6490,7 +6489,7 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateFolderError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -6523,11 +6522,11 @@ impl Workdocs for WorkdocsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UpdateUserResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateUserResponse, _>()?;
 
             Ok(result)
         } else {

@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1151,11 +1150,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ClaimDevicesByClaimCodeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ClaimDevicesByClaimCodeResponse, _>();
+                .deserialize::<ClaimDevicesByClaimCodeResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1181,11 +1180,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeDeviceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDeviceResponse, _>();
+                .deserialize::<DescribeDeviceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1220,11 +1219,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(FinalizeDeviceClaimError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<FinalizeDeviceClaimResponse, _>();
+                .deserialize::<FinalizeDeviceClaimResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1249,11 +1248,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDeviceMethodsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDeviceMethodsResponse, _>();
+                .deserialize::<GetDeviceMethodsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1286,11 +1285,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(InitiateDeviceClaimError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<InitiateDeviceClaimResponse, _>();
+                .deserialize::<InitiateDeviceClaimResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1318,11 +1317,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(InvokeDeviceMethodError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<InvokeDeviceMethodResponse, _>();
+                .deserialize::<InvokeDeviceMethodResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1359,11 +1358,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDeviceEventsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDeviceEventsResponse, _>();
+                .deserialize::<ListDeviceEventsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1400,11 +1399,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDevicesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDevicesResponse, _>();
+                .deserialize::<ListDevicesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1429,11 +1428,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>();
+                .deserialize::<ListTagsForResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1461,7 +1460,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -1489,11 +1488,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UnclaimDeviceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UnclaimDeviceResponse, _>();
+                .deserialize::<UnclaimDeviceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1525,7 +1524,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -1556,11 +1555,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDeviceStateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDeviceStateResponse, _>();
+                .deserialize::<UpdateDeviceStateResponse, _>()?;
 
             Ok(result)
         } else {

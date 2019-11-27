@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1284,11 +1283,11 @@ impl ResourceGroups for ResourceGroupsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateGroupOutput, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateGroupOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1312,11 +1311,11 @@ impl ResourceGroups for ResourceGroupsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<DeleteGroupOutput, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteGroupOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1339,11 +1338,11 @@ impl ResourceGroups for ResourceGroupsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetGroupOutput, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetGroupOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1366,11 +1365,11 @@ impl ResourceGroups for ResourceGroupsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetGroupQueryError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetGroupQueryOutput, _>();
+                .deserialize::<GetGroupQueryOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1393,11 +1392,11 @@ impl ResourceGroups for ResourceGroupsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetTagsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetTagsOutput, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetTagsOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1435,11 +1434,11 @@ impl ResourceGroups for ResourceGroupsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListGroupResourcesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListGroupResourcesOutput, _>();
+                .deserialize::<ListGroupResourcesOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1474,11 +1473,11 @@ impl ResourceGroups for ResourceGroupsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListGroupsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListGroupsOutput, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListGroupsOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1504,11 +1503,11 @@ impl ResourceGroups for ResourceGroupsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SearchResourcesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchResourcesOutput, _>();
+                .deserialize::<SearchResourcesOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1531,10 +1530,11 @@ impl ResourceGroups for ResourceGroupsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<TagOutput, _>();
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<TagOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1558,11 +1558,11 @@ impl ResourceGroups for ResourceGroupsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UntagOutput, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<UntagOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1588,11 +1588,11 @@ impl ResourceGroups for ResourceGroupsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UpdateGroupOutput, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateGroupOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1618,11 +1618,11 @@ impl ResourceGroups for ResourceGroupsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateGroupQueryError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateGroupQueryOutput, _>();
+                .deserialize::<UpdateGroupQueryOutput, _>()?;
 
             Ok(result)
         } else {

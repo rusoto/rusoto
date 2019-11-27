@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -666,11 +665,11 @@ impl MediaTailor for MediaTailorClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeletePlaybackConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePlaybackConfigurationResponse, _>();
+                .deserialize::<DeletePlaybackConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -695,11 +694,11 @@ impl MediaTailor for MediaTailorClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetPlaybackConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPlaybackConfigurationResponse, _>();
+                .deserialize::<GetPlaybackConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -734,11 +733,11 @@ impl MediaTailor for MediaTailorClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPlaybackConfigurationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPlaybackConfigurationsResponse, _>();
+                .deserialize::<ListPlaybackConfigurationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -763,11 +762,11 @@ impl MediaTailor for MediaTailorClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>();
+                .deserialize::<ListTagsForResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -794,11 +793,11 @@ impl MediaTailor for MediaTailorClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutPlaybackConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutPlaybackConfigurationResponse, _>();
+                .deserialize::<PutPlaybackConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -825,7 +824,7 @@ impl MediaTailor for MediaTailorClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -859,7 +858,7 @@ impl MediaTailor for MediaTailorClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);

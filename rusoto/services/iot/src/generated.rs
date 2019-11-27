@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -18102,7 +18101,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AcceptCertificateTransferError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -18132,11 +18131,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AddThingToBillingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddThingToBillingGroupResponse, _>();
+                .deserialize::<AddThingToBillingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18163,11 +18162,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AddThingToThingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddThingToThingGroupResponse, _>();
+                .deserialize::<AddThingToThingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18194,11 +18193,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AssociateTargetsWithJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateTargetsWithJobResponse, _>();
+                .deserialize::<AssociateTargetsWithJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18228,7 +18227,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AttachPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -18261,7 +18260,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AttachPrincipalPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -18299,11 +18298,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AttachSecurityProfileError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AttachSecurityProfileResponse, _>();
+                .deserialize::<AttachSecurityProfileResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18333,11 +18332,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AttachThingPrincipalError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AttachThingPrincipalResponse, _>();
+                .deserialize::<AttachThingPrincipalResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18362,11 +18361,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CancelAuditTaskError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelAuditTaskResponse, _>();
+                .deserialize::<CancelAuditTaskResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18394,7 +18393,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CancelCertificateTransferError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -18430,11 +18429,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CancelJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CancelJobResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CancelJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18471,7 +18470,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CancelJobExecutionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -18498,11 +18497,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ClearDefaultAuthorizerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ClearDefaultAuthorizerResponse, _>();
+                .deserialize::<ClearDefaultAuthorizerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18532,11 +18531,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateAuthorizerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateAuthorizerResponse, _>();
+                .deserialize::<CreateAuthorizerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18566,11 +18565,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateBillingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateBillingGroupResponse, _>();
+                .deserialize::<CreateBillingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18603,11 +18602,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateCertificateFromCsrError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateCertificateFromCsrResponse, _>();
+                .deserialize::<CreateCertificateFromCsrResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18637,11 +18636,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateDynamicThingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDynamicThingGroupResponse, _>();
+                .deserialize::<CreateDynamicThingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18668,11 +18667,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateJobResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18703,11 +18702,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateKeysAndCertificateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateKeysAndCertificateResponse, _>();
+                .deserialize::<CreateKeysAndCertificateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18737,11 +18736,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateOTAUpdateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateOTAUpdateResponse, _>();
+                .deserialize::<CreateOTAUpdateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18768,11 +18767,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreatePolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePolicyResponse, _>();
+                .deserialize::<CreatePolicyResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18808,11 +18807,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreatePolicyVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePolicyVersionResponse, _>();
+                .deserialize::<CreatePolicyVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18839,11 +18838,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateRoleAliasError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRoleAliasResponse, _>();
+                .deserialize::<CreateRoleAliasResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18873,11 +18872,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateScheduledAuditError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateScheduledAuditResponse, _>();
+                .deserialize::<CreateScheduledAuditResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18907,11 +18906,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateSecurityProfileError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSecurityProfileResponse, _>();
+                .deserialize::<CreateSecurityProfileResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18938,11 +18937,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateStreamError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateStreamResponse, _>();
+                .deserialize::<CreateStreamResponse, _>()?;
 
             Ok(result)
         } else {
@@ -18969,11 +18968,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateThingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateThingResponse, _>();
+                .deserialize::<CreateThingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19003,11 +19002,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateThingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateThingGroupResponse, _>();
+                .deserialize::<CreateThingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19037,11 +19036,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateThingTypeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateThingTypeResponse, _>();
+                .deserialize::<CreateThingTypeResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19072,7 +19071,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateTopicRuleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -19109,11 +19108,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteAccountAuditConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteAccountAuditConfigurationResponse, _>();
+                .deserialize::<DeleteAccountAuditConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19143,11 +19142,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteAuthorizerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteAuthorizerResponse, _>();
+                .deserialize::<DeleteAuthorizerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19181,11 +19180,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteBillingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteBillingGroupResponse, _>();
+                .deserialize::<DeleteBillingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19213,11 +19212,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteCACertificateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteCACertificateResponse, _>();
+                .deserialize::<DeleteCACertificateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19251,7 +19250,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteCertificateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -19288,11 +19287,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteDynamicThingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDynamicThingGroupResponse, _>();
+                .deserialize::<DeleteDynamicThingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19320,7 +19319,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -19359,7 +19358,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteJobExecutionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -19399,11 +19398,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteOTAUpdateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteOTAUpdateResponse, _>();
+                .deserialize::<DeleteOTAUpdateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19428,7 +19427,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeletePolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -19460,7 +19459,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeletePolicyVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -19487,11 +19486,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteRegistrationCodeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRegistrationCodeResponse, _>();
+                .deserialize::<DeleteRegistrationCodeResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19516,11 +19515,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteRoleAliasError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRoleAliasResponse, _>();
+                .deserialize::<DeleteRoleAliasResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19548,11 +19547,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteScheduledAuditError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteScheduledAuditResponse, _>();
+                .deserialize::<DeleteScheduledAuditResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19586,11 +19585,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteSecurityProfileError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSecurityProfileResponse, _>();
+                .deserialize::<DeleteSecurityProfileResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19615,11 +19614,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteStreamError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteStreamResponse, _>();
+                .deserialize::<DeleteStreamResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19650,11 +19649,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteThingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteThingResponse, _>();
+                .deserialize::<DeleteThingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19688,11 +19687,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteThingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteThingGroupResponse, _>();
+                .deserialize::<DeleteThingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19720,11 +19719,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteThingTypeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteThingTypeResponse, _>();
+                .deserialize::<DeleteThingTypeResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19749,7 +19748,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteTopicRuleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -19782,7 +19781,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteV2LoggingLevelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -19815,11 +19814,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeprecateThingTypeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeprecateThingTypeResponse, _>();
+                .deserialize::<DeprecateThingTypeResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19846,11 +19845,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeAccountAuditConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAccountAuditConfigurationResponse, _>();
+                .deserialize::<DescribeAccountAuditConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19877,11 +19876,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeAuditTaskError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAuditTaskResponse, _>();
+                .deserialize::<DescribeAuditTaskResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19909,11 +19908,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeAuthorizerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAuthorizerResponse, _>();
+                .deserialize::<DescribeAuthorizerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19941,11 +19940,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeBillingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeBillingGroupResponse, _>();
+                .deserialize::<DescribeBillingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -19973,11 +19972,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeCACertificateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeCACertificateResponse, _>();
+                .deserialize::<DescribeCACertificateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20005,11 +20004,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeCertificateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeCertificateResponse, _>();
+                .deserialize::<DescribeCertificateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20034,11 +20033,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeDefaultAuthorizerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDefaultAuthorizerResponse, _>();
+                .deserialize::<DescribeDefaultAuthorizerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20069,11 +20068,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeEndpointError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEndpointResponse, _>();
+                .deserialize::<DescribeEndpointResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20098,11 +20097,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeEventConfigurationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEventConfigurationsResponse, _>();
+                .deserialize::<DescribeEventConfigurationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20127,11 +20126,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeIndexError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeIndexResponse, _>();
+                .deserialize::<DescribeIndexResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20156,11 +20155,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeJobResponse, _>();
+                .deserialize::<DescribeJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20195,11 +20194,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeJobExecutionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeJobExecutionResponse, _>();
+                .deserialize::<DescribeJobExecutionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20224,11 +20223,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeRoleAliasError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRoleAliasResponse, _>();
+                .deserialize::<DescribeRoleAliasResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20256,11 +20255,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeScheduledAuditError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeScheduledAuditResponse, _>();
+                .deserialize::<DescribeScheduledAuditResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20288,11 +20287,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeSecurityProfileError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSecurityProfileResponse, _>();
+                .deserialize::<DescribeSecurityProfileResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20317,11 +20316,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeStreamError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeStreamResponse, _>();
+                .deserialize::<DescribeStreamResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20346,11 +20345,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeThingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeThingResponse, _>();
+                .deserialize::<DescribeThingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20378,11 +20377,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeThingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeThingGroupResponse, _>();
+                .deserialize::<DescribeThingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20413,11 +20412,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeThingRegistrationTaskError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeThingRegistrationTaskResponse, _>();
+                .deserialize::<DescribeThingRegistrationTaskResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20445,11 +20444,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeThingTypeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeThingTypeResponse, _>();
+                .deserialize::<DescribeThingTypeResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20479,7 +20478,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DetachPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -20512,7 +20511,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DetachPrincipalPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -20550,11 +20549,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DetachSecurityProfileError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DetachSecurityProfileResponse, _>();
+                .deserialize::<DetachSecurityProfileResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20584,11 +20583,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DetachThingPrincipalError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DetachThingPrincipalResponse, _>();
+                .deserialize::<DetachThingPrincipalResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20613,7 +20612,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DisableTopicRuleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -20641,7 +20640,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(EnableTopicRuleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -20677,11 +20676,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetEffectivePoliciesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEffectivePoliciesResponse, _>();
+                .deserialize::<GetEffectivePoliciesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20705,11 +20704,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetIndexingConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetIndexingConfigurationResponse, _>();
+                .deserialize::<GetIndexingConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20734,11 +20733,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetJobDocumentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetJobDocumentResponse, _>();
+                .deserialize::<GetJobDocumentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20762,11 +20761,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetLoggingOptionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetLoggingOptionsResponse, _>();
+                .deserialize::<GetLoggingOptionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20794,11 +20793,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetOTAUpdateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetOTAUpdateResponse, _>();
+                .deserialize::<GetOTAUpdateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20823,11 +20822,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetPolicyResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetPolicyResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20856,11 +20855,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetPolicyVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPolicyVersionResponse, _>();
+                .deserialize::<GetPolicyVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20884,11 +20883,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetRegistrationCodeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRegistrationCodeResponse, _>();
+                .deserialize::<GetRegistrationCodeResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20915,11 +20914,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetStatisticsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetStatisticsResponse, _>();
+                .deserialize::<GetStatisticsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20944,11 +20943,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetTopicRuleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTopicRuleResponse, _>();
+                .deserialize::<GetTopicRuleResponse, _>()?;
 
             Ok(result)
         } else {
@@ -20972,11 +20971,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetV2LoggingOptionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetV2LoggingOptionsResponse, _>();
+                .deserialize::<GetV2LoggingOptionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21016,11 +21015,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListActiveViolationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListActiveViolationsResponse, _>();
+                .deserialize::<ListActiveViolationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21057,11 +21056,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListAttachedPoliciesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAttachedPoliciesResponse, _>();
+                .deserialize::<ListAttachedPoliciesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21088,11 +21087,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListAuditFindingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAuditFindingsResponse, _>();
+                .deserialize::<ListAuditFindingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21134,11 +21133,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListAuditTasksError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAuditTasksResponse, _>();
+                .deserialize::<ListAuditTasksResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21178,11 +21177,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListAuthorizersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAuthorizersResponse, _>();
+                .deserialize::<ListAuthorizersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21219,11 +21218,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListBillingGroupsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBillingGroupsResponse, _>();
+                .deserialize::<ListBillingGroupsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21260,11 +21259,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListCACertificatesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListCACertificatesResponse, _>();
+                .deserialize::<ListCACertificatesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21301,11 +21300,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListCertificatesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListCertificatesResponse, _>();
+                .deserialize::<ListCertificatesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21345,11 +21344,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListCertificatesByCAError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListCertificatesByCAResponse, _>();
+                .deserialize::<ListCertificatesByCAResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21383,11 +21382,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListIndicesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListIndicesResponse, _>();
+                .deserialize::<ListIndicesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21424,11 +21423,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListJobExecutionsForJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJobExecutionsForJobResponse, _>();
+                .deserialize::<ListJobExecutionsForJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21466,11 +21465,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListJobExecutionsForThingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJobExecutionsForThingResponse, _>();
+                .deserialize::<ListJobExecutionsForThingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21516,11 +21515,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListJobsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListJobsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21557,11 +21556,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListOTAUpdatesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOTAUpdatesResponse, _>();
+                .deserialize::<ListOTAUpdatesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21598,11 +21597,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListOutgoingCertificatesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOutgoingCertificatesResponse, _>();
+                .deserialize::<ListOutgoingCertificatesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21639,11 +21638,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPoliciesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPoliciesResponse, _>();
+                .deserialize::<ListPoliciesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21681,11 +21680,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPolicyPrincipalsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPolicyPrincipalsResponse, _>();
+                .deserialize::<ListPolicyPrincipalsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21713,11 +21712,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPolicyVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPolicyVersionsResponse, _>();
+                .deserialize::<ListPolicyVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21755,11 +21754,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPrincipalPoliciesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPrincipalPoliciesResponse, _>();
+                .deserialize::<ListPrincipalPoliciesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21794,11 +21793,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPrincipalThingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPrincipalThingsResponse, _>();
+                .deserialize::<ListPrincipalThingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21835,11 +21834,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListRoleAliasesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRoleAliasesResponse, _>();
+                .deserialize::<ListRoleAliasesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21873,11 +21872,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListScheduledAuditsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListScheduledAuditsResponse, _>();
+                .deserialize::<ListScheduledAuditsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21911,11 +21910,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListSecurityProfilesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSecurityProfilesResponse, _>();
+                .deserialize::<ListSecurityProfilesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -21959,11 +21958,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListSecurityProfilesForTargetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSecurityProfilesForTargetResponse, _>();
+                .deserialize::<ListSecurityProfilesForTargetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22000,11 +21999,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListStreamsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListStreamsResponse, _>();
+                .deserialize::<ListStreamsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22036,11 +22035,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>();
+                .deserialize::<ListTagsForResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22077,11 +22076,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTargetsForPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTargetsForPolicyResponse, _>();
+                .deserialize::<ListTargetsForPolicyResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22121,11 +22120,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTargetsForSecurityProfileError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTargetsForSecurityProfileResponse, _>();
+                .deserialize::<ListTargetsForSecurityProfileResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22168,11 +22167,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListThingGroupsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingGroupsResponse, _>();
+                .deserialize::<ListThingGroupsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22209,11 +22208,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListThingGroupsForThingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingGroupsForThingResponse, _>();
+                .deserialize::<ListThingGroupsForThingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22241,11 +22240,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListThingPrincipalsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingPrincipalsResponse, _>();
+                .deserialize::<ListThingPrincipalsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22286,11 +22285,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListThingRegistrationTaskReportsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingRegistrationTaskReportsResponse, _>();
+                .deserialize::<ListThingRegistrationTaskReportsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22330,11 +22329,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListThingRegistrationTasksError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingRegistrationTasksResponse, _>();
+                .deserialize::<ListThingRegistrationTasksResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22371,11 +22370,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListThingTypesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingTypesResponse, _>();
+                .deserialize::<ListThingTypesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22418,11 +22417,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListThingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListThingsResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListThingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22459,11 +22458,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListThingsInBillingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingsInBillingGroupResponse, _>();
+                .deserialize::<ListThingsInBillingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22503,11 +22502,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListThingsInThingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingsInThingGroupResponse, _>();
+                .deserialize::<ListThingsInThingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22547,11 +22546,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTopicRulesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTopicRulesResponse, _>();
+                .deserialize::<ListTopicRulesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22588,11 +22587,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListV2LoggingLevelsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListV2LoggingLevelsResponse, _>();
+                .deserialize::<ListV2LoggingLevelsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22634,11 +22633,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListViolationEventsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListViolationEventsResponse, _>();
+                .deserialize::<ListViolationEventsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22674,11 +22673,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RegisterCACertificateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterCACertificateResponse, _>();
+                .deserialize::<RegisterCACertificateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22705,11 +22704,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RegisterCertificateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterCertificateResponse, _>();
+                .deserialize::<RegisterCertificateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22736,11 +22735,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RegisterThingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterThingResponse, _>();
+                .deserialize::<RegisterThingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22770,7 +22769,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RejectCertificateTransferError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -22801,11 +22800,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RemoveThingFromBillingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RemoveThingFromBillingGroupResponse, _>();
+                .deserialize::<RemoveThingFromBillingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22833,11 +22832,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RemoveThingFromThingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RemoveThingFromThingGroupResponse, _>();
+                .deserialize::<RemoveThingFromThingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22864,7 +22863,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ReplaceTopicRuleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -22894,11 +22893,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SearchIndexError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchIndexResponse, _>();
+                .deserialize::<SearchIndexResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22925,11 +22924,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SetDefaultAuthorizerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SetDefaultAuthorizerResponse, _>();
+                .deserialize::<SetDefaultAuthorizerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -22958,7 +22957,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SetDefaultPolicyVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -22988,7 +22987,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SetLoggingOptionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -23018,7 +23017,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SetV2LoggingLevelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -23048,7 +23047,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SetV2LoggingOptionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -23078,11 +23077,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StartOnDemandAuditTaskError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartOnDemandAuditTaskResponse, _>();
+                .deserialize::<StartOnDemandAuditTaskResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23110,11 +23109,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StartThingRegistrationTaskError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartThingRegistrationTaskResponse, _>();
+                .deserialize::<StartThingRegistrationTaskResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23143,11 +23142,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StopThingRegistrationTaskError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopThingRegistrationTaskResponse, _>();
+                .deserialize::<StopThingRegistrationTaskResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23174,11 +23173,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>();
+                .deserialize::<TagResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23211,11 +23210,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TestAuthorizationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TestAuthorizationResponse, _>();
+                .deserialize::<TestAuthorizationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23245,11 +23244,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TestInvokeAuthorizerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TestInvokeAuthorizerResponse, _>();
+                .deserialize::<TestInvokeAuthorizerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23283,11 +23282,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TransferCertificateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TransferCertificateResponse, _>();
+                .deserialize::<TransferCertificateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23314,11 +23313,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>();
+                .deserialize::<UntagResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23348,11 +23347,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateAccountAuditConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAccountAuditConfigurationResponse, _>();
+                .deserialize::<UpdateAccountAuditConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23384,11 +23383,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateAuthorizerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAuthorizerResponse, _>();
+                .deserialize::<UpdateAuthorizerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23418,11 +23417,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateBillingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateBillingGroupResponse, _>();
+                .deserialize::<UpdateBillingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23461,7 +23460,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateCACertificateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -23496,7 +23495,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateCertificateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -23529,11 +23528,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDynamicThingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDynamicThingGroupResponse, _>();
+                .deserialize::<UpdateDynamicThingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23561,11 +23560,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateEventConfigurationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateEventConfigurationsResponse, _>();
+                .deserialize::<UpdateEventConfigurationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23593,11 +23592,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateIndexingConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateIndexingConfigurationResponse, _>();
+                .deserialize::<UpdateIndexingConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23621,7 +23620,7 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -23651,11 +23650,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateRoleAliasError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRoleAliasResponse, _>();
+                .deserialize::<UpdateRoleAliasResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23685,11 +23684,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateScheduledAuditError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateScheduledAuditResponse, _>();
+                .deserialize::<UpdateScheduledAuditResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23725,11 +23724,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateSecurityProfileError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateSecurityProfileResponse, _>();
+                .deserialize::<UpdateSecurityProfileResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23756,11 +23755,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateStreamError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateStreamResponse, _>();
+                .deserialize::<UpdateStreamResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23787,11 +23786,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateThingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateThingResponse, _>();
+                .deserialize::<UpdateThingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23821,11 +23820,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateThingGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateThingGroupResponse, _>();
+                .deserialize::<UpdateThingGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23853,11 +23852,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateThingGroupsForThingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateThingGroupsForThingResponse, _>();
+                .deserialize::<UpdateThingGroupsForThingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -23887,11 +23886,11 @@ impl Iot for IotClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ValidateSecurityProfileBehaviorsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ValidateSecurityProfileBehaviorsResponse, _>();
+                .deserialize::<ValidateSecurityProfileBehaviorsResponse, _>()?;
 
             Ok(result)
         } else {

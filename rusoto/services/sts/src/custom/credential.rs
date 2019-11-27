@@ -1,9 +1,11 @@
+use async_trait::async_trait;
 use chrono::prelude::*;
 use chrono::Duration;
 use std::future::Future;
 use std::pin::Pin;
 
 use rusoto_core;
+use rusoto_core::RusotoError;
 
 use rusoto_core::credential::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
 use crate::{
@@ -45,93 +47,95 @@ impl NewAwsCredsForStsCreds for AwsCredentials {
 
 // Trait that defines the STS Client API without any type parameters or assumptions about implementation.
 // This is an internal type used to box the [StsClient](struct.StsClient.html) provided in the session token providers' constructors.
+#[async_trait]
 pub trait StsSessionCredentialsClient {
-    fn assume_role(
+    async fn assume_role(
         &self,
         input: AssumeRoleRequest,
-    ) -> Pin<Box<dyn Future<Output=Result<AssumeRoleResponse, AssumeRoleError>>>>;
+    ) -> Result<AssumeRoleResponse, RusotoError<AssumeRoleError>>;
 
-    fn assume_role_with_saml(
+    async fn assume_role_with_saml(
         &self,
         input: AssumeRoleWithSAMLRequest,
-    ) -> Pin<Box<dyn Future<Output=Result<AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError>>>>;
+    ) -> Result<AssumeRoleWithSAMLResponse, RusotoError<AssumeRoleWithSAMLError>>;
 
-    fn assume_role_with_web_identity(
+    async fn assume_role_with_web_identity(
         &self,
         input: AssumeRoleWithWebIdentityRequest,
-    ) -> Pin<Box<dyn Future<Output=Result<AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError>>>;
+    ) -> Result<AssumeRoleWithWebIdentityResponse, RusotoError<AssumeRoleWithWebIdentityError>>;
 
-    fn decode_authorization_message(
+    async fn decode_authorization_message(
         &self,
         input: DecodeAuthorizationMessageRequest,
-    ) -> Pin<Box<dyn Future<Output=Result<DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError>>>>;
+    ) -> Result<DecodeAuthorizationMessageResponse, RusotoError<DecodeAuthorizationMessageError>>;
 
-    fn get_caller_identity(
+    async fn get_caller_identity(
         &self,
         input: GetCallerIdentityRequest,
-    ) -> Pin<Box<dyn Future<Output=Result<GetCallerIdentityResponse, GetCallerIdentityError>>>>;
+    ) -> Result<GetCallerIdentityResponse, RusotoError<GetCallerIdentityError>>;
 
-    fn get_federation_token(
+    async fn get_federation_token(
         &self,
         input: GetFederationTokenRequest,
-    ) -> Pin<Box<dyn Future<Output=Result<GetFederationTokenResponse, GetFederationTokenError>>>>;
+    ) -> Result<GetFederationTokenResponse, RusotoError<GetFederationTokenError>>;
 
-    fn get_session_token(
+    async fn get_session_token(
         &self,
         input: GetSessionTokenRequest,
-    ) -> Pin<Box<dyn Future<Output=Result<GetSessionTokenResponse, GetSessionTokenError>>>>;
+    ) -> Result<GetSessionTokenResponse, RusotoError<GetSessionTokenError>>;
 }
 
+#[async_trait]
 impl<T> StsSessionCredentialsClient for T
 where
     T: Sts,
 {
-    fn assume_role(
+    async fn assume_role(
         &self,
         input: AssumeRoleRequest,
-    ) -> Pin<Box<dyn Future<Output=Result<AssumeRoleResponse, AssumeRoleError>>>> {
+    ) -> Result<AssumeRoleResponse, RusotoError<AssumeRoleError>> {
         T::assume_role(self, input)
     }
 
-    fn assume_role_with_saml(
+    async fn assume_role_with_saml(
         &self,
         input: AssumeRoleWithSAMLRequest,
-    ) -> Pin<Box<dyn Future<Output=Result<AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError>>>> {
+    ) -> Result<AssumeRoleWithSAMLResponse, RusotoError<AssumeRoleWithSAMLError>> {
         T::assume_role_with_saml(self, input)
     }
 
-    fn assume_role_with_web_identity(
+    async fn assume_role_with_web_identity(
         &self,
         input: AssumeRoleWithWebIdentityRequest,
-    ) -> Pin<Box<dyn Future<Output=Result<AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError>>>> {
+    ) -> Result<AssumeRoleWithWebIdentityResponse, RusotoError<AssumeRoleWithWebIdentityError>> {
         T::assume_role_with_web_identity(self, input)
     }
 
-    fn decode_authorization_message(
+    async fn decode_authorization_message(
         &self,
         input: DecodeAuthorizationMessageRequest,
-    ) -> Pin<Box<dyn Future<Output=Result<DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError>>>> {
+    ) -> Result<DecodeAuthorizationMessageResponse, RusotoError<DecodeAuthorizationMessageError>> {
         T::decode_authorization_message(self, input)
     }
 
-    fn get_caller_identity(
+    async fn get_caller_identity(
         &self,
         input: GetCallerIdentityRequest,
-    ) -> Pin<Box<dyn Future<Output=Result<GetCallerIdentityResponse, GetCallerIdentityError>>>> {
+    ) -> Result<GetCallerIdentityResponse, RusotoError<GetCallerIdentityError>> {
         T::get_caller_identity(self, input)
     }
 
-    fn get_federation_token(
+    async fn get_federation_token(
         &self,
         input: GetFederationTokenRequest,
-    ) -> Pin<Box<dyn Future<Output=Result<GetFederationTokenResponse, GetFederationTokenError>>>> {
+    ) -> Result<GetFederationTokenResponse, RusotoError<GetFederationTokenError>> {
         T::get_federation_token(self, input)
     }
 
-    fn get_session_token(
+    async fn get_session_token(
         &self,
         input: GetSessionTokenRequest,
-    ) -> Pin<Box<dyn Future<Output=Result<GetSessionTokenResponse, GetSessionTokenError>>>> {
+    ) -> Result<GetSessionTokenResponse, RusotoError<GetSessionTokenError>> {
         T::get_session_token(self, input)
     }
 }
@@ -184,7 +188,7 @@ impl StsSessionCredentialsProvider {
 
     /// Calls `GetSessionToken` to get a session token from the STS Api.
     /// Optionally uses MFA if the MFA serial number and code are set.
-    pub async fn get_session_token(&self) -> CredentialsFuture {
+    pub async fn get_session_token(&self) -> Result<AwsCredentials, CredentialsError> {
         let request = GetSessionTokenRequest {
             serial_number: self.mfa_serial.clone(),
             token_code: self.mfa_code.clone(),
@@ -196,7 +200,7 @@ impl StsSessionCredentialsProvider {
 }
 
 impl ProvideAwsCredentials for StsSessionCredentialsProvider {
-    fn credentials(&self) -> CredentialsFuture {
+    fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
         self.get_session_token()
     }
 }
@@ -265,7 +269,7 @@ impl StsAssumeRoleSessionCredentialsProvider {
 
     /// Calls `AssumeRole` to get a session token from the STS Api.
     /// Optionally uses MFA if the MFA serial number and code are set.
-    pub async fn assume_role(&self) -> StsAssumeRoleSessionCredentialsProviderFuture {
+    pub async fn assume_role(&self) -> Result<AwsCredentials, CredentialsError> {
         let request = AssumeRoleRequest {
             role_arn: self.role_arn.clone(),
             role_session_name: self.session_name.clone(),
@@ -341,7 +345,7 @@ impl StsWebIdentityFederationSessionCredentialsProvider {
     /// Calls `AssumeRoleWithWebIdentity` to get a session token from the STS Api.
     pub async fn assume_role_with_web_identity(
         &self,
-    ) -> CredentialsFuture {
+    ) -> Result<AwsCredentials, CredentialsError> {
         let request = AssumeRoleWithWebIdentityRequest {
             web_identity_token: self.wif_token.clone(),
             provider_id: self.wif_provider.clone(),

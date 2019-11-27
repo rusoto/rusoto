@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -6965,11 +6964,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(BatchUpdateScheduleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchUpdateScheduleResponse, _>();
+                .deserialize::<BatchUpdateScheduleResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6995,11 +6994,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateChannelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateChannelResponse, _>();
+                .deserialize::<CreateChannelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7025,11 +7024,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateInputError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateInputResponse, _>();
+                .deserialize::<CreateInputResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7055,11 +7054,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateInputSecurityGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateInputSecurityGroupResponse, _>();
+                .deserialize::<CreateInputSecurityGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7088,7 +7087,7 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateTagsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -7114,11 +7113,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteChannelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteChannelResponse, _>();
+                .deserialize::<DeleteChannelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7141,11 +7140,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteInputError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteInputResponse, _>();
+                .deserialize::<DeleteInputResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7171,11 +7170,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteInputSecurityGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteInputSecurityGroupResponse, _>();
+                .deserialize::<DeleteInputSecurityGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7201,11 +7200,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteReservationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteReservationResponse, _>();
+                .deserialize::<DeleteReservationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7231,11 +7230,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteScheduleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteScheduleResponse, _>();
+                .deserialize::<DeleteScheduleResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7267,7 +7266,7 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteTagsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -7293,11 +7292,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeChannelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeChannelResponse, _>();
+                .deserialize::<DescribeChannelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7320,11 +7319,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeInputError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInputResponse, _>();
+                .deserialize::<DescribeInputResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7351,11 +7350,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeInputSecurityGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInputSecurityGroupResponse, _>();
+                .deserialize::<DescribeInputSecurityGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7381,11 +7380,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeOfferingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeOfferingResponse, _>();
+                .deserialize::<DescribeOfferingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7411,11 +7410,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeReservationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeReservationResponse, _>();
+                .deserialize::<DescribeReservationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7450,11 +7449,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeScheduleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeScheduleResponse, _>();
+                .deserialize::<DescribeScheduleResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7486,11 +7485,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListChannelsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListChannelsResponse, _>();
+                .deserialize::<ListChannelsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7522,11 +7521,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListInputSecurityGroupsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInputSecurityGroupsResponse, _>();
+                .deserialize::<ListInputSecurityGroupsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7558,11 +7557,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListInputsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListInputsResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListInputsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7621,11 +7620,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListOfferingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOfferingsResponse, _>();
+                .deserialize::<ListOfferingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7681,11 +7680,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListReservationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListReservationsResponse, _>();
+                .deserialize::<ListReservationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7711,11 +7710,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>();
+                .deserialize::<ListTagsForResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7744,11 +7743,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PurchaseOfferingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PurchaseOfferingResponse, _>();
+                .deserialize::<PurchaseOfferingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7774,11 +7773,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StartChannelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartChannelResponse, _>();
+                .deserialize::<StartChannelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7804,11 +7803,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StopChannelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopChannelResponse, _>();
+                .deserialize::<StopChannelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7834,11 +7833,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateChannelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateChannelResponse, _>();
+                .deserialize::<UpdateChannelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7867,11 +7866,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateChannelClassError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateChannelClassResponse, _>();
+                .deserialize::<UpdateChannelClassResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7897,11 +7896,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateInputError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateInputResponse, _>();
+                .deserialize::<UpdateInputResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7930,11 +7929,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateInputSecurityGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateInputSecurityGroupResponse, _>();
+                .deserialize::<UpdateInputSecurityGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7963,11 +7962,11 @@ impl MediaLive for MediaLiveClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateReservationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateReservationResponse, _>();
+                .deserialize::<UpdateReservationResponse, _>()?;
 
             Ok(result)
         } else {

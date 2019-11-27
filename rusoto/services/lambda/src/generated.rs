@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -4074,11 +4073,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AddLayerVersionPermissionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddLayerVersionPermissionResponse, _>();
+                .deserialize::<AddLayerVersionPermissionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4113,11 +4112,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AddPermissionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddPermissionResponse, _>();
+                .deserialize::<AddPermissionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4146,11 +4145,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateAliasError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<AliasConfiguration, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AliasConfiguration, _>()?;
 
             Ok(result)
         } else {
@@ -4176,11 +4175,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateEventSourceMappingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<EventSourceMappingConfiguration, _>();
+                .deserialize::<EventSourceMappingConfiguration, _>()?;
 
             Ok(result)
         } else {
@@ -4206,11 +4205,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateFunctionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<FunctionConfiguration, _>();
+                .deserialize::<FunctionConfiguration, _>()?;
 
             Ok(result)
         } else {
@@ -4237,7 +4236,7 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteAliasError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4266,11 +4265,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteEventSourceMappingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<EventSourceMappingConfiguration, _>();
+                .deserialize::<EventSourceMappingConfiguration, _>()?;
 
             Ok(result)
         } else {
@@ -4302,7 +4301,7 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteFunctionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4331,7 +4330,7 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteFunctionConcurrencyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4361,7 +4360,7 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteLayerVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4386,11 +4385,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetAccountSettingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAccountSettingsResponse, _>();
+                .deserialize::<GetAccountSettingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4417,11 +4416,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetAliasError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<AliasConfiguration, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AliasConfiguration, _>()?;
 
             Ok(result)
         } else {
@@ -4447,11 +4446,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetEventSourceMappingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<EventSourceMappingConfiguration, _>();
+                .deserialize::<EventSourceMappingConfiguration, _>()?;
 
             Ok(result)
         } else {
@@ -4483,11 +4482,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetFunctionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFunctionResponse, _>();
+                .deserialize::<GetFunctionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4519,11 +4518,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetFunctionConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<FunctionConfiguration, _>();
+                .deserialize::<FunctionConfiguration, _>()?;
 
             Ok(result)
         } else {
@@ -4550,11 +4549,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetLayerVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetLayerVersionResponse, _>();
+                .deserialize::<GetLayerVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4582,11 +4581,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetLayerVersionByArnError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetLayerVersionResponse, _>();
+                .deserialize::<GetLayerVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4613,11 +4612,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetLayerVersionPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetLayerVersionPolicyResponse, _>();
+                .deserialize::<GetLayerVersionPolicyResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4649,11 +4648,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetPolicyResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetPolicyResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4703,7 +4702,7 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(InvokeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
@@ -4750,11 +4749,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(InvokeAsyncError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<InvokeAsyncResponse, _>();
+                .deserialize::<InvokeAsyncResponse, _>()?;
 
             result.status = Some(response.status.as_u16() as i64);
             Ok(result)
@@ -4793,11 +4792,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListAliasesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAliasesResponse, _>();
+                .deserialize::<ListAliasesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4835,11 +4834,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListEventSourceMappingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEventSourceMappingsResponse, _>();
+                .deserialize::<ListEventSourceMappingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4877,11 +4876,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListFunctionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListFunctionsResponse, _>();
+                .deserialize::<ListFunctionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4919,11 +4918,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListLayerVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListLayerVersionsResponse, _>();
+                .deserialize::<ListLayerVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4958,11 +4957,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListLayersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListLayersResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListLayersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4985,11 +4984,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5024,11 +5023,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListVersionsByFunctionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListVersionsByFunctionResponse, _>();
+                .deserialize::<ListVersionsByFunctionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5057,11 +5056,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PublishLayerVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PublishLayerVersionResponse, _>();
+                .deserialize::<PublishLayerVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5090,11 +5089,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PublishVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<FunctionConfiguration, _>();
+                .deserialize::<FunctionConfiguration, _>()?;
 
             Ok(result)
         } else {
@@ -5123,11 +5122,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutFunctionConcurrencyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Concurrency, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<Concurrency, _>()?;
 
             Ok(result)
         } else {
@@ -5161,7 +5160,7 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RemoveLayerVersionPermissionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -5200,7 +5199,7 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RemovePermissionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -5229,7 +5228,7 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -5261,7 +5260,7 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -5294,11 +5293,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateAliasError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<AliasConfiguration, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AliasConfiguration, _>()?;
 
             Ok(result)
         } else {
@@ -5327,11 +5326,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateEventSourceMappingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<EventSourceMappingConfiguration, _>();
+                .deserialize::<EventSourceMappingConfiguration, _>()?;
 
             Ok(result)
         } else {
@@ -5360,11 +5359,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateFunctionCodeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<FunctionConfiguration, _>();
+                .deserialize::<FunctionConfiguration, _>()?;
 
             Ok(result)
         } else {
@@ -5393,11 +5392,11 @@ impl Lambda for LambdaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateFunctionConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<FunctionConfiguration, _>();
+                .deserialize::<FunctionConfiguration, _>()?;
 
             Ok(result)
         } else {

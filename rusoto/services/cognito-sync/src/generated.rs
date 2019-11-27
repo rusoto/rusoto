@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1901,11 +1900,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(BulkPublishError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BulkPublishResponse, _>();
+                .deserialize::<BulkPublishResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1933,11 +1932,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteDatasetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDatasetResponse, _>();
+                .deserialize::<DeleteDatasetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1965,11 +1964,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeDatasetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDatasetResponse, _>();
+                .deserialize::<DescribeDatasetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1996,11 +1995,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeIdentityPoolUsageError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeIdentityPoolUsageResponse, _>();
+                .deserialize::<DescribeIdentityPoolUsageResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2027,11 +2026,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeIdentityUsageError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeIdentityUsageResponse, _>();
+                .deserialize::<DescribeIdentityUsageResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2057,11 +2056,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBulkPublishDetailsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBulkPublishDetailsResponse, _>();
+                .deserialize::<GetBulkPublishDetailsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2087,11 +2086,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetCognitoEventsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCognitoEventsResponse, _>();
+                .deserialize::<GetCognitoEventsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2118,11 +2117,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetIdentityPoolConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetIdentityPoolConfigurationResponse, _>();
+                .deserialize::<GetIdentityPoolConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2158,11 +2157,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDatasetsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDatasetsResponse, _>();
+                .deserialize::<ListDatasetsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2194,11 +2193,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListIdentityPoolUsageError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListIdentityPoolUsageResponse, _>();
+                .deserialize::<ListIdentityPoolUsageResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2236,11 +2235,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListRecordsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRecordsResponse, _>();
+                .deserialize::<ListRecordsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2270,11 +2269,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RegisterDeviceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterDeviceResponse, _>();
+                .deserialize::<RegisterDeviceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2303,7 +2302,7 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SetCognitoEventsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -2336,11 +2335,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SetIdentityPoolConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SetIdentityPoolConfigurationResponse, _>();
+                .deserialize::<SetIdentityPoolConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2363,11 +2362,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SubscribeToDatasetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SubscribeToDatasetResponse, _>();
+                .deserialize::<SubscribeToDatasetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2390,11 +2389,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UnsubscribeFromDatasetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UnsubscribeFromDatasetResponse, _>();
+                .deserialize::<UnsubscribeFromDatasetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2429,11 +2428,11 @@ impl CognitoSync for CognitoSyncClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateRecordsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRecordsResponse, _>();
+                .deserialize::<UpdateRecordsResponse, _>()?;
 
             Ok(result)
         } else {

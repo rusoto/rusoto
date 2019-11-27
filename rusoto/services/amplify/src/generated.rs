@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -2244,11 +2243,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateAppError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateAppResult, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateAppResult, _>()?;
 
             Ok(result)
         } else {
@@ -2274,11 +2273,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateBranchError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateBranchResult, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateBranchResult, _>()?;
 
             Ok(result)
         } else {
@@ -2304,11 +2303,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateDomainAssociationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDomainAssociationResult, _>();
+                .deserialize::<CreateDomainAssociationResult, _>()?;
 
             Ok(result)
         } else {
@@ -2331,11 +2330,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteAppError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<DeleteAppResult, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteAppResult, _>()?;
 
             Ok(result)
         } else {
@@ -2362,11 +2361,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteBranchError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<DeleteBranchResult, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteBranchResult, _>()?;
 
             Ok(result)
         } else {
@@ -2393,11 +2392,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteDomainAssociationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDomainAssociationResult, _>();
+                .deserialize::<DeleteDomainAssociationResult, _>()?;
 
             Ok(result)
         } else {
@@ -2425,11 +2424,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<DeleteJobResult, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteJobResult, _>()?;
 
             Ok(result)
         } else {
@@ -2452,11 +2451,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetAppError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetAppResult, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetAppResult, _>()?;
 
             Ok(result)
         } else {
@@ -2483,11 +2482,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBranchError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetBranchResult, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetBranchResult, _>()?;
 
             Ok(result)
         } else {
@@ -2514,11 +2513,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDomainAssociationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDomainAssociationResult, _>();
+                .deserialize::<GetDomainAssociationResult, _>()?;
 
             Ok(result)
         } else {
@@ -2546,11 +2545,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetJobResult, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetJobResult, _>()?;
 
             Ok(result)
         } else {
@@ -2582,11 +2581,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListAppsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListAppsResult, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<ListAppsResult, _>()?;
 
             Ok(result)
         } else {
@@ -2618,11 +2617,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListBranchesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListBranchesResult, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListBranchesResult, _>()?;
 
             Ok(result)
         } else {
@@ -2654,11 +2653,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDomainAssociationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDomainAssociationsResult, _>();
+                .deserialize::<ListDomainAssociationsResult, _>()?;
 
             Ok(result)
         } else {
@@ -2694,11 +2693,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListJobsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResult, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResult, _>()?;
 
             Ok(result)
         } else {
@@ -2728,11 +2727,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StartJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<StartJobResult, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<StartJobResult, _>()?;
 
             Ok(result)
         } else {
@@ -2760,11 +2759,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StopJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<StopJobResult, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<StopJobResult, _>()?;
 
             Ok(result)
         } else {
@@ -2790,11 +2789,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateAppError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UpdateAppResult, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<UpdateAppResult, _>()?;
 
             Ok(result)
         } else {
@@ -2824,11 +2823,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateBranchError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UpdateBranchResult, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateBranchResult, _>()?;
 
             Ok(result)
         } else {
@@ -2858,11 +2857,11 @@ impl Amplify for AmplifyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDomainAssociationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDomainAssociationResult, _>();
+                .deserialize::<UpdateDomainAssociationResult, _>()?;
 
             Ok(result)
         } else {

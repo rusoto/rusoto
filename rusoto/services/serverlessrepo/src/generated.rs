@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1927,11 +1926,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateApplicationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateApplicationResponse, _>();
+                .deserialize::<CreateApplicationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1961,11 +1960,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateApplicationVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateApplicationVersionResponse, _>();
+                .deserialize::<CreateApplicationVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1997,11 +1996,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateCloudFormationChangeSetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateCloudFormationChangeSetResponse, _>();
+                .deserialize::<CreateCloudFormationChangeSetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2031,11 +2030,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateCloudFormationTemplateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateCloudFormationTemplateResponse, _>();
+                .deserialize::<CreateCloudFormationTemplateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2062,7 +2061,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteApplicationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -2097,11 +2096,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetApplicationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetApplicationResponse, _>();
+                .deserialize::<GetApplicationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2127,11 +2126,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetApplicationPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetApplicationPolicyResponse, _>();
+                .deserialize::<GetApplicationPolicyResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2159,11 +2158,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetCloudFormationTemplateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCloudFormationTemplateResponse, _>();
+                .deserialize::<GetCloudFormationTemplateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2202,11 +2201,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListApplicationDependenciesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListApplicationDependenciesResponse, _>();
+                .deserialize::<ListApplicationDependenciesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2241,11 +2240,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListApplicationVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListApplicationVersionsResponse, _>();
+                .deserialize::<ListApplicationVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2277,11 +2276,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListApplicationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListApplicationsResponse, _>();
+                .deserialize::<ListApplicationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2313,11 +2312,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutApplicationPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutApplicationPolicyResponse, _>();
+                .deserialize::<PutApplicationPolicyResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2346,11 +2345,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateApplicationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateApplicationResponse, _>();
+                .deserialize::<UpdateApplicationResponse, _>()?;
 
             Ok(result)
         } else {

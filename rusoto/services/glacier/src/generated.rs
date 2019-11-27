@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -3389,7 +3388,7 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AbortMultipartUploadError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -3420,7 +3419,7 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AbortVaultLockError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -3458,7 +3457,7 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AddTagsToVaultError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -3498,11 +3497,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CompleteMultipartUploadError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ArchiveCreationOutput, _>();
+                .deserialize::<ArchiveCreationOutput, _>()?;
             if let Some(archive_id) = response.headers.get("x-amz-archive-id") {
                 let value = archive_id.to_owned();
                 result.archive_id = Some(value)
@@ -3543,7 +3542,7 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CompleteVaultLockError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -3574,11 +3573,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateVaultError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateVaultOutput, _>();
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateVaultOutput, _>()?;
             if let Some(location) = response.headers.get("Location") {
                 let value = location.to_owned();
                 result.location = Some(value)
@@ -3611,7 +3610,7 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteArchiveError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -3642,7 +3641,7 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteVaultError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -3673,7 +3672,7 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteVaultAccessPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -3704,7 +3703,7 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteVaultNotificationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -3736,11 +3735,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GlacierJobDescription, _>();
+                .deserialize::<GlacierJobDescription, _>()?;
 
             Ok(result)
         } else {
@@ -3768,11 +3767,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeVaultError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeVaultOutput, _>();
+                .deserialize::<DescribeVaultOutput, _>()?;
 
             Ok(result)
         } else {
@@ -3799,11 +3798,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDataRetrievalPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDataRetrievalPolicyOutput, _>();
+                .deserialize::<GetDataRetrievalPolicyOutput, _>()?;
 
             Ok(result)
         } else {
@@ -3836,7 +3835,7 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetJobOutputError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
@@ -3890,11 +3889,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetVaultAccessPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetVaultAccessPolicyOutput, _>();
+                .deserialize::<GetVaultAccessPolicyOutput, _>()?;
 
             Ok(result)
         } else {
@@ -3922,11 +3921,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetVaultLockError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetVaultLockOutput, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetVaultLockOutput, _>()?;
 
             Ok(result)
         } else {
@@ -3954,11 +3953,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetVaultNotificationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetVaultNotificationsOutput, _>();
+                .deserialize::<GetVaultNotificationsOutput, _>()?;
 
             Ok(result)
         } else {
@@ -3989,11 +3988,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(InitiateJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result =
-                proto::json::ResponsePayload::new(&response).deserialize::<InitiateJobOutput, _>();
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<InitiateJobOutput, _>()?;
             if let Some(job_id) = response.headers.get("x-amz-job-id") {
                 let value = job_id.to_owned();
                 result.job_id = Some(value)
@@ -4044,11 +4043,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(InitiateMultipartUploadError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<InitiateMultipartUploadOutput, _>();
+                .deserialize::<InitiateMultipartUploadOutput, _>()?;
             if let Some(location) = response.headers.get("Location") {
                 let value = location.to_owned();
                 result.location = Some(value)
@@ -4087,11 +4086,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(InitiateVaultLockError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<InitiateVaultLockOutput, _>();
+                .deserialize::<InitiateVaultLockOutput, _>()?;
             if let Some(lock_id) = response.headers.get("x-amz-lock-id") {
                 let value = lock_id.to_owned();
                 result.lock_id = Some(value)
@@ -4138,11 +4137,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListJobsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListJobsOutput, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<ListJobsOutput, _>()?;
 
             Ok(result)
         } else {
@@ -4179,11 +4178,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListMultipartUploadsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListMultipartUploadsOutput, _>();
+                .deserialize::<ListMultipartUploadsOutput, _>()?;
 
             Ok(result)
         } else {
@@ -4221,11 +4220,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPartsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListPartsOutput, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<ListPartsOutput, _>()?;
 
             Ok(result)
         } else {
@@ -4252,11 +4251,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListProvisionedCapacityError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListProvisionedCapacityOutput, _>();
+                .deserialize::<ListProvisionedCapacityOutput, _>()?;
 
             Ok(result)
         } else {
@@ -4284,11 +4283,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsForVaultError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForVaultOutput, _>();
+                .deserialize::<ListTagsForVaultOutput, _>()?;
 
             Ok(result)
         } else {
@@ -4321,11 +4320,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListVaultsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListVaultsOutput, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListVaultsOutput, _>()?;
 
             Ok(result)
         } else {
@@ -4353,11 +4352,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PurchaseProvisionedCapacityError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PurchaseProvisionedCapacityOutput, _>();
+                .deserialize::<PurchaseProvisionedCapacityOutput, _>()?;
             if let Some(capacity_id) = response.headers.get("x-amz-capacity-id") {
                 let value = capacity_id.to_owned();
                 result.capacity_id = Some(value)
@@ -4396,7 +4395,7 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RemoveTagsFromVaultError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4429,7 +4428,7 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SetDataRetrievalPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4463,7 +4462,7 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SetVaultAccessPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4497,7 +4496,7 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SetVaultNotificationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4546,11 +4545,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UploadArchiveError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ArchiveCreationOutput, _>();
+                .deserialize::<ArchiveCreationOutput, _>()?;
             if let Some(archive_id) = response.headers.get("x-amz-archive-id") {
                 let value = archive_id.to_owned();
                 result.archive_id = Some(value)
@@ -4606,11 +4605,11 @@ impl Glacier for GlacierClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UploadMultipartPartError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UploadMultipartPartOutput, _>();
+                .deserialize::<UploadMultipartPartOutput, _>()?;
             if let Some(checksum) = response.headers.get("x-amz-sha256-tree-hash") {
                 let value = checksum.to_owned();
                 result.checksum = Some(value)

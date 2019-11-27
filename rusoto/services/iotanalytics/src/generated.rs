@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -4013,11 +4012,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(BatchPutMessageError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchPutMessageResponse, _>();
+                .deserialize::<BatchPutMessageResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4045,11 +4044,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CancelPipelineReprocessingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelPipelineReprocessingResponse, _>();
+                .deserialize::<CancelPipelineReprocessingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4075,11 +4074,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateChannelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateChannelResponse, _>();
+                .deserialize::<CreateChannelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4105,11 +4104,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateDatasetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDatasetResponse, _>();
+                .deserialize::<CreateDatasetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4135,11 +4134,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateDatasetContentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDatasetContentResponse, _>();
+                .deserialize::<CreateDatasetContentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4165,11 +4164,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateDatastoreError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDatastoreResponse, _>();
+                .deserialize::<CreateDatastoreResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4195,11 +4194,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreatePipelineError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePipelineResponse, _>();
+                .deserialize::<CreatePipelineResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4225,7 +4224,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteChannelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4254,7 +4253,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteDatasetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4289,7 +4288,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteDatasetContentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4318,7 +4317,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteDatastoreError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4347,7 +4346,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeletePipelineError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4382,11 +4381,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeChannelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeChannelResponse, _>();
+                .deserialize::<DescribeChannelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4412,11 +4411,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeDatasetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDatasetResponse, _>();
+                .deserialize::<DescribeDatasetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4448,11 +4447,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeDatastoreError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDatastoreResponse, _>();
+                .deserialize::<DescribeDatastoreResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4474,11 +4473,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeLoggingOptionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeLoggingOptionsResponse, _>();
+                .deserialize::<DescribeLoggingOptionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4504,11 +4503,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribePipelineError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePipelineResponse, _>();
+                .deserialize::<DescribePipelineResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4540,11 +4539,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDatasetContentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDatasetContentResponse, _>();
+                .deserialize::<GetDatasetContentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4576,11 +4575,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListChannelsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListChannelsResponse, _>();
+                .deserialize::<ListChannelsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4621,11 +4620,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDatasetContentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDatasetContentsResponse, _>();
+                .deserialize::<ListDatasetContentsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4657,11 +4656,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDatasetsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDatasetsResponse, _>();
+                .deserialize::<ListDatasetsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4693,11 +4692,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDatastoresError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDatastoresResponse, _>();
+                .deserialize::<ListDatastoresResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4729,11 +4728,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPipelinesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPipelinesResponse, _>();
+                .deserialize::<ListPipelinesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4760,11 +4759,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>();
+                .deserialize::<ListTagsForResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4790,7 +4789,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutLoggingOptionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4819,11 +4818,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RunPipelineActivityError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RunPipelineActivityResponse, _>();
+                .deserialize::<RunPipelineActivityResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4861,11 +4860,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SampleChannelDataError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SampleChannelDataResponse, _>();
+                .deserialize::<SampleChannelDataResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4895,11 +4894,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StartPipelineReprocessingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartPipelineReprocessingResponse, _>();
+                .deserialize::<StartPipelineReprocessingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4929,11 +4928,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>();
+                .deserialize::<TagResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4963,11 +4962,11 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>();
+                .deserialize::<UntagResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4996,7 +4995,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateChannelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -5028,7 +5027,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDatasetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -5060,7 +5059,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDatastoreError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -5092,7 +5091,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdatePipelineError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);

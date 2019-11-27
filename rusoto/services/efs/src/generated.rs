@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1423,11 +1422,11 @@ impl Efs for EfsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateFileSystemError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<FileSystemDescription, _>();
+                .deserialize::<FileSystemDescription, _>()?;
 
             Ok(result)
         } else {
@@ -1454,11 +1453,11 @@ impl Efs for EfsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateMountTargetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<MountTargetDescription, _>();
+                .deserialize::<MountTargetDescription, _>()?;
 
             Ok(result)
         } else {
@@ -1488,7 +1487,7 @@ impl Efs for EfsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateTagsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -1518,7 +1517,7 @@ impl Efs for EfsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteFileSystemError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -1548,7 +1547,7 @@ impl Efs for EfsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteMountTargetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -1581,7 +1580,7 @@ impl Efs for EfsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteTagsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -1623,11 +1622,11 @@ impl Efs for EfsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeFileSystemsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeFileSystemsResponse, _>();
+                .deserialize::<DescribeFileSystemsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1655,11 +1654,11 @@ impl Efs for EfsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeLifecycleConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<LifecycleConfigurationDescription, _>();
+                .deserialize::<LifecycleConfigurationDescription, _>()?;
 
             Ok(result)
         } else {
@@ -1689,11 +1688,11 @@ impl Efs for EfsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeMountTargetSecurityGroupsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMountTargetSecurityGroupsResponse, _>();
+                .deserialize::<DescribeMountTargetSecurityGroupsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1734,11 +1733,11 @@ impl Efs for EfsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeMountTargetsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMountTargetsResponse, _>();
+                .deserialize::<DescribeMountTargetsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1774,11 +1773,11 @@ impl Efs for EfsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeTagsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeTagsResponse, _>();
+                .deserialize::<DescribeTagsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1808,7 +1807,7 @@ impl Efs for EfsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ModifyMountTargetSecurityGroupsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -1844,11 +1843,11 @@ impl Efs for EfsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutLifecycleConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<LifecycleConfigurationDescription, _>();
+                .deserialize::<LifecycleConfigurationDescription, _>()?;
 
             Ok(result)
         } else {
@@ -1878,11 +1877,11 @@ impl Efs for EfsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateFileSystemError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<FileSystemDescription, _>();
+                .deserialize::<FileSystemDescription, _>()?;
 
             Ok(result)
         } else {

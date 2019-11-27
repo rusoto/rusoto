@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -2471,11 +2470,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateClusterError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateClusterResponse, _>();
+                .deserialize::<CreateClusterResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2502,11 +2501,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateConfigurationResponse, _>();
+                .deserialize::<CreateConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2539,11 +2538,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteClusterError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteClusterResponse, _>();
+                .deserialize::<DeleteClusterResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2570,11 +2569,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeClusterError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeClusterResponse, _>();
+                .deserialize::<DescribeClusterResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2601,11 +2600,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeClusterOperationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeClusterOperationResponse, _>();
+                .deserialize::<DescribeClusterOperationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2629,11 +2628,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigurationResponse, _>();
+                .deserialize::<DescribeConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2664,11 +2663,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeConfigurationRevisionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigurationRevisionResponse, _>();
+                .deserialize::<DescribeConfigurationRevisionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2695,11 +2694,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBootstrapBrokersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBootstrapBrokersResponse, _>();
+                .deserialize::<GetBootstrapBrokersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2735,11 +2734,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListClusterOperationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListClusterOperationsResponse, _>();
+                .deserialize::<ListClusterOperationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2775,11 +2774,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListClustersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListClustersResponse, _>();
+                .deserialize::<ListClustersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2813,11 +2812,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListConfigurationRevisionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListConfigurationRevisionsResponse, _>();
+                .deserialize::<ListConfigurationRevisionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2850,11 +2849,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListConfigurationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListConfigurationsResponse, _>();
+                .deserialize::<ListConfigurationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2890,11 +2889,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListNodesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListNodesResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListNodesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2918,11 +2917,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>();
+                .deserialize::<ListTagsForResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2949,7 +2948,7 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -2982,7 +2981,7 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -3015,11 +3014,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateBrokerStorageError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateBrokerStorageResponse, _>();
+                .deserialize::<UpdateBrokerStorageResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3050,11 +3049,11 @@ impl Kafka for KafkaClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateClusterConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateClusterConfigurationResponse, _>();
+                .deserialize::<UpdateClusterConfigurationResponse, _>()?;
 
             Ok(result)
         } else {

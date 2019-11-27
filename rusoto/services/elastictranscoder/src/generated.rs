@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -2486,11 +2485,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CancelJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CancelJobResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CancelJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2517,11 +2516,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateJobResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2548,11 +2547,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreatePipelineError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePipelineResponse, _>();
+                .deserialize::<CreatePipelineResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2579,11 +2578,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreatePresetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePresetResponse, _>();
+                .deserialize::<CreatePresetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2607,11 +2606,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeletePipelineError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePipelineResponse, _>();
+                .deserialize::<DeletePipelineResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2635,11 +2634,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeletePresetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePresetResponse, _>();
+                .deserialize::<DeletePresetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2675,11 +2674,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListJobsByPipelineError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJobsByPipelineResponse, _>();
+                .deserialize::<ListJobsByPipelineResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2712,11 +2711,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListJobsByStatusError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJobsByStatusResponse, _>();
+                .deserialize::<ListJobsByStatusResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2749,11 +2748,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPipelinesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPipelinesResponse, _>();
+                .deserialize::<ListPipelinesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2786,11 +2785,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPresetsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPresetsResponse, _>();
+                .deserialize::<ListPresetsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2814,11 +2813,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ReadJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ReadJobResponse, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<ReadJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2842,11 +2841,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ReadPipelineError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ReadPipelineResponse, _>();
+                .deserialize::<ReadPipelineResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2870,11 +2869,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ReadPresetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ReadPresetResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ReadPresetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2901,11 +2900,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TestRoleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<TestRoleResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TestRoleResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2932,11 +2931,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdatePipelineError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePipelineResponse, _>();
+                .deserialize::<UpdatePipelineResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2964,11 +2963,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdatePipelineNotificationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePipelineNotificationsResponse, _>();
+                .deserialize::<UpdatePipelineNotificationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2995,11 +2994,11 @@ impl Ets for EtsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdatePipelineStatusError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePipelineStatusResponse, _>();
+                .deserialize::<UpdatePipelineStatusResponse, _>()?;
 
             Ok(result)
         } else {

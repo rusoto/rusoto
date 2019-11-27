@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -2429,11 +2428,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateUserResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2460,7 +2459,7 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -2490,11 +2489,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeUserResponse, _>();
+                .deserialize::<DescribeUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2522,11 +2521,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeUserHierarchyGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeUserHierarchyGroupResponse, _>();
+                .deserialize::<DescribeUserHierarchyGroupResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2555,11 +2554,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeUserHierarchyStructureError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeUserHierarchyStructureResponse, _>();
+                .deserialize::<DescribeUserHierarchyStructureResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2586,11 +2585,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetContactAttributesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetContactAttributesResponse, _>();
+                .deserialize::<GetContactAttributesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2619,11 +2618,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetCurrentMetricDataError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCurrentMetricDataResponse, _>();
+                .deserialize::<GetCurrentMetricDataResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2649,11 +2648,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetFederationTokenError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFederationTokenResponse, _>();
+                .deserialize::<GetFederationTokenResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2682,11 +2681,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetMetricDataError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMetricDataResponse, _>();
+                .deserialize::<GetMetricDataResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2721,11 +2720,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListRoutingProfilesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRoutingProfilesResponse, _>();
+                .deserialize::<ListRoutingProfilesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2760,11 +2759,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListSecurityProfilesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSecurityProfilesResponse, _>();
+                .deserialize::<ListSecurityProfilesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2799,11 +2798,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListUserHierarchyGroupsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListUserHierarchyGroupsResponse, _>();
+                .deserialize::<ListUserHierarchyGroupsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2838,11 +2837,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListUsersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListUsersResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListUsersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2869,11 +2868,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StartOutboundVoiceContactError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartOutboundVoiceContactResponse, _>();
+                .deserialize::<StartOutboundVoiceContactResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2899,11 +2898,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StopContactError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopContactResponse, _>();
+                .deserialize::<StopContactResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2929,11 +2928,11 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateContactAttributesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateContactAttributesResponse, _>();
+                .deserialize::<UpdateContactAttributesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2963,7 +2962,7 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateUserHierarchyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -2996,7 +2995,7 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateUserIdentityInfoError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -3029,7 +3028,7 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateUserPhoneConfigError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -3062,7 +3061,7 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateUserRoutingProfileError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -3095,7 +3094,7 @@ impl Connect for ConnectClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateUserSecurityProfilesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);

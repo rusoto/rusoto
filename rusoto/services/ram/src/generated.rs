@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -2186,11 +2185,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AcceptResourceShareInvitationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AcceptResourceShareInvitationResponse, _>();
+                .deserialize::<AcceptResourceShareInvitationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2216,11 +2215,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AssociateResourceShareError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateResourceShareResponse, _>();
+                .deserialize::<AssociateResourceShareResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2246,11 +2245,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateResourceShareError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateResourceShareResponse, _>();
+                .deserialize::<CreateResourceShareResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2280,11 +2279,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteResourceShareError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteResourceShareResponse, _>();
+                .deserialize::<DeleteResourceShareResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2311,11 +2310,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DisassociateResourceShareError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateResourceShareResponse, _>();
+                .deserialize::<DisassociateResourceShareResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2340,11 +2339,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(EnableSharingWithAwsOrganizationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<EnableSharingWithAwsOrganizationResponse, _>();
+                .deserialize::<EnableSharingWithAwsOrganizationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2372,11 +2371,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetResourcePoliciesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResourcePoliciesResponse, _>();
+                .deserialize::<GetResourcePoliciesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2403,11 +2402,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetResourceShareAssociationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResourceShareAssociationsResponse, _>();
+                .deserialize::<GetResourceShareAssociationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2434,11 +2433,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetResourceShareInvitationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResourceShareInvitationsResponse, _>();
+                .deserialize::<GetResourceShareInvitationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2464,11 +2463,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetResourceSharesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResourceSharesResponse, _>();
+                .deserialize::<GetResourceSharesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2494,11 +2493,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPrincipalsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPrincipalsResponse, _>();
+                .deserialize::<ListPrincipalsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2524,11 +2523,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListResourcesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResourcesResponse, _>();
+                .deserialize::<ListResourcesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2557,11 +2556,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RejectResourceShareInvitationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RejectResourceShareInvitationResponse, _>();
+                .deserialize::<RejectResourceShareInvitationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2587,11 +2586,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>();
+                .deserialize::<TagResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2617,11 +2616,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>();
+                .deserialize::<UntagResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2647,11 +2646,11 @@ impl Ram for RamClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateResourceShareError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateResourceShareResponse, _>();
+                .deserialize::<UpdateResourceShareResponse, _>()?;
 
             Ok(result)
         } else {

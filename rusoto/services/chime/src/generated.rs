@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -6363,11 +6362,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AssociatePhoneNumberWithUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociatePhoneNumberWithUserResponse, _>();
+                .deserialize::<AssociatePhoneNumberWithUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6403,11 +6402,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AssociatePhoneNumbersWithVoiceConnectorError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociatePhoneNumbersWithVoiceConnectorResponse, _>();
+                .deserialize::<AssociatePhoneNumbersWithVoiceConnectorResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6439,11 +6438,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(BatchDeletePhoneNumberError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDeletePhoneNumberResponse, _>();
+                .deserialize::<BatchDeletePhoneNumberResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6476,11 +6475,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(BatchSuspendUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchSuspendUserResponse, _>();
+                .deserialize::<BatchSuspendUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6513,11 +6512,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(BatchUnsuspendUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchUnsuspendUserResponse, _>();
+                .deserialize::<BatchUnsuspendUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6547,11 +6546,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(BatchUpdatePhoneNumberError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchUpdatePhoneNumberResponse, _>();
+                .deserialize::<BatchUpdatePhoneNumberResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6580,11 +6579,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(BatchUpdateUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchUpdateUserResponse, _>();
+                .deserialize::<BatchUpdateUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6610,11 +6609,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateAccountError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateAccountResponse, _>();
+                .deserialize::<CreateAccountResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6640,11 +6639,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateBotError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateBotResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateBotResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6670,11 +6669,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreatePhoneNumberOrderError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePhoneNumberOrderResponse, _>();
+                .deserialize::<CreatePhoneNumberOrderResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6700,11 +6699,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateVoiceConnectorError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateVoiceConnectorResponse, _>();
+                .deserialize::<CreateVoiceConnectorResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6727,11 +6726,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteAccountError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteAccountResponse, _>();
+                .deserialize::<DeleteAccountResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6758,7 +6757,7 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteEventsConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -6787,7 +6786,7 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeletePhoneNumberError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -6816,7 +6815,7 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteVoiceConnectorError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -6845,7 +6844,7 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteVoiceConnectorOriginationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -6876,7 +6875,7 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteVoiceConnectorTerminationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -6914,7 +6913,7 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteVoiceConnectorTerminationCredentialsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -6951,11 +6950,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DisassociatePhoneNumberFromUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociatePhoneNumberFromUserResponse, _>();
+                .deserialize::<DisassociatePhoneNumberFromUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6993,11 +6992,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DisassociatePhoneNumbersFromVoiceConnectorError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociatePhoneNumbersFromVoiceConnectorResponse, _>();
+                .deserialize::<DisassociatePhoneNumbersFromVoiceConnectorResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7020,11 +7019,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetAccountError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetAccountResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAccountResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7050,11 +7049,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetAccountSettingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAccountSettingsResponse, _>();
+                .deserialize::<GetAccountSettingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7081,11 +7080,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBotError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetBotResponse, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetBotResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7112,11 +7111,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetEventsConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEventsConfigurationResponse, _>();
+                .deserialize::<GetEventsConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7138,11 +7137,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetGlobalSettingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetGlobalSettingsResponse, _>();
+                .deserialize::<GetGlobalSettingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7168,11 +7167,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetPhoneNumberError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPhoneNumberResponse, _>();
+                .deserialize::<GetPhoneNumberResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7198,11 +7197,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetPhoneNumberOrderError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPhoneNumberOrderResponse, _>();
+                .deserialize::<GetPhoneNumberOrderResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7229,11 +7228,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetUserResponse, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7260,11 +7259,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetUserSettingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetUserSettingsResponse, _>();
+                .deserialize::<GetUserSettingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7290,11 +7289,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetVoiceConnectorError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetVoiceConnectorResponse, _>();
+                .deserialize::<GetVoiceConnectorResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7321,11 +7320,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetVoiceConnectorOriginationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetVoiceConnectorOriginationResponse, _>();
+                .deserialize::<GetVoiceConnectorOriginationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7352,11 +7351,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetVoiceConnectorTerminationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetVoiceConnectorTerminationResponse, _>();
+                .deserialize::<GetVoiceConnectorTerminationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7385,11 +7384,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetVoiceConnectorTerminationHealthError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetVoiceConnectorTerminationHealthResponse, _>();
+                .deserialize::<GetVoiceConnectorTerminationHealthResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7424,11 +7423,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(InviteUsersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<InviteUsersResponse, _>();
+                .deserialize::<InviteUsersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7466,11 +7465,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListAccountsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAccountsResponse, _>();
+                .deserialize::<ListAccountsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7502,11 +7501,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListBotsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListBotsResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListBotsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7538,11 +7537,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPhoneNumberOrdersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPhoneNumberOrdersResponse, _>();
+                .deserialize::<ListPhoneNumberOrdersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7586,11 +7585,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPhoneNumbersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPhoneNumbersResponse, _>();
+                .deserialize::<ListPhoneNumbersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7628,11 +7627,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListUsersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListUsersResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListUsersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7661,11 +7660,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListVoiceConnectorTerminationCredentialsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListVoiceConnectorTerminationCredentialsResponse, _>();
+                .deserialize::<ListVoiceConnectorTerminationCredentialsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7697,11 +7696,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListVoiceConnectorsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListVoiceConnectorsResponse, _>();
+                .deserialize::<ListVoiceConnectorsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7732,11 +7731,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(LogoutUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<LogoutUserResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<LogoutUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7766,11 +7765,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutEventsConfigurationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutEventsConfigurationResponse, _>();
+                .deserialize::<PutEventsConfigurationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7800,11 +7799,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutVoiceConnectorOriginationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutVoiceConnectorOriginationResponse, _>();
+                .deserialize::<PutVoiceConnectorOriginationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7834,11 +7833,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutVoiceConnectorTerminationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutVoiceConnectorTerminationResponse, _>();
+                .deserialize::<PutVoiceConnectorTerminationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7871,7 +7870,7 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutVoiceConnectorTerminationCredentialsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -7907,11 +7906,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RegenerateSecurityTokenError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegenerateSecurityTokenResponse, _>();
+                .deserialize::<RegenerateSecurityTokenResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7942,11 +7941,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ResetPersonalPINError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ResetPersonalPINResponse, _>();
+                .deserialize::<ResetPersonalPINResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7976,11 +7975,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RestorePhoneNumberError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RestorePhoneNumberResponse, _>();
+                .deserialize::<RestorePhoneNumberResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8029,11 +8028,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SearchAvailablePhoneNumbersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchAvailablePhoneNumbersResponse, _>();
+                .deserialize::<SearchAvailablePhoneNumbersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8059,11 +8058,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateAccountError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAccountResponse, _>();
+                .deserialize::<UpdateAccountResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8092,11 +8091,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateAccountSettingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAccountSettingsResponse, _>();
+                .deserialize::<UpdateAccountSettingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8126,11 +8125,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateBotError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UpdateBotResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateBotResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8156,7 +8155,7 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateGlobalSettingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -8188,11 +8187,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdatePhoneNumberError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePhoneNumberResponse, _>();
+                .deserialize::<UpdatePhoneNumberResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8222,11 +8221,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateUserError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UpdateUserResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateUserResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8256,7 +8255,7 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateUserSettingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -8288,11 +8287,11 @@ impl Chime for ChimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateVoiceConnectorError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateVoiceConnectorResponse, _>();
+                .deserialize::<UpdateVoiceConnectorResponse, _>()?;
 
             Ok(result)
         } else {

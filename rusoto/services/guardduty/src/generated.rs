@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -3614,11 +3613,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AcceptInvitationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AcceptInvitationResponse, _>();
+                .deserialize::<AcceptInvitationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3647,11 +3646,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ArchiveFindingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ArchiveFindingsResponse, _>();
+                .deserialize::<ArchiveFindingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3677,11 +3676,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateDetectorError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDetectorResponse, _>();
+                .deserialize::<CreateDetectorResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3710,11 +3709,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateFilterError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateFilterResponse, _>();
+                .deserialize::<CreateFilterResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3743,11 +3742,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateIPSetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateIPSetResponse, _>();
+                .deserialize::<CreateIPSetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3776,11 +3775,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateMembersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateMembersResponse, _>();
+                .deserialize::<CreateMembersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3809,11 +3808,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateSampleFindingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSampleFindingsResponse, _>();
+                .deserialize::<CreateSampleFindingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3842,11 +3841,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateThreatIntelSetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateThreatIntelSetResponse, _>();
+                .deserialize::<CreateThreatIntelSetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3872,11 +3871,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeclineInvitationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeclineInvitationsResponse, _>();
+                .deserialize::<DeclineInvitationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3899,11 +3898,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteDetectorError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDetectorResponse, _>();
+                .deserialize::<DeleteDetectorResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3930,11 +3929,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteFilterError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteFilterResponse, _>();
+                .deserialize::<DeleteFilterResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3961,11 +3960,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteIPSetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteIPSetResponse, _>();
+                .deserialize::<DeleteIPSetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -3991,11 +3990,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteInvitationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteInvitationsResponse, _>();
+                .deserialize::<DeleteInvitationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4024,11 +4023,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteMembersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteMembersResponse, _>();
+                .deserialize::<DeleteMembersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4055,11 +4054,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteThreatIntelSetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteThreatIntelSetResponse, _>();
+                .deserialize::<DeleteThreatIntelSetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4088,11 +4087,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DisassociateFromMasterAccountError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateFromMasterAccountResponse, _>();
+                .deserialize::<DisassociateFromMasterAccountResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4121,11 +4120,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DisassociateMembersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateMembersResponse, _>();
+                .deserialize::<DisassociateMembersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4148,11 +4147,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDetectorError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDetectorResponse, _>();
+                .deserialize::<GetDetectorResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4179,11 +4178,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetFilterError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetFilterResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetFilterResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4212,11 +4211,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetFindingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFindingsResponse, _>();
+                .deserialize::<GetFindingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4245,11 +4244,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetFindingsStatisticsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFindingsStatisticsResponse, _>();
+                .deserialize::<GetFindingsStatisticsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4276,11 +4275,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetIPSetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetIPSetResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetIPSetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4302,11 +4301,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetInvitationsCountError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInvitationsCountResponse, _>();
+                .deserialize::<GetInvitationsCountResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4332,11 +4331,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetMasterAccountError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMasterAccountResponse, _>();
+                .deserialize::<GetMasterAccountResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4365,11 +4364,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetMembersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetMembersResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetMembersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4396,11 +4395,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetThreatIntelSetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetThreatIntelSetResponse, _>();
+                .deserialize::<GetThreatIntelSetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4429,11 +4428,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(InviteMembersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<InviteMembersResponse, _>();
+                .deserialize::<InviteMembersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4465,11 +4464,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDetectorsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDetectorsResponse, _>();
+                .deserialize::<ListDetectorsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4504,11 +4503,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListFiltersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListFiltersResponse, _>();
+                .deserialize::<ListFiltersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4537,11 +4536,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListFindingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListFindingsResponse, _>();
+                .deserialize::<ListFindingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4576,11 +4575,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListIPSetsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListIPSetsResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListIPSetsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4612,11 +4611,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListInvitationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInvitationsResponse, _>();
+                .deserialize::<ListInvitationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4654,11 +4653,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListMembersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListMembersResponse, _>();
+                .deserialize::<ListMembersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4693,11 +4692,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListThreatIntelSetsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThreatIntelSetsResponse, _>();
+                .deserialize::<ListThreatIntelSetsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4726,11 +4725,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StartMonitoringMembersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartMonitoringMembersResponse, _>();
+                .deserialize::<StartMonitoringMembersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4759,11 +4758,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StopMonitoringMembersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopMonitoringMembersResponse, _>();
+                .deserialize::<StopMonitoringMembersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4792,11 +4791,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UnarchiveFindingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UnarchiveFindingsResponse, _>();
+                .deserialize::<UnarchiveFindingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4822,11 +4821,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDetectorError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDetectorResponse, _>();
+                .deserialize::<UpdateDetectorResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4856,11 +4855,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateFilterError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateFilterResponse, _>();
+                .deserialize::<UpdateFilterResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4889,11 +4888,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateFindingsFeedbackError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateFindingsFeedbackResponse, _>();
+                .deserialize::<UpdateFindingsFeedbackResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4923,11 +4922,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateIPSetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateIPSetResponse, _>();
+                .deserialize::<UpdateIPSetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4957,11 +4956,11 @@ impl GuardDuty for GuardDutyClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateThreatIntelSetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateThreatIntelSetResponse, _>();
+                .deserialize::<UpdateThreatIntelSetResponse, _>()?;
 
             Ok(result)
         } else {

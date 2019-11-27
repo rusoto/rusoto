@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1026,11 +1025,11 @@ impl KinesisVideo for KinesisVideoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateStreamError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateStreamOutput, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateStreamOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1056,11 +1055,11 @@ impl KinesisVideo for KinesisVideoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteStreamError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<DeleteStreamOutput, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteStreamOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1086,11 +1085,11 @@ impl KinesisVideo for KinesisVideoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeStreamError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeStreamOutput, _>();
+                .deserialize::<DescribeStreamOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1116,11 +1115,11 @@ impl KinesisVideo for KinesisVideoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDataEndpointError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDataEndpointOutput, _>();
+                .deserialize::<GetDataEndpointOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1146,11 +1145,11 @@ impl KinesisVideo for KinesisVideoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListStreamsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListStreamsOutput, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListStreamsOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1176,11 +1175,11 @@ impl KinesisVideo for KinesisVideoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsForStreamError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForStreamOutput, _>();
+                .deserialize::<ListTagsForStreamOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1206,11 +1205,11 @@ impl KinesisVideo for KinesisVideoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagStreamError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<TagStreamOutput, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<TagStreamOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1236,11 +1235,11 @@ impl KinesisVideo for KinesisVideoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagStreamError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UntagStreamOutput, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UntagStreamOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1266,11 +1265,11 @@ impl KinesisVideo for KinesisVideoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDataRetentionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDataRetentionOutput, _>();
+                .deserialize::<UpdateDataRetentionOutput, _>()?;
 
             Ok(result)
         } else {
@@ -1296,11 +1295,11 @@ impl KinesisVideo for KinesisVideoClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateStreamError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UpdateStreamOutput, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateStreamOutput, _>()?;
 
             Ok(result)
         } else {

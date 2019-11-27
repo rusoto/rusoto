@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -609,11 +608,11 @@ impl IotJobsData for IotJobsDataClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeJobExecutionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeJobExecutionResponse, _>();
+                .deserialize::<DescribeJobExecutionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -638,11 +637,11 @@ impl IotJobsData for IotJobsDataClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetPendingJobExecutionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPendingJobExecutionsResponse, _>();
+                .deserialize::<GetPendingJobExecutionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -673,11 +672,11 @@ impl IotJobsData for IotJobsDataClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StartNextPendingJobExecutionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartNextPendingJobExecutionResponse, _>();
+                .deserialize::<StartNextPendingJobExecutionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -708,11 +707,11 @@ impl IotJobsData for IotJobsDataClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateJobExecutionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateJobExecutionResponse, _>();
+                .deserialize::<UpdateJobExecutionResponse, _>()?;
 
             Ok(result)
         } else {

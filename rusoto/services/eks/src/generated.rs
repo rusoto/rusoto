@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -978,11 +977,11 @@ impl Eks for EksClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateClusterError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateClusterResponse, _>();
+                .deserialize::<CreateClusterResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1005,11 +1004,11 @@ impl Eks for EksClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteClusterError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteClusterResponse, _>();
+                .deserialize::<DeleteClusterResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1032,11 +1031,11 @@ impl Eks for EksClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeClusterError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeClusterResponse, _>();
+                .deserialize::<DescribeClusterResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1063,11 +1062,11 @@ impl Eks for EksClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeUpdateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeUpdateResponse, _>();
+                .deserialize::<DescribeUpdateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1099,11 +1098,11 @@ impl Eks for EksClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListClustersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListClustersResponse, _>();
+                .deserialize::<ListClustersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1135,11 +1134,11 @@ impl Eks for EksClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListUpdatesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListUpdatesResponse, _>();
+                .deserialize::<ListUpdatesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1165,11 +1164,11 @@ impl Eks for EksClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateClusterConfigError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateClusterConfigResponse, _>();
+                .deserialize::<UpdateClusterConfigResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1195,11 +1194,11 @@ impl Eks for EksClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateClusterVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateClusterVersionResponse, _>();
+                .deserialize::<UpdateClusterVersionResponse, _>()?;
 
             Ok(result)
         } else {

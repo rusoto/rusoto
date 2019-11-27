@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -566,11 +565,11 @@ impl CloudSearchDomain for CloudSearchDomainClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SearchError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<SearchResponse, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<SearchResponse, _>()?;
 
             Ok(result)
         } else {
@@ -604,11 +603,11 @@ impl CloudSearchDomain for CloudSearchDomainClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SuggestError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<SuggestResponse, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<SuggestResponse, _>()?;
 
             Ok(result)
         } else {
@@ -639,11 +638,11 @@ impl CloudSearchDomain for CloudSearchDomainClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UploadDocumentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UploadDocumentsResponse, _>();
+                .deserialize::<UploadDocumentsResponse, _>()?;
 
             Ok(result)
         } else {

@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2501,11 +2500,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(BatchGetTracesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetTracesResult, _>();
+                .deserialize::<BatchGetTracesResult, _>()?;
 
             Ok(result)
         } else {
@@ -2531,11 +2530,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateGroupResult, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateGroupResult, _>()?;
 
             Ok(result)
         } else {
@@ -2561,11 +2560,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateSamplingRuleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSamplingRuleResult, _>();
+                .deserialize::<CreateSamplingRuleResult, _>()?;
 
             Ok(result)
         } else {
@@ -2591,11 +2590,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<DeleteGroupResult, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteGroupResult, _>()?;
 
             Ok(result)
         } else {
@@ -2621,11 +2620,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteSamplingRuleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSamplingRuleResult, _>();
+                .deserialize::<DeleteSamplingRuleResult, _>()?;
 
             Ok(result)
         } else {
@@ -2647,11 +2646,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetEncryptionConfigError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEncryptionConfigResult, _>();
+                .deserialize::<GetEncryptionConfigResult, _>()?;
 
             Ok(result)
         } else {
@@ -2677,11 +2676,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetGroupResult, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetGroupResult, _>()?;
 
             Ok(result)
         } else {
@@ -2707,11 +2706,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetGroupsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetGroupsResult, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetGroupsResult, _>()?;
 
             Ok(result)
         } else {
@@ -2737,11 +2736,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetSamplingRulesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSamplingRulesResult, _>();
+                .deserialize::<GetSamplingRulesResult, _>()?;
 
             Ok(result)
         } else {
@@ -2768,11 +2767,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetSamplingStatisticSummariesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSamplingStatisticSummariesResult, _>();
+                .deserialize::<GetSamplingStatisticSummariesResult, _>()?;
 
             Ok(result)
         } else {
@@ -2798,11 +2797,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetSamplingTargetsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSamplingTargetsResult, _>();
+                .deserialize::<GetSamplingTargetsResult, _>()?;
 
             Ok(result)
         } else {
@@ -2828,11 +2827,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetServiceGraphError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetServiceGraphResult, _>();
+                .deserialize::<GetServiceGraphResult, _>()?;
 
             Ok(result)
         } else {
@@ -2861,11 +2860,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetTimeSeriesServiceStatisticsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTimeSeriesServiceStatisticsResult, _>();
+                .deserialize::<GetTimeSeriesServiceStatisticsResult, _>()?;
 
             Ok(result)
         } else {
@@ -2891,11 +2890,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetTraceGraphError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTraceGraphResult, _>();
+                .deserialize::<GetTraceGraphResult, _>()?;
 
             Ok(result)
         } else {
@@ -2921,11 +2920,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetTraceSummariesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTraceSummariesResult, _>();
+                .deserialize::<GetTraceSummariesResult, _>()?;
 
             Ok(result)
         } else {
@@ -2951,11 +2950,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutEncryptionConfigError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutEncryptionConfigResult, _>();
+                .deserialize::<PutEncryptionConfigResult, _>()?;
 
             Ok(result)
         } else {
@@ -2981,11 +2980,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutTelemetryRecordsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutTelemetryRecordsResult, _>();
+                .deserialize::<PutTelemetryRecordsResult, _>()?;
 
             Ok(result)
         } else {
@@ -3011,11 +3010,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutTraceSegmentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutTraceSegmentsResult, _>();
+                .deserialize::<PutTraceSegmentsResult, _>()?;
 
             Ok(result)
         } else {
@@ -3041,11 +3040,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateGroupError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UpdateGroupResult, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateGroupResult, _>()?;
 
             Ok(result)
         } else {
@@ -3071,11 +3070,11 @@ impl XRay for XRayClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateSamplingRuleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateSamplingRuleResult, _>();
+                .deserialize::<UpdateSamplingRuleResult, _>()?;
 
             Ok(result)
         } else {

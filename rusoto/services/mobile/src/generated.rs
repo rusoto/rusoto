@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1040,11 +1039,11 @@ impl Mobile for MobileClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateProjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateProjectResult, _>();
+                .deserialize::<CreateProjectResult, _>()?;
 
             Ok(result)
         } else {
@@ -1070,11 +1069,11 @@ impl Mobile for MobileClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteProjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteProjectResult, _>();
+                .deserialize::<DeleteProjectResult, _>()?;
 
             Ok(result)
         } else {
@@ -1100,11 +1099,11 @@ impl Mobile for MobileClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeBundleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeBundleResult, _>();
+                .deserialize::<DescribeBundleResult, _>()?;
 
             Ok(result)
         } else {
@@ -1137,11 +1136,11 @@ impl Mobile for MobileClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeProjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProjectResult, _>();
+                .deserialize::<DescribeProjectResult, _>()?;
 
             Ok(result)
         } else {
@@ -1176,11 +1175,11 @@ impl Mobile for MobileClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ExportBundleError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ExportBundleResult, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ExportBundleResult, _>()?;
 
             Ok(result)
         } else {
@@ -1206,11 +1205,11 @@ impl Mobile for MobileClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ExportProjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ExportProjectResult, _>();
+                .deserialize::<ExportProjectResult, _>()?;
 
             Ok(result)
         } else {
@@ -1245,11 +1244,11 @@ impl Mobile for MobileClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListBundlesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListBundlesResult, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListBundlesResult, _>()?;
 
             Ok(result)
         } else {
@@ -1284,11 +1283,11 @@ impl Mobile for MobileClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListProjectsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListProjectsResult, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListProjectsResult, _>()?;
 
             Ok(result)
         } else {
@@ -1324,11 +1323,11 @@ impl Mobile for MobileClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateProjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateProjectResult, _>();
+                .deserialize::<UpdateProjectResult, _>()?;
 
             Ok(result)
         } else {

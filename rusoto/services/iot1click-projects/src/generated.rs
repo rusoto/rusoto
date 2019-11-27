@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1377,11 +1376,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AssociateDeviceWithPlacementError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateDeviceWithPlacementResponse, _>();
+                .deserialize::<AssociateDeviceWithPlacementResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1411,11 +1410,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreatePlacementError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePlacementResponse, _>();
+                .deserialize::<CreatePlacementResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1442,11 +1441,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateProjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateProjectResponse, _>();
+                .deserialize::<CreateProjectResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1475,11 +1474,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeletePlacementError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePlacementResponse, _>();
+                .deserialize::<DeletePlacementResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1507,11 +1506,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteProjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteProjectResponse, _>();
+                .deserialize::<DeleteProjectResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1540,11 +1539,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribePlacementError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePlacementResponse, _>();
+                .deserialize::<DescribePlacementResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1572,11 +1571,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeProjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProjectResponse, _>();
+                .deserialize::<DescribeProjectResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1609,11 +1608,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DisassociateDeviceFromPlacementError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateDeviceFromPlacementResponse, _>();
+                .deserialize::<DisassociateDeviceFromPlacementResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1644,11 +1643,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDevicesInPlacementError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDevicesInPlacementResponse, _>();
+                .deserialize::<GetDevicesInPlacementResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1685,11 +1684,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPlacementsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPlacementsResponse, _>();
+                .deserialize::<ListPlacementsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1723,11 +1722,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListProjectsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListProjectsResponse, _>();
+                .deserialize::<ListProjectsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1752,11 +1751,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>();
+                .deserialize::<ListTagsForResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1783,11 +1782,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>();
+                .deserialize::<TagResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1818,11 +1817,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>();
+                .deserialize::<UntagResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1853,11 +1852,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdatePlacementError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePlacementResponse, _>();
+                .deserialize::<UpdatePlacementResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1887,11 +1886,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateProjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateProjectResponse, _>();
+                .deserialize::<UpdateProjectResponse, _>()?;
 
             Ok(result)
         } else {

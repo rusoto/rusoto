@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -8568,11 +8567,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AddFacetToObjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddFacetToObjectResponse, _>();
+                .deserialize::<AddFacetToObjectResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8599,11 +8598,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ApplySchemaError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ApplySchemaResponse, _>();
+                .deserialize::<ApplySchemaResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8630,11 +8629,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AttachObjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AttachObjectResponse, _>();
+                .deserialize::<AttachObjectResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8661,11 +8660,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AttachPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AttachPolicyResponse, _>();
+                .deserialize::<AttachPolicyResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8692,11 +8691,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AttachToIndexError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AttachToIndexResponse, _>();
+                .deserialize::<AttachToIndexResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8723,11 +8722,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(AttachTypedLinkError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AttachTypedLinkResponse, _>();
+                .deserialize::<AttachTypedLinkResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8758,11 +8757,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(BatchReadError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<BatchReadResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchReadResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8789,11 +8788,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(BatchWriteError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<BatchWriteResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchWriteResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8820,11 +8819,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateDirectoryError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDirectoryResponse, _>();
+                .deserialize::<CreateDirectoryResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8851,11 +8850,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateFacetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateFacetResponse, _>();
+                .deserialize::<CreateFacetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8882,11 +8881,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateIndexError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateIndexResponse, _>();
+                .deserialize::<CreateIndexResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8913,11 +8912,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateObjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateObjectResponse, _>();
+                .deserialize::<CreateObjectResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8943,11 +8942,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateSchemaError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSchemaResponse, _>();
+                .deserialize::<CreateSchemaResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8974,11 +8973,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateTypedLinkFacetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateTypedLinkFacetResponse, _>();
+                .deserialize::<CreateTypedLinkFacetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9003,11 +9002,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteDirectoryError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDirectoryResponse, _>();
+                .deserialize::<DeleteDirectoryResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9034,11 +9033,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteFacetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteFacetResponse, _>();
+                .deserialize::<DeleteFacetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9065,11 +9064,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteObjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteObjectResponse, _>();
+                .deserialize::<DeleteObjectResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9094,11 +9093,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteSchemaError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSchemaResponse, _>();
+                .deserialize::<DeleteSchemaResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9125,11 +9124,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteTypedLinkFacetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteTypedLinkFacetResponse, _>();
+                .deserialize::<DeleteTypedLinkFacetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9156,11 +9155,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DetachFromIndexError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DetachFromIndexResponse, _>();
+                .deserialize::<DetachFromIndexResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9187,11 +9186,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DetachObjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DetachObjectResponse, _>();
+                .deserialize::<DetachObjectResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9218,11 +9217,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DetachPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DetachPolicyResponse, _>();
+                .deserialize::<DetachPolicyResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9249,7 +9248,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DetachTypedLinkError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -9277,11 +9276,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DisableDirectoryError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisableDirectoryResponse, _>();
+                .deserialize::<DisableDirectoryResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9306,11 +9305,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(EnableDirectoryError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<EnableDirectoryResponse, _>();
+                .deserialize::<EnableDirectoryResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9336,11 +9335,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetAppliedSchemaVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAppliedSchemaVersionResponse, _>();
+                .deserialize::<GetAppliedSchemaVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9365,11 +9364,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDirectoryError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDirectoryResponse, _>();
+                .deserialize::<GetDirectoryResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9396,11 +9395,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetFacetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetFacetResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetFacetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9427,11 +9426,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetLinkAttributesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetLinkAttributesResponse, _>();
+                .deserialize::<GetLinkAttributesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9462,11 +9461,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetObjectAttributesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetObjectAttributesResponse, _>();
+                .deserialize::<GetObjectAttributesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9497,11 +9496,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetObjectInformationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetObjectInformationResponse, _>();
+                .deserialize::<GetObjectInformationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9526,11 +9525,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetSchemaAsJsonError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSchemaAsJsonResponse, _>();
+                .deserialize::<GetSchemaAsJsonResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9558,11 +9557,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetTypedLinkFacetInformationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTypedLinkFacetInformationResponse, _>();
+                .deserialize::<GetTypedLinkFacetInformationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9588,11 +9587,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListAppliedSchemaArnsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAppliedSchemaArnsResponse, _>();
+                .deserialize::<ListAppliedSchemaArnsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9623,11 +9622,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListAttachedIndicesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAttachedIndicesResponse, _>();
+                .deserialize::<ListAttachedIndicesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9654,11 +9653,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDevelopmentSchemaArnsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDevelopmentSchemaArnsResponse, _>();
+                .deserialize::<ListDevelopmentSchemaArnsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9684,11 +9683,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListDirectoriesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDirectoriesResponse, _>();
+                .deserialize::<ListDirectoriesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9715,11 +9714,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListFacetAttributesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListFacetAttributesResponse, _>();
+                .deserialize::<ListFacetAttributesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9746,11 +9745,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListFacetNamesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListFacetNamesResponse, _>();
+                .deserialize::<ListFacetNamesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9777,11 +9776,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListIncomingTypedLinksError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListIncomingTypedLinksResponse, _>();
+                .deserialize::<ListIncomingTypedLinksResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9812,11 +9811,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListIndexError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListIndexResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListIndexResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9847,11 +9846,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListObjectAttributesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListObjectAttributesResponse, _>();
+                .deserialize::<ListObjectAttributesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9882,11 +9881,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListObjectChildrenError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListObjectChildrenResponse, _>();
+                .deserialize::<ListObjectChildrenResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9913,11 +9912,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListObjectParentPathsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListObjectParentPathsResponse, _>();
+                .deserialize::<ListObjectParentPathsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9948,11 +9947,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListObjectParentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListObjectParentsResponse, _>();
+                .deserialize::<ListObjectParentsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -9983,11 +9982,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListObjectPoliciesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListObjectPoliciesResponse, _>();
+                .deserialize::<ListObjectPoliciesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10014,11 +10013,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListOutgoingTypedLinksError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOutgoingTypedLinksResponse, _>();
+                .deserialize::<ListOutgoingTypedLinksResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10049,11 +10048,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPolicyAttachmentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPolicyAttachmentsResponse, _>();
+                .deserialize::<ListPolicyAttachmentsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10079,11 +10078,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListPublishedSchemaArnsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPublishedSchemaArnsResponse, _>();
+                .deserialize::<ListPublishedSchemaArnsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10109,11 +10108,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTagsForResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>();
+                .deserialize::<ListTagsForResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10141,11 +10140,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTypedLinkFacetAttributesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTypedLinkFacetAttributesResponse, _>();
+                .deserialize::<ListTypedLinkFacetAttributesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10172,11 +10171,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListTypedLinkFacetNamesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTypedLinkFacetNamesResponse, _>();
+                .deserialize::<ListTypedLinkFacetNamesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10203,11 +10202,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(LookupPolicyError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<LookupPolicyResponse, _>();
+                .deserialize::<LookupPolicyResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10234,11 +10233,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PublishSchemaError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PublishSchemaResponse, _>();
+                .deserialize::<PublishSchemaResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10265,11 +10264,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutSchemaFromJsonError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutSchemaFromJsonResponse, _>();
+                .deserialize::<PutSchemaFromJsonResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10296,11 +10295,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RemoveFacetFromObjectError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RemoveFacetFromObjectResponse, _>();
+                .deserialize::<RemoveFacetFromObjectResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10326,11 +10325,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>();
+                .deserialize::<TagResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10356,11 +10355,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UntagResourceError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>();
+                .deserialize::<UntagResourceResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10387,11 +10386,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateFacetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateFacetResponse, _>();
+                .deserialize::<UpdateFacetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10418,11 +10417,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateLinkAttributesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateLinkAttributesResponse, _>();
+                .deserialize::<UpdateLinkAttributesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10449,11 +10448,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateObjectAttributesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateObjectAttributesResponse, _>();
+                .deserialize::<UpdateObjectAttributesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10480,11 +10479,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateSchemaError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateSchemaResponse, _>();
+                .deserialize::<UpdateSchemaResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10511,11 +10510,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateTypedLinkFacetError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateTypedLinkFacetResponse, _>();
+                .deserialize::<UpdateTypedLinkFacetResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10541,11 +10540,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpgradeAppliedSchemaError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpgradeAppliedSchemaResponse, _>();
+                .deserialize::<UpgradeAppliedSchemaResponse, _>()?;
 
             Ok(result)
         } else {
@@ -10571,11 +10570,11 @@ impl CloudDirectory for CloudDirectoryClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpgradePublishedSchemaError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpgradePublishedSchemaResponse, _>();
+                .deserialize::<UpgradePublishedSchemaResponse, _>()?;
 
             Ok(result)
         } else {

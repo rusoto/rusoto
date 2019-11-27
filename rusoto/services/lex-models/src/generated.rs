@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -4081,11 +4080,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateBotVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateBotVersionResponse, _>();
+                .deserialize::<CreateBotVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4112,11 +4111,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateIntentVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateIntentVersionResponse, _>();
+                .deserialize::<CreateIntentVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4143,11 +4142,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateSlotTypeVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSlotTypeVersionResponse, _>();
+                .deserialize::<CreateSlotTypeVersionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4169,7 +4168,7 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteBotError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4201,7 +4200,7 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteBotAliasError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4234,7 +4233,7 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteBotChannelAssociationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4266,7 +4265,7 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteBotVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4294,7 +4293,7 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteIntentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4326,7 +4325,7 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteIntentVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4354,7 +4353,7 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteSlotTypeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4386,7 +4385,7 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteSlotTypeVersionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4418,7 +4417,7 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteUtterancesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -4450,11 +4449,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBotError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetBotResponse, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetBotResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4483,11 +4482,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBotAliasError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBotAliasResponse, _>();
+                .deserialize::<GetBotAliasResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4524,11 +4523,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBotAliasesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBotAliasesResponse, _>();
+                .deserialize::<GetBotAliasesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4558,11 +4557,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBotChannelAssociationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBotChannelAssociationResponse, _>();
+                .deserialize::<GetBotChannelAssociationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4604,11 +4603,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBotChannelAssociationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBotChannelAssociationsResponse, _>();
+                .deserialize::<GetBotChannelAssociationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4642,11 +4641,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBotVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBotVersionsResponse, _>();
+                .deserialize::<GetBotVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4683,11 +4682,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBotsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetBotsResponse, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetBotsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4712,11 +4711,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBuiltinIntentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBuiltinIntentResponse, _>();
+                .deserialize::<GetBuiltinIntentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4756,11 +4755,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBuiltinIntentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBuiltinIntentsResponse, _>();
+                .deserialize::<GetBuiltinIntentsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4800,11 +4799,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetBuiltinSlotTypesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBuiltinSlotTypesResponse, _>();
+                .deserialize::<GetBuiltinSlotTypesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4836,11 +4835,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetExportError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetExportResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetExportResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4865,11 +4864,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetImportError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetImportResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetImportResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4898,11 +4897,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetIntentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetIntentResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetIntentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4936,11 +4935,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetIntentVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetIntentVersionsResponse, _>();
+                .deserialize::<GetIntentVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -4977,11 +4976,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetIntentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetIntentsResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetIntentsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5010,11 +5009,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetSlotTypeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSlotTypeResponse, _>();
+                .deserialize::<GetSlotTypeResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5048,11 +5047,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetSlotTypeVersionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSlotTypeVersionsResponse, _>();
+                .deserialize::<GetSlotTypeVersionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5089,11 +5088,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetSlotTypesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSlotTypesResponse, _>();
+                .deserialize::<GetSlotTypesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5126,11 +5125,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetUtterancesViewError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetUtterancesViewResponse, _>();
+                .deserialize::<GetUtterancesViewResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5157,11 +5156,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutBotError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<PutBotResponse, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<PutBotResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5192,11 +5191,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutBotAliasError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutBotAliasResponse, _>();
+                .deserialize::<PutBotAliasResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5223,11 +5222,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutIntentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<PutIntentResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutIntentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5254,11 +5253,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PutSlotTypeError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutSlotTypeResponse, _>();
+                .deserialize::<PutSlotTypeResponse, _>()?;
 
             Ok(result)
         } else {
@@ -5285,11 +5284,11 @@ impl LexModels for LexModelsClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(StartImportError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartImportResponse, _>();
+                .deserialize::<StartImportResponse, _>()?;
 
             Ok(result)
         } else {

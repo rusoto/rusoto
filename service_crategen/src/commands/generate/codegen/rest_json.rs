@@ -63,7 +63,7 @@ impl GenerateProtocol for RestJsonGenerator {
                     {load_headers}
                     {load_params}
 
-                    let response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::SignAndDispatch)?;
+                    let response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
                     if {status_check} {{
                         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
                         {parse_body}
@@ -111,8 +111,7 @@ impl GenerateProtocol for RestJsonGenerator {
 
         let res = writeln!(
             writer,
-            "use futures::{{FutureExt, TryFutureExt}};
-                  use rusoto_core::signature::SignedRequest;
+            "use rusoto_core::signature::SignedRequest;
                   use rusoto_core::proto;
                   use serde::{{Deserialize, Serialize}};"
         );
@@ -414,7 +413,7 @@ fn payload_body_parser(
 /// as the result object
 fn json_body_parser(output_shape: &str, mutable_result: bool) -> String {
     format!(
-        "let {mutable} result = proto::json::ResponsePayload::new(&response).deserialize::<{output_shape}, _>();",
+        "let {mutable} result = proto::json::ResponsePayload::new(&response).deserialize::<{output_shape}, _>()?;",
         output_shape = output_shape,
         mutable = if mutable_result { "mut" } else { "" }
     )

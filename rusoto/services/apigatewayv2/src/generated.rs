@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -6770,11 +6769,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateApiError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CreateApiResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateApiResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6803,11 +6802,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateApiMappingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateApiMappingResponse, _>();
+                .deserialize::<CreateApiMappingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6833,11 +6832,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateAuthorizerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateAuthorizerResponse, _>();
+                .deserialize::<CreateAuthorizerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6863,11 +6862,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateDeploymentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDeploymentResponse, _>();
+                .deserialize::<CreateDeploymentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6893,11 +6892,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateDomainNameError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDomainNameResponse, _>();
+                .deserialize::<CreateDomainNameResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6923,11 +6922,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateIntegrationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateIntegrationResponse, _>();
+                .deserialize::<CreateIntegrationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6958,11 +6957,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateIntegrationResponseError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateIntegrationResponseResponse, _>();
+                .deserialize::<CreateIntegrationResponseResponse, _>()?;
 
             Ok(result)
         } else {
@@ -6988,11 +6987,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateModelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateModelResponse, _>();
+                .deserialize::<CreateModelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7018,11 +7017,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateRouteError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRouteResponse, _>();
+                .deserialize::<CreateRouteResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7052,11 +7051,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateRouteResponseError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRouteResponseResponse, _>();
+                .deserialize::<CreateRouteResponseResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7082,11 +7081,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateStageError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateStageResponse, _>();
+                .deserialize::<CreateStageResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7106,7 +7105,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteApiError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -7136,7 +7135,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteApiMappingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -7166,7 +7165,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteAuthorizerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -7196,7 +7195,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteDeploymentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -7225,7 +7224,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteDomainNameError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -7255,7 +7254,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteIntegrationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -7281,7 +7280,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteIntegrationResponseError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -7311,7 +7310,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteModelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -7341,7 +7340,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteRouteError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -7372,7 +7371,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteRouteResponseError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -7402,7 +7401,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteStageError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
@@ -7428,11 +7427,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetApiError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetApiResponse, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetApiResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7459,11 +7458,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetApiMappingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetApiMappingResponse, _>();
+                .deserialize::<GetApiMappingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7498,11 +7497,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetApiMappingsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetApiMappingsResponse, _>();
+                .deserialize::<GetApiMappingsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7534,11 +7533,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetApisError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetApisResponse, _>();
+                proto::json::ResponsePayload::new(&response).deserialize::<GetApisResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7565,11 +7564,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetAuthorizerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAuthorizerResponse, _>();
+                .deserialize::<GetAuthorizerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7601,11 +7600,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetAuthorizersError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAuthorizersResponse, _>();
+                .deserialize::<GetAuthorizersResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7632,11 +7631,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDeploymentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDeploymentResponse, _>();
+                .deserialize::<GetDeploymentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7668,11 +7667,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDeploymentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDeploymentsResponse, _>();
+                .deserialize::<GetDeploymentsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7698,11 +7697,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDomainNameError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDomainNameResponse, _>();
+                .deserialize::<GetDomainNameResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7734,11 +7733,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetDomainNamesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDomainNamesResponse, _>();
+                .deserialize::<GetDomainNamesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7765,11 +7764,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetIntegrationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetIntegrationResponse, _>();
+                .deserialize::<GetIntegrationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7792,11 +7791,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetIntegrationResponseError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetIntegrationResponseResponse, _>();
+                .deserialize::<GetIntegrationResponseResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7832,11 +7831,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetIntegrationResponsesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetIntegrationResponsesResponse, _>();
+                .deserialize::<GetIntegrationResponsesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7868,11 +7867,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetIntegrationsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetIntegrationsResponse, _>();
+                .deserialize::<GetIntegrationsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7899,11 +7898,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetModelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetModelResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetModelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7930,11 +7929,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetModelTemplateError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetModelTemplateResponse, _>();
+                .deserialize::<GetModelTemplateResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7966,11 +7965,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetModelsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetModelsResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetModelsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -7997,11 +7996,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetRouteError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetRouteResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetRouteResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8029,11 +8028,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetRouteResponseError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRouteResponseResponse, _>();
+                .deserialize::<GetRouteResponseResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8069,11 +8068,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetRouteResponsesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRouteResponsesResponse, _>();
+                .deserialize::<GetRouteResponsesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8105,11 +8104,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetRoutesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetRoutesResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetRoutesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8136,11 +8135,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetStageError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetStageResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetStageResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8172,11 +8171,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(GetStagesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetStagesResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetStagesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8202,11 +8201,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateApiError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UpdateApiResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateApiResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8236,11 +8235,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateApiMappingError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateApiMappingResponse, _>();
+                .deserialize::<UpdateApiMappingResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8270,11 +8269,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateAuthorizerError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAuthorizerResponse, _>();
+                .deserialize::<UpdateAuthorizerResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8304,11 +8303,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDeploymentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDeploymentResponse, _>();
+                .deserialize::<UpdateDeploymentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8337,11 +8336,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateDomainNameError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDomainNameResponse, _>();
+                .deserialize::<UpdateDomainNameResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8371,11 +8370,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateIntegrationError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateIntegrationResponse, _>();
+                .deserialize::<UpdateIntegrationResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8402,11 +8401,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateIntegrationResponseError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateIntegrationResponseResponse, _>();
+                .deserialize::<UpdateIntegrationResponseResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8436,11 +8435,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateModelError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateModelResponse, _>();
+                .deserialize::<UpdateModelResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8470,11 +8469,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateRouteError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRouteResponse, _>();
+                .deserialize::<UpdateRouteResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8505,11 +8504,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateRouteResponseError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRouteResponseResponse, _>();
+                .deserialize::<UpdateRouteResponseResponse, _>()?;
 
             Ok(result)
         } else {
@@ -8539,11 +8538,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateStageError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateStageResponse, _>();
+                .deserialize::<UpdateStageResponse, _>()?;
 
             Ok(result)
         } else {

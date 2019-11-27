@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -463,7 +462,7 @@ impl LexRuntime for LexRuntimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PostContentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
@@ -537,11 +536,11 @@ impl LexRuntime for LexRuntimeClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(PostTextError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<PostTextResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PostTextResponse, _>()?;
 
             Ok(result)
         } else {

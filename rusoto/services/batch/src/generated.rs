@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2047,11 +2046,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CancelJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<CancelJobResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CancelJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2077,11 +2076,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateComputeEnvironmentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateComputeEnvironmentResponse, _>();
+                .deserialize::<CreateComputeEnvironmentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2107,11 +2106,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CreateJobQueueError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateJobQueueResponse, _>();
+                .deserialize::<CreateJobQueueResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2137,11 +2136,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteComputeEnvironmentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteComputeEnvironmentResponse, _>();
+                .deserialize::<DeleteComputeEnvironmentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2167,11 +2166,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeleteJobQueueError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteJobQueueResponse, _>();
+                .deserialize::<DeleteJobQueueResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2197,11 +2196,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DeregisterJobDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterJobDefinitionResponse, _>();
+                .deserialize::<DeregisterJobDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2228,11 +2227,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeComputeEnvironmentsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeComputeEnvironmentsResponse, _>();
+                .deserialize::<DescribeComputeEnvironmentsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2258,11 +2257,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeJobDefinitionsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeJobDefinitionsResponse, _>();
+                .deserialize::<DescribeJobDefinitionsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2288,11 +2287,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeJobQueuesError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeJobQueuesResponse, _>();
+                .deserialize::<DescribeJobQueuesResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2318,11 +2317,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(DescribeJobsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeJobsResponse, _>();
+                .deserialize::<DescribeJobsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2348,11 +2347,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ListJobsError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListJobsResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2378,11 +2377,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RegisterJobDefinitionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterJobDefinitionResponse, _>();
+                .deserialize::<RegisterJobDefinitionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2408,11 +2407,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(SubmitJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<SubmitJobResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SubmitJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2438,11 +2437,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(TerminateJobError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TerminateJobResponse, _>();
+                .deserialize::<TerminateJobResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2468,11 +2467,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateComputeEnvironmentError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateComputeEnvironmentResponse, _>();
+                .deserialize::<UpdateComputeEnvironmentResponse, _>()?;
 
             Ok(result)
         } else {
@@ -2498,11 +2497,11 @@ impl Batch for BatchClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(UpdateJobQueueError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateJobQueueResponse, _>();
+                .deserialize::<UpdateJobQueueResponse, _>()?;
 
             Ok(result)
         } else {

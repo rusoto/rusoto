@@ -18,9 +18,8 @@ use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 #[allow(warnings)]
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, HttpDispatchError, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 
-use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1004,11 +1003,11 @@ impl RdsData for RdsDataClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(BatchExecuteStatementError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchExecuteStatementResponse, _>();
+                .deserialize::<BatchExecuteStatementResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1046,11 +1045,11 @@ impl RdsData for RdsDataClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(BeginTransactionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BeginTransactionResponse, _>();
+                .deserialize::<BeginTransactionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1077,11 +1076,11 @@ impl RdsData for RdsDataClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(CommitTransactionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CommitTransactionResponse, _>();
+                .deserialize::<CommitTransactionResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1113,11 +1112,11 @@ impl RdsData for RdsDataClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ExecuteSqlError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ExecuteSqlResponse, _>();
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ExecuteSqlResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1151,11 +1150,11 @@ impl RdsData for RdsDataClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(ExecuteStatementError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ExecuteStatementResponse, _>();
+                .deserialize::<ExecuteStatementResponse, _>()?;
 
             Ok(result)
         } else {
@@ -1181,11 +1180,11 @@ impl RdsData for RdsDataClient {
             .client
             .sign_and_dispatch(request)
             .await
-            .map_err(RollbackTransactionError::SignAndDispatch)?;
+            .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RollbackTransactionResponse, _>();
+                .deserialize::<RollbackTransactionResponse, _>()?;
 
             Ok(result)
         } else {
