@@ -86,26 +86,40 @@ pub fn generate_services(
         features.insert("default".into(), vec!["native-tls".into()]);
         features.insert("native-tls".into(), vec!["rusoto_core/native-tls".into()]);
         features.insert("rustls".into(), vec!["rusoto_core/rustls".into()]);
-        features.insert("serialize_structs".into(), vec![]);
+
+        let mut serialize_feature_dependencies = vec!["bytes/serde".into()];
 
         let service_dependencies = service.get_dependencies();
         let service_dev_dependencies = service.get_dev_dependencies();
 
-        let mut extern_crates = service_dependencies.iter().map(|(k, _)| {
-            if k == "xml-rs" {
+        let mut extern_crates = service_dependencies.iter().map(|(name, dep_obj)| {
+            if name == "xml-rs" {
                 return "extern crate xml;".into();
             }
-            let safe_name = k.replace("-", "_");
-            let use_macro = k == "serde_derive" || k == "lazy_static";
-            if use_macro {
-                return format!("#[macro_use]\nextern crate {};", safe_name);
+            let mut crate_str = String::new();
+            let safe_name = name.replace("-", "_");
+            if let cargo::Dependency::Extended { optional: Some(is_optional), .. } = dep_obj {
+                if *is_optional {
+                    crate_str.push_str("#[cfg(any(feature = \"serialize_structs\", feature = \"deserialize_structs\"))]\n");
+                    if name == "serde" || name == "serde_derive" {
+                        serialize_feature_dependencies.push(name.into());
+                    }
+                }
             }
-            format!("extern crate {};", safe_name)
+            let use_macro = name == "serde_derive" || name == "lazy_static";
+            if use_macro {
+                crate_str.push_str("#[macro_use]\n");
+            }
+            crate_str.push_str(&format!("extern crate {};", safe_name));
+            crate_str
         }).collect::<Vec<String>>().join("\n");
         // S3 needs the external test crate for benchmark tests
         if service.full_name() == "Amazon Simple Storage Service" {
             extern_crates.push_str("\n#[cfg(nightly)]\nextern crate test;");
         }
+
+        features.insert("serialize_structs".into(), serialize_feature_dependencies.clone());
+        features.insert("deserialize_structs".into(), serialize_feature_dependencies.clone());
 
         let mut cargo_manifest = BufWriter::new(
             OpenOptions::new()
@@ -190,6 +204,7 @@ To use `{crate_name}` in your application, add it as a dependency in your `Cargo
 - `native-tls` - use platform-specific TLS implementation.
 - `rustls` - use rustls TLS implementation.
 - `serialize_structs` - output structs of most operations get `derive(Serialize)`.
+- `deserialize_structs` - input structs of most operations get `derive(Deserialize)`.
 
 Note: the crate will use the `native-tls` TLS implementation by default.
 

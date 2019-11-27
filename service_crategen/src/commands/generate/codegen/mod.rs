@@ -465,6 +465,10 @@ where
         && !derived.iter().any(|&x| x == "Serialize")
     {
         "\n#[cfg_attr(any(test, feature = \"serialize_structs\"), derive(Serialize))]"
+    } else if deserialized && !derived.iter().any(|&x| x == "Serialize") {
+        "\n#[cfg_attr(feature = \"serialize_structs\", derive(Serialize))]"
+    } else if serialized && !derived.iter().any(|&x| x == "Deserialize") {
+        "\n#[cfg_attr(feature = \"deserialize_structs\", derive(Deserialize))]"
     } else {
         ""
     };

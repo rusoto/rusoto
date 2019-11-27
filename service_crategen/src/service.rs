@@ -150,12 +150,52 @@ impl<'b> Service<'b> {
             }
             "query" | "ec2" => {
                 dependencies.insert(
+                    "serde".to_owned(),
+                    cargo::Dependency::Extended {
+                        version: Some("1.0.2".into()),
+                        optional: Some(true),
+                        path: None,
+                        default_features: None,
+                        features: None,
+                    },
+                );
+                dependencies.insert(
+                    "serde_derive".to_owned(),
+                    cargo::Dependency::Extended {
+                        version: Some("1.0.2".into()),
+                        optional: Some(true),
+                        path: None,
+                        default_features: None,
+                        features: None,
+                    },
+                );
+                dependencies.insert(
                     "serde_urlencoded".to_owned(),
                     cargo::Dependency::Simple("0.6".into()),
                 );
                 dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.8".into()));
             }
             "rest-xml" => {
+                dependencies.insert(
+                    "serde".to_owned(),
+                    cargo::Dependency::Extended {
+                        version: Some("1.0.2".into()),
+                        optional: Some(true),
+                        path: None,
+                        default_features: None,
+                        features: None,
+                    },
+                );
+                dependencies.insert(
+                    "serde_derive".to_owned(),
+                    cargo::Dependency::Extended {
+                        version: Some("1.0.2".into()),
+                        optional: Some(true),
+                        path: None,
+                        default_features: None,
+                        features: None,
+                    },
+                );
                 dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.8".into()));
             }
             "rest-json" => {
