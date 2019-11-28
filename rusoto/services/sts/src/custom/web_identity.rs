@@ -1,5 +1,3 @@
-//! The Credentials Provider to read from Environment Variables.
-
 use crate::{
     AssumeRoleWithWebIdentityError, AssumeRoleWithWebIdentityRequest,
     AssumeRoleWithWebIdentityResponse, Sts, StsClient,
