@@ -710,8 +710,10 @@ pub struct AllocateHostsRequest {
     pub client_token: Option<String>,
     /// <p>Indicates whether to enable or disable host recovery for the Dedicated Host. Host recovery is disabled by default. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-recovery.html"> Host Recovery</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Default: <code>off</code> </p>
     pub host_recovery: Option<String>,
-    /// <p>Specifies the instance type for which to configure your Dedicated Hosts. When you specify the instance type, that is the only instance type that you can launch onto that host.</p>
-    pub instance_type: String,
+    /// <p>Specifies the instance family to be supported by the Dedicated Hosts. If you specify an instance family, the Dedicated Hosts support multiple instance types within that instance family.</p> <p>If you want the Dedicated Hosts to support a specific instance type only, omit this parameter and specify <b>InstanceType</b> instead. You cannot specify <b>InstanceFamily</b> and <b>InstanceType</b> in the same request.</p>
+    pub instance_family: Option<String>,
+    /// <p>Specifies the instance type to be supported by the Dedicated Hosts. If you specify an instance type, the Dedicated Hosts support instances of the specified instance type only.</p> <p>If you want the Dedicated Hosts to support multiple instance types in a specific instance family, omit this parameter and specify <b>InstanceFamily</b> instead. You cannot specify <b>InstanceType</b> and <b>InstanceFamily</b> in the same request.</p>
+    pub instance_type: Option<String>,
     /// <p>The number of Dedicated Hosts to allocate to your account with these parameters.</p>
     pub quantity: i64,
     /// <p>The tags to apply to the Dedicated Host during creation.</p>
@@ -740,7 +742,12 @@ impl AllocateHostsRequestSerializer {
         if let Some(ref field_value) = obj.host_recovery {
             params.put(&format!("{}{}", prefix, "HostRecovery"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "InstanceType"), &obj.instance_type);
+        if let Some(ref field_value) = obj.instance_family {
+            params.put(&format!("{}{}", prefix, "InstanceFamily"), &field_value);
+        }
+        if let Some(ref field_value) = obj.instance_type {
+            params.put(&format!("{}{}", prefix, "InstanceType"), &field_value);
+        }
         params.put(&format!("{}{}", prefix, "Quantity"), &obj.quantity);
         if let Some(ref field_value) = obj.tag_specifications {
             TagSpecificationListSerializer::serialize(
@@ -863,6 +870,17 @@ impl AllowedPrincipalSetDeserializer {
         })
     }
 }
+struct AllowsMultipleInstanceTypesDeserializer;
+impl AllowsMultipleInstanceTypesDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplySecurityGroupsToClientVpnTargetNetworkRequest {
     /// <p>The ID of the Client VPN endpoint.</p>
@@ -935,6 +953,34 @@ impl ApplySecurityGroupsToClientVpnTargetNetworkResultDeserializer {
                 Ok(())
             },
         )
+    }
+}
+struct ArchitectureTypeDeserializer;
+impl ArchitectureTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct ArchitectureTypeListDeserializer;
+impl ArchitectureTypeListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(ArchitectureTypeDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
     }
 }
 struct ArchitectureValuesDeserializer;
@@ -1876,7 +1922,6 @@ impl AttachNetworkInterfaceResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for AttachVolume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachVolumeRequest {
     /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
@@ -2381,6 +2426,17 @@ impl AutoPlacementDeserializer {
         Ok(obj)
     }
 }
+struct AutoRecoveryFlagDeserializer;
+impl AutoRecoveryFlagDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Describes an Availability Zone.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AvailabilityZone {
@@ -2507,12 +2563,24 @@ impl AvailabilityZoneStateDeserializer {
         Ok(obj)
     }
 }
-/// <p>The capacity information for instances launched onto the Dedicated Host.</p>
+
+/// Serialize `AvailabilityZoneStringList` contents to a `SignedRequest`.
+struct AvailabilityZoneStringListSerializer;
+impl AvailabilityZoneStringListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+/// <p>The capacity information for instances that can be launched onto the Dedicated Host. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AvailableCapacity {
-    /// <p>The total number of instances supported by the Dedicated Host.</p>
+    /// <p>The number of instances that can be launched onto the Dedicated Host depending on the host's available capacity. For Dedicated Hosts that support multiple instance types, this parameter represents the number of instances for each instance size that is supported on the host.</p>
     pub available_instance_capacity: Option<Vec<InstanceCapacity>>,
-    /// <p>The number of vCPUs available on the Dedicated Host.</p>
+    /// <p>The number of vCPUs available for launching instances onto the Dedicated Host.</p>
     pub available_v_cpus: Option<i64>,
 }
 
@@ -2558,6 +2626,17 @@ impl AvailableInstanceCapacityListDeserializer {
             }
             Ok(())
         })
+    }
+}
+struct BareMetalFlagDeserializer;
+impl BareMetalFlagDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
     }
 }
 struct BatchStateDeserializer;
@@ -2922,6 +3001,17 @@ impl BundleTaskStateDeserializer {
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct BurstablePerformanceFlagDeserializer;
+impl BurstablePerformanceFlagDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
 
         Ok(obj)
@@ -5630,7 +5720,6 @@ impl CopyImageResultDeserializer {
         })
     }
 }
-/// <p>Contains the parameters for CopySnapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopySnapshotRequest {
     /// <p>A description for the EBS snapshot.</p>
@@ -5649,6 +5738,8 @@ pub struct CopySnapshotRequest {
     pub source_region: String,
     /// <p>The ID of the EBS snapshot to copy.</p>
     pub source_snapshot_id: String,
+    /// <p>The tags to apply to the new snapshot.</p>
+    pub tag_specifications: Option<Vec<TagSpecification>>,
 }
 
 /// Serialize `CopySnapshotRequest` contents to a `SignedRequest`.
@@ -5683,14 +5774,22 @@ impl CopySnapshotRequestSerializer {
             &format!("{}{}", prefix, "SourceSnapshotId"),
             &obj.source_snapshot_id,
         );
+        if let Some(ref field_value) = obj.tag_specifications {
+            TagSpecificationListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagSpecification"),
+                field_value,
+            );
+        }
     }
 }
 
-/// <p>Contains the output of CopySnapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopySnapshotResult {
     /// <p>The ID of the new snapshot.</p>
     pub snapshot_id: Option<String>,
+    /// <p>Any tags applied to the new snapshot.</p>
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct CopySnapshotResultDeserializer;
@@ -5705,7 +5804,40 @@ impl CopySnapshotResultDeserializer {
                 "snapshotId" => {
                     obj.snapshot_id = Some(StringDeserializer::deserialize("snapshotId", stack)?);
                 }
+                "tagSet" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagListDeserializer::deserialize("tagSet", stack)?);
+                }
                 _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct CoreCountDeserializer;
+impl CoreCountDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct CoreCountListDeserializer;
+impl CoreCountListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<i64>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(CoreCountDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
             }
             Ok(())
         })
@@ -6108,6 +6240,8 @@ pub struct CreateCustomerGatewayRequest {
     pub bgp_asn: i64,
     /// <p>The Amazon Resource Name (ARN) for the customer gateway certificate.</p>
     pub certificate_arn: Option<String>,
+    /// <p>A name for the customer gateway device.</p> <p>Length Constraints: Up to 255 characters.</p>
+    pub device_name: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
     /// <p>The Internet-routable IP address for the customer gateway's outside interface. The address must be static.</p>
@@ -6128,6 +6262,9 @@ impl CreateCustomerGatewayRequestSerializer {
         params.put(&format!("{}{}", prefix, "BgpAsn"), &obj.bgp_asn);
         if let Some(ref field_value) = obj.certificate_arn {
             params.put(&format!("{}{}", prefix, "CertificateArn"), &field_value);
+        }
+        if let Some(ref field_value) = obj.device_name {
+            params.put(&format!("{}{}", prefix, "DeviceName"), &field_value);
         }
         if let Some(ref field_value) = obj.dry_run {
             params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
@@ -6802,6 +6939,8 @@ pub struct CreateFpgaImageRequest {
     pub logs_storage_location: Option<StorageLocation>,
     /// <p>A name for the AFI.</p>
     pub name: Option<String>,
+    /// <p>The tags to apply to the FPGA image during creation.</p>
+    pub tag_specifications: Option<Vec<TagSpecification>>,
 }
 
 /// Serialize `CreateFpgaImageRequest` contents to a `SignedRequest`.
@@ -6836,6 +6975,13 @@ impl CreateFpgaImageRequestSerializer {
         }
         if let Some(ref field_value) = obj.name {
             params.put(&format!("{}{}", prefix, "Name"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tag_specifications {
+            TagSpecificationListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagSpecification"),
+                field_value,
+            );
         }
     }
 }
@@ -7941,7 +8087,6 @@ impl CreateSecurityGroupResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for CreateSnapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateSnapshotRequest {
     /// <p>A description for the snapshot.</p>
@@ -7986,7 +8131,7 @@ pub struct CreateSnapshotsRequest {
     pub copy_tags_from_source: Option<String>,
     /// <p> A description propagated to every snapshot specified by the instance.</p>
     pub description: Option<String>,
-    /// <p>Checks whether you have the required permissions for the action without actually making the request. Provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.</p>
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
     /// <p>The instance to specify which volumes should be included in the snapshots.</p>
     pub instance_specification: InstanceSpecification,
@@ -8423,7 +8568,7 @@ pub struct CreateTrafficMirrorSessionRequest {
     pub dry_run: Option<bool>,
     /// <p>The ID of the source network interface.</p>
     pub network_interface_id: String,
-    /// <p>The number of bytes in each packet to mirror. These are bytes after the VXLAN header. Do not specify this parameter when you want to mirror the entire packet. To mirror a subset of the packet, set this to the length (in bytes) that you want to mirror. For example, if you set this value to 1network0, then the first 100 bytes that meet the filter criteria are copied to the target.</p> <p>If you do not want to mirror the entire packet, use the <code>PacketLength</code> parameter to specify the number of bytes in each packet to mirror.</p>
+    /// <p>The number of bytes in each packet to mirror. These are bytes after the VXLAN header. Do not specify this parameter when you want to mirror the entire packet. To mirror a subset of the packet, set this to the length (in bytes) that you want to mirror. For example, if you set this value to 100, then the first 100 bytes that meet the filter criteria are copied to the target.</p> <p>If you do not want to mirror the entire packet, use the <code>PacketLength</code> parameter to specify the number of bytes in each packet to mirror.</p>
     pub packet_length: Option<i64>,
     /// <p>The session number determines the order in which sessions are evaluated when an interface is used by multiple sessions. The first session with a matching filter is the one that mirrors the packets.</p> <p>Valid values are 1-32766.</p>
     pub session_number: i64,
@@ -9068,7 +9213,6 @@ impl CreateVolumePermissionModificationsSerializer {
     }
 }
 
-/// <p>Contains the parameters for CreateVolume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVolumeRequest {
     /// <p>The Availability Zone in which to create the volume.</p>
@@ -9779,6 +9923,17 @@ impl CurrencyCodeValuesDeserializer {
         Ok(obj)
     }
 }
+struct CurrentGenerationFlagDeserializer;
+impl CurrentGenerationFlagDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Describes a customer gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CustomerGateway {
@@ -9788,6 +9943,8 @@ pub struct CustomerGateway {
     pub certificate_arn: Option<String>,
     /// <p>The ID of the customer gateway.</p>
     pub customer_gateway_id: Option<String>,
+    /// <p>The name of customer gateway device.</p>
+    pub device_name: Option<String>,
     /// <p>The Internet-routable IP address of the customer gateway's outside interface.</p>
     pub ip_address: Option<String>,
     /// <p>The current state of the customer gateway (<code>pending | available | deleting | deleted</code>).</p>
@@ -9817,6 +9974,9 @@ impl CustomerGatewayDeserializer {
                 "customerGatewayId" => {
                     obj.customer_gateway_id =
                         Some(StringDeserializer::deserialize("customerGatewayId", stack)?);
+                }
+                "deviceName" => {
+                    obj.device_name = Some(StringDeserializer::deserialize("deviceName", stack)?);
                 }
                 "ipAddress" => {
                     obj.ip_address = Some(StringDeserializer::deserialize("ipAddress", stack)?);
@@ -9884,6 +10044,17 @@ impl DateTimeDeserializer {
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct DedicatedHostFlagDeserializer;
+impl DedicatedHostFlagDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
 
         Ok(obj)
@@ -11036,6 +11207,140 @@ impl DeletePlacementGroupRequestSerializer {
     }
 }
 
+/// <p>Describes the error for a Reserved Instance whose queued purchase could not be deleted.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EC2DeleteQueuedReservedInstancesError {
+    /// <p>The error code.</p>
+    pub code: Option<String>,
+    /// <p>The error message.</p>
+    pub message: Option<String>,
+}
+
+struct EC2DeleteQueuedReservedInstancesErrorDeserializer;
+impl EC2DeleteQueuedReservedInstancesErrorDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EC2DeleteQueuedReservedInstancesError, XmlParseError> {
+        deserialize_elements::<_, EC2DeleteQueuedReservedInstancesError, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "code" => {
+                        obj.code = Some(
+                            DeleteQueuedReservedInstancesErrorCodeDeserializer::deserialize(
+                                "code", stack,
+                            )?,
+                        );
+                    }
+                    "message" => {
+                        obj.message = Some(StringDeserializer::deserialize("message", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct DeleteQueuedReservedInstancesErrorCodeDeserializer;
+impl DeleteQueuedReservedInstancesErrorCodeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `DeleteQueuedReservedInstancesIdList` contents to a `SignedRequest`.
+struct DeleteQueuedReservedInstancesIdListSerializer;
+impl DeleteQueuedReservedInstancesIdListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteQueuedReservedInstancesRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The IDs of the Reserved Instances.</p>
+    pub reserved_instances_ids: Vec<String>,
+}
+
+/// Serialize `DeleteQueuedReservedInstancesRequest` contents to a `SignedRequest`.
+struct DeleteQueuedReservedInstancesRequestSerializer;
+impl DeleteQueuedReservedInstancesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteQueuedReservedInstancesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        DeleteQueuedReservedInstancesIdListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "ReservedInstancesId"),
+            &obj.reserved_instances_ids,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteQueuedReservedInstancesResult {
+    /// <p>Information about the queued purchases that could not be deleted.</p>
+    pub failed_queued_purchase_deletions: Option<Vec<FailedQueuedPurchaseDeletion>>,
+    /// <p>Information about the queued purchases that were successfully deleted.</p>
+    pub successful_queued_purchase_deletions: Option<Vec<SuccessfulQueuedPurchaseDeletion>>,
+}
+
+struct DeleteQueuedReservedInstancesResultDeserializer;
+impl DeleteQueuedReservedInstancesResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteQueuedReservedInstancesResult, XmlParseError> {
+        deserialize_elements::<_, DeleteQueuedReservedInstancesResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "failedQueuedPurchaseDeletionSet" => {
+                        obj.failed_queued_purchase_deletions
+                            .get_or_insert(vec![])
+                            .extend(FailedQueuedPurchaseDeletionSetDeserializer::deserialize(
+                                "failedQueuedPurchaseDeletionSet",
+                                stack,
+                            )?);
+                    }
+                    "successfulQueuedPurchaseDeletionSet" => {
+                        obj.successful_queued_purchase_deletions
+                            .get_or_insert(vec![])
+                            .extend(
+                                SuccessfulQueuedPurchaseDeletionSetDeserializer::deserialize(
+                                    "successfulQueuedPurchaseDeletionSet",
+                                    stack,
+                                )?,
+                            );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteRouteRequest {
     /// <p>The IPv4 CIDR range for the route. The value you specify must match the CIDR for the route exactly.</p>
@@ -11137,7 +11442,6 @@ impl DeleteSecurityGroupRequestSerializer {
     }
 }
 
-/// <p>Contains the parameters for DeleteSnapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteSnapshotRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
@@ -11712,7 +12016,6 @@ impl DeleteTransitGatewayVpcAttachmentResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for DeleteVolume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVolumeRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
@@ -13735,6 +14038,206 @@ impl DescribeExportTasksResultDeserializer {
         )
     }
 }
+/// <p>Describes fast snapshot restores for a snapshot.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeFastSnapshotRestoreSuccessItem {
+    /// <p>The Availability Zone.</p>
+    pub availability_zone: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>disabled</code> state.</p>
+    pub disabled_time: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>disabling</code> state.</p>
+    pub disabling_time: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>enabled</code> state.</p>
+    pub enabled_time: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>enabling</code> state.</p>
+    pub enabling_time: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>optimizing</code> state.</p>
+    pub optimizing_time: Option<String>,
+    /// <p>The alias of the snapshot owner.</p>
+    pub owner_alias: Option<String>,
+    /// <p>The ID of the AWS account that owns the snapshot.</p>
+    pub owner_id: Option<String>,
+    /// <p>The ID of the snapshot.</p>
+    pub snapshot_id: Option<String>,
+    /// <p>The state of fast snapshot restores.</p>
+    pub state: Option<String>,
+    /// <p><p>The reason for the state transition. The possible values are as follows:</p> <ul> <li> <p> <code>Client.UserInitiated</code> - The state successfully transitioned to <code>enabling</code> or <code>disabling</code>.</p> </li> <li> <p> <code>Client.UserInitiated - Lifecycle state transition</code> - The state successfully transitioned to <code>optimizing</code>, <code>enabled</code>, or <code>disabled</code>.</p> </li> </ul></p>
+    pub state_transition_reason: Option<String>,
+}
+
+struct DescribeFastSnapshotRestoreSuccessItemDeserializer;
+impl DescribeFastSnapshotRestoreSuccessItemDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeFastSnapshotRestoreSuccessItem, XmlParseError> {
+        deserialize_elements::<_, DescribeFastSnapshotRestoreSuccessItem, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "availabilityZone" => {
+                        obj.availability_zone =
+                            Some(StringDeserializer::deserialize("availabilityZone", stack)?);
+                    }
+                    "disabledTime" => {
+                        obj.disabled_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "disabledTime",
+                            stack,
+                        )?);
+                    }
+                    "disablingTime" => {
+                        obj.disabling_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "disablingTime",
+                            stack,
+                        )?);
+                    }
+                    "enabledTime" => {
+                        obj.enabled_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "enabledTime",
+                            stack,
+                        )?);
+                    }
+                    "enablingTime" => {
+                        obj.enabling_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "enablingTime",
+                            stack,
+                        )?);
+                    }
+                    "optimizingTime" => {
+                        obj.optimizing_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "optimizingTime",
+                            stack,
+                        )?);
+                    }
+                    "ownerAlias" => {
+                        obj.owner_alias =
+                            Some(StringDeserializer::deserialize("ownerAlias", stack)?);
+                    }
+                    "ownerId" => {
+                        obj.owner_id = Some(StringDeserializer::deserialize("ownerId", stack)?);
+                    }
+                    "snapshotId" => {
+                        obj.snapshot_id =
+                            Some(StringDeserializer::deserialize("snapshotId", stack)?);
+                    }
+                    "state" => {
+                        obj.state = Some(FastSnapshotRestoreStateCodeDeserializer::deserialize(
+                            "state", stack,
+                        )?);
+                    }
+                    "stateTransitionReason" => {
+                        obj.state_transition_reason = Some(StringDeserializer::deserialize(
+                            "stateTransitionReason",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct DescribeFastSnapshotRestoreSuccessSetDeserializer;
+impl DescribeFastSnapshotRestoreSuccessSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<DescribeFastSnapshotRestoreSuccessItem>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(
+                    DescribeFastSnapshotRestoreSuccessItemDeserializer::deserialize("item", stack)?,
+                );
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeFastSnapshotRestoresRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>The filters. The possible values are:</p> <ul> <li> <p> <code>availability-zone</code>: The Availability Zone of the snapshot.</p> </li> <li> <p> <code>owner-id</code>: The ID of the AWS account that owns the snapshot.</p> </li> <li> <p> <code>snapshot-id</code>: The ID of the snapshot.</p> </li> <li> <p> <code>state</code>: The state of fast snapshot restores for the snapshot (<code>enabling</code> | <code>optimizing</code> | <code>enabled</code> | <code>disabling</code> | <code>disabled</code>).</p> </li> </ul></p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token for the next page of results.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `DescribeFastSnapshotRestoresRequest` contents to a `SignedRequest`.
+struct DescribeFastSnapshotRestoresRequestSerializer;
+impl DescribeFastSnapshotRestoresRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeFastSnapshotRestoresRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeFastSnapshotRestoresResult {
+    /// <p>Information about the state of fast snapshot restores.</p>
+    pub fast_snapshot_restores: Option<Vec<DescribeFastSnapshotRestoreSuccessItem>>,
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeFastSnapshotRestoresResultDeserializer;
+impl DescribeFastSnapshotRestoresResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeFastSnapshotRestoresResult, XmlParseError> {
+        deserialize_elements::<_, DescribeFastSnapshotRestoresResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "fastSnapshotRestoreSet" => {
+                        obj.fast_snapshot_restores.get_or_insert(vec![]).extend(
+                            DescribeFastSnapshotRestoreSuccessSetDeserializer::deserialize(
+                                "fastSnapshotRestoreSet",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "nextToken" => {
+                        obj.next_token =
+                            Some(NextTokenDeserializer::deserialize("nextToken", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Describes the instances that could not be launched by the fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeFleetError {
@@ -15304,10 +15807,182 @@ impl DescribeInstanceStatusResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeInstanceTypeOfferingsRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>One or more filters. Filter names and values are case-sensitive.</p> <ul> <li> <p> <code>location</code> - This depends on the location type. For example, if the location type is <code>region</code> (default), the location is the Region code (for example, <code>us-east-2</code>.)</p> </li> <li> <p> <code>instance-type</code> - The instance type.</p> </li> </ul></p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The location type.</p>
+    pub location_type: Option<String>,
+    /// <p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the next token value.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next page of results.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `DescribeInstanceTypeOfferingsRequest` contents to a `SignedRequest`.
+struct DescribeInstanceTypeOfferingsRequestSerializer;
+impl DescribeInstanceTypeOfferingsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeInstanceTypeOfferingsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.location_type {
+            params.put(&format!("{}{}", prefix, "LocationType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeInstanceTypeOfferingsResult {
+    /// <p>The instance types offered.</p>
+    pub instance_type_offerings: Option<Vec<InstanceTypeOffering>>,
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeInstanceTypeOfferingsResultDeserializer;
+impl DescribeInstanceTypeOfferingsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeInstanceTypeOfferingsResult, XmlParseError> {
+        deserialize_elements::<_, DescribeInstanceTypeOfferingsResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "instanceTypeOfferingSet" => {
+                        obj.instance_type_offerings.get_or_insert(vec![]).extend(
+                            InstanceTypeOfferingsListDeserializer::deserialize(
+                                "instanceTypeOfferingSet",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "nextToken" => {
+                        obj.next_token =
+                            Some(NextTokenDeserializer::deserialize("nextToken", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeInstanceTypesRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>One or more filters. Filter names and values are case-sensitive.</p> <ul> <li> <p> <code>auto-recovery-supported</code> - Indicates whether auto recovery is supported. (<code>true</code> | <code>false</code>)</p> </li> <li> <p> <code>bare-metal</code> - Indicates whether it is a bare metal instance type. (<code>true</code> | <code>false</code>)</p> </li> <li> <p> <code>burstable-performance-supported</code> - Indicates whether it is a burstable performance instance type. (<code>true</code> | <code>false</code>)</p> </li> <li> <p> <code>current-generation</code> - Indicates whether this instance type is the latest generation instance type of an instance family. (<code>true</code> | <code>false</code>)</p> </li> <li> <p> <code>ebs-info.ebs-optimized-support</code> - Indicates whether the instance type is EBS-optimized. (<code>true</code> | <code>false</code>)</p> </li> <li> <p> <code>ebs-info.encryption-support</code> - Indicates whether EBS encryption is supported. (<code>true</code> | <code>false</code>)</p> </li> <li> <p> <code>free-tier-eligible</code> - Indicates whether the instance type is eligible to use in the free tier. (<code>true</code> | <code>false</code>)</p> </li> <li> <p> <code>hibernation-supported</code> - Indicates whether On-Demand hibernation is supported. (<code>true</code> | <code>false</code>)</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor used. (<code>nitro</code> | <code>xen</code>)</p> </li> <li> <p> <code>instance-storage-info.disk.count</code> - The number of local disks.</p> </li> <li> <p> <code>instance-storage-info.disk.size-in-gb</code> - The storage size of each instance storage disk, in GB.</p> </li> <li> <p> <code>instance-storage-info.disk.type</code> - The storage technology for the local instance storage disks. (<code>hdd</code> | <code>ssd</code>)</p> </li> <li> <p> <code>instance-storage-info.total-size-in-gb</code> - The total amount of storage available from all local instance storage, in GB.</p> </li> <li> <p> <code>instance-storage-supported</code> - Indicates whether the instance type has local instance storage. (<code>true</code> | <code>false</code>)</p> </li> <li> <p> <code>memory-info.size-in-mib</code> - The memory size.</p> </li> <li> <p> <code>network-info.ena-support</code> - Indicates whether Elastic Network Adapter (ENA) is supported or required. (<code>required</code> | <code>supported</code> | <code>unsupported</code>)</p> </li> <li> <p> <code>network-info.ipv4-addresses-per-interface</code> - The maximum number of private IPv4 addresses per network interface.</p> </li> <li> <p> <code>network-info.ipv6-addresses-per-interface</code> - The maximum number of private IPv6 addresses per network interface.</p> </li> <li> <p> <code>network-info.ipv6-supported</code> - Indicates whether the instance type supports IPv6. (<code>true</code> | <code>false</code>)</p> </li> <li> <p> <code>network-info.maximum-network-interfaces</code> - The maximum number of network interfaces per instance.</p> </li> <li> <p> <code>network-info.network-performance</code> - Describes the network performance.</p> </li> <li> <p> <code>processor-info.sustained-clock-speed-in-ghz</code> - The CPU clock speed, in GHz.</p> </li> <li> <p> <code>vcpu-info.default-cores</code> - The default number of cores for the instance type.</p> </li> <li> <p> <code>vcpu-info.default-threads-per-core</code> - The default number of threads per cores for the instance type.</p> </li> <li> <p> <code>vcpu-info.default-vcpus</code> - The default number of vCPUs for the instance type.</p> </li> </ul></p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The instance types. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    pub instance_types: Option<Vec<String>>,
+    /// <p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the next token value.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next page of results.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `DescribeInstanceTypesRequest` contents to a `SignedRequest`.
+struct DescribeInstanceTypesRequestSerializer;
+impl DescribeInstanceTypesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeInstanceTypesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.instance_types {
+            RequestInstanceTypeListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "InstanceType"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeInstanceTypesResult {
+    /// <p>The instance type. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    pub instance_types: Option<Vec<InstanceTypeInfo>>,
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeInstanceTypesResultDeserializer;
+impl DescribeInstanceTypesResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeInstanceTypesResult, XmlParseError> {
+        deserialize_elements::<_, DescribeInstanceTypesResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "instanceTypeSet" => {
+                        obj.instance_types.get_or_insert(vec![]).extend(
+                            InstanceTypeInfoListDeserializer::deserialize(
+                                "instanceTypeSet",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "nextToken" => {
+                        obj.next_token =
+                            Some(NextTokenDeserializer::deserialize("nextToken", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>The filters.</p> <ul> <li> <p> <code>affinity</code> - The affinity setting for an instance running on a Dedicated Host (<code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>architecture</code> - The instance architecture (<code>i386</code> | <code>x86_64</code> | <code>arm64</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>block-device-mapping.attach-time</code> - The attach time for an EBS volume mapped to the instance, for example, <code>2010-09-15T17:15:20.000Z</code>.</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean that indicates whether the EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name specified in the block device mapping (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.status</code> - The status for the EBS volume (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>block-device-mapping.volume-id</code> - The volume ID of the EBS volume.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance.</p> </li> <li> <p> <code>dns-name</code> - The public DNS name of the instance.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>group-name</code> - The name of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>hibernation-options.configured</code> - A Boolean that indicates whether the instance is enabled for hibernation. A value of <code>true</code> means that the instance is enabled for hibernation. </p> </li> <li> <p> <code>host-id</code> - The ID of the Dedicated Host on which the instance is running, if applicable.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type of the instance (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>iam-instance-profile.arn</code> - The instance profile associated with the instance. Specified as an ARN.</p> </li> <li> <p> <code>image-id</code> - The ID of the image used to launch the instance.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>instance-lifecycle</code> - Indicates whether this is a Spot Instance or a Scheduled Instance (<code>spot</code> | <code>scheduled</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The state of the instance, as a 16-bit unsigned integer. The high byte is used for internal purposes and should be ignored. The low byte is set based on the state represented. The valid values are: 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>t2.micro</code>).</p> </li> <li> <p> <code>instance.group-id</code> - The ID of the security group for the instance. </p> </li> <li> <p> <code>instance.group-name</code> - The name of the security group for the instance. </p> </li> <li> <p> <code>ip-address</code> - The public IPv4 address of the instance.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair used when the instance was launched.</p> </li> <li> <p> <code>launch-index</code> - When launching multiple instances, this is the index for the instance in the launch group (for example, 0, 1, 2, and so on). </p> </li> <li> <p> <code>launch-time</code> - The time when the instance was launched.</p> </li> <li> <p> <code>monitoring-state</code> - Indicates whether detailed monitoring is enabled (<code>disabled</code> | <code>enabled</code>).</p> </li> <li> <p> <code>network-interface.addresses.private-ip-address</code> - The private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Specifies whether the IPv4 address of the network interface is the primary private IPv4 address.</p> </li> <li> <p> <code>network-interface.addresses.association.public-ip</code> - The ID of the association of an Elastic IP address (IPv4) with a network interface.</p> </li> <li> <p> <code>network-interface.addresses.association.ip-owner-id</code> - The owner ID of the private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>network-interface.association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>network-interface.association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>network-interface.attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>network-interface.attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>network-interface.attachment.attach-time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>network-interface.attachment.delete-on-termination</code> - Specifies whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>network-interface.availability-zone</code> - The Availability Zone for the network interface.</p> </li> <li> <p> <code>network-interface.description</code> - The description of the network interface.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.ipv6-addresses.ipv6-address</code> - The IPv6 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.owner-id</code> - The ID of the owner of the network interface.</p> </li> <li> <p> <code>network-interface.private-dns-name</code> - The private DNS name of the network interface.</p> </li> <li> <p> <code>network-interface.requester-id</code> - The requester ID for the network interface.</p> </li> <li> <p> <code>network-interface.requester-managed</code> - Indicates whether the network interface is being managed by AWS.</p> </li> <li> <p> <code>network-interface.status</code> - The status of the network interface (<code>available</code>) | <code>in-use</code>).</p> </li> <li> <p> <code>network-interface.source-dest-check</code> - Whether the network interface performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>network-interface.vpc-id</code> - The ID of the VPC for the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the instance owner.</p> </li> <li> <p> <code>placement-group-name</code> - The name of the placement group for the instance.</p> </li> <li> <p> <code>placement-partition-number</code> - The partition in which the instance is located.</p> </li> <li> <p> <code>platform</code> - The platform. To list only Windows instances, use <code>windows</code>.</p> </li> <li> <p> <code>private-dns-name</code> - The private IPv4 DNS name of the instance.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address of the instance.</p> </li> <li> <p> <code>product-code</code> - The product code associated with the AMI used to launch the instance.</p> </li> <li> <p> <code>product-code.type</code> - The type of product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>reason</code> - The reason for the current state of the instance (for example, shows &quot;User Initiated [date]&quot; when you stop or terminate the instance). Similar to the state-reason-code filter.</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>reservation-id</code> - The ID of the instance&#39;s reservation. A reservation ID is created any time you launch an instance. A reservation ID has a one-to-one relationship with an instance launch request, but can be associated with more than one instance if you launch multiple instances using the same launch request. For example, if you launch one instance, you get one reservation ID. If you launch ten instances using the same launch request, you also get one reservation ID.</p> </li> <li> <p> <code>root-device-name</code> - The device name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the instance performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the instance to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>spot-instance-request-id</code> - The ID of the Spot Instance request.</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - A message that describes the state change.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources that have a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>tenancy</code> - The tenancy of an instance (<code>dedicated</code> | <code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type of the instance (<code>paravirtual</code> | <code>hvm</code>).</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC that the instance is running in.</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>affinity</code> - The affinity setting for an instance running on a Dedicated Host (<code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>architecture</code> - The instance architecture (<code>i386</code> | <code>x86_64</code> | <code>arm64</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>block-device-mapping.attach-time</code> - The attach time for an EBS volume mapped to the instance, for example, <code>2010-09-15T17:15:20.000Z</code>.</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean that indicates whether the EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name specified in the block device mapping (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.status</code> - The status for the EBS volume (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>block-device-mapping.volume-id</code> - The volume ID of the EBS volume.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance.</p> </li> <li> <p> <code>dns-name</code> - The public DNS name of the instance.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>group-name</code> - The name of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>hibernation-options.configured</code> - A Boolean that indicates whether the instance is enabled for hibernation. A value of <code>true</code> means that the instance is enabled for hibernation. </p> </li> <li> <p> <code>host-id</code> - The ID of the Dedicated Host on which the instance is running, if applicable.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type of the instance (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>iam-instance-profile.arn</code> - The instance profile associated with the instance. Specified as an ARN. <code>image-id</code> - The ID of the image used to launch the instance.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>instance-lifecycle</code> - Indicates whether this is a Spot Instance or a Scheduled Instance (<code>spot</code> | <code>scheduled</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The state of the instance, as a 16-bit unsigned integer. The high byte is used for internal purposes and should be ignored. The low byte is set based on the state represented. The valid values are: 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>t2.micro</code>).</p> </li> <li> <p> <code>instance.group-id</code> - The ID of the security group for the instance. </p> </li> <li> <p> <code>instance.group-name</code> - The name of the security group for the instance. </p> </li> <li> <p> <code>ip-address</code> - The public IPv4 address of the instance.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair used when the instance was launched.</p> </li> <li> <p> <code>launch-index</code> - When launching multiple instances, this is the index for the instance in the launch group (for example, 0, 1, 2, and so on). </p> </li> <li> <p> <code>launch-time</code> - The time when the instance was launched.</p> </li> <li> <p> <code>metadata-http-tokens</code> - The metadata request authorization state (<code>optional</code> | <code>required</code>)</p> </li> <li> <p> <code>metadata-http-put-response-hop-limit</code> - The http metadata request put response hop limit (integer, possible values <code>1</code> to <code>64</code>)</p> </li> <li> <p> <code>metadata-http-endpoint</code> - Enable or disable metadata access on http endpoint (<code>enabled</code> | <code>disabled</code>)</p> </li> <li> <p> <code>monitoring-state</code> - Indicates whether detailed monitoring is enabled (<code>disabled</code> | <code>enabled</code>).</p> </li> <li> <p> <code>network-interface.addresses.private-ip-address</code> - The private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Specifies whether the IPv4 address of the network interface is the primary private IPv4 address.</p> </li> <li> <p> <code>network-interface.addresses.association.public-ip</code> - The ID of the association of an Elastic IP address (IPv4) with a network interface.</p> </li> <li> <p> <code>network-interface.addresses.association.ip-owner-id</code> - The owner ID of the private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>network-interface.association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>network-interface.association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>network-interface.attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>network-interface.attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>network-interface.attachment.attach-time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>network-interface.attachment.delete-on-termination</code> - Specifies whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>network-interface.availability-zone</code> - The Availability Zone for the network interface.</p> </li> <li> <p> <code>network-interface.description</code> - The description of the network interface.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.ipv6-addresses.ipv6-address</code> - The IPv6 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.owner-id</code> - The ID of the owner of the network interface.</p> </li> <li> <p> <code>network-interface.private-dns-name</code> - The private DNS name of the network interface.</p> </li> <li> <p> <code>network-interface.requester-id</code> - The requester ID for the network interface.</p> </li> <li> <p> <code>network-interface.requester-managed</code> - Indicates whether the network interface is being managed by AWS.</p> </li> <li> <p> <code>network-interface.status</code> - The status of the network interface (<code>available</code>) | <code>in-use</code>).</p> </li> <li> <p> <code>network-interface.source-dest-check</code> - Whether the network interface performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>network-interface.vpc-id</code> - The ID of the VPC for the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the instance owner.</p> </li> <li> <p> <code>placement-group-name</code> - The name of the placement group for the instance.</p> </li> <li> <p> <code>placement-partition-number</code> - The partition in which the instance is located.</p> </li> <li> <p> <code>platform</code> - The platform. To list only Windows instances, use <code>windows</code>.</p> </li> <li> <p> <code>private-dns-name</code> - The private IPv4 DNS name of the instance.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address of the instance.</p> </li> <li> <p> <code>product-code</code> - The product code associated with the AMI used to launch the instance.</p> </li> <li> <p> <code>product-code.type</code> - The type of product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>reason</code> - The reason for the current state of the instance (for example, shows &quot;User Initiated [date]&quot; when you stop or terminate the instance). Similar to the state-reason-code filter.</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>reservation-id</code> - The ID of the instance&#39;s reservation. A reservation ID is created any time you launch an instance. A reservation ID has a one-to-one relationship with an instance launch request, but can be associated with more than one instance if you launch multiple instances using the same launch request. For example, if you launch one instance, you get one reservation ID. If you launch ten instances using the same launch request, you also get one reservation ID.</p> </li> <li> <p> <code>root-device-name</code> - The device name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the instance performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the instance to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>spot-instance-request-id</code> - The ID of the Spot Instance request.</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - A message that describes the state change.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources that have a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>tenancy</code> - The tenancy of an instance (<code>dedicated</code> | <code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type of the instance (<code>paravirtual</code> | <code>hvm</code>).</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC that the instance is running in.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The instance IDs.</p> <p>Default: Describes all your instances.</p>
     pub instance_ids: Option<Vec<String>>,
@@ -17463,7 +18138,6 @@ impl DescribeSecurityGroupsResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for DescribeSnapshotAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSnapshotAttributeRequest {
     /// <p>The snapshot attribute you would like to view.</p>
@@ -17491,7 +18165,6 @@ impl DescribeSnapshotAttributeRequestSerializer {
     }
 }
 
-/// <p>Contains the output of DescribeSnapshotAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSnapshotAttributeResult {
     /// <p>The users and groups that have the permissions for creating volumes from the snapshot.</p>
@@ -18999,7 +19672,6 @@ impl DescribeTransitGatewaysResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for DescribeVolumeAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVolumeAttributeRequest {
     /// <p>The attribute of the volume. This parameter is required.</p>
@@ -19027,7 +19699,6 @@ impl DescribeVolumeAttributeRequestSerializer {
     }
 }
 
-/// <p>Contains the output of DescribeVolumeAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVolumeAttributeResult {
     /// <p>The state of <code>autoEnableIO</code> attribute.</p>
@@ -20245,7 +20916,7 @@ impl DescribeVpcsResultDeserializer {
 pub struct DescribeVpnConnectionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>customer-gateway-configuration</code> - The configuration information for the customer gateway.</p> </li> <li> <p> <code>customer-gateway-id</code> - The ID of a customer gateway associated with the VPN connection.</p> </li> <li> <p> <code>state</code> - The state of the VPN connection (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>option.static-routes-only</code> - Indicates whether the connection has static routes only. Used for devices that do not support Border Gateway Protocol (BGP).</p> </li> <li> <p> <code>route.destination-cidr-block</code> - The destination CIDR block. This corresponds to the subnet used in a customer data center.</p> </li> <li> <p> <code>bgp-asn</code> - The BGP Autonomous System Number (ASN) associated with a BGP device.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>type</code> - The type of VPN connection. Currently the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>vpn-connection-id</code> - The ID of the VPN connection.</p> </li> <li> <p> <code>vpn-gateway-id</code> - The ID of a virtual private gateway associated with the VPN connection.</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>customer-gateway-configuration</code> - The configuration information for the customer gateway.</p> </li> <li> <p> <code>customer-gateway-id</code> - The ID of a customer gateway associated with the VPN connection.</p> </li> <li> <p> <code>state</code> - The state of the VPN connection (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>option.static-routes-only</code> - Indicates whether the connection has static routes only. Used for devices that do not support Border Gateway Protocol (BGP).</p> </li> <li> <p> <code>route.destination-cidr-block</code> - The destination CIDR block. This corresponds to the subnet used in a customer data center.</p> </li> <li> <p> <code>bgp-asn</code> - The BGP Autonomous System Number (ASN) associated with a BGP device.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>type</code> - The type of VPN connection. Currently the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>vpn-connection-id</code> - The ID of the VPN connection.</p> </li> <li> <p> <code>vpn-gateway-id</code> - The ID of a virtual private gateway associated with the VPN connection.</p> </li> <li> <p> <code>transit-gateway-id</code> - The ID of a transit gateway associated with the VPN connection.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>One or more VPN connection IDs.</p> <p>Default: Describes your VPN connections.</p>
     pub vpn_connection_ids: Option<Vec<String>>,
@@ -20497,7 +21168,6 @@ impl DetachNetworkInterfaceRequestSerializer {
     }
 }
 
-/// <p>Contains the parameters for DetachVolume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DetachVolumeRequest {
     /// <p>The device name.</p>
@@ -20776,7 +21446,7 @@ impl DirectoryServiceAuthenticationRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisableEbsEncryptionByDefaultRequest {
-    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>. </p>
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
 }
 
@@ -20818,6 +21488,360 @@ impl DisableEbsEncryptionByDefaultResultDeserializer {
                             "ebsEncryptionByDefault",
                             stack,
                         )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Contains information about the errors that occurred when disabling fast snapshot restores.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableFastSnapshotRestoreErrorItem {
+    /// <p>The errors.</p>
+    pub fast_snapshot_restore_state_errors: Option<Vec<DisableFastSnapshotRestoreStateErrorItem>>,
+    /// <p>The ID of the snapshot.</p>
+    pub snapshot_id: Option<String>,
+}
+
+struct DisableFastSnapshotRestoreErrorItemDeserializer;
+impl DisableFastSnapshotRestoreErrorItemDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DisableFastSnapshotRestoreErrorItem, XmlParseError> {
+        deserialize_elements::<_, DisableFastSnapshotRestoreErrorItem, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "fastSnapshotRestoreStateErrorSet" => {
+                        obj.fast_snapshot_restore_state_errors
+                            .get_or_insert(vec![])
+                            .extend(
+                                DisableFastSnapshotRestoreStateErrorSetDeserializer::deserialize(
+                                    "fastSnapshotRestoreStateErrorSet",
+                                    stack,
+                                )?,
+                            );
+                    }
+                    "snapshotId" => {
+                        obj.snapshot_id =
+                            Some(StringDeserializer::deserialize("snapshotId", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct DisableFastSnapshotRestoreErrorSetDeserializer;
+impl DisableFastSnapshotRestoreErrorSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<DisableFastSnapshotRestoreErrorItem>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(
+                    DisableFastSnapshotRestoreErrorItemDeserializer::deserialize("item", stack)?,
+                );
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Describes an error that occurred when disabling fast snapshot restores.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableFastSnapshotRestoreStateError {
+    /// <p>The error code.</p>
+    pub code: Option<String>,
+    /// <p>The error message.</p>
+    pub message: Option<String>,
+}
+
+struct DisableFastSnapshotRestoreStateErrorDeserializer;
+impl DisableFastSnapshotRestoreStateErrorDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DisableFastSnapshotRestoreStateError, XmlParseError> {
+        deserialize_elements::<_, DisableFastSnapshotRestoreStateError, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "code" => {
+                        obj.code = Some(StringDeserializer::deserialize("code", stack)?);
+                    }
+                    "message" => {
+                        obj.message = Some(StringDeserializer::deserialize("message", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Contains information about an error that occurred when disabling fast snapshot restores.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableFastSnapshotRestoreStateErrorItem {
+    /// <p>The Availability Zone.</p>
+    pub availability_zone: Option<String>,
+    /// <p>The error.</p>
+    pub error: Option<DisableFastSnapshotRestoreStateError>,
+}
+
+struct DisableFastSnapshotRestoreStateErrorItemDeserializer;
+impl DisableFastSnapshotRestoreStateErrorItemDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DisableFastSnapshotRestoreStateErrorItem, XmlParseError> {
+        deserialize_elements::<_, DisableFastSnapshotRestoreStateErrorItem, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "availabilityZone" => {
+                        obj.availability_zone =
+                            Some(StringDeserializer::deserialize("availabilityZone", stack)?);
+                    }
+                    "error" => {
+                        obj.error = Some(
+                            DisableFastSnapshotRestoreStateErrorDeserializer::deserialize(
+                                "error", stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct DisableFastSnapshotRestoreStateErrorSetDeserializer;
+impl DisableFastSnapshotRestoreStateErrorSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<DisableFastSnapshotRestoreStateErrorItem>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(
+                    DisableFastSnapshotRestoreStateErrorItemDeserializer::deserialize(
+                        "item", stack,
+                    )?,
+                );
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Describes fast snapshot restores that were successfully disabled.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableFastSnapshotRestoreSuccessItem {
+    /// <p>The Availability Zone.</p>
+    pub availability_zone: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>disabled</code> state.</p>
+    pub disabled_time: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>disabling</code> state.</p>
+    pub disabling_time: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>enabled</code> state.</p>
+    pub enabled_time: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>enabling</code> state.</p>
+    pub enabling_time: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>optimizing</code> state.</p>
+    pub optimizing_time: Option<String>,
+    /// <p>The alias of the snapshot owner.</p>
+    pub owner_alias: Option<String>,
+    /// <p>The ID of the AWS account that owns the snapshot.</p>
+    pub owner_id: Option<String>,
+    /// <p>The ID of the snapshot.</p>
+    pub snapshot_id: Option<String>,
+    /// <p>The state of fast snapshot restores for the snapshot.</p>
+    pub state: Option<String>,
+    /// <p><p>The reason for the state transition. The possible values are as follows:</p> <ul> <li> <p> <code>Client.UserInitiated</code> - The state successfully transitioned to <code>enabling</code> or <code>disabling</code>.</p> </li> <li> <p> <code>Client.UserInitiated - Lifecycle state transition</code> - The state successfully transitioned to <code>optimizing</code>, <code>enabled</code>, or <code>disabled</code>.</p> </li> </ul></p>
+    pub state_transition_reason: Option<String>,
+}
+
+struct DisableFastSnapshotRestoreSuccessItemDeserializer;
+impl DisableFastSnapshotRestoreSuccessItemDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DisableFastSnapshotRestoreSuccessItem, XmlParseError> {
+        deserialize_elements::<_, DisableFastSnapshotRestoreSuccessItem, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "availabilityZone" => {
+                        obj.availability_zone =
+                            Some(StringDeserializer::deserialize("availabilityZone", stack)?);
+                    }
+                    "disabledTime" => {
+                        obj.disabled_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "disabledTime",
+                            stack,
+                        )?);
+                    }
+                    "disablingTime" => {
+                        obj.disabling_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "disablingTime",
+                            stack,
+                        )?);
+                    }
+                    "enabledTime" => {
+                        obj.enabled_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "enabledTime",
+                            stack,
+                        )?);
+                    }
+                    "enablingTime" => {
+                        obj.enabling_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "enablingTime",
+                            stack,
+                        )?);
+                    }
+                    "optimizingTime" => {
+                        obj.optimizing_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "optimizingTime",
+                            stack,
+                        )?);
+                    }
+                    "ownerAlias" => {
+                        obj.owner_alias =
+                            Some(StringDeserializer::deserialize("ownerAlias", stack)?);
+                    }
+                    "ownerId" => {
+                        obj.owner_id = Some(StringDeserializer::deserialize("ownerId", stack)?);
+                    }
+                    "snapshotId" => {
+                        obj.snapshot_id =
+                            Some(StringDeserializer::deserialize("snapshotId", stack)?);
+                    }
+                    "state" => {
+                        obj.state = Some(FastSnapshotRestoreStateCodeDeserializer::deserialize(
+                            "state", stack,
+                        )?);
+                    }
+                    "stateTransitionReason" => {
+                        obj.state_transition_reason = Some(StringDeserializer::deserialize(
+                            "stateTransitionReason",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct DisableFastSnapshotRestoreSuccessSetDeserializer;
+impl DisableFastSnapshotRestoreSuccessSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<DisableFastSnapshotRestoreSuccessItem>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(
+                    DisableFastSnapshotRestoreSuccessItemDeserializer::deserialize("item", stack)?,
+                );
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableFastSnapshotRestoresRequest {
+    /// <p>One or more Availability Zones. For example, <code>us-east-2a</code>.</p>
+    pub availability_zones: Vec<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The IDs of one or more snapshots. For example, <code>snap-1234567890abcdef0</code>.</p>
+    pub source_snapshot_ids: Vec<String>,
+}
+
+/// Serialize `DisableFastSnapshotRestoresRequest` contents to a `SignedRequest`.
+struct DisableFastSnapshotRestoresRequestSerializer;
+impl DisableFastSnapshotRestoresRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DisableFastSnapshotRestoresRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        AvailabilityZoneStringListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "AvailabilityZone"),
+            &obj.availability_zones,
+        );
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        SnapshotIdStringListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "SourceSnapshotId"),
+            &obj.source_snapshot_ids,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableFastSnapshotRestoresResult {
+    /// <p>Information about the snapshots for which fast snapshot restores were successfully disabled.</p>
+    pub successful: Option<Vec<DisableFastSnapshotRestoreSuccessItem>>,
+    /// <p>Information about the snapshots for which fast snapshot restores could not be disabled.</p>
+    pub unsuccessful: Option<Vec<DisableFastSnapshotRestoreErrorItem>>,
+}
+
+struct DisableFastSnapshotRestoresResultDeserializer;
+impl DisableFastSnapshotRestoresResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DisableFastSnapshotRestoresResult, XmlParseError> {
+        deserialize_elements::<_, DisableFastSnapshotRestoresResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "successful" => {
+                        obj.successful.get_or_insert(vec![]).extend(
+                            DisableFastSnapshotRestoreSuccessSetDeserializer::deserialize(
+                                "successful",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "unsuccessful" => {
+                        obj.unsuccessful.get_or_insert(vec![]).extend(
+                            DisableFastSnapshotRestoreErrorSetDeserializer::deserialize(
+                                "unsuccessful",
+                                stack,
+                            )?,
+                        );
                     }
                     _ => skip_tree(stack),
                 }
@@ -21396,6 +22420,17 @@ impl DisassociateVpcCidrBlockResultDeserializer {
         )
     }
 }
+struct DiskCountDeserializer;
+impl DiskCountDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Describes a disk image.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DiskImage {
@@ -21563,6 +22598,80 @@ impl DiskImageVolumeDescriptionDeserializer {
         )
     }
 }
+/// <p>Describes the disk.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DiskInfo {
+    /// <p>The number of disks with this configuration.</p>
+    pub count: Option<i64>,
+    /// <p>The size of the disk in GiB.</p>
+    pub size_in_gb: Option<i64>,
+    /// <p>The type of disk.</p>
+    pub type_: Option<String>,
+}
+
+struct DiskInfoDeserializer;
+impl DiskInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DiskInfo, XmlParseError> {
+        deserialize_elements::<_, DiskInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "count" => {
+                    obj.count = Some(DiskCountDeserializer::deserialize("count", stack)?);
+                }
+                "sizeInGB" => {
+                    obj.size_in_gb = Some(DiskSizeDeserializer::deserialize("sizeInGB", stack)?);
+                }
+                "type" => {
+                    obj.type_ = Some(DiskTypeDeserializer::deserialize("type", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct DiskInfoListDeserializer;
+impl DiskInfoListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<DiskInfo>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(DiskInfoDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct DiskSizeDeserializer;
+impl DiskSizeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct DiskTypeDeserializer;
+impl DiskTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Describes a DNS entry.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DnsEntry {
@@ -21678,7 +22787,7 @@ impl DoubleDeserializer {
 /// <p>Describes a block device for an EBS volume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EbsBlockDevice {
-    /// <p>Indicates whether the EBS volume is deleted on instance termination.</p>
+    /// <p>Indicates whether the EBS volume is deleted on instance termination. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html#preserving-volumes-on-termination">Preserving Amazon EBS Volumes on Instance Termination</a> in the Amazon Elastic Compute Cloud User Guide.</p>
     pub delete_on_termination: Option<bool>,
     /// <p>Indicates whether the encryption state of an EBS volume is changed while being restored from a backing snapshot. The effect of setting the encryption state to <code>true</code> depends on the volume origin (new or from a snapshot), starting encryption state, ownership, and whether encryption by default is enabled. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-parameters">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>In no case can you remove encryption from an encrypted volume.</p> <p>Encrypted volumes can only be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
     pub encrypted: Option<bool>,
@@ -21771,6 +22880,53 @@ impl EbsBlockDeviceSerializer {
     }
 }
 
+struct EbsEncryptionSupportDeserializer;
+impl EbsEncryptionSupportDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the Amazon EBS features supported by the instance type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EbsInfo {
+    /// <p>Indicates that the instance type is Amazon EBS-optimized. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html">Amazon EBS-Optimized Instances</a> in <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    pub ebs_optimized_support: Option<String>,
+    /// <p>Indicates whether Amazon EBS encryption is supported.</p>
+    pub encryption_support: Option<String>,
+}
+
+struct EbsInfoDeserializer;
+impl EbsInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EbsInfo, XmlParseError> {
+        deserialize_elements::<_, EbsInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ebsOptimizedSupport" => {
+                    obj.ebs_optimized_support = Some(EbsOptimizedSupportDeserializer::deserialize(
+                        "ebsOptimizedSupport",
+                        stack,
+                    )?);
+                }
+                "encryptionSupport" => {
+                    obj.encryption_support = Some(EbsEncryptionSupportDeserializer::deserialize(
+                        "encryptionSupport",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Describes a parameter used to set up an EBS volume in a block device mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EbsInstanceBlockDevice {
@@ -21844,6 +23000,17 @@ impl EbsInstanceBlockDeviceSpecificationSerializer {
     }
 }
 
+struct EbsOptimizedSupportDeserializer;
+impl EbsOptimizedSupportDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Describes an egress-only internet gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EgressOnlyInternetGateway {
@@ -22335,9 +23502,20 @@ impl ElasticInferenceAcceleratorsSerializer {
     }
 }
 
+struct EnaSupportDeserializer;
+impl EnaSupportDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableEbsEncryptionByDefaultRequest {
-    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>. </p>
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
 }
 
@@ -22379,6 +23557,360 @@ impl EnableEbsEncryptionByDefaultResultDeserializer {
                             "ebsEncryptionByDefault",
                             stack,
                         )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Contains information about the errors that occurred when enabling fast snapshot restores.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableFastSnapshotRestoreErrorItem {
+    /// <p>The errors.</p>
+    pub fast_snapshot_restore_state_errors: Option<Vec<EnableFastSnapshotRestoreStateErrorItem>>,
+    /// <p>The ID of the snapshot.</p>
+    pub snapshot_id: Option<String>,
+}
+
+struct EnableFastSnapshotRestoreErrorItemDeserializer;
+impl EnableFastSnapshotRestoreErrorItemDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnableFastSnapshotRestoreErrorItem, XmlParseError> {
+        deserialize_elements::<_, EnableFastSnapshotRestoreErrorItem, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "fastSnapshotRestoreStateErrorSet" => {
+                        obj.fast_snapshot_restore_state_errors
+                            .get_or_insert(vec![])
+                            .extend(
+                                EnableFastSnapshotRestoreStateErrorSetDeserializer::deserialize(
+                                    "fastSnapshotRestoreStateErrorSet",
+                                    stack,
+                                )?,
+                            );
+                    }
+                    "snapshotId" => {
+                        obj.snapshot_id =
+                            Some(StringDeserializer::deserialize("snapshotId", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct EnableFastSnapshotRestoreErrorSetDeserializer;
+impl EnableFastSnapshotRestoreErrorSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<EnableFastSnapshotRestoreErrorItem>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(EnableFastSnapshotRestoreErrorItemDeserializer::deserialize(
+                    "item", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Describes an error that occurred when enabling fast snapshot restores.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableFastSnapshotRestoreStateError {
+    /// <p>The error code.</p>
+    pub code: Option<String>,
+    /// <p>The error message.</p>
+    pub message: Option<String>,
+}
+
+struct EnableFastSnapshotRestoreStateErrorDeserializer;
+impl EnableFastSnapshotRestoreStateErrorDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnableFastSnapshotRestoreStateError, XmlParseError> {
+        deserialize_elements::<_, EnableFastSnapshotRestoreStateError, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "code" => {
+                        obj.code = Some(StringDeserializer::deserialize("code", stack)?);
+                    }
+                    "message" => {
+                        obj.message = Some(StringDeserializer::deserialize("message", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Contains information about an error that occurred when enabling fast snapshot restores.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableFastSnapshotRestoreStateErrorItem {
+    /// <p>The Availability Zone.</p>
+    pub availability_zone: Option<String>,
+    /// <p>The error.</p>
+    pub error: Option<EnableFastSnapshotRestoreStateError>,
+}
+
+struct EnableFastSnapshotRestoreStateErrorItemDeserializer;
+impl EnableFastSnapshotRestoreStateErrorItemDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnableFastSnapshotRestoreStateErrorItem, XmlParseError> {
+        deserialize_elements::<_, EnableFastSnapshotRestoreStateErrorItem, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "availabilityZone" => {
+                        obj.availability_zone =
+                            Some(StringDeserializer::deserialize("availabilityZone", stack)?);
+                    }
+                    "error" => {
+                        obj.error = Some(
+                            EnableFastSnapshotRestoreStateErrorDeserializer::deserialize(
+                                "error", stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct EnableFastSnapshotRestoreStateErrorSetDeserializer;
+impl EnableFastSnapshotRestoreStateErrorSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<EnableFastSnapshotRestoreStateErrorItem>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(
+                    EnableFastSnapshotRestoreStateErrorItemDeserializer::deserialize(
+                        "item", stack,
+                    )?,
+                );
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Describes fast snapshot restores that were successfully enabled.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableFastSnapshotRestoreSuccessItem {
+    /// <p>The Availability Zone.</p>
+    pub availability_zone: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>disabled</code> state.</p>
+    pub disabled_time: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>disabling</code> state.</p>
+    pub disabling_time: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>enabled</code> state.</p>
+    pub enabled_time: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>enabling</code> state.</p>
+    pub enabling_time: Option<String>,
+    /// <p>The time at which fast snapshot restores entered the <code>optimizing</code> state.</p>
+    pub optimizing_time: Option<String>,
+    /// <p>The alias of the snapshot owner.</p>
+    pub owner_alias: Option<String>,
+    /// <p>The ID of the AWS account that owns the snapshot.</p>
+    pub owner_id: Option<String>,
+    /// <p>The ID of the snapshot.</p>
+    pub snapshot_id: Option<String>,
+    /// <p>The state of fast snapshot restores.</p>
+    pub state: Option<String>,
+    /// <p><p>The reason for the state transition. The possible values are as follows:</p> <ul> <li> <p> <code>Client.UserInitiated</code> - The state successfully transitioned to <code>enabling</code> or <code>disabling</code>.</p> </li> <li> <p> <code>Client.UserInitiated - Lifecycle state transition</code> - The state successfully transitioned to <code>optimizing</code>, <code>enabled</code>, or <code>disabled</code>.</p> </li> </ul></p>
+    pub state_transition_reason: Option<String>,
+}
+
+struct EnableFastSnapshotRestoreSuccessItemDeserializer;
+impl EnableFastSnapshotRestoreSuccessItemDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnableFastSnapshotRestoreSuccessItem, XmlParseError> {
+        deserialize_elements::<_, EnableFastSnapshotRestoreSuccessItem, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "availabilityZone" => {
+                        obj.availability_zone =
+                            Some(StringDeserializer::deserialize("availabilityZone", stack)?);
+                    }
+                    "disabledTime" => {
+                        obj.disabled_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "disabledTime",
+                            stack,
+                        )?);
+                    }
+                    "disablingTime" => {
+                        obj.disabling_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "disablingTime",
+                            stack,
+                        )?);
+                    }
+                    "enabledTime" => {
+                        obj.enabled_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "enabledTime",
+                            stack,
+                        )?);
+                    }
+                    "enablingTime" => {
+                        obj.enabling_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "enablingTime",
+                            stack,
+                        )?);
+                    }
+                    "optimizingTime" => {
+                        obj.optimizing_time = Some(MillisecondDateTimeDeserializer::deserialize(
+                            "optimizingTime",
+                            stack,
+                        )?);
+                    }
+                    "ownerAlias" => {
+                        obj.owner_alias =
+                            Some(StringDeserializer::deserialize("ownerAlias", stack)?);
+                    }
+                    "ownerId" => {
+                        obj.owner_id = Some(StringDeserializer::deserialize("ownerId", stack)?);
+                    }
+                    "snapshotId" => {
+                        obj.snapshot_id =
+                            Some(StringDeserializer::deserialize("snapshotId", stack)?);
+                    }
+                    "state" => {
+                        obj.state = Some(FastSnapshotRestoreStateCodeDeserializer::deserialize(
+                            "state", stack,
+                        )?);
+                    }
+                    "stateTransitionReason" => {
+                        obj.state_transition_reason = Some(StringDeserializer::deserialize(
+                            "stateTransitionReason",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct EnableFastSnapshotRestoreSuccessSetDeserializer;
+impl EnableFastSnapshotRestoreSuccessSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<EnableFastSnapshotRestoreSuccessItem>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(
+                    EnableFastSnapshotRestoreSuccessItemDeserializer::deserialize("item", stack)?,
+                );
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableFastSnapshotRestoresRequest {
+    /// <p>One or more Availability Zones. For example, <code>us-east-2a</code>.</p>
+    pub availability_zones: Vec<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The IDs of one or more snapshots. For example, <code>snap-1234567890abcdef0</code>. You can specify a snapshot that was shared with you from another AWS account.</p>
+    pub source_snapshot_ids: Vec<String>,
+}
+
+/// Serialize `EnableFastSnapshotRestoresRequest` contents to a `SignedRequest`.
+struct EnableFastSnapshotRestoresRequestSerializer;
+impl EnableFastSnapshotRestoresRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &EnableFastSnapshotRestoresRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        AvailabilityZoneStringListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "AvailabilityZone"),
+            &obj.availability_zones,
+        );
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        SnapshotIdStringListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "SourceSnapshotId"),
+            &obj.source_snapshot_ids,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableFastSnapshotRestoresResult {
+    /// <p>Information about the snapshots for which fast snapshot restores were successfully enabled.</p>
+    pub successful: Option<Vec<EnableFastSnapshotRestoreSuccessItem>>,
+    /// <p>Information about the snapshots for which fast snapshot restores could not be enabled.</p>
+    pub unsuccessful: Option<Vec<EnableFastSnapshotRestoreErrorItem>>,
+}
+
+struct EnableFastSnapshotRestoresResultDeserializer;
+impl EnableFastSnapshotRestoresResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnableFastSnapshotRestoresResult, XmlParseError> {
+        deserialize_elements::<_, EnableFastSnapshotRestoresResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "successful" => {
+                        obj.successful.get_or_insert(vec![]).extend(
+                            EnableFastSnapshotRestoreSuccessSetDeserializer::deserialize(
+                                "successful",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "unsuccessful" => {
+                        obj.unsuccessful.get_or_insert(vec![]).extend(
+                            EnableFastSnapshotRestoreErrorSetDeserializer::deserialize(
+                                "unsuccessful",
+                                stack,
+                            )?,
+                        );
                     }
                     _ => skip_tree(stack),
                 }
@@ -22481,7 +24013,6 @@ impl EnableVgwRoutePropagationRequestSerializer {
     }
 }
 
-/// <p>Contains the parameters for EnableVolumeIO.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableVolumeIORequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
@@ -23373,6 +24904,77 @@ impl ExportTransitGatewayRoutesResultDeserializer {
         )
     }
 }
+/// <p>Describes a Reserved Instance whose queued purchase was not deleted.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct FailedQueuedPurchaseDeletion {
+    /// <p>The error.</p>
+    pub error: Option<EC2DeleteQueuedReservedInstancesError>,
+    /// <p>The ID of the Reserved Instance.</p>
+    pub reserved_instances_id: Option<String>,
+}
+
+struct FailedQueuedPurchaseDeletionDeserializer;
+impl FailedQueuedPurchaseDeletionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FailedQueuedPurchaseDeletion, XmlParseError> {
+        deserialize_elements::<_, FailedQueuedPurchaseDeletion, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "error" => {
+                        obj.error = Some(
+                            EC2DeleteQueuedReservedInstancesErrorDeserializer::deserialize(
+                                "error", stack,
+                            )?,
+                        );
+                    }
+                    "reservedInstancesId" => {
+                        obj.reserved_instances_id = Some(StringDeserializer::deserialize(
+                            "reservedInstancesId",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct FailedQueuedPurchaseDeletionSetDeserializer;
+impl FailedQueuedPurchaseDeletionSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<FailedQueuedPurchaseDeletion>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(FailedQueuedPurchaseDeletionDeserializer::deserialize(
+                    "item", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct FastSnapshotRestoreStateCodeDeserializer;
+impl FastSnapshotRestoreStateCodeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p><p>A filter name and value pair that is used to return a more specific list of results from a describe operation. Filters can be used to match a set of resources by specific criteria, such as tags, attributes, or IDs. The filters supported by a describe operation are documented with the describe operation. For example:</p> <ul> <li> <p> <a>DescribeAvailabilityZones</a> </p> </li> <li> <p> <a>DescribeImages</a> </p> </li> <li> <p> <a>DescribeInstances</a> </p> </li> <li> <p> <a>DescribeKeyPairs</a> </p> </li> <li> <p> <a>DescribeSecurityGroups</a> </p> </li> <li> <p> <a>DescribeSnapshots</a> </p> </li> <li> <p> <a>DescribeSubnets</a> </p> </li> <li> <p> <a>DescribeTags</a> </p> </li> <li> <p> <a>DescribeVolumes</a> </p> </li> <li> <p> <a>DescribeVpcs</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Filter {
@@ -24170,6 +25772,141 @@ impl FlowLogSetDeserializer {
         })
     }
 }
+struct FpgaDeviceCountDeserializer;
+impl FpgaDeviceCountDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the FPGA accelerator for the instance type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct FpgaDeviceInfo {
+    /// <p>The count of FPGA accelerators for the instance type.</p>
+    pub count: Option<i64>,
+    /// <p>The manufacturer of the FPGA accelerator.</p>
+    pub manufacturer: Option<String>,
+    /// <p>Describes the memory for the FPGA accelerator for the instance type.</p>
+    pub memory_info: Option<FpgaDeviceMemoryInfo>,
+    /// <p>The name of the FPGA accelerator.</p>
+    pub name: Option<String>,
+}
+
+struct FpgaDeviceInfoDeserializer;
+impl FpgaDeviceInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FpgaDeviceInfo, XmlParseError> {
+        deserialize_elements::<_, FpgaDeviceInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "count" => {
+                    obj.count = Some(FpgaDeviceCountDeserializer::deserialize("count", stack)?);
+                }
+                "manufacturer" => {
+                    obj.manufacturer = Some(FpgaDeviceManufacturerNameDeserializer::deserialize(
+                        "manufacturer",
+                        stack,
+                    )?);
+                }
+                "memoryInfo" => {
+                    obj.memory_info = Some(FpgaDeviceMemoryInfoDeserializer::deserialize(
+                        "memoryInfo",
+                        stack,
+                    )?);
+                }
+                "name" => {
+                    obj.name = Some(FpgaDeviceNameDeserializer::deserialize("name", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct FpgaDeviceInfoListDeserializer;
+impl FpgaDeviceInfoListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<FpgaDeviceInfo>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(FpgaDeviceInfoDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct FpgaDeviceManufacturerNameDeserializer;
+impl FpgaDeviceManufacturerNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the memory for the FPGA accelerator for the instance type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct FpgaDeviceMemoryInfo {
+    /// <p>The size (in MiB) for the memory available to the FPGA accelerator.</p>
+    pub size_in_mi_b: Option<i64>,
+}
+
+struct FpgaDeviceMemoryInfoDeserializer;
+impl FpgaDeviceMemoryInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FpgaDeviceMemoryInfo, XmlParseError> {
+        deserialize_elements::<_, FpgaDeviceMemoryInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "sizeInMiB" => {
+                    obj.size_in_mi_b = Some(FpgaDeviceMemorySizeDeserializer::deserialize(
+                        "sizeInMiB",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct FpgaDeviceMemorySizeDeserializer;
+impl FpgaDeviceMemorySizeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct FpgaDeviceNameDeserializer;
+impl FpgaDeviceNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Describes an Amazon FPGA image (AFI).</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct FpgaImage {
@@ -24390,6 +26127,52 @@ impl FpgaImageStateCodeDeserializer {
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the FPGAs for the instance type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct FpgaInfo {
+    /// <p>Describes the FPGAs for the instance type.</p>
+    pub fpgas: Option<Vec<FpgaDeviceInfo>>,
+    /// <p>The total memory of all FPGA accelerators for the instance type.</p>
+    pub total_fpga_memory_in_mi_b: Option<i64>,
+}
+
+struct FpgaInfoDeserializer;
+impl FpgaInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FpgaInfo, XmlParseError> {
+        deserialize_elements::<_, FpgaInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "fpgas" => {
+                    obj.fpgas
+                        .get_or_insert(vec![])
+                        .extend(FpgaDeviceInfoListDeserializer::deserialize("fpgas", stack)?);
+                }
+                "totalFpgaMemoryInMiB" => {
+                    obj.total_fpga_memory_in_mi_b = Some(TotalFpgaMemoryDeserializer::deserialize(
+                        "totalFpgaMemoryInMiB",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct FreeTierEligibleFlagDeserializer;
+impl FreeTierEligibleFlagDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
 
         Ok(obj)
@@ -24633,6 +26416,65 @@ impl GetConsoleScreenshotResultDeserializer {
                     "instanceId" => {
                         obj.instance_id =
                             Some(StringDeserializer::deserialize("instanceId", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetDefaultCreditSpecificationRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The instance family.</p>
+    pub instance_family: String,
+}
+
+/// Serialize `GetDefaultCreditSpecificationRequest` contents to a `SignedRequest`.
+struct GetDefaultCreditSpecificationRequestSerializer;
+impl GetDefaultCreditSpecificationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetDefaultCreditSpecificationRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "InstanceFamily"),
+            &obj.instance_family,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetDefaultCreditSpecificationResult {
+    /// <p>The default credit option for CPU usage of the instance family.</p>
+    pub instance_family_credit_specification: Option<InstanceFamilyCreditSpecification>,
+}
+
+struct GetDefaultCreditSpecificationResultDeserializer;
+impl GetDefaultCreditSpecificationResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetDefaultCreditSpecificationResult, XmlParseError> {
+        deserialize_elements::<_, GetDefaultCreditSpecificationResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "instanceFamilyCreditSpecification" => {
+                        obj.instance_family_credit_specification =
+                            Some(InstanceFamilyCreditSpecificationDeserializer::deserialize(
+                                "instanceFamilyCreditSpecification",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -25338,6 +27180,176 @@ impl GetTransitGatewayRouteTablePropagationsResultDeserializer {
         )
     }
 }
+struct GpuDeviceCountDeserializer;
+impl GpuDeviceCountDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the GPU accelerators for the instance type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GpuDeviceInfo {
+    /// <p>The number of GPUs for the instance type.</p>
+    pub count: Option<i64>,
+    /// <p>The manufacturer of the GPU accelerator.</p>
+    pub manufacturer: Option<String>,
+    /// <p>Describes the memory available to the GPU accelerator.</p>
+    pub memory_info: Option<GpuDeviceMemoryInfo>,
+    /// <p>The name of the GPU accelerator.</p>
+    pub name: Option<String>,
+}
+
+struct GpuDeviceInfoDeserializer;
+impl GpuDeviceInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GpuDeviceInfo, XmlParseError> {
+        deserialize_elements::<_, GpuDeviceInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "count" => {
+                    obj.count = Some(GpuDeviceCountDeserializer::deserialize("count", stack)?);
+                }
+                "manufacturer" => {
+                    obj.manufacturer = Some(GpuDeviceManufacturerNameDeserializer::deserialize(
+                        "manufacturer",
+                        stack,
+                    )?);
+                }
+                "memoryInfo" => {
+                    obj.memory_info = Some(GpuDeviceMemoryInfoDeserializer::deserialize(
+                        "memoryInfo",
+                        stack,
+                    )?);
+                }
+                "name" => {
+                    obj.name = Some(GpuDeviceNameDeserializer::deserialize("name", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct GpuDeviceInfoListDeserializer;
+impl GpuDeviceInfoListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<GpuDeviceInfo>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(GpuDeviceInfoDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct GpuDeviceManufacturerNameDeserializer;
+impl GpuDeviceManufacturerNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the memory available to the GPU accelerator.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GpuDeviceMemoryInfo {
+    /// <p>The size (in MiB) for the memory available to the GPU accelerator.</p>
+    pub size_in_mi_b: Option<i64>,
+}
+
+struct GpuDeviceMemoryInfoDeserializer;
+impl GpuDeviceMemoryInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GpuDeviceMemoryInfo, XmlParseError> {
+        deserialize_elements::<_, GpuDeviceMemoryInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "sizeInMiB" => {
+                    obj.size_in_mi_b = Some(GpuDeviceMemorySizeDeserializer::deserialize(
+                        "sizeInMiB",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct GpuDeviceMemorySizeDeserializer;
+impl GpuDeviceMemorySizeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct GpuDeviceNameDeserializer;
+impl GpuDeviceNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the GPU accelerators for the instance type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GpuInfo {
+    /// <p>Describes the GPU accelerators for the instance type.</p>
+    pub gpus: Option<Vec<GpuDeviceInfo>>,
+    /// <p>The total size of the memory for the GPU accelerators for the instance type.</p>
+    pub total_gpu_memory_in_mi_b: Option<i64>,
+}
+
+struct GpuInfoDeserializer;
+impl GpuInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GpuInfo, XmlParseError> {
+        deserialize_elements::<_, GpuInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "gpus" => {
+                    obj.gpus
+                        .get_or_insert(vec![])
+                        .extend(GpuDeviceInfoListDeserializer::deserialize("gpus", stack)?);
+                }
+                "totalGpuMemoryInMiB" => {
+                    obj.total_gpu_memory_in_mi_b = Some(TotalGpuMemoryDeserializer::deserialize(
+                        "totalGpuMemoryInMiB",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 struct GroupIdStringListDeserializer;
 impl GroupIdStringListDeserializer {
     #[allow(unused_variables)]
@@ -25487,7 +27499,18 @@ impl GroupNameStringListSerializer {
     }
 }
 
-/// <p>Indicates whether your instance is configured for hibernation. This parameter is valid only if the instance meets the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#hibernating-prerequisites">hibernation prerequisites</a>. Hibernation is currently supported only for Amazon Linux. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html">Hibernate Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+struct HibernationFlagDeserializer;
+impl HibernationFlagDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Indicates whether your instance is configured for hibernation. This parameter is valid only if the instance meets the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#hibernating-prerequisites">hibernation prerequisites</a>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html">Hibernate Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct HibernationOptions {
     /// <p>If this parameter is set to <code>true</code>, your instance is enabled for hibernation; otherwise, it is not enabled for hibernation.</p>
@@ -25512,7 +27535,7 @@ impl HibernationOptionsDeserializer {
         })
     }
 }
-/// <p>Indicates whether your instance is configured for hibernation. This parameter is valid only if the instance meets the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#hibernating-prerequisites">hibernation prerequisites</a>. Hibernation is currently supported only for Amazon Linux. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html">Hibernate Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+/// <p>Indicates whether your instance is configured for hibernation. This parameter is valid only if the instance meets the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#hibernating-prerequisites">hibernation prerequisites</a>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html">Hibernate Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct HibernationOptionsRequest {
     /// <p>If you set this parameter to <code>true</code>, your instance is enabled for hibernation.</p> <p>Default: <code>false</code> </p>
@@ -25650,11 +27673,15 @@ impl HistoryRecordsDeserializer {
 pub struct Host {
     /// <p>The time that the Dedicated Host was allocated.</p>
     pub allocation_time: Option<String>,
+    /// <p>Indicates whether the Dedicated Host supports multiple instance types of the same instance family, or a specific instance type only. <code>one</code> indicates that the Dedicated Host supports multiple instance types in the instance family. <code>off</code> indicates that the Dedicated Host supports a single instance type only.</p>
+    pub allows_multiple_instance_types: Option<String>,
     /// <p>Whether auto-placement is on or off.</p>
     pub auto_placement: Option<String>,
     /// <p>The Availability Zone of the Dedicated Host.</p>
     pub availability_zone: Option<String>,
-    /// <p>The number of new instances that can be launched onto the Dedicated Host.</p>
+    /// <p>The ID of the Availability Zone in which the Dedicated Host is allocated.</p>
+    pub availability_zone_id: Option<String>,
+    /// <p>Information about the instances running on the Dedicated Host.</p>
     pub available_capacity: Option<AvailableCapacity>,
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -25668,6 +27695,8 @@ pub struct Host {
     pub host_reservation_id: Option<String>,
     /// <p>The IDs and instance type that are currently running on the Dedicated Host.</p>
     pub instances: Option<Vec<HostInstance>>,
+    /// <p>The ID of the AWS account that owns the Dedicated Host.</p>
+    pub owner_id: Option<String>,
     /// <p>The time that the Dedicated Host was released.</p>
     pub release_time: Option<String>,
     /// <p>The Dedicated Host's state.</p>
@@ -25686,6 +27715,13 @@ impl HostDeserializer {
                     obj.allocation_time =
                         Some(DateTimeDeserializer::deserialize("allocationTime", stack)?);
                 }
+                "allowsMultipleInstanceTypes" => {
+                    obj.allows_multiple_instance_types =
+                        Some(AllowsMultipleInstanceTypesDeserializer::deserialize(
+                            "allowsMultipleInstanceTypes",
+                            stack,
+                        )?);
+                }
                 "autoPlacement" => {
                     obj.auto_placement = Some(AutoPlacementDeserializer::deserialize(
                         "autoPlacement",
@@ -25695,6 +27731,12 @@ impl HostDeserializer {
                 "availabilityZone" => {
                     obj.availability_zone =
                         Some(StringDeserializer::deserialize("availabilityZone", stack)?);
+                }
+                "availabilityZoneId" => {
+                    obj.availability_zone_id = Some(StringDeserializer::deserialize(
+                        "availabilityZoneId",
+                        stack,
+                    )?);
                 }
                 "availableCapacity" => {
                     obj.available_capacity = Some(AvailableCapacityDeserializer::deserialize(
@@ -25729,6 +27771,9 @@ impl HostDeserializer {
                         HostInstanceListDeserializer::deserialize("instances", stack)?,
                     );
                 }
+                "ownerId" => {
+                    obj.owner_id = Some(StringDeserializer::deserialize("ownerId", stack)?);
+                }
                 "releaseTime" => {
                     obj.release_time =
                         Some(DateTimeDeserializer::deserialize("releaseTime", stack)?);
@@ -25750,10 +27795,12 @@ impl HostDeserializer {
 /// <p>Describes an instance running on a Dedicated Host.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct HostInstance {
-    /// <p>the IDs of instances that are running on the Dedicated Host.</p>
+    /// <p>The ID of instance that is running on the Dedicated Host.</p>
     pub instance_id: Option<String>,
-    /// <p>The instance type size (for example, <code>m3.medium</code>) of the running instance.</p>
+    /// <p>The instance type (for example, <code>m3.medium</code>) of the running instance.</p>
     pub instance_type: Option<String>,
+    /// <p>The ID of the AWS account that owns the instance.</p>
+    pub owner_id: Option<String>,
 }
 
 struct HostInstanceDeserializer;
@@ -25771,6 +27818,9 @@ impl HostInstanceDeserializer {
                 "instanceType" => {
                     obj.instance_type =
                         Some(StringDeserializer::deserialize("instanceType", stack)?);
+                }
+                "ownerId" => {
+                    obj.owner_id = Some(StringDeserializer::deserialize("ownerId", stack)?);
                 }
                 _ => skip_tree(stack),
             }
@@ -25892,16 +27942,18 @@ impl HostOfferingSetDeserializer {
         })
     }
 }
-/// <p>Describes properties of a Dedicated Host.</p>
+/// <p>Describes the properties of a Dedicated Host.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct HostProperties {
     /// <p>The number of cores on the Dedicated Host.</p>
     pub cores: Option<i64>,
-    /// <p>The instance type size that the Dedicated Host supports (for example, <code>m3.medium</code>).</p>
+    /// <p>The instance family supported by the Dedicated Host. For example, <code>m5</code>.</p>
+    pub instance_family: Option<String>,
+    /// <p>The instance type supported by the Dedicated Host. For example, <code>m5.large</code>. If the host supports multiple instance types, no <b>instanceType</b> is returned.</p>
     pub instance_type: Option<String>,
     /// <p>The number of sockets on the Dedicated Host.</p>
     pub sockets: Option<i64>,
-    /// <p>The number of vCPUs on the Dedicated Host.</p>
+    /// <p>The total number of vCPUs on the Dedicated Host.</p>
     pub total_v_cpus: Option<i64>,
 }
 
@@ -25916,6 +27968,10 @@ impl HostPropertiesDeserializer {
             match name {
                 "cores" => {
                     obj.cores = Some(IntegerDeserializer::deserialize("cores", stack)?);
+                }
+                "instanceFamily" => {
+                    obj.instance_family =
+                        Some(StringDeserializer::deserialize("instanceFamily", stack)?);
                 }
                 "instanceType" => {
                     obj.instance_type =
@@ -26074,6 +28130,17 @@ impl HostReservationSetDeserializer {
             }
             Ok(())
         })
+    }
+}
+struct HttpTokensStateDeserializer;
+impl HttpTokensStateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
     }
 }
 struct HypervisorTypeDeserializer;
@@ -26859,6 +28926,100 @@ impl ImportClientVpnClientCertificateRevocationListResultDeserializer {
         )
     }
 }
+/// <p>The request information of license configurations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ImportImageLicenseConfigurationRequest {
+    /// <p>The ARN of a license configuration.</p>
+    pub license_configuration_arn: Option<String>,
+}
+
+/// Serialize `ImportImageLicenseConfigurationRequest` contents to a `SignedRequest`.
+struct ImportImageLicenseConfigurationRequestSerializer;
+impl ImportImageLicenseConfigurationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ImportImageLicenseConfigurationRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.license_configuration_arn {
+            params.put(
+                &format!("{}{}", prefix, "LicenseConfigurationArn"),
+                &field_value,
+            );
+        }
+    }
+}
+
+/// <p> The response information of license configurations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ImportImageLicenseConfigurationResponse {
+    /// <p>The ARN of a license configuration.</p>
+    pub license_configuration_arn: Option<String>,
+}
+
+struct ImportImageLicenseConfigurationResponseDeserializer;
+impl ImportImageLicenseConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ImportImageLicenseConfigurationResponse, XmlParseError> {
+        deserialize_elements::<_, ImportImageLicenseConfigurationResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "licenseConfigurationArn" => {
+                        obj.license_configuration_arn = Some(StringDeserializer::deserialize(
+                            "licenseConfigurationArn",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `ImportImageLicenseSpecificationListRequest` contents to a `SignedRequest`.
+struct ImportImageLicenseSpecificationListRequestSerializer;
+impl ImportImageLicenseSpecificationListRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &Vec<ImportImageLicenseConfigurationRequest>,
+    ) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            ImportImageLicenseConfigurationRequestSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+struct ImportImageLicenseSpecificationListResponseDeserializer;
+impl ImportImageLicenseSpecificationListResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ImportImageLicenseConfigurationResponse>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(
+                    ImportImageLicenseConfigurationResponseDeserializer::deserialize(
+                        "item", stack,
+                    )?,
+                );
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportImageRequest {
     /// <p>The architecture of the virtual machine.</p> <p>Valid values: <code>i386</code> | <code>x86_64</code> | <code>arm64</code> </p>
@@ -26879,6 +29040,8 @@ pub struct ImportImageRequest {
     pub hypervisor: Option<String>,
     /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted AMI. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>.</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>.</p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. This action will eventually report failure. </p> <p>The specified CMK must exist in the Region that the AMI is being copied to.</p>
     pub kms_key_id: Option<String>,
+    /// <p>The ARNs of the license configurations.</p>
+    pub license_specifications: Option<Vec<ImportImageLicenseConfigurationRequest>>,
     /// <p>The license type to be used for the Amazon Machine Image (AMI) after importing.</p> <p>By default, we detect the source-system operating system (OS) and apply the appropriate license. Specify <code>AWS</code> to replace the source-system license with an AWS license, if appropriate. Specify <code>BYOL</code> to retain the source-system license, if appropriate.</p> <p>To use <code>BYOL</code>, you must have existing licenses with rights to use these licenses in a third party cloud, such as AWS. For more information, see <a href="https://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html#prerequisites-image">Prerequisites</a> in the VM Import/Export User Guide.</p>
     pub license_type: Option<String>,
     /// <p>The operating system of the virtual machine.</p> <p>Valid values: <code>Windows</code> | <code>Linux</code> </p>
@@ -26931,6 +29094,13 @@ impl ImportImageRequestSerializer {
         if let Some(ref field_value) = obj.kms_key_id {
             params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
         }
+        if let Some(ref field_value) = obj.license_specifications {
+            ImportImageLicenseSpecificationListRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LicenseSpecifications"),
+                field_value,
+            );
+        }
         if let Some(ref field_value) = obj.license_type {
             params.put(&format!("{}{}", prefix, "LicenseType"), &field_value);
         }
@@ -26959,6 +29129,8 @@ pub struct ImportImageResult {
     pub import_task_id: Option<String>,
     /// <p>The identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to create the encrypted AMI.</p>
     pub kms_key_id: Option<String>,
+    /// <p>The ARNs of the license configurations.</p>
+    pub license_specifications: Option<Vec<ImportImageLicenseConfigurationResponse>>,
     /// <p>The license type of the virtual machine.</p>
     pub license_type: Option<String>,
     /// <p>The operating system of the virtual machine.</p>
@@ -27005,6 +29177,14 @@ impl ImportImageResultDeserializer {
                 "kmsKeyId" => {
                     obj.kms_key_id = Some(StringDeserializer::deserialize("kmsKeyId", stack)?);
                 }
+                "licenseSpecifications" => {
+                    obj.license_specifications.get_or_insert(vec![]).extend(
+                        ImportImageLicenseSpecificationListResponseDeserializer::deserialize(
+                            "licenseSpecifications",
+                            stack,
+                        )?,
+                    );
+                }
                 "licenseType" => {
                     obj.license_type = Some(StringDeserializer::deserialize("licenseType", stack)?);
                 }
@@ -27049,6 +29229,8 @@ pub struct ImportImageTask {
     pub import_task_id: Option<String>,
     /// <p>The identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to create the encrypted image.</p>
     pub kms_key_id: Option<String>,
+    /// <p>The ARNs of the license configurations associated to the import image task.</p>
+    pub license_specifications: Option<Vec<ImportImageLicenseConfigurationResponse>>,
     /// <p>The license type of the virtual machine.</p>
     pub license_type: Option<String>,
     /// <p>The description string for the import image task.</p>
@@ -27094,6 +29276,14 @@ impl ImportImageTaskDeserializer {
                 }
                 "kmsKeyId" => {
                     obj.kms_key_id = Some(StringDeserializer::deserialize("kmsKeyId", stack)?);
+                }
+                "licenseSpecifications" => {
+                    obj.license_specifications.get_or_insert(vec![]).extend(
+                        ImportImageLicenseSpecificationListResponseDeserializer::deserialize(
+                            "licenseSpecifications",
+                            stack,
+                        )?,
+                    );
                 }
                 "licenseType" => {
                     obj.license_type = Some(StringDeserializer::deserialize("licenseType", stack)?);
@@ -27813,7 +30003,7 @@ pub struct Instance {
     pub ebs_optimized: Option<bool>,
     /// <p>The Elastic GPU associated with the instance.</p>
     pub elastic_gpu_associations: Option<Vec<ElasticGpuAssociation>>,
-    /// <p> The elastic inference accelerator associated with the instance. </p>
+    /// <p> The elastic inference accelerator associated with the instance.</p>
     pub elastic_inference_accelerator_associations:
         Option<Vec<ElasticInferenceAcceleratorAssociation>>,
     /// <p>Specifies whether enhanced networking with ENA is enabled.</p>
@@ -27840,6 +30030,8 @@ pub struct Instance {
     pub launch_time: Option<String>,
     /// <p>The license configurations.</p>
     pub licenses: Option<Vec<LicenseConfiguration>>,
+    /// <p>The metadata options for the instance.</p>
+    pub metadata_options: Option<InstanceMetadataOptionsResponse>,
     /// <p>The monitoring for the instance.</p>
     pub monitoring: Option<Monitoring>,
     /// <p>[EC2-VPC] The network interfaces for the instance.</p>
@@ -28010,6 +30202,13 @@ impl InstanceDeserializer {
                     obj.licenses
                         .get_or_insert(vec![])
                         .extend(LicenseListDeserializer::deserialize("licenseSet", stack)?);
+                }
+                "metadataOptions" => {
+                    obj.metadata_options =
+                        Some(InstanceMetadataOptionsResponseDeserializer::deserialize(
+                            "metadataOptions",
+                            stack,
+                        )?);
                 }
                 "monitoring" => {
                     obj.monitoring =
@@ -28363,14 +30562,14 @@ impl InstanceBlockDeviceMappingSpecificationListSerializer {
     }
 }
 
-/// <p>Information about the instance type that the Dedicated Host supports.</p>
+/// <p>Information about the number of instances that can be launched onto the Dedicated Host.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceCapacity {
-    /// <p>The number of instances that can still be launched onto the Dedicated Host.</p>
+    /// <p>The number of instances that can be launched onto the Dedicated Host based on the host's available capacity.</p>
     pub available_capacity: Option<i64>,
-    /// <p>The instance type size supported by the Dedicated Host.</p>
+    /// <p>The instance type supported by the Dedicated Host.</p>
     pub instance_type: Option<String>,
-    /// <p>The total number of instances that can be launched onto the Dedicated Host.</p>
+    /// <p>The total number of instances that can be launched onto the Dedicated Host if there are no instances running on it.</p>
     pub total_capacity: Option<i64>,
 }
 
@@ -28451,7 +30650,7 @@ impl InstanceCountListDeserializer {
         })
     }
 }
-/// <p>Describes the credit option for CPU usage of a T2 or T3 instance. </p>
+/// <p>Describes the credit option for CPU usage of a burstable performance instance. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceCreditSpecification {
     /// <p>The credit option for CPU usage of the instance. Valid values are <code>standard</code> and <code>unlimited</code>.</p>
@@ -28518,7 +30717,7 @@ impl InstanceCreditSpecificationListRequestSerializer {
     }
 }
 
-/// <p>Describes the credit option for CPU usage of a T2 or T3 instance.</p>
+/// <p>Describes the credit option for CPU usage of a burstable performance instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceCreditSpecificationRequest {
     /// <p>The credit option for CPU usage of the instance. Valid values are <code>standard</code> and <code>unlimited</code>.</p>
@@ -28587,6 +30786,45 @@ impl InstanceExportDetailsDeserializer {
             }
             Ok(())
         })
+    }
+}
+/// <p>Describes the default credit option for CPU usage of a burstable performance instance family.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InstanceFamilyCreditSpecification {
+    /// <p>The default credit option for CPU usage of the instance family. Valid values are <code>standard</code> and <code>unlimited</code>.</p>
+    pub cpu_credits: Option<String>,
+    /// <p>The instance family.</p>
+    pub instance_family: Option<String>,
+}
+
+struct InstanceFamilyCreditSpecificationDeserializer;
+impl InstanceFamilyCreditSpecificationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InstanceFamilyCreditSpecification, XmlParseError> {
+        deserialize_elements::<_, InstanceFamilyCreditSpecification, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "cpuCredits" => {
+                        obj.cpu_credits =
+                            Some(StringDeserializer::deserialize("cpuCredits", stack)?);
+                    }
+                    "instanceFamily" => {
+                        obj.instance_family =
+                            Some(UnlimitedSupportedInstanceFamilyDeserializer::deserialize(
+                                "instanceFamily",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 struct InstanceHealthStatusDeserializer;
@@ -28844,6 +31082,119 @@ impl InstanceMarketOptionsRequestSerializer {
 
 struct InstanceMatchCriteriaDeserializer;
 impl InstanceMatchCriteriaDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct InstanceMetadataEndpointStateDeserializer;
+impl InstanceMetadataEndpointStateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>The metadata options for the instance.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InstanceMetadataOptionsRequest {
+    /// <p><p>This parameter enables or disables the HTTP metadata endpoint on your instances. If the parameter is not specified, the default state is <code>enabled</code>.</p> <note> <p>If you specify a value of <code>disabled</code>, you will not be able to access your instance metadata.</p> </note></p>
+    pub http_endpoint: Option<String>,
+    /// <p>The desired HTTP PUT response hop limit for instance metadata requests. The larger the number, the further instance metadata requests can travel.</p> <p>Default: 1</p> <p>Possible values: Integers from 1 to 64</p>
+    pub http_put_response_hop_limit: Option<i64>,
+    /// <p>The state of token usage for your instance metadata requests. If the parameter is not specified in the request, the default state is <code>optional</code>.</p> <p>If the state is <code>optional</code>, you can choose to retrieve instance metadata with or without a signed token header on your request. If you retrieve the IAM role credentials without a token, the version 1.0 role credentials are returned. If you retrieve the IAM role credentials using a valid signed token, the version 2.0 role credentials are returned.</p> <p>If the state is <code>required</code>, you must send a signed token header with any instance metadata retrieval requests. In this state, retrieving the IAM role credentials always returns the version 2.0 credentials; the version 1.0 credentials are not available.</p>
+    pub http_tokens: Option<String>,
+}
+
+/// Serialize `InstanceMetadataOptionsRequest` contents to a `SignedRequest`.
+struct InstanceMetadataOptionsRequestSerializer;
+impl InstanceMetadataOptionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &InstanceMetadataOptionsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.http_endpoint {
+            params.put(&format!("{}{}", prefix, "HttpEndpoint"), &field_value);
+        }
+        if let Some(ref field_value) = obj.http_put_response_hop_limit {
+            params.put(
+                &format!("{}{}", prefix, "HttpPutResponseHopLimit"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.http_tokens {
+            params.put(&format!("{}{}", prefix, "HttpTokens"), &field_value);
+        }
+    }
+}
+
+/// <p>The metadata options for the instance.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InstanceMetadataOptionsResponse {
+    /// <p><p>This parameter enables or disables the HTTP metadata endpoint on your instances. If the parameter is not specified, the default state is <code>enabled</code>.</p> <note> <p>If you specify a value of <code>disabled</code>, you will not be able to access your instance metadata.</p> </note></p>
+    pub http_endpoint: Option<String>,
+    /// <p>The desired HTTP PUT response hop limit for instance metadata requests. The larger the number, the further instance metadata requests can travel.</p> <p>Default: 1</p> <p>Possible values: Integers from 1 to 64</p>
+    pub http_put_response_hop_limit: Option<i64>,
+    /// <p>The state of token usage for your instance metadata requests. If the parameter is not specified in the request, the default state is <code>optional</code>.</p> <p>If the state is <code>optional</code>, you can choose to retrieve instance metadata with or without a signed token header on your request. If you retrieve the IAM role credentials without a token, the version 1.0 role credentials are returned. If you retrieve the IAM role credentials using a valid signed token, the version 2.0 role credentials are returned.</p> <p>If the state is <code>required</code>, you must send a signed token header with any instance metadata retrieval requests. In this state, retrieving the IAM role credential always returns the version 2.0 credentials; the version 1.0 credentials are not available.</p>
+    pub http_tokens: Option<String>,
+    /// <p>The state of the metadata option changes.</p> <p> <code>pending</code> - The metadata options are being updated and the instance is not ready to process metadata traffic with the new selection.</p> <p> <code>applied</code> - The metadata options have been successfully applied on the instance.</p>
+    pub state: Option<String>,
+}
+
+struct InstanceMetadataOptionsResponseDeserializer;
+impl InstanceMetadataOptionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InstanceMetadataOptionsResponse, XmlParseError> {
+        deserialize_elements::<_, InstanceMetadataOptionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "httpEndpoint" => {
+                        obj.http_endpoint =
+                            Some(InstanceMetadataEndpointStateDeserializer::deserialize(
+                                "httpEndpoint",
+                                stack,
+                            )?);
+                    }
+                    "httpPutResponseHopLimit" => {
+                        obj.http_put_response_hop_limit = Some(IntegerDeserializer::deserialize(
+                            "httpPutResponseHopLimit",
+                            stack,
+                        )?);
+                    }
+                    "httpTokens" => {
+                        obj.http_tokens = Some(HttpTokensStateDeserializer::deserialize(
+                            "httpTokens",
+                            stack,
+                        )?);
+                    }
+                    "state" => {
+                        obj.state = Some(InstanceMetadataOptionsStateDeserializer::deserialize(
+                            "state", stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct InstanceMetadataOptionsStateDeserializer;
+impl InstanceMetadataOptionsStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
@@ -29818,6 +32169,50 @@ impl InstanceStatusSummaryDeserializer {
         })
     }
 }
+struct InstanceStorageFlagDeserializer;
+impl InstanceStorageFlagDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the disks that are available for the instance type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InstanceStorageInfo {
+    /// <p>Array describing the disks that are available for the instance type.</p>
+    pub disks: Option<Vec<DiskInfo>>,
+    /// <p>The total size of the disks, in GiB.</p>
+    pub total_size_in_gb: Option<i64>,
+}
+
+struct InstanceStorageInfoDeserializer;
+impl InstanceStorageInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InstanceStorageInfo, XmlParseError> {
+        deserialize_elements::<_, InstanceStorageInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "disks" => {
+                    obj.disks
+                        .get_or_insert(vec![])
+                        .extend(DiskInfoListDeserializer::deserialize("disks", stack)?);
+                }
+                "totalSizeInGB" => {
+                    obj.total_size_in_gb =
+                        Some(DiskSizeDeserializer::deserialize("totalSizeInGB", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 struct InstanceTypeDeserializer;
 impl InstanceTypeDeserializer {
     #[allow(unused_variables)]
@@ -29827,6 +32222,208 @@ impl InstanceTypeDeserializer {
         end_element(tag_name, stack)?;
 
         Ok(obj)
+    }
+}
+struct InstanceTypeHypervisorDeserializer;
+impl InstanceTypeHypervisorDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the instance type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InstanceTypeInfo {
+    /// <p>Indicates whether auto recovery is supported.</p>
+    pub auto_recovery_supported: Option<bool>,
+    /// <p>Indicates whether the instance is bare metal.</p>
+    pub bare_metal: Option<bool>,
+    /// <p>Indicates whether the instance type is a burstable performance instance type.</p>
+    pub burstable_performance_supported: Option<bool>,
+    /// <p>Indicates whether the instance type is a current generation.</p>
+    pub current_generation: Option<bool>,
+    /// <p>Indicates whether Dedicated Hosts are supported on the instance type.</p>
+    pub dedicated_hosts_supported: Option<bool>,
+    /// <p>Describes the Amazon EBS settings for the instance type.</p>
+    pub ebs_info: Option<EbsInfo>,
+    /// <p>Describes the FPGA accelerator settings for the instance type.</p>
+    pub fpga_info: Option<FpgaInfo>,
+    /// <p>Indicates whether the instance type is eligible for the free tier.</p>
+    pub free_tier_eligible: Option<bool>,
+    /// <p>Describes the GPU accelerator settings for the instance type.</p>
+    pub gpu_info: Option<GpuInfo>,
+    /// <p>Indicates whether On-Demand hibernation is supported.</p>
+    pub hibernation_supported: Option<bool>,
+    /// <p>Indicates the hypervisor used for the instance type.</p>
+    pub hypervisor: Option<String>,
+    /// <p>Describes the disks for the instance type.</p>
+    pub instance_storage_info: Option<InstanceStorageInfo>,
+    /// <p>Indicates whether instance storage is supported.</p>
+    pub instance_storage_supported: Option<bool>,
+    /// <p>The instance type. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    pub instance_type: Option<String>,
+    /// <p>Describes the memory for the instance type.</p>
+    pub memory_info: Option<MemoryInfo>,
+    /// <p>Describes the network settings for the instance type.</p>
+    pub network_info: Option<NetworkInfo>,
+    /// <p>Describes the placement group settings for the instance type.</p>
+    pub placement_group_info: Option<PlacementGroupInfo>,
+    /// <p>Describes the processor.</p>
+    pub processor_info: Option<ProcessorInfo>,
+    /// <p>Indicates the supported root devices.</p>
+    pub supported_root_devices: Option<Vec<String>>,
+    /// <p>Indicates whether the instance type is offered for spot or On-Demand.</p>
+    pub supported_usage_classes: Option<Vec<String>>,
+    /// <p>Describes the vCPU configurations for the instance type.</p>
+    pub v_cpu_info: Option<VCpuInfo>,
+}
+
+struct InstanceTypeInfoDeserializer;
+impl InstanceTypeInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InstanceTypeInfo, XmlParseError> {
+        deserialize_elements::<_, InstanceTypeInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "autoRecoverySupported" => {
+                    obj.auto_recovery_supported = Some(AutoRecoveryFlagDeserializer::deserialize(
+                        "autoRecoverySupported",
+                        stack,
+                    )?);
+                }
+                "bareMetal" => {
+                    obj.bare_metal =
+                        Some(BareMetalFlagDeserializer::deserialize("bareMetal", stack)?);
+                }
+                "burstablePerformanceSupported" => {
+                    obj.burstable_performance_supported =
+                        Some(BurstablePerformanceFlagDeserializer::deserialize(
+                            "burstablePerformanceSupported",
+                            stack,
+                        )?);
+                }
+                "currentGeneration" => {
+                    obj.current_generation = Some(CurrentGenerationFlagDeserializer::deserialize(
+                        "currentGeneration",
+                        stack,
+                    )?);
+                }
+                "dedicatedHostsSupported" => {
+                    obj.dedicated_hosts_supported =
+                        Some(DedicatedHostFlagDeserializer::deserialize(
+                            "dedicatedHostsSupported",
+                            stack,
+                        )?);
+                }
+                "ebsInfo" => {
+                    obj.ebs_info = Some(EbsInfoDeserializer::deserialize("ebsInfo", stack)?);
+                }
+                "fpgaInfo" => {
+                    obj.fpga_info = Some(FpgaInfoDeserializer::deserialize("fpgaInfo", stack)?);
+                }
+                "freeTierEligible" => {
+                    obj.free_tier_eligible = Some(FreeTierEligibleFlagDeserializer::deserialize(
+                        "freeTierEligible",
+                        stack,
+                    )?);
+                }
+                "gpuInfo" => {
+                    obj.gpu_info = Some(GpuInfoDeserializer::deserialize("gpuInfo", stack)?);
+                }
+                "hibernationSupported" => {
+                    obj.hibernation_supported = Some(HibernationFlagDeserializer::deserialize(
+                        "hibernationSupported",
+                        stack,
+                    )?);
+                }
+                "hypervisor" => {
+                    obj.hypervisor = Some(InstanceTypeHypervisorDeserializer::deserialize(
+                        "hypervisor",
+                        stack,
+                    )?);
+                }
+                "instanceStorageInfo" => {
+                    obj.instance_storage_info = Some(InstanceStorageInfoDeserializer::deserialize(
+                        "instanceStorageInfo",
+                        stack,
+                    )?);
+                }
+                "instanceStorageSupported" => {
+                    obj.instance_storage_supported =
+                        Some(InstanceStorageFlagDeserializer::deserialize(
+                            "instanceStorageSupported",
+                            stack,
+                        )?);
+                }
+                "instanceType" => {
+                    obj.instance_type = Some(InstanceTypeDeserializer::deserialize(
+                        "instanceType",
+                        stack,
+                    )?);
+                }
+                "memoryInfo" => {
+                    obj.memory_info =
+                        Some(MemoryInfoDeserializer::deserialize("memoryInfo", stack)?);
+                }
+                "networkInfo" => {
+                    obj.network_info =
+                        Some(NetworkInfoDeserializer::deserialize("networkInfo", stack)?);
+                }
+                "placementGroupInfo" => {
+                    obj.placement_group_info = Some(PlacementGroupInfoDeserializer::deserialize(
+                        "placementGroupInfo",
+                        stack,
+                    )?);
+                }
+                "processorInfo" => {
+                    obj.processor_info = Some(ProcessorInfoDeserializer::deserialize(
+                        "processorInfo",
+                        stack,
+                    )?);
+                }
+                "supportedRootDevices" => {
+                    obj.supported_root_devices.get_or_insert(vec![]).extend(
+                        RootDeviceTypeListDeserializer::deserialize("supportedRootDevices", stack)?,
+                    );
+                }
+                "supportedUsageClasses" => {
+                    obj.supported_usage_classes.get_or_insert(vec![]).extend(
+                        UsageClassTypeListDeserializer::deserialize(
+                            "supportedUsageClasses",
+                            stack,
+                        )?,
+                    );
+                }
+                "vCpuInfo" => {
+                    obj.v_cpu_info = Some(VCpuInfoDeserializer::deserialize("vCpuInfo", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct InstanceTypeInfoListDeserializer;
+impl InstanceTypeInfoListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<InstanceTypeInfo>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(InstanceTypeInfoDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
     }
 }
 
@@ -29841,6 +32438,66 @@ impl InstanceTypeListSerializer {
     }
 }
 
+/// <p>The instance types offered.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InstanceTypeOffering {
+    /// <p>The instance type. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    pub instance_type: Option<String>,
+    /// <p>The identifier for the location. This depends on the location type. For example, if the location type is <code>region</code>, the location is the Region code (for example, <code>us-east-2</code>.)</p>
+    pub location: Option<String>,
+    /// <p>The location type.</p>
+    pub location_type: Option<String>,
+}
+
+struct InstanceTypeOfferingDeserializer;
+impl InstanceTypeOfferingDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InstanceTypeOffering, XmlParseError> {
+        deserialize_elements::<_, InstanceTypeOffering, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "instanceType" => {
+                    obj.instance_type = Some(InstanceTypeDeserializer::deserialize(
+                        "instanceType",
+                        stack,
+                    )?);
+                }
+                "location" => {
+                    obj.location = Some(LocationDeserializer::deserialize("location", stack)?);
+                }
+                "locationType" => {
+                    obj.location_type = Some(LocationTypeDeserializer::deserialize(
+                        "locationType",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct InstanceTypeOfferingsListDeserializer;
+impl InstanceTypeOfferingsListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<InstanceTypeOffering>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(InstanceTypeOfferingDeserializer::deserialize(
+                    "item", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Information about the Capacity Reservation usage.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceUsage {
@@ -30341,6 +32998,17 @@ impl Ipv6CidrBlockSetDeserializer {
         })
     }
 }
+struct Ipv6FlagDeserializer;
+impl Ipv6FlagDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>[EC2-VPC only] Describes an IPv6 range.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Ipv6Range {
@@ -30467,7 +33135,10 @@ impl KeyPairDeserializer {
                         Some(StringDeserializer::deserialize("keyFingerprint", stack)?);
                 }
                 "keyMaterial" => {
-                    obj.key_material = Some(StringDeserializer::deserialize("keyMaterial", stack)?);
+                    obj.key_material = Some(SensitiveUserDataDeserializer::deserialize(
+                        "keyMaterial",
+                        stack,
+                    )?);
                 }
                 "keyName" => {
                     obj.key_name = Some(StringDeserializer::deserialize("keyName", stack)?);
@@ -31502,7 +34173,7 @@ impl LaunchTemplateHibernationOptionsDeserializer {
         )
     }
 }
-/// <p>Indicates whether the instance is configured for hibernation. This parameter is valid only if the instance meets the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#hibernating-prerequisites">hibernation prerequisites</a>. Hibernation is currently supported only for Amazon Linux.</p>
+/// <p>Indicates whether the instance is configured for hibernation. This parameter is valid only if the instance meets the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#hibernating-prerequisites">hibernation prerequisites</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateHibernationOptionsRequest {
     /// <p>If you set this parameter to <code>true</code>, the instance is enabled for hibernation.</p> <p>Default: <code>false</code> </p>
@@ -32957,6 +35628,28 @@ impl LoadPermissionRequestSerializer {
     }
 }
 
+struct LocationDeserializer;
+impl LocationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct LocationTypeDeserializer;
+impl LocationTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 struct LogDestinationTypeDeserializer;
 impl LogDestinationTypeDeserializer {
     #[allow(unused_variables)]
@@ -32985,6 +35678,76 @@ impl MarketTypeDeserializer {
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct MaxIpv4AddrPerInterfaceDeserializer;
+impl MaxIpv4AddrPerInterfaceDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct MaxIpv6AddrPerInterfaceDeserializer;
+impl MaxIpv6AddrPerInterfaceDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct MaxNetworkInterfacesDeserializer;
+impl MaxNetworkInterfacesDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the memory for the instance type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct MemoryInfo {
+    /// <p>Size of the memory, in MiB.</p>
+    pub size_in_mi_b: Option<i64>,
+}
+
+struct MemoryInfoDeserializer;
+impl MemoryInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MemoryInfo, XmlParseError> {
+        deserialize_elements::<_, MemoryInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "sizeInMiB" => {
+                    obj.size_in_mi_b =
+                        Some(MemorySizeDeserializer::deserialize("sizeInMiB", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct MemorySizeDeserializer;
+impl MemorySizeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
 
         Ok(obj)
@@ -33154,6 +35917,68 @@ impl ModifyClientVpnEndpointResultDeserializer {
                 match name {
                     "return" => {
                         obj.return_ = Some(BooleanDeserializer::deserialize("return", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyDefaultCreditSpecificationRequest {
+    /// <p>The credit option for CPU usage of the instance family.</p> <p>Valid Values: <code>standard</code> | <code>unlimited</code> </p>
+    pub cpu_credits: String,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The instance family.</p>
+    pub instance_family: String,
+}
+
+/// Serialize `ModifyDefaultCreditSpecificationRequest` contents to a `SignedRequest`.
+struct ModifyDefaultCreditSpecificationRequestSerializer;
+impl ModifyDefaultCreditSpecificationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyDefaultCreditSpecificationRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "CpuCredits"), &obj.cpu_credits);
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "InstanceFamily"),
+            &obj.instance_family,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyDefaultCreditSpecificationResult {
+    /// <p>The default credit option for CPU usage of the instance family.</p>
+    pub instance_family_credit_specification: Option<InstanceFamilyCreditSpecification>,
+}
+
+struct ModifyDefaultCreditSpecificationResultDeserializer;
+impl ModifyDefaultCreditSpecificationResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyDefaultCreditSpecificationResult, XmlParseError> {
+        deserialize_elements::<_, ModifyDefaultCreditSpecificationResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "instanceFamilyCreditSpecification" => {
+                        obj.instance_family_credit_specification =
+                            Some(InstanceFamilyCreditSpecificationDeserializer::deserialize(
+                                "instanceFamilyCreditSpecification",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -33397,6 +36222,10 @@ pub struct ModifyHostsRequest {
     pub host_ids: Vec<String>,
     /// <p>Indicates whether to enable or disable host recovery for the Dedicated Host. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-recovery.html"> Host Recovery</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub host_recovery: Option<String>,
+    /// <p>Specifies the instance family to be supported by the Dedicated Host. Specify this parameter to modify a Dedicated Host to support multiple instance types within its current instance family.</p> <p>If you want to modify a Dedicated Host to support a specific instance type only, omit this parameter and specify <b>InstanceType</b> instead. You cannot specify <b>InstanceFamily</b> and <b>InstanceType</b> in the same request.</p>
+    pub instance_family: Option<String>,
+    /// <p>Specifies the instance type to be supported by the Dedicated Host. Specify this parameter to modify a Dedicated Host to support only a specific instance type.</p> <p>If you want to modify a Dedicated Host to support multiple instance types in its current instance family, omit this parameter and specify <b>InstanceFamily</b> instead. You cannot specify <b>InstanceType</b> and <b>InstanceFamily</b> in the same request.</p>
+    pub instance_type: Option<String>,
 }
 
 /// Serialize `ModifyHostsRequest` contents to a `SignedRequest`.
@@ -33418,6 +36247,12 @@ impl ModifyHostsRequestSerializer {
         );
         if let Some(ref field_value) = obj.host_recovery {
             params.put(&format!("{}{}", prefix, "HostRecovery"), &field_value);
+        }
+        if let Some(ref field_value) = obj.instance_family {
+            params.put(&format!("{}{}", prefix, "InstanceFamily"), &field_value);
+        }
+        if let Some(ref field_value) = obj.instance_type {
+            params.put(&format!("{}{}", prefix, "InstanceType"), &field_value);
         }
     }
 }
@@ -33932,6 +36767,86 @@ impl ModifyInstanceEventStartTimeResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyInstanceMetadataOptionsRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>This parameter enables or disables the HTTP metadata endpoint on your instances. If the parameter is not specified, the existing state is maintained.</p> <note> <p>If you specify a value of <code>disabled</code>, you will not be able to access your instance metadata.</p> </note></p>
+    pub http_endpoint: Option<String>,
+    /// <p>The desired HTTP PUT response hop limit for instance metadata requests. The larger the number, the further instance metadata requests can travel. If no parameter is specified, the existing state is maintained.</p> <p>Possible values: Integers from 1 to 64</p>
+    pub http_put_response_hop_limit: Option<i64>,
+    /// <p>The state of token usage for your instance metadata requests. If the parameter is not specified in the request, the default state is <code>optional</code>.</p> <p>If the state is <code>optional</code>, you can choose to retrieve instance metadata with or without a signed token header on your request. If you retrieve the IAM role credentials without a token, the version 1.0 role credentials are returned. If you retrieve the IAM role credentials using a valid signed token, the version 2.0 role credentials are returned.</p> <p>If the state is <code>required</code>, you must send a signed token header with any instance metadata retrieval requests. In this state, retrieving the IAM role credential always returns the version 2.0 credentials; the version 1.0 credentials are not available.</p>
+    pub http_tokens: Option<String>,
+    /// <p>The ID of the instance.</p>
+    pub instance_id: String,
+}
+
+/// Serialize `ModifyInstanceMetadataOptionsRequest` contents to a `SignedRequest`.
+struct ModifyInstanceMetadataOptionsRequestSerializer;
+impl ModifyInstanceMetadataOptionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyInstanceMetadataOptionsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.http_endpoint {
+            params.put(&format!("{}{}", prefix, "HttpEndpoint"), &field_value);
+        }
+        if let Some(ref field_value) = obj.http_put_response_hop_limit {
+            params.put(
+                &format!("{}{}", prefix, "HttpPutResponseHopLimit"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.http_tokens {
+            params.put(&format!("{}{}", prefix, "HttpTokens"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyInstanceMetadataOptionsResult {
+    /// <p>The ID of the instance.</p>
+    pub instance_id: Option<String>,
+    /// <p>The metadata options for the instance.</p>
+    pub instance_metadata_options: Option<InstanceMetadataOptionsResponse>,
+}
+
+struct ModifyInstanceMetadataOptionsResultDeserializer;
+impl ModifyInstanceMetadataOptionsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyInstanceMetadataOptionsResult, XmlParseError> {
+        deserialize_elements::<_, ModifyInstanceMetadataOptionsResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "instanceId" => {
+                        obj.instance_id =
+                            Some(StringDeserializer::deserialize("instanceId", stack)?);
+                    }
+                    "instanceMetadataOptions" => {
+                        obj.instance_metadata_options =
+                            Some(InstanceMetadataOptionsResponseDeserializer::deserialize(
+                                "instanceMetadataOptions",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyInstancePlacementRequest {
     /// <p>The affinity setting for the instance.</p>
     pub affinity: Option<String>,
@@ -34208,7 +37123,6 @@ impl ModifyReservedInstancesResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for ModifySnapshotAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifySnapshotAttributeRequest {
     /// <p>The snapshot attribute to modify. Only volume creation permissions can be modified.</p>
@@ -34806,7 +37720,6 @@ impl ModifyTransitGatewayVpcAttachmentResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for ModifyVolumeAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVolumeAttributeRequest {
     /// <p>Indicates whether the volume should be auto-enabled for I/O operations.</p>
@@ -36376,6 +39289,73 @@ impl NetworkAclListDeserializer {
         })
     }
 }
+/// <p>Describes the networking features of the instance type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NetworkInfo {
+    /// <p>Indicates whether Elastic Network Adapter (ENA) is supported.</p>
+    pub ena_support: Option<String>,
+    /// <p>The maximum number of IPv4 addresses per network interface.</p>
+    pub ipv_4_addresses_per_interface: Option<i64>,
+    /// <p>The maximum number of IPv6 addresses per network interface.</p>
+    pub ipv_6_addresses_per_interface: Option<i64>,
+    /// <p>Indicates whether IPv6 is supported.</p>
+    pub ipv_6_supported: Option<bool>,
+    /// <p>The maximum number of network interfaces for the instance type.</p>
+    pub maximum_network_interfaces: Option<i64>,
+    /// <p>Describes the network performance.</p>
+    pub network_performance: Option<String>,
+}
+
+struct NetworkInfoDeserializer;
+impl NetworkInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<NetworkInfo, XmlParseError> {
+        deserialize_elements::<_, NetworkInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "enaSupport" => {
+                    obj.ena_support =
+                        Some(EnaSupportDeserializer::deserialize("enaSupport", stack)?);
+                }
+                "ipv4AddressesPerInterface" => {
+                    obj.ipv_4_addresses_per_interface =
+                        Some(MaxIpv4AddrPerInterfaceDeserializer::deserialize(
+                            "ipv4AddressesPerInterface",
+                            stack,
+                        )?);
+                }
+                "ipv6AddressesPerInterface" => {
+                    obj.ipv_6_addresses_per_interface =
+                        Some(MaxIpv6AddrPerInterfaceDeserializer::deserialize(
+                            "ipv6AddressesPerInterface",
+                            stack,
+                        )?);
+                }
+                "ipv6Supported" => {
+                    obj.ipv_6_supported =
+                        Some(Ipv6FlagDeserializer::deserialize("ipv6Supported", stack)?);
+                }
+                "maximumNetworkInterfaces" => {
+                    obj.maximum_network_interfaces =
+                        Some(MaxNetworkInterfacesDeserializer::deserialize(
+                            "maximumNetworkInterfaces",
+                            stack,
+                        )?);
+                }
+                "networkPerformance" => {
+                    obj.network_performance = Some(NetworkPerformanceDeserializer::deserialize(
+                        "networkPerformance",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Describes a network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct NetworkInterface {
@@ -36988,6 +39968,17 @@ impl NetworkInterfaceStatusDeserializer {
 }
 struct NetworkInterfaceTypeDeserializer;
 impl NetworkInterfaceTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct NetworkPerformanceDeserializer;
+impl NetworkPerformanceDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
@@ -38029,6 +41020,36 @@ impl PlacementGroupDeserializer {
         })
     }
 }
+/// <p>Describes the placement group support of the instance type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PlacementGroupInfo {
+    /// <p>A list of supported placement groups types.</p>
+    pub supported_strategies: Option<Vec<String>>,
+}
+
+struct PlacementGroupInfoDeserializer;
+impl PlacementGroupInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PlacementGroupInfo, XmlParseError> {
+        deserialize_elements::<_, PlacementGroupInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "supportedStrategies" => {
+                    obj.supported_strategies.get_or_insert(vec![]).extend(
+                        PlacementGroupStrategyListDeserializer::deserialize(
+                            "supportedStrategies",
+                            stack,
+                        )?,
+                    );
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 struct PlacementGroupListDeserializer;
 impl PlacementGroupListDeserializer {
     #[allow(unused_variables)]
@@ -38055,6 +41076,36 @@ impl PlacementGroupStateDeserializer {
         end_element(tag_name, stack)?;
 
         Ok(obj)
+    }
+}
+struct PlacementGroupStrategyDeserializer;
+impl PlacementGroupStrategyDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct PlacementGroupStrategyListDeserializer;
+impl PlacementGroupStrategyListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(PlacementGroupStrategyDeserializer::deserialize(
+                    "item", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
     }
 }
 
@@ -38639,6 +41690,56 @@ impl PrivateIpAddressStringListSerializer {
     }
 }
 
+/// <p>Describes the processor used by the instance type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ProcessorInfo {
+    /// <p>A list of architectures supported by the instance type.</p>
+    pub supported_architectures: Option<Vec<String>>,
+    /// <p>The speed of the processor, in GHz.</p>
+    pub sustained_clock_speed_in_ghz: Option<f64>,
+}
+
+struct ProcessorInfoDeserializer;
+impl ProcessorInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ProcessorInfo, XmlParseError> {
+        deserialize_elements::<_, ProcessorInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "supportedArchitectures" => {
+                    obj.supported_architectures.get_or_insert(vec![]).extend(
+                        ArchitectureTypeListDeserializer::deserialize(
+                            "supportedArchitectures",
+                            stack,
+                        )?,
+                    );
+                }
+                "sustainedClockSpeedInGhz" => {
+                    obj.sustained_clock_speed_in_ghz =
+                        Some(ProcessorSustainedClockSpeedDeserializer::deserialize(
+                            "sustainedClockSpeedInGhz",
+                            stack,
+                        )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct ProcessorSustainedClockSpeedDeserializer;
+impl ProcessorSustainedClockSpeedDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Describes a product code.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ProductCode {
@@ -39243,6 +42344,8 @@ pub struct PurchaseReservedInstancesOfferingRequest {
     pub instance_count: i64,
     /// <p>Specified for Reserved Instance Marketplace offerings to limit the total order and ensure that the Reserved Instances are not purchased at unexpected prices.</p>
     pub limit_price: Option<ReservedInstanceLimitPrice>,
+    /// <p>The time at which to purchase the Reserved Instance, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>
+    pub purchase_time: Option<String>,
     /// <p>The ID of the Reserved Instance offering to purchase.</p>
     pub reserved_instances_offering_id: String,
 }
@@ -39269,6 +42372,9 @@ impl PurchaseReservedInstancesOfferingRequestSerializer {
                 &format!("{}{}", prefix, "LimitPrice"),
                 field_value,
             );
+        }
+        if let Some(ref field_value) = obj.purchase_time {
+            params.put(&format!("{}{}", prefix, "PurchaseTime"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ReservedInstancesOfferingId"),
@@ -40451,6 +43557,17 @@ impl RequestHostIdSetSerializer {
     }
 }
 
+/// Serialize `RequestInstanceTypeList` contents to a `SignedRequest`.
+struct RequestInstanceTypeListSerializer;
+impl RequestInstanceTypeListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
 /// <p>The information to include in the launch template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RequestLaunchTemplateData {
@@ -40471,7 +43588,7 @@ pub struct RequestLaunchTemplateData {
     pub elastic_gpu_specifications: Option<Vec<ElasticGpuSpecification>>,
     /// <p> The elastic inference accelerator for the instance. </p>
     pub elastic_inference_accelerators: Option<Vec<LaunchTemplateElasticInferenceAccelerator>>,
-    /// <p>Indicates whether an instance is enabled for hibernation. This parameter is valid only if the instance meets the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#hibernating-prerequisites">hibernation prerequisites</a>. Hibernation is currently supported only for Amazon Linux. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html">Hibernate Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Indicates whether an instance is enabled for hibernation. This parameter is valid only if the instance meets the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#hibernating-prerequisites">hibernation prerequisites</a>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html">Hibernate Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub hibernation_options: Option<LaunchTemplateHibernationOptionsRequest>,
     /// <p>The IAM instance profile.</p>
     pub iam_instance_profile: Option<LaunchTemplateIamInstanceProfileSpecificationRequest>,
@@ -40748,7 +43865,7 @@ pub struct RequestSpotInstancesRequest {
     pub spot_price: Option<String>,
     /// <p>The Spot Instance request type.</p> <p>Default: <code>one-time</code> </p>
     pub type_: Option<String>,
-    /// <p>The start date of the request. If this is a one-time request, the request becomes active at this date and time and remains active until all instances launch, the request expires, or the request is canceled. If the request is persistent, the request becomes active at this date and time and remains active until it expires or is canceled.</p>
+    /// <p>The start date of the request. If this is a one-time request, the request becomes active at this date and time and remains active until all instances launch, the request expires, or the request is canceled. If the request is persistent, the request becomes active at this date and time and remains active until it expires or is canceled.</p> <p>The specified start date and time cannot be equal to the current date and time. You must specify a start date and time that occurs after the current date and time.</p>
     pub valid_from: Option<String>,
     /// <p>The end date of the request. If this is a one-time request, the request remains active until all instances launch, the request is canceled, or this date is reached. If the request is persistent, it remains active until it is canceled or this date is reached. The default end date is 7 days from the current date.</p>
     pub valid_until: Option<String>,
@@ -42152,7 +45269,6 @@ impl ResetNetworkInterfaceAttributeRequestSerializer {
     }
 }
 
-/// <p>Contains the parameters for ResetSnapshotAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetSnapshotAttributeRequest {
     /// <p>The attribute to reset. Currently, only the attribute for permission to create volumes can be reset.</p>
@@ -42785,6 +45901,34 @@ impl RevokeSecurityGroupIngressRequestSerializer {
     }
 }
 
+struct RootDeviceTypeDeserializer;
+impl RootDeviceTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct RootDeviceTypeListDeserializer;
+impl RootDeviceTypeListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(RootDeviceTypeDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Describes a route in a route table.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Route {
@@ -43140,7 +46284,7 @@ pub struct RunInstancesRequest {
     pub client_token: Option<String>,
     /// <p>The CPU options for the instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-optimize-cpu.html">Optimizing CPU Options</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub cpu_options: Option<CpuOptionsRequest>,
-    /// <p>The credit option for CPU usage of the T2 or T3 instance. Valid values are <code>standard</code> and <code>unlimited</code>. To change this attribute after launch, use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyInstanceCreditSpecification.html"> ModifyInstanceCreditSpecification</a>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Default: <code>standard</code> (T2 instances) or <code>unlimited</code> (T3 instances)</p>
+    /// <p>The credit option for CPU usage of the burstable performance instance. Valid values are <code>standard</code> and <code>unlimited</code>. To change this attribute after launch, use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyInstanceCreditSpecification.html"> ModifyInstanceCreditSpecification</a>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Default: <code>standard</code> (T2 instances) or <code>unlimited</code> (T3/T3a instances)</p>
     pub credit_specification: Option<CreditSpecificationRequest>,
     /// <p>If you set this parameter to <code>true</code>, you can't terminate the instance using the Amazon EC2 console, CLI, or API; otherwise, you can. To change this attribute after launch, use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyInstanceAttribute.html">ModifyInstanceAttribute</a>. Alternatively, if you set <code>InstanceInitiatedShutdownBehavior</code> to <code>terminate</code>, you can terminate the instance by running the shutdown command from the instance.</p> <p>Default: <code>false</code> </p>
     pub disable_api_termination: Option<bool>,
@@ -43178,6 +46322,8 @@ pub struct RunInstancesRequest {
     pub license_specifications: Option<Vec<LicenseConfigurationRequest>>,
     /// <p>The maximum number of instances to launch. If you specify more instances than Amazon EC2 can launch in the target Availability Zone, Amazon EC2 launches the largest possible number of instances above <code>MinCount</code>.</p> <p>Constraints: Between 1 and the maximum number you're allowed for the specified instance type. For more information about the default limits, and how to request an increase, see <a href="http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2">How many instances can I run in Amazon EC2</a> in the Amazon EC2 FAQ.</p>
     pub max_count: i64,
+    /// <p>The metadata options for the instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance Metadata and User Data</a>.</p>
+    pub metadata_options: Option<InstanceMetadataOptionsRequest>,
     /// <p>The minimum number of instances to launch. If you specify a minimum that is more instances than Amazon EC2 can launch in the target Availability Zone, Amazon EC2 launches no instances.</p> <p>Constraints: Between 1 and the maximum number you're allowed for the specified instance type. For more information about the default limits, and how to request an increase, see <a href="http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2">How many instances can I run in Amazon EC2</a> in the Amazon EC2 General FAQ.</p>
     pub min_count: i64,
     /// <p>Specifies whether detailed monitoring is enabled for the instance.</p>
@@ -43335,6 +46481,13 @@ impl RunInstancesRequestSerializer {
             );
         }
         params.put(&format!("{}{}", prefix, "MaxCount"), &obj.max_count);
+        if let Some(ref field_value) = obj.metadata_options {
+            InstanceMetadataOptionsRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "MetadataOptions"),
+                field_value,
+            );
+        }
         params.put(&format!("{}{}", prefix, "MinCount"), &obj.min_count);
         if let Some(ref field_value) = obj.monitoring {
             RunInstancesMonitoringEnabledSerializer::serialize(
@@ -44730,6 +47883,17 @@ impl SendDiagnosticInterruptRequestSerializer {
     }
 }
 
+struct SensitiveUserDataDeserializer;
+impl SensitiveUserDataDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Describes a service configuration for a VPC endpoint service.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ServiceConfiguration {
@@ -46668,11 +49832,11 @@ impl SpotMarketOptionsSerializer {
 /// <p>Describes the configuration of Spot Instances in an EC2 Fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotOptions {
-    /// <p>Indicates how to allocate the target Spot Instance capacity across the Spot Instance pools specified by the EC2 Fleet.</p> <p>If the allocation strategy is <code>lowestPrice</code>, EC2 Fleet launches instances from the Spot Instance pools with the lowest price. This is the default allocation strategy.</p> <p>If the allocation strategy is <code>diversified</code>, EC2 Fleet launches instances from all the Spot Instance pools that you specify.</p> <p>If the allocation strategy is <code>capacityOptimized</code>, EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p>
+    /// <p>Indicates how to allocate the target Spot Instance capacity across the Spot Instance pools specified by the EC2 Fleet.</p> <p>If the allocation strategy is <code>lowest-price</code>, EC2 Fleet launches instances from the Spot Instance pools with the lowest price. This is the default allocation strategy.</p> <p>If the allocation strategy is <code>diversified</code>, EC2 Fleet launches instances from all the Spot Instance pools that you specify.</p> <p>If the allocation strategy is <code>capacity-optimized</code>, EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p>
     pub allocation_strategy: Option<String>,
     /// <p>The behavior when a Spot Instance is interrupted. The default is <code>terminate</code>.</p>
     pub instance_interruption_behavior: Option<String>,
-    /// <p>The number of Spot pools across which to allocate your target Spot capacity. Valid only when <b>AllocationStrategy</b> is set to <code>lowestPrice</code>. EC2 Fleet selects the cheapest Spot pools and evenly allocates your target Spot capacity across the number of Spot pools that you specify.</p>
+    /// <p>The number of Spot pools across which to allocate your target Spot capacity. Valid only when <b>AllocationStrategy</b> is set to <code>lowest-price</code>. EC2 Fleet selects the cheapest Spot pools and evenly allocates your target Spot capacity across the number of Spot pools that you specify.</p>
     pub instance_pools_to_use_count: Option<i64>,
     /// <p>The maximum amount per hour for Spot Instances that you're willing to pay.</p>
     pub max_total_price: Option<String>,
@@ -46744,7 +49908,7 @@ impl SpotOptionsDeserializer {
 /// <p>Describes the configuration of Spot Instances in an EC2 Fleet request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotOptionsRequest {
-    /// <p>Indicates how to allocate the target Spot Instance capacity across the Spot Instance pools specified by the EC2 Fleet.</p> <p>If the allocation strategy is <code>lowestPrice</code>, EC2 Fleet launches instances from the Spot Instance pools with the lowest price. This is the default allocation strategy.</p> <p>If the allocation strategy is <code>diversified</code>, EC2 Fleet launches instances from all the Spot Instance pools that you specify.</p> <p>If the allocation strategy is <code>capacityOptimized</code>, EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p>
+    /// <p>Indicates how to allocate the target Spot Instance capacity across the Spot Instance pools specified by the EC2 Fleet.</p> <p>If the allocation strategy is <code>lowest-price</code>, EC2 Fleet launches instances from the Spot Instance pools with the lowest price. This is the default allocation strategy.</p> <p>If the allocation strategy is <code>diversified</code>, EC2 Fleet launches instances from all the Spot Instance pools that you specify.</p> <p>If the allocation strategy is <code>capacity-optimized</code>, EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p>
     pub allocation_strategy: Option<String>,
     /// <p>The behavior when a Spot Instance is interrupted. The default is <code>terminate</code>.</p>
     pub instance_interruption_behavior: Option<String>,
@@ -47608,7 +50772,7 @@ impl SubnetStateDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes the T2 or T3 instance whose credit option for CPU usage was successfully modified.</p>
+/// <p>Describes the burstable performance instance whose credit option for CPU usage was successfully modified.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SuccessfulInstanceCreditSpecificationItem {
     /// <p>The ID of the instance.</p>
@@ -47652,6 +50816,57 @@ impl SuccessfulInstanceCreditSpecificationSetDeserializer {
                         "item", stack,
                     )?,
                 );
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Describes a Reserved Instance whose queued purchase was successfully deleted.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SuccessfulQueuedPurchaseDeletion {
+    /// <p>The ID of the Reserved Instance.</p>
+    pub reserved_instances_id: Option<String>,
+}
+
+struct SuccessfulQueuedPurchaseDeletionDeserializer;
+impl SuccessfulQueuedPurchaseDeletionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SuccessfulQueuedPurchaseDeletion, XmlParseError> {
+        deserialize_elements::<_, SuccessfulQueuedPurchaseDeletion, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "reservedInstancesId" => {
+                        obj.reserved_instances_id = Some(StringDeserializer::deserialize(
+                            "reservedInstancesId",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct SuccessfulQueuedPurchaseDeletionSetDeserializer;
+impl SuccessfulQueuedPurchaseDeletionSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<SuccessfulQueuedPurchaseDeletion>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(SuccessfulQueuedPurchaseDeletionDeserializer::deserialize(
+                    "item", stack,
+                )?);
             } else {
                 skip_tree(stack);
             }
@@ -47808,7 +51023,7 @@ impl TagListSerializer {
 /// <p>The tags to apply to a resource when the resource is being created.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TagSpecification {
-    /// <p>The type of resource to tag. Currently, the resource types that support tagging on creation are: <code>capacity-reservation</code> | <code>client-vpn-endpoint</code> | <code>dedicated-host</code> | <code>fleet</code> | <code>instance</code> | <code>launch-template</code> | <code>snapshot</code> | <code>transit-gateway</code> | <code>transit-gateway-attachment</code> | <code>transit-gateway-route-table</code> | <code>volume</code>.</p> <p>To tag a resource after it has been created, see <a>CreateTags</a>.</p>
+    /// <p>The type of resource to tag. Currently, the resource types that support tagging on creation are: <code>capacity-reservation</code> | <code>client-vpn-endpoint</code> | <code>dedicated-host</code> | <code>fleet</code> | <code>fpga-image</code> | <code>instance</code> | <code>launch-template</code> | <code>snapshot</code> | <code>traffic-mirror-filter</code> | <code>traffic-mirror-session</code> | <code>traffic-mirror-target</code> | <code>transit-gateway</code> | <code>transit-gateway-attachment</code> | <code>transit-gateway-route-table</code> | <code>volume</code>.</p> <p>To tag a resource after it has been created, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html">CreateTags</a>.</p>
     pub resource_type: Option<String>,
     /// <p>The tags to apply to the resource.</p>
     pub tags: Option<Vec<Tag>>,
@@ -48488,6 +51703,56 @@ impl TerminateInstancesResultDeserializer {
                 Ok(())
             },
         )
+    }
+}
+struct ThreadsPerCoreDeserializer;
+impl ThreadsPerCoreDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct ThreadsPerCoreListDeserializer;
+impl ThreadsPerCoreListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<i64>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(ThreadsPerCoreDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct TotalFpgaMemoryDeserializer;
+impl TotalFpgaMemoryDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct TotalGpuMemoryDeserializer;
+impl TotalGpuMemoryDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
     }
 }
 struct TrafficDirectionDeserializer;
@@ -50551,6 +53816,17 @@ impl UnassignPrivateIpAddressesRequestSerializer {
     }
 }
 
+struct UnlimitedSupportedInstanceFamilyDeserializer;
+impl UnlimitedSupportedInstanceFamilyDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UnmonitorInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
@@ -50620,10 +53896,10 @@ impl UnsuccessfulInstanceCreditSpecificationErrorCodeDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes the T2 or T3 instance whose credit option for CPU usage was not modified.</p>
+/// <p>Describes the burstable performance instance whose credit option for CPU usage was not modified.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UnsuccessfulInstanceCreditSpecificationItem {
-    /// <p>The applicable error for the T2 or T3 instance whose credit option for CPU usage was not modified.</p>
+    /// <p>The applicable error for the burstable performance instance whose credit option for CPU usage was not modified.</p>
     pub error: Option<UnsuccessfulInstanceCreditSpecificationItemError>,
     /// <p>The ID of the instance.</p>
     pub instance_id: Option<String>,
@@ -50655,7 +53931,7 @@ impl UnsuccessfulInstanceCreditSpecificationItemDeserializer {
         )
     }
 }
-/// <p>Information about the error for the T2 or T3 instance whose credit option for CPU usage was not modified.</p>
+/// <p>Information about the error for the burstable performance instance whose credit option for CPU usage was not modified.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UnsuccessfulInstanceCreditSpecificationItemError {
     /// <p>The error code.</p>
@@ -50946,6 +54222,34 @@ impl UpdateSecurityGroupRuleDescriptionsIngressResultDeserializer {
         )
     }
 }
+struct UsageClassTypeDeserializer;
+impl UsageClassTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct UsageClassTypeListDeserializer;
+impl UsageClassTypeListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "item" {
+                obj.push(UsageClassTypeDeserializer::deserialize("item", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Describes the S3 bucket for the disk image.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UserBucket {
@@ -51190,6 +54494,71 @@ impl UserIdStringListSerializer {
     }
 }
 
+struct VCpuCountDeserializer;
+impl VCpuCountDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the vCPU configurations for the instance type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct VCpuInfo {
+    /// <p>The default number of cores for the instance type.</p>
+    pub default_cores: Option<i64>,
+    /// <p>The default number of threads per core for the instance type.</p>
+    pub default_threads_per_core: Option<i64>,
+    /// <p>The default number of vCPUs for the instance type.</p>
+    pub default_v_cpus: Option<i64>,
+    /// <p>List of the valid number of cores that can be configured for the instance type.</p>
+    pub valid_cores: Option<Vec<i64>>,
+    /// <p>List of the valid number of threads per core that can be configured for the instance type. </p>
+    pub valid_threads_per_core: Option<Vec<i64>>,
+}
+
+struct VCpuInfoDeserializer;
+impl VCpuInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<VCpuInfo, XmlParseError> {
+        deserialize_elements::<_, VCpuInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "defaultCores" => {
+                    obj.default_cores =
+                        Some(CoreCountDeserializer::deserialize("defaultCores", stack)?);
+                }
+                "defaultThreadsPerCore" => {
+                    obj.default_threads_per_core = Some(ThreadsPerCoreDeserializer::deserialize(
+                        "defaultThreadsPerCore",
+                        stack,
+                    )?);
+                }
+                "defaultVCpus" => {
+                    obj.default_v_cpus =
+                        Some(VCpuCountDeserializer::deserialize("defaultVCpus", stack)?);
+                }
+                "validCores" => {
+                    obj.valid_cores
+                        .get_or_insert(vec![])
+                        .extend(CoreCountListDeserializer::deserialize("validCores", stack)?);
+                }
+                "validThreadsPerCore" => {
+                    obj.valid_threads_per_core.get_or_insert(vec![]).extend(
+                        ThreadsPerCoreListDeserializer::deserialize("validThreadsPerCore", stack)?,
+                    );
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 struct ValueStringListDeserializer;
 impl ValueStringListDeserializer {
     #[allow(unused_variables)]
@@ -51340,6 +54709,8 @@ pub struct Volume {
     pub create_time: Option<String>,
     /// <p>Indicates whether the volume is encrypted.</p>
     pub encrypted: Option<bool>,
+    /// <p>Indicates whether the volume was created using fast snapshot restore.</p>
+    pub fast_restored: Option<bool>,
     /// <p>The number of I/O operations per second (IOPS) that the volume supports. For Provisioned IOPS SSD volumes, this represents the number of IOPS that are provisioned for the volume. For General Purpose SSD volumes, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraints: Range is 100-16,000 IOPS for <code>gp2</code> volumes and 100 to 64,000IOPS for <code>io1</code> volumes, in most Regions. The maximum IOPS for <code>io1</code> of 64,000 is guaranteed only on <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances">Nitro-based instances</a>. Other instance families guarantee performance up to 32,000 IOPS.</p> <p>Condition: This parameter is required for requests to create <code>io1</code> volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>
     pub iops: Option<i64>,
     /// <p>The Amazon Resource Name (ARN) of the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the volume encryption key for the volume.</p>
@@ -51378,6 +54749,10 @@ impl VolumeDeserializer {
                 }
                 "encrypted" => {
                     obj.encrypted = Some(BooleanDeserializer::deserialize("encrypted", stack)?);
+                }
+                "fastRestored" => {
+                    obj.fast_restored =
+                        Some(BooleanDeserializer::deserialize("fastRestored", stack)?);
                 }
                 "iops" => {
                     obj.iops = Some(IntegerDeserializer::deserialize("iops", stack)?);
@@ -57560,6 +60935,46 @@ impl Error for DeletePlacementGroupError {
         match *self {}
     }
 }
+/// Errors returned by DeleteQueuedReservedInstances
+#[derive(Debug, PartialEq)]
+pub enum DeleteQueuedReservedInstancesError {}
+
+impl DeleteQueuedReservedInstancesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteQueuedReservedInstancesError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteQueuedReservedInstancesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteQueuedReservedInstancesError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by DeleteRoute
 #[derive(Debug, PartialEq)]
 pub enum DeleteRouteError {}
@@ -59338,6 +62753,46 @@ impl Error for DescribeExportTasksError {
         match *self {}
     }
 }
+/// Errors returned by DescribeFastSnapshotRestores
+#[derive(Debug, PartialEq)]
+pub enum DescribeFastSnapshotRestoresError {}
+
+impl DescribeFastSnapshotRestoresError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeFastSnapshotRestoresError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeFastSnapshotRestoresError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeFastSnapshotRestoresError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by DescribeFleetHistory
 #[derive(Debug, PartialEq)]
 pub enum DescribeFleetHistoryError {}
@@ -60066,6 +63521,84 @@ impl fmt::Display for DescribeInstanceStatusError {
     }
 }
 impl Error for DescribeInstanceStatusError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by DescribeInstanceTypeOfferings
+#[derive(Debug, PartialEq)]
+pub enum DescribeInstanceTypeOfferingsError {}
+
+impl DescribeInstanceTypeOfferingsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeInstanceTypeOfferingsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeInstanceTypeOfferingsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeInstanceTypeOfferingsError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by DescribeInstanceTypes
+#[derive(Debug, PartialEq)]
+pub enum DescribeInstanceTypesError {}
+
+impl DescribeInstanceTypesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInstanceTypesError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeInstanceTypesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeInstanceTypesError {
     fn description(&self) -> &str {
         match *self {}
     }
@@ -62636,6 +66169,46 @@ impl Error for DisableEbsEncryptionByDefaultError {
         match *self {}
     }
 }
+/// Errors returned by DisableFastSnapshotRestores
+#[derive(Debug, PartialEq)]
+pub enum DisableFastSnapshotRestoresError {}
+
+impl DisableFastSnapshotRestoresError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisableFastSnapshotRestoresError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DisableFastSnapshotRestoresError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisableFastSnapshotRestoresError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by DisableTransitGatewayRouteTablePropagation
 #[derive(Debug, PartialEq)]
 pub enum DisableTransitGatewayRouteTablePropagationError {}
@@ -63108,6 +66681,46 @@ impl Error for EnableEbsEncryptionByDefaultError {
         match *self {}
     }
 }
+/// Errors returned by EnableFastSnapshotRestores
+#[derive(Debug, PartialEq)]
+pub enum EnableFastSnapshotRestoresError {}
+
+impl EnableFastSnapshotRestoresError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<EnableFastSnapshotRestoresError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for EnableFastSnapshotRestoresError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for EnableFastSnapshotRestoresError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by EnableTransitGatewayRouteTablePropagation
 #[derive(Debug, PartialEq)]
 pub enum EnableTransitGatewayRouteTablePropagationError {}
@@ -63572,6 +67185,46 @@ impl fmt::Display for GetConsoleScreenshotError {
     }
 }
 impl Error for GetConsoleScreenshotError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by GetDefaultCreditSpecification
+#[derive(Debug, PartialEq)]
+pub enum GetDefaultCreditSpecificationError {}
+
+impl GetDefaultCreditSpecificationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetDefaultCreditSpecificationError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetDefaultCreditSpecificationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetDefaultCreditSpecificationError {
     fn description(&self) -> &str {
         match *self {}
     }
@@ -64234,6 +67887,46 @@ impl Error for ModifyClientVpnEndpointError {
         match *self {}
     }
 }
+/// Errors returned by ModifyDefaultCreditSpecification
+#[derive(Debug, PartialEq)]
+pub enum ModifyDefaultCreditSpecificationError {}
+
+impl ModifyDefaultCreditSpecificationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyDefaultCreditSpecificationError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyDefaultCreditSpecificationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyDefaultCreditSpecificationError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by ModifyEbsDefaultKmsKeyId
 #[derive(Debug, PartialEq)]
 pub enum ModifyEbsDefaultKmsKeyIdError {}
@@ -64654,6 +68347,46 @@ impl fmt::Display for ModifyInstanceEventStartTimeError {
     }
 }
 impl Error for ModifyInstanceEventStartTimeError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ModifyInstanceMetadataOptions
+#[derive(Debug, PartialEq)]
+pub enum ModifyInstanceMetadataOptionsError {}
+
+impl ModifyInstanceMetadataOptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyInstanceMetadataOptionsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyInstanceMetadataOptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyInstanceMetadataOptionsError {
     fn description(&self) -> &str {
         match *self {}
     }
@@ -67373,7 +71106,7 @@ pub trait Ec2 {
         input: AllocateAddressRequest,
     ) -> RusotoFuture<AllocateAddressResult, AllocateAddressError>;
 
-    /// <p>Allocates a Dedicated Host to your account. At a minimum, specify the instance size type, Availability Zone, and quantity of hosts to allocate.</p>
+    /// <p>Allocates a Dedicated Host to your account. At a minimum, specify the supported instance type or instance family, the Availability Zone in which to allocate the host, and the number of hosts to allocate.</p>
     fn allocate_hosts(
         &self,
         input: AllocateHostsRequest,
@@ -67589,7 +71322,7 @@ pub trait Ec2 {
         input: CreateClientVpnRouteRequest,
     ) -> RusotoFuture<CreateClientVpnRouteResult, CreateClientVpnRouteError>;
 
-    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and can be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> Region, and 9059, which is reserved in the <code>eu-west-1</code> Region.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important></p>
+    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and can be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> Region, and 9059, which is reserved in the <code>eu-west-1</code> Region.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <important> <p>To create more than one customer gateway with the same VPN type, IP address, and BGP ASN, specify a unique device name for each customer gateway. Identical requests return information about the existing customer gateway and do not create new customer gateways.</p> </important></p>
     fn create_customer_gateway(
         &self,
         input: CreateCustomerGatewayRequest,
@@ -67739,7 +71472,7 @@ pub trait Ec2 {
         input: CreateSnapshotRequest,
     ) -> RusotoFuture<Snapshot, CreateSnapshotError>;
 
-    /// <p>Creates crash-consistent snapshots of multiple EBS volumes and stores the data in S3. Volumes are chosen by specifying an instance. Any attached volumes will produce one snapshot each that is crash-consistent across the instance. Boot volumes can be excluded by changing the paramaters. </p>
+    /// <p>Creates crash-consistent snapshots of multiple EBS volumes and stores the data in S3. Volumes are chosen by specifying an instance. Any attached volumes will produce one snapshot each that is crash-consistent across the instance. Boot volumes can be excluded by changing the parameters. </p>
     fn create_snapshots(
         &self,
         input: CreateSnapshotsRequest,
@@ -67760,25 +71493,25 @@ pub trait Ec2 {
     /// <p>Adds or overwrites the specified tags for the specified Amazon EC2 resource or resources. Each resource can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique per resource.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. For more information about creating IAM policies that control users' access to resources based on tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-iam-actions-resources.html">Supported Resource-Level Permissions for Amazon EC2 API Actions</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError>;
 
-    /// <p>Creates a Traffic Mirror filter.</p> <p>A Traffic Mirror filter is a set of rules that defines the traffic to mirror.</p> <p>By default, no traffic is mirrored. To mirror traffic, use <a>CreateTrafficMirrorFilterRule</a> to add Traffic Mirror rules to the filter. The rules you add define what traffic gets mirrored. You can also use <a>ModifyTrafficMirrorFilterNetworkServices</a> to mirror supported network services.</p>
+    /// <p>Creates a Traffic Mirror filter.</p> <p>A Traffic Mirror filter is a set of rules that defines the traffic to mirror.</p> <p>By default, no traffic is mirrored. To mirror traffic, use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTrafficMirrorFilterRule.htm">CreateTrafficMirrorFilterRule</a> to add Traffic Mirror rules to the filter. The rules you add define what traffic gets mirrored. You can also use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyTrafficMirrorFilterNetworkServices.html">ModifyTrafficMirrorFilterNetworkServices</a> to mirror supported network services.</p>
     fn create_traffic_mirror_filter(
         &self,
         input: CreateTrafficMirrorFilterRequest,
     ) -> RusotoFuture<CreateTrafficMirrorFilterResult, CreateTrafficMirrorFilterError>;
 
-    /// <p>Creates a Traffic Mirror rule. </p> <p>A Traffic Mirror rule defines the Traffic Mirror source traffic to mirror.</p> <p>You need the Traffic Mirror filter ID when you create the rule.</p>
+    /// <p>Creates a Traffic Mirror filter rule. </p> <p>A Traffic Mirror rule defines the Traffic Mirror source traffic to mirror.</p> <p>You need the Traffic Mirror filter ID when you create the rule.</p>
     fn create_traffic_mirror_filter_rule(
         &self,
         input: CreateTrafficMirrorFilterRuleRequest,
     ) -> RusotoFuture<CreateTrafficMirrorFilterRuleResult, CreateTrafficMirrorFilterRuleError>;
 
-    /// <p>Creates a Traffic Mirror session.</p> <p>A Traffic Mirror session actively copies packets from a Traffic Mirror source to a Traffic Mirror target. Create a filter, and then assign it to the session to define a subset of the traffic to mirror, for example all TCP traffic.</p> <p>The Traffic Mirror source and the Traffic Mirror target (monitoring appliances) can be in the same VPC, or in a different VPC connected via VPC peering or a transit gateway. </p> <p>By default, no traffic is mirrored. Use <a>CreateTrafficMirrorFilter</a> to create filter rules that specify the traffic to mirror.</p>
+    /// <p>Creates a Traffic Mirror session.</p> <p>A Traffic Mirror session actively copies packets from a Traffic Mirror source to a Traffic Mirror target. Create a filter, and then assign it to the session to define a subset of the traffic to mirror, for example all TCP traffic.</p> <p>The Traffic Mirror source and the Traffic Mirror target (monitoring appliances) can be in the same VPC, or in a different VPC connected via VPC peering or a transit gateway. </p> <p>By default, no traffic is mirrored. Use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTrafficMirrorFilter.htm">CreateTrafficMirrorFilter</a> to create filter rules that specify the traffic to mirror.</p>
     fn create_traffic_mirror_session(
         &self,
         input: CreateTrafficMirrorSessionRequest,
     ) -> RusotoFuture<CreateTrafficMirrorSessionResult, CreateTrafficMirrorSessionError>;
 
-    /// <p>Creates a target for your Traffic Mirror session.</p> <p>A Traffic Mirror target is the destination for mirrored traffic. The Traffic Mirror source and the Traffic Mirror target (monitoring appliances) can be in the same VPC, or in different VPCs connected via VPC peering or a transit gateway.</p> <p>A Traffic Mirror target can be a network interface, or a Network Load Balancer.</p> <p>To use the target in a Traffic Mirror session, use <a>CreateTrafficMirrorSession</a>.</p>
+    /// <p>Creates a target for your Traffic Mirror session.</p> <p>A Traffic Mirror target is the destination for mirrored traffic. The Traffic Mirror source and the Traffic Mirror target (monitoring appliances) can be in the same VPC, or in different VPCs connected via VPC peering or a transit gateway.</p> <p>A Traffic Mirror target can be a network interface, or a Network Load Balancer.</p> <p>To use the target in a Traffic Mirror session, use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTrafficMirrorSession.htm">CreateTrafficMirrorSession</a>.</p>
     fn create_traffic_mirror_target(
         &self,
         input: CreateTrafficMirrorTargetRequest,
@@ -67966,6 +71699,12 @@ pub trait Ec2 {
         &self,
         input: DeletePlacementGroupRequest,
     ) -> RusotoFuture<(), DeletePlacementGroupError>;
+
+    /// <p>Deletes the queued purchases for the specified Reserved Instances.</p>
+    fn delete_queued_reserved_instances(
+        &self,
+        input: DeleteQueuedReservedInstancesRequest,
+    ) -> RusotoFuture<DeleteQueuedReservedInstancesResult, DeleteQueuedReservedInstancesError>;
 
     /// <p>Deletes the specified route from the specified route table.</p>
     fn delete_route(&self, input: DeleteRouteRequest) -> RusotoFuture<(), DeleteRouteError>;
@@ -68240,7 +71979,13 @@ pub trait Ec2 {
         input: DescribeExportTasksRequest,
     ) -> RusotoFuture<DescribeExportTasksResult, DescribeExportTasksError>;
 
-    /// <p>Describes the events for the specified EC2 Fleet during the specified time.</p>
+    /// <p>Describes the state of fast snapshot restores for your snapshots.</p>
+    fn describe_fast_snapshot_restores(
+        &self,
+        input: DescribeFastSnapshotRestoresRequest,
+    ) -> RusotoFuture<DescribeFastSnapshotRestoresResult, DescribeFastSnapshotRestoresError>;
+
+    /// <p>Describes the events for the specified EC2 Fleet during the specified time.</p> <p>EC2 Fleet events are delayed by up to 30 seconds before they can be described. This ensures that you can query by the last evaluated time and not miss a recorded event. EC2 Fleet events are available for 48 hours.</p>
     fn describe_fleet_history(
         &self,
         input: DescribeFleetHistoryRequest,
@@ -68276,7 +72021,7 @@ pub trait Ec2 {
         input: DescribeFpgaImagesRequest,
     ) -> RusotoFuture<DescribeFpgaImagesResult, DescribeFpgaImagesError>;
 
-    /// <p>Describes the Dedicated Host reservations that are available to purchase.</p> <p>The results describe all the Dedicated Host reservation offerings, including offerings that may not match the instance family and Region of your Dedicated Hosts. When purchasing an offering, ensure that the instance family and Region of the offering matches that of the Dedicated Hosts with which it is to be associated. For more information about supported instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html">Dedicated Hosts Overview</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p>
+    /// <p>Describes the Dedicated Host reservations that are available to purchase.</p> <p>The results describe all of the Dedicated Host reservation offerings, including offerings that might not match the instance family and Region of your Dedicated Hosts. When purchasing an offering, ensure that the instance family and Region of the offering matches that of the Dedicated Hosts with which it is to be associated. For more information about supported instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html">Dedicated Hosts Overview</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p>
     fn describe_host_reservation_offerings(
         &self,
         input: DescribeHostReservationOfferingsRequest,
@@ -68345,7 +72090,7 @@ pub trait Ec2 {
         input: DescribeInstanceAttributeRequest,
     ) -> RusotoFuture<InstanceAttribute, DescribeInstanceAttributeError>;
 
-    /// <p>Describes the credit option for CPU usage of the specified T2 or T3 instances. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>If you do not specify an instance ID, Amazon EC2 returns T2 and T3 instances with the <code>unlimited</code> credit option, as well as instances that were previously configured as T2 or T3 with the <code>unlimited</code> credit option. For example, if you resize a T2 instance, while it is configured as <code>unlimited</code>, to an M4 instance, Amazon EC2 returns the M4 instance.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns the credit option (<code>standard</code> or <code>unlimited</code>) of those instances. If you specify an instance ID that is not valid, such as an instance that is not a T2 or T3 instance, an error is returned.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If an Availability Zone is experiencing a service disruption and you specify instance IDs in the affected zone, or do not specify any instance IDs at all, the call fails. If you specify only instance IDs in an unaffected zone, the call works normally.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the credit option for CPU usage of the specified burstable performance instances. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>If you do not specify an instance ID, Amazon EC2 returns burstable performance instances with the <code>unlimited</code> credit option, as well as instances that were previously configured as T2, T3, and T3a with the <code>unlimited</code> credit option. For example, if you resize a T2 instance, while it is configured as <code>unlimited</code>, to an M4 instance, Amazon EC2 returns the M4 instance.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns the credit option (<code>standard</code> or <code>unlimited</code>) of those instances. If you specify an instance ID that is not valid, such as an instance that is not a burstable performance instance, an error is returned.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If an Availability Zone is experiencing a service disruption and you specify instance IDs in the affected zone, or do not specify any instance IDs at all, the call fails. If you specify only instance IDs in an unaffected zone, the call works normally.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_instance_credit_specifications(
         &self,
         input: DescribeInstanceCreditSpecificationsRequest,
@@ -68359,6 +72104,18 @@ pub trait Ec2 {
         &self,
         input: DescribeInstanceStatusRequest,
     ) -> RusotoFuture<DescribeInstanceStatusResult, DescribeInstanceStatusError>;
+
+    /// <p>Returns a list of all instance types offered. The results can be filtered by location (Region or Availability Zone). If no location is specified, the instance types offered in the current Region are returned.</p>
+    fn describe_instance_type_offerings(
+        &self,
+        input: DescribeInstanceTypeOfferingsRequest,
+    ) -> RusotoFuture<DescribeInstanceTypeOfferingsResult, DescribeInstanceTypeOfferingsError>;
+
+    /// <p>Returns a list of all instance types offered in your current AWS Region. The results can be filtered by the attributes of the instance types.</p>
+    fn describe_instance_types(
+        &self,
+        input: DescribeInstanceTypesRequest,
+    ) -> RusotoFuture<DescribeInstanceTypesResult, DescribeInstanceTypesError>;
 
     /// <p>Describes the specified instances or all of AWS account's instances.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns information for those instances. If you do not specify instance IDs, Amazon EC2 returns information for all relevant instances. If you specify an instance ID that is not valid, an error is returned. If you specify an instance that you do not own, it is not included in the returned results.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If you describe instances in the rare case where an Availability Zone is experiencing a service disruption and you specify instance IDs that are in the affected zone, or do not specify any instance IDs at all, the call fails. If you describe instances and specify only instance IDs that are in an unaffected zone, the call works normally.</p>
     fn describe_instances(
@@ -68780,6 +72537,12 @@ pub trait Ec2 {
         input: DisableEbsEncryptionByDefaultRequest,
     ) -> RusotoFuture<DisableEbsEncryptionByDefaultResult, DisableEbsEncryptionByDefaultError>;
 
+    /// <p>Disables fast snapshot restores for the specified snapshots in the specified Availability Zones.</p>
+    fn disable_fast_snapshot_restores(
+        &self,
+        input: DisableFastSnapshotRestoresRequest,
+    ) -> RusotoFuture<DisableFastSnapshotRestoresResult, DisableFastSnapshotRestoresError>;
+
     /// <p>Disables the specified resource attachment from propagating routes to the specified propagation route table.</p>
     fn disable_transit_gateway_route_table_propagation(
         &self,
@@ -68861,6 +72624,12 @@ pub trait Ec2 {
         input: EnableEbsEncryptionByDefaultRequest,
     ) -> RusotoFuture<EnableEbsEncryptionByDefaultResult, EnableEbsEncryptionByDefaultError>;
 
+    /// <p>Enables fast snapshot restores for the specified snapshots in the specified Availability Zones.</p> <p>You get the full benefit of fast snapshot restores after they enter the <code>enabled</code> state. To get the current state of fast snapshot restores, use <a>DescribeFastSnapshotRestores</a>. To disable fast snapshot restores, use <a>DisableFastSnapshotRestores</a>.</p>
+    fn enable_fast_snapshot_restores(
+        &self,
+        input: EnableFastSnapshotRestoresRequest,
+    ) -> RusotoFuture<EnableFastSnapshotRestoresResult, EnableFastSnapshotRestoresError>;
+
     /// <p>Enables the specified attachment to propagate routes to the specified propagation route table.</p>
     fn enable_transit_gateway_route_table_propagation(
         &self,
@@ -68941,6 +72710,12 @@ pub trait Ec2 {
         &self,
         input: GetConsoleScreenshotRequest,
     ) -> RusotoFuture<GetConsoleScreenshotResult, GetConsoleScreenshotError>;
+
+    /// <p>Describes the default credit option for CPU usage of a burstable performance instance family.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    fn get_default_credit_specification(
+        &self,
+        input: GetDefaultCreditSpecificationRequest,
+    ) -> RusotoFuture<GetDefaultCreditSpecificationResult, GetDefaultCreditSpecificationError>;
 
     /// <p>Describes the default customer master key (CMK) for EBS encryption by default for your account in this Region. You can change the default CMK for encryption by default using <a>ModifyEbsDefaultKmsKeyId</a> or <a>ResetEbsDefaultKmsKeyId</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn get_ebs_default_kms_key_id(
@@ -69056,13 +72831,19 @@ pub trait Ec2 {
         input: ModifyClientVpnEndpointRequest,
     ) -> RusotoFuture<ModifyClientVpnEndpointResult, ModifyClientVpnEndpointError>;
 
+    /// <p>Modifies the default credit option for CPU usage of burstable performance instances. The default credit option is set at the account level per AWS Region, and is specified per instance family. All new burstable performance instances in the account launch using the default credit option.</p> <p> <code>ModifyDefaultCreditSpecification</code> is an asynchronous operation, which works at an AWS Region level and modifies the credit option for each Availability Zone. All zones in a Region are updated within five minutes. But if instances are launched during this operation, they might not get the new credit option until the zone is updated. To verify whether the update has occurred, you can call <code>GetDefaultCreditSpecification</code> and check <code>DefaultCreditSpecification</code> for updates.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    fn modify_default_credit_specification(
+        &self,
+        input: ModifyDefaultCreditSpecificationRequest,
+    ) -> RusotoFuture<ModifyDefaultCreditSpecificationResult, ModifyDefaultCreditSpecificationError>;
+
     /// <p>Changes the default customer master key (CMK) for EBS encryption by default for your account in this Region.</p> <p>AWS creates a unique AWS managed CMK in each Region for use with encryption by default. If you change the default CMK to a customer managed CMK, it is used instead of the AWS managed CMK. To reset the default CMK to the AWS managed CMK for EBS, use <a>ResetEbsDefaultKmsKeyId</a>.</p> <p>If you delete or disable the customer managed CMK that you specified for use with encryption by default, your instances will fail to launch.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn modify_ebs_default_kms_key_id(
         &self,
         input: ModifyEbsDefaultKmsKeyIdRequest,
     ) -> RusotoFuture<ModifyEbsDefaultKmsKeyIdResult, ModifyEbsDefaultKmsKeyIdError>;
 
-    /// <p>Modifies the specified EC2 Fleet.</p> <p>You can only modify an EC2 Fleet request of type <code>maintain</code>.</p> <p>While the EC2 Fleet is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your EC2 Fleet, increase its target capacity. The EC2 Fleet launches the additional Spot Instances according to the allocation strategy for the EC2 Fleet request. If the allocation strategy is <code>lowestPrice</code>, the EC2 Fleet launches instances using the Spot Instance pool with the lowest price. If the allocation strategy is <code>diversified</code>, the EC2 Fleet distributes the instances across the Spot Instance pools. If the allocation strategy is <code>capacityOptimized</code>, EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p> <p>To scale down your EC2 Fleet, decrease its target capacity. First, the EC2 Fleet cancels any open requests that exceed the new target capacity. You can request that the EC2 Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the EC2 Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>capacityOptimized</code>, the EC2 Fleet terminates the instances in the Spot Instance pools that have the least available Spot Instance capacity. If the allocation strategy is <code>diversified</code>, the EC2 Fleet terminates instances across the Spot Instance pools. Alternatively, you can request that the EC2 Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your EC2 Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
+    /// <p>Modifies the specified EC2 Fleet.</p> <p>You can only modify an EC2 Fleet request of type <code>maintain</code>.</p> <p>While the EC2 Fleet is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your EC2 Fleet, increase its target capacity. The EC2 Fleet launches the additional Spot Instances according to the allocation strategy for the EC2 Fleet request. If the allocation strategy is <code>lowest-price</code>, the EC2 Fleet launches instances using the Spot Instance pool with the lowest price. If the allocation strategy is <code>diversified</code>, the EC2 Fleet distributes the instances across the Spot Instance pools. If the allocation strategy is <code>capacity-optimized</code>, EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p> <p>To scale down your EC2 Fleet, decrease its target capacity. First, the EC2 Fleet cancels any open requests that exceed the new target capacity. You can request that the EC2 Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowest-price</code>, the EC2 Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>capacity-optimized</code>, the EC2 Fleet terminates the instances in the Spot Instance pools that have the least available Spot Instance capacity. If the allocation strategy is <code>diversified</code>, the EC2 Fleet terminates instances across the Spot Instance pools. Alternatively, you can request that the EC2 Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your EC2 Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
     fn modify_fleet(
         &self,
         input: ModifyFleetRequest,
@@ -69074,7 +72855,7 @@ pub trait Ec2 {
         input: ModifyFpgaImageAttributeRequest,
     ) -> RusotoFuture<ModifyFpgaImageAttributeResult, ModifyFpgaImageAttributeError>;
 
-    /// <p>Modify the auto-placement setting of a Dedicated Host. When auto-placement is enabled, any instances that you launch with a tenancy of <code>host</code> but without a specific host ID are placed onto any available Dedicated Host in your account that has auto-placement enabled. When auto-placement is disabled, you need to provide a host ID to have the instance launch onto a specific host. If no host ID is provided, the instance is launched onto a suitable host with auto-placement enabled.</p>
+    /// <p>Modify the auto-placement setting of a Dedicated Host. When auto-placement is enabled, any instances that you launch with a tenancy of <code>host</code> but without a specific host ID are placed onto any available Dedicated Host in your account that has auto-placement enabled. When auto-placement is disabled, you need to provide a host ID to have the instance launch onto a specific host. If no host ID is provided, the instance is launched onto a suitable host with auto-placement enabled.</p> <p>You can also use this API action to modify a Dedicated Host to support either multiple instance types in an instance family, or to support a specific instance type only.</p>
     fn modify_hosts(
         &self,
         input: ModifyHostsRequest,
@@ -69113,7 +72894,7 @@ pub trait Ec2 {
         ModifyInstanceCapacityReservationAttributesError,
     >;
 
-    /// <p>Modifies the credit option for CPU usage on a running or stopped T2 or T3 instance. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Modifies the credit option for CPU usage on a running or stopped burstable performance instance. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn modify_instance_credit_specification(
         &self,
         input: ModifyInstanceCreditSpecificationRequest,
@@ -69124,6 +72905,12 @@ pub trait Ec2 {
         &self,
         input: ModifyInstanceEventStartTimeRequest,
     ) -> RusotoFuture<ModifyInstanceEventStartTimeResult, ModifyInstanceEventStartTimeError>;
+
+    /// <p>Modify the instance metadata parameters on a running or stopped instance. When you modify the parameters on a stopped instance, they are applied when the instance is started. When you modify the parameters on a running instance, the API responds with a state of “pending”. After the parameter modifications are successfully applied to the instance, the state of the modifications changes from “pending” to “applied” in subsequent describe-instances API calls. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance Metadata and User Data</a>.</p>
+    fn modify_instance_metadata_options(
+        &self,
+        input: ModifyInstanceMetadataOptionsRequest,
+    ) -> RusotoFuture<ModifyInstanceMetadataOptionsResult, ModifyInstanceMetadataOptionsError>;
 
     /// <p>Modifies the placement attributes for a specified instance. You can do the following:</p> <ul> <li> <p>Modify the affinity between an instance and a <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html">Dedicated Host</a>. When affinity is set to <code>host</code> and the instance is not associated with a specific Dedicated Host, the next time the instance is launched, it is automatically associated with the host on which it lands. If the instance is restarted or rebooted, this relationship persists.</p> </li> <li> <p>Change the Dedicated Host with which an instance is associated.</p> </li> <li> <p>Change the instance tenancy of an instance from <code>host</code> to <code>dedicated</code>, or from <code>dedicated</code> to <code>host</code>.</p> </li> <li> <p>Move an instance to or from a <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">placement group</a>.</p> </li> </ul> <p>At least one attribute for affinity, host ID, tenancy, or placement group name must be specified in the request. Affinity and tenancy can be modified in the same request.</p> <p>To modify the host ID, tenancy, placement group, or partition for an instance, the instance must be in the <code>stopped</code> state.</p>
     fn modify_instance_placement(
@@ -69167,7 +72954,7 @@ pub trait Ec2 {
         input: ModifySubnetAttributeRequest,
     ) -> RusotoFuture<(), ModifySubnetAttributeError>;
 
-    /// <p>Allows or restricts mirroring network services.</p> <p> By default, Amazon DNS network services are not eligible for Traffic Mirror. Use <code>AddNetworkServices</code> to add network services to a Traffic Mirror filter. When a network service is added to the Traffic Mirror filter, all traffic related to that network service will be mirrored. When you no longer want to mirror network services, use <code>RemoveNetworkServices</code> to remove the network services from the Traffic Mirror filter. </p> <p>FFor information about filter rule properties, see <a href="https://docs.aws.amazon.com/vpc/latest/mirroring/traffic-mirroring-considerations.html#traffic-mirroring-network-services">Network Services</a> in the <i>Traffic Mirroring User Guide </i>.</p>
+    /// <p>Allows or restricts mirroring network services.</p> <p> By default, Amazon DNS network services are not eligible for Traffic Mirror. Use <code>AddNetworkServices</code> to add network services to a Traffic Mirror filter. When a network service is added to the Traffic Mirror filter, all traffic related to that network service will be mirrored. When you no longer want to mirror network services, use <code>RemoveNetworkServices</code> to remove the network services from the Traffic Mirror filter. </p> <p>For information about filter rule properties, see <a href="https://docs.aws.amazon.com/vpc/latest/mirroring/traffic-mirroring-considerations.html">Network Services</a> in the <i>Traffic Mirroring User Guide </i>.</p>
     fn modify_traffic_mirror_filter_network_services(
         &self,
         input: ModifyTrafficMirrorFilterNetworkServicesRequest,
@@ -69299,7 +73086,7 @@ pub trait Ec2 {
         input: PurchaseHostReservationRequest,
     ) -> RusotoFuture<PurchaseHostReservationResult, PurchaseHostReservationError>;
 
-    /// <p>Purchases a Reserved Instance for use with your account. With Reserved Instances, you pay a lower hourly rate compared to On-Demand instance pricing.</p> <p>Use <a>DescribeReservedInstancesOfferings</a> to get a list of Reserved Instance offerings that match your specifications. After you've purchased a Reserved Instance, you can check for your new Reserved Instance with <a>DescribeReservedInstances</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts-on-demand-reserved-instances.html">Reserved Instances</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Purchases a Reserved Instance for use with your account. With Reserved Instances, you pay a lower hourly rate compared to On-Demand instance pricing.</p> <p>Use <a>DescribeReservedInstancesOfferings</a> to get a list of Reserved Instance offerings that match your specifications. After you've purchased a Reserved Instance, you can check for your new Reserved Instance with <a>DescribeReservedInstances</a>.</p> <p>To queue a purchase for a future date and time, specify a purchase time. If you do not specify a purchase time, the default is the current time.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts-on-demand-reserved-instances.html">Reserved Instances</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn purchase_reserved_instances_offering(
         &self,
         input: PurchaseReservedInstancesOfferingRequest,
@@ -69317,7 +73104,7 @@ pub trait Ec2 {
         input: RebootInstancesRequest,
     ) -> RusotoFuture<(), RebootInstancesError>;
 
-    /// <p>Registers an AMI. When you're creating an AMI, this is the final step you must complete before you can launch an instance from the AMI. For more information about creating AMIs, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami.html">Creating Your Own AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <note> <p>For Amazon EBS-backed instances, <a>CreateImage</a> creates and registers the AMI in a single request, so you don't have to register the AMI yourself.</p> </note> <p>You can also use <code>RegisterImage</code> to create an Amazon EBS-backed Linux AMI from a snapshot of a root device volume. You specify the snapshot using the block device mapping. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-launch-snapshot.html">Launching a Linux Instance from a Backup</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can't register an image where a secondary (non-root) snapshot has AWS Marketplace product codes.</p> <p>Some Linux distributions, such as Red Hat Enterprise Linux (RHEL) and SUSE Linux Enterprise Server (SLES), use the EC2 billing product code associated with an AMI to verify the subscription status for package updates. Creating an AMI from an EBS snapshot does not maintain this billing code, and instances launched from such an AMI are not able to connect to package update infrastructure. If you purchase a Reserved Instance offering for one of these Linux distributions and launch instances using an AMI that does not contain the required billing code, your Reserved Instance is not applied to these instances.</p> <p>To create an AMI for operating systems that require a billing code, see <a>CreateImage</a>.</p> <p>If needed, you can deregister an AMI at any time. Any modifications you make to an AMI backed by an instance store volume invalidates its registration. If you make changes to an image, deregister the previous image and register the new image.</p>
+    /// <p>Registers an AMI. When you're creating an AMI, this is the final step you must complete before you can launch an instance from the AMI. For more information about creating AMIs, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami.html">Creating Your Own AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <note> <p>For Amazon EBS-backed instances, <a>CreateImage</a> creates and registers the AMI in a single request, so you don't have to register the AMI yourself.</p> </note> <p>You can also use <code>RegisterImage</code> to create an Amazon EBS-backed Linux AMI from a snapshot of a root device volume. You specify the snapshot using the block device mapping. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-launch-snapshot.html">Launching a Linux Instance from a Backup</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can't register an image where a secondary (non-root) snapshot has AWS Marketplace product codes.</p> <p>Windows and some Linux distributions, such as Red Hat Enterprise Linux (RHEL) and SUSE Linux Enterprise Server (SLES), use the EC2 billing product code associated with an AMI to verify the subscription status for package updates. To create a new AMI for operating systems that require a billing product code, do the following:</p> <ol> <li> <p>Launch an instance from an existing AMI with that billing product code.</p> </li> <li> <p>Customize the instance.</p> </li> <li> <p>Create a new AMI from the instance using <a>CreateImage</a> to preserve the billing product code association.</p> </li> </ol> <p>If you purchase a Reserved Instance to apply to an On-Demand Instance that was launched from an AMI with a billing product code, make sure that the Reserved Instance has the matching billing product code. If you purchase a Reserved Instance without the matching billing product code, the Reserved Instance will not be applied to the On-Demand Instance. </p> <p>If needed, you can deregister an AMI at any time. Any modifications you make to an AMI backed by an instance store volume invalidates its registration. If you make changes to an image, deregister the previous image and register the new image.</p>
     fn register_image(
         &self,
         input: RegisterImageRequest,
@@ -69879,7 +73666,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Allocates a Dedicated Host to your account. At a minimum, specify the instance size type, Availability Zone, and quantity of hosts to allocate.</p>
+    /// <p>Allocates a Dedicated Host to your account. At a minimum, specify the supported instance type or instance family, the Availability Zone in which to allocate the host, and the number of hosts to allocate.</p>
     fn allocate_hosts(
         &self,
         input: AllocateHostsRequest,
@@ -71426,7 +75213,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and can be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> Region, and 9059, which is reserved in the <code>eu-west-1</code> Region.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important></p>
+    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and can be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> Region, and 9059, which is reserved in the <code>eu-west-1</code> Region.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <important> <p>To create more than one customer gateway with the same VPN type, IP address, and BGP ASN, specify a unique device name for each customer gateway. Identical requests return information about the existing customer gateway and do not create new customer gateways.</p> </important></p>
     fn create_customer_gateway(
         &self,
         input: CreateCustomerGatewayRequest,
@@ -72550,7 +76337,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates crash-consistent snapshots of multiple EBS volumes and stores the data in S3. Volumes are chosen by specifying an instance. Any attached volumes will produce one snapshot each that is crash-consistent across the instance. Boot volumes can be excluded by changing the paramaters. </p>
+    /// <p>Creates crash-consistent snapshots of multiple EBS volumes and stores the data in S3. Volumes are chosen by specifying an instance. Any attached volumes will produce one snapshot each that is crash-consistent across the instance. Boot volumes can be excluded by changing the parameters. </p>
     fn create_snapshots(
         &self,
         input: CreateSnapshotsRequest,
@@ -72715,7 +76502,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a Traffic Mirror filter.</p> <p>A Traffic Mirror filter is a set of rules that defines the traffic to mirror.</p> <p>By default, no traffic is mirrored. To mirror traffic, use <a>CreateTrafficMirrorFilterRule</a> to add Traffic Mirror rules to the filter. The rules you add define what traffic gets mirrored. You can also use <a>ModifyTrafficMirrorFilterNetworkServices</a> to mirror supported network services.</p>
+    /// <p>Creates a Traffic Mirror filter.</p> <p>A Traffic Mirror filter is a set of rules that defines the traffic to mirror.</p> <p>By default, no traffic is mirrored. To mirror traffic, use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTrafficMirrorFilterRule.htm">CreateTrafficMirrorFilterRule</a> to add Traffic Mirror rules to the filter. The rules you add define what traffic gets mirrored. You can also use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyTrafficMirrorFilterNetworkServices.html">ModifyTrafficMirrorFilterNetworkServices</a> to mirror supported network services.</p>
     fn create_traffic_mirror_filter(
         &self,
         input: CreateTrafficMirrorFilterRequest,
@@ -72760,7 +76547,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a Traffic Mirror rule. </p> <p>A Traffic Mirror rule defines the Traffic Mirror source traffic to mirror.</p> <p>You need the Traffic Mirror filter ID when you create the rule.</p>
+    /// <p>Creates a Traffic Mirror filter rule. </p> <p>A Traffic Mirror rule defines the Traffic Mirror source traffic to mirror.</p> <p>You need the Traffic Mirror filter ID when you create the rule.</p>
     fn create_traffic_mirror_filter_rule(
         &self,
         input: CreateTrafficMirrorFilterRuleRequest,
@@ -72805,7 +76592,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a Traffic Mirror session.</p> <p>A Traffic Mirror session actively copies packets from a Traffic Mirror source to a Traffic Mirror target. Create a filter, and then assign it to the session to define a subset of the traffic to mirror, for example all TCP traffic.</p> <p>The Traffic Mirror source and the Traffic Mirror target (monitoring appliances) can be in the same VPC, or in a different VPC connected via VPC peering or a transit gateway. </p> <p>By default, no traffic is mirrored. Use <a>CreateTrafficMirrorFilter</a> to create filter rules that specify the traffic to mirror.</p>
+    /// <p>Creates a Traffic Mirror session.</p> <p>A Traffic Mirror session actively copies packets from a Traffic Mirror source to a Traffic Mirror target. Create a filter, and then assign it to the session to define a subset of the traffic to mirror, for example all TCP traffic.</p> <p>The Traffic Mirror source and the Traffic Mirror target (monitoring appliances) can be in the same VPC, or in a different VPC connected via VPC peering or a transit gateway. </p> <p>By default, no traffic is mirrored. Use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTrafficMirrorFilter.htm">CreateTrafficMirrorFilter</a> to create filter rules that specify the traffic to mirror.</p>
     fn create_traffic_mirror_session(
         &self,
         input: CreateTrafficMirrorSessionRequest,
@@ -72850,7 +76637,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a target for your Traffic Mirror session.</p> <p>A Traffic Mirror target is the destination for mirrored traffic. The Traffic Mirror source and the Traffic Mirror target (monitoring appliances) can be in the same VPC, or in different VPCs connected via VPC peering or a transit gateway.</p> <p>A Traffic Mirror target can be a network interface, or a Network Load Balancer.</p> <p>To use the target in a Traffic Mirror session, use <a>CreateTrafficMirrorSession</a>.</p>
+    /// <p>Creates a target for your Traffic Mirror session.</p> <p>A Traffic Mirror target is the destination for mirrored traffic. The Traffic Mirror source and the Traffic Mirror target (monitoring appliances) can be in the same VPC, or in different VPCs connected via VPC peering or a transit gateway.</p> <p>A Traffic Mirror target can be a network interface, or a Network Load Balancer.</p> <p>To use the target in a Traffic Mirror session, use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTrafficMirrorSession.htm">CreateTrafficMirrorSession</a>.</p>
     fn create_traffic_mirror_target(
         &self,
         input: CreateTrafficMirrorTargetRequest,
@@ -74159,6 +77946,51 @@ impl Ec2 for Ec2Client {
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p>Deletes the queued purchases for the specified Reserved Instances.</p>
+    fn delete_queued_reserved_instances(
+        &self,
+        input: DeleteQueuedReservedInstancesRequest,
+    ) -> RusotoFuture<DeleteQueuedReservedInstancesResult, DeleteQueuedReservedInstancesError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteQueuedReservedInstances");
+        params.put("Version", "2016-11-15");
+        DeleteQueuedReservedInstancesRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteQueuedReservedInstancesError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteQueuedReservedInstancesResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteQueuedReservedInstancesResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
 
@@ -76039,7 +79871,52 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes the events for the specified EC2 Fleet during the specified time.</p>
+    /// <p>Describes the state of fast snapshot restores for your snapshots.</p>
+    fn describe_fast_snapshot_restores(
+        &self,
+        input: DescribeFastSnapshotRestoresRequest,
+    ) -> RusotoFuture<DescribeFastSnapshotRestoresResult, DescribeFastSnapshotRestoresError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeFastSnapshotRestores");
+        params.put("Version", "2016-11-15");
+        DescribeFastSnapshotRestoresRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeFastSnapshotRestoresError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeFastSnapshotRestoresResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DescribeFastSnapshotRestoresResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Describes the events for the specified EC2 Fleet during the specified time.</p> <p>EC2 Fleet events are delayed by up to 30 seconds before they can be described. This ensures that you can query by the last evaluated time and not miss a recorded event. EC2 Fleet events are available for 48 hours.</p>
     fn describe_fleet_history(
         &self,
         input: DescribeFleetHistoryRequest,
@@ -76320,7 +80197,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes the Dedicated Host reservations that are available to purchase.</p> <p>The results describe all the Dedicated Host reservation offerings, including offerings that may not match the instance family and Region of your Dedicated Hosts. When purchasing an offering, ensure that the instance family and Region of the offering matches that of the Dedicated Hosts with which it is to be associated. For more information about supported instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html">Dedicated Hosts Overview</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p>
+    /// <p>Describes the Dedicated Host reservations that are available to purchase.</p> <p>The results describe all of the Dedicated Host reservation offerings, including offerings that might not match the instance family and Region of your Dedicated Hosts. When purchasing an offering, ensure that the instance family and Region of the offering matches that of the Dedicated Hosts with which it is to be associated. For more information about supported instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html">Dedicated Hosts Overview</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p>
     fn describe_host_reservation_offerings(
         &self,
         input: DescribeHostReservationOfferingsRequest,
@@ -76825,7 +80702,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes the credit option for CPU usage of the specified T2 or T3 instances. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>If you do not specify an instance ID, Amazon EC2 returns T2 and T3 instances with the <code>unlimited</code> credit option, as well as instances that were previously configured as T2 or T3 with the <code>unlimited</code> credit option. For example, if you resize a T2 instance, while it is configured as <code>unlimited</code>, to an M4 instance, Amazon EC2 returns the M4 instance.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns the credit option (<code>standard</code> or <code>unlimited</code>) of those instances. If you specify an instance ID that is not valid, such as an instance that is not a T2 or T3 instance, an error is returned.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If an Availability Zone is experiencing a service disruption and you specify instance IDs in the affected zone, or do not specify any instance IDs at all, the call fails. If you specify only instance IDs in an unaffected zone, the call works normally.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the credit option for CPU usage of the specified burstable performance instances. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>If you do not specify an instance ID, Amazon EC2 returns burstable performance instances with the <code>unlimited</code> credit option, as well as instances that were previously configured as T2, T3, and T3a with the <code>unlimited</code> credit option. For example, if you resize a T2 instance, while it is configured as <code>unlimited</code>, to an M4 instance, Amazon EC2 returns the M4 instance.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns the credit option (<code>standard</code> or <code>unlimited</code>) of those instances. If you specify an instance ID that is not valid, such as an instance that is not a burstable performance instance, an error is returned.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If an Availability Zone is experiencing a service disruption and you specify instance IDs in the affected zone, or do not specify any instance IDs at all, the call fails. If you specify only instance IDs in an unaffected zone, the call works normally.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_instance_credit_specifications(
         &self,
         input: DescribeInstanceCreditSpecificationsRequest,
@@ -76910,6 +80787,96 @@ impl Ec2 for Ec2Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result = DescribeInstanceStatusResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Returns a list of all instance types offered. The results can be filtered by location (Region or Availability Zone). If no location is specified, the instance types offered in the current Region are returned.</p>
+    fn describe_instance_type_offerings(
+        &self,
+        input: DescribeInstanceTypeOfferingsRequest,
+    ) -> RusotoFuture<DescribeInstanceTypeOfferingsResult, DescribeInstanceTypeOfferingsError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeInstanceTypeOfferings");
+        params.put("Version", "2016-11-15");
+        DescribeInstanceTypeOfferingsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeInstanceTypeOfferingsError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeInstanceTypeOfferingsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DescribeInstanceTypeOfferingsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Returns a list of all instance types offered in your current AWS Region. The results can be filtered by the attributes of the instance types.</p>
+    fn describe_instance_types(
+        &self,
+        input: DescribeInstanceTypesRequest,
+    ) -> RusotoFuture<DescribeInstanceTypesResult, DescribeInstanceTypesError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeInstanceTypes");
+        params.put("Version", "2016-11-15");
+        DescribeInstanceTypesRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeInstanceTypesError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeInstanceTypesResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DescribeInstanceTypesResultDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -79944,6 +83911,51 @@ impl Ec2 for Ec2Client {
         })
     }
 
+    /// <p>Disables fast snapshot restores for the specified snapshots in the specified Availability Zones.</p>
+    fn disable_fast_snapshot_restores(
+        &self,
+        input: DisableFastSnapshotRestoresRequest,
+    ) -> RusotoFuture<DisableFastSnapshotRestoresResult, DisableFastSnapshotRestoresError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DisableFastSnapshotRestores");
+        params.put("Version", "2016-11-15");
+        DisableFastSnapshotRestoresRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DisableFastSnapshotRestoresError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DisableFastSnapshotRestoresResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DisableFastSnapshotRestoresResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Disables the specified resource attachment from propagating routes to the specified propagation route table.</p>
     fn disable_transit_gateway_route_table_propagation(
         &self,
@@ -80438,6 +84450,51 @@ impl Ec2 for Ec2Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result = EnableEbsEncryptionByDefaultResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Enables fast snapshot restores for the specified snapshots in the specified Availability Zones.</p> <p>You get the full benefit of fast snapshot restores after they enter the <code>enabled</code> state. To get the current state of fast snapshot restores, use <a>DescribeFastSnapshotRestores</a>. To disable fast snapshot restores, use <a>DisableFastSnapshotRestores</a>.</p>
+    fn enable_fast_snapshot_restores(
+        &self,
+        input: EnableFastSnapshotRestoresRequest,
+    ) -> RusotoFuture<EnableFastSnapshotRestoresResult, EnableFastSnapshotRestoresError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "EnableFastSnapshotRestores");
+        params.put("Version", "2016-11-15");
+        EnableFastSnapshotRestoresRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(EnableFastSnapshotRestoresError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = EnableFastSnapshotRestoresResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = EnableFastSnapshotRestoresResultDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -80967,6 +85024,51 @@ impl Ec2 for Ec2Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result = GetConsoleScreenshotResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Describes the default credit option for CPU usage of a burstable performance instance family.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    fn get_default_credit_specification(
+        &self,
+        input: GetDefaultCreditSpecificationRequest,
+    ) -> RusotoFuture<GetDefaultCreditSpecificationResult, GetDefaultCreditSpecificationError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetDefaultCreditSpecification");
+        params.put("Version", "2016-11-15");
+        GetDefaultCreditSpecificationRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetDefaultCreditSpecificationError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetDefaultCreditSpecificationResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = GetDefaultCreditSpecificationResultDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -81794,6 +85896,54 @@ impl Ec2 for Ec2Client {
         })
     }
 
+    /// <p>Modifies the default credit option for CPU usage of burstable performance instances. The default credit option is set at the account level per AWS Region, and is specified per instance family. All new burstable performance instances in the account launch using the default credit option.</p> <p> <code>ModifyDefaultCreditSpecification</code> is an asynchronous operation, which works at an AWS Region level and modifies the credit option for each Availability Zone. All zones in a Region are updated within five minutes. But if instances are launched during this operation, they might not get the new credit option until the zone is updated. To verify whether the update has occurred, you can call <code>GetDefaultCreditSpecification</code> and check <code>DefaultCreditSpecification</code> for updates.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    fn modify_default_credit_specification(
+        &self,
+        input: ModifyDefaultCreditSpecificationRequest,
+    ) -> RusotoFuture<ModifyDefaultCreditSpecificationResult, ModifyDefaultCreditSpecificationError>
+    {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyDefaultCreditSpecification");
+        params.put("Version", "2016-11-15");
+        ModifyDefaultCreditSpecificationRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyDefaultCreditSpecificationError::from_response(
+                        response,
+                    ))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyDefaultCreditSpecificationResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ModifyDefaultCreditSpecificationResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Changes the default customer master key (CMK) for EBS encryption by default for your account in this Region.</p> <p>AWS creates a unique AWS managed CMK in each Region for use with encryption by default. If you change the default CMK to a customer managed CMK, it is used instead of the AWS managed CMK. To reset the default CMK to the AWS managed CMK for EBS, use <a>ResetEbsDefaultKmsKeyId</a>.</p> <p>If you delete or disable the customer managed CMK that you specified for use with encryption by default, your instances will fail to launch.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn modify_ebs_default_kms_key_id(
         &self,
@@ -81839,7 +85989,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Modifies the specified EC2 Fleet.</p> <p>You can only modify an EC2 Fleet request of type <code>maintain</code>.</p> <p>While the EC2 Fleet is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your EC2 Fleet, increase its target capacity. The EC2 Fleet launches the additional Spot Instances according to the allocation strategy for the EC2 Fleet request. If the allocation strategy is <code>lowestPrice</code>, the EC2 Fleet launches instances using the Spot Instance pool with the lowest price. If the allocation strategy is <code>diversified</code>, the EC2 Fleet distributes the instances across the Spot Instance pools. If the allocation strategy is <code>capacityOptimized</code>, EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p> <p>To scale down your EC2 Fleet, decrease its target capacity. First, the EC2 Fleet cancels any open requests that exceed the new target capacity. You can request that the EC2 Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the EC2 Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>capacityOptimized</code>, the EC2 Fleet terminates the instances in the Spot Instance pools that have the least available Spot Instance capacity. If the allocation strategy is <code>diversified</code>, the EC2 Fleet terminates instances across the Spot Instance pools. Alternatively, you can request that the EC2 Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your EC2 Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
+    /// <p>Modifies the specified EC2 Fleet.</p> <p>You can only modify an EC2 Fleet request of type <code>maintain</code>.</p> <p>While the EC2 Fleet is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your EC2 Fleet, increase its target capacity. The EC2 Fleet launches the additional Spot Instances according to the allocation strategy for the EC2 Fleet request. If the allocation strategy is <code>lowest-price</code>, the EC2 Fleet launches instances using the Spot Instance pool with the lowest price. If the allocation strategy is <code>diversified</code>, the EC2 Fleet distributes the instances across the Spot Instance pools. If the allocation strategy is <code>capacity-optimized</code>, EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p> <p>To scale down your EC2 Fleet, decrease its target capacity. First, the EC2 Fleet cancels any open requests that exceed the new target capacity. You can request that the EC2 Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowest-price</code>, the EC2 Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>capacity-optimized</code>, the EC2 Fleet terminates the instances in the Spot Instance pools that have the least available Spot Instance capacity. If the allocation strategy is <code>diversified</code>, the EC2 Fleet terminates instances across the Spot Instance pools. Alternatively, you can request that the EC2 Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your EC2 Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
     fn modify_fleet(
         &self,
         input: ModifyFleetRequest,
@@ -81930,7 +86080,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Modify the auto-placement setting of a Dedicated Host. When auto-placement is enabled, any instances that you launch with a tenancy of <code>host</code> but without a specific host ID are placed onto any available Dedicated Host in your account that has auto-placement enabled. When auto-placement is disabled, you need to provide a host ID to have the instance launch onto a specific host. If no host ID is provided, the instance is launched onto a suitable host with auto-placement enabled.</p>
+    /// <p>Modify the auto-placement setting of a Dedicated Host. When auto-placement is enabled, any instances that you launch with a tenancy of <code>host</code> but without a specific host ID are placed onto any available Dedicated Host in your account that has auto-placement enabled. When auto-placement is disabled, you need to provide a host ID to have the instance launch onto a specific host. If no host ID is provided, the instance is launched onto a suitable host with auto-placement enabled.</p> <p>You can also use this API action to modify a Dedicated Host to support either multiple instance types in an instance family, or to support a specific instance type only.</p>
     fn modify_hosts(
         &self,
         input: ModifyHostsRequest,
@@ -82134,7 +86284,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Modifies the credit option for CPU usage on a running or stopped T2 or T3 instance. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Modifies the credit option for CPU usage on a running or stopped burstable performance instance. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn modify_instance_credit_specification(
         &self,
         input: ModifyInstanceCreditSpecificationRequest,
@@ -82217,6 +86367,51 @@ impl Ec2 for Ec2Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result = ModifyInstanceEventStartTimeResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Modify the instance metadata parameters on a running or stopped instance. When you modify the parameters on a stopped instance, they are applied when the instance is started. When you modify the parameters on a running instance, the API responds with a state of “pending”. After the parameter modifications are successfully applied to the instance, the state of the modifications changes from “pending” to “applied” in subsequent describe-instances API calls. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance Metadata and User Data</a>.</p>
+    fn modify_instance_metadata_options(
+        &self,
+        input: ModifyInstanceMetadataOptionsRequest,
+    ) -> RusotoFuture<ModifyInstanceMetadataOptionsResult, ModifyInstanceMetadataOptionsError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyInstanceMetadataOptions");
+        params.put("Version", "2016-11-15");
+        ModifyInstanceMetadataOptionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyInstanceMetadataOptionsError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyInstanceMetadataOptionsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ModifyInstanceMetadataOptionsResultDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -82486,7 +86681,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Allows or restricts mirroring network services.</p> <p> By default, Amazon DNS network services are not eligible for Traffic Mirror. Use <code>AddNetworkServices</code> to add network services to a Traffic Mirror filter. When a network service is added to the Traffic Mirror filter, all traffic related to that network service will be mirrored. When you no longer want to mirror network services, use <code>RemoveNetworkServices</code> to remove the network services from the Traffic Mirror filter. </p> <p>FFor information about filter rule properties, see <a href="https://docs.aws.amazon.com/vpc/latest/mirroring/traffic-mirroring-considerations.html#traffic-mirroring-network-services">Network Services</a> in the <i>Traffic Mirroring User Guide </i>.</p>
+    /// <p>Allows or restricts mirroring network services.</p> <p> By default, Amazon DNS network services are not eligible for Traffic Mirror. Use <code>AddNetworkServices</code> to add network services to a Traffic Mirror filter. When a network service is added to the Traffic Mirror filter, all traffic related to that network service will be mirrored. When you no longer want to mirror network services, use <code>RemoveNetworkServices</code> to remove the network services from the Traffic Mirror filter. </p> <p>For information about filter rule properties, see <a href="https://docs.aws.amazon.com/vpc/latest/mirroring/traffic-mirroring-considerations.html">Network Services</a> in the <i>Traffic Mirroring User Guide </i>.</p>
     fn modify_traffic_mirror_filter_network_services(
         &self,
         input: ModifyTrafficMirrorFilterNetworkServicesRequest,
@@ -83401,7 +87596,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Purchases a Reserved Instance for use with your account. With Reserved Instances, you pay a lower hourly rate compared to On-Demand instance pricing.</p> <p>Use <a>DescribeReservedInstancesOfferings</a> to get a list of Reserved Instance offerings that match your specifications. After you've purchased a Reserved Instance, you can check for your new Reserved Instance with <a>DescribeReservedInstances</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts-on-demand-reserved-instances.html">Reserved Instances</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Purchases a Reserved Instance for use with your account. With Reserved Instances, you pay a lower hourly rate compared to On-Demand instance pricing.</p> <p>Use <a>DescribeReservedInstancesOfferings</a> to get a list of Reserved Instance offerings that match your specifications. After you've purchased a Reserved Instance, you can check for your new Reserved Instance with <a>DescribeReservedInstances</a>.</p> <p>To queue a purchase for a future date and time, specify a purchase time. If you do not specify a purchase time, the default is the current time.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts-on-demand-reserved-instances.html">Reserved Instances</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn purchase_reserved_instances_offering(
         &self,
         input: PurchaseReservedInstancesOfferingRequest,
@@ -83522,7 +87717,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Registers an AMI. When you're creating an AMI, this is the final step you must complete before you can launch an instance from the AMI. For more information about creating AMIs, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami.html">Creating Your Own AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <note> <p>For Amazon EBS-backed instances, <a>CreateImage</a> creates and registers the AMI in a single request, so you don't have to register the AMI yourself.</p> </note> <p>You can also use <code>RegisterImage</code> to create an Amazon EBS-backed Linux AMI from a snapshot of a root device volume. You specify the snapshot using the block device mapping. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-launch-snapshot.html">Launching a Linux Instance from a Backup</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can't register an image where a secondary (non-root) snapshot has AWS Marketplace product codes.</p> <p>Some Linux distributions, such as Red Hat Enterprise Linux (RHEL) and SUSE Linux Enterprise Server (SLES), use the EC2 billing product code associated with an AMI to verify the subscription status for package updates. Creating an AMI from an EBS snapshot does not maintain this billing code, and instances launched from such an AMI are not able to connect to package update infrastructure. If you purchase a Reserved Instance offering for one of these Linux distributions and launch instances using an AMI that does not contain the required billing code, your Reserved Instance is not applied to these instances.</p> <p>To create an AMI for operating systems that require a billing code, see <a>CreateImage</a>.</p> <p>If needed, you can deregister an AMI at any time. Any modifications you make to an AMI backed by an instance store volume invalidates its registration. If you make changes to an image, deregister the previous image and register the new image.</p>
+    /// <p>Registers an AMI. When you're creating an AMI, this is the final step you must complete before you can launch an instance from the AMI. For more information about creating AMIs, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami.html">Creating Your Own AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <note> <p>For Amazon EBS-backed instances, <a>CreateImage</a> creates and registers the AMI in a single request, so you don't have to register the AMI yourself.</p> </note> <p>You can also use <code>RegisterImage</code> to create an Amazon EBS-backed Linux AMI from a snapshot of a root device volume. You specify the snapshot using the block device mapping. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-launch-snapshot.html">Launching a Linux Instance from a Backup</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can't register an image where a secondary (non-root) snapshot has AWS Marketplace product codes.</p> <p>Windows and some Linux distributions, such as Red Hat Enterprise Linux (RHEL) and SUSE Linux Enterprise Server (SLES), use the EC2 billing product code associated with an AMI to verify the subscription status for package updates. To create a new AMI for operating systems that require a billing product code, do the following:</p> <ol> <li> <p>Launch an instance from an existing AMI with that billing product code.</p> </li> <li> <p>Customize the instance.</p> </li> <li> <p>Create a new AMI from the instance using <a>CreateImage</a> to preserve the billing product code association.</p> </li> </ol> <p>If you purchase a Reserved Instance to apply to an On-Demand Instance that was launched from an AMI with a billing product code, make sure that the Reserved Instance has the matching billing product code. If you purchase a Reserved Instance without the matching billing product code, the Reserved Instance will not be applied to the On-Demand Instance. </p> <p>If needed, you can deregister an AMI at any time. Any modifications you make to an AMI backed by an instance store volume invalidates its registration. If you make changes to an image, deregister the previous image and register the new image.</p>
     fn register_image(
         &self,
         input: RegisterImageRequest,

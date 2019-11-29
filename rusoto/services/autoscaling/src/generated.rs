@@ -462,11 +462,13 @@ pub struct AutoScalingGroup {
     pub launch_template: Option<LaunchTemplateSpecification>,
     /// <p>One or more load balancers associated with the group.</p>
     pub load_balancer_names: Option<Vec<String>>,
+    /// <p>The maximum amount of time, in seconds, that an instance can be in service.</p> <p>Valid Range: Minimum value of 604800.</p>
+    pub max_instance_lifetime: Option<i64>,
     /// <p>The maximum size of the group.</p>
     pub max_size: i64,
     /// <p>The minimum size of the group.</p>
     pub min_size: i64,
-    /// <p>The mixed instances policy for the group. </p>
+    /// <p>The mixed instances policy for the group.</p>
     pub mixed_instances_policy: Option<MixedInstancesPolicy>,
     /// <p>Indicates whether newly launched instances are protected from termination by Amazon EC2 Auto Scaling when scaling in.</p>
     pub new_instances_protected_from_scale_in: Option<bool>,
@@ -568,6 +570,12 @@ impl AutoScalingGroupDeserializer {
                     obj.load_balancer_names.get_or_insert(vec![]).extend(
                         LoadBalancerNamesDeserializer::deserialize("LoadBalancerNames", stack)?,
                     );
+                }
+                "MaxInstanceLifetime" => {
+                    obj.max_instance_lifetime = Some(MaxInstanceLifetimeDeserializer::deserialize(
+                        "MaxInstanceLifetime",
+                        stack,
+                    )?);
                 }
                 "MaxSize" => {
                     obj.max_size =
@@ -687,9 +695,9 @@ impl AutoScalingGroupNamesSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AutoScalingGroupNamesType {
-    /// <p>The names of the Auto Scaling groups. Each name can be a maximum of 1600 characters. By default, you can only specify up to 50 names. You can optionally increase this limit using the <code>MaxRecords</code> parameter. </p> <p>If you omit this parameter, all Auto Scaling groups are described.</p>
+    /// <p>The names of the Auto Scaling groups. Each name can be a maximum of 1600 characters. By default, you can only specify up to 50 names. You can optionally increase this limit using the <code>MaxRecords</code> parameter.</p> <p>If you omit this parameter, all Auto Scaling groups are described.</p>
     pub auto_scaling_group_names: Option<Vec<String>>,
-    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>. </p>
+    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -781,6 +789,8 @@ pub struct AutoScalingInstanceDetails {
     pub health_status: String,
     /// <p>The ID of the instance.</p>
     pub instance_id: String,
+    /// <p>The instance type of the EC2 instance.</p>
+    pub instance_type: Option<String>,
     /// <p>The launch configuration used to launch the instance. This value is not available if you attached the instance to the Auto Scaling group.</p>
     pub launch_configuration_name: Option<String>,
     /// <p>The launch template for the instance.</p>
@@ -789,6 +799,8 @@ pub struct AutoScalingInstanceDetails {
     pub lifecycle_state: String,
     /// <p>Indicates whether the instance is protected from termination by Amazon EC2 Auto Scaling when scaling in.</p>
     pub protected_from_scale_in: bool,
+    /// <p>The number of capacity units contributed by the instance based on its instance type.</p> <p>Valid Range: Minimum value of 1. Maximum value of 999.</p>
+    pub weighted_capacity: Option<String>,
 }
 
 struct AutoScalingInstanceDetailsDeserializer;
@@ -821,6 +833,12 @@ impl AutoScalingInstanceDetailsDeserializer {
                         obj.instance_id =
                             XmlStringMaxLen19Deserializer::deserialize("InstanceId", stack)?;
                     }
+                    "InstanceType" => {
+                        obj.instance_type = Some(XmlStringMaxLen255Deserializer::deserialize(
+                            "InstanceType",
+                            stack,
+                        )?);
+                    }
                     "LaunchConfigurationName" => {
                         obj.launch_configuration_name =
                             Some(XmlStringMaxLen255Deserializer::deserialize(
@@ -844,6 +862,12 @@ impl AutoScalingInstanceDetailsDeserializer {
                             "ProtectedFromScaleIn",
                             stack,
                         )?;
+                    }
+                    "WeightedCapacity" => {
+                        obj.weighted_capacity = Some(XmlStringMaxLen32Deserializer::deserialize(
+                            "WeightedCapacity",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -974,7 +998,7 @@ impl AvailabilityZonesSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct BatchDeleteScheduledActionAnswer {
-    /// <p>The names of the scheduled actions that could not be deleted, including an error message. </p>
+    /// <p>The names of the scheduled actions that could not be deleted, including an error message.</p>
     pub failed_scheduled_actions: Option<Vec<FailedScheduledUpdateGroupActionRequest>>,
 }
 
@@ -1073,7 +1097,7 @@ impl BatchPutScheduledUpdateGroupActionAnswerDeserializer {
 pub struct BatchPutScheduledUpdateGroupActionType {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>One or more scheduled actions. The maximum number allowed is 50. </p>
+    /// <p>One or more scheduled actions. The maximum number allowed is 50.</p>
     pub scheduled_update_group_actions: Vec<ScheduledUpdateGroupActionRequest>,
 }
 
@@ -1383,6 +1407,8 @@ pub struct CreateAutoScalingGroupType {
     pub lifecycle_hook_specification_list: Option<Vec<LifecycleHookSpecification>>,
     /// <p>A list of Classic Load Balancers associated with this Auto Scaling group. For Application Load Balancers and Network Load Balancers, specify a list of target groups using the <code>TargetGroupARNs</code> property instead.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html">Using a Load Balancer with an Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub load_balancer_names: Option<Vec<String>>,
+    /// <p>The maximum amount of time, in seconds, that an instance can be in service.</p> <p>Valid Range: Minimum value of 604800.</p>
+    pub max_instance_lifetime: Option<i64>,
     /// <p>The maximum size of the group.</p>
     pub max_size: i64,
     /// <p>The minimum size of the group.</p>
@@ -1470,6 +1496,12 @@ impl CreateAutoScalingGroupTypeSerializer {
                 field_value,
             );
         }
+        if let Some(ref field_value) = obj.max_instance_lifetime {
+            params.put(
+                &format!("{}{}", prefix, "MaxInstanceLifetime"),
+                &field_value,
+            );
+        }
         params.put(&format!("{}{}", prefix, "MaxSize"), &obj.max_size);
         params.put(&format!("{}{}", prefix, "MinSize"), &obj.min_size);
         if let Some(ref field_value) = obj.mixed_instances_policy {
@@ -1523,19 +1555,19 @@ pub struct CreateLaunchConfigurationType {
     pub associate_public_ip_address: Option<bool>,
     /// <p>A block device mapping, which specifies the block devices for the instance. You can specify virtual devices and EBS volumes. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html">Block Device Mapping</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
-    /// <p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>This parameter can only be used if you are launching EC2-Classic instances. </p>
+    /// <p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>This parameter can only be used if you are launching EC2-Classic instances.</p>
     pub classic_link_vpc_id: Option<String>,
-    /// <p>The IDs of one or more security groups for the specified ClassicLink-enabled VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you specify the <code>ClassicLinkVPCId</code> parameter, you must specify this parameter. </p>
+    /// <p>The IDs of one or more security groups for the specified ClassicLink-enabled VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you specify the <code>ClassicLinkVPCId</code> parameter, you must specify this parameter.</p>
     pub classic_link_vpc_security_groups: Option<Vec<String>>,
-    /// <p>Specifies whether the launch configuration is optimized for EBS I/O (<code>true</code>) or not (<code>false</code>). The optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization is not available with all instance types. Additional fees are incurred when you enable EBS optimization for an instance type that is not EBS-optimized by default. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html">Amazon EBS-Optimized Instances</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>The default value is <code>false</code>. </p>
+    /// <p>Specifies whether the launch configuration is optimized for EBS I/O (<code>true</code>) or not (<code>false</code>). The optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization is not available with all instance types. Additional fees are incurred when you enable EBS optimization for an instance type that is not EBS-optimized by default. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html">Amazon EBS-Optimized Instances</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>The default value is <code>false</code>.</p>
     pub ebs_optimized: Option<bool>,
-    /// <p>The name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance. The instance profile contains the IAM role. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/us-iam-role.html">IAM Role for Applications That Run on Amazon EC2 Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance. The instance profile contains the IAM role.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/us-iam-role.html">IAM Role for Applications That Run on Amazon EC2 Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub iam_instance_profile: Option<String>,
     /// <p>The ID of the Amazon Machine Image (AMI) that was assigned during registration. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html">Finding an AMI</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>ImageId</code>.</p>
     pub image_id: Option<String>,
     /// <p>The ID of the instance to use to create the launch configuration. The new launch configuration derives attributes from the instance, except for the block device mapping.</p> <p>To create a launch configuration with a block device mapping or override any other instance attributes, specify them as part of the same request.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-lc-with-instanceID.html">Create a Launch Configuration Using an EC2 Instance</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you do not specify <code>InstanceId</code>, you must specify both <code>ImageId</code> and <code>InstanceType</code>.</p>
     pub instance_id: Option<String>,
-    /// <p><p>Controls whether instances in this group are launched with detailed (<code>true</code>) or basic (<code>false</code>) monitoring. </p> <p>The default value is <code>true</code> (enabled). </p> <important> <p>When detailed monitoring is enabled, Amazon CloudWatch generates metrics every minute and your account is charged a fee. When you disable detailed monitoring, CloudWatch generates metrics every 5 minutes. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html#enable-as-instance-metrics">Configure Monitoring for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p> </important></p>
+    /// <p><p>Controls whether instances in this group are launched with detailed (<code>true</code>) or basic (<code>false</code>) monitoring.</p> <p>The default value is <code>true</code> (enabled).</p> <important> <p>When detailed monitoring is enabled, Amazon CloudWatch generates metrics every minute and your account is charged a fee. When you disable detailed monitoring, CloudWatch generates metrics every 5 minutes. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html#enable-as-instance-metrics">Configure Monitoring for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> </important></p>
     pub instance_monitoring: Option<InstanceMonitoring>,
     /// <p>Specifies the instance type of the EC2 instance.</p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon EC2 User Guide for Linux Instances.</i> </p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>InstanceType</code>.</p>
     pub instance_type: Option<String>,
@@ -1545,13 +1577,13 @@ pub struct CreateLaunchConfigurationType {
     pub key_name: Option<String>,
     /// <p>The name of the launch configuration. This name must be unique per Region per account.</p>
     pub launch_configuration_name: String,
-    /// <p>The tenancy of the instance. An instance with <code>dedicated</code> tenancy runs on isolated, single-tenant hardware and can only be launched into a VPC.</p> <p>To launch dedicated instances into a shared tenancy VPC (a VPC with the instance placement tenancy attribute set to <code>default</code>), you must set the value of this parameter to <code>dedicated</code>.</p> <p>If you specify <code>PlacementTenancy</code>, you must specify at least one subnet for <code>VPCZoneIdentifier</code> when you create your group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-vpc-tenancy">Instance Placement Tenancy</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Valid values: <code>default</code> | <code>dedicated</code> </p>
+    /// <p>The tenancy of the instance. An instance with <code>dedicated</code> tenancy runs on isolated, single-tenant hardware and can only be launched into a VPC.</p> <p>To launch dedicated instances into a shared tenancy VPC (a VPC with the instance placement tenancy attribute set to <code>default</code>), you must set the value of this parameter to <code>dedicated</code>.</p> <p>If you specify <code>PlacementTenancy</code>, you must specify at least one subnet for <code>VPCZoneIdentifier</code> when you create your group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-vpc-tenancy">Instance Placement Tenancy</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Valid Values: <code>default</code> | <code>dedicated</code> </p>
     pub placement_tenancy: Option<String>,
     /// <p>The ID of the RAM disk to select.</p>
     pub ramdisk_id: Option<String>,
     /// <p>A list that contains the security groups to assign to the instances in the Auto Scaling group.</p> <p>[EC2-VPC] Specify the security group IDs. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>[EC2-Classic] Specify either the security group names or the security group IDs. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Amazon EC2 Security Groups</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub security_groups: Option<Vec<String>>,
-    /// <p><p>The maximum hourly price to be paid for any Spot Instance launched to fulfill the request. Spot Instances are launched when the price you specify exceeds the current Spot market price. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-launch-spot-instances.html">Launching Spot Instances in Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If a Spot price is set, then the Auto Scaling group will only launch instances when the Spot price has been met, regardless of the setting in the Auto Scaling group&#39;s <code>DesiredCapacity</code>. </p> <note> <p>When you change your Spot price by creating a new launch configuration, running instances will continue to run as long as the Spot price for those running instances is higher than the current Spot market price. </p> </note></p>
+    /// <p><p>The maximum hourly price to be paid for any Spot Instance launched to fulfill the request. Spot Instances are launched when the price you specify exceeds the current Spot price. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-launch-spot-instances.html">Launching Spot Instances in Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <note> <p>When you change your maximum price by creating a new launch configuration, running instances will continue to run as long as the maximum price for those running instances is higher than the current Spot price.</p> </note></p>
     pub spot_price: Option<String>,
     /// <p>The Base64-encoded user data to make available to the launched EC2 instances. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance Metadata and User Data</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub user_data: Option<String>,
@@ -1662,7 +1694,7 @@ impl CreateOrUpdateTagsTypeSerializer {
     }
 }
 
-/// <p>Represents a CloudWatch metric of your choosing for a target tracking scaling policy to use with Amazon EC2 Auto Scaling.</p> <p>To create your customized metric specification:</p> <ul> <li> <p>Add values for each required parameter from CloudWatch. You can use an existing metric, or a new metric that you create. To use your own metric, you must first publish the metric to CloudWatch. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publish Custom Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> </li> <li> <p>Choose a metric that changes proportionally with capacity. The value of the metric should increase or decrease in inverse proportion to the number of capacity units. That is, the value of the metric should decrease when capacity increases. </p> </li> </ul> <p>For more information about CloudWatch, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html">Amazon CloudWatch Concepts</a>. </p>
+/// <p>Represents a CloudWatch metric of your choosing for a target tracking scaling policy to use with Amazon EC2 Auto Scaling.</p> <p>To create your customized metric specification:</p> <ul> <li> <p>Add values for each required parameter from CloudWatch. You can use an existing metric, or a new metric that you create. To use your own metric, you must first publish the metric to CloudWatch. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publish Custom Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> </li> <li> <p>Choose a metric that changes proportionally with capacity. The value of the metric should increase or decrease in inverse proportion to the number of capacity units. That is, the value of the metric should decrease when capacity increases.</p> </li> </ul> <p>For more information about CloudWatch, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html">Amazon CloudWatch Concepts</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CustomizedMetricSpecification {
     /// <p>The dimensions of the metric.</p> <p>Conditional: If you published your metric with dimensions, you must specify the same dimensions in your scaling policy.</p>
@@ -2832,15 +2864,15 @@ impl DisableScaleInDeserializer {
 pub struct Ebs {
     /// <p>Indicates whether the volume is deleted on instance termination. For Amazon EC2 Auto Scaling, the default value is <code>true</code>.</p>
     pub delete_on_termination: Option<bool>,
-    /// <p>Specifies whether the volume should be encrypted. Encrypted EBS volumes can only be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>. If your AMI uses encrypted volumes, you can also only launch it on supported instance types.</p> <note> <p>If you are creating a volume from a snapshot, you cannot specify an encryption value. Volumes that are created from encrypted snapshots are automatically encrypted, and volumes that are created from unencrypted snapshots are automatically unencrypted. By default, encrypted snapshots use the AWS managed CMK that is used for EBS encryption, but you can specify a custom CMK when you create the snapshot. The ability to encrypt a snapshot during copying also allows you to apply a new CMK to an already-encrypted snapshot. Volumes restored from the resulting copy are only accessible using the new CMK. </p> <p>Enabling <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-by-default">encryption by default</a> results in all EBS volumes being encrypted with the AWS managed CMK or a customer managed CMK, whether or not the snapshot was encrypted.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIEncryption.html">Using Encryption with EBS-Backed AMIs</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/key-policy-requirements-EBS-encryption.html">Required CMK Key Policy for Use with Encrypted Volumes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Specifies whether the volume should be encrypted. Encrypted EBS volumes can only be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>. If your AMI uses encrypted volumes, you can also only launch it on supported instance types.</p> <note> <p>If you are creating a volume from a snapshot, you cannot specify an encryption value. Volumes that are created from encrypted snapshots are automatically encrypted, and volumes that are created from unencrypted snapshots are automatically unencrypted. By default, encrypted snapshots use the AWS managed CMK that is used for EBS encryption, but you can specify a custom CMK when you create the snapshot. The ability to encrypt a snapshot during copying also allows you to apply a new CMK to an already-encrypted snapshot. Volumes restored from the resulting copy are only accessible using the new CMK.</p> <p>Enabling <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-by-default">encryption by default</a> results in all EBS volumes being encrypted with the AWS managed CMK or a customer managed CMK, whether or not the snapshot was encrypted.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIEncryption.html">Using Encryption with EBS-Backed AMIs</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/key-policy-requirements-EBS-encryption.html">Required CMK Key Policy for Use with Encrypted Volumes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub encrypted: Option<bool>,
     /// <p>The number of I/O operations per second (IOPS) to provision for the volume. The maximum ratio of IOPS to volume size (in GiB) is 50:1. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>Conditional: This parameter is required when the volume type is <code>io1</code>. (Not used with <code>standard</code>, <code>gp2</code>, <code>st1</code>, or <code>sc1</code> volumes.) </p>
     pub iops: Option<i64>,
-    /// <p>The snapshot ID of the volume to use. </p> <p>Conditional: This parameter is optional if you specify a volume size. If you specify both <code>SnapshotId</code> and <code>VolumeSize</code>, <code>VolumeSize</code> must be equal or greater than the size of the snapshot.</p>
+    /// <p>The snapshot ID of the volume to use.</p> <p>Conditional: This parameter is optional if you specify a volume size. If you specify both <code>SnapshotId</code> and <code>VolumeSize</code>, <code>VolumeSize</code> must be equal or greater than the size of the snapshot.</p>
     pub snapshot_id: Option<String>,
-    /// <p><p>The volume size, in Gibibytes (GiB). </p> <p>This can be a number from 1-1,024 for <code>standard</code>, 4-16,384 for <code>io1</code>, 1-16,384 for <code>gp2</code>, and 500-16,384 for <code>st1</code> and <code>sc1</code>. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you create a volume from a snapshot and you don&#39;t specify a volume size, the default is the snapshot size.</p> <note> <p>At least one of VolumeSize or SnapshotId is required.</p> </note></p>
+    /// <p><p>The volume size, in Gibibytes (GiB).</p> <p>This can be a number from 1-1,024 for <code>standard</code>, 4-16,384 for <code>io1</code>, 1-16,384 for <code>gp2</code>, and 500-16,384 for <code>st1</code> and <code>sc1</code>. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you create a volume from a snapshot and you don&#39;t specify a volume size, the default is the snapshot size.</p> <note> <p>At least one of VolumeSize or SnapshotId is required.</p> </note></p>
     pub volume_size: Option<i64>,
-    /// <p>The volume type, which can be <code>standard</code> for Magnetic, <code>io1</code> for Provisioned IOPS SSD, <code>gp2</code> for General Purpose SSD, <code>st1</code> for Throughput Optimized HDD, or <code>sc1</code> for Cold HDD. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>Valid values: <code>standard</code> | <code>io1</code> | <code>gp2</code> | <code>st1</code> | <code>sc1</code> </p>
+    /// <p>The volume type, which can be <code>standard</code> for Magnetic, <code>io1</code> for Provisioned IOPS SSD, <code>gp2</code> for General Purpose SSD, <code>st1</code> for Throughput Optimized HDD, or <code>sc1</code> for Cold HDD. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>Valid Values: <code>standard</code> | <code>io1</code> | <code>gp2</code> | <code>st1</code> | <code>sc1</code> </p>
     pub volume_type: Option<String>,
 }
 
@@ -3337,6 +3369,8 @@ pub struct Instance {
     pub health_status: String,
     /// <p>The ID of the instance.</p>
     pub instance_id: String,
+    /// <p>The instance type of the EC2 instance.</p>
+    pub instance_type: Option<String>,
     /// <p>The launch configuration associated with the instance.</p>
     pub launch_configuration_name: Option<String>,
     /// <p>The launch template for the instance.</p>
@@ -3345,6 +3379,8 @@ pub struct Instance {
     pub lifecycle_state: String,
     /// <p>Indicates whether the instance is protected from termination by Amazon EC2 Auto Scaling when scaling in.</p>
     pub protected_from_scale_in: bool,
+    /// <p>The number of capacity units contributed by the instance based on its instance type.</p> <p>Valid Range: Minimum value of 1. Maximum value of 999.</p>
+    pub weighted_capacity: Option<String>,
 }
 
 struct InstanceDeserializer;
@@ -3368,6 +3404,12 @@ impl InstanceDeserializer {
                     obj.instance_id =
                         XmlStringMaxLen19Deserializer::deserialize("InstanceId", stack)?;
                 }
+                "InstanceType" => {
+                    obj.instance_type = Some(XmlStringMaxLen255Deserializer::deserialize(
+                        "InstanceType",
+                        stack,
+                    )?);
+                }
                 "LaunchConfigurationName" => {
                     obj.launch_configuration_name =
                         Some(XmlStringMaxLen255Deserializer::deserialize(
@@ -3389,6 +3431,12 @@ impl InstanceDeserializer {
                 "ProtectedFromScaleIn" => {
                     obj.protected_from_scale_in =
                         InstanceProtectedDeserializer::deserialize("ProtectedFromScaleIn", stack)?;
+                }
+                "WeightedCapacity" => {
+                    obj.weighted_capacity = Some(XmlStringMaxLen32Deserializer::deserialize(
+                        "WeightedCapacity",
+                        stack,
+                    )?);
                 }
                 _ => skip_tree(stack),
             }
@@ -3479,18 +3527,18 @@ impl InstancesDeserializer {
         })
     }
 }
-/// <p>Describes an instances distribution for an Auto Scaling group with <a>MixedInstancesPolicy</a>.</p> <p>The instances distribution specifies the distribution of On-Demand Instances and Spot Instances, the maximum price to pay for Spot Instances, and how the Auto Scaling group allocates instance types to fulfill On-Demand and Spot capacity.</p>
+/// <p>Describes an instances distribution for an Auto Scaling group with <a>MixedInstancesPolicy</a>.</p> <p>The instances distribution specifies the distribution of On-Demand Instances and Spot Instances, the maximum price to pay for Spot Instances, and how the Auto Scaling group allocates instance types to fulfill On-Demand and Spot capacity.</p> <p>When you update <code>SpotAllocationStrategy</code>, <code>SpotInstancePools</code>, or <code>SpotMaxPrice</code>, this update action does not deploy any changes across the running Amazon EC2 instances in the group. Your existing Spot Instances continue to run as long as the maximum price for those instances is higher than the current Spot price. When scale out occurs, Amazon EC2 Auto Scaling launches instances based on the new settings. When scale in occurs, Amazon EC2 Auto Scaling terminates instances according to the group's termination policies.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstancesDistribution {
-    /// <p>Indicates how to allocate instance types to fulfill On-Demand capacity. </p> <p>The only valid value is <code>prioritized</code>, which is also the default value. This strategy uses the order of instance type overrides for the <a>LaunchTemplate</a> to define the launch priority of each instance type. The first instance type in the array is prioritized higher than the last. If all your On-Demand capacity cannot be fulfilled using your highest priority instance, then the Auto Scaling groups launches the remaining capacity using the second priority instance type, and so on. </p>
+    /// <p>Indicates how to allocate instance types to fulfill On-Demand capacity.</p> <p>The only valid value is <code>prioritized</code>, which is also the default value. This strategy uses the order of instance type overrides for the <a>LaunchTemplate</a> to define the launch priority of each instance type. The first instance type in the array is prioritized higher than the last. If all your On-Demand capacity cannot be fulfilled using your highest priority instance, then the Auto Scaling groups launches the remaining capacity using the second priority instance type, and so on.</p>
     pub on_demand_allocation_strategy: Option<String>,
-    /// <p>The minimum amount of the Auto Scaling group's capacity that must be fulfilled by On-Demand Instances. This base portion is provisioned first as your group scales.</p> <p>The default value is <code>0</code>. If you leave this parameter set to <code>0</code>, On-Demand Instances are launched as a percentage of the Auto Scaling group's desired capacity, per the <code>OnDemandPercentageAboveBaseCapacity</code> setting.</p>
+    /// <p><p>The minimum amount of the Auto Scaling group&#39;s capacity that must be fulfilled by On-Demand Instances. This base portion is provisioned first as your group scales.</p> <p>Default if not set is 0. If you leave it set to 0, On-Demand Instances are launched as a percentage of the Auto Scaling group&#39;s desired capacity, per the <code>OnDemandPercentageAboveBaseCapacity</code> setting.</p> <note> <p>An update to this setting means a gradual replacement of instances to maintain the specified number of On-Demand Instances for your base capacity. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones.</p> </note></p>
     pub on_demand_base_capacity: Option<i64>,
-    /// <p>Controls the percentages of On-Demand Instances and Spot Instances for your additional capacity beyond <code>OnDemandBaseCapacity</code>. The range is 0–100.</p> <p>The default value is <code>100</code>. If you leave this parameter set to <code>100</code>, the percentages are 100% for On-Demand Instances and 0% for Spot Instances. </p>
+    /// <p>Controls the percentages of On-Demand Instances and Spot Instances for your additional capacity beyond <code>OnDemandBaseCapacity</code>.</p> <p>Default if not set is 100. If you leave it set to 100, the percentages are 100% for On-Demand Instances and 0% for Spot Instances.</p> <note> <p>An update to this setting means a gradual replacement of instances to maintain the percentage of On-Demand Instances for your additional capacity above the base capacity. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones.</p> </note> <p>Valid Range: Minimum value of 0. Maximum value of 100.</p>
     pub on_demand_percentage_above_base_capacity: Option<i64>,
-    /// <p>Indicates how to allocate instances across Spot Instance pools. </p> <p>If the allocation strategy is <code>lowest-price</code>, the Auto Scaling group launches instances using the Spot pools with the lowest price, and evenly allocates your instances across the number of Spot pools that you specify. If the allocation strategy is <code>capacity-optimized</code>, the Auto Scaling group launches instances using Spot pools that are optimally chosen based on the available Spot capacity. </p> <p>The default Spot allocation strategy for calls that you make through the API, the AWS CLI, or the AWS SDKs is <code>lowest-price</code>. The default Spot allocation strategy for the AWS Management Console is <code>capacity-optimized</code>.</p> <p>Valid values: <code>lowest-price</code> | <code>capacity-optimized</code> </p>
+    /// <p>Indicates how to allocate instances across Spot Instance pools.</p> <p>If the allocation strategy is <code>lowest-price</code>, the Auto Scaling group launches instances using the Spot pools with the lowest price, and evenly allocates your instances across the number of Spot pools that you specify. If the allocation strategy is <code>capacity-optimized</code>, the Auto Scaling group launches instances using Spot pools that are optimally chosen based on the available Spot capacity.</p> <p>The default Spot allocation strategy for calls that you make through the API, the AWS CLI, or the AWS SDKs is <code>lowest-price</code>. The default Spot allocation strategy for the AWS Management Console is <code>capacity-optimized</code>.</p> <p>Valid values: <code>lowest-price</code> | <code>capacity-optimized</code> </p>
     pub spot_allocation_strategy: Option<String>,
-    /// <p>The number of Spot Instance pools across which to allocate your Spot Instances. The Spot pools are determined from the different instance types in the Overrides array of <a>LaunchTemplate</a>. The range is 1–20. The default value is <code>2</code>. </p> <p>Valid only when the Spot allocation strategy is <code>lowest-price</code>. </p>
+    /// <p>The number of Spot Instance pools across which to allocate your Spot Instances. The Spot pools are determined from the different instance types in the Overrides array of <a>LaunchTemplate</a>. Default if not set is 2.</p> <p>Used only when the Spot allocation strategy is <code>lowest-price</code>.</p> <p>Valid Range: Minimum value of 1. Maximum value of 20.</p>
     pub spot_instance_pools: Option<i64>,
     /// <p>The maximum price per unit hour that you are willing to pay for a Spot Instance. If you leave the value of this parameter blank (which is the default), the maximum Spot price is set at the On-Demand price.</p> <p>To remove a value that you previously set, include the parameter but leave the value blank.</p>
     pub spot_max_price: Option<String>,
@@ -3596,23 +3644,23 @@ impl InstancesDistributionSerializer {
 /// <p>Describes a launch configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchConfiguration {
-    /// <p>For Auto Scaling groups that are running in a VPC, specifies whether to assign a public IP address to the group's instances. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>For Auto Scaling groups that are running in a VPC, specifies whether to assign a public IP address to the group's instances.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub associate_public_ip_address: Option<bool>,
     /// <p>A block device mapping, which specifies the block devices for the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html">Block Device Mapping</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
-    /// <p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub classic_link_vpc_id: Option<String>,
-    /// <p>The IDs of one or more security groups for the VPC specified in <code>ClassicLinkVPCId</code>. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The IDs of one or more security groups for the VPC specified in <code>ClassicLinkVPCId</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub classic_link_vpc_security_groups: Option<Vec<String>>,
     /// <p>The creation date and time for the launch configuration.</p>
     pub created_time: String,
-    /// <p>Specifies whether the launch configuration is optimized for EBS I/O (<code>true</code>) or not (<code>false</code>). </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html">Amazon EBS-Optimized Instances</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>Specifies whether the launch configuration is optimized for EBS I/O (<code>true</code>) or not (<code>false</code>).</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html">Amazon EBS-Optimized Instances</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub ebs_optimized: Option<bool>,
-    /// <p>The name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance. The instance profile contains the IAM role. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/us-iam-role.html">IAM Role for Applications That Run on Amazon EC2 Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance. The instance profile contains the IAM role.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/us-iam-role.html">IAM Role for Applications That Run on Amazon EC2 Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub iam_instance_profile: Option<String>,
-    /// <p>The ID of the Amazon Machine Image (AMI) to use to launch your EC2 instances. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html">Finding an AMI</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>The ID of the Amazon Machine Image (AMI) to use to launch your EC2 instances.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html">Finding an AMI</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub image_id: String,
-    /// <p>Controls whether instances in this group are launched with detailed (<code>true</code>) or basic (<code>false</code>) monitoring. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html#enable-as-instance-metrics">Configure Monitoring for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>
+    /// <p>Controls whether instances in this group are launched with detailed (<code>true</code>) or basic (<code>false</code>) monitoring.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html#enable-as-instance-metrics">Configure Monitoring for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub instance_monitoring: Option<InstanceMonitoring>,
     /// <p>The instance type for the instances.</p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon EC2 User Guide for Linux Instances.</i> </p>
     pub instance_type: String,
@@ -3628,11 +3676,11 @@ pub struct LaunchConfiguration {
     pub placement_tenancy: Option<String>,
     /// <p>The ID of the RAM disk associated with the AMI.</p>
     pub ramdisk_id: Option<String>,
-    /// <p>A list that contains the security groups to assign to the instances in the Auto Scaling group. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>A list that contains the security groups to assign to the instances in the Auto Scaling group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     pub security_groups: Option<Vec<String>>,
-    /// <p>The maximum hourly price to be paid for any Spot Instance launched to fulfill the request. Spot Instances are launched when the price you specify exceeds the current Spot market price. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-launch-spot-instances.html">Launching Spot Instances in Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The maximum hourly price to be paid for any Spot Instance launched to fulfill the request. Spot Instances are launched when the price you specify exceeds the current Spot price.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-launch-spot-instances.html">Launching Spot Instances in Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub spot_price: Option<String>,
-    /// <p>The Base64-encoded user data to make available to the launched EC2 instances. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance Metadata and User Data</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>The Base64-encoded user data to make available to the launched EC2 instances.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance Metadata and User Data</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub user_data: Option<String>,
 }
 
@@ -3879,12 +3927,12 @@ impl LaunchConfigurationsTypeDeserializer {
         )
     }
 }
-/// <p>Describes a launch template and overrides. </p> <p>The overrides are used to override the instance type specified by the launch template with multiple instance types that can be used to launch On-Demand Instances and Spot Instances. </p>
+/// <p>Describes a launch template and overrides.</p> <p>The overrides are used to override the instance type specified by the launch template with multiple instance types that can be used to launch On-Demand Instances and Spot Instances.</p> <p>When you update the launch template or overrides, existing Amazon EC2 instances continue to run. When scale out occurs, Amazon EC2 Auto Scaling launches instances to match the new settings. When scale in occurs, Amazon EC2 Auto Scaling terminates instances according to the group's termination policies.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplate {
-    /// <p>The launch template to use. You must specify either the launch template ID or launch template name in the request. </p>
+    /// <p>The launch template to use. You must specify either the launch template ID or launch template name in the request.</p>
     pub launch_template_specification: Option<LaunchTemplateSpecification>,
-    /// <p>Any parameters that you specify override the same parameters in the launch template. Currently, the only supported override is instance type. You must specify between 2 and 20 overrides.</p>
+    /// <p>An optional setting. Any parameters that you specify override the same parameters in the launch template. Currently, the only supported override is instance type. You can specify between 1 and 20 instance types.</p>
     pub overrides: Option<Vec<LaunchTemplateOverrides>>,
 }
 
@@ -3953,11 +4001,13 @@ impl LaunchTemplateNameDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes an override for a launch template. </p>
+/// <p>Describes an override for a launch template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateOverrides {
-    /// <p>The instance type. </p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide.</i> </p>
+    /// <p>The instance type.</p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide.</i> </p>
     pub instance_type: Option<String>,
+    /// <p>The number of capacity units, which gives the instance type a proportional weight to other instance types. For example, larger instance types are generally weighted more than smaller instance types. These are the same units that you chose to set the desired capacity in terms of instances, or a performance attribute such as vCPUs, memory, or I/O.</p> <p>Valid Range: Minimum value of 1. Maximum value of 999.</p>
+    pub weighted_capacity: Option<String>,
 }
 
 struct LaunchTemplateOverridesDeserializer;
@@ -3975,6 +4025,12 @@ impl LaunchTemplateOverridesDeserializer {
                     "InstanceType" => {
                         obj.instance_type = Some(XmlStringMaxLen255Deserializer::deserialize(
                             "InstanceType",
+                            stack,
+                        )?);
+                    }
+                    "WeightedCapacity" => {
+                        obj.weighted_capacity = Some(XmlStringMaxLen32Deserializer::deserialize(
+                            "WeightedCapacity",
                             stack,
                         )?);
                     }
@@ -3997,6 +4053,9 @@ impl LaunchTemplateOverridesSerializer {
 
         if let Some(ref field_value) = obj.instance_type {
             params.put(&format!("{}{}", prefix, "InstanceType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.weighted_capacity {
+            params.put(&format!("{}{}", prefix, "WeightedCapacity"), &field_value);
         }
     }
 }
@@ -4432,6 +4491,17 @@ impl LoadBalancerTargetGroupStatesDeserializer {
         })
     }
 }
+struct MaxInstanceLifetimeDeserializer;
+impl MaxInstanceLifetimeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 struct MaxNumberOfAutoScalingGroupsDeserializer;
 impl MaxNumberOfAutoScalingGroupsDeserializer {
     #[allow(unused_variables)]
@@ -4757,7 +4827,7 @@ impl MixedInstanceSpotPriceDeserializer {
 /// <p>Describes a mixed instances policy for an Auto Scaling group. With mixed instances, your Auto Scaling group can provision a combination of On-Demand Instances and Spot Instances across multiple instance types. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling Groups with Multiple Instance Types and Purchase Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You can create a mixed instances policy for a new Auto Scaling group, or you can create it for an existing group by updating the group to specify <code>MixedInstancesPolicy</code> as the top-level parameter instead of a launch configuration or template. For more information, see <a>CreateAutoScalingGroup</a> and <a>UpdateAutoScalingGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct MixedInstancesPolicy {
-    /// <p>The instances distribution to use.</p> <p>If you leave this parameter unspecified when creating a mixed instances policy, the default values are used.</p>
+    /// <p>The instances distribution to use.</p> <p>If you leave this parameter unspecified, the value for each parameter in <code>InstancesDistribution</code> uses a default value.</p>
     pub instances_distribution: Option<InstancesDistribution>,
     /// <p>The launch template and instance types (overrides).</p> <p>This parameter must be specified when creating a mixed instances policy.</p>
     pub launch_template: Option<LaunchTemplate>,
@@ -5081,9 +5151,9 @@ impl PolicyTypesSerializer {
 /// <p>Represents a predefined metric for a target tracking scaling policy to use with Amazon EC2 Auto Scaling.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PredefinedMetricSpecification {
-    /// <p>The metric type.</p>
+    /// <p><p>The metric type. The following predefined metrics are available:</p> <ul> <li> <p> <code>ASGAverageCPUUtilization</code> - Average CPU utilization of the Auto Scaling group.</p> </li> <li> <p> <code>ASGAverageNetworkIn</code> - Average number of bytes received on all network interfaces by the Auto Scaling group.</p> </li> <li> <p> <code>ASGAverageNetworkOut</code> - Average number of bytes sent out on all network interfaces by the Auto Scaling group.</p> </li> <li> <p> <code>ALBRequestCountPerTarget</code> - Number of requests completed per target in an Application Load Balancer target group.</p> </li> </ul></p>
     pub predefined_metric_type: String,
-    /// <p>Identifies the resource associated with the metric type. The following predefined metrics are available:</p> <ul> <li> <p> <code>ASGAverageCPUUtilization</code> - Average CPU utilization of the Auto Scaling group.</p> </li> <li> <p> <code>ASGAverageNetworkIn</code> - Average number of bytes received on all network interfaces by the Auto Scaling group.</p> </li> <li> <p> <code>ASGAverageNetworkOut</code> - Average number of bytes sent out on all network interfaces by the Auto Scaling group.</p> </li> <li> <p> <code>ALBRequestCountPerTarget</code> - Number of requests completed per target in an Application Load Balancer target group.</p> </li> </ul> <p>For predefined metric types <code>ASGAverageCPUUtilization</code>, <code>ASGAverageNetworkIn</code>, and <code>ASGAverageNetworkOut</code>, the parameter must not be specified as the resource associated with the metric type is the Auto Scaling group. For predefined metric type <code>ALBRequestCountPerTarget</code>, the parameter must be specified in the format: <code>app/<i>load-balancer-name</i>/<i>load-balancer-id</i>/targetgroup/<i>target-group-name</i>/<i>target-group-id</i> </code>, where <code>app/<i>load-balancer-name</i>/<i>load-balancer-id</i> </code> is the final portion of the load balancer ARN, and <code>targetgroup/<i>target-group-name</i>/<i>target-group-id</i> </code> is the final portion of the target group ARN. The target group must be attached to the Auto Scaling group.</p>
+    /// <p><p>Identifies the resource associated with the metric type. You can&#39;t specify a resource label unless the metric type is <code>ALBRequestCountPerTarget</code> and there is a target group attached to the Auto Scaling group.</p> <p>The format is <code>app/<i>load-balancer-name</i>/<i>load-balancer-id</i>/targetgroup/<i>target-group-name</i>/<i>target-group-id</i> </code>, where </p> <ul> <li> <p> <code>app/<i>load-balancer-name</i>/<i>load-balancer-id</i> </code> is the final portion of the load balancer ARN, and</p> </li> <li> <p> <code>targetgroup/<i>target-group-name</i>/<i>target-group-id</i> </code> is the final portion of the target group ARN.</p> </li> </ul></p>
     pub resource_label: Option<String>,
 }
 
@@ -5376,7 +5446,7 @@ pub struct PutScalingPolicyType {
     pub policy_name: String,
     /// <p>The policy type. The valid values are <code>SimpleScaling</code>, <code>StepScaling</code>, and <code>TargetTrackingScaling</code>. If the policy type is null, the value is treated as <code>SimpleScaling</code>.</p>
     pub policy_type: Option<String>,
-    /// <p>The amount by which a simple scaling policy scales the Auto Scaling group in response to an alarm breach. The adjustment is based on the value that you specified in the <code>AdjustmentType</code> parameter (either an absolute number or a percentage). A positive value adds to the current capacity and a negative value subtracts from the current capacity. For exact capacity, you must specify a positive value. </p> <p>Conditional: If you specify <code>SimpleScaling</code> for the policy type, you must specify this parameter. (Not used with any other policy type.) </p>
+    /// <p>The amount by which a simple scaling policy scales the Auto Scaling group in response to an alarm breach. The adjustment is based on the value that you specified in the <code>AdjustmentType</code> parameter (either an absolute number or a percentage). A positive value adds to the current capacity and a negative value subtracts from the current capacity. For exact capacity, you must specify a positive value.</p> <p>Conditional: If you specify <code>SimpleScaling</code> for the policy type, you must specify this parameter. (Not used with any other policy type.) </p>
     pub scaling_adjustment: Option<i64>,
     /// <p>A set of adjustments that enable you to scale based on the size of the alarm breach.</p> <p>Conditional: If you specify <code>StepScaling</code> for the policy type, you must specify this parameter. (Not used with any other policy type.) </p>
     pub step_adjustments: Option<Vec<StepAdjustment>>,
@@ -5454,7 +5524,7 @@ pub struct PutScheduledUpdateGroupActionType {
     pub auto_scaling_group_name: String,
     /// <p>The number of EC2 instances that should be running in the Auto Scaling group.</p>
     pub desired_capacity: Option<i64>,
-    /// <p>The date and time for the recurring schedule to end. Amazon EC2 Auto Scaling does not perform the action after this time. </p>
+    /// <p>The date and time for the recurring schedule to end. Amazon EC2 Auto Scaling does not perform the action after this time.</p>
     pub end_time: Option<String>,
     /// <p>The maximum number of instances in the Auto Scaling group.</p>
     pub max_size: Option<i64>,
@@ -5813,7 +5883,7 @@ impl ScheduledActionsTypeDeserializer {
         })
     }
 }
-/// <p>Describes a scheduled scaling action. Used in response to <a>DescribeScheduledActions</a>. </p>
+/// <p>Describes a scheduled scaling action. Used in response to <a>DescribeScheduledActions</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledUpdateGroupAction {
     /// <p>The name of the Auto Scaling group.</p>
@@ -5826,7 +5896,7 @@ pub struct ScheduledUpdateGroupAction {
     pub max_size: Option<i64>,
     /// <p>The minimum number of instances in the Auto Scaling group.</p>
     pub min_size: Option<i64>,
-    /// <p>The recurring schedule for the action, in Unix cron syntax format. </p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p>
+    /// <p>The recurring schedule for the action, in Unix cron syntax format.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p>
     pub recurrence: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the scheduled action.</p>
     pub scheduled_action_arn: Option<String>,
@@ -5911,7 +5981,7 @@ impl ScheduledUpdateGroupActionDeserializer {
         )
     }
 }
-/// <p>Describes one or more scheduled scaling action updates for a specified Auto Scaling group. Used in combination with <a>BatchPutScheduledUpdateGroupAction</a>.</p> <p>When updating a scheduled scaling action, all optional parameters are left unchanged if not specified. </p>
+/// <p>Describes one or more scheduled scaling action updates for a specified Auto Scaling group. Used in combination with <a>BatchPutScheduledUpdateGroupAction</a>.</p> <p>When updating a scheduled scaling action, all optional parameters are left unchanged if not specified.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledUpdateGroupActionRequest {
     /// <p>The number of EC2 instances that should be running in the group.</p>
@@ -6686,10 +6756,12 @@ pub struct UpdateAutoScalingGroupType {
     pub health_check_grace_period: Option<i64>,
     /// <p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>. If you configure an Auto Scaling group to use ELB health checks, it considers the instance unhealthy if it fails either the EC2 status checks or the load balancer health checks.</p>
     pub health_check_type: Option<String>,
-    /// <p><p>The name of the launch configuration. If you specify <code>LaunchConfigurationName</code> in your update request, you can&#39;t specify <code>LaunchTemplate</code> or <code>MixedInstancesPolicy</code>.</p> <important> <p>To update an Auto Scaling group with a launch configuration with <code>InstanceMonitoring</code> set to <code>false</code>, you must first disable the collection of group metrics. Otherwise, you get an error. If you have previously enabled the collection of group metrics, you can disable it using <a>DisableMetricsCollection</a>.</p> </important></p>
+    /// <p>The name of the launch configuration. If you specify <code>LaunchConfigurationName</code> in your update request, you can't specify <code>LaunchTemplate</code> or <code>MixedInstancesPolicy</code>.</p>
     pub launch_configuration_name: Option<String>,
     /// <p>The launch template and version to use to specify the updates. If you specify <code>LaunchTemplate</code> in your update request, you can't specify <code>LaunchConfigurationName</code> or <code>MixedInstancesPolicy</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_LaunchTemplateSpecification.html">LaunchTemplateSpecification</a> in the <i>Amazon EC2 Auto Scaling API Reference</i>.</p>
     pub launch_template: Option<LaunchTemplateSpecification>,
+    /// <p>The maximum amount of time, in seconds, that an instance can be in service.</p> <p>Valid Range: Minimum value of 604800.</p>
+    pub max_instance_lifetime: Option<i64>,
     /// <p>The maximum size of the Auto Scaling group.</p>
     pub max_size: Option<i64>,
     /// <p>The minimum size of the Auto Scaling group.</p>
@@ -6754,6 +6826,12 @@ impl UpdateAutoScalingGroupTypeSerializer {
                 params,
                 &format!("{}{}", prefix, "LaunchTemplate"),
                 field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_instance_lifetime {
+            params.put(
+                &format!("{}{}", prefix, "MaxInstanceLifetime"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.max_size {
@@ -9948,7 +10026,7 @@ pub trait Autoscaling {
         input: AttachInstancesQuery,
     ) -> RusotoFuture<(), AttachInstancesError>;
 
-    /// <p>Attaches one or more target groups to the specified Auto Scaling group. </p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn attach_load_balancer_target_groups(
         &self,
         input: AttachLoadBalancerTargetGroupsType,
@@ -10125,7 +10203,7 @@ pub trait Autoscaling {
         &self,
     ) -> RusotoFuture<ProcessesType, DescribeScalingProcessTypesError>;
 
-    /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run or that have not reached their end time. To describe the actions that have already run, use <a>DescribeScalingActivities</a>. </p>
+    /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run or that have not reached their end time. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>
     fn describe_scheduled_actions(
         &self,
         input: DescribeScheduledActionsType,
@@ -10169,7 +10247,7 @@ pub trait Autoscaling {
         input: EnableMetricsCollectionQuery,
     ) -> RusotoFuture<(), EnableMetricsCollectionError>;
 
-    /// <p>Moves the specified instances into the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Moves the specified instances into the standby state.</p> <p>If you choose to decrement the desired capacity of the Auto Scaling group, the instances can enter standby as long as the desired capacity of the Auto Scaling group after the instances are placed into standby is equal to or greater than the minimum capacity of the group.</p> <p>If you choose not to decrement the desired capacity of the Auto Scaling group, the Auto Scaling group launches new instances to replace the instances on standby.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn enter_standby(
         &self,
         input: EnterStandbyQuery,
@@ -10178,7 +10256,7 @@ pub trait Autoscaling {
     /// <p>Executes the specified policy.</p>
     fn execute_policy(&self, input: ExecutePolicyType) -> RusotoFuture<(), ExecutePolicyError>;
 
-    /// <p>Moves the specified instances out of the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Moves the specified instances out of the standby state.</p> <p>After you put the instances back in service, the desired capacity is incremented.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn exit_standby(
         &self,
         input: ExitStandbyQuery,
@@ -10250,7 +10328,7 @@ pub trait Autoscaling {
         input: TerminateInstanceInAutoScalingGroupType,
     ) -> RusotoFuture<ActivityType, TerminateInstanceInAutoScalingGroupError>;
 
-    /// <p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group, specify the name of the group and the parameter that you want to change. Any parameters that you don't specify are not changed by this update request. The new settings take effect on any scaling activities after this call returns. Scaling activities that are currently in progress aren't affected.</p> <p>If you associate a new launch configuration or template with an Auto Scaling group, all new instances will get the updated configuration. Existing instances continue to run with the configuration that they were originally launched with. When you update a group to specify a mixed instances policy instead of a launch configuration or template, existing instances may be replaced to match the new purchasing options that you specified in the policy. For example, if the group currently has 100% On-Demand capacity and the policy specifies 50% Spot capacity, this means that half of your instances will be gradually terminated and relaunched as Spot Instances. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones, so that updating your group does not compromise the performance or availability of your application.</p> <p>Note the following about changing <code>DesiredCapacity</code>, <code>MaxSize</code>, or <code>MinSize</code>:</p> <ul> <li> <p>If a scale-in event occurs as a result of a new <code>DesiredCapacity</code> value that is lower than the current size of the group, the Auto Scaling group uses its termination policy to determine which instances to terminate.</p> </li> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MinSize</code> value.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MaxSize</code> value.</p> </li> </ul> <p>To see which parameters have been set, use <a>DescribeAutoScalingGroups</a>. You can also view the scaling policies for an Auto Scaling group using <a>DescribePolicies</a>. If the group has scaling policies, you can update them using <a>PutScalingPolicy</a>.</p>
+    /// <p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group, specify the name of the group and the parameter that you want to change. Any parameters that you don't specify are not changed by this update request. The new settings take effect on any scaling activities after this call returns. </p> <p>If you associate a new launch configuration or template with an Auto Scaling group, all new instances will get the updated configuration. Existing instances continue to run with the configuration that they were originally launched with. When you update a group to specify a mixed instances policy instead of a launch configuration or template, existing instances may be replaced to match the new purchasing options that you specified in the policy. For example, if the group currently has 100% On-Demand capacity and the policy specifies 50% Spot capacity, this means that half of your instances will be gradually terminated and relaunched as Spot Instances. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones, so that updating your group does not compromise the performance or availability of your application.</p> <p>Note the following about changing <code>DesiredCapacity</code>, <code>MaxSize</code>, or <code>MinSize</code>:</p> <ul> <li> <p>If a scale-in event occurs as a result of a new <code>DesiredCapacity</code> value that is lower than the current size of the group, the Auto Scaling group uses its termination policy to determine which instances to terminate.</p> </li> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MinSize</code> value.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MaxSize</code> value.</p> </li> </ul> <p>To see which parameters have been set, use <a>DescribeAutoScalingGroups</a>. You can also view the scaling policies for an Auto Scaling group using <a>DescribePolicies</a>. If the group has scaling policies, you can update them using <a>PutScalingPolicy</a>.</p>
     fn update_auto_scaling_group(
         &self,
         input: UpdateAutoScalingGroupType,
@@ -10322,7 +10400,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Attaches one or more target groups to the specified Auto Scaling group. </p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn attach_load_balancer_target_groups(
         &self,
         input: AttachLoadBalancerTargetGroupsType,
@@ -11580,7 +11658,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run or that have not reached their end time. To describe the actions that have already run, use <a>DescribeScalingActivities</a>. </p>
+    /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run or that have not reached their end time. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>
     fn describe_scheduled_actions(
         &self,
         input: DescribeScheduledActionsType,
@@ -11921,7 +11999,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Moves the specified instances into the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Moves the specified instances into the standby state.</p> <p>If you choose to decrement the desired capacity of the Auto Scaling group, the instances can enter standby as long as the desired capacity of the Auto Scaling group after the instances are placed into standby is equal to or greater than the minimum capacity of the group.</p> <p>If you choose not to decrement the desired capacity of the Auto Scaling group, the Auto Scaling group launches new instances to replace the instances on standby.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn enter_standby(
         &self,
         input: EnterStandbyQuery,
@@ -11997,7 +12075,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Moves the specified instances out of the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Moves the specified instances out of the standby state.</p> <p>After you put the instances back in service, the desired capacity is incremented.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn exit_standby(
         &self,
         input: ExitStandbyQuery,
@@ -12459,7 +12537,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group, specify the name of the group and the parameter that you want to change. Any parameters that you don't specify are not changed by this update request. The new settings take effect on any scaling activities after this call returns. Scaling activities that are currently in progress aren't affected.</p> <p>If you associate a new launch configuration or template with an Auto Scaling group, all new instances will get the updated configuration. Existing instances continue to run with the configuration that they were originally launched with. When you update a group to specify a mixed instances policy instead of a launch configuration or template, existing instances may be replaced to match the new purchasing options that you specified in the policy. For example, if the group currently has 100% On-Demand capacity and the policy specifies 50% Spot capacity, this means that half of your instances will be gradually terminated and relaunched as Spot Instances. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones, so that updating your group does not compromise the performance or availability of your application.</p> <p>Note the following about changing <code>DesiredCapacity</code>, <code>MaxSize</code>, or <code>MinSize</code>:</p> <ul> <li> <p>If a scale-in event occurs as a result of a new <code>DesiredCapacity</code> value that is lower than the current size of the group, the Auto Scaling group uses its termination policy to determine which instances to terminate.</p> </li> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MinSize</code> value.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MaxSize</code> value.</p> </li> </ul> <p>To see which parameters have been set, use <a>DescribeAutoScalingGroups</a>. You can also view the scaling policies for an Auto Scaling group using <a>DescribePolicies</a>. If the group has scaling policies, you can update them using <a>PutScalingPolicy</a>.</p>
+    /// <p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group, specify the name of the group and the parameter that you want to change. Any parameters that you don't specify are not changed by this update request. The new settings take effect on any scaling activities after this call returns. </p> <p>If you associate a new launch configuration or template with an Auto Scaling group, all new instances will get the updated configuration. Existing instances continue to run with the configuration that they were originally launched with. When you update a group to specify a mixed instances policy instead of a launch configuration or template, existing instances may be replaced to match the new purchasing options that you specified in the policy. For example, if the group currently has 100% On-Demand capacity and the policy specifies 50% Spot capacity, this means that half of your instances will be gradually terminated and relaunched as Spot Instances. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones, so that updating your group does not compromise the performance or availability of your application.</p> <p>Note the following about changing <code>DesiredCapacity</code>, <code>MaxSize</code>, or <code>MinSize</code>:</p> <ul> <li> <p>If a scale-in event occurs as a result of a new <code>DesiredCapacity</code> value that is lower than the current size of the group, the Auto Scaling group uses its termination policy to determine which instances to terminate.</p> </li> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MinSize</code> value.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MaxSize</code> value.</p> </li> </ul> <p>To see which parameters have been set, use <a>DescribeAutoScalingGroups</a>. You can also view the scaling policies for an Auto Scaling group using <a>DescribePolicies</a>. If the group has scaling policies, you can update them using <a>PutScalingPolicy</a>.</p>
     fn update_auto_scaling_group(
         &self,
         input: UpdateAutoScalingGroupType,

@@ -158,7 +158,7 @@ impl AlarmNamesSerializer {
     }
 }
 
-/// <p>An anomaly detection model associated with a particular CloudWatch metric athresnd statistic. You can use the model to display a band of expected normal values when the metric is graphed.</p>
+/// <p>An anomaly detection model associated with a particular CloudWatch metric and statistic. You can use the model to display a band of expected normal values when the metric is graphed.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AnomalyDetector {
     /// <p>The configuration specifies details about how the anomaly detection model is to be trained, including time ranges to exclude from use for training the model, and the time zone to use for the metric.</p>
@@ -326,6 +326,23 @@ impl AnomalyDetectorsDeserializer {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(AnomalyDetectorDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct BatchFailuresDeserializer;
+impl BatchFailuresDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<PartialFailure>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(PartialFailureDeserializer::deserialize("member", stack)?);
             } else {
                 skip_tree(stack);
             }
@@ -795,6 +812,59 @@ impl DeleteDashboardsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteInsightRulesInput {
+    /// <p>An array of the rule names to delete. If you need to find out the names of your rules, use <a>DescribeInsightRules</a>.</p>
+    pub rule_names: Vec<String>,
+}
+
+/// Serialize `DeleteInsightRulesInput` contents to a `SignedRequest`.
+struct DeleteInsightRulesInputSerializer;
+impl DeleteInsightRulesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteInsightRulesInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        InsightRuleNamesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "RuleNames"),
+            &obj.rule_names,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteInsightRulesOutput {
+    /// <p>An array listing the rules that could not be deleted. You cannot delete built-in rules.</p>
+    pub failures: Option<Vec<PartialFailure>>,
+}
+
+struct DeleteInsightRulesOutputDeserializer;
+impl DeleteInsightRulesOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteInsightRulesOutput, XmlParseError> {
+        deserialize_elements::<_, DeleteInsightRulesOutput, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Failures" => {
+                        obj.failures
+                            .get_or_insert(vec![])
+                            .extend(BatchFailuresDeserializer::deserialize("Failures", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAlarmHistoryInput {
     /// <p>The name of the alarm.</p>
     pub alarm_name: Option<String>,
@@ -1119,6 +1189,68 @@ impl DescribeAnomalyDetectorsOutputDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeInsightRulesInput {
+    /// <p>This parameter is not currently used. Reserved for future use. If it is used in the future, the maximum value may be different.</p>
+    pub max_results: Option<i64>,
+    /// <p>Reserved for future use.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `DescribeInsightRulesInput` contents to a `SignedRequest`.
+struct DescribeInsightRulesInputSerializer;
+impl DescribeInsightRulesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeInsightRulesInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeInsightRulesOutput {
+    /// <p>The rules returned by the operation.</p>
+    pub insight_rules: Option<Vec<InsightRule>>,
+    /// <p>Reserved for future use.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeInsightRulesOutputDeserializer;
+impl DescribeInsightRulesOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeInsightRulesOutput, XmlParseError> {
+        deserialize_elements::<_, DescribeInsightRulesOutput, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "InsightRules" => {
+                        obj.insight_rules.get_or_insert(vec![]).extend(
+                            InsightRulesDeserializer::deserialize("InsightRules", stack)?,
+                        );
+                    }
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Expands the identity of a metric.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Dimension {
@@ -1275,6 +1407,59 @@ impl DisableAlarmActionsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableInsightRulesInput {
+    /// <p>An array of the rule names to disable. If you need to find out the names of your rules, use <a>DescribeInsightRules</a>.</p>
+    pub rule_names: Vec<String>,
+}
+
+/// Serialize `DisableInsightRulesInput` contents to a `SignedRequest`.
+struct DisableInsightRulesInputSerializer;
+impl DisableInsightRulesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DisableInsightRulesInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        InsightRuleNamesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "RuleNames"),
+            &obj.rule_names,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableInsightRulesOutput {
+    /// <p>An array listing the rules that could not be disabled. You cannot disable built-in rules.</p>
+    pub failures: Option<Vec<PartialFailure>>,
+}
+
+struct DisableInsightRulesOutputDeserializer;
+impl DisableInsightRulesOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DisableInsightRulesOutput, XmlParseError> {
+        deserialize_elements::<_, DisableInsightRulesOutput, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Failures" => {
+                        obj.failures
+                            .get_or_insert(vec![])
+                            .extend(BatchFailuresDeserializer::deserialize("Failures", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableAlarmActionsInput {
     /// <p>The names of the alarms.</p>
     pub alarm_names: Vec<String>,
@@ -1297,6 +1482,59 @@ impl EnableAlarmActionsInputSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableInsightRulesInput {
+    /// <p>An array of the rule names to enable. If you need to find out the names of your rules, use <a>DescribeInsightRules</a>.</p>
+    pub rule_names: Vec<String>,
+}
+
+/// Serialize `EnableInsightRulesInput` contents to a `SignedRequest`.
+struct EnableInsightRulesInputSerializer;
+impl EnableInsightRulesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &EnableInsightRulesInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        InsightRuleNamesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "RuleNames"),
+            &obj.rule_names,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableInsightRulesOutput {
+    /// <p>An array listing the rules that could not be enabled. You cannot disable or enable built-in rules.</p>
+    pub failures: Option<Vec<PartialFailure>>,
+}
+
+struct EnableInsightRulesOutputDeserializer;
+impl EnableInsightRulesOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnableInsightRulesOutput, XmlParseError> {
+        deserialize_elements::<_, EnableInsightRulesOutput, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Failures" => {
+                        obj.failures
+                            .get_or_insert(vec![])
+                            .extend(BatchFailuresDeserializer::deserialize("Failures", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 struct EvaluateLowSampleCountPercentileDeserializer;
 impl EvaluateLowSampleCountPercentileDeserializer {
     #[allow(unused_variables)]
@@ -1314,6 +1552,17 @@ impl EvaluationPeriodsDeserializer {
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct ExceptionTypeDeserializer;
+impl ExceptionTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
         end_element(tag_name, stack)?;
 
         Ok(obj)
@@ -1342,6 +1591,39 @@ impl ExtendedStatisticsSerializer {
     }
 }
 
+struct FailureCodeDeserializer;
+impl FailureCodeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct FailureDescriptionDeserializer;
+impl FailureDescriptionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct FailureResourceDeserializer;
+impl FailureResourceDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetDashboardInput {
     /// <p>The name of the dashboard to be described.</p>
@@ -1405,6 +1687,136 @@ impl GetDashboardOutputDeserializer {
             }
             Ok(())
         })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetInsightRuleReportInput {
+    /// <p>The end time of the data to use in the report. When used in a raw HTTP Query API, it is formatted as <code>yyyy-MM-dd'T'HH:mm:ss</code>. For example, <code>2019-07-01T23:59:59</code>.</p>
+    pub end_time: String,
+    /// <p>The maximum number of contributors to include in the report. The range is 1 to 100. If you omit this, the default of 10 is used.</p>
+    pub max_contributor_count: Option<i64>,
+    /// <p><p>Specifies which metrics to use for aggregation of contributor values for the report. You can specify one or more of the following metrics:</p> <ul> <li> <p> <code>UniqueContributors</code> -- the number of unique contributors for each data point.</p> </li> <li> <p> <code>MaxContributorValue</code> -- the value of the top contributor for each data point. The identity of the contributor may change for each data point in the graph.</p> <p>If this rule aggregates by COUNT, the top contributor for each data point is the contributor with the most occurrences in that period. If the rule aggregates by SUM, the top contributor is the contributor with the highest sum in the log field specified by the rule&#39;s <code>Value</code>, during that period.</p> </li> <li> <p> <code>SampleCount</code> -- the number of data points matched by the rule.</p> </li> <li> <p> <code>Sum</code> -- the sum of the values from all contributors during the time period represented by that data point.</p> </li> <li> <p> <code>Minimum</code> -- the minimum value from a single observation during the time period represented by that data point.</p> </li> <li> <p> <code>Maximum</code> -- the maximum value from a single observation during the time period represented by that data point.</p> </li> <li> <p> <code>Average</code> -- the average value from all contributors during the time period represented by that data point.</p> </li> </ul></p>
+    pub metrics: Option<Vec<String>>,
+    /// <p>Determines what statistic to use to rank the contributors. Valid values are SUM and MAXIMUM.</p>
+    pub order_by: Option<String>,
+    /// <p>The period, in seconds, to use for the statistics in the <code>InsightRuleMetricDatapoint</code> results.</p>
+    pub period: i64,
+    /// <p>The name of the rule that you want to see data from.</p>
+    pub rule_name: String,
+    /// <p>The start time of the data to use in the report. When used in a raw HTTP Query API, it is formatted as <code>yyyy-MM-dd'T'HH:mm:ss</code>. For example, <code>2019-07-01T23:59:59</code>.</p>
+    pub start_time: String,
+}
+
+/// Serialize `GetInsightRuleReportInput` contents to a `SignedRequest`.
+struct GetInsightRuleReportInputSerializer;
+impl GetInsightRuleReportInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetInsightRuleReportInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "EndTime"), &obj.end_time);
+        if let Some(ref field_value) = obj.max_contributor_count {
+            params.put(
+                &format!("{}{}", prefix, "MaxContributorCount"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.metrics {
+            InsightRuleMetricListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Metrics"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.order_by {
+            params.put(&format!("{}{}", prefix, "OrderBy"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "Period"), &obj.period);
+        params.put(&format!("{}{}", prefix, "RuleName"), &obj.rule_name);
+        params.put(&format!("{}{}", prefix, "StartTime"), &obj.start_time);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetInsightRuleReportOutput {
+    /// <p>The sum of the values from all individual contributors that match the rule.</p>
+    pub aggregate_value: Option<f64>,
+    /// <p>Specifies whether this rule aggregates contributor data by COUNT or SUM.</p>
+    pub aggregation_statistic: Option<String>,
+    /// <p>An approximate count of the unique contributors found by this rule in this time period.</p>
+    pub approximate_unique_count: Option<i64>,
+    /// <p>An array of the unique contributors found by this rule in this time period. If the rule contains multiple keys, each combination of values for the keys counts as a unique contributor.</p>
+    pub contributors: Option<Vec<InsightRuleContributor>>,
+    /// <p>An array of the strings used as the keys for this rule. The keys are the dimensions used to classify contributors. If the rule contains more than one key, then each unique combination of values for the keys is counted as a unique contributor.</p>
+    pub key_labels: Option<Vec<String>>,
+    /// <p>A time series of metric data points that matches the time period in the rule request.</p>
+    pub metric_datapoints: Option<Vec<InsightRuleMetricDatapoint>>,
+}
+
+struct GetInsightRuleReportOutputDeserializer;
+impl GetInsightRuleReportOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetInsightRuleReportOutput, XmlParseError> {
+        deserialize_elements::<_, GetInsightRuleReportOutput, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AggregateValue" => {
+                        obj.aggregate_value =
+                            Some(InsightRuleUnboundDoubleDeserializer::deserialize(
+                                "AggregateValue",
+                                stack,
+                            )?);
+                    }
+                    "AggregationStatistic" => {
+                        obj.aggregation_statistic =
+                            Some(InsightRuleAggregationStatisticDeserializer::deserialize(
+                                "AggregationStatistic",
+                                stack,
+                            )?);
+                    }
+                    "ApproximateUniqueCount" => {
+                        obj.approximate_unique_count =
+                            Some(InsightRuleUnboundLongDeserializer::deserialize(
+                                "ApproximateUniqueCount",
+                                stack,
+                            )?);
+                    }
+                    "Contributors" => {
+                        obj.contributors.get_or_insert(vec![]).extend(
+                            InsightRuleContributorsDeserializer::deserialize(
+                                "Contributors",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "KeyLabels" => {
+                        obj.key_labels.get_or_insert(vec![]).extend(
+                            InsightRuleContributorKeyLabelsDeserializer::deserialize(
+                                "KeyLabels",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "MetricDatapoints" => {
+                        obj.metric_datapoints.get_or_insert(vec![]).extend(
+                            InsightRuleMetricDatapointsDeserializer::deserialize(
+                                "MetricDatapoints",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1493,7 +1905,7 @@ impl GetMetricDataOutputDeserializer {
 pub struct GetMetricStatisticsInput {
     /// <p>The dimensions. If the metric contains multiple dimensions, you must include a value for each dimension. CloudWatch treats each unique combination of dimensions as a separate metric. If a specific combination of dimensions was not published, you can't retrieve statistics for it. You must specify the same dimensions that were used when the metrics were created. For an example, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#dimension-combinations">Dimension Combinations</a> in the <i>Amazon CloudWatch User Guide</i>. For more information about specifying dimensions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     pub dimensions: Option<Vec<Dimension>>,
-    /// <p>The time stamp that determines the last data point to return.</p> <p>The value specified is exclusive; results include data points up to the specified time stamp. The time stamp must be in ISO 8601 UTC format (for example, 2016-10-10T23:00:00Z).</p>
+    /// <p>The time stamp that determines the last data point to return.</p> <p>The value specified is exclusive; results include data points up to the specified time stamp. In a raw HTTP query, the time stamp must be in ISO 8601 UTC format (for example, 2016-10-10T23:00:00Z).</p>
     pub end_time: String,
     /// <p>The percentile statistics. Specify values between p0.0 and p100. When calling <code>GetMetricStatistics</code>, you must specify either <code>Statistics</code> or <code>ExtendedStatistics</code>, but not both. Percentile statistics are not available for metrics when any of the metric values are negative numbers.</p>
     pub extended_statistics: Option<Vec<String>>,
@@ -1503,7 +1915,7 @@ pub struct GetMetricStatisticsInput {
     pub namespace: String,
     /// <p><p>The granularity, in seconds, of the returned data points. For metrics with regular resolution, a period can be as short as one minute (60 seconds) and must be a multiple of 60. For high-resolution metrics that are collected at intervals of less than one minute, the period can be 1, 5, 10, 30, 60, or any multiple of 60. High-resolution metrics are those metrics stored by a <code>PutMetricData</code> call that includes a <code>StorageResolution</code> of 1 second.</p> <p>If the <code>StartTime</code> parameter specifies a time stamp that is greater than 3 hours ago, you must specify the period as follows or no data points in that time range is returned:</p> <ul> <li> <p>Start time between 3 hours and 15 days ago - Use a multiple of 60 seconds (1 minute).</p> </li> <li> <p>Start time between 15 and 63 days ago - Use a multiple of 300 seconds (5 minutes).</p> </li> <li> <p>Start time greater than 63 days ago - Use a multiple of 3600 seconds (1 hour).</p> </li> </ul></p>
     pub period: i64,
-    /// <p>The time stamp that determines the first data point to return. Start times are evaluated relative to the time that CloudWatch receives the request.</p> <p>The value specified is inclusive; results include data points with the specified time stamp. The time stamp must be in ISO 8601 UTC format (for example, 2016-10-03T23:00:00Z).</p> <p>CloudWatch rounds the specified time stamp as follows:</p> <ul> <li> <p>Start time less than 15 days ago - Round down to the nearest whole minute. For example, 12:32:34 is rounded down to 12:32:00.</p> </li> <li> <p>Start time between 15 and 63 days ago - Round down to the nearest 5-minute clock interval. For example, 12:32:34 is rounded down to 12:30:00.</p> </li> <li> <p>Start time greater than 63 days ago - Round down to the nearest 1-hour clock interval. For example, 12:32:34 is rounded down to 12:00:00.</p> </li> </ul> <p>If you set <code>Period</code> to 5, 10, or 30, the start time of your request is rounded down to the nearest time that corresponds to even 5-, 10-, or 30-second divisions of a minute. For example, if you make a query at (HH:mm:ss) 01:05:23 for the previous 10-second period, the start time of your request is rounded down and you receive data from 01:05:10 to 01:05:20. If you make a query at 15:07:17 for the previous 5 minutes of data, using a period of 5 seconds, you receive data timestamped between 15:02:15 and 15:07:15. </p>
+    /// <p>The time stamp that determines the first data point to return. Start times are evaluated relative to the time that CloudWatch receives the request.</p> <p>The value specified is inclusive; results include data points with the specified time stamp. In a raw HTTP query, the time stamp must be in ISO 8601 UTC format (for example, 2016-10-03T23:00:00Z).</p> <p>CloudWatch rounds the specified time stamp as follows:</p> <ul> <li> <p>Start time less than 15 days ago - Round down to the nearest whole minute. For example, 12:32:34 is rounded down to 12:32:00.</p> </li> <li> <p>Start time between 15 and 63 days ago - Round down to the nearest 5-minute clock interval. For example, 12:32:34 is rounded down to 12:30:00.</p> </li> <li> <p>Start time greater than 63 days ago - Round down to the nearest 1-hour clock interval. For example, 12:32:34 is rounded down to 12:00:00.</p> </li> </ul> <p>If you set <code>Period</code> to 5, 10, or 30, the start time of your request is rounded down to the nearest time that corresponds to even 5-, 10-, or 30-second divisions of a minute. For example, if you make a query at (HH:mm:ss) 01:05:23 for the previous 10-second period, the start time of your request is rounded down and you receive data from 01:05:10 to 01:05:20. If you make a query at 15:07:17 for the previous 5 minutes of data, using a period of 5 seconds, you receive data timestamped between 15:02:15 and 15:07:15. </p>
     pub start_time: String,
     /// <p>The metric statistics, other than percentile. For percentile statistics, use <code>ExtendedStatistics</code>. When calling <code>GetMetricStatistics</code>, you must specify either <code>Statistics</code> or <code>ExtendedStatistics</code>, but not both.</p>
     pub statistics: Option<Vec<String>>,
@@ -1673,6 +2085,449 @@ impl HistorySummaryDeserializer {
         end_element(tag_name, stack)?;
 
         Ok(obj)
+    }
+}
+/// <p>This structure contains the definition for a Contributor Insights rule.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InsightRule {
+    /// <p>The definition of the rule, as a JSON object. The definition contains the keywords used to define contributors, the value to aggregate on if this rule returns a sum instead of a count, and the filters. For details on the valid syntax, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContributorInsights-RuleSyntax.html">Contributor Insights Rule Syntax</a>.</p>
+    pub definition: String,
+    /// <p>The name of the rule.</p>
+    pub name: String,
+    /// <p>For rules that you create, this is always <code>{"Name": "CloudWatchLogRule", "Version": 1}</code>. For built-in rules, this is <code>{"Name": "ServiceLogRule", "Version": 1}</code> </p>
+    pub schema: String,
+    /// <p>Indicates whether the rule is enabled or disabled.</p>
+    pub state: String,
+}
+
+struct InsightRuleDeserializer;
+impl InsightRuleDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InsightRule, XmlParseError> {
+        deserialize_elements::<_, InsightRule, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Definition" => {
+                    obj.definition =
+                        InsightRuleDefinitionDeserializer::deserialize("Definition", stack)?;
+                }
+                "Name" => {
+                    obj.name = InsightRuleNameDeserializer::deserialize("Name", stack)?;
+                }
+                "Schema" => {
+                    obj.schema = InsightRuleSchemaDeserializer::deserialize("Schema", stack)?;
+                }
+                "State" => {
+                    obj.state = InsightRuleStateDeserializer::deserialize("State", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct InsightRuleAggregationStatisticDeserializer;
+impl InsightRuleAggregationStatisticDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>One of the unique contributors found by a Contributor Insights rule. If the rule contains multiple keys, then a unique contributor is a unique combination of values from all the keys in the rule.</p> <p>If the rule contains a single key, then each unique contributor is each unique value for this key.</p> <p>For more information, see <a>GetInsightRuleReport</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InsightRuleContributor {
+    /// <p>An approximation of the aggregate value that comes from this contributor.</p>
+    pub approximate_aggregate_value: f64,
+    /// <p>An array of the data points where this contributor is present. Only the data points when this contributor appeared are included in the array.</p>
+    pub datapoints: Vec<InsightRuleContributorDatapoint>,
+    /// <p>One of the log entry field keywords that is used to define contributors for this rule.</p>
+    pub keys: Vec<String>,
+}
+
+struct InsightRuleContributorDeserializer;
+impl InsightRuleContributorDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InsightRuleContributor, XmlParseError> {
+        deserialize_elements::<_, InsightRuleContributor, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ApproximateAggregateValue" => {
+                    obj.approximate_aggregate_value =
+                        InsightRuleUnboundDoubleDeserializer::deserialize(
+                            "ApproximateAggregateValue",
+                            stack,
+                        )?;
+                }
+                "Datapoints" => {
+                    obj.datapoints.extend(
+                        InsightRuleContributorDatapointsDeserializer::deserialize(
+                            "Datapoints",
+                            stack,
+                        )?,
+                    );
+                }
+                "Keys" => {
+                    obj.keys
+                        .extend(InsightRuleContributorKeysDeserializer::deserialize(
+                            "Keys", stack,
+                        )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>One data point related to one contributor.</p> <p>For more information, see <a>GetInsightRuleReport</a> and <a>InsightRuleContributor</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InsightRuleContributorDatapoint {
+    /// <p>The approximate value that this contributor added during this timestamp.</p>
+    pub approximate_value: f64,
+    /// <p>The timestamp of the data point.</p>
+    pub timestamp: String,
+}
+
+struct InsightRuleContributorDatapointDeserializer;
+impl InsightRuleContributorDatapointDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InsightRuleContributorDatapoint, XmlParseError> {
+        deserialize_elements::<_, InsightRuleContributorDatapoint, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ApproximateValue" => {
+                        obj.approximate_value = InsightRuleUnboundDoubleDeserializer::deserialize(
+                            "ApproximateValue",
+                            stack,
+                        )?;
+                    }
+                    "Timestamp" => {
+                        obj.timestamp = TimestampDeserializer::deserialize("Timestamp", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct InsightRuleContributorDatapointsDeserializer;
+impl InsightRuleContributorDatapointsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<InsightRuleContributorDatapoint>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(InsightRuleContributorDatapointDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct InsightRuleContributorKeyDeserializer;
+impl InsightRuleContributorKeyDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct InsightRuleContributorKeyLabelDeserializer;
+impl InsightRuleContributorKeyLabelDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct InsightRuleContributorKeyLabelsDeserializer;
+impl InsightRuleContributorKeyLabelsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(InsightRuleContributorKeyLabelDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct InsightRuleContributorKeysDeserializer;
+impl InsightRuleContributorKeysDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(InsightRuleContributorKeyDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct InsightRuleContributorsDeserializer;
+impl InsightRuleContributorsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<InsightRuleContributor>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(InsightRuleContributorDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct InsightRuleDefinitionDeserializer;
+impl InsightRuleDefinitionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>One data point from the metric time series returned in a Contributor Insights rule report.</p> <p>For more information, see <a>GetInsightRuleReport</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InsightRuleMetricDatapoint {
+    /// <p>The average value from all contributors during the time period represented by that data point.</p> <p>This statistic is returned only if you included it in the <code>Metrics</code> array in your request.</p>
+    pub average: Option<f64>,
+    /// <p>The maximum value provided by one contributor during this timestamp. Each timestamp is evaluated separately, so the identity of the max contributor could be different for each timestamp.</p> <p>This statistic is returned only if you included it in the <code>Metrics</code> array in your request.</p>
+    pub max_contributor_value: Option<f64>,
+    /// <p>The maximum value from a single occurence from a single contributor during the time period represented by that data point.</p> <p>This statistic is returned only if you included it in the <code>Metrics</code> array in your request.</p>
+    pub maximum: Option<f64>,
+    /// <p>The minimum value from a single contributor during the time period represented by that data point.</p> <p>This statistic is returned only if you included it in the <code>Metrics</code> array in your request.</p>
+    pub minimum: Option<f64>,
+    /// <p>The number of occurrences that matched the rule during this data point.</p> <p>This statistic is returned only if you included it in the <code>Metrics</code> array in your request.</p>
+    pub sample_count: Option<f64>,
+    /// <p>The sum of the values from all contributors during the time period represented by that data point.</p> <p>This statistic is returned only if you included it in the <code>Metrics</code> array in your request.</p>
+    pub sum: Option<f64>,
+    /// <p>The timestamp of the data point.</p>
+    pub timestamp: String,
+    /// <p>The number of unique contributors who published data during this timestamp.</p> <p>This statistic is returned only if you included it in the <code>Metrics</code> array in your request.</p>
+    pub unique_contributors: Option<f64>,
+}
+
+struct InsightRuleMetricDatapointDeserializer;
+impl InsightRuleMetricDatapointDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InsightRuleMetricDatapoint, XmlParseError> {
+        deserialize_elements::<_, InsightRuleMetricDatapoint, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Average" => {
+                        obj.average = Some(InsightRuleUnboundDoubleDeserializer::deserialize(
+                            "Average", stack,
+                        )?);
+                    }
+                    "MaxContributorValue" => {
+                        obj.max_contributor_value =
+                            Some(InsightRuleUnboundDoubleDeserializer::deserialize(
+                                "MaxContributorValue",
+                                stack,
+                            )?);
+                    }
+                    "Maximum" => {
+                        obj.maximum = Some(InsightRuleUnboundDoubleDeserializer::deserialize(
+                            "Maximum", stack,
+                        )?);
+                    }
+                    "Minimum" => {
+                        obj.minimum = Some(InsightRuleUnboundDoubleDeserializer::deserialize(
+                            "Minimum", stack,
+                        )?);
+                    }
+                    "SampleCount" => {
+                        obj.sample_count = Some(InsightRuleUnboundDoubleDeserializer::deserialize(
+                            "SampleCount",
+                            stack,
+                        )?);
+                    }
+                    "Sum" => {
+                        obj.sum = Some(InsightRuleUnboundDoubleDeserializer::deserialize(
+                            "Sum", stack,
+                        )?);
+                    }
+                    "Timestamp" => {
+                        obj.timestamp = TimestampDeserializer::deserialize("Timestamp", stack)?;
+                    }
+                    "UniqueContributors" => {
+                        obj.unique_contributors =
+                            Some(InsightRuleUnboundDoubleDeserializer::deserialize(
+                                "UniqueContributors",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct InsightRuleMetricDatapointsDeserializer;
+impl InsightRuleMetricDatapointsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<InsightRuleMetricDatapoint>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(InsightRuleMetricDatapointDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `InsightRuleMetricList` contents to a `SignedRequest`.
+struct InsightRuleMetricListSerializer;
+impl InsightRuleMetricListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+struct InsightRuleNameDeserializer;
+impl InsightRuleNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `InsightRuleNames` contents to a `SignedRequest`.
+struct InsightRuleNamesSerializer;
+impl InsightRuleNamesSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+struct InsightRuleSchemaDeserializer;
+impl InsightRuleSchemaDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct InsightRuleStateDeserializer;
+impl InsightRuleStateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct InsightRuleUnboundDoubleDeserializer;
+impl InsightRuleUnboundDoubleDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct InsightRuleUnboundLongDeserializer;
+impl InsightRuleUnboundLongDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct InsightRulesDeserializer;
+impl InsightRulesDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<InsightRule>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(InsightRuleDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
     }
 }
 struct LastModifiedDeserializer;
@@ -2007,7 +2862,7 @@ pub struct MetricAlarm {
     pub alarm_name: Option<String>,
     /// <p>The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.</p>
     pub comparison_operator: Option<String>,
-    /// <p>The number of datapoints that must be breaching to trigger the alarm.</p>
+    /// <p>The number of data points that must be breaching to trigger the alarm.</p>
     pub datapoints_to_alarm: Option<i64>,
     /// <p>The dimensions for the metric associated with the alarm.</p>
     pub dimensions: Option<Vec<Dimension>>,
@@ -2265,6 +3120,8 @@ pub struct MetricDataQuery {
     pub label: Option<String>,
     /// <p>The metric to be returned, along with statistics, period, and units. Use this parameter only if this object is retrieving a metric and not performing a math expression on returned data.</p> <p>Within one MetricDataQuery object, you must specify either <code>Expression</code> or <code>MetricStat</code> but not both.</p>
     pub metric_stat: Option<MetricStat>,
+    /// <p>The granularity, in seconds, of the returned data points. For metrics with regular resolution, a period can be as short as one minute (60 seconds) and must be a multiple of 60. For high-resolution metrics that are collected at intervals of less than one minute, the period can be 1, 5, 10, 30, 60, or any multiple of 60. High-resolution metrics are those metrics stored by a <code>PutMetricData</code> operation that includes a <code>StorageResolution of 1 second</code>.</p> <p>If you are performing a <code>GetMetricData</code> operation, use this field only if you are specifying an <code>Expression</code>. Do not use this field when you are specifying a <code>MetricStat</code> in a <code>GetMetricData</code> operation.</p>
+    pub period: Option<i64>,
     /// <p>When used in <code>GetMetricData</code>, this option indicates whether to return the timestamps and raw data values of this metric. If you are performing this call just to do math expressions and do not also need the raw data returned, you can specify <code>False</code>. If you omit this, the default of <code>True</code> is used.</p> <p>When used in <code>PutMetricAlarm</code>, specify <code>True</code> for the one expression result to use as the alarm. For all other metrics and expressions in the same <code>PutMetricAlarm</code> operation, specify <code>ReturnData</code> as False.</p>
     pub return_data: Option<bool>,
 }
@@ -2293,6 +3150,9 @@ impl MetricDataQueryDeserializer {
                 "MetricStat" => {
                     obj.metric_stat =
                         Some(MetricStatDeserializer::deserialize("MetricStat", stack)?);
+                }
+                "Period" => {
+                    obj.period = Some(PeriodDeserializer::deserialize("Period", stack)?);
                 }
                 "ReturnData" => {
                     obj.return_data =
@@ -2327,6 +3187,9 @@ impl MetricDataQuerySerializer {
                 &format!("{}{}", prefix, "MetricStat"),
                 field_value,
             );
+        }
+        if let Some(ref field_value) = obj.period {
+            params.put(&format!("{}{}", prefix, "Period"), &field_value);
         }
         if let Some(ref field_value) = obj.return_data {
             params.put(&format!("{}{}", prefix, "ReturnData"), &field_value);
@@ -2442,9 +3305,9 @@ pub struct MetricDatum {
     pub timestamp: Option<String>,
     /// <p>When you are using a <code>Put</code> operation, this defines what unit you want to use when storing the metric.</p> <p>In a <code>Get</code> operation, this displays the unit that is used for the metric.</p>
     pub unit: Option<String>,
-    /// <p>The value for the metric.</p> <p>Although the parameter accepts numbers of type Double, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p>
+    /// <p>The value for the metric.</p> <p>Although the parameter accepts numbers of type Double, CloudWatch rejects values that are either too small or too large. Values must be in the range of -2^360 to 2^360. In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p>
     pub value: Option<f64>,
-    /// <p>Array of numbers representing the values for the metric during the period. Each unique value is listed just once in this array, and the corresponding number in the <code>Counts</code> array specifies the number of times that value occurred during the period. You can include up to 150 unique values in each <code>PutMetricData</code> action that specifies a <code>Values</code> array.</p> <p>Although the <code>Values</code> array accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p>
+    /// <p>Array of numbers representing the values for the metric during the period. Each unique value is listed just once in this array, and the corresponding number in the <code>Counts</code> array specifies the number of times that value occurred during the period. You can include up to 150 unique values in each <code>PutMetricData</code> action that specifies a <code>Values</code> array.</p> <p>Although the <code>Values</code> array accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of -2^360 to 2^360. In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p>
     pub values: Option<Vec<f64>>,
 }
 
@@ -2542,7 +3405,7 @@ impl MetricNameDeserializer {
 pub struct MetricStat {
     /// <p>The metric to return, including the metric name, namespace, and dimensions.</p>
     pub metric: Metric,
-    /// <p>The period, in seconds, to use when retrieving the metric.</p>
+    /// <p><p>The granularity, in seconds, of the returned data points. For metrics with regular resolution, a period can be as short as one minute (60 seconds) and must be a multiple of 60. For high-resolution metrics that are collected at intervals of less than one minute, the period can be 1, 5, 10, 30, 60, or any multiple of 60. High-resolution metrics are those metrics stored by a <code>PutMetricData</code> call that includes a <code>StorageResolution</code> of 1 second.</p> <p>If the <code>StartTime</code> parameter specifies a time stamp that is greater than 3 hours ago, you must specify the period as follows or no data points in that time range is returned:</p> <ul> <li> <p>Start time between 3 hours and 15 days ago - Use a multiple of 60 seconds (1 minute).</p> </li> <li> <p>Start time between 15 and 63 days ago - Use a multiple of 300 seconds (5 minutes).</p> </li> <li> <p>Start time greater than 63 days ago - Use a multiple of 3600 seconds (1 hour).</p> </li> </ul></p>
     pub period: i64,
     /// <p>The statistic to return. It can include any CloudWatch statistic or extended statistic.</p>
     pub stat: String,
@@ -2647,6 +3510,56 @@ impl NextTokenDeserializer {
         end_element(tag_name, stack)?;
 
         Ok(obj)
+    }
+}
+/// <p>This array is empty if the API operation was successful for all the rules specified in the request. If the operation could not process one of the rules, the following data is returned for each of those rules.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PartialFailure {
+    /// <p>The type of error.</p>
+    pub exception_type: Option<String>,
+    /// <p>The code of the error.</p>
+    pub failure_code: Option<String>,
+    /// <p>A description of the error.</p>
+    pub failure_description: Option<String>,
+    /// <p>The specified rule that could not be deleted.</p>
+    pub failure_resource: Option<String>,
+}
+
+struct PartialFailureDeserializer;
+impl PartialFailureDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PartialFailure, XmlParseError> {
+        deserialize_elements::<_, PartialFailure, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ExceptionType" => {
+                    obj.exception_type = Some(ExceptionTypeDeserializer::deserialize(
+                        "ExceptionType",
+                        stack,
+                    )?);
+                }
+                "FailureCode" => {
+                    obj.failure_code =
+                        Some(FailureCodeDeserializer::deserialize("FailureCode", stack)?);
+                }
+                "FailureDescription" => {
+                    obj.failure_description = Some(FailureDescriptionDeserializer::deserialize(
+                        "FailureDescription",
+                        stack,
+                    )?);
+                }
+                "FailureResource" => {
+                    obj.failure_resource = Some(FailureResourceDeserializer::deserialize(
+                        "FailureResource",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 struct PeriodDeserializer;
@@ -2780,6 +3693,55 @@ impl PutDashboardOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutInsightRuleInput {
+    /// <p>The definition of the rule, as a JSON object. For details on the valid syntax, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContributorInsights-RuleSyntax.html">Contributor Insights Rule Syntax</a>.</p>
+    pub rule_definition: String,
+    /// <p>A unique name for the rule.</p>
+    pub rule_name: String,
+    /// <p>The state of the rule. Valid values are ENABLED and DISABLED.</p>
+    pub rule_state: Option<String>,
+}
+
+/// Serialize `PutInsightRuleInput` contents to a `SignedRequest`.
+struct PutInsightRuleInputSerializer;
+impl PutInsightRuleInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PutInsightRuleInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "RuleDefinition"),
+            &obj.rule_definition,
+        );
+        params.put(&format!("{}{}", prefix, "RuleName"), &obj.rule_name);
+        if let Some(ref field_value) = obj.rule_state {
+            params.put(&format!("{}{}", prefix, "RuleState"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutInsightRuleOutput {}
+
+struct PutInsightRuleOutputDeserializer;
+impl PutInsightRuleOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutInsightRuleOutput, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = PutInsightRuleOutput::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutMetricAlarmInput {
     /// <p>Indicates whether actions should be executed during any changes to the alarm state. The default is <code>TRUE</code>.</p>
     pub actions_enabled: Option<bool>,
@@ -2791,7 +3753,7 @@ pub struct PutMetricAlarmInput {
     pub alarm_name: String,
     /// <p> The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.</p> <p>The values <code>LessThanLowerOrGreaterThanUpperThreshold</code>, <code>LessThanLowerThreshold</code>, and <code>GreaterThanUpperThreshold</code> are used only for alarms based on anomaly detection models.</p>
     pub comparison_operator: String,
-    /// <p>The number of datapoints that must be breaching to trigger the alarm. This is used only if you are setting an "M out of N" alarm. In that case, this value is the M. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarm-evaluation">Evaluating an Alarm</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
+    /// <p>The number of data points that must be breaching to trigger the alarm. This is used only if you are setting an "M out of N" alarm. In that case, this value is the M. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarm-evaluation">Evaluating an Alarm</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     pub datapoints_to_alarm: Option<i64>,
     /// <p>The dimensions for the metric specified in <code>MetricName</code>.</p>
     pub dimensions: Option<Vec<Dimension>>,
@@ -3301,9 +4263,9 @@ impl TagListSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TagResourceInput {
-    /// <p>The ARN of the CloudWatch resource that you're adding tags to. For more information on ARN format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-cloudwatch">Example ARNs</a> in the <i>Amazon Web Services General Reference</i>.</p>
+    /// <p>The ARN of the CloudWatch alarm that you're adding tags to. The ARN format is <code>arn:aws:cloudwatch:<i>Region</i>:<i>account-id</i>:alarm:<i>alarm-name</i> </code> </p>
     pub resource_arn: String,
-    /// <p>The list of key-value pairs to associate with the resource.</p>
+    /// <p>The list of key-value pairs to associate with the alarm.</p>
     pub tags: Vec<Tag>,
 }
 
@@ -3637,6 +4599,61 @@ impl Error for DeleteDashboardsError {
         }
     }
 }
+/// Errors returned by DeleteInsightRules
+#[derive(Debug, PartialEq)]
+pub enum DeleteInsightRulesError {
+    /// <p>The value of an input parameter is bad or out-of-range.</p>
+    InvalidParameterValue(String),
+    /// <p>An input parameter that is required is missing.</p>
+    MissingRequiredParameter(String),
+}
+
+impl DeleteInsightRulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInsightRulesError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(
+                            DeleteInsightRulesError::InvalidParameterValue(parsed_error.message),
+                        )
+                    }
+                    "MissingParameter" => {
+                        return RusotoError::Service(
+                            DeleteInsightRulesError::MissingRequiredParameter(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteInsightRulesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteInsightRulesError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteInsightRulesError::InvalidParameterValue(ref cause) => cause,
+            DeleteInsightRulesError::MissingRequiredParameter(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeAlarmHistory
 #[derive(Debug, PartialEq)]
 pub enum DescribeAlarmHistoryError {
@@ -3835,6 +4852,53 @@ impl Error for DescribeAnomalyDetectorsError {
         }
     }
 }
+/// Errors returned by DescribeInsightRules
+#[derive(Debug, PartialEq)]
+pub enum DescribeInsightRulesError {
+    /// <p>The next token specified is invalid.</p>
+    InvalidNextToken(String),
+}
+
+impl DescribeInsightRulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInsightRulesError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return RusotoError::Service(DescribeInsightRulesError::InvalidNextToken(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeInsightRulesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeInsightRulesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeInsightRulesError::InvalidNextToken(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DisableAlarmActions
 #[derive(Debug, PartialEq)]
 pub enum DisableAlarmActionsError {}
@@ -3872,6 +4936,63 @@ impl Error for DisableAlarmActionsError {
         match *self {}
     }
 }
+/// Errors returned by DisableInsightRules
+#[derive(Debug, PartialEq)]
+pub enum DisableInsightRulesError {
+    /// <p>The value of an input parameter is bad or out-of-range.</p>
+    InvalidParameterValue(String),
+    /// <p>An input parameter that is required is missing.</p>
+    MissingRequiredParameter(String),
+}
+
+impl DisableInsightRulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableInsightRulesError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(
+                            DisableInsightRulesError::InvalidParameterValue(parsed_error.message),
+                        )
+                    }
+                    "MissingParameter" => {
+                        return RusotoError::Service(
+                            DisableInsightRulesError::MissingRequiredParameter(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DisableInsightRulesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisableInsightRulesError {
+    fn description(&self) -> &str {
+        match *self {
+            DisableInsightRulesError::InvalidParameterValue(ref cause) => cause,
+            DisableInsightRulesError::MissingRequiredParameter(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by EnableAlarmActions
 #[derive(Debug, PartialEq)]
 pub enum EnableAlarmActionsError {}
@@ -3907,6 +5028,69 @@ impl fmt::Display for EnableAlarmActionsError {
 impl Error for EnableAlarmActionsError {
     fn description(&self) -> &str {
         match *self {}
+    }
+}
+/// Errors returned by EnableInsightRules
+#[derive(Debug, PartialEq)]
+pub enum EnableInsightRulesError {
+    /// <p>The value of an input parameter is bad or out-of-range.</p>
+    InvalidParameterValue(String),
+    /// <p>The operation exceeded one or more limits.</p>
+    LimitExceeded(String),
+    /// <p>An input parameter that is required is missing.</p>
+    MissingRequiredParameter(String),
+}
+
+impl EnableInsightRulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableInsightRulesError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(
+                            EnableInsightRulesError::InvalidParameterValue(parsed_error.message),
+                        )
+                    }
+                    "LimitExceededException" => {
+                        return RusotoError::Service(EnableInsightRulesError::LimitExceeded(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return RusotoError::Service(
+                            EnableInsightRulesError::MissingRequiredParameter(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for EnableInsightRulesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for EnableInsightRulesError {
+    fn description(&self) -> &str {
+        match *self {
+            EnableInsightRulesError::InvalidParameterValue(ref cause) => cause,
+            EnableInsightRulesError::LimitExceeded(ref cause) => cause,
+            EnableInsightRulesError::MissingRequiredParameter(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by GetDashboard
@@ -3969,6 +5153,71 @@ impl Error for GetDashboardError {
             GetDashboardError::DashboardNotFoundError(ref cause) => cause,
             GetDashboardError::InternalServiceFault(ref cause) => cause,
             GetDashboardError::InvalidParameterValue(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetInsightRuleReport
+#[derive(Debug, PartialEq)]
+pub enum GetInsightRuleReportError {
+    /// <p>The value of an input parameter is bad or out-of-range.</p>
+    InvalidParameterValue(String),
+    /// <p>An input parameter that is required is missing.</p>
+    MissingRequiredParameter(String),
+    /// <p>The named resource does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl GetInsightRuleReportError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInsightRuleReportError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(
+                            GetInsightRuleReportError::InvalidParameterValue(parsed_error.message),
+                        )
+                    }
+                    "MissingParameter" => {
+                        return RusotoError::Service(
+                            GetInsightRuleReportError::MissingRequiredParameter(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ResourceNotFoundException" => {
+                        return RusotoError::Service(GetInsightRuleReportError::ResourceNotFound(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetInsightRuleReportError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetInsightRuleReportError {
+    fn description(&self) -> &str {
+        match *self {
+            GetInsightRuleReportError::InvalidParameterValue(ref cause) => cause,
+            GetInsightRuleReportError::MissingRequiredParameter(ref cause) => cause,
+            GetInsightRuleReportError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -4430,6 +5679,69 @@ impl Error for PutDashboardError {
         }
     }
 }
+/// Errors returned by PutInsightRule
+#[derive(Debug, PartialEq)]
+pub enum PutInsightRuleError {
+    /// <p>The value of an input parameter is bad or out-of-range.</p>
+    InvalidParameterValue(String),
+    /// <p>The operation exceeded one or more limits.</p>
+    LimitExceeded(String),
+    /// <p>An input parameter that is required is missing.</p>
+    MissingRequiredParameter(String),
+}
+
+impl PutInsightRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutInsightRuleError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(PutInsightRuleError::InvalidParameterValue(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceededException" => {
+                        return RusotoError::Service(PutInsightRuleError::LimitExceeded(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return RusotoError::Service(PutInsightRuleError::MissingRequiredParameter(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for PutInsightRuleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutInsightRuleError {
+    fn description(&self) -> &str {
+        match *self {
+            PutInsightRuleError::InvalidParameterValue(ref cause) => cause,
+            PutInsightRuleError::LimitExceeded(ref cause) => cause,
+            PutInsightRuleError::MissingRequiredParameter(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutMetricAlarm
 #[derive(Debug, PartialEq)]
 pub enum PutMetricAlarmError {
@@ -4762,6 +6074,12 @@ pub trait CloudWatch {
         input: DeleteDashboardsInput,
     ) -> RusotoFuture<DeleteDashboardsOutput, DeleteDashboardsError>;
 
+    /// <p>Permanently deletes the specified Contributor Insights rules.</p> <p>If you create a rule, delete it, and then re-create it with the same name, historical data from the first time the rule was created may or may not be available.</p>
+    fn delete_insight_rules(
+        &self,
+        input: DeleteInsightRulesInput,
+    ) -> RusotoFuture<DeleteInsightRulesOutput, DeleteInsightRulesError>;
+
     /// <p>Retrieves the history for the specified alarm. You can filter the results by date range or item type. If an alarm name is not specified, the histories for all alarms are returned.</p> <p>CloudWatch retains the history of an alarm even if you delete the alarm.</p>
     fn describe_alarm_history(
         &self,
@@ -4786,11 +6104,23 @@ pub trait CloudWatch {
         input: DescribeAnomalyDetectorsInput,
     ) -> RusotoFuture<DescribeAnomalyDetectorsOutput, DescribeAnomalyDetectorsError>;
 
+    /// <p>Returns a list of all the Contributor Insights rules in your account. All rules in your account are returned with a single operation.</p> <p>For more information about Contributor Insights, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContributorInsights.html">Using Contributor Insights to Analyze High-Cardinality Data</a>.</p>
+    fn describe_insight_rules(
+        &self,
+        input: DescribeInsightRulesInput,
+    ) -> RusotoFuture<DescribeInsightRulesOutput, DescribeInsightRulesError>;
+
     /// <p>Disables the actions for the specified alarms. When an alarm's actions are disabled, the alarm actions do not execute when the alarm state changes.</p>
     fn disable_alarm_actions(
         &self,
         input: DisableAlarmActionsInput,
     ) -> RusotoFuture<(), DisableAlarmActionsError>;
+
+    /// <p>Disables the specified Contributor Insights rules. When rules are disabled, they do not analyze log groups and do not incur costs.</p>
+    fn disable_insight_rules(
+        &self,
+        input: DisableInsightRulesInput,
+    ) -> RusotoFuture<DisableInsightRulesOutput, DisableInsightRulesError>;
 
     /// <p>Enables the actions for the specified alarms.</p>
     fn enable_alarm_actions(
@@ -4798,13 +6128,25 @@ pub trait CloudWatch {
         input: EnableAlarmActionsInput,
     ) -> RusotoFuture<(), EnableAlarmActionsError>;
 
+    /// <p>Enables the specified Contributor Insights rules. When rules are enabled, they immediately begin analyzing log data.</p>
+    fn enable_insight_rules(
+        &self,
+        input: EnableInsightRulesInput,
+    ) -> RusotoFuture<EnableInsightRulesOutput, EnableInsightRulesError>;
+
     /// <p>Displays the details of the dashboard that you specify.</p> <p>To copy an existing dashboard, use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code> to create the copy.</p>
     fn get_dashboard(
         &self,
         input: GetDashboardInput,
     ) -> RusotoFuture<GetDashboardOutput, GetDashboardError>;
 
-    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>If you omit <code>Unit</code> in your request, all data that was collected with any unit is returned, along with the corresponding units that were specified when the data was reported to CloudWatch. If you specify a unit, the operation returns only data data that was collected with that unit specified. If you specify a unit that does not match the data collected, the results of the operation are null. CloudWatch does not perform unit conversions.</p>
+    /// <p><p>This operation returns the time series data collected by a Contributor Insights rule. The data includes the identity and number of contributors to the log group.</p> <p>You can also optionally return one or more statistics about each data point in the time series. These statistics can include the following:</p> <ul> <li> <p> <code>UniqueContributors</code> -- the number of unique contributors for each data point.</p> </li> <li> <p> <code>MaxContributorValue</code> -- the value of the top contributor for each data point. The identity of the contributor may change for each data point in the graph.</p> <p>If this rule aggregates by COUNT, the top contributor for each data point is the contributor with the most occurrences in that period. If the rule aggregates by SUM, the top contributor is the contributor with the highest sum in the log field specified by the rule&#39;s <code>Value</code>, during that period.</p> </li> <li> <p> <code>SampleCount</code> -- the number of data points matched by the rule.</p> </li> <li> <p> <code>Sum</code> -- the sum of the values from all contributors during the time period represented by that data point.</p> </li> <li> <p> <code>Minimum</code> -- the minimum value from a single observation during the time period represented by that data point.</p> </li> <li> <p> <code>Maximum</code> -- the maximum value from a single observation during the time period represented by that data point.</p> </li> <li> <p> <code>Average</code> -- the average value from all contributors during the time period represented by that data point.</p> </li> </ul></p>
+    fn get_insight_rule_report(
+        &self,
+        input: GetInsightRuleReportInput,
+    ) -> RusotoFuture<GetInsightRuleReportOutput, GetInsightRuleReportError>;
+
+    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 data points. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>If you omit <code>Unit</code> in your request, all data that was collected with any unit is returned, along with the corresponding units that were specified when the data was reported to CloudWatch. If you specify a unit, the operation returns only data data that was collected with that unit specified. If you specify a unit that does not match the data collected, the results of the operation are null. CloudWatch does not perform unit conversions.</p>
     fn get_metric_data(
         &self,
         input: GetMetricDataInput,
@@ -4852,17 +6194,23 @@ pub trait CloudWatch {
         input: PutDashboardInput,
     ) -> RusotoFuture<PutDashboardOutput, PutDashboardError>;
 
+    /// <p>Creates a Contributor Insights rule. Rules evaluate log events in a CloudWatch Logs log group, enabling you to find contributor data for the log events in that log group. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContributorInsights.html">Using Contributor Insights to Analyze High-Cardinality Data</a>.</p> <p>If you create a rule, delete it, and then re-create it with the same name, historical data from the first time the rule was created may or may not be available.</p>
+    fn put_insight_rule(
+        &self,
+        input: PutInsightRuleInput,
+    ) -> RusotoFuture<PutInsightRuleOutput, PutInsightRuleError>;
+
     /// <p>Creates or updates an alarm and associates it with the specified metric, metric math expression, or anomaly detection model.</p> <p>Alarms based on anomaly detection models cannot have Auto Scaling actions.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p>No specific permissions are needed for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked role for you. The service-linked role is called <code>AWSServiceRoleForCloudWatchEvents</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
     fn put_metric_alarm(&self, input: PutMetricAlarmInput)
         -> RusotoFuture<(), PutMetricAlarmError>;
 
-    /// <p><p>Publishes metric data points to Amazon CloudWatch. CloudWatch associates the data points with the specified metric. If the specified metric does not exist, CloudWatch creates the metric. When CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>You can publish either individual data points in the <code>Value</code> field, or arrays of values and the number of times each value occurred during the period by using the <code>Values</code> and <code>Counts</code> fields in the <code>MetricDatum</code> structure. Using the <code>Values</code> and <code>Counts</code> method enables you to publish up to 150 values per metric with one <code>PutMetricData</code> request, and supports retrieving percentile statistics on this data.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests. You can send a payload compressed by gzip. Each request is also limited to no more than 20 different metrics.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. Each dimension consists of a Name and Value pair. For more information about specifying dimensions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricData</a> or <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The <code>SampleCount</code> value of the statistic set is 1 and <code>Min</code>, <code>Max</code>, and <code>Sum</code> are all equal.</p> </li> <li> <p>The <code>Min</code> and <code>Max</code> are equal, and <code>Sum</code> is equal to <code>Min</code> multiplied by <code>SampleCount</code>.</p> </li> </ul></p>
+    /// <p><p>Publishes metric data points to Amazon CloudWatch. CloudWatch associates the data points with the specified metric. If the specified metric does not exist, CloudWatch creates the metric. When CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>You can publish either individual data points in the <code>Value</code> field, or arrays of values and the number of times each value occurred during the period by using the <code>Values</code> and <code>Counts</code> fields in the <code>MetricDatum</code> structure. Using the <code>Values</code> and <code>Counts</code> method enables you to publish up to 150 values per metric with one <code>PutMetricData</code> request, and supports retrieving percentile statistics on this data.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests. You can send a payload compressed by gzip. Each request is also limited to no more than 20 different metrics.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of -2^360 to 2^360. In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. Each dimension consists of a Name and Value pair. For more information about specifying dimensions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricData</a> or <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The <code>SampleCount</code> value of the statistic set is 1 and <code>Min</code>, <code>Max</code>, and <code>Sum</code> are all equal.</p> </li> <li> <p>The <code>Min</code> and <code>Max</code> are equal, and <code>Sum</code> is equal to <code>Min</code> multiplied by <code>SampleCount</code>.</p> </li> </ul></p>
     fn put_metric_data(&self, input: PutMetricDataInput) -> RusotoFuture<(), PutMetricDataError>;
 
     /// <p>Temporarily sets the state of an alarm for testing purposes. When the updated state differs from the previous value, the action configured for the appropriate state is invoked. For example, if your alarm is configured to send an Amazon SNS message when an alarm is triggered, temporarily changing the alarm state to <code>ALARM</code> sends an SNS message. The alarm returns to its actual state (often within seconds). Because the alarm state change happens quickly, it is typically only visible in the alarm's <b>History</b> tab in the Amazon CloudWatch console or through <a>DescribeAlarmHistory</a>.</p>
     fn set_alarm_state(&self, input: SetAlarmStateInput) -> RusotoFuture<(), SetAlarmStateError>;
 
-    /// <p>Assigns one or more tags (key-value pairs) to the specified CloudWatch resource. Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only resources with certain tag values. In CloudWatch, alarms can be tagged.</p> <p>Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters.</p> <p>You can use the <code>TagResource</code> action with a resource that already has tags. If you specify a new tag key for the resource, this tag is appended to the list of tags associated with the resource. If you specify a tag key that is already associated with the resource, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource.</p>
+    /// <p>Assigns one or more tags (key-value pairs) to the specified CloudWatch resource. Currently, the only CloudWatch resources that can be tagged are alarms.</p> <p>Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only resources with certain tag values.</p> <p>Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters.</p> <p>You can use the <code>TagResource</code> action with an alarm that already has tags. If you specify a new tag key for the alarm, this tag is appended to the list of tags associated with the alarm. If you specify a tag key that is already associated with the alarm, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource.</p>
     fn tag_resource(
         &self,
         input: TagResourceInput,
@@ -5025,6 +6373,57 @@ impl CloudWatch for CloudWatchClient {
                     start_element(&actual_tag_name, &mut stack)?;
                     result = DeleteDashboardsOutputDeserializer::deserialize(
                         "DeleteDashboardsResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Permanently deletes the specified Contributor Insights rules.</p> <p>If you create a rule, delete it, and then re-create it with the same name, historical data from the first time the rule was created may or may not be available.</p>
+    fn delete_insight_rules(
+        &self,
+        input: DeleteInsightRulesInput,
+    ) -> RusotoFuture<DeleteInsightRulesOutput, DeleteInsightRulesError> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteInsightRules");
+        params.put("Version", "2010-08-01");
+        DeleteInsightRulesInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteInsightRulesError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteInsightRulesOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteInsightRulesOutputDeserializer::deserialize(
+                        "DeleteInsightRulesResult",
                         &mut stack,
                     )?;
                     skip_tree(&mut stack);
@@ -5233,6 +6632,56 @@ impl CloudWatch for CloudWatchClient {
         })
     }
 
+    /// <p>Returns a list of all the Contributor Insights rules in your account. All rules in your account are returned with a single operation.</p> <p>For more information about Contributor Insights, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContributorInsights.html">Using Contributor Insights to Analyze High-Cardinality Data</a>.</p>
+    fn describe_insight_rules(
+        &self,
+        input: DescribeInsightRulesInput,
+    ) -> RusotoFuture<DescribeInsightRulesOutput, DescribeInsightRulesError> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeInsightRules");
+        params.put("Version", "2010-08-01");
+        DescribeInsightRulesInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeInsightRulesError::from_response(response))
+                    }),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeInsightRulesOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeInsightRulesOutputDeserializer::deserialize(
+                        "DescribeInsightRulesResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Disables the actions for the specified alarms. When an alarm's actions are disabled, the alarm actions do not execute when the alarm state changes.</p>
     fn disable_alarm_actions(
         &self,
@@ -5257,6 +6706,56 @@ impl CloudWatch for CloudWatchClient {
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p>Disables the specified Contributor Insights rules. When rules are disabled, they do not analyze log groups and do not incur costs.</p>
+    fn disable_insight_rules(
+        &self,
+        input: DisableInsightRulesInput,
+    ) -> RusotoFuture<DisableInsightRulesOutput, DisableInsightRulesError> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DisableInsightRules");
+        params.put("Version", "2010-08-01");
+        DisableInsightRulesInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DisableInsightRulesError::from_response(response))
+                    }),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DisableInsightRulesOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DisableInsightRulesOutputDeserializer::deserialize(
+                        "DisableInsightRulesResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
 
@@ -5285,6 +6784,57 @@ impl CloudWatch for CloudWatchClient {
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p>Enables the specified Contributor Insights rules. When rules are enabled, they immediately begin analyzing log data.</p>
+    fn enable_insight_rules(
+        &self,
+        input: EnableInsightRulesInput,
+    ) -> RusotoFuture<EnableInsightRulesOutput, EnableInsightRulesError> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "EnableInsightRules");
+        params.put("Version", "2010-08-01");
+        EnableInsightRulesInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(EnableInsightRulesError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = EnableInsightRulesOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = EnableInsightRulesOutputDeserializer::deserialize(
+                        "EnableInsightRulesResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
 
@@ -5339,7 +6889,57 @@ impl CloudWatch for CloudWatchClient {
         })
     }
 
-    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>If you omit <code>Unit</code> in your request, all data that was collected with any unit is returned, along with the corresponding units that were specified when the data was reported to CloudWatch. If you specify a unit, the operation returns only data data that was collected with that unit specified. If you specify a unit that does not match the data collected, the results of the operation are null. CloudWatch does not perform unit conversions.</p>
+    /// <p><p>This operation returns the time series data collected by a Contributor Insights rule. The data includes the identity and number of contributors to the log group.</p> <p>You can also optionally return one or more statistics about each data point in the time series. These statistics can include the following:</p> <ul> <li> <p> <code>UniqueContributors</code> -- the number of unique contributors for each data point.</p> </li> <li> <p> <code>MaxContributorValue</code> -- the value of the top contributor for each data point. The identity of the contributor may change for each data point in the graph.</p> <p>If this rule aggregates by COUNT, the top contributor for each data point is the contributor with the most occurrences in that period. If the rule aggregates by SUM, the top contributor is the contributor with the highest sum in the log field specified by the rule&#39;s <code>Value</code>, during that period.</p> </li> <li> <p> <code>SampleCount</code> -- the number of data points matched by the rule.</p> </li> <li> <p> <code>Sum</code> -- the sum of the values from all contributors during the time period represented by that data point.</p> </li> <li> <p> <code>Minimum</code> -- the minimum value from a single observation during the time period represented by that data point.</p> </li> <li> <p> <code>Maximum</code> -- the maximum value from a single observation during the time period represented by that data point.</p> </li> <li> <p> <code>Average</code> -- the average value from all contributors during the time period represented by that data point.</p> </li> </ul></p>
+    fn get_insight_rule_report(
+        &self,
+        input: GetInsightRuleReportInput,
+    ) -> RusotoFuture<GetInsightRuleReportOutput, GetInsightRuleReportError> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetInsightRuleReport");
+        params.put("Version", "2010-08-01");
+        GetInsightRuleReportInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetInsightRuleReportError::from_response(response))
+                    }),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetInsightRuleReportOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetInsightRuleReportOutputDeserializer::deserialize(
+                        "GetInsightRuleReportResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 data points. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>If you omit <code>Unit</code> in your request, all data that was collected with any unit is returned, along with the corresponding units that were specified when the data was reported to CloudWatch. If you specify a unit, the operation returns only data data that was collected with that unit specified. If you specify a unit that does not match the data collected, the results of the operation are null. CloudWatch does not perform unit conversions.</p>
     fn get_metric_data(
         &self,
         input: GetMetricDataInput,
@@ -5744,6 +7344,57 @@ impl CloudWatch for CloudWatchClient {
         })
     }
 
+    /// <p>Creates a Contributor Insights rule. Rules evaluate log events in a CloudWatch Logs log group, enabling you to find contributor data for the log events in that log group. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContributorInsights.html">Using Contributor Insights to Analyze High-Cardinality Data</a>.</p> <p>If you create a rule, delete it, and then re-create it with the same name, historical data from the first time the rule was created may or may not be available.</p>
+    fn put_insight_rule(
+        &self,
+        input: PutInsightRuleInput,
+    ) -> RusotoFuture<PutInsightRuleOutput, PutInsightRuleError> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "PutInsightRule");
+        params.put("Version", "2010-08-01");
+        PutInsightRuleInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutInsightRuleError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = PutInsightRuleOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = PutInsightRuleOutputDeserializer::deserialize(
+                        "PutInsightRuleResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Creates or updates an alarm and associates it with the specified metric, metric math expression, or anomaly detection model.</p> <p>Alarms based on anomaly detection models cannot have Auto Scaling actions.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p>No specific permissions are needed for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked role for you. The service-linked role is called <code>AWSServiceRoleForCloudWatchEvents</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
     fn put_metric_alarm(
         &self,
@@ -5772,7 +7423,7 @@ impl CloudWatch for CloudWatchClient {
         })
     }
 
-    /// <p><p>Publishes metric data points to Amazon CloudWatch. CloudWatch associates the data points with the specified metric. If the specified metric does not exist, CloudWatch creates the metric. When CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>You can publish either individual data points in the <code>Value</code> field, or arrays of values and the number of times each value occurred during the period by using the <code>Values</code> and <code>Counts</code> fields in the <code>MetricDatum</code> structure. Using the <code>Values</code> and <code>Counts</code> method enables you to publish up to 150 values per metric with one <code>PutMetricData</code> request, and supports retrieving percentile statistics on this data.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests. You can send a payload compressed by gzip. Each request is also limited to no more than 20 different metrics.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. Each dimension consists of a Name and Value pair. For more information about specifying dimensions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricData</a> or <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The <code>SampleCount</code> value of the statistic set is 1 and <code>Min</code>, <code>Max</code>, and <code>Sum</code> are all equal.</p> </li> <li> <p>The <code>Min</code> and <code>Max</code> are equal, and <code>Sum</code> is equal to <code>Min</code> multiplied by <code>SampleCount</code>.</p> </li> </ul></p>
+    /// <p><p>Publishes metric data points to Amazon CloudWatch. CloudWatch associates the data points with the specified metric. If the specified metric does not exist, CloudWatch creates the metric. When CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>You can publish either individual data points in the <code>Value</code> field, or arrays of values and the number of times each value occurred during the period by using the <code>Values</code> and <code>Counts</code> fields in the <code>MetricDatum</code> structure. Using the <code>Values</code> and <code>Counts</code> method enables you to publish up to 150 values per metric with one <code>PutMetricData</code> request, and supports retrieving percentile statistics on this data.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests. You can send a payload compressed by gzip. Each request is also limited to no more than 20 different metrics.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of -2^360 to 2^360. In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. Each dimension consists of a Name and Value pair. For more information about specifying dimensions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricData</a> or <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The <code>SampleCount</code> value of the statistic set is 1 and <code>Min</code>, <code>Max</code>, and <code>Sum</code> are all equal.</p> </li> <li> <p>The <code>Min</code> and <code>Max</code> are equal, and <code>Sum</code> is equal to <code>Min</code> multiplied by <code>SampleCount</code>.</p> </li> </ul></p>
     fn put_metric_data(&self, input: PutMetricDataInput) -> RusotoFuture<(), PutMetricDataError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -5822,7 +7473,7 @@ impl CloudWatch for CloudWatchClient {
         })
     }
 
-    /// <p>Assigns one or more tags (key-value pairs) to the specified CloudWatch resource. Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only resources with certain tag values. In CloudWatch, alarms can be tagged.</p> <p>Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters.</p> <p>You can use the <code>TagResource</code> action with a resource that already has tags. If you specify a new tag key for the resource, this tag is appended to the list of tags associated with the resource. If you specify a tag key that is already associated with the resource, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource.</p>
+    /// <p>Assigns one or more tags (key-value pairs) to the specified CloudWatch resource. Currently, the only CloudWatch resources that can be tagged are alarms.</p> <p>Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only resources with certain tag values.</p> <p>Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters.</p> <p>You can use the <code>TagResource</code> action with an alarm that already has tags. If you specify a new tag key for the alarm, this tag is appended to the list of tags associated with the alarm. If you specify a tag key that is already associated with the alarm, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource.</p>
     fn tag_resource(
         &self,
         input: TagResourceInput,

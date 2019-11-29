@@ -305,17 +305,32 @@ fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
         // RDS has a conveniently named "Option" type
         "Option" => "RDSOption".to_owned(),
 
-        // Discovery has an BatchDeleteImportDataError struct, avoid collision with our error enum
+        // Discovery has a BatchDeleteImportDataError struct, avoid collision with our error enum
         "BatchDeleteImportDataError" => "DiscoveryBatchDeleteImportDataError".to_owned(),
 
-        // EC2 has an CreateFleetError struct, avoid collision with our error enum
+        // EC2 has a CreateFleetError struct, avoid collision with our error enum
         "CreateFleetError" => "EC2CreateFleetError".to_owned(),
+
+        // EC2 has a DeleteQueuedReservedInstancesError struct, avoid collision with our error enum
+        "DeleteQueuedReservedInstancesError" => "EC2DeleteQueuedReservedInstancesError".to_owned(),
 
         // codecommit has a BatchDescribeMergeConflictsError, avoid collision with our error enum
         "BatchDescribeMergeConflictsError" => "CodeCommitBatchDescribeMergeConflictsError".to_owned(),
 
         // codecommit has a BatchGetCommitsError, avoid collision with our error enum
         "BatchGetCommitsError" => "CodeCommitBatchGetCommitsError".to_owned(),
+
+        // codecommit has a BatchDisassociateApprovalRuleTemplateFromRepositoriesError, avoid collision with our error enum
+        "BatchDisassociateApprovalRuleTemplateFromRepositoriesError" => "CodeCommitBatchDisassociateApprovalRuleTemplateFromRepositoriesError".to_owned(),
+
+        // codecommit has a BatchAssociateApprovalRuleTemplateWithRepositoriesError, avoid collision with our error enum
+        "BatchAssociateApprovalRuleTemplateWithRepositoriesError" => "CodeCommitBatchAssociateApprovalRuleTemplateWithRepositoriesError".to_owned(),
+
+        // CloudSearch has a UpdateDomainEndpointOptionsError, avoid collision with our error enum
+        "UpdateDomainEndpointOptionsError" => "CloudSearchUpdateDomainEndpointOptionsError".to_owned(),
+
+        // Chime has a CreateAttendeeError, avoid collision with our error enum
+        "CreateAttendeeError" => "ChimeCreateAttendeeError".to_owned(),
 
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,

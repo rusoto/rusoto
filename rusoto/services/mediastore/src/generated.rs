@@ -81,7 +81,7 @@ pub struct CreateContainerInput {
     /// <p>The name for the container. The name must be from 1 to 255 characters. Container names must be unique to your AWS account within a specific region. As an example, you could create a container named <code>movies</code> in every region, as long as you don’t have an existing container with that name.</p>
     #[serde(rename = "ContainerName")]
     pub container_name: String,
-    /// <p>An array of key:value pairs that you define. These values can be anything that you want. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://aws.amazon.com/documentation/mediastore/tagging">Tagging Resources in MediaStore</a>.</p>
+    /// <p>An array of key:value pairs that you define. These values can be anything that you want. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/tagging.html">Tagging Resources in MediaStore</a>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -305,13 +305,12 @@ pub struct StopAccessLoggingInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopAccessLoggingOutput {}
 
-/// <p>A collection of tags associated with a container. Each tag consists of a key:value pair, which can be anything you define. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://aws.amazon.com/documentation/mediastore/tagging">Tagging Resources in MediaStore</a>.</p>
+/// <p>A collection of tags associated with a container. Each tag consists of a key:value pair, which can be anything you define. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/tagging.html">Tagging Resources in MediaStore</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>Part of the key:value pair that defines a tag. You can use a tag key to describe a category of information, such as "customer." Tag keys are case-sensitive.</p>
     #[serde(rename = "Key")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub key: Option<String>,
+    pub key: String,
     /// <p>Part of the key:value pair that defines a tag. You can use a tag value to describe a specific value within a category, such as "companyA" or "companyB." Tag values are case-sensitive.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1318,7 +1317,7 @@ pub trait MediaStore {
         input: StopAccessLoggingInput,
     ) -> RusotoFuture<StopAccessLoggingOutput, StopAccessLoggingError>;
 
-    /// <p>Adds tags to the specified AWS Elemental MediaStore container. Tags are key:value pairs that you can associate with AWS resources. For example, the tag key might be "customer" and the tag value might be "companyA." You can specify one or more tags to add to each container. You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://aws.amazon.com/documentation/mediastore/tagging">Tagging Resources in MediaStore</a>.</p>
+    /// <p>Adds tags to the specified AWS Elemental MediaStore container. Tags are key:value pairs that you can associate with AWS resources. For example, the tag key might be "customer" and the tag value might be "companyA." You can specify one or more tags to add to each container. You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/tagging.html">Tagging Resources in MediaStore</a>.</p>
     fn tag_resource(
         &self,
         input: TagResourceInput,
@@ -1829,7 +1828,7 @@ impl MediaStore for MediaStoreClient {
         })
     }
 
-    /// <p>Adds tags to the specified AWS Elemental MediaStore container. Tags are key:value pairs that you can associate with AWS resources. For example, the tag key might be "customer" and the tag value might be "companyA." You can specify one or more tags to add to each container. You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://aws.amazon.com/documentation/mediastore/tagging">Tagging Resources in MediaStore</a>.</p>
+    /// <p>Adds tags to the specified AWS Elemental MediaStore container. Tags are key:value pairs that you can associate with AWS resources. For example, the tag key might be "customer" and the tag value might be "companyA." You can specify one or more tags to add to each container. You can add up to 50 tags to each container. For more information about tagging, including naming and usage conventions, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/tagging.html">Tagging Resources in MediaStore</a>.</p>
     fn tag_resource(
         &self,
         input: TagResourceInput,

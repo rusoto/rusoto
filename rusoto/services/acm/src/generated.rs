@@ -282,7 +282,7 @@ pub struct Filters {
     #[serde(rename = "extendedKeyUsage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extended_key_usage: Option<Vec<String>>,
-    /// <p>Specify one or more algorithms that can be used to generate key pairs.</p>
+    /// <p>Specify one or more algorithms that can be used to generate key pairs.</p> <p>Default filtering returns only <code>RSA_2048</code> certificates. To return other certificate types, provide the desired type signatures in a comma-separated list. For example, <code>"keyTypes": ["RSA_2048,RSA_4096"]</code> returns both <code>RSA_2048</code> and <code>RSA_4096</code> certificates.</p>
     #[serde(rename = "keyTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_types: Option<Vec<String>>,
@@ -343,6 +343,10 @@ pub struct ImportCertificateRequest {
         default
     )]
     pub private_key: bytes::Bytes,
+    /// <p>One or more resource tags to associate with the imported certificate. </p> <p>Note: You cannot apply tags when reimporting a certificate.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -455,7 +459,7 @@ pub struct RequestCertificateRequest {
     #[serde(rename = "CertificateAuthorityArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_authority_arn: Option<String>,
-    /// <p> Fully qualified domain name (FQDN), such as www.example.com, that you want to secure with an ACM certificate. Use an asterisk (*) to create a wildcard certificate that protects several sites in the same domain. For example, *.example.com protects www.example.com, site.example.com, and images.example.com. </p> <p> The first domain name you enter cannot exceed 63 octets, including periods. Each subsequent Subject Alternative Name (SAN), however, can be up to 253 octets in length. </p>
+    /// <p> Fully qualified domain name (FQDN), such as www.example.com, that you want to secure with an ACM certificate. Use an asterisk (*) to create a wildcard certificate that protects several sites in the same domain. For example, *.example.com protects www.example.com, site.example.com, and images.example.com. </p> <p> The first domain name you enter cannot exceed 64 octets, including periods. Each subsequent Subject Alternative Name (SAN), however, can be up to 253 octets in length. </p>
     #[serde(rename = "DomainName")]
     pub domain_name: String,
     /// <p>The domain name that you want ACM to use to send you emails so that you can validate domain ownership.</p>
@@ -474,6 +478,10 @@ pub struct RequestCertificateRequest {
     #[serde(rename = "SubjectAlternativeNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subject_alternative_names: Option<Vec<String>>,
+    /// <p>One or more resource tags to associate with the certificate.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The method you want to use if you are requesting a public certificate to validate that you own or control domain. You can <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html">validate with DNS</a> or <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-email.html">validate with email</a>. We recommend that you use DNS validation. </p>
     #[serde(rename = "ValidationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -544,10 +552,14 @@ pub struct UpdateCertificateOptionsRequest {
 pub enum AddTagsToCertificateError {
     /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
+    /// <p>An input parameter was invalid.</p>
+    InvalidParameter(String),
     /// <p>One or both of the values that make up the key-value pair is not valid. For example, you cannot specify a tag value that begins with <code>aws:</code>.</p>
     InvalidTag(String),
     /// <p>The specified certificate cannot be found in the caller's account or the caller's account cannot be found.</p>
     ResourceNotFound(String),
+    /// <p>A specified tag did not comply with an existing tag policy and was rejected.</p>
+    TagPolicy(String),
     /// <p>The request contains too many tags. Try the request again with fewer tags.</p>
     TooManyTags(String),
 }
@@ -559,6 +571,11 @@ impl AddTagsToCertificateError {
                 "InvalidArnException" => {
                     return RusotoError::Service(AddTagsToCertificateError::InvalidArn(err.msg))
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(AddTagsToCertificateError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
                 "InvalidTagException" => {
                     return RusotoError::Service(AddTagsToCertificateError::InvalidTag(err.msg))
                 }
@@ -566,6 +583,9 @@ impl AddTagsToCertificateError {
                     return RusotoError::Service(AddTagsToCertificateError::ResourceNotFound(
                         err.msg,
                     ))
+                }
+                "TagPolicyException" => {
+                    return RusotoError::Service(AddTagsToCertificateError::TagPolicy(err.msg))
                 }
                 "TooManyTagsException" => {
                     return RusotoError::Service(AddTagsToCertificateError::TooManyTags(err.msg))
@@ -586,8 +606,10 @@ impl Error for AddTagsToCertificateError {
     fn description(&self) -> &str {
         match *self {
             AddTagsToCertificateError::InvalidArn(ref cause) => cause,
+            AddTagsToCertificateError::InvalidParameter(ref cause) => cause,
             AddTagsToCertificateError::InvalidTag(ref cause) => cause,
             AddTagsToCertificateError::ResourceNotFound(ref cause) => cause,
+            AddTagsToCertificateError::TagPolicy(ref cause) => cause,
             AddTagsToCertificateError::TooManyTags(ref cause) => cause,
         }
     }
@@ -771,21 +793,41 @@ impl Error for GetCertificateError {
 /// Errors returned by ImportCertificate
 #[derive(Debug, PartialEq)]
 pub enum ImportCertificateError {
+    /// <p>An input parameter was invalid.</p>
+    InvalidParameter(String),
+    /// <p>One or both of the values that make up the key-value pair is not valid. For example, you cannot specify a tag value that begins with <code>aws:</code>.</p>
+    InvalidTag(String),
     /// <p>An ACM limit has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The specified certificate cannot be found in the caller's account or the caller's account cannot be found.</p>
     ResourceNotFound(String),
+    /// <p>A specified tag did not comply with an existing tag policy and was rejected.</p>
+    TagPolicy(String),
+    /// <p>The request contains too many tags. Try the request again with fewer tags.</p>
+    TooManyTags(String),
 }
 
 impl ImportCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ImportCertificateError::InvalidParameter(err.msg))
+                }
+                "InvalidTagException" => {
+                    return RusotoError::Service(ImportCertificateError::InvalidTag(err.msg))
+                }
                 "LimitExceededException" => {
                     return RusotoError::Service(ImportCertificateError::LimitExceeded(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ImportCertificateError::ResourceNotFound(err.msg))
+                }
+                "TagPolicyException" => {
+                    return RusotoError::Service(ImportCertificateError::TagPolicy(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(ImportCertificateError::TooManyTags(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -802,8 +844,12 @@ impl fmt::Display for ImportCertificateError {
 impl Error for ImportCertificateError {
     fn description(&self) -> &str {
         match *self {
+            ImportCertificateError::InvalidParameter(ref cause) => cause,
+            ImportCertificateError::InvalidTag(ref cause) => cause,
             ImportCertificateError::LimitExceeded(ref cause) => cause,
             ImportCertificateError::ResourceNotFound(ref cause) => cause,
+            ImportCertificateError::TagPolicy(ref cause) => cause,
+            ImportCertificateError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -886,10 +932,14 @@ impl Error for ListTagsForCertificateError {
 pub enum RemoveTagsFromCertificateError {
     /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
+    /// <p>An input parameter was invalid.</p>
+    InvalidParameter(String),
     /// <p>One or both of the values that make up the key-value pair is not valid. For example, you cannot specify a tag value that begins with <code>aws:</code>.</p>
     InvalidTag(String),
     /// <p>The specified certificate cannot be found in the caller's account or the caller's account cannot be found.</p>
     ResourceNotFound(String),
+    /// <p>A specified tag did not comply with an existing tag policy and was rejected.</p>
+    TagPolicy(String),
 }
 
 impl RemoveTagsFromCertificateError {
@@ -898,6 +948,11 @@ impl RemoveTagsFromCertificateError {
             match err.typ.as_str() {
                 "InvalidArnException" => {
                     return RusotoError::Service(RemoveTagsFromCertificateError::InvalidArn(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(RemoveTagsFromCertificateError::InvalidParameter(
                         err.msg,
                     ))
                 }
@@ -910,6 +965,9 @@ impl RemoveTagsFromCertificateError {
                     return RusotoError::Service(RemoveTagsFromCertificateError::ResourceNotFound(
                         err.msg,
                     ))
+                }
+                "TagPolicyException" => {
+                    return RusotoError::Service(RemoveTagsFromCertificateError::TagPolicy(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -927,8 +985,10 @@ impl Error for RemoveTagsFromCertificateError {
     fn description(&self) -> &str {
         match *self {
             RemoveTagsFromCertificateError::InvalidArn(ref cause) => cause,
+            RemoveTagsFromCertificateError::InvalidParameter(ref cause) => cause,
             RemoveTagsFromCertificateError::InvalidTag(ref cause) => cause,
             RemoveTagsFromCertificateError::ResourceNotFound(ref cause) => cause,
+            RemoveTagsFromCertificateError::TagPolicy(ref cause) => cause,
         }
     }
 }
@@ -978,8 +1038,16 @@ pub enum RequestCertificateError {
     InvalidArn(String),
     /// <p>One or more values in the <a>DomainValidationOption</a> structure is incorrect.</p>
     InvalidDomainValidationOptions(String),
+    /// <p>An input parameter was invalid.</p>
+    InvalidParameter(String),
+    /// <p>One or both of the values that make up the key-value pair is not valid. For example, you cannot specify a tag value that begins with <code>aws:</code>.</p>
+    InvalidTag(String),
     /// <p>An ACM limit has been exceeded.</p>
     LimitExceeded(String),
+    /// <p>A specified tag did not comply with an existing tag policy and was rejected.</p>
+    TagPolicy(String),
+    /// <p>The request contains too many tags. Try the request again with fewer tags.</p>
+    TooManyTags(String),
 }
 
 impl RequestCertificateError {
@@ -994,8 +1062,20 @@ impl RequestCertificateError {
                         RequestCertificateError::InvalidDomainValidationOptions(err.msg),
                     )
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(RequestCertificateError::InvalidParameter(err.msg))
+                }
+                "InvalidTagException" => {
+                    return RusotoError::Service(RequestCertificateError::InvalidTag(err.msg))
+                }
                 "LimitExceededException" => {
                     return RusotoError::Service(RequestCertificateError::LimitExceeded(err.msg))
+                }
+                "TagPolicyException" => {
+                    return RusotoError::Service(RequestCertificateError::TagPolicy(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(RequestCertificateError::TooManyTags(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1014,7 +1094,11 @@ impl Error for RequestCertificateError {
         match *self {
             RequestCertificateError::InvalidArn(ref cause) => cause,
             RequestCertificateError::InvalidDomainValidationOptions(ref cause) => cause,
+            RequestCertificateError::InvalidParameter(ref cause) => cause,
+            RequestCertificateError::InvalidTag(ref cause) => cause,
             RequestCertificateError::LimitExceeded(ref cause) => cause,
+            RequestCertificateError::TagPolicy(ref cause) => cause,
+            RequestCertificateError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -1150,7 +1234,7 @@ pub trait Acm {
         input: DescribeCertificateRequest,
     ) -> RusotoFuture<DescribeCertificateResponse, DescribeCertificateError>;
 
-    /// <p>Exports a private certificate issued by a private certificate authority (CA) for use anywhere. You can export the certificate, the certificate chain, and the encrypted private key associated with the public key embedded in the certificate. You must store the private key securely. The private key is a 2048 bit RSA key. You must provide a passphrase for the private key when exporting it. You can use the following OpenSSL command to decrypt it later. Provide the passphrase when prompted. </p> <p> <code>openssl rsa -in encrypted_key.pem -out decrypted_key.pem</code> </p>
+    /// <p>Exports a private certificate issued by a private certificate authority (CA) for use anywhere. The exported file contains the certificate, the certificate chain, and the encrypted private 2048-bit RSA key associated with the public key that is embedded in the certificate. For security, you must assign a passphrase for the private key when exporting it. </p> <p>For information about exporting and formatting a certificate using the ACM console or CLI, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-export-private.html">Export a Private Certificate</a>.</p>
     fn export_certificate(
         &self,
         input: ExportCertificateRequest,
@@ -1162,13 +1246,13 @@ pub trait Acm {
         input: GetCertificateRequest,
     ) -> RusotoFuture<GetCertificateResponse, GetCertificateError>;
 
-    /// <p>Imports a certificate into AWS Certificate Manager (ACM) to use with services that are integrated with ACM. Note that <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-services.html">integrated services</a> allow only certificate types and keys they support to be associated with their resources. Further, their support differs depending on whether the certificate is imported into IAM or into ACM. For more information, see the documentation for each service. For more information about importing certificates into ACM, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing Certificates</a> in the <i>AWS Certificate Manager User Guide</i>. </p> <note> <p>ACM does not provide <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html">managed renewal</a> for certificates that you import.</p> </note> <p>Note the following guidelines when importing third party certificates:</p> <ul> <li> <p>You must enter the private key that matches the certificate you are importing.</p> </li> <li> <p>The private key must be unencrypted. You cannot import a private key that is protected by a password or a passphrase.</p> </li> <li> <p>If the certificate you are importing is not self-signed, you must enter its certificate chain.</p> </li> <li> <p>If a certificate chain is included, the issuer must be the subject of one of the certificates in the chain.</p> </li> <li> <p>The certificate, private key, and certificate chain must be PEM-encoded.</p> </li> <li> <p>The current time must be between the <code>Not Before</code> and <code>Not After</code> certificate fields.</p> </li> <li> <p>The <code>Issuer</code> field must not be empty.</p> </li> <li> <p>The OCSP authority URL, if present, must not exceed 1000 characters.</p> </li> <li> <p>To import a new certificate, omit the <code>CertificateArn</code> argument. Include this argument only when you want to replace a previously imported certificate.</p> </li> <li> <p>When you import a certificate by using the CLI, you must specify the certificate, the certificate chain, and the private key by their file names preceded by <code>file://</code>. For example, you can specify a certificate saved in the <code>C:\temp</code> folder as <code>file://C:\temp\certificate_to_import.pem</code>. If you are making an HTTP or HTTPS Query request, include these arguments as BLOBs. </p> </li> <li> <p>When you import a certificate by using an SDK, you must specify the certificate, the certificate chain, and the private key files in the manner required by the programming language you're using. </p> </li> </ul> <p>This operation returns the <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Name (ARN)</a> of the imported certificate.</p>
+    /// <p>Imports a certificate into AWS Certificate Manager (ACM) to use with services that are integrated with ACM. Note that <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-services.html">integrated services</a> allow only certificate types and keys they support to be associated with their resources. Further, their support differs depending on whether the certificate is imported into IAM or into ACM. For more information, see the documentation for each service. For more information about importing certificates into ACM, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing Certificates</a> in the <i>AWS Certificate Manager User Guide</i>. </p> <note> <p>ACM does not provide <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html">managed renewal</a> for certificates that you import.</p> </note> <p>Note the following guidelines when importing third party certificates:</p> <ul> <li> <p>You must enter the private key that matches the certificate you are importing.</p> </li> <li> <p>The private key must be unencrypted. You cannot import a private key that is protected by a password or a passphrase.</p> </li> <li> <p>If the certificate you are importing is not self-signed, you must enter its certificate chain.</p> </li> <li> <p>If a certificate chain is included, the issuer must be the subject of one of the certificates in the chain.</p> </li> <li> <p>The certificate, private key, and certificate chain must be PEM-encoded.</p> </li> <li> <p>The current time must be between the <code>Not Before</code> and <code>Not After</code> certificate fields.</p> </li> <li> <p>The <code>Issuer</code> field must not be empty.</p> </li> <li> <p>The OCSP authority URL, if present, must not exceed 1000 characters.</p> </li> <li> <p>To import a new certificate, omit the <code>CertificateArn</code> argument. Include this argument only when you want to replace a previously imported certifica</p> </li> <li> <p>When you import a certificate by using the CLI, you must specify the certificate, the certificate chain, and the private key by their file names preceded by <code>file://</code>. For example, you can specify a certificate saved in the <code>C:\temp</code> folder as <code>file://C:\temp\certificate_to_import.pem</code>. If you are making an HTTP or HTTPS Query request, include these arguments as BLOBs. </p> </li> <li> <p>When you import a certificate by using an SDK, you must specify the certificate, the certificate chain, and the private key files in the manner required by the programming language you're using. </p> </li> <li> <p>The cryptographic algorithm of an imported certificate must match the algorithm of the signing CA. For example, if the signing CA key type is RSA, then the certificate key type must also be RSA.</p> </li> </ul> <p>This operation returns the <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Name (ARN)</a> of the imported certificate.</p>
     fn import_certificate(
         &self,
         input: ImportCertificateRequest,
     ) -> RusotoFuture<ImportCertificateResponse, ImportCertificateError>;
 
-    /// <p>Retrieves a list of certificate ARNs and domain names. You can request that only certificates that match a specific status be listed. You can also filter by specific attributes of the certificate. </p>
+    /// <p>Retrieves a list of certificate ARNs and domain names. You can request that only certificates that match a specific status be listed. You can also filter by specific attributes of the certificate. Default filtering returns only <code>RSA_2048</code> certificates. For more information, see <a>Filters</a>.</p>
     fn list_certificates(
         &self,
         input: ListCertificatesRequest,
@@ -1327,7 +1411,7 @@ impl Acm for AcmClient {
         })
     }
 
-    /// <p>Exports a private certificate issued by a private certificate authority (CA) for use anywhere. You can export the certificate, the certificate chain, and the encrypted private key associated with the public key embedded in the certificate. You must store the private key securely. The private key is a 2048 bit RSA key. You must provide a passphrase for the private key when exporting it. You can use the following OpenSSL command to decrypt it later. Provide the passphrase when prompted. </p> <p> <code>openssl rsa -in encrypted_key.pem -out decrypted_key.pem</code> </p>
+    /// <p>Exports a private certificate issued by a private certificate authority (CA) for use anywhere. The exported file contains the certificate, the certificate chain, and the encrypted private 2048-bit RSA key associated with the public key that is embedded in the certificate. For security, you must assign a passphrase for the private key when exporting it. </p> <p>For information about exporting and formatting a certificate using the ACM console or CLI, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-export-private.html">Export a Private Certificate</a>.</p>
     fn export_certificate(
         &self,
         input: ExportCertificateRequest,
@@ -1385,7 +1469,7 @@ impl Acm for AcmClient {
         })
     }
 
-    /// <p>Imports a certificate into AWS Certificate Manager (ACM) to use with services that are integrated with ACM. Note that <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-services.html">integrated services</a> allow only certificate types and keys they support to be associated with their resources. Further, their support differs depending on whether the certificate is imported into IAM or into ACM. For more information, see the documentation for each service. For more information about importing certificates into ACM, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing Certificates</a> in the <i>AWS Certificate Manager User Guide</i>. </p> <note> <p>ACM does not provide <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html">managed renewal</a> for certificates that you import.</p> </note> <p>Note the following guidelines when importing third party certificates:</p> <ul> <li> <p>You must enter the private key that matches the certificate you are importing.</p> </li> <li> <p>The private key must be unencrypted. You cannot import a private key that is protected by a password or a passphrase.</p> </li> <li> <p>If the certificate you are importing is not self-signed, you must enter its certificate chain.</p> </li> <li> <p>If a certificate chain is included, the issuer must be the subject of one of the certificates in the chain.</p> </li> <li> <p>The certificate, private key, and certificate chain must be PEM-encoded.</p> </li> <li> <p>The current time must be between the <code>Not Before</code> and <code>Not After</code> certificate fields.</p> </li> <li> <p>The <code>Issuer</code> field must not be empty.</p> </li> <li> <p>The OCSP authority URL, if present, must not exceed 1000 characters.</p> </li> <li> <p>To import a new certificate, omit the <code>CertificateArn</code> argument. Include this argument only when you want to replace a previously imported certificate.</p> </li> <li> <p>When you import a certificate by using the CLI, you must specify the certificate, the certificate chain, and the private key by their file names preceded by <code>file://</code>. For example, you can specify a certificate saved in the <code>C:\temp</code> folder as <code>file://C:\temp\certificate_to_import.pem</code>. If you are making an HTTP or HTTPS Query request, include these arguments as BLOBs. </p> </li> <li> <p>When you import a certificate by using an SDK, you must specify the certificate, the certificate chain, and the private key files in the manner required by the programming language you're using. </p> </li> </ul> <p>This operation returns the <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Name (ARN)</a> of the imported certificate.</p>
+    /// <p>Imports a certificate into AWS Certificate Manager (ACM) to use with services that are integrated with ACM. Note that <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-services.html">integrated services</a> allow only certificate types and keys they support to be associated with their resources. Further, their support differs depending on whether the certificate is imported into IAM or into ACM. For more information, see the documentation for each service. For more information about importing certificates into ACM, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing Certificates</a> in the <i>AWS Certificate Manager User Guide</i>. </p> <note> <p>ACM does not provide <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html">managed renewal</a> for certificates that you import.</p> </note> <p>Note the following guidelines when importing third party certificates:</p> <ul> <li> <p>You must enter the private key that matches the certificate you are importing.</p> </li> <li> <p>The private key must be unencrypted. You cannot import a private key that is protected by a password or a passphrase.</p> </li> <li> <p>If the certificate you are importing is not self-signed, you must enter its certificate chain.</p> </li> <li> <p>If a certificate chain is included, the issuer must be the subject of one of the certificates in the chain.</p> </li> <li> <p>The certificate, private key, and certificate chain must be PEM-encoded.</p> </li> <li> <p>The current time must be between the <code>Not Before</code> and <code>Not After</code> certificate fields.</p> </li> <li> <p>The <code>Issuer</code> field must not be empty.</p> </li> <li> <p>The OCSP authority URL, if present, must not exceed 1000 characters.</p> </li> <li> <p>To import a new certificate, omit the <code>CertificateArn</code> argument. Include this argument only when you want to replace a previously imported certifica</p> </li> <li> <p>When you import a certificate by using the CLI, you must specify the certificate, the certificate chain, and the private key by their file names preceded by <code>file://</code>. For example, you can specify a certificate saved in the <code>C:\temp</code> folder as <code>file://C:\temp\certificate_to_import.pem</code>. If you are making an HTTP or HTTPS Query request, include these arguments as BLOBs. </p> </li> <li> <p>When you import a certificate by using an SDK, you must specify the certificate, the certificate chain, and the private key files in the manner required by the programming language you're using. </p> </li> <li> <p>The cryptographic algorithm of an imported certificate must match the algorithm of the signing CA. For example, if the signing CA key type is RSA, then the certificate key type must also be RSA.</p> </li> </ul> <p>This operation returns the <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Name (ARN)</a> of the imported certificate.</p>
     fn import_certificate(
         &self,
         input: ImportCertificateRequest,
@@ -1414,7 +1498,7 @@ impl Acm for AcmClient {
         })
     }
 
-    /// <p>Retrieves a list of certificate ARNs and domain names. You can request that only certificates that match a specific status be listed. You can also filter by specific attributes of the certificate. </p>
+    /// <p>Retrieves a list of certificate ARNs and domain names. You can request that only certificates that match a specific status be listed. You can also filter by specific attributes of the certificate. Default filtering returns only <code>RSA_2048</code> certificates. For more information, see <a>Filters</a>.</p>
     fn list_certificates(
         &self,
         input: ListCertificatesRequest,

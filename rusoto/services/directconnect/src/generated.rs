@@ -81,7 +81,7 @@ pub struct AllocateHostedConnectionRequest {
     /// <p>The ID of the AWS account ID of the customer for the connection.</p>
     #[serde(rename = "ownerAccount")]
     pub owner_account: String,
-    /// <p>The tags to assign to the hosted connection.</p>
+    /// <p>The tags associated with the connection.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -362,11 +362,15 @@ pub struct Connection {
     #[serde(rename = "partnerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partner_name: Option<String>,
+    /// <p>The name of the service provider associated with the connection.</p>
+    #[serde(rename = "providerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_name: Option<String>,
     /// <p>The AWS Region where the connection is located.</p>
     #[serde(rename = "region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
-    /// <p>Any tags assigned to the connection.</p>
+    /// <p>The tags associated with the connection.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -421,7 +425,11 @@ pub struct CreateConnectionRequest {
     /// <p>The location of the connection.</p>
     #[serde(rename = "location")]
     pub location: String,
-    /// <p>The tags to assign to the connection.</p>
+    /// <p>The name of the service provider associated with the requested connection.</p>
+    #[serde(rename = "providerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_name: Option<String>,
+    /// <p>The tags to associate with the lag.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -460,7 +468,7 @@ pub struct CreateDirectConnectGatewayAssociationProposalResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDirectConnectGatewayAssociationRequest {
-    /// <p>The Amazon VPC prefixes to advertise to the Direct Connect gateway</p> <p>For information about how to set the prefixes, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/multi-account-associate-vgw.html#allowed-prefixes">Allowed Prefixes</a> in the <i>AWS Direct Connect User Guide</i>.</p>
+    /// <p>The Amazon VPC prefixes to advertise to the Direct Connect gateway</p> <p>This parameter is required when you create an association to a transit gateway.</p> <p>For information about how to set the prefixes, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/multi-account-associate-vgw.html#allowed-prefixes">Allowed Prefixes</a> in the <i>AWS Direct Connect User Guide</i>.</p>
     #[serde(rename = "addAllowedPrefixesToDirectConnectGateway")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub add_allowed_prefixes_to_direct_connect_gateway: Option<Vec<RouteFilterPrefix>>,
@@ -521,7 +529,11 @@ pub struct CreateInterconnectRequest {
     /// <p>The location of the interconnect.</p>
     #[serde(rename = "location")]
     pub location: String,
-    /// <p>The tags to assign to the interconnect,</p>
+    /// <p>The name of the service provider associated with the interconnect.</p>
+    #[serde(rename = "providerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_name: Option<String>,
+    /// <p>The tags to associate with the interconnect.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -529,7 +541,7 @@ pub struct CreateInterconnectRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateLagRequest {
-    /// <p>The tags to assign to the child connections of the LAG. Only newly created child connections as the result of creating a LAG connection are assigned the provided tags. The tags are not assigned to an existing connection that is provided via the “connectionId” parameter that will be migrated to the LAG.</p>
+    /// <p>The tags to associate with the automtically created LAGs.</p>
     #[serde(rename = "childConnectionTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub child_connection_tags: Option<Vec<Tag>>,
@@ -549,7 +561,11 @@ pub struct CreateLagRequest {
     /// <p>The number of physical connections initially provisioned and bundled by the LAG.</p>
     #[serde(rename = "numberOfConnections")]
     pub number_of_connections: i64,
-    /// <p>The tags to assign to the link aggregation group (LAG).</p>
+    /// <p>The name of the service provider associated with the LAG.</p>
+    #[serde(rename = "providerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_name: Option<String>,
+    /// <p>The tags to associate with the LAG.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1114,7 +1130,7 @@ pub struct DirectConnectGatewayAttachment {
     #[serde(rename = "attachmentState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attachment_state: Option<String>,
-    /// <p>The interface type.</p>
+    /// <p>The type of attachment.</p>
     #[serde(rename = "attachmentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attachment_type: Option<String>,
@@ -1198,11 +1214,15 @@ pub struct Interconnect {
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
+    /// <p>The name of the service provider associated with the interconnect.</p>
+    #[serde(rename = "providerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_name: Option<String>,
     /// <p>The AWS Region where the connection is located.</p>
     #[serde(rename = "region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
-    /// <p>Any tags assigned to the interconnect.</p>
+    /// <p>The tags associated with the interconnect.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1277,11 +1297,15 @@ pub struct Lag {
     #[serde(rename = "ownerAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_account: Option<String>,
+    /// <p>The name of the service provider associated with the LAG.</p>
+    #[serde(rename = "providerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_name: Option<String>,
     /// <p>The AWS Region where the connection is located.</p>
     #[serde(rename = "region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
-    /// <p>Any tags assigned to link aggregation group (LAG).</p>
+    /// <p>The tags associated with the LAG.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1323,6 +1347,10 @@ pub struct Location {
     #[serde(rename = "availablePortSpeeds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub available_port_speeds: Option<Vec<String>>,
+    /// <p>The name of the service provider for the location.</p>
+    #[serde(rename = "availableProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub available_providers: Option<Vec<String>>,
     /// <p>The code for the location.</p>
     #[serde(rename = "locationCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1382,7 +1410,7 @@ pub struct NewPrivateVirtualInterface {
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p> <p>The valid values are 1-2147483647.</p>
     #[serde(rename = "asn")]
     pub asn: i64,
     /// <p>The authentication key for BGP configuration. This string has a minimum length of 6 characters and and a maximun lenth of 80 characters.</p>
@@ -1401,7 +1429,7 @@ pub struct NewPrivateVirtualInterface {
     #[serde(rename = "mtu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mtu: Option<i64>,
-    /// <p>Any tags assigned to the private virtual interface.</p>
+    /// <p>The tags associated with the private virtual interface.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1428,7 +1456,7 @@ pub struct NewPrivateVirtualInterfaceAllocation {
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p> <p>The valid values are 1-2147483647.</p>
     #[serde(rename = "asn")]
     pub asn: i64,
     /// <p>The authentication key for BGP configuration. This string has a minimum length of 6 characters and and a maximun lenth of 80 characters.</p>
@@ -1443,7 +1471,7 @@ pub struct NewPrivateVirtualInterfaceAllocation {
     #[serde(rename = "mtu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mtu: Option<i64>,
-    /// <p>Any tags assigned to the private virtual interface to be provisioned on a connection.</p>
+    /// <p>The tags associated with the private virtual interface.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1466,7 +1494,7 @@ pub struct NewPublicVirtualInterface {
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p> <p>The valid values are 1-2147483647.</p>
     #[serde(rename = "asn")]
     pub asn: i64,
     /// <p>The authentication key for BGP configuration. This string has a minimum length of 6 characters and and a maximun lenth of 80 characters.</p>
@@ -1481,7 +1509,7 @@ pub struct NewPublicVirtualInterface {
     #[serde(rename = "routeFilterPrefixes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
-    /// <p>Any tags assigned to the public virtual interface.</p>
+    /// <p>The tags associated with the public virtual interface.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1504,7 +1532,7 @@ pub struct NewPublicVirtualInterfaceAllocation {
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p> <p>The valid values are 1-2147483647.</p>
     #[serde(rename = "asn")]
     pub asn: i64,
     /// <p>The authentication key for BGP configuration. This string has a minimum length of 6 characters and and a maximun lenth of 80 characters.</p>
@@ -1519,7 +1547,7 @@ pub struct NewPublicVirtualInterfaceAllocation {
     #[serde(rename = "routeFilterPrefixes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
-    /// <p>Any tags assigned to the public virtual interface to be provisioned on a connection.</p>
+    /// <p>The tags associated with the public virtual interface.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1531,7 +1559,7 @@ pub struct NewPublicVirtualInterfaceAllocation {
     pub vlan: i64,
 }
 
-/// <p>Information about the transit virtual interface.</p>
+/// <p>Information about a transit virtual interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NewTransitVirtualInterface {
     /// <p>The address family for the BGP peer.</p>
@@ -1542,11 +1570,11 @@ pub struct NewTransitVirtualInterface {
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p> <p>The valid values are 1-2147483647.</p>
     #[serde(rename = "asn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
-    /// <p>The authentication key for BGP configuration.</p>
+    /// <p>The authentication key for BGP configuration. This string has a minimum length of 6 characters and and a maximun lenth of 80 characters.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
@@ -1558,11 +1586,11 @@ pub struct NewTransitVirtualInterface {
     #[serde(rename = "directConnectGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_id: Option<String>,
-    /// <p>The maximum transmission unit (MTU), in bytes. The supported values are 1500 and 8500. The default value is 1500. </p>
+    /// <p>The maximum transmission unit (MTU), in bytes. The supported values are 1500 and 9001. The default value is 1500.</p>
     #[serde(rename = "mtu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mtu: Option<i64>,
-    /// <p>Any tags assigned to the transit virtual interface.</p>
+    /// <p>The tags associated with the transitive virtual interface.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1576,7 +1604,7 @@ pub struct NewTransitVirtualInterface {
     pub vlan: Option<i64>,
 }
 
-/// <p>Information about a transit virtual interface.</p>
+/// <p>Information about a transit virtual interface to be provisioned on a connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NewTransitVirtualInterfaceAllocation {
     /// <p>The address family for the BGP peer.</p>
@@ -1587,11 +1615,11 @@ pub struct NewTransitVirtualInterfaceAllocation {
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p> <p>The valid values are 1-2147483647.</p>
     #[serde(rename = "asn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
-    /// <p>The authentication key for BGP configuration.</p>
+    /// <p>The authentication key for BGP configuration. This string has a minimum length of 6 characters and and a maximun lenth of 80 characters.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
@@ -1599,11 +1627,11 @@ pub struct NewTransitVirtualInterfaceAllocation {
     #[serde(rename = "customerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
-    /// <p>The maximum transmission unit (MTU), in bytes. The supported values are 1500 and 8500. The default value is 1500. </p>
+    /// <p>The maximum transmission unit (MTU), in bytes. The supported values are 1500 and 9001. The default value is 1500. </p>
     #[serde(rename = "mtu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mtu: Option<i64>,
-    /// <p>Any tags assigned to the transit virtual interface.</p>
+    /// <p>The tags associated with the transitive virtual interface.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1657,7 +1685,7 @@ pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p>The tags to assign.</p>
+    /// <p>The tags to add.</p>
     #[serde(rename = "tags")]
     pub tags: Vec<Tag>,
 }
@@ -1769,7 +1797,7 @@ pub struct VirtualInterface {
     #[serde(rename = "amazonSideAsn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_side_asn: Option<i64>,
-    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p> <p>The valid values are 1-2147483647.</p>
     #[serde(rename = "asn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
@@ -1825,7 +1853,7 @@ pub struct VirtualInterface {
     #[serde(rename = "routeFilterPrefixes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
-    /// <p>Any tags assigned to the virtual interface.</p>
+    /// <p>The tags associated with the virtual interface.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -4505,13 +4533,13 @@ pub trait DirectConnect {
         input: DeleteConnectionRequest,
     ) -> RusotoFuture<Connection, DeleteConnectionError>;
 
-    /// <p>Deletes the specified Direct Connect gateway. You must first delete all virtual interfaces that are attached to the Direct Connect gateway and disassociate all virtual private gateways that are associated with the Direct Connect gateway.</p>
+    /// <p>Deletes the specified Direct Connect gateway. You must first delete all virtual interfaces that are attached to the Direct Connect gateway and disassociate all virtual private gateways associated with the Direct Connect gateway.</p>
     fn delete_direct_connect_gateway(
         &self,
         input: DeleteDirectConnectGatewayRequest,
     ) -> RusotoFuture<DeleteDirectConnectGatewayResult, DeleteDirectConnectGatewayError>;
 
-    /// <p>Deletes the association between the specified Direct Connect gateway and virtual private gateway.</p>
+    /// <p>Deletes the association between the specified Direct Connect gateway and virtual private gateway.</p> <p>We recommend that you specify the <code>associationID</code> to delete the association. Alternatively, if you own virtual gateway and a Direct Connect gateway association, you can specify the <code>virtualGatewayId</code> and <code>directConnectGatewayId</code> to delete an association.</p>
     fn delete_direct_connect_gateway_association(
         &self,
         input: DeleteDirectConnectGatewayAssociationRequest,
@@ -5433,7 +5461,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Deletes the specified Direct Connect gateway. You must first delete all virtual interfaces that are attached to the Direct Connect gateway and disassociate all virtual private gateways that are associated with the Direct Connect gateway.</p>
+    /// <p>Deletes the specified Direct Connect gateway. You must first delete all virtual interfaces that are attached to the Direct Connect gateway and disassociate all virtual private gateways associated with the Direct Connect gateway.</p>
     fn delete_direct_connect_gateway(
         &self,
         input: DeleteDirectConnectGatewayRequest,
@@ -5459,7 +5487,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Deletes the association between the specified Direct Connect gateway and virtual private gateway.</p>
+    /// <p>Deletes the association between the specified Direct Connect gateway and virtual private gateway.</p> <p>We recommend that you specify the <code>associationID</code> to delete the association. Alternatively, if you own virtual gateway and a Direct Connect gateway association, you can specify the <code>virtualGatewayId</code> and <code>directConnectGatewayId</code> to delete an association.</p>
     fn delete_direct_connect_gateway_association(
         &self,
         input: DeleteDirectConnectGatewayAssociationRequest,

@@ -1223,6 +1223,64 @@ impl DescribeAvailabilityOptionsResponseDeserializer {
         )
     }
 }
+/// <p>Container for the parameters to the <code><a>DescribeDomainEndpointOptions</a></code> operation. Specify the name of the domain you want to describe. To show the active configuration and exclude any pending changes, set the Deployed option to <code>true</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDomainEndpointOptionsRequest {
+    /// <p>Whether to retrieve the latest configuration (which might be in a Processing state) or the current, active configuration. Defaults to <code>false</code>.</p>
+    pub deployed: Option<bool>,
+    /// <p>A string that represents the name of a domain.</p>
+    pub domain_name: String,
+}
+
+/// Serialize `DescribeDomainEndpointOptionsRequest` contents to a `SignedRequest`.
+struct DescribeDomainEndpointOptionsRequestSerializer;
+impl DescribeDomainEndpointOptionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeDomainEndpointOptionsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.deployed {
+            params.put(&format!("{}{}", prefix, "Deployed"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+    }
+}
+
+/// <p>The result of a <code>DescribeDomainEndpointOptions</code> request. Contains the status and configuration of a search domain's endpoint options. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDomainEndpointOptionsResponse {
+    /// <p>The status and configuration of a search domain's endpoint options.</p>
+    pub domain_endpoint_options: Option<DomainEndpointOptionsStatus>,
+}
+
+struct DescribeDomainEndpointOptionsResponseDeserializer;
+impl DescribeDomainEndpointOptionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDomainEndpointOptionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDomainEndpointOptionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DomainEndpointOptions" => {
+                        obj.domain_endpoint_options =
+                            Some(DomainEndpointOptionsStatusDeserializer::deserialize(
+                                "DomainEndpointOptions",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Container for the parameters to the <code><a>DescribeDomains</a></code> operation. By default shows the status of all domains. To restrict the response to particular domains, specify the names of the domains you want to describe.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDomainsRequest {
@@ -1651,6 +1709,94 @@ impl DocumentSuggesterOptionsSerializer {
     }
 }
 
+/// <p>The domain's endpoint options.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DomainEndpointOptions {
+    /// <p>Whether the domain is HTTPS only enabled.</p>
+    pub enforce_https: Option<bool>,
+    /// <p>The minimum required TLS version</p>
+    pub tls_security_policy: Option<String>,
+}
+
+struct DomainEndpointOptionsDeserializer;
+impl DomainEndpointOptionsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DomainEndpointOptions, XmlParseError> {
+        deserialize_elements::<_, DomainEndpointOptions, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "EnforceHTTPS" => {
+                    obj.enforce_https =
+                        Some(BooleanDeserializer::deserialize("EnforceHTTPS", stack)?);
+                }
+                "TLSSecurityPolicy" => {
+                    obj.tls_security_policy = Some(TLSSecurityPolicyDeserializer::deserialize(
+                        "TLSSecurityPolicy",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `DomainEndpointOptions` contents to a `SignedRequest`.
+struct DomainEndpointOptionsSerializer;
+impl DomainEndpointOptionsSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DomainEndpointOptions) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.enforce_https {
+            params.put(&format!("{}{}", prefix, "EnforceHTTPS"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tls_security_policy {
+            params.put(&format!("{}{}", prefix, "TLSSecurityPolicy"), &field_value);
+        }
+    }
+}
+
+/// <p>The configuration and status of the domain's endpoint options.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DomainEndpointOptionsStatus {
+    /// <p>The domain endpoint options configured for the domain.</p>
+    pub options: DomainEndpointOptions,
+    /// <p>The status of the configured domain endpoint options.</p>
+    pub status: OptionStatus,
+}
+
+struct DomainEndpointOptionsStatusDeserializer;
+impl DomainEndpointOptionsStatusDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DomainEndpointOptionsStatus, XmlParseError> {
+        deserialize_elements::<_, DomainEndpointOptionsStatus, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Options" => {
+                        obj.options =
+                            DomainEndpointOptionsDeserializer::deserialize("Options", stack)?;
+                    }
+                    "Status" => {
+                        obj.status = OptionStatusDeserializer::deserialize("Status", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 struct DomainIdDeserializer;
 impl DomainIdDeserializer {
     #[allow(unused_variables)]
@@ -3036,7 +3182,7 @@ pub struct OptionStatus {
     pub creation_date: String,
     /// <p>Indicates that the option will be deleted once processing is complete.</p>
     pub pending_deletion: Option<bool>,
-    /// <p><p>The state of processing a change to an option. Possible values:</p> <ul> <li> <code>RequiresIndexDocuments</code>: the option&#39;s latest value will not be deployed until <a>IndexDocuments</a> has been called and indexing is complete.</li> <li> <code>Processing</code>: the option&#39;s latest value is in the process of being activated. </li> <li> <code>Active</code>: the option&#39;s latest value is completely deployed.</li> <li> <code>FailedToValidate</code>: the option value is not compatible with the domain&#39;s data and cannot be used to index the data. You must either modify the option value or update or remove the incompatible documents.</li> </ul></p>
+    /// <p><p>The state of processing a change to an option. Possible values:</p><ul> <li><code>RequiresIndexDocuments</code>: the option&#39;s latest value will not be deployed until <a>IndexDocuments</a> has been called and indexing is complete.</li> <li><code>Processing</code>: the option&#39;s latest value is in the process of being activated. </li> <li><code>Active</code>: the option&#39;s latest value is completely deployed.</li> <li><code>FailedToValidate</code>: the option value is not compatible with the domain&#39;s data and cannot be used to index the data. You must either modify the option value or update or remove the incompatible documents.</li> </ul></p>
     pub state: String,
     /// <p>A timestamp for when this option was last updated.</p>
     pub update_date: String,
@@ -3410,6 +3556,17 @@ impl SuggesterStatusListDeserializer {
         })
     }
 }
+struct TLSSecurityPolicyDeserializer;
+impl TLSSecurityPolicyDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Options for a field that contains an array of text strings. Present if <code>IndexFieldType</code> specifies the field is of type <code>text-array</code>. A <code>text-array</code> field is always searchable. All options are enabled by default.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TextArrayOptions {
@@ -3632,6 +3789,66 @@ impl UpdateAvailabilityOptionsResponseDeserializer {
                         obj.availability_options =
                             Some(AvailabilityOptionsStatusDeserializer::deserialize(
                                 "AvailabilityOptions",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Container for the parameters to the <code><a>UpdateDomainEndpointOptions</a></code> operation. Specifies the name of the domain you want to update and the domain endpoint options.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateDomainEndpointOptionsRequest {
+    /// <p>Whether to require that all requests to the domain arrive over HTTPS. We recommend Policy-Min-TLS-1-2-2019-07 for TLSSecurityPolicy. For compatibility with older clients, the default is Policy-Min-TLS-1-0-2019-07. </p>
+    pub domain_endpoint_options: DomainEndpointOptions,
+    /// <p>A string that represents the name of a domain.</p>
+    pub domain_name: String,
+}
+
+/// Serialize `UpdateDomainEndpointOptionsRequest` contents to a `SignedRequest`.
+struct UpdateDomainEndpointOptionsRequestSerializer;
+impl UpdateDomainEndpointOptionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UpdateDomainEndpointOptionsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        DomainEndpointOptionsSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "DomainEndpointOptions"),
+            &obj.domain_endpoint_options,
+        );
+        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+    }
+}
+
+/// <p>The result of a <code>UpdateDomainEndpointOptions</code> request. Contains the configuration and status of the domain's endpoint options. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateDomainEndpointOptionsResponse {
+    /// <p>The newly-configured domain endpoint options.</p>
+    pub domain_endpoint_options: Option<DomainEndpointOptionsStatus>,
+}
+
+struct UpdateDomainEndpointOptionsResponseDeserializer;
+impl UpdateDomainEndpointOptionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateDomainEndpointOptionsResponse, XmlParseError> {
+        deserialize_elements::<_, UpdateDomainEndpointOptionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DomainEndpointOptions" => {
+                        obj.domain_endpoint_options =
+                            Some(DomainEndpointOptionsStatusDeserializer::deserialize(
+                                "DomainEndpointOptions",
                                 stack,
                             )?);
                     }
@@ -4708,6 +4925,91 @@ impl Error for DescribeAvailabilityOptionsError {
         }
     }
 }
+/// Errors returned by DescribeDomainEndpointOptions
+#[derive(Debug, PartialEq)]
+pub enum DescribeDomainEndpointOptionsError {
+    /// <p>An error occurred while processing the request.</p>
+    Base(String),
+    /// <p>The request was rejected because it attempted an operation which is not enabled.</p>
+    DisabledOperation(String),
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    Internal(String),
+    /// <p>The request was rejected because a resource limit has already been met.</p>
+    LimitExceeded(String),
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeDomainEndpointOptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDomainEndpointOptionsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return RusotoError::Service(DescribeDomainEndpointOptionsError::Base(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DisabledAction" => {
+                        return RusotoError::Service(
+                            DescribeDomainEndpointOptionsError::DisabledOperation(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InternalException" => {
+                        return RusotoError::Service(DescribeDomainEndpointOptionsError::Internal(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return RusotoError::Service(
+                            DescribeDomainEndpointOptionsError::LimitExceeded(parsed_error.message),
+                        )
+                    }
+                    "ResourceNotFound" => {
+                        return RusotoError::Service(
+                            DescribeDomainEndpointOptionsError::ResourceNotFound(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeDomainEndpointOptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeDomainEndpointOptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeDomainEndpointOptionsError::Base(ref cause) => cause,
+            DescribeDomainEndpointOptionsError::DisabledOperation(ref cause) => cause,
+            DescribeDomainEndpointOptionsError::Internal(ref cause) => cause,
+            DescribeDomainEndpointOptionsError::LimitExceeded(ref cause) => cause,
+            DescribeDomainEndpointOptionsError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeDomains
 #[derive(Debug, PartialEq)]
 pub enum DescribeDomainsError {
@@ -5247,6 +5549,11 @@ impl UpdateAvailabilityOptionsError {
                             UpdateAvailabilityOptionsError::ResourceNotFound(parsed_error.message),
                         )
                     }
+                    "ValidationException" => {
+                        return RusotoError::Service(UpdateAvailabilityOptionsError::Validation(
+                            parsed_error.message,
+                        ))
+                    }
                     _ => {}
                 }
             }
@@ -5276,6 +5583,104 @@ impl Error for UpdateAvailabilityOptionsError {
             UpdateAvailabilityOptionsError::InvalidType(ref cause) => cause,
             UpdateAvailabilityOptionsError::LimitExceeded(ref cause) => cause,
             UpdateAvailabilityOptionsError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateDomainEndpointOptions
+#[derive(Debug, PartialEq)]
+pub enum UpdateDomainEndpointOptionsError {
+    /// <p>An error occurred while processing the request.</p>
+    Base(String),
+    /// <p>The request was rejected because it attempted an operation which is not enabled.</p>
+    DisabledOperation(String),
+    /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+    Internal(String),
+    /// <p>The request was rejected because it specified an invalid type definition.</p>
+    InvalidType(String),
+    /// <p>The request was rejected because a resource limit has already been met.</p>
+    LimitExceeded(String),
+    /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateDomainEndpointOptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateDomainEndpointOptionsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return RusotoError::Service(UpdateDomainEndpointOptionsError::Base(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DisabledAction" => {
+                        return RusotoError::Service(
+                            UpdateDomainEndpointOptionsError::DisabledOperation(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InternalException" => {
+                        return RusotoError::Service(UpdateDomainEndpointOptionsError::Internal(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidType" => {
+                        return RusotoError::Service(UpdateDomainEndpointOptionsError::InvalidType(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return RusotoError::Service(
+                            UpdateDomainEndpointOptionsError::LimitExceeded(parsed_error.message),
+                        )
+                    }
+                    "ResourceNotFound" => {
+                        return RusotoError::Service(
+                            UpdateDomainEndpointOptionsError::ResourceNotFound(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ValidationException" => {
+                        return RusotoError::Service(UpdateDomainEndpointOptionsError::Validation(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for UpdateDomainEndpointOptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateDomainEndpointOptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateDomainEndpointOptionsError::Base(ref cause) => cause,
+            UpdateDomainEndpointOptionsError::DisabledOperation(ref cause) => cause,
+            UpdateDomainEndpointOptionsError::Internal(ref cause) => cause,
+            UpdateDomainEndpointOptionsError::InvalidType(ref cause) => cause,
+            UpdateDomainEndpointOptionsError::LimitExceeded(ref cause) => cause,
+            UpdateDomainEndpointOptionsError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -5521,6 +5926,12 @@ pub trait CloudSearch {
         input: DescribeAvailabilityOptionsRequest,
     ) -> RusotoFuture<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError>;
 
+    /// <p>Returns the domain's endpoint options, specifically whether all requests to the domain must arrive over HTTPS. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-domain-endpoint-options.html" target="_blank">Configuring Domain Endpoint Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn describe_domain_endpoint_options(
+        &self,
+        input: DescribeDomainEndpointOptionsRequest,
+    ) -> RusotoFuture<DescribeDomainEndpointOptionsResponse, DescribeDomainEndpointOptionsError>;
+
     /// <p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html" target="_blank">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_domains(
         &self,
@@ -5571,6 +5982,12 @@ pub trait CloudSearch {
         &self,
         input: UpdateAvailabilityOptionsRequest,
     ) -> RusotoFuture<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError>;
+
+    /// <p>Updates the domain's endpoint options, specifically whether all requests to the domain must arrive over HTTPS. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-domain-endpoint-options.html" target="_blank">Configuring Domain Endpoint Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn update_domain_endpoint_options(
+        &self,
+        input: UpdateDomainEndpointOptionsRequest,
+    ) -> RusotoFuture<UpdateDomainEndpointOptionsResponse, UpdateDomainEndpointOptionsError>;
 
     /// <p>Configures scaling parameters for a domain. A domain's scaling parameters specify the desired search instance type and replication count. Amazon CloudSearch will still automatically scale your domain based on the volume of data and traffic, but not below the desired instance type and replication count. If the Multi-AZ option is enabled, these values control the resources used per Availability Zone. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html" target="_blank">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
     fn update_scaling_parameters(
@@ -6277,6 +6694,55 @@ impl CloudSearch for CloudSearchClient {
         })
     }
 
+    /// <p>Returns the domain's endpoint options, specifically whether all requests to the domain must arrive over HTTPS. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-domain-endpoint-options.html" target="_blank">Configuring Domain Endpoint Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn describe_domain_endpoint_options(
+        &self,
+        input: DescribeDomainEndpointOptionsRequest,
+    ) -> RusotoFuture<DescribeDomainEndpointOptionsResponse, DescribeDomainEndpointOptionsError>
+    {
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeDomainEndpointOptions");
+        params.put("Version", "2013-01-01");
+        DescribeDomainEndpointOptionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeDomainEndpointOptionsError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeDomainEndpointOptionsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeDomainEndpointOptionsResponseDeserializer::deserialize(
+                        "DescribeDomainEndpointOptionsResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html" target="_blank">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_domains(
         &self,
@@ -6712,6 +7178,54 @@ impl CloudSearch for CloudSearchClient {
                     start_element(&actual_tag_name, &mut stack)?;
                     result = UpdateAvailabilityOptionsResponseDeserializer::deserialize(
                         "UpdateAvailabilityOptionsResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Updates the domain's endpoint options, specifically whether all requests to the domain must arrive over HTTPS. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-domain-endpoint-options.html" target="_blank">Configuring Domain Endpoint Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn update_domain_endpoint_options(
+        &self,
+        input: UpdateDomainEndpointOptionsRequest,
+    ) -> RusotoFuture<UpdateDomainEndpointOptionsResponse, UpdateDomainEndpointOptionsError> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "UpdateDomainEndpointOptions");
+        params.put("Version", "2013-01-01");
+        UpdateDomainEndpointOptionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateDomainEndpointOptionsError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateDomainEndpointOptionsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = UpdateDomainEndpointOptionsResponseDeserializer::deserialize(
+                        "UpdateDomainEndpointOptionsResult",
                         &mut stack,
                     )?;
                     skip_tree(&mut stack);

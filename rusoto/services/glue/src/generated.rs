@@ -587,7 +587,7 @@ pub struct ConfusionMatrix {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connection {
-    /// <p><p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER<em>NAME</code> - The name under which to log in to the database. The value string for <code>USER</em>NAME</code> is &quot;<code>USERNAME</code>&quot;.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>ENCRYPTED<em>PASSWORD</code> - When you enable connection password protection by setting <code>ConnectionPasswordEncryption</code> in the Data Catalog encryption settings, this field stores the encrypted password.</p> </li> <li> <p> <code>JDBC</em>DRIVER<em>JAR</em>URI</code> - The Amazon Simple Storage Service (Amazon S3) path of the JAR file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC<em>DRIVER</em>CLASS<em>NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC</em>ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC<em>ENGINE</em>VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG<em>FILES</code> - (Reserved for future use.)</p> </li> <li> <p> <code>INSTANCE</em>ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC<em>CONNECTION</em>URL</code> - The URL for the JDBC connection.</p> </li> <li> <p> <code>JDBC<em>ENFORCE</em>SSL</code> - A Boolean string (true, false) specifying whether Secure Sockets Layer (SSL) with hostname matching is enforced for the JDBC connection on the client. The default is false.</p> </li> </ul></p>
+    /// <p><p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER<em>NAME</code> - The name under which to log in to the database. The value string for <code>USER</em>NAME</code> is &quot;<code>USERNAME</code>&quot;.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>ENCRYPTED<em>PASSWORD</code> - When you enable connection password protection by setting <code>ConnectionPasswordEncryption</code> in the Data Catalog encryption settings, this field stores the encrypted password.</p> </li> <li> <p> <code>JDBC</em>DRIVER<em>JAR</em>URI</code> - The Amazon Simple Storage Service (Amazon S3) path of the JAR file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC<em>DRIVER</em>CLASS<em>NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC</em>ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC<em>ENGINE</em>VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG<em>FILES</code> - (Reserved for future use.)</p> </li> <li> <p> <code>INSTANCE</em>ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC<em>CONNECTION</em>URL</code> - The URL for the JDBC connection.</p> </li> <li> <p> <code>JDBC<em>ENFORCE</em>SSL</code> - A Boolean string (true, false) specifying whether Secure Sockets Layer (SSL) with hostname matching is enforced for the JDBC connection on the client. The default is false.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT</code> - An Amazon S3 location specifying the customer&#39;s root certificate. AWS Glue uses this root certificate to validate the customer’s certificate when connecting to the customer database. AWS Glue only handles X.509 certificates. The certificate provided must be DER-encoded and supplied in Base64 encoding PEM format.</p> </li> <li> <p> <code>SKIP<em>CUSTOM</em>JDBC<em>CERT</em>VALIDATION</code> - By default, this is <code>false</code>. AWS Glue validates the Signature algorithm and Subject Public Key Algorithm for the customer certificate. The only permitted algorithms for the Signature algorithm are SHA256withRSA, SHA384withRSA or SHA512withRSA. For the Subject Public Key Algorithm, the key length must be at least 2048. You can set the value of this property to <code>true</code> to skip AWS Glue’s validation of the customer certificate.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT<em>STRING</code> - A custom JDBC certificate string which is used for domain match or distinguished name match to prevent a man-in-the-middle attack. In Oracle database, this is used as the <code>SSL</em>SERVER<em>CERT</em>DN</code>; in Microsoft SQL Server, this is used as the <code>hostNameInCertificate</code>.</p> </li> </ul></p>
     #[serde(rename = "ConnectionProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_properties: Option<::std::collections::HashMap<String, String>>,
@@ -1001,6 +1001,10 @@ pub struct CreateDevEndpointRequest {
     #[serde(rename = "ExtraPythonLibsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_python_libs_s3_path: Option<String>,
+    /// <p>Glue version determines the versions of Apache Spark and Python that AWS Glue supports. The Python version indicates the version supported for running your ETL scripts on development endpoints. </p> <p>For more information about the available AWS Glue versions and corresponding Spark and Python versions, see <a href="https://docs.aws.amazon.com/glue/latest/dg/add-job.html">Glue version</a> in the developer guide.</p> <p>Development endpoints that are created without specifying a Glue version default to Glue 0.9.</p> <p>You can specify a version of Python support for development endpoints by using the <code>Arguments</code> parameter in the <code>CreateDevEndpoint</code> or <code>UpdateDevEndpoint</code> APIs. If no arguments are provided, the version defaults to Python 2.</p>
+    #[serde(rename = "GlueVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub glue_version: Option<String>,
     /// <p>The number of AWS Glue Data Processing Units (DPUs) to allocate to this <code>DevEndpoint</code>.</p>
     #[serde(rename = "NumberOfNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1045,7 +1049,7 @@ pub struct CreateDevEndpointRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDevEndpointResponse {
-    /// <p>The map of arguments used to configure this <code>DevEndpoint</code>.</p>
+    /// <p>The map of arguments used to configure this <code>DevEndpoint</code>.</p> <p>Valid arguments are:</p> <ul> <li> <p> <code>"--enable-glue-datacatalog": ""</code> </p> </li> <li> <p> <code>"GLUE_PYTHON_VERSION": "3"</code> </p> </li> <li> <p> <code>"GLUE_PYTHON_VERSION": "2"</code> </p> </li> </ul> <p>You can specify a version of Python support for development endpoints by using the <code>Arguments</code> parameter in the <code>CreateDevEndpoint</code> or <code>UpdateDevEndpoint</code> APIs. If no arguments are provided, the version defaults to Python 2.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
@@ -1073,6 +1077,10 @@ pub struct CreateDevEndpointResponse {
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
+    /// <p>Glue version determines the versions of Apache Spark and Python that AWS Glue supports. The Python version indicates the version supported for running your ETL scripts on development endpoints. </p>
+    #[serde(rename = "GlueVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub glue_version: Option<String>,
     /// <p>The number of AWS Glue Data Processing Units (DPUs) allocated to this DevEndpoint.</p>
     #[serde(rename = "NumberOfNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1232,10 +1240,14 @@ pub struct CreateMLTransformRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>This value determines which version of AWS Glue this machine learning transform is compatible with. Glue 1.0 is recommended for most customers. If the value is not set, the Glue compatibility defaults to Glue 0.9. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/release-notes.html#release-notes-versions">AWS Glue Versions</a> in the developer guide.</p>
+    #[serde(rename = "GlueVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub glue_version: Option<String>,
     /// <p>A list of AWS Glue table definitions used by the transform.</p>
     #[serde(rename = "InputRecordTables")]
     pub input_record_tables: Vec<GlueTable>,
-    /// <p>The number of AWS Glue data processing units (DPUs) that are allocated to task runs for this transform. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>. </p> <p>When the <code>WorkerType</code> field is set to a value other than <code>Standard</code>, the <code>MaxCapacity</code> field is set automatically and becomes read-only.</p>
+    /// <p>The number of AWS Glue data processing units (DPUs) that are allocated to task runs for this transform. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>. </p> <p> <code>MaxCapacity</code> is a mutually exclusive option with <code>NumberOfWorkers</code> and <code>WorkerType</code>.</p> <ul> <li> <p>If either <code>NumberOfWorkers</code> or <code>WorkerType</code> is set, then <code>MaxCapacity</code> cannot be set.</p> </li> <li> <p>If <code>MaxCapacity</code> is set then neither <code>NumberOfWorkers</code> or <code>WorkerType</code> can be set.</p> </li> <li> <p>If <code>WorkerType</code> is set, then <code>NumberOfWorkers</code> is required (and vice versa).</p> </li> <li> <p> <code>MaxCapacity</code> and <code>NumberOfWorkers</code> must both be at least 1.</p> </li> </ul> <p>When the <code>WorkerType</code> field is set to a value other than <code>Standard</code>, the <code>MaxCapacity</code> field is set automatically and becomes read-only.</p> <p>When the <code>WorkerType</code> field is set to a value other than <code>Standard</code>, the <code>MaxCapacity</code> field is set automatically and becomes read-only.</p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -1246,21 +1258,21 @@ pub struct CreateMLTransformRequest {
     /// <p>The unique name that you give the transform when you create it.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The number of workers of a defined <code>workerType</code> that are allocated when this task runs.</p>
+    /// <p>The number of workers of a defined <code>workerType</code> that are allocated when this task runs.</p> <p>If <code>WorkerType</code> is set, then <code>NumberOfWorkers</code> is required (and vice versa).</p>
     #[serde(rename = "NumberOfWorkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_workers: Option<i64>,
     /// <p>The algorithmic parameters that are specific to the transform type used. Conditionally dependent on the transform type.</p>
     #[serde(rename = "Parameters")]
     pub parameters: TransformParameters,
-    /// <p>The name or Amazon Resource Name (ARN) of the IAM role with the required permissions. Ensure that this role has permission to your Amazon Simple Storage Service (Amazon S3) sources, targets, temporary directory, scripts, and any libraries that are used by the task run for this transform.</p>
+    /// <p><p>The name or Amazon Resource Name (ARN) of the IAM role with the required permissions. The required permissions include both AWS Glue service role permissions to AWS Glue resources, and Amazon S3 permissions required by the transform. </p> <ul> <li> <p>This role needs AWS Glue service role permissions to allow access to resources in AWS Glue. See <a href="https://docs.aws.amazon.com/glue/latest/dg/attach-policy-iam-user.html">Attach a Policy to IAM Users That Access AWS Glue</a>.</p> </li> <li> <p>This role needs permission to your Amazon Simple Storage Service (Amazon S3) sources, targets, temporary directory, scripts, and any libraries used by the task run for this transform.</p> </li> </ul></p>
     #[serde(rename = "Role")]
     pub role: String,
     /// <p>The timeout of the task run for this transform in minutes. This is the maximum time that a task run for this transform can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours).</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
-    /// <p><p>The type of predefined worker that is allocated when this task runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul></p>
+    /// <p><p>The type of predefined worker that is allocated when this task runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul> <p> <code>MaxCapacity</code> is a mutually exclusive option with <code>NumberOfWorkers</code> and <code>WorkerType</code>.</p> <ul> <li> <p>If either <code>NumberOfWorkers</code> or <code>WorkerType</code> is set, then <code>MaxCapacity</code> cannot be set.</p> </li> <li> <p>If <code>MaxCapacity</code> is set then neither <code>NumberOfWorkers</code> or <code>WorkerType</code> can be set.</p> </li> <li> <p>If <code>WorkerType</code> is set, then <code>NumberOfWorkers</code> is required (and vice versa).</p> </li> <li> <p> <code>MaxCapacity</code> and <code>NumberOfWorkers</code> must both be at least 1.</p> </li> </ul></p>
     #[serde(rename = "WorkerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub worker_type: Option<String>,
@@ -1825,7 +1837,7 @@ pub struct DeleteWorkflowResponse {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DevEndpoint {
-    /// <p>A map of arguments used to configure the <code>DevEndpoint</code>.</p> <p>Currently, only <code>"--enable-glue-datacatalog": ""</code> is supported as a valid argument.</p>
+    /// <p>A map of arguments used to configure the <code>DevEndpoint</code>.</p> <p>Valid arguments are:</p> <ul> <li> <p> <code>"--enable-glue-datacatalog": ""</code> </p> </li> <li> <p> <code>"GLUE_PYTHON_VERSION": "3"</code> </p> </li> <li> <p> <code>"GLUE_PYTHON_VERSION": "2"</code> </p> </li> </ul> <p>You can specify a version of Python support for development endpoints by using the <code>Arguments</code> parameter in the <code>CreateDevEndpoint</code> or <code>UpdateDevEndpoint</code> APIs. If no arguments are provided, the version defaults to Python 2.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
@@ -1853,6 +1865,10 @@ pub struct DevEndpoint {
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
+    /// <p>Glue version determines the versions of Apache Spark and Python that AWS Glue supports. The Python version indicates the version supported for running your ETL scripts on development endpoints. </p> <p>For more information about the available AWS Glue versions and corresponding Spark and Python versions, see <a href="https://docs.aws.amazon.com/glue/latest/dg/add-job.html">Glue version</a> in the developer guide.</p> <p>Development endpoints that are created without specifying a Glue version default to Glue 0.9.</p> <p>You can specify a version of Python support for development endpoints by using the <code>Arguments</code> parameter in the <code>CreateDevEndpoint</code> or <code>UpdateDevEndpoint</code> APIs. If no arguments are provided, the version defaults to Python 2.</p>
+    #[serde(rename = "GlueVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub glue_version: Option<String>,
     /// <p>The point in time at which this <code>DevEndpoint</code> was last modified.</p>
     #[serde(rename = "LastModifiedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2653,6 +2669,10 @@ pub struct GetMLTransformResponse {
     #[serde(rename = "EvaluationMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_metrics: Option<EvaluationMetrics>,
+    /// <p>This value determines which version of AWS Glue this machine learning transform is compatible with. Glue 1.0 is recommended for most customers. If the value is not set, the Glue compatibility defaults to Glue 0.9. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/release-notes.html#release-notes-versions">AWS Glue Versions</a> in the developer guide.</p>
+    #[serde(rename = "GlueVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub glue_version: Option<String>,
     /// <p>A list of AWS Glue table definitions used by the transform.</p>
     #[serde(rename = "InputRecordTables")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3911,6 +3931,10 @@ pub struct MLTransform {
     #[serde(rename = "EvaluationMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_metrics: Option<EvaluationMetrics>,
+    /// <p>This value determines which version of AWS Glue this machine learning transform is compatible with. Glue 1.0 is recommended for most customers. If the value is not set, the Glue compatibility defaults to Glue 0.9. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/release-notes.html#release-notes-versions">AWS Glue Versions</a> in the developer guide.</p>
+    #[serde(rename = "GlueVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub glue_version: Option<String>,
     /// <p>A list of AWS Glue table definitions used by the transform.</p>
     #[serde(rename = "InputRecordTables")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3923,7 +3947,7 @@ pub struct MLTransform {
     #[serde(rename = "LastModifiedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_on: Option<f64>,
-    /// <p>The number of AWS Glue data processing units (DPUs) that are allocated to task runs for this transform. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>. </p> <p>When the <code>WorkerType</code> field is set to a value other than <code>Standard</code>, the <code>MaxCapacity</code> field is set automatically and becomes read-only.</p>
+    /// <p>The number of AWS Glue data processing units (DPUs) that are allocated to task runs for this transform. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="http://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>. </p> <p> <code>MaxCapacity</code> is a mutually exclusive option with <code>NumberOfWorkers</code> and <code>WorkerType</code>.</p> <ul> <li> <p>If either <code>NumberOfWorkers</code> or <code>WorkerType</code> is set, then <code>MaxCapacity</code> cannot be set.</p> </li> <li> <p>If <code>MaxCapacity</code> is set then neither <code>NumberOfWorkers</code> or <code>WorkerType</code> can be set.</p> </li> <li> <p>If <code>WorkerType</code> is set, then <code>NumberOfWorkers</code> is required (and vice versa).</p> </li> <li> <p> <code>MaxCapacity</code> and <code>NumberOfWorkers</code> must both be at least 1.</p> </li> </ul> <p>When the <code>WorkerType</code> field is set to a value other than <code>Standard</code>, the <code>MaxCapacity</code> field is set automatically and becomes read-only.</p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -3935,7 +3959,7 @@ pub struct MLTransform {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The number of workers of a defined <code>workerType</code> that are allocated when a task of the transform runs.</p>
+    /// <p>The number of workers of a defined <code>workerType</code> that are allocated when a task of the transform runs.</p> <p>If <code>WorkerType</code> is set, then <code>NumberOfWorkers</code> is required (and vice versa).</p>
     #[serde(rename = "NumberOfWorkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_workers: Option<i64>,
@@ -3943,7 +3967,7 @@ pub struct MLTransform {
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<TransformParameters>,
-    /// <p>The name or Amazon Resource Name (ARN) of the IAM role with the required permissions. This role needs permission to your Amazon Simple Storage Service (Amazon S3) sources, targets, temporary directory, scripts, and any libraries used by the task run for this transform.</p>
+    /// <p><p>The name or Amazon Resource Name (ARN) of the IAM role with the required permissions. The required permissions include both AWS Glue service role permissions to AWS Glue resources, and Amazon S3 permissions required by the transform. </p> <ul> <li> <p>This role needs AWS Glue service role permissions to allow access to resources in AWS Glue. See <a href="https://docs.aws.amazon.com/glue/latest/dg/attach-policy-iam-user.html">Attach a Policy to IAM Users That Access AWS Glue</a>.</p> </li> <li> <p>This role needs permission to your Amazon Simple Storage Service (Amazon S3) sources, targets, temporary directory, scripts, and any libraries used by the task run for this transform.</p> </li> </ul></p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
@@ -3963,7 +3987,7 @@ pub struct MLTransform {
     #[serde(rename = "TransformId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transform_id: Option<String>,
-    /// <p><p>The type of predefined worker that is allocated when a task of this transform runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul></p>
+    /// <p><p>The type of predefined worker that is allocated when a task of this transform runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul> <p> <code>MaxCapacity</code> is a mutually exclusive option with <code>NumberOfWorkers</code> and <code>WorkerType</code>.</p> <ul> <li> <p>If either <code>NumberOfWorkers</code> or <code>WorkerType</code> is set, then <code>MaxCapacity</code> cannot be set.</p> </li> <li> <p>If <code>MaxCapacity</code> is set then neither <code>NumberOfWorkers</code> or <code>WorkerType</code> can be set.</p> </li> <li> <p>If <code>WorkerType</code> is set, then <code>NumberOfWorkers</code> is required (and vice versa).</p> </li> <li> <p> <code>MaxCapacity</code> and <code>NumberOfWorkers</code> must both be at least 1.</p> </li> </ul></p>
     #[serde(rename = "WorkerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub worker_type: Option<String>,
@@ -4119,7 +4143,7 @@ pub struct PartitionInput {
     #[serde(rename = "StorageDescriptor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_descriptor: Option<StorageDescriptor>,
-    /// <p>The values of the partition. Although this parameter is not required by the SDK, you must specify this parameter for a valid input.</p>
+    /// <p>The values of the partition. Although this parameter is not required by the SDK, you must specify this parameter for a valid input.</p> <p>The values for the keys for the new partition must be passed as an array of String objects that must be ordered in the same order as the partition keys appearing in the Amazon S3 prefix. Otherwise AWS Glue will add the values to the wrong keys.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
@@ -4466,11 +4490,14 @@ pub struct SkewedInfo {
     pub skewed_column_values: Option<Vec<String>>,
 }
 
+/// <p>Specifies a field to sort by and a sort order.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SortCriterion {
+    /// <p>The name of the field on which to sort.</p>
     #[serde(rename = "FieldName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub field_name: Option<String>,
+    /// <p>An ascending or descending sort.</p>
     #[serde(rename = "Sort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort: Option<String>,
@@ -5046,6 +5073,10 @@ pub struct TransformFilterCriteria {
     #[serde(rename = "CreatedBefore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_before: Option<f64>,
+    /// <p>This value determines which version of AWS Glue this machine learning transform is compatible with. Glue 1.0 is recommended for most customers. If the value is not set, the Glue compatibility defaults to Glue 0.9. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/release-notes.html#release-notes-versions">AWS Glue Versions</a> in the developer guide.</p>
+    #[serde(rename = "GlueVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub glue_version: Option<String>,
     /// <p>Filter on transforms last modified after this date.</p>
     #[serde(rename = "LastModifiedAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5346,7 +5377,7 @@ pub struct UpdateDatabaseResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDevEndpointRequest {
-    /// <p>The map of arguments to add the map of arguments used to configure the <code>DevEndpoint</code>.</p>
+    /// <p>The map of arguments to add the map of arguments used to configure the <code>DevEndpoint</code>.</p> <p>Valid arguments are:</p> <ul> <li> <p> <code>"--enable-glue-datacatalog": ""</code> </p> </li> <li> <p> <code>"GLUE_PYTHON_VERSION": "3"</code> </p> </li> <li> <p> <code>"GLUE_PYTHON_VERSION": "2"</code> </p> </li> </ul> <p>You can specify a version of Python support for development endpoints by using the <code>Arguments</code> parameter in the <code>CreateDevEndpoint</code> or <code>UpdateDevEndpoint</code> APIs. If no arguments are provided, the version defaults to Python 2.</p>
     #[serde(rename = "AddArguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub add_arguments: Option<::std::collections::HashMap<String, String>>,
@@ -5440,6 +5471,10 @@ pub struct UpdateMLTransformRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>This value determines which version of AWS Glue this machine learning transform is compatible with. Glue 1.0 is recommended for most customers. If the value is not set, the Glue compatibility defaults to Glue 0.9. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/release-notes.html#release-notes-versions">AWS Glue Versions</a> in the developer guide.</p>
+    #[serde(rename = "GlueVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub glue_version: Option<String>,
     /// <p>The number of AWS Glue data processing units (DPUs) that are allocated to task runs for this transform. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>. </p> <p>When the <code>WorkerType</code> field is set to a value other than <code>Standard</code>, the <code>MaxCapacity</code> field is set automatically and becomes read-only.</p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]

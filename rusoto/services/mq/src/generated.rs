@@ -564,6 +564,10 @@ pub struct DescribeBrokerResponse {
     #[serde(rename = "PendingEngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pending_engine_version: Option<String>,
+    /// <p>The host instance type of the broker to upgrade to. For a list of supported instance types, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide//broker.html#broker-instance-types</p>
+    #[serde(rename = "PendingHostInstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_host_instance_type: Option<String>,
     /// <p>The list of pending security groups to authorize connections to brokers.</p>
     #[serde(rename = "PendingSecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -968,6 +972,10 @@ pub struct UpdateBrokerRequest {
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
+    /// <p>The host instance type of the broker to upgrade to. For a list of supported instance types, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide//broker.html#broker-instance-types</p>
+    #[serde(rename = "HostInstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host_instance_type: Option<String>,
     /// <p>Enables Amazon CloudWatch logging for brokers.</p>
     #[serde(rename = "Logs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -997,6 +1005,10 @@ pub struct UpdateBrokerResponse {
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
+    /// <p>The host instance type of the broker to upgrade to. For a list of supported instance types, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide//broker.html#broker-instance-types</p>
+    #[serde(rename = "HostInstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host_instance_type: Option<String>,
     /// <p>The list of information about logs to be enabled for the specified broker.</p>
     #[serde(rename = "Logs")]
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -1205,6 +1205,10 @@ pub struct EndpointConfiguration {
     #[serde(rename = "types")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub types: Option<Vec<String>>,
+    /// <p>A list of VpcEndpointIds of an API (<a>RestApi</a>) against which to create Route53 ALIASes. It is only supported for <code>PRIVATE</code> endpoint type.</p>
+    #[serde(rename = "vpcEndpointIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_endpoint_ids: Option<Vec<String>>,
 }
 
 /// <p>The binary blob response to <a>GetExport</a>, which contains the generated SDK.</p>
@@ -4810,6 +4814,8 @@ impl Error for DeleteDocumentationVersionError {
 /// Errors returned by DeleteDomainName
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainNameError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
     /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
     /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
@@ -4822,6 +4828,9 @@ impl DeleteDomainNameError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainNameError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteDomainNameError::BadRequest(err.msg))
+                }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteDomainNameError::NotFound(err.msg))
                 }
@@ -4846,6 +4855,7 @@ impl fmt::Display for DeleteDomainNameError {
 impl Error for DeleteDomainNameError {
     fn description(&self) -> &str {
         match *self {
+            DeleteDomainNameError::BadRequest(ref cause) => cause,
             DeleteDomainNameError::NotFound(ref cause) => cause,
             DeleteDomainNameError::TooManyRequests(ref cause) => cause,
             DeleteDomainNameError::Unauthorized(ref cause) => cause,

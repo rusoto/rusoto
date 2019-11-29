@@ -105,7 +105,7 @@ pub struct Ac3Settings {
 /// <p>Accelerated transcoding can significantly speed up jobs with long, visually complex content. Outputs that use this feature incur pro-tier pricing. For information about feature limitations, see the AWS Elemental MediaConvert User Guide.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AccelerationSettings {
-    /// <p>Acceleration configuration for the job.</p>
+    /// <p>Specify the conditions when the service will run your job with accelerated transcoding.</p>
     #[serde(rename = "Mode")]
     pub mode: String,
 }
@@ -215,7 +215,7 @@ pub struct AudioDescription {
     #[serde(rename = "CodecSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_settings: Option<AudioCodecSettings>,
-    /// <p>Specify the language for this audio output track, using the ISO 639-2 or ISO 639-3 three-letter language code. The language specified will be used when &#39;Follow Input Language Code&#39; is not selected or when &#39;Follow Input Language Code&#39; is selected but there is no ISO 639 language code specified by the input.</p>
+    /// <p>Specify the language for this audio output track. The service puts this language code into your output audio track when you set Language code control (AudioLanguageCodeControl) to Use configured (USE<em>CONFIGURED). The service also uses your specified custom language code when you set Language code control (AudioLanguageCodeControl) to Follow input (FOLLOW</em>INPUT), but your input file doesn&#39;t specify a language code. For all outputs, you can use an ISO 639-2 or ISO 639-3 code. For streaming outputs, you can also use any other code in the full RFC-5646 specification. Streaming outputs are those that are in one of the following output groups: CMAF, DASH ISO, Apple HLS, or Microsoft Smooth Streaming.</p>
     #[serde(rename = "CustomLanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_language_code: Option<String>,
@@ -223,7 +223,7 @@ pub struct AudioDescription {
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
-    /// <p>Choosing FOLLOW<em>INPUT will cause the ISO 639 language code of the output to follow the ISO 639 language code of the input. The language specified for languageCode&#39; will be used when USE</em>CONFIGURED is selected or when FOLLOW_INPUT is selected but there is no ISO 639 language code specified by the input.</p>
+    /// <p>Specify which source for language code takes precedence for this audio track. When you choose Follow input (FOLLOW<em>INPUT), the service uses the language code from the input track if it&#39;s present. If there&#39;s no languge code on the input track, the service uses the code that you specify in the setting Language code (languageCode or customLanguageCode). When you choose Use configured (USE</em>CONFIGURED), the service uses the language code that you specify.</p>
     #[serde(rename = "LanguageCodeControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code_control: Option<String>,
@@ -424,7 +424,7 @@ pub struct CaptionDescription {
     #[serde(rename = "CaptionSelectorName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption_selector_name: Option<String>,
-    /// <p>Indicates the language of the caption output track, using the ISO 639-2 or ISO 639-3 three-letter language code. For most captions output formats, the encoder puts this language information in the output captions metadata. If your output captions format is DVB-Sub or Burn in, the encoder uses this language information to choose the font language for rendering the captions text.</p>
+    /// <p>Specify the language for this captions output track. For most captions output formats, the encoder puts this language information in the output captions metadata. If your output captions format is DVB-Sub or Burn in, the encoder uses this language information when automatically selecting the font script for rendering the captions text. For all outputs, you can use an ISO 639-2 or ISO 639-3 code. For streaming outputs, you can also use any other code in the full RFC-5646 specification. Streaming outputs are those that are in one of the following output groups: CMAF, DASH ISO, Apple HLS, or Microsoft Smooth Streaming.</p>
     #[serde(rename = "CustomLanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_language_code: Option<String>,
@@ -445,7 +445,7 @@ pub struct CaptionDescription {
 /// <p>Caption Description for preset</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CaptionDescriptionPreset {
-    /// <p>Indicates the language of the caption output track, using the ISO 639-2 or ISO 639-3 three-letter language code. For most captions output formats, the encoder puts this language information in the output captions metadata. If your output captions format is DVB-Sub or Burn in, the encoder uses this language information to choose the font language for rendering the captions text.</p>
+    /// <p>Specify the language for this captions output track. For most captions output formats, the encoder puts this language information in the output captions metadata. If your output captions format is DVB-Sub or Burn in, the encoder uses this language information when automatically selecting the font script for rendering the captions text. For all outputs, you can use an ISO 639-2 or ISO 639-3 code. For streaming outputs, you can also use any other code in the full RFC-5646 specification. Streaming outputs are those that are in one of the following output groups: CMAF, DASH ISO, Apple HLS, or Microsoft Smooth Streaming.</p>
     #[serde(rename = "CustomLanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_language_code: Option<String>,
@@ -559,6 +559,19 @@ pub struct ChannelMapping {
     pub output_channels: Option<Vec<OutputChannelMapping>>,
 }
 
+/// <p>Specify the details for each pair of HLS and DASH additional manifests that you want the service to generate for this CMAF output group. Each pair of manifests can reference a different subset of outputs in the group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CmafAdditionalManifest {
+    /// <p>Specify a name modifier that the service adds to the name of this manifest to make it different from the file names of the other main manifests in the output group. For example, say that the default main manifest for your HLS group is film-name.m3u8. If you enter &quot;-no-premium&quot; for this setting, then the file name the service generates for this top-level manifest is film-name-no-premium.m3u8. For HLS output groups, specify a manifestNameModifier that is different from the nameModifier of the output. The service uses the output name modifier to create unique names for the individual variant manifests.</p>
+    #[serde(rename = "ManifestNameModifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest_name_modifier: Option<String>,
+    /// <p>Specify the outputs that you want this additional top-level manifest to reference.</p>
+    #[serde(rename = "SelectedOutputs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selected_outputs: Option<Vec<String>>,
+}
+
 /// <p>Settings for CMAF encryption</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CmafEncryptionSettings {
@@ -591,6 +604,10 @@ pub struct CmafEncryptionSettings {
 /// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to CMAF<em>GROUP</em>SETTINGS. Each output in a CMAF Output Group may only contain a single video, audio, or caption output.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CmafGroupSettings {
+    /// <p>By default, the service creates one top-level .m3u8 HLS manifest and one top -level .mpd DASH manifest for each CMAF output group in your job. These default manifests reference every output in the output group. To create additional top-level manifests that reference a subset of the outputs in the output group, specify a list of them here. For each additional manifest that you specify, the service creates one HLS manifest and one DASH manifest.</p>
+    #[serde(rename = "AdditionalManifests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_manifests: Option<Vec<CmafAdditionalManifest>>,
     /// <p>A partial URI prefix that will be put in the manifest file at the top level BaseURL element. Can be used if streams are delivered from a different URL than the manifest file.</p>
     #[serde(rename = "BaseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -635,6 +652,10 @@ pub struct CmafGroupSettings {
     #[serde(rename = "MinFinalSegmentLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_final_segment_length: Option<f64>,
+    /// <p>Specify whether your DASH profile is on-demand or main. When you choose Main profile (MAIN<em>PROFILE), the service signals  urn:mpeg:dash:profile:isoff-main:2011 in your .mpd DASH manifest. When you choose On-demand (ON</em>DEMAND<em>PROFILE), the service signals urn:mpeg:dash:profile:isoff-on-demand:2011 in your .mpd. When you choose On-demand, you must also set the output group setting Segment control (SegmentControl) to Single file (SINGLE</em>FILE).</p>
+    #[serde(rename = "MpdProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mpd_profile: Option<String>,
     /// <p>When set to SINGLE<em>FILE, a single output file is generated, which is internally segmented using the Fragment Length and Segment Length. When set to SEGMENTED</em>FILES, separate segment files will be created.</p>
     #[serde(rename = "SegmentControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -713,6 +734,10 @@ pub struct ContainerSettings {
     #[serde(rename = "Mp4Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mp_4_settings: Option<Mp4Settings>,
+    /// <p>Settings for MP4 segments in DASH</p>
+    #[serde(rename = "MpdSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mpd_settings: Option<MpdSettings>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -755,6 +780,10 @@ pub struct CreateJobRequest {
     #[serde(rename = "StatusUpdateInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_update_interval: Option<String>,
+    /// <p>The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>User-defined metadata that you want to associate with an MediaConvert job. You specify metadata in key/value pairs.</p>
     #[serde(rename = "UserMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -884,6 +913,19 @@ pub struct CreateQueueResponse {
     pub queue: Option<Queue>,
 }
 
+/// <p>Specify the details for each additional DASH manifest that you want the service to generate for this output group. Each manifest can reference a different subset of outputs in the group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DashAdditionalManifest {
+    /// <p>Specify a name modifier that the service adds to the name of this manifest to make it different from the file names of the other main manifests in the output group. For example, say that the default main manifest for your DASH group is film-name.mpd. If you enter &quot;-no-premium&quot; for this setting, then the file name the service generates for this top-level manifest is film-name-no-premium.mpd.</p>
+    #[serde(rename = "ManifestNameModifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest_name_modifier: Option<String>,
+    /// <p>Specify the outputs that you want this additional top-level manifest to reference.</p>
+    #[serde(rename = "SelectedOutputs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selected_outputs: Option<Vec<String>>,
+}
+
 /// <p>Specifies DRM settings for DASH outputs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DashIsoEncryptionSettings {
@@ -900,6 +942,10 @@ pub struct DashIsoEncryptionSettings {
 /// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to DASH<em>ISO</em>GROUP_SETTINGS.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DashIsoGroupSettings {
+    /// <p>By default, the service creates one .mpd DASH manifest for each DASH ISO output group in your job. This default manifest references every output in the output group. To create additional DASH manifests that reference a subset of the outputs in the output group, specify a list of them here.</p>
+    #[serde(rename = "AdditionalManifests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_manifests: Option<Vec<DashAdditionalManifest>>,
     /// <p>A partial URI prefix that will be put in the manifest (.mpd) file at the top level BaseURL element. Can be used if streams are delivered from a different URL than the manifest file.</p>
     #[serde(rename = "BaseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -928,6 +974,10 @@ pub struct DashIsoGroupSettings {
     #[serde(rename = "MinBufferTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_buffer_time: Option<i64>,
+    /// <p>Specify whether your DASH profile is on-demand or main. When you choose Main profile (MAIN<em>PROFILE), the service signals  urn:mpeg:dash:profile:isoff-main:2011 in your .mpd DASH manifest. When you choose On-demand (ON</em>DEMAND<em>PROFILE), the service signals urn:mpeg:dash:profile:isoff-on-demand:2011 in your .mpd. When you choose On-demand, you must also set the output group setting Segment control (SegmentControl) to Single file (SINGLE</em>FILE).</p>
+    #[serde(rename = "MpdProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mpd_profile: Option<String>,
     /// <p>When set to SINGLE<em>FILE, a single output file is generated, which is internally segmented using the Fragment Length and Segment Length. When set to SEGMENTED</em>FILES, separate segment files will be created.</p>
     #[serde(rename = "SegmentControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -936,7 +986,7 @@ pub struct DashIsoGroupSettings {
     #[serde(rename = "SegmentLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segment_length: Option<i64>,
-    /// <p>When you enable Precise segment duration in manifests (writeSegmentTimelineInRepresentation), your DASH manifest shows precise segment durations. The segment duration information appears inside the SegmentTimeline element, inside SegmentTemplate at the Representation level. When this feature isn&#39;t enabled, the segment durations in your DASH manifest are approximate. The segment duration information appears in the duration attribute of the SegmentTemplate element.</p>
+    /// <p>If you get an HTTP error in the 400 range when you play back your DASH output, enable this setting and run your transcoding job again. When you enable this setting, the service writes precise segment durations in the DASH manifest. The segment duration information appears inside the SegmentTimeline element, inside SegmentTemplate at the Representation level. When you don&#39;t enable this setting, the service writes approximate segment durations in your DASH manifest.</p>
     #[serde(rename = "WriteSegmentTimelineInRepresentation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub write_segment_timeline_in_representation: Option<String>,
@@ -1044,6 +1094,36 @@ pub struct DisassociateCertificateRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateCertificateResponse {}
 
+/// <p>Settings for Dolby Vision</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DolbyVision {
+    /// <p>Use these settings when you set DolbyVisionLevel6Mode to SPECIFY to override the MaxCLL and MaxFALL values in your input with new values.</p>
+    #[serde(rename = "L6Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub l6_metadata: Option<DolbyVisionLevel6Metadata>,
+    /// <p>Use Dolby Vision Mode to choose how the service will handle Dolby Vision MaxCLL and MaxFALL properies.</p>
+    #[serde(rename = "L6Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub l6_mode: Option<String>,
+    /// <p>In the current MediaConvert implementation, the Dolby Vision profile is always 5 (PROFILE_5). Therefore, all of your inputs must contain Dolby Vision frame interleaved data.</p>
+    #[serde(rename = "Profile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profile: Option<String>,
+}
+
+/// <p>Use these settings when you set DolbyVisionLevel6Mode to SPECIFY to override the MaxCLL and MaxFALL values in your input with new values.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DolbyVisionLevel6Metadata {
+    /// <p>Maximum Content Light Level. Static HDR metadata that corresponds to the brightest pixel in the entire stream. Measured in nits.</p>
+    #[serde(rename = "MaxCll")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_cll: Option<i64>,
+    /// <p>Maximum Frame-Average Light Level. Static HDR metadata that corresponds to the highest frame-average brightness in the entire stream. Measured in nits.</p>
+    #[serde(rename = "MaxFall")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_fall: Option<i64>,
+}
+
 /// <p>Inserts DVB Network Information Table (NIT) at the specified table repetition interval.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DvbNitSettings {
@@ -1145,6 +1225,10 @@ pub struct DvbSubDestinationSettings {
     #[serde(rename = "ShadowYOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shadow_y_offset: Option<i64>,
+    /// <p>Specify whether your DVB subtitles are standard or for hearing impaired. Choose hearing impaired if your subtitles include audio descriptions and dialogue. Choose standard if your subtitles include only dialogue.</p>
+    #[serde(rename = "SubtitlingType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subtitling_type: Option<String>,
     /// <p>Only applies to jobs with input captions in Teletext or STL formats. Specify whether the spacing between letters in your captions is set by the captions grid or varies depending on letter width. Choose fixed grid to conform to the spacing specified in the captions file more accurately. Choose proportional to make the text easier to read if the captions are closed caption.</p>
     #[serde(rename = "TeletextSpacing")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1882,7 +1966,7 @@ pub struct H265Settings {
     #[serde(rename = "UnregisteredSeiTimecode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unregistered_sei_timecode: Option<String>,
-    /// <p>Use this setting only for outputs encoded with H.265 that are in CMAF or DASH output groups. If you include writeMp4PackagingType in your JSON job specification for other outputs, your video might not work properly with downstream systems and video players. If the location of parameter set NAL units don&#39;t matter in your workflow, ignore this setting. The service defaults to marking your output as HEV1. Choose HVC1 to mark your output as HVC1. This makes your output compliant with this specification: ISO IECJTC1 SC29 N13798 Text ISO/IEC FDIS 14496-15 3rd Edition. For these outputs, the service stores parameter set NAL units in the sample headers but not in the samples directly. Keep the default HEV1 to mark your output as HEV1. For these outputs, the service writes parameter set NAL units directly into the samples.</p>
+    /// <p>If the location of parameter set NAL units doesn&#39;t matter in your workflow, ignore this setting. Use this setting only with CMAF or DASH outputs, or with standalone file outputs in an MPEG-4 container (MP4 outputs). Choose HVC1 to mark your output as HVC1. This makes your output compliant with the following specification: ISO IECJTC1 SC29 N13798 Text ISO/IEC FDIS 14496-15 3rd Edition. For these outputs, the service stores parameter set NAL units in the sample headers but not in the samples directly. For MP4 outputs, when you choose HVC1, your output video might not work properly with some downstream systems and video players. The service defaults to marking your output as HEV1. For these outputs, the service writes parameter set NAL units directly into the samples.</p>
     #[serde(rename = "WriteMp4PackagingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub write_mp_4_packaging_type: Option<String>,
@@ -1941,6 +2025,19 @@ pub struct Hdr10Metadata {
     pub white_point_y: Option<i64>,
 }
 
+/// <p>Specify the details for each additional HLS manifest that you want the service to generate for this output group. Each manifest can reference a different subset of outputs in the group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HlsAdditionalManifest {
+    /// <p>Specify a name modifier that the service adds to the name of this manifest to make it different from the file names of the other main manifests in the output group. For example, say that the default main manifest for your HLS group is film-name.m3u8. If you enter &quot;-no-premium&quot; for this setting, then the file name the service generates for this top-level manifest is film-name-no-premium.m3u8. For HLS output groups, specify a manifestNameModifier that is different from the nameModifier of the output. The service uses the output name modifier to create unique names for the individual variant manifests.</p>
+    #[serde(rename = "ManifestNameModifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest_name_modifier: Option<String>,
+    /// <p>Specify the outputs that you want this additional top-level manifest to reference.</p>
+    #[serde(rename = "SelectedOutputs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selected_outputs: Option<Vec<String>>,
+}
+
 /// <p>Caption Language Mapping</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HlsCaptionLanguageMapping {
@@ -1948,7 +2045,7 @@ pub struct HlsCaptionLanguageMapping {
     #[serde(rename = "CaptionChannel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption_channel: Option<i64>,
-    /// <p>Specify the language for this caption channel, using the ISO 639-2 or ISO 639-3 three-letter language code</p>
+    /// <p>Specify the language for this captions channel, using the ISO 639-2 or ISO 639-3 three-letter language code</p>
     #[serde(rename = "CustomLanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_language_code: Option<String>,
@@ -2002,6 +2099,10 @@ pub struct HlsGroupSettings {
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_markers: Option<Vec<String>>,
+    /// <p>By default, the service creates one top-level .m3u8 HLS manifest for each HLS output group in your job. This default manifest references every output in the output group. To create additional top-level manifests that reference a subset of the outputs in the output group, specify a list of them here.</p>
+    #[serde(rename = "AdditionalManifests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_manifests: Option<Vec<HlsAdditionalManifest>>,
     /// <p>A partial URI prefix that will be prepended to each output in the media .m3u8 file. Can be used if base manifest is delivered from a different URL than the main .m3u8 file.</p>
     #[serde(rename = "BaseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2359,7 +2460,7 @@ pub struct InsertableImage {
     #[serde(rename = "Height")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub height: Option<i64>,
-    /// <p>Specify the Amazon S3 location of the image that you want to overlay on the video. Use a PNG or TGA file.</p>
+    /// <p>Specify the HTTP, HTTPS, or Amazon S3 location of the image that you want to overlay on the video. Use a PNG or TGA file.</p>
     #[serde(rename = "ImageInserterInput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_inserter_input: Option<String>,
@@ -2397,6 +2498,10 @@ pub struct Job {
     #[serde(rename = "AccelerationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub acceleration_settings: Option<AccelerationSettings>,
+    /// <p>Describes whether the current job is running with accelerated transcoding. For jobs that have Acceleration (AccelerationMode) set to DISABLED, AccelerationStatus is always NOT<em>APPLICABLE. For jobs that have Acceleration (AccelerationMode) set to ENABLED or PREFERRED, AccelerationStatus is one of the other states. AccelerationStatus is IN</em>PROGRESS initially, while the service determines whether the input files and job settings are compatible with accelerated transcoding. If they are, AcclerationStatus is ACCELERATED. If your input files and job settings aren&#39;t compatible with accelerated transcoding, the service either fails your job or runs it without accelerated transcoding, depending on how you set Acceleration (AccelerationMode). When the service runs your job without accelerated transcoding, AccelerationStatus is NOT_ACCELERATED.</p>
+    #[serde(rename = "AccelerationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub acceleration_status: Option<String>,
     /// <p>An identifier for this resource that is unique within all of AWS.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2433,6 +2538,10 @@ pub struct Job {
     #[serde(rename = "JobTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_template: Option<String>,
+    /// <p>Provides messages from the service about jobs that you have already successfully submitted.</p>
+    #[serde(rename = "Messages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub messages: Option<JobMessages>,
     /// <p>List of output group details</p>
     #[serde(rename = "OutputGroupDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2475,6 +2584,20 @@ pub struct Job {
     #[serde(rename = "UserMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_metadata: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Provides messages from the service about jobs that you have already successfully submitted.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct JobMessages {
+    /// <p>List of messages that are informational only and don&#39;t indicate a problem with your job.</p>
+    #[serde(rename = "Info")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub info: Option<Vec<String>>,
+    /// <p>List of messages that warn about conditions that might cause your job not to run or to fail.</p>
+    #[serde(rename = "Warning")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub warning: Option<Vec<String>>,
 }
 
 /// <p>JobSettings contains all the transcode settings for a job.</p>
@@ -3116,6 +3239,23 @@ pub struct Mp4Settings {
     pub mp_4_major_brand: Option<String>,
 }
 
+/// <p>Settings for MP4 segments in DASH</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MpdSettings {
+    /// <p>Use this setting only in DASH output groups that include sidecar TTML or IMSC captions.  You specify sidecar captions in a separate output from your audio and video. Choose Raw (RAW) for captions in a single XML file in a raw container. Choose Fragmented MPEG-4 (FRAGMENTED_MP4) for captions in XML format contained within fragmented MP4 files. This set of fragmented MP4 files is separate from your video and audio fragmented MP4 files.</p>
+    #[serde(rename = "CaptionContainerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub caption_container_type: Option<String>,
+    /// <p>Use this setting only when you specify SCTE-35 markers from ESAM. Choose INSERT to put SCTE-35 markers in this output at the insertion points that you specify in an ESAM XML document. Provide the document in the setting SCC XML (sccXml).</p>
+    #[serde(rename = "Scte35Esam")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scte_35_esam: Option<String>,
+    /// <p>Ignore this setting unless you have SCTE-35 markers in your input video file. Choose Passthrough (PASSTHROUGH) if you want SCTE-35 markers that appear in your input to also appear in this output. Choose None (NONE) if you don&#39;t want those SCTE-35 markers in this output.</p>
+    #[serde(rename = "Scte35Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scte_35_source: Option<String>,
+}
+
 /// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value MPEG2.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Mpeg2Settings {
@@ -3247,6 +3387,19 @@ pub struct Mpeg2Settings {
     pub temporal_adaptive_quantization: Option<String>,
 }
 
+/// <p>Specify the details for each additional Microsoft Smooth Streaming manifest that you want the service to generate for this output group. Each manifest can reference a different subset of outputs in the group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MsSmoothAdditionalManifest {
+    /// <p>Specify a name modifier that the service adds to the name of this manifest to make it different from the file names of the other main manifests in the output group. For example, say that the default main manifest for your Microsoft Smooth group is film-name.ismv. If you enter &quot;-no-premium&quot; for this setting, then the file name the service generates for this top-level manifest is film-name-no-premium.ismv.</p>
+    #[serde(rename = "ManifestNameModifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest_name_modifier: Option<String>,
+    /// <p>Specify the outputs that you want this additional top-level manifest to reference.</p>
+    #[serde(rename = "SelectedOutputs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selected_outputs: Option<Vec<String>>,
+}
+
 /// <p>If you are using DRM, set DRM System (MsSmoothEncryptionSettings) to specify the value SpekeKeyProvider.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MsSmoothEncryptionSettings {
@@ -3259,6 +3412,10 @@ pub struct MsSmoothEncryptionSettings {
 /// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to MS<em>SMOOTH</em>GROUP_SETTINGS.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MsSmoothGroupSettings {
+    /// <p>By default, the service creates one .ism Microsoft Smooth Streaming manifest for each Microsoft Smooth Streaming output group in your job. This default manifest references every output in the output group. To create additional manifests that reference a subset of the outputs in the output group, specify a list of them here.</p>
+    #[serde(rename = "AdditionalManifests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_manifests: Option<Vec<MsSmoothAdditionalManifest>>,
     /// <p>COMBINE<em>DUPLICATE</em>STREAMS combines identical audio encoding settings across a Microsoft Smooth output group into a single audio stream.</p>
     #[serde(rename = "AudioDeduplication")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3744,9 +3901,22 @@ pub struct ResourceTags {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>Optional. Have MediaConvert automatically apply Amazon S3 access control for the outputs in this output group. When you don&#39;t use this setting, S3 automatically applies the default access control list PRIVATE.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct S3DestinationAccessControl {
+    /// <p>Choose an Amazon S3 canned ACL for MediaConvert to apply to this output.</p>
+    #[serde(rename = "CannedAcl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canned_acl: Option<String>,
+}
+
 /// <p>Settings associated with S3 destination</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3DestinationSettings {
+    /// <p>Optional. Have MediaConvert automatically apply Amazon S3 access control for the outputs in this output group. When you don&#39;t use this setting, S3 automatically applies the default access control list PRIVATE.</p>
+    #[serde(rename = "AccessControl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_control: Option<S3DestinationAccessControl>,
     /// <p>Settings for how your job outputs are encrypted as they are uploaded to Amazon S3.</p>
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4196,6 +4366,10 @@ pub struct VideoPreprocessor {
     #[serde(rename = "Deinterlacer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deinterlacer: Option<Deinterlacer>,
+    /// <p>Enable Dolby Vision feature to produce Dolby Vision compatible video output.</p>
+    #[serde(rename = "DolbyVision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dolby_vision: Option<DolbyVision>,
     /// <p>Enable the Image inserter (ImageInserter) feature to include a graphic overlay on your video. Enable or disable this feature for each output individually. This setting is disabled by default.</p>
     #[serde(rename = "ImageInserter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4213,6 +4387,10 @@ pub struct VideoPreprocessor {
 /// <p>Selector for video.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VideoSelector {
+    /// <p>Ignore this setting unless this input is a QuickTime animation. Specify which part of this input MediaConvert uses for your outputs. Leave this setting set to DISCARD in order to delete the alpha channel and preserve the video. Use REMAP<em>TO</em>LUMA for this setting to delete the video and map the alpha channel to the luma channel of your outputs.</p>
+    #[serde(rename = "AlphaBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alpha_behavior: Option<String>,
     /// <p>If your input video has accurate color space metadata, or if you don&#39;t know about color space, leave this set to the default value Follow (FOLLOW). The service will automatically detect your input color space. If your input video has metadata indicating the wrong color space, specify the accurate color space here. If your input video is HDR 10 and the SMPTE ST 2086 Mastering Display Color Volume static metadata isn&#39;t present in your video stream, or if that metadata is present but not accurate, choose Force HDR 10 (FORCE_HDR10) here and specify correct values in the input HDR 10 metadata (Hdr10Metadata) settings. For more information about MediaConvert HDR jobs, see https://docs.aws.amazon.com/console/mediaconvert/hdr.</p>
     #[serde(rename = "ColorSpace")]
     #[serde(skip_serializing_if = "Option::is_none")]

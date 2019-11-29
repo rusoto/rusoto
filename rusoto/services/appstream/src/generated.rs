@@ -251,7 +251,7 @@ pub struct CreateFleetRequest {
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the fleet. To assume a role, a fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the fleet. To assume a role, a fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -322,7 +322,7 @@ pub struct CreateImageBuilderRequest {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the image builder. To assume a role, the image builder calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the image builder. To assume a role, the image builder calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -334,7 +334,7 @@ pub struct CreateImageBuilderRequest {
     #[serde(rename = "ImageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_name: Option<String>,
-    /// <p>The instance type to use when launching the image builder.</p>
+    /// <p><p>The instance type to use when launching the image builder. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
     /// <p>A unique name for the image builder.</p>
@@ -401,6 +401,10 @@ pub struct CreateStackRequest {
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    /// <p>The domains where AppStream 2.0 streaming sessions can be embedded in an iframe. You must approve the domains that you want to host embedded AppStream 2.0 streaming sessions.</p>
+    #[serde(rename = "EmbedHostDomains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub embed_host_domains: Option<Vec<String>>,
     /// <p>The URL that users are redirected to after they click the Send Feedback link. If no URL is specified, no Send Feedback link is displayed.</p>
     #[serde(rename = "FeedbackURL")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1054,7 +1058,7 @@ pub struct Fleet {
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
-    /// <p>The ARN of the IAM role that is applied to the fleet. To assume a role, the fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials.</p>
+    /// <p>The ARN of the IAM role that is applied to the fleet. To assume a role, the fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -1070,7 +1074,7 @@ pub struct Fleet {
     #[serde(rename = "ImageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_name: Option<String>,
-    /// <p>The instance type to use when launching fleet instances.</p>
+    /// <p><p>The instance type to use when launching fleet instances. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
     /// <p>The maximum amount of time that a streaming session can remain active, in seconds. If users are still connected to a streaming instance five minutes before this limit is reached, they are prompted to save any open documents before being disconnected. After this time elapses, the instance is terminated and replaced by a new instance. </p> <p>Specify a value between 600 and 360000.</p>
@@ -1208,7 +1212,7 @@ pub struct ImageBuilder {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
-    /// <p>The ARN of the IAM role that is applied to the image builder. To assume a role, the image builder calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. </p>
+    /// <p>The ARN of the IAM role that is applied to the image builder. To assume a role, the image builder calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -1220,7 +1224,7 @@ pub struct ImageBuilder {
     #[serde(rename = "ImageBuilderErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_builder_errors: Option<Vec<ResourceError>>,
-    /// <p>The instance type for the image builder.</p>
+    /// <p><p>The instance type for the image builder. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
@@ -1491,6 +1495,10 @@ pub struct Stack {
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    /// <p>The domains where AppStream 2.0 streaming sessions can be embedded in an iframe. You must approve the domains that you want to host embedded AppStream 2.0 streaming sessions.</p>
+    #[serde(rename = "EmbedHostDomains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub embed_host_domains: Option<Vec<String>>,
     /// <p>The URL that users are redirected to after they click the Send Feedback link. If no URL is specified, no Send Feedback link is displayed.</p>
     #[serde(rename = "FeedbackURL")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1686,7 +1694,7 @@ pub struct UpdateFleetRequest {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the fleet. To assume a role, a fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to apply to the fleet. To assume a role, a fleet instance calls the AWS Security Token Service (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use. The operation creates a new session with temporary credentials. AppStream 2.0 retrieves the temporary credentials and creates the <b>AppStream_Machine_Role</b> credential profile on the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html">Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -1768,6 +1776,10 @@ pub struct UpdateStackRequest {
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    /// <p>The domains where AppStream 2.0 streaming sessions can be embedded in an iframe. You must approve the domains that you want to host embedded AppStream 2.0 streaming sessions.</p>
+    #[serde(rename = "EmbedHostDomains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub embed_host_domains: Option<Vec<String>>,
     /// <p>The URL that users are redirected to after they choose the Send Feedback link. If no URL is specified, no Send Feedback link is displayed.</p>
     #[serde(rename = "FeedbackURL")]
     #[serde(skip_serializing_if = "Option::is_none")]

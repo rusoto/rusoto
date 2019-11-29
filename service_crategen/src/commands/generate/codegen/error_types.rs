@@ -120,7 +120,7 @@ pub trait GenerateErrorTypes {
             // botocore has some dulicated errors
             for error in operation.errors() {
                 // some botocore definitions include Validation in every errors list, some take it as assumed
-                // skip it if it's listed, as we implement it for all error types below
+                // skip it if it's listed, as we implement it for all error types below.
                 if error.idiomatic_error_name() != "Validation" {
                     type_matchers.push(format!(
                         "{error_type}::{error_shape}(ref cause) => cause",

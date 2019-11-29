@@ -228,7 +228,7 @@ pub struct EnvironmentLifecycle {
     #[serde(rename = "reason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<String>,
-    /// <p><p>The current creation or deletion lifecycle state of the environment.</p> <ul> <li> <p> <code>CREATED</code>: The environment was successfully created.</p> </li> <li> <p> <code>DELETE_FAILED</code>: The environment failed to delete.</p> </li> <li> <p> <code>DELETING</code>: The environment is in the process of being deleted.</p> </li> </ul></p>
+    /// <p><p>The current creation or deletion lifecycle state of the environment.</p> <ul> <li> <p> <code>CREATING</code>: The environment is in the process of being created.</p> </li> <li> <p> <code>CREATED</code>: The environment was successfully created.</p> </li> <li> <p> <code>CREATE<em>FAILED</code>: The environment failed to be created.</p> </li> <li> <p> <code>DELETING</code>: The environment is in the process of being deleted.</p> </li> <li> <p> <code>DELETE</em>FAILED</code>: The environment failed to delete.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,

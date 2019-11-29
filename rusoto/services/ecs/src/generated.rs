@@ -167,10 +167,6 @@ pub struct Container {
     #[serde(rename = "exitCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exit_code: Option<i64>,
-    /// <p>The FireLens configuration for the container.</p>
-    #[serde(rename = "firelensConfiguration")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub firelens_configuration: Option<FirelensConfiguration>,
     /// <p>The IDs of each GPU assigned to the container.</p>
     #[serde(rename = "gpuIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -179,6 +175,14 @@ pub struct Container {
     #[serde(rename = "healthStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_status: Option<String>,
+    /// <p>The image used for the container.</p>
+    #[serde(rename = "image")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image: Option<String>,
+    /// <p><p>The container image manifest digest.</p> <note> <p>The <code>imageDigest</code> is only returned if the container is using an image hosted in Amazon ECR, otherwise it is omitted.</p> </note></p>
+    #[serde(rename = "imageDigest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_digest: Option<String>,
     /// <p>The last known status of the container.</p>
     #[serde(rename = "lastStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -228,7 +232,7 @@ pub struct ContainerDefinition {
     #[serde(rename = "cpu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cpu: Option<i64>,
-    /// <p>The dependencies defined for container startup and shutdown. A container can contain multiple dependencies. When a dependency is defined for container startup, for container shutdown it is reversed.</p> <p>For tasks using the EC2 launch type, the container instances require at least version 1.26.0 of the container agent to enable container dependencies. However, we recommend using the latest container agent version. For information about checking your agent version and updating to the latest version, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html">Updating the Amazon ECS Container Agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. If you are using an Amazon ECS-optimized Linux AMI, your instance needs at least version 1.26.0-1 of the <code>ecs-init</code> package. If your container instances are launched from version <code>20190301</code> or later, then they contain the required versions of the container agent and <code>ecs-init</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html">Amazon ECS-optimized Linux AMI</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>This parameter is available for tasks using the Fargate launch type in the Ohio (us-east-2) region only and the task or service requires platform version 1.3.0 or later.</p>
+    /// <p>The dependencies defined for container startup and shutdown. A container can contain multiple dependencies. When a dependency is defined for container startup, for container shutdown it is reversed.</p> <p>For tasks using the EC2 launch type, the container instances require at least version 1.26.0 of the container agent to enable container dependencies. However, we recommend using the latest container agent version. For information about checking your agent version and updating to the latest version, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html">Updating the Amazon ECS Container Agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. If you are using an Amazon ECS-optimized Linux AMI, your instance needs at least version 1.26.0-1 of the <code>ecs-init</code> package. If your container instances are launched from version <code>20190301</code> or later, then they contain the required versions of the container agent and <code>ecs-init</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html">Amazon ECS-optimized Linux AMI</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>For tasks using the Fargate launch type, the task or service requires platform version <code>1.3.0</code> or later.</p>
     #[serde(rename = "dependsOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub depends_on: Option<Vec<ContainerDependency>>,
@@ -268,7 +272,7 @@ pub struct ContainerDefinition {
     #[serde(rename = "extraHosts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_hosts: Option<Vec<HostEntry>>,
-    /// <p>The FireLens configuration for the container. This is used to specify and configure a log router for container logs.</p>
+    /// <p>The FireLens configuration for the container. This is used to specify and configure a log router for container logs. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html">Custom Log Routing</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "firelensConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub firelens_configuration: Option<FirelensConfiguration>,
@@ -344,11 +348,11 @@ pub struct ContainerDefinition {
     #[serde(rename = "secrets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secrets: Option<Vec<Secret>>,
-    /// <p>Time duration (in seconds) to wait before giving up on resolving dependencies for a container. For example, you specify two containers in a task definition with containerA having a dependency on containerB reaching a <code>COMPLETE</code>, <code>SUCCESS</code>, or <code>HEALTHY</code> status. If a <code>startTimeout</code> value is specified for containerB and it does not reach the desired status within that time then containerA will give up and not start. This results in the task transitioning to a <code>STOPPED</code> state.</p> <p>For tasks using the EC2 launch type, the container instances require at least version 1.26.0 of the container agent to enable a container start timeout value. However, we recommend using the latest container agent version. For information about checking your agent version and updating to the latest version, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html">Updating the Amazon ECS Container Agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. If you are using an Amazon ECS-optimized Linux AMI, your instance needs at least version 1.26.0-1 of the <code>ecs-init</code> package. If your container instances are launched from version <code>20190301</code> or later, then they contain the required versions of the container agent and <code>ecs-init</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html">Amazon ECS-optimized Linux AMI</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>This parameter is available for tasks using the Fargate launch type in the Ohio (us-east-2) region only and the task or service requires platform version 1.3.0 or later.</p>
+    /// <p>Time duration (in seconds) to wait before giving up on resolving dependencies for a container. For example, you specify two containers in a task definition with containerA having a dependency on containerB reaching a <code>COMPLETE</code>, <code>SUCCESS</code>, or <code>HEALTHY</code> status. If a <code>startTimeout</code> value is specified for containerB and it does not reach the desired status within that time then containerA will give up and not start. This results in the task transitioning to a <code>STOPPED</code> state.</p> <p>For tasks using the EC2 launch type, the container instances require at least version 1.26.0 of the container agent to enable a container start timeout value. However, we recommend using the latest container agent version. For information about checking your agent version and updating to the latest version, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html">Updating the Amazon ECS Container Agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. If you are using an Amazon ECS-optimized Linux AMI, your instance needs at least version 1.26.0-1 of the <code>ecs-init</code> package. If your container instances are launched from version <code>20190301</code> or later, then they contain the required versions of the container agent and <code>ecs-init</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html">Amazon ECS-optimized Linux AMI</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>For tasks using the Fargate launch type, the task or service requires platform version <code>1.3.0</code> or later.</p>
     #[serde(rename = "startTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_timeout: Option<i64>,
-    /// <p>Time duration (in seconds) to wait before the container is forcefully killed if it doesn't exit normally on its own. For tasks using the Fargate launch type, the max <code>stopTimeout</code> value is 2 minutes. This parameter is available for tasks using the Fargate launch type in the Ohio (us-east-2) region only and the task or service requires platform version 1.3.0 or later.</p> <p>For tasks using the EC2 launch type, the stop timeout value for the container takes precedence over the <code>ECS_CONTAINER_STOP_TIMEOUT</code> container agent configuration parameter, if used. Container instances require at least version 1.26.0 of the container agent to enable a container stop timeout value. However, we recommend using the latest container agent version. For information about checking your agent version and updating to the latest version, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html">Updating the Amazon ECS Container Agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. If you are using an Amazon ECS-optimized Linux AMI, your instance needs at least version 1.26.0-1 of the <code>ecs-init</code> package. If your container instances are launched from version <code>20190301</code> or later, then they contain the required versions of the container agent and <code>ecs-init</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html">Amazon ECS-optimized Linux AMI</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>Time duration (in seconds) to wait before the container is forcefully killed if it doesn't exit normally on its own.</p> <p>For tasks using the Fargate launch type, the max <code>stopTimeout</code> value is 2 minutes and the task or service requires platform version <code>1.3.0</code> or later.</p> <p>For tasks using the EC2 launch type, the stop timeout value for the container takes precedence over the <code>ECS_CONTAINER_STOP_TIMEOUT</code> container agent configuration parameter, if used. Container instances require at least version 1.26.0 of the container agent to enable a container stop timeout value. However, we recommend using the latest container agent version. For information about checking your agent version and updating to the latest version, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html">Updating the Amazon ECS Container Agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. If you are using an Amazon ECS-optimized Linux AMI, your instance needs at least version 1.26.0-1 of the <code>ecs-init</code> package. If your container instances are launched from version <code>20190301</code> or later, then they contain the required versions of the container agent and <code>ecs-init</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html">Amazon ECS-optimized Linux AMI</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "stopTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop_timeout: Option<i64>,
@@ -499,6 +503,10 @@ pub struct ContainerStateChange {
     #[serde(rename = "exitCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exit_code: Option<i64>,
+    /// <p>The container image SHA 256 digest.</p>
+    #[serde(rename = "imageDigest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_digest: Option<String>,
     /// <p>Any network bindings associated with the container.</p>
     #[serde(rename = "networkBindings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -576,7 +584,7 @@ pub struct CreateServiceRequest {
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_type: Option<String>,
-    /// <p>A load balancer object representing the load balancers to use with your service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html">Service Load Balancing</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If the service is using the rolling update (<code>ECS</code>) deployment controller and using either an Application Load Balancer or Network Load Balancer, you can specify multiple target groups to attach to the service.</p> <p>If the service is using the <code>CODE_DEPLOY</code> deployment controller, the service is required to use either an Application Load Balancer or Network Load Balancer. When creating an AWS CodeDeploy deployment group, you specify two target groups (referred to as a <code>targetGroupPair</code>). During a deployment, AWS CodeDeploy determines which task set in your service has the status <code>PRIMARY</code> and associates one target group with it, and then associates the other target group with the replacement task set. The load balancer can also have up to two listeners: a required listener for production traffic and an optional listener that allows you perform validation tests with Lambda functions before routing production traffic to it.</p> <p>After you create a service using the <code>ECS</code> deployment controller, the load balancer name or target group ARN, container name, and container port specified in the service definition are immutable. If you are using the <code>CODE_DEPLOY</code> deployment controller, these values can be changed when updating the service.</p> <p>For Application Load Balancers and Network Load Balancers, this object must contain the load balancer target group ARN, the container name (as it appears in a container definition), and the container port to access from the load balancer. When a task from this service is placed on a container instance, the container instance and port combination is registered as a target in the target group specified here.</p> <p>For Classic Load Balancers, this object must contain the load balancer name, the container name (as it appears in a container definition), and the container port to access from the load balancer. When a task from this service is placed on a container instance, the container instance is registered with the load balancer specified here.</p> <p>Services with tasks that use the <code>awsvpc</code> network mode (for example, those with the Fargate launch type) only support Application Load Balancers and Network Load Balancers. Classic Load Balancers are not supported. Also, when you create any target groups for these services, you must choose <code>ip</code> as the target type, not <code>instance</code>, because tasks that use the <code>awsvpc</code> network mode are associated with an elastic network interface, not an Amazon EC2 instance.</p>
+    /// <p>A load balancer object representing the load balancers to use with your service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html">Service Load Balancing</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If the service is using the rolling update (<code>ECS</code>) deployment controller and using either an Application Load Balancer or Network Load Balancer, you can specify multiple target groups to attach to the service. The service-linked role is required for services that make use of multiple target groups. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If the service is using the <code>CODE_DEPLOY</code> deployment controller, the service is required to use either an Application Load Balancer or Network Load Balancer. When creating an AWS CodeDeploy deployment group, you specify two target groups (referred to as a <code>targetGroupPair</code>). During a deployment, AWS CodeDeploy determines which task set in your service has the status <code>PRIMARY</code> and associates one target group with it, and then associates the other target group with the replacement task set. The load balancer can also have up to two listeners: a required listener for production traffic and an optional listener that allows you perform validation tests with Lambda functions before routing production traffic to it.</p> <p>After you create a service using the <code>ECS</code> deployment controller, the load balancer name or target group ARN, container name, and container port specified in the service definition are immutable. If you are using the <code>CODE_DEPLOY</code> deployment controller, these values can be changed when updating the service.</p> <p>For Application Load Balancers and Network Load Balancers, this object must contain the load balancer target group ARN, the container name (as it appears in a container definition), and the container port to access from the load balancer. When a task from this service is placed on a container instance, the container instance and port combination is registered as a target in the target group specified here.</p> <p>For Classic Load Balancers, this object must contain the load balancer name, the container name (as it appears in a container definition), and the container port to access from the load balancer. When a task from this service is placed on a container instance, the container instance is registered with the load balancer specified here.</p> <p>Services with tasks that use the <code>awsvpc</code> network mode (for example, those with the Fargate launch type) only support Application Load Balancers and Network Load Balancers. Classic Load Balancers are not supported. Also, when you create any target groups for these services, you must choose <code>ip</code> as the target type, not <code>instance</code>, because tasks that use the <code>awsvpc</code> network mode are associated with an elastic network interface, not an Amazon EC2 instance.</p>
     #[serde(rename = "loadBalancers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub load_balancers: Option<Vec<LoadBalancer>>,
@@ -600,7 +608,7 @@ pub struct CreateServiceRequest {
     #[serde(rename = "propagateTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub propagate_tags: Option<String>,
-    /// <p>The name or full Amazon Resource Name (ARN) of the IAM role that allows Amazon ECS to make calls to your load balancer on your behalf. This parameter is only permitted if you are using a load balancer with your service and your task definition does not use the <code>awsvpc</code> network mode. If you specify the <code>role</code> parameter, you must also specify a load balancer object with the <code>loadBalancers</code> parameter.</p> <important> <p>If your account has already created the Amazon ECS service-linked role, that role is used by default for your service unless you specify a role here. The service-linked role is required if your task definition uses the <code>awsvpc</code> network mode, in which case you should not specify a role here. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> </important> <p>If your specified role has a path other than <code>/</code>, then you must either specify the full role ARN (this is recommended) or prefix the role name with the path. For example, if a role with the name <code>bar</code> has a path of <code>/foo/</code> then you would specify <code>/foo/bar</code> as the role name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-friendly-names">Friendly Names and Paths</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>The name or full Amazon Resource Name (ARN) of the IAM role that allows Amazon ECS to make calls to your load balancer on your behalf. This parameter is only permitted if you are using a load balancer with your service and your task definition does not use the <code>awsvpc</code> network mode. If you specify the <code>role</code> parameter, you must also specify a load balancer object with the <code>loadBalancers</code> parameter.</p> <important> <p>If your account has already created the Amazon ECS service-linked role, that role is used by default for your service unless you specify a role here. The service-linked role is required if your task definition uses the <code>awsvpc</code> network mode or if the service is configured to use service discovery, an external deployment controller, or multiple target groups in which case you should not specify a role here. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> </important> <p>If your specified role has a path other than <code>/</code>, then you must either specify the full role ARN (this is recommended) or prefix the role name with the path. For example, if a role with the name <code>bar</code> has a path of <code>/foo/</code> then you would specify <code>/foo/bar</code> as the role name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-friendly-names">Friendly Names and Paths</a> in the <i>IAM User Guide</i>.</p>
     #[serde(rename = "role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
@@ -1135,13 +1143,17 @@ pub struct Failure {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The details of the failure.</p>
+    #[serde(rename = "detail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detail: Option<String>,
     /// <p>The reason for the failure.</p>
     #[serde(rename = "reason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<String>,
 }
 
-/// <p>The FireLens configuration for the container. This is used to specify and configure a log router for container logs.</p>
+/// <p>The FireLens configuration for the container. This is used to specify and configure a log router for container logs. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html">Custom Log Routing</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FirelensConfiguration {
     /// <p>The options to use when configuring the log router. This field is optional and can be used to add additional metadata, such as the task, task definition, cluster, and container instance details to the log event. If specified, the syntax to use is <code>"options":{"enable-ecs-log-metadata":"true|false"}</code>.</p>
@@ -1294,7 +1306,7 @@ pub struct ListAccountSettingsRequest {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListAccountSettings</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListAccountSettings</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1339,7 +1351,7 @@ pub struct ListAttributesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListAttributes</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListAttributes</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1367,7 +1379,7 @@ pub struct ListClustersRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListClusters</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListClusters</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1400,7 +1412,7 @@ pub struct ListContainerInstancesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListContainerInstances</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListContainerInstances</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1437,7 +1449,7 @@ pub struct ListServicesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListServices</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListServices</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1486,7 +1498,7 @@ pub struct ListTaskDefinitionFamiliesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListTaskDefinitionFamilies</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListTaskDefinitionFamilies</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1519,7 +1531,7 @@ pub struct ListTaskDefinitionsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListTaskDefinitions</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListTaskDefinitions</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1572,7 +1584,7 @@ pub struct ListTasksRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListTasks</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListTasks</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1630,7 +1642,7 @@ pub struct LogConfiguration {
     #[serde(rename = "options")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub options: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The secrets to pass to the log configuration.</p>
+    /// <p>The secrets to pass to the log configuration. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html">Specifying Sensitive Data</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "secretOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_options: Option<Vec<Secret>>,
@@ -1913,7 +1925,7 @@ pub struct RegisterTaskDefinitionRequest {
     #[serde(rename = "networkMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_mode: Option<String>,
-    /// <p><p>The process namespace to use for the containers in the task. The valid values are <code>host</code> or <code>task</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> PID mode on the same container instance share the same IPC resources with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace. For more information, see <a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">PID settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> PID mode is used, be aware that there is a heightened risk of undesired process namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
+    /// <p><p>The process namespace to use for the containers in the task. The valid values are <code>host</code> or <code>task</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> PID mode on the same container instance share the same process namespace with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace. For more information, see <a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">PID settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> PID mode is used, be aware that there is a heightened risk of undesired process namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
     #[serde(rename = "pidMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pid_mode: Option<String>,
@@ -2049,6 +2061,10 @@ pub struct RunTaskRequest {
     #[serde(rename = "propagateTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub propagate_tags: Option<String>,
+    /// <p>The reference ID to use for the task.</p>
+    #[serde(rename = "referenceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reference_id: Option<String>,
     /// <p>An optional tag specified when a task is started. For example, if you automatically trigger a task to run a batch process job, you could apply a unique identifier for that job to your task with the <code>startedBy</code> parameter. You can then identify which tasks belong to that job by filtering the results of a <a>ListTasks</a> call with the <code>startedBy</code> value. Up to 36 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p> <p>If a task is started by an Amazon ECS service, then the <code>startedBy</code> parameter contains the deployment ID of the service that starts it.</p>
     #[serde(rename = "startedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2303,6 +2319,10 @@ pub struct StartTaskRequest {
     #[serde(rename = "propagateTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub propagate_tags: Option<String>,
+    /// <p>The reference ID to use for the task.</p>
+    #[serde(rename = "referenceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reference_id: Option<String>,
     /// <p>An optional tag specified when a task is started. For example, if you automatically trigger a task to run a batch process job, you could apply a unique identifier for that job to your task with the <code>startedBy</code> parameter. You can then identify which tasks belong to that job by filtering the results of a <a>ListTasks</a> call with the <code>startedBy</code> value. Up to 36 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p> <p>If a task is started by an Amazon ECS service, then the <code>startedBy</code> parameter contains the deployment ID of the service that starts it.</p>
     #[serde(rename = "startedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2515,6 +2535,14 @@ pub struct Task {
     #[serde(rename = "attachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attachments: Option<Vec<Attachment>>,
+    /// <p>The attributes of the task</p>
+    #[serde(rename = "attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<Attribute>>,
+    /// <p>The availability zone of the task.</p>
+    #[serde(rename = "availabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone: Option<String>,
     /// <p>The ARN of the cluster that hosts the task.</p>
     #[serde(rename = "clusterArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2627,7 +2655,7 @@ pub struct Task {
     #[serde(rename = "taskDefinitionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_definition_arn: Option<String>,
-    /// <p>The version counter for the task. Every time a task experiences a change that triggers a CloudWatch event, the version counter is incremented. If you are replicating your Amazon ECS task state with CloudWatch Events, you can compare the version of a task reported by the Amazon ECS API actionss with the version reported in CloudWatch Events for the task (inside the <code>detail</code> object) to verify that the version in your event stream is current.</p>
+    /// <p>The version counter for the task. Every time a task experiences a change that triggers a CloudWatch event, the version counter is incremented. If you are replicating your Amazon ECS task state with CloudWatch Events, you can compare the version of a task reported by the Amazon ECS API actions with the version reported in CloudWatch Events for the task (inside the <code>detail</code> object) to verify that the version in your event stream is current.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
@@ -2657,6 +2685,10 @@ pub struct TaskDefinition {
     #[serde(rename = "family")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub family: Option<String>,
+    /// <p>The Elastic Inference accelerator associated with the task.</p>
+    #[serde(rename = "inferenceAccelerators")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inference_accelerators: Option<Vec<InferenceAccelerator>>,
     /// <p><p>The IPC resource namespace to use for the containers in the task. The valid values are <code>host</code>, <code>task</code>, or <code>none</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> IPC mode on the same container instance share the same IPC resources with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same IPC resources. If <code>none</code> is specified, then IPC resources within the containers of a task are private and not shared with other containers in a task or on the container instance. If no value is specified, then the IPC resource namespace sharing depends on the Docker daemon setting on the container instance. For more information, see <a href="https://docs.docker.com/engine/reference/run/#ipc-settings---ipc">IPC settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> IPC mode is used, be aware that there is a heightened risk of undesired IPC namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <p>If you are setting namespaced kernel parameters using <code>systemControls</code> for the containers in the task, the following will apply to your IPC resource namespace. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html">System Controls</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <ul> <li> <p>For tasks that use the <code>host</code> IPC mode, IPC namespace related <code>systemControls</code> are not supported.</p> </li> <li> <p>For tasks that use the <code>task</code> IPC mode, IPC namespace related <code>systemControls</code> will apply to all containers within a task.</p> </li> </ul> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
     #[serde(rename = "ipcMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2669,7 +2701,7 @@ pub struct TaskDefinition {
     #[serde(rename = "networkMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_mode: Option<String>,
-    /// <p><p>The process namespace to use for the containers in the task. The valid values are <code>host</code> or <code>task</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> PID mode on the same container instance share the same IPC resources with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace. For more information, see <a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">PID settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> PID mode is used, be aware that there is a heightened risk of undesired process namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
+    /// <p><p>The process namespace to use for the containers in the task. The valid values are <code>host</code> or <code>task</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> PID mode on the same container instance share the same process namespace with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace. For more information, see <a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">PID settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> PID mode is used, be aware that there is a heightened risk of undesired process namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
     #[serde(rename = "pidMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pid_mode: Option<String>,
@@ -2731,6 +2763,10 @@ pub struct TaskOverride {
     #[serde(rename = "containerOverrides")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_overrides: Option<Vec<ContainerOverride>>,
+    /// <p>The cpu override for the task.</p>
+    #[serde(rename = "cpu")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cpu: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the task execution role that the Amazon ECS container agent and the Docker daemon can assume.</p>
     #[serde(rename = "executionRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2739,6 +2775,10 @@ pub struct TaskOverride {
     #[serde(rename = "inferenceAcceleratorOverrides")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inference_accelerator_overrides: Option<Vec<InferenceAcceleratorOverride>>,
+    /// <p>The memory override for the task.</p>
+    #[serde(rename = "memory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the IAM role that containers in this task can assume. All containers in this task are granted the permissions that are specified in this role.</p>
     #[serde(rename = "taskRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5027,6 +5067,8 @@ pub enum SubmitTaskStateChangeError {
     AccessDenied(String),
     /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
 }
@@ -5040,6 +5082,11 @@ impl SubmitTaskStateChangeError {
                 }
                 "ClientException" => {
                     return RusotoError::Service(SubmitTaskStateChangeError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(SubmitTaskStateChangeError::InvalidParameter(
+                        err.msg,
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(SubmitTaskStateChangeError::Server(err.msg))
@@ -5061,6 +5108,7 @@ impl Error for SubmitTaskStateChangeError {
         match *self {
             SubmitTaskStateChangeError::AccessDenied(ref cause) => cause,
             SubmitTaskStateChangeError::Client(ref cause) => cause,
+            SubmitTaskStateChangeError::InvalidParameter(ref cause) => cause,
             SubmitTaskStateChangeError::Server(ref cause) => cause,
         }
     }

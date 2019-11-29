@@ -252,6 +252,109 @@ impl BooleanOptionalDeserializer {
         Ok(obj)
     }
 }
+/// <p>A certificate authority (CA) certificate for an AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Certificate {
+    /// <p>The Amazon Resource Name (ARN) for the certificate.</p> <p>Example: <code>arn:aws:rds:us-east-1::cert:rds-ca-2019</code> </p>
+    pub certificate_arn: Option<String>,
+    /// <p>The unique key that identifies a certificate.</p> <p>Example: <code>rds-ca-2019</code> </p>
+    pub certificate_identifier: Option<String>,
+    /// <p>The type of the certificate.</p> <p>Example: <code>CA</code> </p>
+    pub certificate_type: Option<String>,
+    /// <p>The thumbprint of the certificate.</p>
+    pub thumbprint: Option<String>,
+    /// <p>The starting date-time from which the certificate is valid.</p> <p>Example: <code>2019-07-31T17:57:09Z</code> </p>
+    pub valid_from: Option<String>,
+    /// <p>The date-time after which the certificate is no longer valid.</p> <p>Example: <code>2024-07-31T17:57:09Z</code> </p>
+    pub valid_till: Option<String>,
+}
+
+struct CertificateDeserializer;
+impl CertificateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Certificate, XmlParseError> {
+        deserialize_elements::<_, Certificate, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CertificateArn" => {
+                    obj.certificate_arn =
+                        Some(StringDeserializer::deserialize("CertificateArn", stack)?);
+                }
+                "CertificateIdentifier" => {
+                    obj.certificate_identifier = Some(StringDeserializer::deserialize(
+                        "CertificateIdentifier",
+                        stack,
+                    )?);
+                }
+                "CertificateType" => {
+                    obj.certificate_type =
+                        Some(StringDeserializer::deserialize("CertificateType", stack)?);
+                }
+                "Thumbprint" => {
+                    obj.thumbprint = Some(StringDeserializer::deserialize("Thumbprint", stack)?);
+                }
+                "ValidFrom" => {
+                    obj.valid_from = Some(TStampDeserializer::deserialize("ValidFrom", stack)?);
+                }
+                "ValidTill" => {
+                    obj.valid_till = Some(TStampDeserializer::deserialize("ValidTill", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+struct CertificateListDeserializer;
+impl CertificateListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Certificate>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "Certificate" {
+                obj.push(CertificateDeserializer::deserialize("Certificate", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CertificateMessage {
+    /// <p>A list of certificates for this AWS account.</p>
+    pub certificates: Option<Vec<Certificate>>,
+    /// <p>An optional pagination token provided if the number of records retrieved is greater than <code>MaxRecords</code>. If this parameter is specified, the marker specifies the next record in the list. Including the value of <code>Marker</code> in the next call to <code>DescribeCertificates</code> results in the next page of certificates.</p>
+    pub marker: Option<String>,
+}
+
+struct CertificateMessageDeserializer;
+impl CertificateMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CertificateMessage, XmlParseError> {
+        deserialize_elements::<_, CertificateMessage, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Certificates" => {
+                    obj.certificates.get_or_insert(vec![]).extend(
+                        CertificateListDeserializer::deserialize("Certificates", stack)?,
+                    );
+                }
+                "Marker" => {
+                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>The configuration setting for the log types to be enabled for export to Amazon CloudWatch Logs for a specific DB instance or DB cluster.</p> <p>The <code>EnableLogTypes</code> and <code>DisableLogTypes</code> arrays determine which logs are exported (or not exported) to CloudWatch Logs. The values within these arrays depend on the DB engine that is being used.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CloudwatchLogsExportConfiguration {
@@ -460,9 +563,9 @@ pub struct CreateDBClusterMessage {
     pub engine_version: Option<String>,
     /// <p>The AWS KMS key identifier for an encrypted DB cluster.</p> <p>The AWS KMS key identifier is the Amazon Resource Name (ARN) for the AWS KMS encryption key. If you are creating a DB cluster using the same AWS account that owns the AWS KMS encryption key that is used to encrypt the new DB cluster, you can use the AWS KMS key alias instead of the ARN for the AWS KMS encryption key.</p> <p>If an encryption key is not specified in <code>KmsKeyId</code>:</p> <ul> <li> <p>If <code>ReplicationSourceIdentifier</code> identifies an encrypted source, then Amazon DocumentDB uses the encryption key that is used to encrypt the source. Otherwise, Amazon DocumentDB uses your default encryption key. </p> </li> <li> <p>If the <code>StorageEncrypted</code> parameter is <code>true</code> and <code>ReplicationSourceIdentifier</code> is not specified, Amazon DocumentDB uses your default encryption key.</p> </li> </ul> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p> <p>If you create a replica of an encrypted DB cluster in another AWS Region, you must set <code>KmsKeyId</code> to a KMS key ID that is valid in the destination AWS Region. This key is used to encrypt the replica in that AWS Region.</p>
     pub kms_key_id: Option<String>,
-    /// <p>The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@).</p> <p>Constraints: Must contain from 8 to 41 characters.</p>
+    /// <p>The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@).</p> <p>Constraints: Must contain from 8 to 100 characters.</p>
     pub master_user_password: String,
-    /// <p><p>The name of the master user for the DB cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must be from 1 to 16 letters or numbers.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot be a reserved word for the chosen database engine.</p> </li> </ul></p>
+    /// <p><p>The name of the master user for the DB cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must be from 1 to 63 letters or numbers.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot be a reserved word for the chosen database engine.</p> </li> </ul></p>
     pub master_username: String,
     /// <p>The port number on which the instances in the DB cluster accept connections.</p>
     pub port: Option<i64>,
@@ -743,7 +846,7 @@ pub struct CreateDBInstanceMessage {
     pub preferred_maintenance_window: Option<String>,
     /// <p>A value that specifies the order in which an Amazon DocumentDB replica is promoted to the primary instance after a failure of the existing primary instance.</p> <p>Default: 1</p> <p>Valid values: 0-15</p>
     pub promotion_tier: Option<i64>,
-    /// <p>The tags to be assigned to the DB instance.</p>
+    /// <p>The tags to be assigned to the DB instance. You can assign up to 10 tags to an instance.</p>
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -1881,6 +1984,8 @@ pub struct DBInstance {
     pub availability_zone: Option<String>,
     /// <p>Specifies the number of days for which automatic DB snapshots are retained.</p>
     pub backup_retention_period: Option<i64>,
+    /// <p>The identifier of the CA certificate for this DB instance.</p>
+    pub ca_certificate_identifier: Option<String>,
     /// <p>Contains the name of the DB cluster that the DB instance is a member of if the DB instance is a member of a DB cluster.</p>
     pub db_cluster_identifier: Option<String>,
     /// <p>The Amazon Resource Name (ARN) for the DB instance.</p>
@@ -1917,11 +2022,11 @@ pub struct DBInstance {
     pub preferred_maintenance_window: Option<String>,
     /// <p>A value that specifies the order in which an Amazon DocumentDB replica is promoted to the primary instance after a failure of the existing primary instance.</p>
     pub promotion_tier: Option<i64>,
-    /// <p>Specifies the availability options for the DB instance. A value of <code>true</code> specifies an internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. A value of <code>false</code> specifies an internal instance with a DNS name that resolves to a private IP address.</p>
+    /// <p>Not supported. Amazon DocumentDB does not currently support public endpoints. The value of <code>PubliclyAccessible</code> is always <code>false</code>.</p>
     pub publicly_accessible: Option<bool>,
     /// <p>The status of a read replica. If the instance is not a read replica, this is blank.</p>
     pub status_infos: Option<Vec<DBInstanceStatusInfo>>,
-    /// <p>Specifies whether the DB instance is encrypted.</p>
+    /// <p>Specifies whether or not the DB instance is encrypted.</p>
     pub storage_encrypted: Option<bool>,
     /// <p>Provides a list of VPC security group elements that the DB instance belongs to.</p>
     pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
@@ -1949,6 +2054,12 @@ impl DBInstanceDeserializer {
                 "BackupRetentionPeriod" => {
                     obj.backup_retention_period = Some(IntegerDeserializer::deserialize(
                         "BackupRetentionPeriod",
+                        stack,
+                    )?);
+                }
+                "CACertificateIdentifier" => {
+                    obj.ca_certificate_identifier = Some(StringDeserializer::deserialize(
+                        "CACertificateIdentifier",
                         stack,
                     )?);
                 }
@@ -2185,7 +2296,7 @@ impl DBInstanceStatusInfoListDeserializer {
 /// <p>Detailed information about a DB subnet group. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBSubnetGroup {
-    /// <p>The Amazon Resource Identifier (ARN) for the DB subnet group.</p>
+    /// <p>The Amazon Resource Name (ARN) for the DB subnet group.</p>
     pub db_subnet_group_arn: Option<String>,
     /// <p>Provides the description of the DB subnet group.</p>
     pub db_subnet_group_description: Option<String>,
@@ -2494,6 +2605,49 @@ impl DeleteDBSubnetGroupMessageSerializer {
             &format!("{}{}", prefix, "DBSubnetGroupName"),
             &obj.db_subnet_group_name,
         );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeCertificatesMessage {
+    /// <p><p>The user-supplied certificate identifier. If this parameter is specified, information for only the specified certificate is returned. If this parameter is omitted, a list of up to <code>MaxRecords</code> certificates is returned. This parameter is not case sensitive.</p> <p>Constraints</p> <ul> <li> <p>Must match an existing <code>CertificateIdentifier</code>.</p> </li> </ul></p>
+    pub certificate_identifier: Option<String>,
+    /// <p>This parameter is not currently supported.</p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>An optional pagination token provided by a previous <code>DescribeCertificates</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+    /// <p><p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints:</p> <ul> <li> <p>Minimum: 20</p> </li> <li> <p>Maximum: 100</p> </li> </ul></p>
+    pub max_records: Option<i64>,
+}
+
+/// Serialize `DescribeCertificatesMessage` contents to a `SignedRequest`.
+struct DescribeCertificatesMessageSerializer;
+impl DescribeCertificatesMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeCertificatesMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.certificate_identifier {
+            params.put(
+                &format!("{}{}", prefix, "CertificateIdentifier"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
     }
 }
 
@@ -3700,7 +3854,7 @@ pub struct ModifyDBClusterMessage {
     pub deletion_protection: Option<bool>,
     /// <p>The version number of the database engine to which you want to upgrade. Changing this parameter results in an outage. The change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code>.</p>
     pub engine_version: Option<String>,
-    /// <p>The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@).</p> <p>Constraints: Must contain from 8 to 41 characters.</p>
+    /// <p>The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@).</p> <p>Constraints: Must contain from 8 to 100 characters.</p>
     pub master_user_password: Option<String>,
     /// <p>The new DB cluster identifier for the DB cluster when renaming a DB cluster. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster2</code> </p>
     pub new_db_cluster_identifier: Option<String>,
@@ -3927,6 +4081,8 @@ pub struct ModifyDBInstanceMessage {
     pub apply_immediately: Option<bool>,
     /// <p>Indicates that minor version upgrades are applied automatically to the DB instance during the maintenance window. Changing this parameter doesn't result in an outage except in the following case, and the change is asynchronously applied as soon as possible. An outage results if this parameter is set to <code>true</code> during the maintenance window, and a newer minor version is available, and Amazon DocumentDB has enabled automatic patching for that engine version. </p>
     pub auto_minor_version_upgrade: Option<bool>,
+    /// <p>Indicates the certificate that needs to be associated with the instance.</p>
+    pub ca_certificate_identifier: Option<String>,
     /// <p>The new compute and memory capacity of the DB instance; for example, <code>db.r5.large</code>. Not all DB instance classes are available in all AWS Regions. </p> <p>If you modify the DB instance class, an outage occurs during the change. The change is applied during the next maintenance window, unless <code>ApplyImmediately</code> is specified as <code>true</code> for this request. </p> <p>Default: Uses existing setting.</p>
     pub db_instance_class: Option<String>,
     /// <p><p>The DB instance identifier. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing <code>DBInstance</code>.</p> </li> </ul></p>
@@ -3954,6 +4110,12 @@ impl ModifyDBInstanceMessageSerializer {
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AutoMinorVersionUpgrade"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.ca_certificate_identifier {
+            params.put(
+                &format!("{}{}", prefix, "CACertificateIdentifier"),
                 &field_value,
             );
         }
@@ -6700,6 +6862,55 @@ impl Error for DeleteDBSubnetGroupError {
         }
     }
 }
+/// Errors returned by DescribeCertificates
+#[derive(Debug, PartialEq)]
+pub enum DescribeCertificatesError {
+    /// <p> <code>CertificateIdentifier</code> doesn't refer to an existing certificate. </p>
+    CertificateNotFoundFault(String),
+}
+
+impl DescribeCertificatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCertificatesError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CertificateNotFound" => {
+                        return RusotoError::Service(
+                            DescribeCertificatesError::CertificateNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeCertificatesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeCertificatesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeCertificatesError::CertificateNotFoundFault(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeDBClusterParameterGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClusterParameterGroupsError {
@@ -8713,6 +8924,12 @@ pub trait Docdb {
         input: DeleteDBSubnetGroupMessage,
     ) -> RusotoFuture<(), DeleteDBSubnetGroupError>;
 
+    /// <p>Returns a list of certificate authority (CA) certificates provided by Amazon RDS for this AWS account.</p>
+    fn describe_certificates(
+        &self,
+        input: DescribeCertificatesMessage,
+    ) -> RusotoFuture<CertificateMessage, DescribeCertificatesError>;
+
     /// <p>Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list contains only the description of the specified DB cluster parameter group. </p>
     fn describe_db_cluster_parameter_groups(
         &self,
@@ -9538,6 +9755,56 @@ impl Docdb for DocdbClient {
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p>Returns a list of certificate authority (CA) certificates provided by Amazon RDS for this AWS account.</p>
+    fn describe_certificates(
+        &self,
+        input: DescribeCertificatesMessage,
+    ) -> RusotoFuture<CertificateMessage, DescribeCertificatesError> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeCertificates");
+        params.put("Version", "2014-10-31");
+        DescribeCertificatesMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeCertificatesError::from_response(response))
+                    }),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CertificateMessage::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(false),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CertificateMessageDeserializer::deserialize(
+                        "DescribeCertificatesResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
 

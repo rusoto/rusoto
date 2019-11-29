@@ -24,11 +24,11 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-/// <p>Limits that are related to concurrency and code storage. All file and storage sizes are in bytes.</p>
+/// <p>Limits that are related to concurrency and storage. All file and storage sizes are in bytes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccountLimit {
-    /// <p>The maximum size of your function's code and layers when they're extracted.</p>
+    /// <p>The maximum size of a function's deployment package and layers when they're extracted.</p>
     #[serde(rename = "CodeSizeUnzipped")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code_size_unzipped: Option<i64>,
@@ -224,6 +224,14 @@ pub struct CreateEventSourceMappingRequest {
     #[serde(rename = "BatchSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<i64>,
+    /// <p>(Streams) If the function returns an error, split the batch in two and retry.</p>
+    #[serde(rename = "BisectBatchOnFunctionError")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bisect_batch_on_function_error: Option<bool>,
+    /// <p>(Streams) An Amazon SQS queue or Amazon SNS topic destination for discarded records.</p>
+    #[serde(rename = "DestinationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_config: Option<DestinationConfig>,
     /// <p>Disables the event source mapping to pause polling and invocation.</p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -234,9 +242,22 @@ pub struct CreateEventSourceMappingRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>MyFunction</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p> </li> <li> <p> <b>Version or Alias ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction:PROD</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it's limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
     pub function_name: String,
+    /// <p>The maximum amount of time to gather records before invoking the function, in seconds.</p>
     #[serde(rename = "MaximumBatchingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_batching_window_in_seconds: Option<i64>,
+    /// <p>(Streams) The maximum age of a record that Lambda sends to a function for processing.</p>
+    #[serde(rename = "MaximumRecordAgeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_record_age_in_seconds: Option<i64>,
+    /// <p>(Streams) The maximum number of times to retry when the function returns an error.</p>
+    #[serde(rename = "MaximumRetryAttempts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_retry_attempts: Option<i64>,
+    /// <p>(Streams) The number of batches to process from each shard concurrently.</p>
+    #[serde(rename = "ParallelizationFactor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parallelization_factor: Option<i64>,
     /// <p>The position in a stream from which to start reading. Required for Amazon Kinesis and Amazon DynamoDB Streams sources. <code>AT_TIMESTAMP</code> is only supported for Amazon Kinesis streams.</p>
     #[serde(rename = "StartingPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -252,7 +273,7 @@ pub struct CreateFunctionRequest {
     /// <p>The code for the function.</p>
     #[serde(rename = "Code")]
     pub code: FunctionCode,
-    /// <p>A dead letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">Dead Letter Queues</a>.</p>
+    /// <p>A dead letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#dlq">Dead Letter Queues</a>.</p>
     #[serde(rename = "DeadLetterConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dead_letter_config: Option<DeadLetterConfig>,
@@ -304,13 +325,13 @@ pub struct CreateFunctionRequest {
     #[serde(rename = "TracingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tracing_config: Option<TracingConfig>,
-    /// <p>For network connectivity to AWS resources in a VPC, specify a list of security groups and subnets in the VPC. When you connect a function to a VPC, it can only access resources and the internet through that VPC. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/vpc.html">VPC Settings</a>.</p>
+    /// <p>For network connectivity to AWS resources in a VPC, specify a list of security groups and subnets in the VPC. When you connect a function to a VPC, it can only access resources and the internet through that VPC. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html">VPC Settings</a>.</p>
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_config: Option<VpcConfig>,
 }
 
-/// <p>The <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">dead letter queue</a> for failed asynchronous invocations.</p>
+/// <p>The <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#dlq">dead-letter queue</a> for failed asynchronous invocations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeadLetterConfig {
     /// <p>The Amazon Resource Name (ARN) of an Amazon SQS queue or Amazon SNS topic.</p>
@@ -344,6 +365,17 @@ pub struct DeleteFunctionConcurrencyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteFunctionEventInvokeConfigRequest {
+    /// <p>The name of the Lambda function, version, or alias.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code> (name-only), <code>my-function:v1</code> (with alias).</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>You can append a version number or alias to any of the formats. The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+    #[serde(rename = "FunctionName")]
+    pub function_name: String,
+    /// <p>A version number or alias name.</p>
+    #[serde(rename = "Qualifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qualifier: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteFunctionRequest {
     /// <p>The name of the Lambda function or version.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code> (name-only), <code>my-function:1</code> (with version).</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>You can append a version number or alias to any of the formats. The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
@@ -362,6 +394,19 @@ pub struct DeleteLayerVersionRequest {
     /// <p>The version number.</p>
     #[serde(rename = "VersionNumber")]
     pub version_number: i64,
+}
+
+/// <p>A configuration object that specifies the destination of an event after Lambda processes it.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DestinationConfig {
+    /// <p>The destination configuration for failed invocations.</p>
+    #[serde(rename = "OnFailure")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_failure: Option<OnFailure>,
+    /// <p>The destination configuration for successful invocations.</p>
+    #[serde(rename = "OnSuccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_success: Option<OnSuccess>,
 }
 
 /// <p>A function's environment variable settings.</p>
@@ -387,7 +432,7 @@ pub struct EnvironmentError {
     pub message: Option<String>,
 }
 
-/// <p>The results of a configuration update that applied environment variables.</p>
+/// <p>The results of an operation to update or read environment variables. If the operation is successful, the response contains the environment variables. If it failed, the response contains details about the error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentResponse {
@@ -409,6 +454,14 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "BatchSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<i64>,
+    /// <p>(Streams) If the function returns an error, split the batch in two and retry.</p>
+    #[serde(rename = "BisectBatchOnFunctionError")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bisect_batch_on_function_error: Option<bool>,
+    /// <p>(Streams) An Amazon SQS queue or Amazon SNS topic destination for discarded records.</p>
+    #[serde(rename = "DestinationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_config: Option<DestinationConfig>,
     /// <p>The Amazon Resource Name (ARN) of the event source.</p>
     #[serde(rename = "EventSourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -417,7 +470,7 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "FunctionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_arn: Option<String>,
-    /// <p>The date that the event source mapping was last updated.</p>
+    /// <p>The date that the event source mapping was last updated, or its state changed.</p>
     #[serde(rename = "LastModified")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified: Option<f64>,
@@ -425,14 +478,27 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "LastProcessingResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_processing_result: Option<String>,
+    /// <p>The maximum amount of time to gather records before invoking the function, in seconds.</p>
     #[serde(rename = "MaximumBatchingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_batching_window_in_seconds: Option<i64>,
+    /// <p>(Streams) The maximum age of a record that Lambda sends to a function for processing.</p>
+    #[serde(rename = "MaximumRecordAgeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_record_age_in_seconds: Option<i64>,
+    /// <p>(Streams) The maximum number of times to retry when the function returns an error.</p>
+    #[serde(rename = "MaximumRetryAttempts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_retry_attempts: Option<i64>,
+    /// <p>(Streams) The number of batches to process from each shard concurrently.</p>
+    #[serde(rename = "ParallelizationFactor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parallelization_factor: Option<i64>,
     /// <p>The state of the event source mapping. It can be one of the following: <code>Creating</code>, <code>Enabling</code>, <code>Enabled</code>, <code>Disabling</code>, <code>Disabled</code>, <code>Updating</code>, or <code>Deleting</code>.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    /// <p>The cause of the last state change, either <code>User initiated</code> or <code>Lambda initiated</code>.</p>
+    /// <p>Indicates whether the last change to the event source mapping was made by a user, or by the Lambda service.</p>
     #[serde(rename = "StateTransitionReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_transition_reason: Option<String>,
@@ -518,7 +584,7 @@ pub struct FunctionConfiguration {
     #[serde(rename = "Handler")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub handler: Option<String>,
-    /// <p>The KMS key that's used to encrypt the function's environment variables. This key is only returned if you've configured a customer-managed CMK.</p>
+    /// <p>The KMS key that's used to encrypt the function's environment variables. This key is only returned if you've configured a customer managed CMK.</p>
     #[serde(rename = "KMSKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_arn: Option<String>,
@@ -526,6 +592,18 @@ pub struct FunctionConfiguration {
     #[serde(rename = "LastModified")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified: Option<String>,
+    /// <p>The status of the last update that was performed on the function.</p>
+    #[serde(rename = "LastUpdateStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_status: Option<String>,
+    /// <p>The reason for the last update that was performed on the function.</p>
+    #[serde(rename = "LastUpdateStatusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_status_reason: Option<String>,
+    /// <p>The reason code for the last update that was performed on the function.</p>
+    #[serde(rename = "LastUpdateStatusReasonCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_status_reason_code: Option<String>,
     /// <p>The function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html"> layers</a>.</p>
     #[serde(rename = "Layers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -550,6 +628,18 @@ pub struct FunctionConfiguration {
     #[serde(rename = "Runtime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub runtime: Option<String>,
+    /// <p>The current state of the function. When the state is <code>Inactive</code>, you can reactivate the function by invoking it.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The reason for the function's current state.</p>
+    #[serde(rename = "StateReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_reason: Option<String>,
+    /// <p>The reason code for the function's current state. When the code is <code>Creating</code>, you can't invoke or modify the function.</p>
+    #[serde(rename = "StateReasonCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_reason_code: Option<String>,
     /// <p>The amount of time that Lambda allows a function to run before stopping it.</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -566,6 +656,31 @@ pub struct FunctionConfiguration {
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_config: Option<VpcConfigResponse>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FunctionEventInvokeConfig {
+    /// <p><p>A destination for events after they have been sent to a function for processing.</p> <p class="title"> <b>Destinations</b> </p> <ul> <li> <p> <b>Function</b> - The Amazon Resource Name (ARN) of a Lambda function.</p> </li> <li> <p> <b>Queue</b> - The ARN of an SQS queue.</p> </li> <li> <p> <b>Topic</b> - The ARN of an SNS topic.</p> </li> <li> <p> <b>Event Bus</b> - The ARN of an Amazon EventBridge event bus.</p> </li> </ul></p>
+    #[serde(rename = "DestinationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_config: Option<DestinationConfig>,
+    /// <p>The Amazon Resource Name (ARN) of the function.</p>
+    #[serde(rename = "FunctionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_arn: Option<String>,
+    /// <p>The date and time that the configuration was last updated.</p>
+    #[serde(rename = "LastModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified: Option<f64>,
+    /// <p>The maximum age of a request that Lambda sends to a function for processing.</p>
+    #[serde(rename = "MaximumEventAgeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_event_age_in_seconds: Option<i64>,
+    /// <p>The maximum number of times to retry when the function returns an error.</p>
+    #[serde(rename = "MaximumRetryAttempts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_retry_attempts: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -607,6 +722,17 @@ pub struct GetFunctionConfigurationRequest {
     #[serde(rename = "FunctionName")]
     pub function_name: String,
     /// <p>Specify a version or alias to get details about a published version of the function.</p>
+    #[serde(rename = "Qualifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qualifier: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetFunctionEventInvokeConfigRequest {
+    /// <p>The name of the Lambda function, version, or alias.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code> (name-only), <code>my-function:v1</code> (with alias).</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>You can append a version number or alias to any of the formats. The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+    #[serde(rename = "FunctionName")]
+    pub function_name: String,
+    /// <p>A version number or alias name.</p>
     #[serde(rename = "Qualifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub qualifier: Option<String>,
@@ -988,6 +1114,34 @@ pub struct ListEventSourceMappingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListFunctionEventInvokeConfigsRequest {
+    /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+    #[serde(rename = "FunctionName")]
+    pub function_name: String,
+    /// <p>Specify the pagination token that's returned by a previous request to retrieve the next page of results.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>The maximum number of configurations to return.</p>
+    #[serde(rename = "MaxItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_items: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFunctionEventInvokeConfigsResponse {
+    /// <p>A list of configurations.</p>
+    #[serde(rename = "FunctionEventInvokeConfigs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_event_invoke_configs: Option<Vec<FunctionEventInvokeConfig>>,
+    /// <p>The pagination token that's included if more results are available.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListFunctionsRequest {
     /// <p>Set to <code>ALL</code> to include entries for all published versions of each function.</p>
     #[serde(rename = "FunctionVersion")]
@@ -1126,6 +1280,24 @@ pub struct ListVersionsByFunctionResponse {
     pub versions: Option<Vec<FunctionConfiguration>>,
 }
 
+/// <p>A destination for events that failed processing.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OnFailure {
+    /// <p>The Amazon Resource Name (ARN) of the destination resource.</p>
+    #[serde(rename = "Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination: Option<String>,
+}
+
+/// <p>A destination for events that were processed successfully.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OnSuccess {
+    /// <p>The Amazon Resource Name (ARN) of the destination resource.</p>
+    #[serde(rename = "Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PublishLayerVersionRequest {
     /// <p>A list of compatible <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">function runtimes</a>. Used for filtering with <a>ListLayers</a> and <a>ListLayerVersions</a>.</p>
@@ -1212,6 +1384,29 @@ pub struct PutFunctionConcurrencyRequest {
     /// <p>The number of simultaneous executions to reserve for the function.</p>
     #[serde(rename = "ReservedConcurrentExecutions")]
     pub reserved_concurrent_executions: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutFunctionEventInvokeConfigRequest {
+    /// <p><p>A destination for events after they have been sent to a function for processing.</p> <p class="title"> <b>Destinations</b> </p> <ul> <li> <p> <b>Function</b> - The Amazon Resource Name (ARN) of a Lambda function.</p> </li> <li> <p> <b>Queue</b> - The ARN of an SQS queue.</p> </li> <li> <p> <b>Topic</b> - The ARN of an SNS topic.</p> </li> <li> <p> <b>Event Bus</b> - The ARN of an Amazon EventBridge event bus.</p> </li> </ul></p>
+    #[serde(rename = "DestinationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_config: Option<DestinationConfig>,
+    /// <p>The name of the Lambda function, version, or alias.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code> (name-only), <code>my-function:v1</code> (with alias).</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>You can append a version number or alias to any of the formats. The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+    #[serde(rename = "FunctionName")]
+    pub function_name: String,
+    /// <p>The maximum age of a request that Lambda sends to a function for processing.</p>
+    #[serde(rename = "MaximumEventAgeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_event_age_in_seconds: Option<i64>,
+    /// <p>The maximum number of times to retry when the function returns an error.</p>
+    #[serde(rename = "MaximumRetryAttempts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_retry_attempts: Option<i64>,
+    /// <p>A version number or alias name.</p>
+    #[serde(rename = "Qualifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qualifier: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1320,6 +1515,14 @@ pub struct UpdateEventSourceMappingRequest {
     #[serde(rename = "BatchSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<i64>,
+    /// <p>(Streams) If the function returns an error, split the batch in two and retry.</p>
+    #[serde(rename = "BisectBatchOnFunctionError")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bisect_batch_on_function_error: Option<bool>,
+    /// <p>(Streams) An Amazon SQS queue or Amazon SNS topic destination for discarded records.</p>
+    #[serde(rename = "DestinationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_config: Option<DestinationConfig>,
     /// <p>Disables the event source mapping to pause polling and invocation.</p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1328,9 +1531,22 @@ pub struct UpdateEventSourceMappingRequest {
     #[serde(rename = "FunctionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_name: Option<String>,
+    /// <p>The maximum amount of time to gather records before invoking the function, in seconds.</p>
     #[serde(rename = "MaximumBatchingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_batching_window_in_seconds: Option<i64>,
+    /// <p>(Streams) The maximum age of a record that Lambda sends to a function for processing.</p>
+    #[serde(rename = "MaximumRecordAgeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_record_age_in_seconds: Option<i64>,
+    /// <p>(Streams) The maximum number of times to retry when the function returns an error.</p>
+    #[serde(rename = "MaximumRetryAttempts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_retry_attempts: Option<i64>,
+    /// <p>(Streams) The number of batches to process from each shard concurrently.</p>
+    #[serde(rename = "ParallelizationFactor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parallelization_factor: Option<i64>,
     /// <p>The identifier of the event source mapping.</p>
     #[serde(rename = "UUID")]
     pub uuid: String,
@@ -1378,7 +1594,7 @@ pub struct UpdateFunctionCodeRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateFunctionConfigurationRequest {
-    /// <p>A dead letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">Dead Letter Queues</a>.</p>
+    /// <p>A dead letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#dlq">Dead Letter Queues</a>.</p>
     #[serde(rename = "DeadLetterConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dead_letter_config: Option<DeadLetterConfig>,
@@ -1429,13 +1645,36 @@ pub struct UpdateFunctionConfigurationRequest {
     #[serde(rename = "TracingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tracing_config: Option<TracingConfig>,
-    /// <p>For network connectivity to AWS resources in a VPC, specify a list of security groups and subnets in the VPC. When you connect a function to a VPC, it can only access resources and the internet through that VPC. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/vpc.html">VPC Settings</a>.</p>
+    /// <p>For network connectivity to AWS resources in a VPC, specify a list of security groups and subnets in the VPC. When you connect a function to a VPC, it can only access resources and the internet through that VPC. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html">VPC Settings</a>.</p>
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_config: Option<VpcConfig>,
 }
 
-/// <p>The VPC security groups and subnets that are attached to a Lambda function.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateFunctionEventInvokeConfigRequest {
+    /// <p><p>A destination for events after they have been sent to a function for processing.</p> <p class="title"> <b>Destinations</b> </p> <ul> <li> <p> <b>Function</b> - The Amazon Resource Name (ARN) of a Lambda function.</p> </li> <li> <p> <b>Queue</b> - The ARN of an SQS queue.</p> </li> <li> <p> <b>Topic</b> - The ARN of an SNS topic.</p> </li> <li> <p> <b>Event Bus</b> - The ARN of an Amazon EventBridge event bus.</p> </li> </ul></p>
+    #[serde(rename = "DestinationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_config: Option<DestinationConfig>,
+    /// <p>The name of the Lambda function, version, or alias.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code> (name-only), <code>my-function:v1</code> (with alias).</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>You can append a version number or alias to any of the formats. The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+    #[serde(rename = "FunctionName")]
+    pub function_name: String,
+    /// <p>The maximum age of a request that Lambda sends to a function for processing.</p>
+    #[serde(rename = "MaximumEventAgeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_event_age_in_seconds: Option<i64>,
+    /// <p>The maximum number of times to retry when the function returns an error.</p>
+    #[serde(rename = "MaximumRetryAttempts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_retry_attempts: Option<i64>,
+    /// <p>A version number or alias name.</p>
+    #[serde(rename = "Qualifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qualifier: Option<String>,
+}
+
+/// <p>The VPC security groups and subnets that are attached to a Lambda function. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html">VPC Settings</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct VpcConfig {
     /// <p>A list of VPC security groups IDs.</p>
@@ -1469,19 +1708,19 @@ pub struct VpcConfigResponse {
 /// Errors returned by AddLayerVersionPermission
 #[derive(Debug, PartialEq)]
 pub enum AddLayerVersionPermissionError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The permissions policy for the resource is too large. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Learn more</a> </p>
     PolicyLengthExceeded(String),
     /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
     PreconditionFailed(String),
-    /// <p>The resource already exists.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
     ResourceConflict(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -1550,19 +1789,19 @@ impl Error for AddLayerVersionPermissionError {
 /// Errors returned by AddPermission
 #[derive(Debug, PartialEq)]
 pub enum AddPermissionError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The permissions policy for the resource is too large. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Learn more</a> </p>
     PolicyLengthExceeded(String),
     /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
     PreconditionFailed(String),
-    /// <p>The resource already exists.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
     ResourceConflict(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -1619,15 +1858,15 @@ impl Error for AddPermissionError {
 /// Errors returned by CreateAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAliasError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource already exists.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
     ResourceConflict(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -1676,15 +1915,15 @@ impl Error for CreateAliasError {
 /// Errors returned by CreateEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSourceMappingError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource already exists.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
     ResourceConflict(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -1743,15 +1982,15 @@ impl Error for CreateEventSourceMappingError {
 pub enum CreateFunctionError {
     /// <p>You have exceeded your maximum total code size per account. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Learn more</a> </p>
     CodeStorageExceeded(String),
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource already exists.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
     ResourceConflict(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -1806,11 +2045,11 @@ impl Error for CreateFunctionError {
 /// Errors returned by DeleteAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAliasError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -1851,15 +2090,15 @@ impl Error for DeleteAliasError {
 /// Errors returned by DeleteEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventSourceMappingError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to update an EventSource Mapping in CREATING, or tried to delete a EventSource mapping currently in the UPDATING state. </p>
     ResourceInUse(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -1916,15 +2155,15 @@ impl Error for DeleteEventSourceMappingError {
 /// Errors returned by DeleteFunction
 #[derive(Debug, PartialEq)]
 pub enum DeleteFunctionError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource already exists.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
     ResourceConflict(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -1975,13 +2214,15 @@ impl Error for DeleteFunctionError {
 /// Errors returned by DeleteFunctionConcurrency
 #[derive(Debug, PartialEq)]
 pub enum DeleteFunctionConcurrencyError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
+    ResourceConflict(String),
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -1993,6 +2234,11 @@ impl DeleteFunctionConcurrencyError {
                     return RusotoError::Service(
                         DeleteFunctionConcurrencyError::InvalidParameterValue(err.msg),
                     )
+                }
+                "ResourceConflictException" => {
+                    return RusotoError::Service(DeleteFunctionConcurrencyError::ResourceConflict(
+                        err.msg,
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteFunctionConcurrencyError::ResourceNotFound(
@@ -2023,9 +2269,71 @@ impl Error for DeleteFunctionConcurrencyError {
     fn description(&self) -> &str {
         match *self {
             DeleteFunctionConcurrencyError::InvalidParameterValue(ref cause) => cause,
+            DeleteFunctionConcurrencyError::ResourceConflict(ref cause) => cause,
             DeleteFunctionConcurrencyError::ResourceNotFound(ref cause) => cause,
             DeleteFunctionConcurrencyError::Service(ref cause) => cause,
             DeleteFunctionConcurrencyError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteFunctionEventInvokeConfig
+#[derive(Debug, PartialEq)]
+pub enum DeleteFunctionEventInvokeConfigError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+    /// <p>The request throughput limit was exceeded.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteFunctionEventInvokeConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteFunctionEventInvokeConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DeleteFunctionEventInvokeConfigError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteFunctionEventInvokeConfigError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DeleteFunctionEventInvokeConfigError::Service(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        DeleteFunctionEventInvokeConfigError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteFunctionEventInvokeConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteFunctionEventInvokeConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteFunctionEventInvokeConfigError::InvalidParameterValue(ref cause) => cause,
+            DeleteFunctionEventInvokeConfigError::ResourceNotFound(ref cause) => cause,
+            DeleteFunctionEventInvokeConfigError::Service(ref cause) => cause,
+            DeleteFunctionEventInvokeConfigError::TooManyRequests(ref cause) => cause,
         }
     }
 }
@@ -2034,7 +2342,7 @@ impl Error for DeleteFunctionConcurrencyError {
 pub enum DeleteLayerVersionError {
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2073,7 +2381,7 @@ impl Error for DeleteLayerVersionError {
 pub enum GetAccountSettingsError {
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2110,13 +2418,13 @@ impl Error for GetAccountSettingsError {
 /// Errors returned by GetAlias
 #[derive(Debug, PartialEq)]
 pub enum GetAliasError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2159,13 +2467,13 @@ impl Error for GetAliasError {
 /// Errors returned by GetEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum GetEventSourceMappingError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2216,13 +2524,13 @@ impl Error for GetEventSourceMappingError {
 /// Errors returned by GetFunction
 #[derive(Debug, PartialEq)]
 pub enum GetFunctionError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2267,13 +2575,13 @@ impl Error for GetFunctionError {
 /// Errors returned by GetFunctionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetFunctionConfigurationError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2321,16 +2629,77 @@ impl Error for GetFunctionConfigurationError {
         }
     }
 }
-/// Errors returned by GetLayerVersion
+/// Errors returned by GetFunctionEventInvokeConfig
 #[derive(Debug, PartialEq)]
-pub enum GetLayerVersionError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+pub enum GetFunctionEventInvokeConfigError {
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
+    TooManyRequests(String),
+}
+
+impl GetFunctionEventInvokeConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetFunctionEventInvokeConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        GetFunctionEventInvokeConfigError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        GetFunctionEventInvokeConfigError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(GetFunctionEventInvokeConfigError::Service(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        GetFunctionEventInvokeConfigError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetFunctionEventInvokeConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetFunctionEventInvokeConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            GetFunctionEventInvokeConfigError::InvalidParameterValue(ref cause) => cause,
+            GetFunctionEventInvokeConfigError::ResourceNotFound(ref cause) => cause,
+            GetFunctionEventInvokeConfigError::Service(ref cause) => cause,
+            GetFunctionEventInvokeConfigError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetLayerVersion
+#[derive(Debug, PartialEq)]
+pub enum GetLayerVersionError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2377,13 +2746,13 @@ impl Error for GetLayerVersionError {
 /// Errors returned by GetLayerVersionByArn
 #[derive(Debug, PartialEq)]
 pub enum GetLayerVersionByArnError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2434,13 +2803,13 @@ impl Error for GetLayerVersionByArnError {
 /// Errors returned by GetLayerVersionPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetLayerVersionPolicyError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2491,13 +2860,13 @@ impl Error for GetLayerVersionPolicyError {
 /// Errors returned by GetPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetPolicyError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2548,9 +2917,9 @@ pub enum InvokeError {
     EC2Throttled(String),
     /// <p>AWS Lambda received an unexpected EC2 client exception while setting up for the Lambda function.</p>
     EC2Unexpected(String),
-    /// <p>AWS Lambda was not able to create an Elastic Network Interface (ENI) in the VPC, specified as part of Lambda function configuration, because the limit for network interfaces has been reached.</p>
+    /// <p>AWS Lambda was not able to create an elastic network interface in the VPC, specified as part of Lambda function configuration, because the limit for network interfaces has been reached.</p>
     ENILimitReached(String),
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The request body could not be parsed as JSON.</p>
     InvalidRequestContent(String),
@@ -2572,13 +2941,17 @@ pub enum InvokeError {
     KMSNotFound(String),
     /// <p>The request payload exceeded the <code>Invoke</code> request body JSON input limit. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a>. </p>
     RequestTooLarge(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
+    ResourceConflict(String),
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
+    /// <p>The function is inactive and its VPC connection is no longer available. Wait for the VPC connection to reestablish and try again.</p>
+    ResourceNotReady(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
     /// <p>AWS Lambda was not able to set up VPC access for the Lambda function because one or more configured subnets has no available IP addresses.</p>
     SubnetIPAddressLimitReached(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
     /// <p>The content type of the <code>Invoke</code> request body is not JSON.</p>
     UnsupportedMediaType(String),
@@ -2633,8 +3006,14 @@ impl InvokeError {
                 "RequestTooLargeException" => {
                     return RusotoError::Service(InvokeError::RequestTooLarge(err.msg))
                 }
+                "ResourceConflictException" => {
+                    return RusotoError::Service(InvokeError::ResourceConflict(err.msg))
+                }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(InvokeError::ResourceNotFound(err.msg))
+                }
+                "ResourceNotReadyException" => {
+                    return RusotoError::Service(InvokeError::ResourceNotReady(err.msg))
                 }
                 "ServiceException" => return RusotoError::Service(InvokeError::Service(err.msg)),
                 "SubnetIPAddressLimitReachedException" => {
@@ -2676,7 +3055,9 @@ impl Error for InvokeError {
             InvokeError::KMSInvalidState(ref cause) => cause,
             InvokeError::KMSNotFound(ref cause) => cause,
             InvokeError::RequestTooLarge(ref cause) => cause,
+            InvokeError::ResourceConflict(ref cause) => cause,
             InvokeError::ResourceNotFound(ref cause) => cause,
+            InvokeError::ResourceNotReady(ref cause) => cause,
             InvokeError::Service(ref cause) => cause,
             InvokeError::SubnetIPAddressLimitReached(ref cause) => cause,
             InvokeError::TooManyRequests(ref cause) => cause,
@@ -2691,7 +3072,9 @@ pub enum InvokeAsyncError {
     InvalidRequestContent(String),
     /// <p>The runtime or runtime version specified is not supported.</p>
     InvalidRuntime(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
+    ResourceConflict(String),
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
@@ -2706,6 +3089,9 @@ impl InvokeAsyncError {
                 }
                 "InvalidRuntimeException" => {
                     return RusotoError::Service(InvokeAsyncError::InvalidRuntime(err.msg))
+                }
+                "ResourceConflictException" => {
+                    return RusotoError::Service(InvokeAsyncError::ResourceConflict(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(InvokeAsyncError::ResourceNotFound(err.msg))
@@ -2730,6 +3116,7 @@ impl Error for InvokeAsyncError {
         match *self {
             InvokeAsyncError::InvalidRequestContent(ref cause) => cause,
             InvokeAsyncError::InvalidRuntime(ref cause) => cause,
+            InvokeAsyncError::ResourceConflict(ref cause) => cause,
             InvokeAsyncError::ResourceNotFound(ref cause) => cause,
             InvokeAsyncError::Service(ref cause) => cause,
         }
@@ -2738,13 +3125,13 @@ impl Error for InvokeAsyncError {
 /// Errors returned by ListAliases
 #[derive(Debug, PartialEq)]
 pub enum ListAliasesError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2789,13 +3176,13 @@ impl Error for ListAliasesError {
 /// Errors returned by ListEventSourceMappings
 #[derive(Debug, PartialEq)]
 pub enum ListEventSourceMappingsError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2843,14 +3230,75 @@ impl Error for ListEventSourceMappingsError {
         }
     }
 }
+/// Errors returned by ListFunctionEventInvokeConfigs
+#[derive(Debug, PartialEq)]
+pub enum ListFunctionEventInvokeConfigsError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+    /// <p>The request throughput limit was exceeded.</p>
+    TooManyRequests(String),
+}
+
+impl ListFunctionEventInvokeConfigsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListFunctionEventInvokeConfigsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        ListFunctionEventInvokeConfigsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ListFunctionEventInvokeConfigsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(ListFunctionEventInvokeConfigsError::Service(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        ListFunctionEventInvokeConfigsError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListFunctionEventInvokeConfigsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListFunctionEventInvokeConfigsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListFunctionEventInvokeConfigsError::InvalidParameterValue(ref cause) => cause,
+            ListFunctionEventInvokeConfigsError::ResourceNotFound(ref cause) => cause,
+            ListFunctionEventInvokeConfigsError::Service(ref cause) => cause,
+            ListFunctionEventInvokeConfigsError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListFunctions
 #[derive(Debug, PartialEq)]
 pub enum ListFunctionsError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2891,13 +3339,13 @@ impl Error for ListFunctionsError {
 /// Errors returned by ListLayerVersions
 #[derive(Debug, PartialEq)]
 pub enum ListLayerVersionsError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2944,11 +3392,11 @@ impl Error for ListLayerVersionsError {
 /// Errors returned by ListLayers
 #[derive(Debug, PartialEq)]
 pub enum ListLayersError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -2989,13 +3437,13 @@ impl Error for ListLayersError {
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -3038,13 +3486,13 @@ impl Error for ListTagsError {
 /// Errors returned by ListVersionsByFunction
 #[derive(Debug, PartialEq)]
 pub enum ListVersionsByFunctionError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -3097,13 +3545,13 @@ impl Error for ListVersionsByFunctionError {
 pub enum PublishLayerVersionError {
     /// <p>You have exceeded your maximum total code size per account. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Learn more</a> </p>
     CodeStorageExceeded(String),
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -3160,15 +3608,17 @@ impl Error for PublishLayerVersionError {
 pub enum PublishVersionError {
     /// <p>You have exceeded your maximum total code size per account. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Learn more</a> </p>
     CodeStorageExceeded(String),
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
     PreconditionFailed(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
+    ResourceConflict(String),
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -3186,6 +3636,9 @@ impl PublishVersionError {
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(PublishVersionError::PreconditionFailed(err.msg))
+                }
+                "ResourceConflictException" => {
+                    return RusotoError::Service(PublishVersionError::ResourceConflict(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(PublishVersionError::ResourceNotFound(err.msg))
@@ -3214,6 +3667,7 @@ impl Error for PublishVersionError {
             PublishVersionError::CodeStorageExceeded(ref cause) => cause,
             PublishVersionError::InvalidParameterValue(ref cause) => cause,
             PublishVersionError::PreconditionFailed(ref cause) => cause,
+            PublishVersionError::ResourceConflict(ref cause) => cause,
             PublishVersionError::ResourceNotFound(ref cause) => cause,
             PublishVersionError::Service(ref cause) => cause,
             PublishVersionError::TooManyRequests(ref cause) => cause,
@@ -3223,13 +3677,15 @@ impl Error for PublishVersionError {
 /// Errors returned by PutFunctionConcurrency
 #[derive(Debug, PartialEq)]
 pub enum PutFunctionConcurrencyError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
+    ResourceConflict(String),
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -3241,6 +3697,11 @@ impl PutFunctionConcurrencyError {
                     return RusotoError::Service(
                         PutFunctionConcurrencyError::InvalidParameterValue(err.msg),
                     )
+                }
+                "ResourceConflictException" => {
+                    return RusotoError::Service(PutFunctionConcurrencyError::ResourceConflict(
+                        err.msg,
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(PutFunctionConcurrencyError::ResourceNotFound(
@@ -3271,24 +3732,86 @@ impl Error for PutFunctionConcurrencyError {
     fn description(&self) -> &str {
         match *self {
             PutFunctionConcurrencyError::InvalidParameterValue(ref cause) => cause,
+            PutFunctionConcurrencyError::ResourceConflict(ref cause) => cause,
             PutFunctionConcurrencyError::ResourceNotFound(ref cause) => cause,
             PutFunctionConcurrencyError::Service(ref cause) => cause,
             PutFunctionConcurrencyError::TooManyRequests(ref cause) => cause,
         }
     }
 }
-/// Errors returned by RemoveLayerVersionPermission
+/// Errors returned by PutFunctionEventInvokeConfig
 #[derive(Debug, PartialEq)]
-pub enum RemoveLayerVersionPermissionError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+pub enum PutFunctionEventInvokeConfigError {
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
-    PreconditionFailed(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
+    TooManyRequests(String),
+}
+
+impl PutFunctionEventInvokeConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutFunctionEventInvokeConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        PutFunctionEventInvokeConfigError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        PutFunctionEventInvokeConfigError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(PutFunctionEventInvokeConfigError::Service(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        PutFunctionEventInvokeConfigError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for PutFunctionEventInvokeConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutFunctionEventInvokeConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            PutFunctionEventInvokeConfigError::InvalidParameterValue(ref cause) => cause,
+            PutFunctionEventInvokeConfigError::ResourceNotFound(ref cause) => cause,
+            PutFunctionEventInvokeConfigError::Service(ref cause) => cause,
+            PutFunctionEventInvokeConfigError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by RemoveLayerVersionPermission
+#[derive(Debug, PartialEq)]
+pub enum RemoveLayerVersionPermissionError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
+    PreconditionFailed(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -3349,15 +3872,15 @@ impl Error for RemoveLayerVersionPermissionError {
 /// Errors returned by RemovePermission
 #[derive(Debug, PartialEq)]
 pub enum RemovePermissionError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
     PreconditionFailed(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -3408,13 +3931,13 @@ impl Error for RemovePermissionError {
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -3459,13 +3982,13 @@ impl Error for TagResourceError {
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -3510,15 +4033,17 @@ impl Error for UntagResourceError {
 /// Errors returned by UpdateAlias
 #[derive(Debug, PartialEq)]
 pub enum UpdateAliasError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
     PreconditionFailed(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
+    ResourceConflict(String),
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -3531,6 +4056,9 @@ impl UpdateAliasError {
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(UpdateAliasError::PreconditionFailed(err.msg))
+                }
+                "ResourceConflictException" => {
+                    return RusotoError::Service(UpdateAliasError::ResourceConflict(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateAliasError::ResourceNotFound(err.msg))
@@ -3558,6 +4086,7 @@ impl Error for UpdateAliasError {
         match *self {
             UpdateAliasError::InvalidParameterValue(ref cause) => cause,
             UpdateAliasError::PreconditionFailed(ref cause) => cause,
+            UpdateAliasError::ResourceConflict(ref cause) => cause,
             UpdateAliasError::ResourceNotFound(ref cause) => cause,
             UpdateAliasError::Service(ref cause) => cause,
             UpdateAliasError::TooManyRequests(ref cause) => cause,
@@ -3567,17 +4096,17 @@ impl Error for UpdateAliasError {
 /// Errors returned by UpdateEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum UpdateEventSourceMappingError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The resource already exists.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
     ResourceConflict(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to update an EventSource Mapping in CREATING, or tried to delete a EventSource mapping currently in the UPDATING state. </p>
     ResourceInUse(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -3642,15 +4171,17 @@ impl Error for UpdateEventSourceMappingError {
 pub enum UpdateFunctionCodeError {
     /// <p>You have exceeded your maximum total code size per account. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Learn more</a> </p>
     CodeStorageExceeded(String),
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
     PreconditionFailed(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
+    ResourceConflict(String),
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -3672,6 +4203,9 @@ impl UpdateFunctionCodeError {
                     return RusotoError::Service(UpdateFunctionCodeError::PreconditionFailed(
                         err.msg,
                     ))
+                }
+                "ResourceConflictException" => {
+                    return RusotoError::Service(UpdateFunctionCodeError::ResourceConflict(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateFunctionCodeError::ResourceNotFound(err.msg))
@@ -3700,6 +4234,7 @@ impl Error for UpdateFunctionCodeError {
             UpdateFunctionCodeError::CodeStorageExceeded(ref cause) => cause,
             UpdateFunctionCodeError::InvalidParameterValue(ref cause) => cause,
             UpdateFunctionCodeError::PreconditionFailed(ref cause) => cause,
+            UpdateFunctionCodeError::ResourceConflict(ref cause) => cause,
             UpdateFunctionCodeError::ResourceNotFound(ref cause) => cause,
             UpdateFunctionCodeError::Service(ref cause) => cause,
             UpdateFunctionCodeError::TooManyRequests(ref cause) => cause,
@@ -3709,17 +4244,17 @@ impl Error for UpdateFunctionCodeError {
 /// Errors returned by UpdateFunctionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateFunctionConfigurationError {
-    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
     /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
     PreconditionFailed(String),
-    /// <p>The resource already exists.</p>
+    /// <p>The resource already exists, or another operation is in progress.</p>
     ResourceConflict(String),
-    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>Request throughput limit exceeded.</p>
+    /// <p>The request throughput limit was exceeded.</p>
     TooManyRequests(String),
 }
 
@@ -3781,6 +4316,67 @@ impl Error for UpdateFunctionConfigurationError {
         }
     }
 }
+/// Errors returned by UpdateFunctionEventInvokeConfig
+#[derive(Debug, PartialEq)]
+pub enum UpdateFunctionEventInvokeConfigError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+    /// <p>The request throughput limit was exceeded.</p>
+    TooManyRequests(String),
+}
+
+impl UpdateFunctionEventInvokeConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateFunctionEventInvokeConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        UpdateFunctionEventInvokeConfigError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateFunctionEventInvokeConfigError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(UpdateFunctionEventInvokeConfigError::Service(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        UpdateFunctionEventInvokeConfigError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateFunctionEventInvokeConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateFunctionEventInvokeConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateFunctionEventInvokeConfigError::InvalidParameterValue(ref cause) => cause,
+            UpdateFunctionEventInvokeConfigError::ResourceNotFound(ref cause) => cause,
+            UpdateFunctionEventInvokeConfigError::Service(ref cause) => cause,
+            UpdateFunctionEventInvokeConfigError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the AWS Lambda API. AWS Lambda clients implement this trait.
 pub trait Lambda {
     /// <p>Adds permissions to the resource-based policy of a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Use this action to grant layer usage permission to other accounts. You can grant permission to a single account, all AWS accounts, or all accounts in an organization.</p> <p>To revoke permission, call <a>RemoveLayerVersionPermission</a> with the statement ID that you specified when you added it.</p>
@@ -3789,7 +4385,7 @@ pub trait Lambda {
         input: AddLayerVersionPermissionRequest,
     ) -> RusotoFuture<AddLayerVersionPermissionResponse, AddLayerVersionPermissionError>;
 
-    /// <p>Grants an AWS service or another account permission to use a function. You can apply the policy at the function level, or specify a qualifier to restrict access to a single version or alias. If you use a qualifier, the invoker must use the full Amazon Resource Name (ARN) of that version or alias to invoke the function.</p> <p>To grant permission to another account, specify the account ID as the <code>Principal</code>. For AWS services, the principal is a domain-style identifier defined by the service, like <code>s3.amazonaws.com</code> or <code>sns.amazonaws.com</code>. For AWS services, you can also specify the ARN or owning account of the associated resource as the <code>SourceArn</code> or <code>SourceAccount</code>. If you grant permission to a service principal without specifying the source, other accounts could potentially configure resources in their account to invoke your Lambda function.</p> <p>This action adds a statement to a resource-based permission policy for the function. For more information about function policies, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html">Lambda Function Policies</a>. </p>
+    /// <p>Grants an AWS service or another account permission to use a function. You can apply the policy at the function level, or specify a qualifier to restrict access to a single version or alias. If you use a qualifier, the invoker must use the full Amazon Resource Name (ARN) of that version or alias to invoke the function.</p> <p>To grant permission to another account, specify the account ID as the <code>Principal</code>. For AWS services, the principal is a domain-style identifier defined by the service, like <code>s3.amazonaws.com</code> or <code>sns.amazonaws.com</code>. For AWS services, you can also specify the ARN or owning account of the associated resource as the <code>SourceArn</code> or <code>SourceAccount</code>. If you grant permission to a service principal without specifying the source, other accounts could potentially configure resources in their account to invoke your Lambda function.</p> <p>This action adds a statement to a resource-based permissions policy for the function. For more information about function policies, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html">Lambda Function Policies</a>. </p>
     fn add_permission(
         &self,
         input: AddPermissionRequest,
@@ -3801,13 +4397,13 @@ pub trait Lambda {
         input: CreateAliasRequest,
     ) -> RusotoFuture<AliasConfiguration, CreateAliasError>;
 
-    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> </ul></p>
+    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> </ul> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> </ul></p>
     fn create_event_source_mapping(
         &self,
         input: CreateEventSourceMappingRequest,
     ) -> RusotoFuture<EventSourceMappingConfiguration, CreateEventSourceMappingError>;
 
-    /// <p>Creates a Lambda function. To create a function, you need a <a href="https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html">deployment package</a> and an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role">execution role</a>. The deployment package contains your function code. The execution role grants the function permission to use AWS services, such as Amazon CloudWatch Logs for log streaming and AWS X-Ray for request tracing.</p> <p>A function has an unpublished version, and can have published versions and aliases. The unpublished version changes when you update your function's code and configuration. A published version is a snapshot of your function code and configuration that can't be changed. An alias is a named resource that maps to a version, and can be changed to map to a different version. Use the <code>Publish</code> parameter to create version <code>1</code> of your function from its initial configuration.</p> <p>The other parameters let you configure version-specific and function-level settings. You can modify version-specific settings later with <a>UpdateFunctionConfiguration</a>. Function-level settings apply to both the unpublished and published versions of the function, and include tags (<a>TagResource</a>) and per-function concurrency limits (<a>PutFunctionConcurrency</a>).</p> <p>If another account or an AWS service invokes your function, use <a>AddPermission</a> to grant permission by creating a resource-based IAM policy. You can grant permissions at the function level, on a version, or on an alias.</p> <p>To invoke your function directly, use <a>Invoke</a>. To invoke your function in response to events in other AWS services, create an event source mapping (<a>CreateEventSourceMapping</a>), or configure a function trigger in the other service. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-functions.html">Invoking Functions</a>.</p>
+    /// <p>Creates a Lambda function. To create a function, you need a <a href="https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html">deployment package</a> and an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role">execution role</a>. The deployment package contains your function code. The execution role grants the function permission to use AWS services, such as Amazon CloudWatch Logs for log streaming and AWS X-Ray for request tracing.</p> <p>When you create a function, Lambda provisions an instance of the function and its supporting resources. If your function connects to a VPC, this process can take a minute or so. During this time, you can't invoke or modify the function. The <code>State</code>, <code>StateReason</code>, and <code>StateReasonCode</code> fields in the response from <a>GetFunctionConfiguration</a> indicate when the function is ready to invoke. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/functions-states.html">Function States</a>.</p> <p>A function has an unpublished version, and can have published versions and aliases. The unpublished version changes when you update your function's code and configuration. A published version is a snapshot of your function code and configuration that can't be changed. An alias is a named resource that maps to a version, and can be changed to map to a different version. Use the <code>Publish</code> parameter to create version <code>1</code> of your function from its initial configuration.</p> <p>The other parameters let you configure version-specific and function-level settings. You can modify version-specific settings later with <a>UpdateFunctionConfiguration</a>. Function-level settings apply to both the unpublished and published versions of the function, and include tags (<a>TagResource</a>) and per-function concurrency limits (<a>PutFunctionConcurrency</a>).</p> <p>If another account or an AWS service invokes your function, use <a>AddPermission</a> to grant permission by creating a resource-based IAM policy. You can grant permissions at the function level, on a version, or on an alias.</p> <p>To invoke your function directly, use <a>Invoke</a>. To invoke your function in response to events in other AWS services, create an event source mapping (<a>CreateEventSourceMapping</a>), or configure a function trigger in the other service. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-invocation.html">Invoking Functions</a>.</p>
     fn create_function(
         &self,
         input: CreateFunctionRequest,
@@ -3816,7 +4412,7 @@ pub trait Lambda {
     /// <p>Deletes a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
     fn delete_alias(&self, input: DeleteAliasRequest) -> RusotoFuture<(), DeleteAliasError>;
 
-    /// <p>Deletes an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-invocation-modes.html">event source mapping</a>. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p>
+    /// <p>Deletes an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-invocation-modes.html">event source mapping</a>. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p> <p>When you delete an event source mapping, it enters a <code>Deleting</code> state and might not be completely deleted for several seconds.</p>
     fn delete_event_source_mapping(
         &self,
         input: DeleteEventSourceMappingRequest,
@@ -3833,6 +4429,12 @@ pub trait Lambda {
         &self,
         input: DeleteFunctionConcurrencyRequest,
     ) -> RusotoFuture<(), DeleteFunctionConcurrencyError>;
+
+    /// <p>Deletes the configuration for asynchronous invocation for a function, version, or alias.</p> <p>To configure options for asynchronous invocation, use <a>PutFunctionEventInvokeConfig</a>.</p>
+    fn delete_function_event_invoke_config(
+        &self,
+        input: DeleteFunctionEventInvokeConfigRequest,
+    ) -> RusotoFuture<(), DeleteFunctionEventInvokeConfigError>;
 
     /// <p>Deletes a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Deleted versions can no longer be viewed or added to functions. To avoid breaking functions, a copy of the version remains in Lambda until no functions refer to it.</p>
     fn delete_layer_version(
@@ -3866,6 +4468,12 @@ pub trait Lambda {
         input: GetFunctionConfigurationRequest,
     ) -> RusotoFuture<FunctionConfiguration, GetFunctionConfigurationError>;
 
+    /// <p>Retrieves the configuration for asynchronous invocation for a function, version, or alias.</p> <p>To configure options for asynchronous invocation, use <a>PutFunctionEventInvokeConfig</a>.</p>
+    fn get_function_event_invoke_config(
+        &self,
+        input: GetFunctionEventInvokeConfigRequest,
+    ) -> RusotoFuture<FunctionEventInvokeConfig, GetFunctionEventInvokeConfigError>;
+
     /// <p>Returns information about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>, with a link to download the layer archive that's valid for 10 minutes.</p>
     fn get_layer_version(
         &self,
@@ -3890,7 +4498,7 @@ pub trait Lambda {
         input: GetPolicyRequest,
     ) -> RusotoFuture<GetPolicyResponse, GetPolicyError>;
 
-    /// <p>Invokes a Lambda function. You can invoke a function synchronously (and wait for the response), or asynchronously. To invoke a function asynchronously, set <code>InvocationType</code> to <code>Event</code>.</p> <p>For synchronous invocation, details about the function response, including errors, are included in the response body and headers. For either invocation type, you can find more information in the <a href="https://docs.aws.amazon.com/lambda/latest/dg/monitoring-functions.html">execution log</a> and <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">trace</a>. To record function errors for asynchronous invocations, configure your function with a <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">dead letter queue</a>.</p> <p>When an error occurs, your function may be invoked multiple times. Retry behavior varies by error type, client, event source, and invocation type. For example, if you invoke a function asynchronously and it returns an error, Lambda executes the function up to two more times. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/retries-on-errors.html">Retry Behavior</a>.</p> <p>The status code in the API response doesn't reflect function errors. Error codes are reserved for errors that prevent your function from executing, such as permissions errors, <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limit errors</a>, or issues with your function's code and configuration. For example, Lambda returns <code>TooManyRequestsException</code> if executing the function would cause you to exceed a concurrency limit at either the account level (<code>ConcurrentInvocationLimitExceeded</code>) or function level (<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p> <p>For functions with a long timeout, your client might be disconnected during synchronous invocation while it waits for a response. Configure your HTTP client, SDK, firewall, proxy, or operating system to allow for long connections with timeout or keep-alive settings.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
+    /// <p>Invokes a Lambda function. You can invoke a function synchronously (and wait for the response), or asynchronously. To invoke a function asynchronously, set <code>InvocationType</code> to <code>Event</code>.</p> <p>For <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-sync.html">synchronous invocation</a>, details about the function response, including errors, are included in the response body and headers. For either invocation type, you can find more information in the <a href="https://docs.aws.amazon.com/lambda/latest/dg/monitoring-functions.html">execution log</a> and <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html">trace</a>.</p> <p>When an error occurs, your function may be invoked multiple times. Retry behavior varies by error type, client, event source, and invocation type. For example, if you invoke a function asynchronously and it returns an error, Lambda executes the function up to two more times. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/retries-on-errors.html">Retry Behavior</a>.</p> <p>For <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html">asynchronous invocation</a>, Lambda adds events to a queue before sending them to your function. If your function does not have enough capacity to keep up with the queue, events may be lost. Occasionally, your function may receive the same event multiple times, even if no error occurs. To retain events that were not processed, configure your function with a <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#dlq">dead-letter queue</a>.</p> <p>The status code in the API response doesn't reflect function errors. Error codes are reserved for errors that prevent your function from executing, such as permissions errors, <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limit errors</a>, or issues with your function's code and configuration. For example, Lambda returns <code>TooManyRequestsException</code> if executing the function would cause you to exceed a concurrency limit at either the account level (<code>ConcurrentInvocationLimitExceeded</code>) or function level (<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p> <p>For functions with a long timeout, your client might be disconnected during synchronous invocation while it waits for a response. Configure your HTTP client, SDK, firewall, proxy, or operating system to allow for long connections with timeout or keep-alive settings.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
     fn invoke(&self, input: InvocationRequest) -> RusotoFuture<InvocationResponse, InvokeError>;
 
     /// <p><important> <p>For asynchronous function invocation, use <a>Invoke</a>.</p> </important> <p>Invokes a function asynchronously.</p></p>
@@ -3910,6 +4518,12 @@ pub trait Lambda {
         &self,
         input: ListEventSourceMappingsRequest,
     ) -> RusotoFuture<ListEventSourceMappingsResponse, ListEventSourceMappingsError>;
+
+    /// <p>Retrieves a list of configurations for asynchronous invocation for a function.</p> <p>To configure options for asynchronous invocation, use <a>PutFunctionEventInvokeConfig</a>.</p>
+    fn list_function_event_invoke_configs(
+        &self,
+        input: ListFunctionEventInvokeConfigsRequest,
+    ) -> RusotoFuture<ListFunctionEventInvokeConfigsResponse, ListFunctionEventInvokeConfigsError>;
 
     /// <p>Returns a list of Lambda functions, with the version-specific configuration of each.</p> <p>Set <code>FunctionVersion</code> to <code>ALL</code> to include all published versions of each function in addition to the unpublished version. To get more information about a function or version, use <a>GetFunction</a>.</p>
     fn list_functions(
@@ -3938,7 +4552,7 @@ pub trait Lambda {
         input: ListVersionsByFunctionRequest,
     ) -> RusotoFuture<ListVersionsByFunctionResponse, ListVersionsByFunctionError>;
 
-    /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a> from a ZIP archive. Each time you call <code>PublishLayerVersion</code> with the same version name, a new version is created.</p> <p>Add layers to your function with <a>CreateFunction</a> or <a>UpdateFunctionConfiguration</a>.</p>
+    /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a> from a ZIP archive. Each time you call <code>PublishLayerVersion</code> with the same layer name, a new version is created.</p> <p>Add layers to your function with <a>CreateFunction</a> or <a>UpdateFunctionConfiguration</a>.</p>
     fn publish_layer_version(
         &self,
         input: PublishLayerVersionRequest,
@@ -3955,6 +4569,12 @@ pub trait Lambda {
         &self,
         input: PutFunctionConcurrencyRequest,
     ) -> RusotoFuture<Concurrency, PutFunctionConcurrencyError>;
+
+    /// <p>Configures options for <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html">asynchronous invocation</a> on a function, version, or alias.</p> <p>By default, Lambda retries an asynchronous invocation twice if the function returns an error. It retains events in a queue for up to six hours. When an event fails all processing attempts or stays in the asynchronous invocation queue for too long, Lambda discards it. To retain discarded events, configure a dead-letter queue with <a>UpdateFunctionConfiguration</a>.</p>
+    fn put_function_event_invoke_config(
+        &self,
+        input: PutFunctionEventInvokeConfigRequest,
+    ) -> RusotoFuture<FunctionEventInvokeConfig, PutFunctionEventInvokeConfigError>;
 
     /// <p>Removes a statement from the permissions policy for a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. For more information, see <a>AddLayerVersionPermission</a>.</p>
     fn remove_layer_version_permission(
@@ -3980,7 +4600,7 @@ pub trait Lambda {
         input: UpdateAliasRequest,
     ) -> RusotoFuture<AliasConfiguration, UpdateAliasError>;
 
-    /// <p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p>
+    /// <p><p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> </ul></p>
     fn update_event_source_mapping(
         &self,
         input: UpdateEventSourceMappingRequest,
@@ -3992,11 +4612,17 @@ pub trait Lambda {
         input: UpdateFunctionCodeRequest,
     ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionCodeError>;
 
-    /// <p>Modify the version-specific settings of a Lambda function.</p> <p>These settings can vary between versions of a function and are locked when you publish a version. You can't modify the configuration of a published version, only the unpublished version.</p> <p>To configure function concurrency, use <a>PutFunctionConcurrency</a>. To grant invoke permissions to an account or AWS service, use <a>AddPermission</a>.</p>
+    /// <p>Modify the version-specific settings of a Lambda function.</p> <p>When you update a function, Lambda provisions an instance of the function and its supporting resources. If your function connects to a VPC, this process can take a minute. During this time, you can't modify the function, but you can still invoke it. The <code>LastUpdateStatus</code>, <code>LastUpdateStatusReason</code>, and <code>LastUpdateStatusReasonCode</code> fields in the response from <a>GetFunctionConfiguration</a> indicate when the update is complete and the function is processing events with the new configuration. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/functions-states.html">Function States</a>.</p> <p>These settings can vary between versions of a function and are locked when you publish a version. You can't modify the configuration of a published version, only the unpublished version.</p> <p>To configure function concurrency, use <a>PutFunctionConcurrency</a>. To grant invoke permissions to an account or AWS service, use <a>AddPermission</a>.</p>
     fn update_function_configuration(
         &self,
         input: UpdateFunctionConfigurationRequest,
     ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionConfigurationError>;
+
+    /// <p>Updates the configuration for asynchronous invocation for a function, version, or alias.</p> <p>To configure options for asynchronous invocation, use <a>PutFunctionEventInvokeConfig</a>.</p>
+    fn update_function_event_invoke_config(
+        &self,
+        input: UpdateFunctionEventInvokeConfigRequest,
+    ) -> RusotoFuture<FunctionEventInvokeConfig, UpdateFunctionEventInvokeConfigError>;
 }
 /// A client for the AWS Lambda API.
 #[derive(Clone)]
@@ -4075,7 +4701,7 @@ impl Lambda for LambdaClient {
         })
     }
 
-    /// <p>Grants an AWS service or another account permission to use a function. You can apply the policy at the function level, or specify a qualifier to restrict access to a single version or alias. If you use a qualifier, the invoker must use the full Amazon Resource Name (ARN) of that version or alias to invoke the function.</p> <p>To grant permission to another account, specify the account ID as the <code>Principal</code>. For AWS services, the principal is a domain-style identifier defined by the service, like <code>s3.amazonaws.com</code> or <code>sns.amazonaws.com</code>. For AWS services, you can also specify the ARN or owning account of the associated resource as the <code>SourceArn</code> or <code>SourceAccount</code>. If you grant permission to a service principal without specifying the source, other accounts could potentially configure resources in their account to invoke your Lambda function.</p> <p>This action adds a statement to a resource-based permission policy for the function. For more information about function policies, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html">Lambda Function Policies</a>. </p>
+    /// <p>Grants an AWS service or another account permission to use a function. You can apply the policy at the function level, or specify a qualifier to restrict access to a single version or alias. If you use a qualifier, the invoker must use the full Amazon Resource Name (ARN) of that version or alias to invoke the function.</p> <p>To grant permission to another account, specify the account ID as the <code>Principal</code>. For AWS services, the principal is a domain-style identifier defined by the service, like <code>s3.amazonaws.com</code> or <code>sns.amazonaws.com</code>. For AWS services, you can also specify the ARN or owning account of the associated resource as the <code>SourceArn</code> or <code>SourceAccount</code>. If you grant permission to a service principal without specifying the source, other accounts could potentially configure resources in their account to invoke your Lambda function.</p> <p>This action adds a statement to a resource-based permissions policy for the function. For more information about function policies, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html">Lambda Function Policies</a>. </p>
     fn add_permission(
         &self,
         input: AddPermissionRequest,
@@ -4151,7 +4777,7 @@ impl Lambda for LambdaClient {
         })
     }
 
-    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> </ul></p>
+    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> </ul> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> </ul></p>
     fn create_event_source_mapping(
         &self,
         input: CreateEventSourceMappingRequest,
@@ -4180,7 +4806,7 @@ impl Lambda for LambdaClient {
         })
     }
 
-    /// <p>Creates a Lambda function. To create a function, you need a <a href="https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html">deployment package</a> and an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role">execution role</a>. The deployment package contains your function code. The execution role grants the function permission to use AWS services, such as Amazon CloudWatch Logs for log streaming and AWS X-Ray for request tracing.</p> <p>A function has an unpublished version, and can have published versions and aliases. The unpublished version changes when you update your function's code and configuration. A published version is a snapshot of your function code and configuration that can't be changed. An alias is a named resource that maps to a version, and can be changed to map to a different version. Use the <code>Publish</code> parameter to create version <code>1</code> of your function from its initial configuration.</p> <p>The other parameters let you configure version-specific and function-level settings. You can modify version-specific settings later with <a>UpdateFunctionConfiguration</a>. Function-level settings apply to both the unpublished and published versions of the function, and include tags (<a>TagResource</a>) and per-function concurrency limits (<a>PutFunctionConcurrency</a>).</p> <p>If another account or an AWS service invokes your function, use <a>AddPermission</a> to grant permission by creating a resource-based IAM policy. You can grant permissions at the function level, on a version, or on an alias.</p> <p>To invoke your function directly, use <a>Invoke</a>. To invoke your function in response to events in other AWS services, create an event source mapping (<a>CreateEventSourceMapping</a>), or configure a function trigger in the other service. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-functions.html">Invoking Functions</a>.</p>
+    /// <p>Creates a Lambda function. To create a function, you need a <a href="https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html">deployment package</a> and an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role">execution role</a>. The deployment package contains your function code. The execution role grants the function permission to use AWS services, such as Amazon CloudWatch Logs for log streaming and AWS X-Ray for request tracing.</p> <p>When you create a function, Lambda provisions an instance of the function and its supporting resources. If your function connects to a VPC, this process can take a minute or so. During this time, you can't invoke or modify the function. The <code>State</code>, <code>StateReason</code>, and <code>StateReasonCode</code> fields in the response from <a>GetFunctionConfiguration</a> indicate when the function is ready to invoke. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/functions-states.html">Function States</a>.</p> <p>A function has an unpublished version, and can have published versions and aliases. The unpublished version changes when you update your function's code and configuration. A published version is a snapshot of your function code and configuration that can't be changed. An alias is a named resource that maps to a version, and can be changed to map to a different version. Use the <code>Publish</code> parameter to create version <code>1</code> of your function from its initial configuration.</p> <p>The other parameters let you configure version-specific and function-level settings. You can modify version-specific settings later with <a>UpdateFunctionConfiguration</a>. Function-level settings apply to both the unpublished and published versions of the function, and include tags (<a>TagResource</a>) and per-function concurrency limits (<a>PutFunctionConcurrency</a>).</p> <p>If another account or an AWS service invokes your function, use <a>AddPermission</a> to grant permission by creating a resource-based IAM policy. You can grant permissions at the function level, on a version, or on an alias.</p> <p>To invoke your function directly, use <a>Invoke</a>. To invoke your function in response to events in other AWS services, create an event source mapping (<a>CreateEventSourceMapping</a>), or configure a function trigger in the other service. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-invocation.html">Invoking Functions</a>.</p>
     fn create_function(
         &self,
         input: CreateFunctionRequest,
@@ -4241,7 +4867,7 @@ impl Lambda for LambdaClient {
         })
     }
 
-    /// <p>Deletes an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-invocation-modes.html">event source mapping</a>. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p>
+    /// <p>Deletes an <a href="https://docs.aws.amazon.com/lambda/latest/dg/intro-invocation-modes.html">event source mapping</a>. You can get the identifier of a mapping from the output of <a>ListEventSourceMappings</a>.</p> <p>When you delete an event source mapping, it enters a <code>Deleting</code> state and might not be completely deleted for several seconds.</p>
     fn delete_event_source_mapping(
         &self,
         input: DeleteEventSourceMappingRequest,
@@ -4330,6 +4956,42 @@ impl Lambda for LambdaClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteFunctionConcurrencyError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes the configuration for asynchronous invocation for a function, version, or alias.</p> <p>To configure options for asynchronous invocation, use <a>PutFunctionEventInvokeConfig</a>.</p>
+    fn delete_function_event_invoke_config(
+        &self,
+        input: DeleteFunctionEventInvokeConfigRequest,
+    ) -> RusotoFuture<(), DeleteFunctionEventInvokeConfigError> {
+        let request_uri = format!(
+            "/2019-09-25/functions/{function_name}/event-invoke-config",
+            function_name = input.function_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.qualifier {
+            params.put("Qualifier", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteFunctionEventInvokeConfigError::from_response(
+                        response,
+                    ))
                 }))
             }
         })
@@ -4529,6 +5191,41 @@ impl Lambda for LambdaClient {
         })
     }
 
+    /// <p>Retrieves the configuration for asynchronous invocation for a function, version, or alias.</p> <p>To configure options for asynchronous invocation, use <a>PutFunctionEventInvokeConfig</a>.</p>
+    fn get_function_event_invoke_config(
+        &self,
+        input: GetFunctionEventInvokeConfigRequest,
+    ) -> RusotoFuture<FunctionEventInvokeConfig, GetFunctionEventInvokeConfigError> {
+        let request_uri = format!(
+            "/2019-09-25/functions/{function_name}/event-invoke-config",
+            function_name = input.function_name
+        );
+
+        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.qualifier {
+            params.put("Qualifier", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<FunctionEventInvokeConfig, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetFunctionEventInvokeConfigError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Returns information about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>, with a link to download the layer archive that's valid for 10 minutes.</p>
     fn get_layer_version(
         &self,
@@ -4665,7 +5362,7 @@ impl Lambda for LambdaClient {
         })
     }
 
-    /// <p>Invokes a Lambda function. You can invoke a function synchronously (and wait for the response), or asynchronously. To invoke a function asynchronously, set <code>InvocationType</code> to <code>Event</code>.</p> <p>For synchronous invocation, details about the function response, including errors, are included in the response body and headers. For either invocation type, you can find more information in the <a href="https://docs.aws.amazon.com/lambda/latest/dg/monitoring-functions.html">execution log</a> and <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">trace</a>. To record function errors for asynchronous invocations, configure your function with a <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">dead letter queue</a>.</p> <p>When an error occurs, your function may be invoked multiple times. Retry behavior varies by error type, client, event source, and invocation type. For example, if you invoke a function asynchronously and it returns an error, Lambda executes the function up to two more times. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/retries-on-errors.html">Retry Behavior</a>.</p> <p>The status code in the API response doesn't reflect function errors. Error codes are reserved for errors that prevent your function from executing, such as permissions errors, <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limit errors</a>, or issues with your function's code and configuration. For example, Lambda returns <code>TooManyRequestsException</code> if executing the function would cause you to exceed a concurrency limit at either the account level (<code>ConcurrentInvocationLimitExceeded</code>) or function level (<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p> <p>For functions with a long timeout, your client might be disconnected during synchronous invocation while it waits for a response. Configure your HTTP client, SDK, firewall, proxy, or operating system to allow for long connections with timeout or keep-alive settings.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
+    /// <p>Invokes a Lambda function. You can invoke a function synchronously (and wait for the response), or asynchronously. To invoke a function asynchronously, set <code>InvocationType</code> to <code>Event</code>.</p> <p>For <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-sync.html">synchronous invocation</a>, details about the function response, including errors, are included in the response body and headers. For either invocation type, you can find more information in the <a href="https://docs.aws.amazon.com/lambda/latest/dg/monitoring-functions.html">execution log</a> and <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html">trace</a>.</p> <p>When an error occurs, your function may be invoked multiple times. Retry behavior varies by error type, client, event source, and invocation type. For example, if you invoke a function asynchronously and it returns an error, Lambda executes the function up to two more times. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/retries-on-errors.html">Retry Behavior</a>.</p> <p>For <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html">asynchronous invocation</a>, Lambda adds events to a queue before sending them to your function. If your function does not have enough capacity to keep up with the queue, events may be lost. Occasionally, your function may receive the same event multiple times, even if no error occurs. To retain events that were not processed, configure your function with a <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#dlq">dead-letter queue</a>.</p> <p>The status code in the API response doesn't reflect function errors. Error codes are reserved for errors that prevent your function from executing, such as permissions errors, <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limit errors</a>, or issues with your function's code and configuration. For example, Lambda returns <code>TooManyRequestsException</code> if executing the function would cause you to exceed a concurrency limit at either the account level (<code>ConcurrentInvocationLimitExceeded</code>) or function level (<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p> <p>For functions with a long timeout, your client might be disconnected during synchronous invocation while it waits for a response. Configure your HTTP client, SDK, firewall, proxy, or operating system to allow for long connections with timeout or keep-alive settings.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
     fn invoke(&self, input: InvocationRequest) -> RusotoFuture<InvocationResponse, InvokeError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/invocations",
@@ -4847,6 +5544,45 @@ impl Lambda for LambdaClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListEventSourceMappingsError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Retrieves a list of configurations for asynchronous invocation for a function.</p> <p>To configure options for asynchronous invocation, use <a>PutFunctionEventInvokeConfig</a>.</p>
+    fn list_function_event_invoke_configs(
+        &self,
+        input: ListFunctionEventInvokeConfigsRequest,
+    ) -> RusotoFuture<ListFunctionEventInvokeConfigsResponse, ListFunctionEventInvokeConfigsError>
+    {
+        let request_uri = format!(
+            "/2019-09-25/functions/{function_name}/event-invoke-config/list",
+            function_name = input.function_name
+        );
+
+        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
+        }
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListFunctionEventInvokeConfigsResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListFunctionEventInvokeConfigsError::from_response(response))
                 }))
             }
         })
@@ -5047,7 +5783,7 @@ impl Lambda for LambdaClient {
         })
     }
 
-    /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a> from a ZIP archive. Each time you call <code>PublishLayerVersion</code> with the same version name, a new version is created.</p> <p>Add layers to your function with <a>CreateFunction</a> or <a>UpdateFunctionConfiguration</a>.</p>
+    /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a> from a ZIP archive. Each time you call <code>PublishLayerVersion</code> with the same layer name, a new version is created.</p> <p>Add layers to your function with <a>CreateFunction</a> or <a>UpdateFunctionConfiguration</a>.</p>
     fn publish_layer_version(
         &self,
         input: PublishLayerVersionRequest,
@@ -5146,6 +5882,44 @@ impl Lambda for LambdaClient {
                         Err(PutFunctionConcurrencyError::from_response(response))
                     }),
                 )
+            }
+        })
+    }
+
+    /// <p>Configures options for <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html">asynchronous invocation</a> on a function, version, or alias.</p> <p>By default, Lambda retries an asynchronous invocation twice if the function returns an error. It retains events in a queue for up to six hours. When an event fails all processing attempts or stays in the asynchronous invocation queue for too long, Lambda discards it. To retain discarded events, configure a dead-letter queue with <a>UpdateFunctionConfiguration</a>.</p>
+    fn put_function_event_invoke_config(
+        &self,
+        input: PutFunctionEventInvokeConfigRequest,
+    ) -> RusotoFuture<FunctionEventInvokeConfig, PutFunctionEventInvokeConfigError> {
+        let request_uri = format!(
+            "/2019-09-25/functions/{function_name}/event-invoke-config",
+            function_name = input.function_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.qualifier {
+            params.put("Qualifier", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<FunctionEventInvokeConfig, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutFunctionEventInvokeConfigError::from_response(response))
+                }))
             }
         })
     }
@@ -5322,7 +6096,7 @@ impl Lambda for LambdaClient {
         })
     }
 
-    /// <p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p>
+    /// <p><p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> </ul></p>
     fn update_event_source_mapping(
         &self,
         input: UpdateEventSourceMappingRequest,
@@ -5389,7 +6163,7 @@ impl Lambda for LambdaClient {
         })
     }
 
-    /// <p>Modify the version-specific settings of a Lambda function.</p> <p>These settings can vary between versions of a function and are locked when you publish a version. You can't modify the configuration of a published version, only the unpublished version.</p> <p>To configure function concurrency, use <a>PutFunctionConcurrency</a>. To grant invoke permissions to an account or AWS service, use <a>AddPermission</a>.</p>
+    /// <p>Modify the version-specific settings of a Lambda function.</p> <p>When you update a function, Lambda provisions an instance of the function and its supporting resources. If your function connects to a VPC, this process can take a minute. During this time, you can't modify the function, but you can still invoke it. The <code>LastUpdateStatus</code>, <code>LastUpdateStatusReason</code>, and <code>LastUpdateStatusReasonCode</code> fields in the response from <a>GetFunctionConfiguration</a> indicate when the update is complete and the function is processing events with the new configuration. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/functions-states.html">Function States</a>.</p> <p>These settings can vary between versions of a function and are locked when you publish a version. You can't modify the configuration of a published version, only the unpublished version.</p> <p>To configure function concurrency, use <a>PutFunctionConcurrency</a>. To grant invoke permissions to an account or AWS service, use <a>AddPermission</a>.</p>
     fn update_function_configuration(
         &self,
         input: UpdateFunctionConfigurationRequest,
@@ -5416,6 +6190,46 @@ impl Lambda for LambdaClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateFunctionConfigurationError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates the configuration for asynchronous invocation for a function, version, or alias.</p> <p>To configure options for asynchronous invocation, use <a>PutFunctionEventInvokeConfig</a>.</p>
+    fn update_function_event_invoke_config(
+        &self,
+        input: UpdateFunctionEventInvokeConfigRequest,
+    ) -> RusotoFuture<FunctionEventInvokeConfig, UpdateFunctionEventInvokeConfigError> {
+        let request_uri = format!(
+            "/2019-09-25/functions/{function_name}/event-invoke-config",
+            function_name = input.function_name
+        );
+
+        let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.qualifier {
+            params.put("Qualifier", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<FunctionEventInvokeConfig, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateFunctionEventInvokeConfigError::from_response(
+                        response,
+                    ))
                 }))
             }
         })

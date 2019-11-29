@@ -23,6 +23,72 @@ use std::fmt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
+/// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>The structure of Cost Categories. This includes detailed metadata and the set of rules for the <code>CostCategory</code> object.</p></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CostCategory {
+    /// <p> The unique identifier for your Cost Category. </p>
+    #[serde(rename = "CostCategoryArn")]
+    pub cost_category_arn: String,
+    /// <p> The Cost Category's effective end date.</p>
+    #[serde(rename = "EffectiveEnd")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effective_end: Option<String>,
+    /// <p> The Cost Category's effective start date.</p>
+    #[serde(rename = "EffectiveStart")]
+    pub effective_start: String,
+    #[serde(rename = "Name")]
+    pub name: String,
+    #[serde(rename = "RuleVersion")]
+    pub rule_version: String,
+    /// <p> Rules are processed in order. If there are multiple rules that match the line item, then the first rule to match is used to determine that Cost Category value. </p>
+    #[serde(rename = "Rules")]
+    pub rules: Vec<CostCategoryRule>,
+}
+
+/// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>A reference to a Cost Category containing only enough information to identify the Cost Category.</p> <p>You can use this information to retrieve the full Cost Category information using <code>DescribeCostCategory</code>.</p></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CostCategoryReference {
+    /// <p> The unique identifier for your Cost Category Reference. </p>
+    #[serde(rename = "CostCategoryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cost_category_arn: Option<String>,
+    /// <p> The Cost Category's effective end date.</p>
+    #[serde(rename = "EffectiveEnd")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effective_end: Option<String>,
+    /// <p> The Cost Category's effective start date.</p>
+    #[serde(rename = "EffectiveStart")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effective_start: Option<String>,
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>Rules are processed in order. If there are multiple rules that match the line item, then the first rule to match is used to determine that Cost Category value.</p></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CostCategoryRule {
+    /// <p>An <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object used to categorize costs. This supports dimensions, Tags, and nested expressions. Currently the only dimensions supported is <code>LINKED_ACCOUNT</code>.</p> <p>Root level <code>OR</code> is not supported. We recommend you create a separate rule instead.</p>
+    #[serde(rename = "Rule")]
+    pub rule: Expression,
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+/// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>The values that are available for Cost Categories.</p></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CostCategoryValues {
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The specific value of the Cost Category.</p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub values: Option<Vec<String>>,
+}
+
 /// <p>The amount of instance usage that a reservation covered.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -113,6 +179,30 @@ pub struct CoverageNormalizedUnits {
     pub total_running_normalized_units: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateCostCategoryDefinitionRequest {
+    #[serde(rename = "Name")]
+    pub name: String,
+    #[serde(rename = "RuleVersion")]
+    pub rule_version: String,
+    /// <p> Rules are processed in order. If there are multiple rules that match the line item, then the first rule to match is used to determine that Cost Category value. </p>
+    #[serde(rename = "Rules")]
+    pub rules: Vec<CostCategoryRule>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateCostCategoryDefinitionResponse {
+    /// <p> The unique identifier for your newly created Cost Category. </p>
+    #[serde(rename = "CostCategoryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cost_category_arn: Option<String>,
+    /// <p> The Cost Category's effective start date. </p>
+    #[serde(rename = "EffectiveStart")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effective_start: Option<String>,
+}
+
 /// <p>Context about the current instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -145,6 +235,10 @@ pub struct CurrentInstance {
     #[serde(rename = "ResourceUtilization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_utilization: Option<ResourceUtilization>,
+    /// <p>Number of hours during the lookback period covered by Savings Plans.</p>
+    #[serde(rename = "SavingsPlansCoveredHoursInLookbackPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub savings_plans_covered_hours_in_lookback_period: Option<String>,
     /// <p>Cost allocation resource tags applied to the instance.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -166,8 +260,47 @@ pub struct DateInterval {
     pub start: String,
 }
 
-/// <p>The metadata that you can use to filter and group your results. You can use <code>GetDimensionValues</code> to find specific values.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteCostCategoryDefinitionRequest {
+    /// <p> The unique identifier for your Cost Category. </p>
+    #[serde(rename = "CostCategoryArn")]
+    pub cost_category_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteCostCategoryDefinitionResponse {
+    /// <p> The unique identifier for your Cost Category. </p>
+    #[serde(rename = "CostCategoryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cost_category_arn: Option<String>,
+    /// <p> The effective end date of the Cost Category as a result of deleting it. No costs after this date will be categorized by the deleted Cost Category. </p>
+    #[serde(rename = "EffectiveEnd")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effective_end: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeCostCategoryDefinitionRequest {
+    /// <p> The unique identifier for your Cost Category. </p>
+    #[serde(rename = "CostCategoryArn")]
+    pub cost_category_arn: String,
+    /// <p> The date when the Cost Category was effective. </p>
+    #[serde(rename = "EffectiveOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effective_on: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeCostCategoryDefinitionResponse {
+    #[serde(rename = "CostCategory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cost_category: Option<CostCategory>,
+}
+
+/// <p>The metadata that you can use to filter and group your results. You can use <code>GetDimensionValues</code> to find specific values.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DimensionValues {
     /// <p>The names of the metadata types that you can use to filter and group your results. For example, <code>AZ</code> returns a list of Availability Zones.</p>
     #[serde(rename = "Key")]
@@ -356,13 +489,17 @@ pub struct ElastiCacheInstanceDetails {
     pub size_flex_eligible: Option<bool>,
 }
 
-/// <p><p>Use <code>Expression</code> to filter by cost or by usage. There are two patterns: </p> <ul> <li> <p>Simple dimension values - You can set the dimension name and values for the filters that you plan to use. For example, you can filter for <code>REGION==us-east-1 OR REGION==us-west-1</code>. The <code>Expression</code> for that looks like this:</p> <p> <code>{ &quot;Dimensions&quot;: { &quot;Key&quot;: &quot;REGION&quot;, &quot;Values&quot;: [ &quot;us-east-1&quot;, “us-west-1” ] } }</code> </p> <p>The list of dimension values are OR&#39;d together to retrieve cost or usage data. You can create <code>Expression</code> and <code>DimensionValues</code> objects using either <code>with<em></code> methods or <code>set</em></code> methods in multiple lines. </p> </li> <li> <p>Compound dimension values with logical operations - You can use multiple <code>Expression</code> types and the logical operators <code>AND/OR/NOT</code> to create a list of one or more <code>Expression</code> objects. This allows you to filter on more advanced options. For example, you can filter on <code>((REGION == us-east-1 OR REGION == us-west-1) OR (TAG.Type == Type1)) AND (USAGE<em>TYPE != DataTransfer)</code>. The <code>Expression</code> for that looks like this:</p> <p> <code>{ &quot;And&quot;: [ {&quot;Or&quot;: [ {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;REGION&quot;, &quot;Values&quot;: [ &quot;us-east-1&quot;, &quot;us-west-1&quot; ] }}, {&quot;Tags&quot;: { &quot;Key&quot;: &quot;TagName&quot;, &quot;Values&quot;: [&quot;Value1&quot;] } } ]}, {&quot;Not&quot;: {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;USAGE</em>TYPE&quot;, &quot;Values&quot;: [&quot;DataTransfer&quot;] }}} ] } </code> </p> <note> <p>Because each <code>Expression</code> can have only one operator, the service returns an error if more than one is specified. The following example shows an <code>Expression</code> object that creates an error.</p> </note> <p> <code> { &quot;And&quot;: [ ... ], &quot;DimensionValues&quot;: { &quot;Dimension&quot;: &quot;USAGE<em>TYPE&quot;, &quot;Values&quot;: [ &quot;DataTransfer&quot; ] } } </code> </p> </li> </ul> <note> <p>For <code>GetRightsizingRecommendation</code> action, a combination of OR and NOT is not supported. OR is not supported between different dimensions, or dimensions and tags. NOT operators aren&#39;t supported. Dimentions are also limited to <code>LINKED</em>ACCOUNT</code>, <code>REGION</code>, or <code>RIGHTSIZING_TYPE</code>.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+/// <p><p>Use <code>Expression</code> to filter by cost or by usage. There are two patterns: </p> <ul> <li> <p>Simple dimension values - You can set the dimension name and values for the filters that you plan to use. For example, you can filter for <code>REGION==us-east-1 OR REGION==us-west-1</code>. The <code>Expression</code> for that looks like this:</p> <p> <code>{ &quot;Dimensions&quot;: { &quot;Key&quot;: &quot;REGION&quot;, &quot;Values&quot;: [ &quot;us-east-1&quot;, “us-west-1” ] } }</code> </p> <p>The list of dimension values are OR&#39;d together to retrieve cost or usage data. You can create <code>Expression</code> and <code>DimensionValues</code> objects using either <code>with<em></code> methods or <code>set</em></code> methods in multiple lines. </p> </li> <li> <p>Compound dimension values with logical operations - You can use multiple <code>Expression</code> types and the logical operators <code>AND/OR/NOT</code> to create a list of one or more <code>Expression</code> objects. This allows you to filter on more advanced options. For example, you can filter on <code>((REGION == us-east-1 OR REGION == us-west-1) OR (TAG.Type == Type1)) AND (USAGE<em>TYPE != DataTransfer)</code>. The <code>Expression</code> for that looks like this:</p> <p> <code>{ &quot;And&quot;: [ {&quot;Or&quot;: [ {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;REGION&quot;, &quot;Values&quot;: [ &quot;us-east-1&quot;, &quot;us-west-1&quot; ] }}, {&quot;Tags&quot;: { &quot;Key&quot;: &quot;TagName&quot;, &quot;Values&quot;: [&quot;Value1&quot;] } } ]}, {&quot;Not&quot;: {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;USAGE</em>TYPE&quot;, &quot;Values&quot;: [&quot;DataTransfer&quot;] }}} ] } </code> </p> <note> <p>Because each <code>Expression</code> can have only one operator, the service returns an error if more than one is specified. The following example shows an <code>Expression</code> object that creates an error.</p> </note> <p> <code> { &quot;And&quot;: [ ... ], &quot;DimensionValues&quot;: { &quot;Dimension&quot;: &quot;USAGE<em>TYPE&quot;, &quot;Values&quot;: [ &quot;DataTransfer&quot; ] } } </code> </p> </li> </ul> <note> <p>For <code>GetRightsizingRecommendation</code> action, a combination of OR and NOT is not supported. OR is not supported between different dimensions, or dimensions and tags. NOT operators aren&#39;t supported. Dimensions are also limited to <code>LINKED</em>ACCOUNT</code>, <code>REGION</code>, or <code>RIGHTSIZING_TYPE</code>.</p> </note></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Expression {
     /// <p>Return results that match both <code>Dimension</code> objects.</p>
     #[serde(rename = "And")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub and: Option<Vec<Expression>>,
+    /// <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> <p>The specific <code>CostCategory</code> used for <code>Expression</code>.</p>
+    #[serde(rename = "CostCategories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cost_categories: Option<CostCategoryValues>,
     /// <p>The specific <code>Dimension</code> to use for <code>Expression</code>.</p>
     #[serde(rename = "Dimensions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -409,11 +546,11 @@ pub struct GetCostAndUsageRequest {
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<Expression>,
-    /// <p>Sets the AWS cost granularity to <code>MONTHLY</code> or <code>DAILY</code>. If <code>Granularity</code> isn't set, the response object doesn't include the <code>Granularity</code>, either <code>MONTHLY</code> or <code>DAILY</code>. </p> <p>The <code>GetCostAndUsageRequest</code> operation supports only <code>DAILY</code> and <code>MONTHLY</code> granularities.</p>
+    /// <p>Sets the AWS cost granularity to <code>MONTHLY</code> or <code>DAILY</code>, or <code>HOURLY</code>. If <code>Granularity</code> isn't set, the response object doesn't include the <code>Granularity</code>, either <code>MONTHLY</code> or <code>DAILY</code>, or <code>HOURLY</code>. </p>
     #[serde(rename = "Granularity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub granularity: Option<String>,
-    /// <p>You can group AWS costs using up to two different groups, either dimensions, tag keys, or both.</p> <p>When you group by tag key, you get all tag values, including empty strings.</p> <p>Valid values are <code>AZ</code>, <code>INSTANCE_TYPE</code>, <code>LEGAL_ENTITY_NAME</code>, <code>LINKED_ACCOUNT</code>, <code>OPERATION</code>, <code>PLATFORM</code>, <code>PURCHASE_TYPE</code>, <code>SERVICE</code>, <code>TAGS</code>, <code>TENANCY</code>, and <code>USAGE_TYPE</code>.</p>
+    /// <p>You can group AWS costs using up to two different groups, either dimensions, tag keys, or both.</p> <p>When you group by tag key, you get all tag values, including empty strings.</p> <p>Valid values are <code>AZ</code>, <code>INSTANCE_TYPE</code>, <code>LEGAL_ENTITY_NAME</code>, <code>LINKED_ACCOUNT</code>, <code>OPERATION</code>, <code>PLATFORM</code>, <code>PURCHASE_TYPE</code>, <code>SERVICE</code>, <code>TAGS</code>, <code>TENANCY</code>, <code>RECORD_TYPE</code>, and <code>USAGE_TYPE</code>.</p>
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_by: Option<Vec<GroupDefinition>>,
@@ -433,6 +570,50 @@ pub struct GetCostAndUsageRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCostAndUsageResponse {
+    /// <p>The groups that are specified by the <code>Filter</code> or <code>GroupBy</code> parameters in the request.</p>
+    #[serde(rename = "GroupDefinitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_definitions: Option<Vec<GroupDefinition>>,
+    /// <p>The token for the next set of retrievable results. AWS provides the token when the response from a previous call has more results than the maximum page size.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>The time period that is covered by the results in the response.</p>
+    #[serde(rename = "ResultsByTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub results_by_time: Option<Vec<ResultByTime>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetCostAndUsageWithResourcesRequest {
+    /// <p>Filters Amazon Web Services costs by different dimensions. For example, you can specify <code>SERVICE</code> and <code>LINKED_ACCOUNT</code> and get the costs that are associated with that account's usage of that service. You can nest <code>Expression</code> objects to define any combination of dimension filters. For more information, see <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a>. </p> <p>The <code>GetCostAndUsageWithResources</code> operation requires that you either group by or filter by a <code>ResourceId</code>.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<Expression>,
+    /// <p>Sets the AWS cost granularity to <code>MONTHLY</code>, <code>DAILY</code>, or <code>HOURLY</code>. If <code>Granularity</code> isn't set, the response object doesn't include the <code>Granularity</code>, <code>MONTHLY</code>, <code>DAILY</code>, or <code>HOURLY</code>. </p>
+    #[serde(rename = "Granularity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub granularity: Option<String>,
+    /// <p>You can group Amazon Web Services costs using up to two different groups: either dimensions, tag keys, or both.</p>
+    #[serde(rename = "GroupBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_by: Option<Vec<GroupDefinition>>,
+    /// <p>Which metrics are returned in the query. For more information about blended and unblended rates, see <a href="https://aws.amazon.com/premiumsupport/knowledge-center/blended-rates-intro/">Why does the "blended" annotation appear on some line items in my bill?</a>. </p> <p>Valid values are <code>AmortizedCost</code>, <code>BlendedCost</code>, <code>NetAmortizedCost</code>, <code>NetUnblendedCost</code>, <code>NormalizedUsageAmount</code>, <code>UnblendedCost</code>, and <code>UsageQuantity</code>. </p> <note> <p>If you return the <code>UsageQuantity</code> metric, the service aggregates all usage numbers without taking the units into account. For example, if you aggregate <code>usageQuantity</code> across all of Amazon EC2, the results aren't meaningful because Amazon EC2 compute hours and data transfer are measured in different units (for example, hours vs. GB). To get more meaningful <code>UsageQuantity</code> metrics, filter by <code>UsageType</code> or <code>UsageTypeGroups</code>. </p> </note> <p> <code>Metrics</code> is required for <code>GetCostAndUsageWithResources</code> requests.</p>
+    #[serde(rename = "Metrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metrics: Option<Vec<String>>,
+    /// <p>The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>Sets the start and end dates for retrieving Amazon Web Services costs. The range must be within the last 14 days (the start date cannot be earlier than 14 days ago). The start date is inclusive, but the end date is exclusive. For example, if <code>start</code> is <code>2017-01-01</code> and <code>end</code> is <code>2017-05-01</code>, then the cost and usage data is retrieved from <code>2017-01-01</code> up to and including <code>2017-04-30</code> but not including <code>2017-05-01</code>.</p>
+    #[serde(rename = "TimePeriod")]
+    pub time_period: DateInterval,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetCostAndUsageWithResourcesResponse {
     /// <p>The groups that are specified by the <code>Filter</code> or <code>GroupBy</code> parameters in the request.</p>
     #[serde(rename = "GroupDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -483,11 +664,11 @@ pub struct GetCostForecastResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDimensionValuesRequest {
-    /// <p><p>The context for the call to <code>GetDimensionValues</code>. This can be <code>RESERVATIONS</code> or <code>COST<em>AND</em>USAGE</code>. The default value is <code>COST<em>AND</em>USAGE</code>. If the context is set to <code>RESERVATIONS</code>, the resulting dimension values can be used in the <code>GetReservationUtilization</code> operation. If the context is set to <code>COST<em>AND</em>USAGE</code>, the resulting dimension values can be used in the <code>GetCostAndUsage</code> operation.</p> <p>If you set the context to <code>COST<em>AND</em>USAGE</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>DATABASE<em>ENGINE - The Amazon Relational Database Service database. Examples are Aurora or MySQL.</p> </li> <li> <p>INSTANCE</em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LEGAL<em>ENTITY</em>NAME - The name of the organization that sells you AWS services, such as Amazon Web Services.</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>OPERATING</em>SYSTEM - The operating system. Examples are Windows or Linux.</p> </li> <li> <p>OPERATION - The action performed. Examples include <code>RunInstance</code> and <code>CreateBucket</code>.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>PURCHASE<em>TYPE - The reservation type of the purchase to which this usage is related. Examples include On-Demand Instances and Standard Reserved Instances.</p> </li> <li> <p>SERVICE - The AWS service such as Amazon DynamoDB.</p> </li> <li> <p>USAGE</em>TYPE - The type of usage. An example is DataTransfer-In-Bytes. The response for the <code>GetDimensionValues</code> operation includes a unit attribute. Examples include GB and Hrs.</p> </li> <li> <p>USAGE<em>TYPE</em>GROUP - The grouping of common usage types. An example is Amazon EC2: CloudWatch – Alarms. The response for this operation includes a unit attribute.</p> </li> <li> <p>RECORD<em>TYPE - The different types of charges such as RI fees, usage costs, tax refunds, and credits.</p> </li> </ul> <p>If you set the context to <code>RESERVATIONS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>CACHE</em>ENGINE - The Amazon ElastiCache operating system. Examples are Windows or Linux.</p> </li> <li> <p>DEPLOYMENT<em>OPTION - The scope of Amazon Relational Database Service deployments. Valid values are <code>SingleAZ</code> and <code>MultiAZ</code>.</p> </li> <li> <p>INSTANCE</em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LINKED_ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>SCOPE (Utilization only) - The scope of a Reserved Instance (RI). Values are regional or a single Availability Zone.</p> </li> <li> <p>TAG (Coverage only) - The tags that are associated with a Reserved Instance (RI).</p> </li> <li> <p>TENANCY - The tenancy of a resource. Examples are shared or dedicated.</p> </li> </ul></p>
+    /// <p><p>The context for the call to <code>GetDimensionValues</code>. This can be <code>RESERVATIONS</code> or <code>COST<em>AND</em>USAGE</code>. The default value is <code>COST<em>AND</em>USAGE</code>. If the context is set to <code>RESERVATIONS</code>, the resulting dimension values can be used in the <code>GetReservationUtilization</code> operation. If the context is set to <code>COST<em>AND</em>USAGE</code>, the resulting dimension values can be used in the <code>GetCostAndUsage</code> operation.</p> <p>If you set the context to <code>COST<em>AND</em>USAGE</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>DATABASE<em>ENGINE - The Amazon Relational Database Service database. Examples are Aurora or MySQL.</p> </li> <li> <p>INSTANCE</em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LEGAL<em>ENTITY</em>NAME - The name of the organization that sells you AWS services, such as Amazon Web Services.</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>OPERATING</em>SYSTEM - The operating system. Examples are Windows or Linux.</p> </li> <li> <p>OPERATION - The action performed. Examples include <code>RunInstance</code> and <code>CreateBucket</code>.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>PURCHASE<em>TYPE - The reservation type of the purchase to which this usage is related. Examples include On-Demand Instances and Standard Reserved Instances.</p> </li> <li> <p>SERVICE - The AWS service such as Amazon DynamoDB.</p> </li> <li> <p>USAGE</em>TYPE - The type of usage. An example is DataTransfer-In-Bytes. The response for the <code>GetDimensionValues</code> operation includes a unit attribute. Examples include GB and Hrs.</p> </li> <li> <p>USAGE<em>TYPE</em>GROUP - The grouping of common usage types. An example is Amazon EC2: CloudWatch – Alarms. The response for this operation includes a unit attribute.</p> </li> <li> <p>RECORD<em>TYPE - The different types of charges such as RI fees, usage costs, tax refunds, and credits.</p> </li> <li> <p>RESOURCE</em>ID - The unique identifier of the resource. ResourceId is an opt-in feature only available for last 14 days for EC2-Compute Service.</p> </li> </ul> <p>If you set the context to <code>RESERVATIONS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>CACHE<em>ENGINE - The Amazon ElastiCache operating system. Examples are Windows or Linux.</p> </li> <li> <p>DEPLOYMENT</em>OPTION - The scope of Amazon Relational Database Service deployments. Valid values are <code>SingleAZ</code> and <code>MultiAZ</code>.</p> </li> <li> <p>INSTANCE<em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LINKED</em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>SCOPE (Utilization only) - The scope of a Reserved Instance (RI). Values are regional or a single Availability Zone.</p> </li> <li> <p>TAG (Coverage only) - The tags that are associated with a Reserved Instance (RI).</p> </li> <li> <p>TENANCY - The tenancy of a resource. Examples are shared or dedicated.</p> </li> </ul> <p>If you set the context to <code>SAVINGS<em>PLANS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>SAVINGS</em>PLANS<em>TYPE - Type of Savings Plans (EC2 Instance or Compute)</p> </li> <li> <p>PAYMENT</em>OPTION - Payment option for the given Savings Plans (for example, All Upfront)</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>INSTANCE<em>TYPE</em>FAMILY - The family of instances (For example, <code>m5</code>)</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>SAVINGS</em>PLAN_ARN - The unique identifier for your Savings Plan</p> </li> </ul></p>
     #[serde(rename = "Context")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub context: Option<String>,
-    /// <p>The name of the dimension. Each <code>Dimension</code> is available for a different <code>Context</code>. For more information, see <code>Context</code>.</p>
+    /// <p>The name of the dimension. Each <code>Dimension</code> is available for a different <code>Context</code>. For more information, see <code>Context</code>. </p>
     #[serde(rename = "Dimension")]
     pub dimension: String,
     /// <p>The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size.</p>
@@ -506,7 +687,7 @@ pub struct GetDimensionValuesRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDimensionValuesResponse {
-    /// <p><p>The filters that you used to filter your request. Some dimensions are available only for a specific context.</p> <p>If you set the context to <code>COST<em>AND</em>USAGE</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>DATABASE<em>ENGINE - The Amazon Relational Database Service database. Examples are Aurora or MySQL.</p> </li> <li> <p>INSTANCE</em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LEGAL<em>ENTITY</em>NAME - The name of the organization that sells you AWS services, such as Amazon Web Services.</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>OPERATING</em>SYSTEM - The operating system. Examples are Windows or Linux.</p> </li> <li> <p>OPERATION - The action performed. Examples include <code>RunInstance</code> and <code>CreateBucket</code>.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>PURCHASE<em>TYPE - The reservation type of the purchase to which this usage is related. Examples include On-Demand Instances and Standard Reserved Instances.</p> </li> <li> <p>SERVICE - The AWS service such as Amazon DynamoDB.</p> </li> <li> <p>USAGE</em>TYPE - The type of usage. An example is DataTransfer-In-Bytes. The response for the <code>GetDimensionValues</code> operation includes a unit attribute. Examples include GB and Hrs.</p> </li> <li> <p>USAGE<em>TYPE</em>GROUP - The grouping of common usage types. An example is Amazon EC2: CloudWatch – Alarms. The response for this operation includes a unit attribute.</p> </li> <li> <p>RECORD<em>TYPE - The different types of charges such as RI fees, usage costs, tax refunds, and credits.</p> </li> </ul> <p>If you set the context to <code>RESERVATIONS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>CACHE</em>ENGINE - The Amazon ElastiCache operating system. Examples are Windows or Linux.</p> </li> <li> <p>DEPLOYMENT<em>OPTION - The scope of Amazon Relational Database Service deployments. Valid values are <code>SingleAZ</code> and <code>MultiAZ</code>.</p> </li> <li> <p>INSTANCE</em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LINKED_ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>SCOPE (Utilization only) - The scope of a Reserved Instance (RI). Values are regional or a single Availability Zone.</p> </li> <li> <p>TAG (Coverage only) - The tags that are associated with a Reserved Instance (RI).</p> </li> <li> <p>TENANCY - The tenancy of a resource. Examples are shared or dedicated.</p> </li> </ul></p>
+    /// <p><p>The filters that you used to filter your request. Some dimensions are available only for a specific context.</p> <p>If you set the context to <code>COST<em>AND</em>USAGE</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>DATABASE<em>ENGINE - The Amazon Relational Database Service database. Examples are Aurora or MySQL.</p> </li> <li> <p>INSTANCE</em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LEGAL<em>ENTITY</em>NAME - The name of the organization that sells you AWS services, such as Amazon Web Services.</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>OPERATING</em>SYSTEM - The operating system. Examples are Windows or Linux.</p> </li> <li> <p>OPERATION - The action performed. Examples include <code>RunInstance</code> and <code>CreateBucket</code>.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>PURCHASE<em>TYPE - The reservation type of the purchase to which this usage is related. Examples include On-Demand Instances and Standard Reserved Instances.</p> </li> <li> <p>SERVICE - The AWS service such as Amazon DynamoDB.</p> </li> <li> <p>USAGE</em>TYPE - The type of usage. An example is DataTransfer-In-Bytes. The response for the <code>GetDimensionValues</code> operation includes a unit attribute. Examples include GB and Hrs.</p> </li> <li> <p>USAGE<em>TYPE</em>GROUP - The grouping of common usage types. An example is Amazon EC2: CloudWatch – Alarms. The response for this operation includes a unit attribute.</p> </li> <li> <p>RECORD<em>TYPE - The different types of charges such as RI fees, usage costs, tax refunds, and credits.</p> </li> <li> <p>RESOURCE</em>ID - The unique identifier of the resource. ResourceId is an opt-in feature only available for last 14 days for EC2-Compute Service.</p> </li> </ul> <p>If you set the context to <code>RESERVATIONS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>CACHE<em>ENGINE - The Amazon ElastiCache operating system. Examples are Windows or Linux.</p> </li> <li> <p>DEPLOYMENT</em>OPTION - The scope of Amazon Relational Database Service deployments. Valid values are <code>SingleAZ</code> and <code>MultiAZ</code>.</p> </li> <li> <p>INSTANCE<em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LINKED</em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>SCOPE (Utilization only) - The scope of a Reserved Instance (RI). Values are regional or a single Availability Zone.</p> </li> <li> <p>TAG (Coverage only) - The tags that are associated with a Reserved Instance (RI).</p> </li> <li> <p>TENANCY - The tenancy of a resource. Examples are shared or dedicated.</p> </li> </ul> <p>If you set the context to <code>SAVINGS<em>PLANS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>SAVINGS</em>PLANS<em>TYPE - Type of Savings Plans (EC2 Instance or Compute)</p> </li> <li> <p>PAYMENT</em>OPTION - Payment option for the given Savings Plans (for example, All Upfront)</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>INSTANCE<em>TYPE</em>FAMILY - The family of instances (For example, <code>m5</code>)</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>SAVINGS</em>PLAN_ARN - The unique identifier for your Savings Plan</p> </li> </ul></p>
     #[serde(rename = "DimensionValues")]
     pub dimension_values: Vec<DimensionValuesWithAttributes>,
     /// <p>The token for the next set of retrievable results. AWS provides the token when the response from a previous call has more results than the maximum page size.</p>
@@ -673,7 +854,7 @@ pub struct GetRightsizingRecommendationRequest {
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The specific service that you want recommendations for.</p>
+    /// <p>The specific service that you want recommendations for. The only valid value for <code>GetRightsizingRecommendation</code> is "<code>AmazonEC2</code>".</p>
     #[serde(rename = "Service")]
     pub service: String,
 }
@@ -697,6 +878,154 @@ pub struct GetRightsizingRecommendationResponse {
     #[serde(rename = "Summary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub summary: Option<RightsizingRecommendationSummary>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetSavingsPlansCoverageRequest {
+    /// <p>Filters Savings Plans coverage data by dimensions. You can filter data for Savings Plans usage with the following dimensions:</p> <ul> <li> <p> <code>LINKED_ACCOUNT</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>SERVICE</code> </p> </li> <li> <p> <code>INSTANCE_FAMILY</code> </p> </li> </ul> <p> <code>GetSavingsPlansCoverage</code> uses the same <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object as the other operations, but only <code>AND</code> is supported among each dimension. If there are multiple values for a dimension, they are OR'd together.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<Expression>,
+    /// <p>The granularity of the Amazon Web Services cost data for your Savings Plans. <code>Granularity</code> can't be set if <code>GroupBy</code> is set.</p> <p>The <code>GetSavingsPlansCoverage</code> operation supports only <code>DAILY</code> and <code>MONTHLY</code> granularities.</p>
+    #[serde(rename = "Granularity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub granularity: Option<String>,
+    /// <p>You can group the data using the attributes <code>INSTANCE_FAMILY</code>, <code>REGION</code>, or <code>SERVICE</code>.</p>
+    #[serde(rename = "GroupBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_by: Option<Vec<GroupDefinition>>,
+    /// <p>The number of items to be returned in a response. The default is <code>20</code>, with a minimum value of <code>1</code>.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The measurement that you want your Savings Plans coverage reported in. The only valid value is <code>SpendCoveredBySavingsPlans</code>.</p>
+    #[serde(rename = "Metrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metrics: Option<Vec<String>>,
+    /// <p>The token to retrieve the next set of results. Amazon Web Services provides the token when the response from a previous call has more results than the maximum page size.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The time period that you want the usage and costs for. The <code>Start</code> date must be within 13 months. The <code>End</code> date must be after the <code>Start</code> date, and before the current date. Future dates can't be used as an <code>End</code> date.</p>
+    #[serde(rename = "TimePeriod")]
+    pub time_period: DateInterval,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSavingsPlansCoverageResponse {
+    /// <p>The token to retrieve the next set of results. Amazon Web Services provides the token when the response from a previous call has more results than the maximum page size.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The amount of spend that your Savings Plans covered.</p>
+    #[serde(rename = "SavingsPlansCoverages")]
+    pub savings_plans_coverages: Vec<SavingsPlansCoverage>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetSavingsPlansPurchaseRecommendationRequest {
+    /// <p>The lookback period used to generate the recommendation.</p>
+    #[serde(rename = "LookbackPeriodInDays")]
+    pub lookback_period_in_days: String,
+    /// <p>The token to retrieve the next set of results. Amazon Web Services provides the token when the response from a previous call has more results than the maximum page size.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>The number of recommendations that you want returned in a single response object.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The payment option used to generate these recommendations.</p>
+    #[serde(rename = "PaymentOption")]
+    pub payment_option: String,
+    /// <p>The Savings Plans recommendation type requested.</p>
+    #[serde(rename = "SavingsPlansType")]
+    pub savings_plans_type: String,
+    /// <p>The savings plan recommendation term used to generated these recommendations.</p>
+    #[serde(rename = "TermInYears")]
+    pub term_in_years: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSavingsPlansPurchaseRecommendationResponse {
+    /// <p>Information regarding this specific recommendation set.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<SavingsPlansPurchaseRecommendationMetadata>,
+    /// <p>The token for the next set of retrievable results. AWS provides the token when the response from a previous call has more results than the maximum page size.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>Contains your request parameters, Savings Plan Recommendations Summary, and Details.</p>
+    #[serde(rename = "SavingsPlansPurchaseRecommendation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub savings_plans_purchase_recommendation: Option<SavingsPlansPurchaseRecommendation>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetSavingsPlansUtilizationDetailsRequest {
+    /// <p>Filters Savings Plans utilization coverage data for active Savings Plans dimensions. You can filter data with the following dimensions:</p> <ul> <li> <p> <code>LINKED_ACCOUNT</code> </p> </li> <li> <p> <code>SAVINGS_PLAN_ARN</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>PAYMENT_OPTION</code> </p> </li> <li> <p> <code>INSTANCE_TYPE_FAMILY</code> </p> </li> </ul> <p> <code>GetSavingsPlansUtilizationDetails</code> uses the same <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object as the other operations, but only <code>AND</code> is supported among each dimension.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<Expression>,
+    /// <p>The number of items to be returned in a response. The default is <code>20</code>, with a minimum value of <code>1</code>.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next set of results. Amazon Web Services provides the token when the response from a previous call has more results than the maximum page size.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The time period that you want the usage and costs for. The <code>Start</code> date must be within 13 months. The <code>End</code> date must be after the <code>Start</code> date, and before the current date. Future dates can't be used as an <code>End</code> date.</p>
+    #[serde(rename = "TimePeriod")]
+    pub time_period: DateInterval,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSavingsPlansUtilizationDetailsResponse {
+    /// <p>The token to retrieve the next set of results. Amazon Web Services provides the token when the response from a previous call has more results than the maximum page size.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Retrieves a single daily or monthly Savings Plans utilization rate and details for your account.</p>
+    #[serde(rename = "SavingsPlansUtilizationDetails")]
+    pub savings_plans_utilization_details: Vec<SavingsPlansUtilizationDetail>,
+    #[serde(rename = "TimePeriod")]
+    pub time_period: DateInterval,
+    /// <p>The total Savings Plans utilization, regardless of time period.</p>
+    #[serde(rename = "Total")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total: Option<SavingsPlansUtilizationAggregates>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetSavingsPlansUtilizationRequest {
+    /// <p>Filters Savings Plans utilization coverage data for active Savings Plans dimensions. You can filter data with the following dimensions:</p> <ul> <li> <p> <code>LINKED_ACCOUNT</code> </p> </li> <li> <p> <code>SAVINGS_PLAN_ARN</code> </p> </li> <li> <p> <code>SAVINGS_PLANS_TYPE</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>PAYMENT_OPTION</code> </p> </li> <li> <p> <code>INSTANCE_TYPE_FAMILY</code> </p> </li> </ul> <p> <code>GetSavingsPlansUtilization</code> uses the same <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object as the other operations, but only <code>AND</code> is supported among each dimension.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<Expression>,
+    /// <p>The granularity of the Amazon Web Services utillization data for your Savings Plans.</p> <p>The <code>GetSavingsPlansUtilization</code> operation supports only <code>DAILY</code> and <code>MONTHLY</code> granularities.</p>
+    #[serde(rename = "Granularity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub granularity: Option<String>,
+    /// <p>The time period that you want the usage and costs for. The <code>Start</code> date must be within 13 months. The <code>End</code> date must be after the <code>Start</code> date, and before the current date. Future dates can't be used as an <code>End</code> date.</p>
+    #[serde(rename = "TimePeriod")]
+    pub time_period: DateInterval,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSavingsPlansUtilizationResponse {
+    /// <p>The amount of cost/commitment you used your Savings Plans. This allows you to specify date ranges.</p>
+    #[serde(rename = "SavingsPlansUtilizationsByTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub savings_plans_utilizations_by_time: Option<Vec<SavingsPlansUtilizationByTime>>,
+    /// <p>The total amount of cost/commitment that you used your Savings Plans, regardless of date ranges.</p>
+    #[serde(rename = "Total")]
+    pub total: SavingsPlansUtilizationAggregates,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -823,6 +1152,31 @@ pub struct InstanceDetails {
     pub redshift_instance_details: Option<RedshiftInstanceDetails>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListCostCategoryDefinitionsRequest {
+    /// <p> The date when the Cost Category was effective. </p>
+    #[serde(rename = "EffectiveOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effective_on: Option<String>,
+    /// <p> The token to retrieve the next set of results. Amazon Web Services provides the token when the response from a previous call has more results than the maximum page size. </p> <p>You can use this information to retrieve the full Cost Category information using <code>DescribeCostCategory</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListCostCategoryDefinitionsResponse {
+    /// <p> A reference to a Cost Category containing enough information to identify the Cost Category. </p>
+    #[serde(rename = "CostCategoryReferences")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cost_category_references: Option<Vec<CostCategoryReference>>,
+    /// <p> The token to retrieve the next set of results. Amazon Web Services provides the token when the response from a previous call has more results than the maximum page size. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p>The aggregated value for a metric.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -841,7 +1195,7 @@ pub struct MetricValue {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyRecommendationDetail {
-    /// <p> Identifies whether this instance type is the Amazon Web Services default recommendation.</p>
+    /// <p>Identifies whether this instance type is the Amazon Web Services default recommendation.</p>
     #[serde(rename = "TargetInstances")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_instances: Option<Vec<TargetInstance>>,
@@ -1065,7 +1419,7 @@ pub struct ReservationPurchaseRecommendationDetail {
     #[serde(rename = "EstimatedMonthlySavingsPercentage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub estimated_monthly_savings_percentage: Option<String>,
-    /// <p>How much AWS estimates that you would have spent for all usage during the specified historical period if you had had a reservation.</p>
+    /// <p>How much AWS estimates that you would have spent for all usage during the specified historical period if you had a reservation.</p>
     #[serde(rename = "EstimatedReservationCostForLookbackPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub estimated_reservation_cost_for_lookback_period: Option<String>,
@@ -1269,6 +1623,345 @@ pub struct RightsizingRecommendationSummary {
     pub total_recommendation_count: Option<String>,
 }
 
+/// <p>The amortized amount of Savings Plans purchased in a specific account during a specific time interval.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SavingsPlansAmortizedCommitment {
+    /// <p>The amortized amount of your Savings Plans commitment that was purchased with either a <code>Partial</code> or a <code>NoUpfront</code>.</p>
+    #[serde(rename = "AmortizedRecurringCommitment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amortized_recurring_commitment: Option<String>,
+    /// <p>The amortized amount of your Savings Plans commitment that was purchased with an <code>Upfront</code> or <code>PartialUpfront</code> Savings Plans.</p>
+    #[serde(rename = "AmortizedUpfrontCommitment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amortized_upfront_commitment: Option<String>,
+    /// <p>The total amortized amount of your Savings Plans commitment, regardless of your Savings Plans purchase method. </p>
+    #[serde(rename = "TotalAmortizedCommitment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_amortized_commitment: Option<String>,
+}
+
+/// <p>The amount of Savings Plans eligible usage that is covered by Savings Plans. All calculations consider the On-Demand equivalent of your Savings Plans usage.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SavingsPlansCoverage {
+    /// <p>The attribute that applies to a specific <code>Dimension</code>.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The amount of Savings Plans eligible usage that the Savings Plans covered.</p>
+    #[serde(rename = "Coverage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub coverage: Option<SavingsPlansCoverageData>,
+    #[serde(rename = "TimePeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_period: Option<DateInterval>,
+}
+
+/// <p>Specific coverage percentage, On-Demand costs, and spend covered by Savings Plans, and total Savings Plans costs for an account.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SavingsPlansCoverageData {
+    /// <p>The percentage of your existing Savings Planscovered usage, divided by all of your eligible Savings Plans usage in an account(or set of accounts).</p>
+    #[serde(rename = "CoveragePercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub coverage_percentage: Option<String>,
+    /// <p>The cost of your Amazon Web Services usage at the public On-Demand rate.</p>
+    #[serde(rename = "OnDemandCost")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_demand_cost: Option<String>,
+    /// <p>The amount of your Amazon Web Services usage that is covered by a Savings Plans.</p>
+    #[serde(rename = "SpendCoveredBySavingsPlans")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub spend_covered_by_savings_plans: Option<String>,
+    /// <p>The total cost of your Amazon Web Services usage, regardless of your purchase option.</p>
+    #[serde(rename = "TotalCost")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_cost: Option<String>,
+}
+
+/// <p>Attribute details on a specific Savings Plan.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SavingsPlansDetails {
+    /// <p>A group of instance types that Savings Plans applies to.</p>
+    #[serde(rename = "InstanceFamily")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_family: Option<String>,
+    /// <p>The unique ID used to distinguish Savings Plans from one another.</p>
+    #[serde(rename = "OfferingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offering_id: Option<String>,
+    /// <p>A collection of AWS resources in a geographic area. Each AWS Region is isolated and independent of the other Regions.</p>
+    #[serde(rename = "Region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
+}
+
+/// <p>Contains your request parameters, Savings Plan Recommendations Summary, and Details.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SavingsPlansPurchaseRecommendation {
+    /// <p>The lookback period in days, used to generate the recommendation.</p>
+    #[serde(rename = "LookbackPeriodInDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lookback_period_in_days: Option<String>,
+    /// <p>The payment option used to generate the recommendation.</p>
+    #[serde(rename = "PaymentOption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payment_option: Option<String>,
+    /// <p>Details for the Savings Plans we recommend you to purchase to cover existing, Savings Plans eligible workloads.</p>
+    #[serde(rename = "SavingsPlansPurchaseRecommendationDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub savings_plans_purchase_recommendation_details:
+        Option<Vec<SavingsPlansPurchaseRecommendationDetail>>,
+    /// <p>Summary metrics for your Savings Plans Recommendations. </p>
+    #[serde(rename = "SavingsPlansPurchaseRecommendationSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub savings_plans_purchase_recommendation_summary:
+        Option<SavingsPlansPurchaseRecommendationSummary>,
+    /// <p>The requested Savings Plans recommendation type.</p>
+    #[serde(rename = "SavingsPlansType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub savings_plans_type: Option<String>,
+    /// <p>The Savings Plans recommendation term in years, used to generate the recommendation.</p>
+    #[serde(rename = "TermInYears")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub term_in_years: Option<String>,
+}
+
+/// <p>Details for your recommended Savings Plans.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SavingsPlansPurchaseRecommendationDetail {
+    /// <p>The <code>AccountID</code> the recommendation is generated for.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The currency code Amazon Web Services used to generate the recommendations and present potential savings.</p>
+    #[serde(rename = "CurrencyCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub currency_code: Option<String>,
+    /// <p>The average value of hourly On-Demand spend over the lookback period of the applicable usage type.</p>
+    #[serde(rename = "CurrentAverageHourlyOnDemandSpend")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_average_hourly_on_demand_spend: Option<String>,
+    /// <p>The highest value of hourly On-Demand spend over the lookback period of the applicable usage type.</p>
+    #[serde(rename = "CurrentMaximumHourlyOnDemandSpend")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_maximum_hourly_on_demand_spend: Option<String>,
+    /// <p>The lowest value of hourly On-Demand spend over the lookback period of the applicable usage type.</p>
+    #[serde(rename = "CurrentMinimumHourlyOnDemandSpend")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_minimum_hourly_on_demand_spend: Option<String>,
+    /// <p>The estimated utilization of the recommended Savings Plans.</p>
+    #[serde(rename = "EstimatedAverageUtilization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_average_utilization: Option<String>,
+    /// <p>The estimated monthly savings amount, based on the recommended Savings Plans.</p>
+    #[serde(rename = "EstimatedMonthlySavingsAmount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_monthly_savings_amount: Option<String>,
+    /// <p>The remaining On-Demand cost estimated to not be covered by the recommended Savings Plans, over the length of the lookback period.</p>
+    #[serde(rename = "EstimatedOnDemandCost")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_on_demand_cost: Option<String>,
+    /// <p> The estimated On-Demand costs you would expect with no additional commitment, based on your usage of the selected time period and the Savings Plans you own. </p>
+    #[serde(rename = "EstimatedOnDemandCostWithCurrentCommitment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_on_demand_cost_with_current_commitment: Option<String>,
+    /// <p>The estimated return on investment based on the recommended Savings Plans purchased. This is calculated as <code>estimatedSavingsAmount</code>/ <code>estimatedSPCost</code>*100.</p>
+    #[serde(rename = "EstimatedROI")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_roi: Option<String>,
+    /// <p>The cost of the recommended Savings Plans over the length of the lookback period.</p>
+    #[serde(rename = "EstimatedSPCost")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_sp_cost: Option<String>,
+    /// <p>The estimated savings amount based on the recommended Savings Plans over the length of the lookback period.</p>
+    #[serde(rename = "EstimatedSavingsAmount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_savings_amount: Option<String>,
+    /// <p>The estimated savings percentage relative to the total cost of applicable On-Demand usage over the lookback period.</p>
+    #[serde(rename = "EstimatedSavingsPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_savings_percentage: Option<String>,
+    /// <p>The recommended hourly commitment level for the Savings Plans type, and configuration based on the usage during the lookback period.</p>
+    #[serde(rename = "HourlyCommitmentToPurchase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hourly_commitment_to_purchase: Option<String>,
+    /// <p>Details for your recommended Savings Plans.</p>
+    #[serde(rename = "SavingsPlansDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub savings_plans_details: Option<SavingsPlansDetails>,
+    /// <p>The upfront cost of the recommended Savings Plans, based on the selected payment option.</p>
+    #[serde(rename = "UpfrontCost")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub upfront_cost: Option<String>,
+}
+
+/// <p>Metadata about your Savings Plans Purchase Recommendations.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SavingsPlansPurchaseRecommendationMetadata {
+    /// <p>The timestamp showing when the recommendations were generated.</p>
+    #[serde(rename = "GenerationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub generation_timestamp: Option<String>,
+    /// <p>The unique identifier for the recommendation set.</p>
+    #[serde(rename = "RecommendationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recommendation_id: Option<String>,
+}
+
+/// <p>Summary metrics for your Savings Plans Purchase Recommendations.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SavingsPlansPurchaseRecommendationSummary {
+    /// <p>The currency code Amazon Web Services used to generate the recommendations and present potential savings.</p>
+    #[serde(rename = "CurrencyCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub currency_code: Option<String>,
+    /// <p>The current total on demand spend of the applicable usage types over the lookback period.</p>
+    #[serde(rename = "CurrentOnDemandSpend")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_on_demand_spend: Option<String>,
+    /// <p>The recommended Savings Plans cost on a daily (24 hourly) basis.</p>
+    #[serde(rename = "DailyCommitmentToPurchase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub daily_commitment_to_purchase: Option<String>,
+    /// <p>The estimated monthly savings amount, based on the recommended Savings Plans purchase.</p>
+    #[serde(rename = "EstimatedMonthlySavingsAmount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_monthly_savings_amount: Option<String>,
+    /// <p> The estimated On-Demand costs you would expect with no additional commitment, based on your usage of the selected time period and the Savings Plans you own. </p>
+    #[serde(rename = "EstimatedOnDemandCostWithCurrentCommitment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_on_demand_cost_with_current_commitment: Option<String>,
+    /// <p>The estimated return on investment based on the recommended Savings Plans and estimated savings.</p>
+    #[serde(rename = "EstimatedROI")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_roi: Option<String>,
+    /// <p>The estimated total savings over the lookback period, based on the purchase of the recommended Savings Plans.</p>
+    #[serde(rename = "EstimatedSavingsAmount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_savings_amount: Option<String>,
+    /// <p>The estimated savings relative to the total cost of On-Demand usage, over the lookback period. This is calculated as <code>estimatedSavingsAmount</code>/ <code>CurrentOnDemandSpend</code>*100.</p>
+    #[serde(rename = "EstimatedSavingsPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_savings_percentage: Option<String>,
+    /// <p>The estimated total cost of the usage after purchasing the recommended Savings Plans. This is a sum of the cost of Savings Plans during this term, and the remaining On-Demand usage.</p>
+    #[serde(rename = "EstimatedTotalCost")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_total_cost: Option<String>,
+    /// <p>The recommended hourly commitment based on the recommendation parameters.</p>
+    #[serde(rename = "HourlyCommitmentToPurchase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hourly_commitment_to_purchase: Option<String>,
+    /// <p>The aggregate number of Savings Plans recommendations that exist for your account.</p>
+    #[serde(rename = "TotalRecommendationCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_recommendation_count: Option<String>,
+}
+
+/// <p>The amount of savings you're accumulating, against the public On-Demand rate of the usage accrued in an account.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SavingsPlansSavings {
+    /// <p>The savings amount that you are accumulating for the usage that is covered by a Savings Plans, when compared to the On-Demand equivalent of the same usage.</p>
+    #[serde(rename = "NetSavings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub net_savings: Option<String>,
+    /// <p>How much the amount that the usage would have cost if it was accrued at the On-Demand rate.</p>
+    #[serde(rename = "OnDemandCostEquivalent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_demand_cost_equivalent: Option<String>,
+}
+
+/// <p>The measurement of how well you are using your existing Savings Plans.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SavingsPlansUtilization {
+    /// <p>The total amount of Savings Plans commitment that's been purchased in an account (or set of accounts).</p>
+    #[serde(rename = "TotalCommitment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_commitment: Option<String>,
+    /// <p>The amount of your Savings Plans commitment that was not consumed from Savings Plans eligible usage in a specific period.</p>
+    #[serde(rename = "UnusedCommitment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unused_commitment: Option<String>,
+    /// <p>The amount of your Savings Plans commitment that was consumed from Savings Plans eligible usage in a specific period.</p>
+    #[serde(rename = "UsedCommitment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub used_commitment: Option<String>,
+    /// <p>The amount of <code>UsedCommitment</code> divided by the <code>TotalCommitment</code> for your Savings Plans.</p>
+    #[serde(rename = "UtilizationPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub utilization_percentage: Option<String>,
+}
+
+/// <p>The aggregated utilization metrics for your Savings Plans usage.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SavingsPlansUtilizationAggregates {
+    /// <p>The total amortized commitment for a Savings Plans. This includes the sum of the upfront and recurring Savings Plans fees.</p>
+    #[serde(rename = "AmortizedCommitment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amortized_commitment: Option<SavingsPlansAmortizedCommitment>,
+    /// <p>The amount saved by using existing Savings Plans. Savings returns both net savings from Savings Plans, as well as the <code>onDemandCostEquivalent</code> of the Savings Plans when considering the utilization rate.</p>
+    #[serde(rename = "Savings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub savings: Option<SavingsPlansSavings>,
+    /// <p>A ratio of your effectiveness of using existing Savings Plans to apply to workloads that are Savings Plans eligible.</p>
+    #[serde(rename = "Utilization")]
+    pub utilization: SavingsPlansUtilization,
+}
+
+/// <p>The amount of Savings Plans utilization, in hours.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SavingsPlansUtilizationByTime {
+    /// <p>The total amortized commitment for a Savings Plans. This includes the sum of the upfront and recurring Savings Plans fees.</p>
+    #[serde(rename = "AmortizedCommitment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amortized_commitment: Option<SavingsPlansAmortizedCommitment>,
+    /// <p>The amount saved by using existing Savings Plans. Savings returns both net savings from Savings Plans as well as the <code>onDemandCostEquivalent</code> of the Savings Plans when considering the utilization rate.</p>
+    #[serde(rename = "Savings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub savings: Option<SavingsPlansSavings>,
+    #[serde(rename = "TimePeriod")]
+    pub time_period: DateInterval,
+    /// <p>A ratio of your effectiveness of using existing Savings Plans to apply to workloads that are Savings Plans eligible.</p>
+    #[serde(rename = "Utilization")]
+    pub utilization: SavingsPlansUtilization,
+}
+
+/// <p>A single daily or monthly Savings Plans utilization rate, and details for your account. Master accounts in an organization have access to member accounts. You can use <code>GetDimensionValues</code> to determine the possible dimension values. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SavingsPlansUtilizationDetail {
+    /// <p>The total amortized commitment for a Savings Plans. Includes the sum of the upfront and recurring Savings Plans fees.</p>
+    #[serde(rename = "AmortizedCommitment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amortized_commitment: Option<SavingsPlansAmortizedCommitment>,
+    /// <p>The attribute that applies to a specific <code>Dimension</code>.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The amount saved by using existing Savings Plans. Savings returns both net savings from savings plans as well as the <code>onDemandCostEquivalent</code> of the Savings Plans when considering the utilization rate.</p>
+    #[serde(rename = "Savings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub savings: Option<SavingsPlansSavings>,
+    /// <p>The unique Amazon Resource Name (ARN) for a particular Savings Plan.</p>
+    #[serde(rename = "SavingsPlanArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub savings_plan_arn: Option<String>,
+    /// <p>A ratio of your effectiveness of using existing Savings Plans to apply to workloads that are Savings Plans eligible.</p>
+    #[serde(rename = "Utilization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub utilization: Option<SavingsPlansUtilization>,
+}
+
 /// <p>Hardware specifications for the service that you want recommendations for.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ServiceSpecification {
@@ -1335,6 +2028,31 @@ pub struct TerminateRecommendationDetail {
     pub estimated_monthly_savings: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateCostCategoryDefinitionRequest {
+    /// <p>The unique identifier for your Cost Category.</p>
+    #[serde(rename = "CostCategoryArn")]
+    pub cost_category_arn: String,
+    #[serde(rename = "RuleVersion")]
+    pub rule_version: String,
+    /// <p> Rules are processed in order. If there are multiple rules that match the line item, then the first rule to match is used to determine that Cost Category value. </p>
+    #[serde(rename = "Rules")]
+    pub rules: Vec<CostCategoryRule>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateCostCategoryDefinitionResponse {
+    /// <p> The unique identifier for your Cost Category. </p>
+    #[serde(rename = "CostCategoryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cost_category_arn: Option<String>,
+    /// <p> The Cost Category's effective start date. </p>
+    #[serde(rename = "EffectiveStart")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effective_start: Option<String>,
+}
+
 /// <p>The amount of utilization, in hours.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1353,6 +2071,141 @@ pub struct UtilizationByTime {
     pub total: Option<ReservationAggregates>,
 }
 
+/// Errors returned by CreateCostCategoryDefinition
+#[derive(Debug, PartialEq)]
+pub enum CreateCostCategoryDefinitionError {
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+    /// <p> You've reached the limit on the number of resources you can create, or exceeded the size of an individual resources. </p>
+    ServiceQuotaExceeded(String),
+}
+
+impl CreateCostCategoryDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateCostCategoryDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateCostCategoryDefinitionError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(
+                        CreateCostCategoryDefinitionError::ServiceQuotaExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateCostCategoryDefinitionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateCostCategoryDefinitionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateCostCategoryDefinitionError::LimitExceeded(ref cause) => cause,
+            CreateCostCategoryDefinitionError::ServiceQuotaExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteCostCategoryDefinition
+#[derive(Debug, PartialEq)]
+pub enum DeleteCostCategoryDefinitionError {
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+    /// <p> The specified ARN in the request doesn't exist. </p>
+    ResourceNotFound(String),
+}
+
+impl DeleteCostCategoryDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteCostCategoryDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "LimitExceededException" => {
+                    return RusotoError::Service(DeleteCostCategoryDefinitionError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteCostCategoryDefinitionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteCostCategoryDefinitionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteCostCategoryDefinitionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteCostCategoryDefinitionError::LimitExceeded(ref cause) => cause,
+            DeleteCostCategoryDefinitionError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeCostCategoryDefinition
+#[derive(Debug, PartialEq)]
+pub enum DescribeCostCategoryDefinitionError {
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+    /// <p> The specified ARN in the request doesn't exist. </p>
+    ResourceNotFound(String),
+}
+
+impl DescribeCostCategoryDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeCostCategoryDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        DescribeCostCategoryDefinitionError::LimitExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeCostCategoryDefinitionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeCostCategoryDefinitionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeCostCategoryDefinitionError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeCostCategoryDefinitionError::LimitExceeded(ref cause) => cause,
+            DescribeCostCategoryDefinitionError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetCostAndUsage
 #[derive(Debug, PartialEq)]
 pub enum GetCostAndUsageError {
@@ -1407,6 +2260,75 @@ impl Error for GetCostAndUsageError {
             GetCostAndUsageError::InvalidNextToken(ref cause) => cause,
             GetCostAndUsageError::LimitExceeded(ref cause) => cause,
             GetCostAndUsageError::RequestChanged(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetCostAndUsageWithResources
+#[derive(Debug, PartialEq)]
+pub enum GetCostAndUsageWithResourcesError {
+    /// <p>The requested report expired. Update the date interval and try again.</p>
+    BillExpiration(String),
+    /// <p>The requested data is unavailable.</p>
+    DataUnavailable(String),
+    /// <p>The pagination token is invalid. Try again without a pagination token.</p>
+    InvalidNextToken(String),
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+    /// <p>Your request parameters changed between pages. Try again with the old parameters or without a pagination token.</p>
+    RequestChanged(String),
+}
+
+impl GetCostAndUsageWithResourcesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetCostAndUsageWithResourcesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BillExpirationException" => {
+                    return RusotoError::Service(GetCostAndUsageWithResourcesError::BillExpiration(
+                        err.msg,
+                    ))
+                }
+                "DataUnavailableException" => {
+                    return RusotoError::Service(
+                        GetCostAndUsageWithResourcesError::DataUnavailable(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        GetCostAndUsageWithResourcesError::InvalidNextToken(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(GetCostAndUsageWithResourcesError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "RequestChangedException" => {
+                    return RusotoError::Service(GetCostAndUsageWithResourcesError::RequestChanged(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetCostAndUsageWithResourcesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetCostAndUsageWithResourcesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetCostAndUsageWithResourcesError::BillExpiration(ref cause) => cause,
+            GetCostAndUsageWithResourcesError::DataUnavailable(ref cause) => cause,
+            GetCostAndUsageWithResourcesError::InvalidNextToken(ref cause) => cause,
+            GetCostAndUsageWithResourcesError::LimitExceeded(ref cause) => cause,
+            GetCostAndUsageWithResourcesError::RequestChanged(ref cause) => cause,
         }
     }
 }
@@ -1706,6 +2628,200 @@ impl Error for GetRightsizingRecommendationError {
         }
     }
 }
+/// Errors returned by GetSavingsPlansCoverage
+#[derive(Debug, PartialEq)]
+pub enum GetSavingsPlansCoverageError {
+    /// <p>The requested data is unavailable.</p>
+    DataUnavailable(String),
+    /// <p>The pagination token is invalid. Try again without a pagination token.</p>
+    InvalidNextToken(String),
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+}
+
+impl GetSavingsPlansCoverageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSavingsPlansCoverageError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "DataUnavailableException" => {
+                    return RusotoError::Service(GetSavingsPlansCoverageError::DataUnavailable(
+                        err.msg,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(GetSavingsPlansCoverageError::InvalidNextToken(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(GetSavingsPlansCoverageError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetSavingsPlansCoverageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetSavingsPlansCoverageError {
+    fn description(&self) -> &str {
+        match *self {
+            GetSavingsPlansCoverageError::DataUnavailable(ref cause) => cause,
+            GetSavingsPlansCoverageError::InvalidNextToken(ref cause) => cause,
+            GetSavingsPlansCoverageError::LimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetSavingsPlansPurchaseRecommendation
+#[derive(Debug, PartialEq)]
+pub enum GetSavingsPlansPurchaseRecommendationError {
+    /// <p>The pagination token is invalid. Try again without a pagination token.</p>
+    InvalidNextToken(String),
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+}
+
+impl GetSavingsPlansPurchaseRecommendationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetSavingsPlansPurchaseRecommendationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        GetSavingsPlansPurchaseRecommendationError::InvalidNextToken(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        GetSavingsPlansPurchaseRecommendationError::LimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetSavingsPlansPurchaseRecommendationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetSavingsPlansPurchaseRecommendationError {
+    fn description(&self) -> &str {
+        match *self {
+            GetSavingsPlansPurchaseRecommendationError::InvalidNextToken(ref cause) => cause,
+            GetSavingsPlansPurchaseRecommendationError::LimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetSavingsPlansUtilization
+#[derive(Debug, PartialEq)]
+pub enum GetSavingsPlansUtilizationError {
+    /// <p>The requested data is unavailable.</p>
+    DataUnavailable(String),
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+}
+
+impl GetSavingsPlansUtilizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetSavingsPlansUtilizationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "DataUnavailableException" => {
+                    return RusotoError::Service(GetSavingsPlansUtilizationError::DataUnavailable(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(GetSavingsPlansUtilizationError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetSavingsPlansUtilizationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetSavingsPlansUtilizationError {
+    fn description(&self) -> &str {
+        match *self {
+            GetSavingsPlansUtilizationError::DataUnavailable(ref cause) => cause,
+            GetSavingsPlansUtilizationError::LimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetSavingsPlansUtilizationDetails
+#[derive(Debug, PartialEq)]
+pub enum GetSavingsPlansUtilizationDetailsError {
+    /// <p>The requested data is unavailable.</p>
+    DataUnavailable(String),
+    /// <p>The pagination token is invalid. Try again without a pagination token.</p>
+    InvalidNextToken(String),
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+}
+
+impl GetSavingsPlansUtilizationDetailsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetSavingsPlansUtilizationDetailsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "DataUnavailableException" => {
+                    return RusotoError::Service(
+                        GetSavingsPlansUtilizationDetailsError::DataUnavailable(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        GetSavingsPlansUtilizationDetailsError::InvalidNextToken(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        GetSavingsPlansUtilizationDetailsError::LimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetSavingsPlansUtilizationDetailsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetSavingsPlansUtilizationDetailsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetSavingsPlansUtilizationDetailsError::DataUnavailable(ref cause) => cause,
+            GetSavingsPlansUtilizationDetailsError::InvalidNextToken(ref cause) => cause,
+            GetSavingsPlansUtilizationDetailsError::LimitExceeded(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetTags
 #[derive(Debug, PartialEq)]
 pub enum GetTagsError {
@@ -1810,13 +2926,127 @@ impl Error for GetUsageForecastError {
         }
     }
 }
+/// Errors returned by ListCostCategoryDefinitions
+#[derive(Debug, PartialEq)]
+pub enum ListCostCategoryDefinitionsError {
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+}
+
+impl ListCostCategoryDefinitionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListCostCategoryDefinitionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListCostCategoryDefinitionsError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListCostCategoryDefinitionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListCostCategoryDefinitionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListCostCategoryDefinitionsError::LimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateCostCategoryDefinition
+#[derive(Debug, PartialEq)]
+pub enum UpdateCostCategoryDefinitionError {
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+    /// <p> The specified ARN in the request doesn't exist. </p>
+    ResourceNotFound(String),
+    /// <p> You've reached the limit on the number of resources you can create, or exceeded the size of an individual resources. </p>
+    ServiceQuotaExceeded(String),
+}
+
+impl UpdateCostCategoryDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateCostCategoryDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateCostCategoryDefinitionError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateCostCategoryDefinitionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(
+                        UpdateCostCategoryDefinitionError::ServiceQuotaExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateCostCategoryDefinitionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateCostCategoryDefinitionError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateCostCategoryDefinitionError::LimitExceeded(ref cause) => cause,
+            UpdateCostCategoryDefinitionError::ResourceNotFound(ref cause) => cause,
+            UpdateCostCategoryDefinitionError::ServiceQuotaExceeded(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the AWS Cost Explorer API. AWS Cost Explorer clients implement this trait.
 pub trait CostExplorer {
+    /// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>Creates a new Cost Category with the requested name and rules.</p></p>
+    fn create_cost_category_definition(
+        &self,
+        input: CreateCostCategoryDefinitionRequest,
+    ) -> RusotoFuture<CreateCostCategoryDefinitionResponse, CreateCostCategoryDefinitionError>;
+
+    /// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>Deletes a Cost Category. Expenses from this month going forward will no longer be categorized with this Cost Category.</p></p>
+    fn delete_cost_category_definition(
+        &self,
+        input: DeleteCostCategoryDefinitionRequest,
+    ) -> RusotoFuture<DeleteCostCategoryDefinitionResponse, DeleteCostCategoryDefinitionError>;
+
+    /// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>Returns the name, ARN, rules, definition, and effective dates of a Cost Category that&#39;s defined in the account.</p> <p>You have the option to use <code>EffectiveOn</code> to return a Cost Category that is active on a specific date. If there is no <code>EffectiveOn</code> specified, you’ll see a Cost Category that is effective on the current date. If Cost Category is still effective, <code>EffectiveEnd</code> is omitted in the response. </p></p>
+    fn describe_cost_category_definition(
+        &self,
+        input: DescribeCostCategoryDefinitionRequest,
+    ) -> RusotoFuture<DescribeCostCategoryDefinitionResponse, DescribeCostCategoryDefinitionError>;
+
     /// <p>Retrieves cost and usage metrics for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Master accounts in an organization in AWS Organizations have access to all member accounts.</p>
     fn get_cost_and_usage(
         &self,
         input: GetCostAndUsageRequest,
     ) -> RusotoFuture<GetCostAndUsageResponse, GetCostAndUsageError>;
+
+    /// <p><p>Retrieves cost and usage metrics with resources for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Master accounts in an organization in AWS Organizations have access to all member accounts. This API is currently available for the Amazon Elastic Compute Cloud – Compute service only.</p> <note> <p>This is an opt-in only feature. You can enable this feature from the Cost Explorer Settings page. For information on how to access the Settings page, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-access.html">Controlling Access for Cost Explorer</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> </note></p>
+    fn get_cost_and_usage_with_resources(
+        &self,
+        input: GetCostAndUsageWithResourcesRequest,
+    ) -> RusotoFuture<GetCostAndUsageWithResourcesResponse, GetCostAndUsageWithResourcesError>;
 
     /// <p>Retrieves a forecast for how much Amazon Web Services predicts that you will spend over the forecast time period that you select, based on your past costs. </p>
     fn get_cost_forecast(
@@ -1857,6 +3087,36 @@ pub trait CostExplorer {
         input: GetRightsizingRecommendationRequest,
     ) -> RusotoFuture<GetRightsizingRecommendationResponse, GetRightsizingRecommendationError>;
 
+    /// <p>Retrieves the Savings Plans covered for your account. This enables you to see how much of your cost is covered by a Savings Plan. An organization’s master account can see the coverage of the associated member accounts. For any time period, you can filter data for Savings Plans usage with the following dimensions:</p> <ul> <li> <p> <code>LINKED_ACCOUNT</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>SERVICE</code> </p> </li> <li> <p> <code>INSTANCE_FAMILY</code> </p> </li> </ul> <p>To determine valid values for a dimension, use the <code>GetDimensionValues</code> operation.</p>
+    fn get_savings_plans_coverage(
+        &self,
+        input: GetSavingsPlansCoverageRequest,
+    ) -> RusotoFuture<GetSavingsPlansCoverageResponse, GetSavingsPlansCoverageError>;
+
+    /// <p>Retrieves your request parameters, Savings Plan Recommendations Summary and Details.</p>
+    fn get_savings_plans_purchase_recommendation(
+        &self,
+        input: GetSavingsPlansPurchaseRecommendationRequest,
+    ) -> RusotoFuture<
+        GetSavingsPlansPurchaseRecommendationResponse,
+        GetSavingsPlansPurchaseRecommendationError,
+    >;
+
+    /// <p><p>Retrieves the Savings Plans utilization for your account across date ranges with daily or monthly granularity. Master accounts in an organization have access to member accounts. You can use <code>GetDimensionValues</code> in <code>SAVINGS_PLANS</code> to determine the possible dimension values.</p> <note> <p>You cannot group by any dimension values for <code>GetSavingsPlansUtilization</code>.</p> </note></p>
+    fn get_savings_plans_utilization(
+        &self,
+        input: GetSavingsPlansUtilizationRequest,
+    ) -> RusotoFuture<GetSavingsPlansUtilizationResponse, GetSavingsPlansUtilizationError>;
+
+    /// <p><p>Retrieves attribute data along with aggregate utilization and savings data for a given time period. This doesn&#39;t support granular or grouped data (daily/monthly) in response. You can&#39;t retrieve data by dates in a single response similar to <code>GetSavingsPlanUtilization</code>, but you have the option to make multiple calls to <code>GetSavingsPlanUtilizationDetails</code> by providing individual dates. You can use <code>GetDimensionValues</code> in <code>SAVINGS_PLANS</code> to determine the possible dimension values.</p> <note> <p> <code>GetSavingsPlanUtilizationDetails</code> internally groups data by <code>SavingsPlansArn</code>.</p> </note></p>
+    fn get_savings_plans_utilization_details(
+        &self,
+        input: GetSavingsPlansUtilizationDetailsRequest,
+    ) -> RusotoFuture<
+        GetSavingsPlansUtilizationDetailsResponse,
+        GetSavingsPlansUtilizationDetailsError,
+    >;
+
     /// <p>Queries for available tag keys and tag values for a specified period. You can search the tag values for an arbitrary string. </p>
     fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<GetTagsResponse, GetTagsError>;
 
@@ -1865,6 +3125,18 @@ pub trait CostExplorer {
         &self,
         input: GetUsageForecastRequest,
     ) -> RusotoFuture<GetUsageForecastResponse, GetUsageForecastError>;
+
+    /// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>Returns the name, ARN and effective dates of all Cost Categories defined in the account. You have the option to use <code>EffectiveOn</code> to return a list of Cost Categories that were active on a specific date. If there is no <code>EffectiveOn</code> specified, you’ll see Cost Categories that are effective on the current date. If Cost Category is still effective, <code>EffectiveEnd</code> is omitted in the response. </p></p>
+    fn list_cost_category_definitions(
+        &self,
+        input: ListCostCategoryDefinitionsRequest,
+    ) -> RusotoFuture<ListCostCategoryDefinitionsResponse, ListCostCategoryDefinitionsError>;
+
+    /// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>Updates an existing Cost Category. Changes made to the Cost Category rules will be used to categorize the current month’s expenses and future expenses. This won’t change categorization for the previous months.</p></p>
+    fn update_cost_category_definition(
+        &self,
+        input: UpdateCostCategoryDefinitionRequest,
+    ) -> RusotoFuture<UpdateCostCategoryDefinitionResponse, UpdateCostCategoryDefinitionError>;
 }
 /// A client for the AWS Cost Explorer API.
 #[derive(Clone)]
@@ -1904,6 +3176,94 @@ impl CostExplorerClient {
 }
 
 impl CostExplorer for CostExplorerClient {
+    /// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>Creates a new Cost Category with the requested name and rules.</p></p>
+    fn create_cost_category_definition(
+        &self,
+        input: CreateCostCategoryDefinitionRequest,
+    ) -> RusotoFuture<CreateCostCategoryDefinitionResponse, CreateCostCategoryDefinitionError> {
+        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.CreateCostCategoryDefinition",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateCostCategoryDefinitionResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateCostCategoryDefinitionError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>Deletes a Cost Category. Expenses from this month going forward will no longer be categorized with this Cost Category.</p></p>
+    fn delete_cost_category_definition(
+        &self,
+        input: DeleteCostCategoryDefinitionRequest,
+    ) -> RusotoFuture<DeleteCostCategoryDefinitionResponse, DeleteCostCategoryDefinitionError> {
+        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.DeleteCostCategoryDefinition",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteCostCategoryDefinitionResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteCostCategoryDefinitionError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>Returns the name, ARN, rules, definition, and effective dates of a Cost Category that&#39;s defined in the account.</p> <p>You have the option to use <code>EffectiveOn</code> to return a Cost Category that is active on a specific date. If there is no <code>EffectiveOn</code> specified, you’ll see a Cost Category that is effective on the current date. If Cost Category is still effective, <code>EffectiveEnd</code> is omitted in the response. </p></p>
+    fn describe_cost_category_definition(
+        &self,
+        input: DescribeCostCategoryDefinitionRequest,
+    ) -> RusotoFuture<DescribeCostCategoryDefinitionResponse, DescribeCostCategoryDefinitionError>
+    {
+        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.DescribeCostCategoryDefinition",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeCostCategoryDefinitionResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeCostCategoryDefinitionError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Retrieves cost and usage metrics for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Master accounts in an organization in AWS Organizations have access to all member accounts.</p>
     fn get_cost_and_usage(
         &self,
@@ -1929,6 +3289,35 @@ impl CostExplorer for CostExplorerClient {
                         .from_err()
                         .and_then(|response| Err(GetCostAndUsageError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p><p>Retrieves cost and usage metrics with resources for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Master accounts in an organization in AWS Organizations have access to all member accounts. This API is currently available for the Amazon Elastic Compute Cloud – Compute service only.</p> <note> <p>This is an opt-in only feature. You can enable this feature from the Cost Explorer Settings page. For information on how to access the Settings page, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-access.html">Controlling Access for Cost Explorer</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> </note></p>
+    fn get_cost_and_usage_with_resources(
+        &self,
+        input: GetCostAndUsageWithResourcesRequest,
+    ) -> RusotoFuture<GetCostAndUsageWithResourcesResponse, GetCostAndUsageWithResourcesError> {
+        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.GetCostAndUsageWithResources",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetCostAndUsageWithResourcesResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetCostAndUsageWithResourcesError::from_response(response))
+                }))
             }
         })
     }
@@ -2114,6 +3503,132 @@ impl CostExplorer for CostExplorerClient {
         })
     }
 
+    /// <p>Retrieves the Savings Plans covered for your account. This enables you to see how much of your cost is covered by a Savings Plan. An organization’s master account can see the coverage of the associated member accounts. For any time period, you can filter data for Savings Plans usage with the following dimensions:</p> <ul> <li> <p> <code>LINKED_ACCOUNT</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>SERVICE</code> </p> </li> <li> <p> <code>INSTANCE_FAMILY</code> </p> </li> </ul> <p>To determine valid values for a dimension, use the <code>GetDimensionValues</code> operation.</p>
+    fn get_savings_plans_coverage(
+        &self,
+        input: GetSavingsPlansCoverageRequest,
+    ) -> RusotoFuture<GetSavingsPlansCoverageResponse, GetSavingsPlansCoverageError> {
+        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.GetSavingsPlansCoverage",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetSavingsPlansCoverageResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetSavingsPlansCoverageError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Retrieves your request parameters, Savings Plan Recommendations Summary and Details.</p>
+    fn get_savings_plans_purchase_recommendation(
+        &self,
+        input: GetSavingsPlansPurchaseRecommendationRequest,
+    ) -> RusotoFuture<
+        GetSavingsPlansPurchaseRecommendationResponse,
+        GetSavingsPlansPurchaseRecommendationError,
+    > {
+        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.GetSavingsPlansPurchaseRecommendation",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetSavingsPlansPurchaseRecommendationResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetSavingsPlansPurchaseRecommendationError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p><p>Retrieves the Savings Plans utilization for your account across date ranges with daily or monthly granularity. Master accounts in an organization have access to member accounts. You can use <code>GetDimensionValues</code> in <code>SAVINGS_PLANS</code> to determine the possible dimension values.</p> <note> <p>You cannot group by any dimension values for <code>GetSavingsPlansUtilization</code>.</p> </note></p>
+    fn get_savings_plans_utilization(
+        &self,
+        input: GetSavingsPlansUtilizationRequest,
+    ) -> RusotoFuture<GetSavingsPlansUtilizationResponse, GetSavingsPlansUtilizationError> {
+        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.GetSavingsPlansUtilization",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetSavingsPlansUtilizationResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetSavingsPlansUtilizationError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p><p>Retrieves attribute data along with aggregate utilization and savings data for a given time period. This doesn&#39;t support granular or grouped data (daily/monthly) in response. You can&#39;t retrieve data by dates in a single response similar to <code>GetSavingsPlanUtilization</code>, but you have the option to make multiple calls to <code>GetSavingsPlanUtilizationDetails</code> by providing individual dates. You can use <code>GetDimensionValues</code> in <code>SAVINGS_PLANS</code> to determine the possible dimension values.</p> <note> <p> <code>GetSavingsPlanUtilizationDetails</code> internally groups data by <code>SavingsPlansArn</code>.</p> </note></p>
+    fn get_savings_plans_utilization_details(
+        &self,
+        input: GetSavingsPlansUtilizationDetailsRequest,
+    ) -> RusotoFuture<
+        GetSavingsPlansUtilizationDetailsResponse,
+        GetSavingsPlansUtilizationDetailsError,
+    > {
+        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.GetSavingsPlansUtilizationDetails",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetSavingsPlansUtilizationDetailsResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetSavingsPlansUtilizationDetailsError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Queries for available tag keys and tag values for a specified period. You can search the tag values for an arbitrary string. </p>
     fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<GetTagsResponse, GetTagsError> {
         let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
@@ -2164,6 +3679,64 @@ impl CostExplorer for CostExplorerClient {
                         .from_err()
                         .and_then(|response| Err(GetUsageForecastError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>Returns the name, ARN and effective dates of all Cost Categories defined in the account. You have the option to use <code>EffectiveOn</code> to return a list of Cost Categories that were active on a specific date. If there is no <code>EffectiveOn</code> specified, you’ll see Cost Categories that are effective on the current date. If Cost Category is still effective, <code>EffectiveEnd</code> is omitted in the response. </p></p>
+    fn list_cost_category_definitions(
+        &self,
+        input: ListCostCategoryDefinitionsRequest,
+    ) -> RusotoFuture<ListCostCategoryDefinitionsResponse, ListCostCategoryDefinitionsError> {
+        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.ListCostCategoryDefinitions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListCostCategoryDefinitionsResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListCostCategoryDefinitionsError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p><important> <p> <i> <b>Cost Category is in preview release for AWS Billing and Cost Management and is subject to change. Your use of Cost Categories is subject to the Beta Service Participation terms of the <a href="https://aws.amazon.com/service-terms/">AWS Service Terms</a> (Section 1.10).</b> </i> </p> </important> <p>Updates an existing Cost Category. Changes made to the Cost Category rules will be used to categorize the current month’s expenses and future expenses. This won’t change categorization for the previous months.</p></p>
+    fn update_cost_category_definition(
+        &self,
+        input: UpdateCostCategoryDefinitionRequest,
+    ) -> RusotoFuture<UpdateCostCategoryDefinitionResponse, UpdateCostCategoryDefinitionError> {
+        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.UpdateCostCategoryDefinition",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateCostCategoryDefinitionResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateCostCategoryDefinitionError::from_response(response))
+                }))
             }
         })
     }
