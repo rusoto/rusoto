@@ -41,7 +41,7 @@ impl GenerateProtocol for JsonGenerator {
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     {payload}
 
-                    let response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
+                    let mut response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
                     if response.status.is_success() {{
                         {ok_response}
                     }} else {{

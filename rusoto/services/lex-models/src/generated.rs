@@ -4076,7 +4076,7 @@ impl LexModels for LexModelsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4107,7 +4107,7 @@ impl LexModels for LexModelsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4138,7 +4138,7 @@ impl LexModels for LexModelsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4164,7 +4164,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4196,7 +4196,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4229,7 +4229,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4261,7 +4261,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4289,7 +4289,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4321,7 +4321,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4349,7 +4349,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4381,7 +4381,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4413,7 +4413,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4445,7 +4445,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4478,7 +4478,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4519,7 +4519,7 @@ impl LexModels for LexModelsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4553,7 +4553,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4599,7 +4599,7 @@ impl LexModels for LexModelsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4637,7 +4637,7 @@ impl LexModels for LexModelsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4678,7 +4678,7 @@ impl LexModels for LexModelsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4707,7 +4707,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4751,7 +4751,7 @@ impl LexModels for LexModelsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4795,7 +4795,7 @@ impl LexModels for LexModelsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4831,7 +4831,7 @@ impl LexModels for LexModelsClient {
         params.put("version", &input.version);
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4860,7 +4860,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4893,7 +4893,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4931,7 +4931,7 @@ impl LexModels for LexModelsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4972,7 +4972,7 @@ impl LexModels for LexModelsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5005,7 +5005,7 @@ impl LexModels for LexModelsClient {
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5043,7 +5043,7 @@ impl LexModels for LexModelsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5084,7 +5084,7 @@ impl LexModels for LexModelsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5121,7 +5121,7 @@ impl LexModels for LexModelsClient {
         params.put("view", "aggregation");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5152,7 +5152,7 @@ impl LexModels for LexModelsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5187,7 +5187,7 @@ impl LexModels for LexModelsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5218,7 +5218,7 @@ impl LexModels for LexModelsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5249,7 +5249,7 @@ impl LexModels for LexModelsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5280,7 +5280,7 @@ impl LexModels for LexModelsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

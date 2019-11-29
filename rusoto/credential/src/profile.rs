@@ -6,8 +6,8 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 
+use async_trait::async_trait;
 use dirs::home_dir;
-use futures::FutureExt;
 use regex::Regex;
 use serde::Deserialize;
 use tokio::net::process::Command;
@@ -167,46 +167,43 @@ impl ProfileProvider {
     }
 }
 
-async fn profile_provider_credentials(provider: ProfileProvider) -> Result<AwsCredentials, CredentialsError> {
-    match ProfileProvider::default_config_location().map(|location| {
-        parse_config_file(&location).and_then(|config| {
-            config
-                .get(&ProfileProvider::default_profile_name())
-                .and_then(|props| props.get("credential_process"))
-                .map(std::borrow::ToOwned::to_owned)
-        })
-    }) {
-        Ok(Some(command)) => {
-            // credential_process is set, create the future
-            let mut command = parse_command_str(&command)?;
-            let output = command.output().await.map_err(|e| {
-                CredentialsError::new(format!("Credential process failed: {:?}", e))
-            })?;
-            if output.status.success() {
-                parse_credential_process_output(&output.stdout)
-            } else {
-                Err(CredentialsError::new(format!(
-                    "Credential process failed with {}: {}",
-                    output.status,
-                    String::from_utf8_lossy(&output.stderr)
-                )))
-            }
-        }
-        Ok(None) => {
-            // credential_process is not set, parse the credentials file
-            parse_credentials_file(provider.file_path()).and_then(|mut profiles| {
-                profiles
-                    .remove(provider.profile())
-                    .ok_or_else(|| CredentialsError::new("profile not found"))
-            })
-        }
-        Err(err) => Err(err),
-    }
-}
-
+#[async_trait]
 impl ProvideAwsCredentials for ProfileProvider {
-    fn credentials(&self) -> crate::CredentialsFuture {
-        profile_provider_credentials(self.clone()).boxed()
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        match ProfileProvider::default_config_location().map(|location| {
+            parse_config_file(&location).and_then(|config| {
+                config
+                    .get(&ProfileProvider::default_profile_name())
+                    .and_then(|props| props.get("credential_process"))
+                    .map(std::borrow::ToOwned::to_owned)
+            })
+        }) {
+            Ok(Some(command)) => {
+                // credential_process is set, create the future
+                let mut command = parse_command_str(&command)?;
+                let output = command.output().await.map_err(|e| {
+                    CredentialsError::new(format!("Credential process failed: {:?}", e))
+                })?;
+                if output.status.success() {
+                    parse_credential_process_output(&output.stdout)
+                } else {
+                    Err(CredentialsError::new(format!(
+                        "Credential process failed with {}: {}",
+                        output.status,
+                        String::from_utf8_lossy(&output.stderr)
+                    )))
+                }
+            }
+            Ok(None) => {
+                // credential_process is not set, parse the credentials file
+                parse_credentials_file(self.file_path()).and_then(|mut profiles| {
+                    profiles
+                        .remove(self.profile())
+                        .ok_or_else(|| CredentialsError::new("profile not found"))
+                })
+            }
+            Err(err) => Err(err),
+        }
     }
 }
 

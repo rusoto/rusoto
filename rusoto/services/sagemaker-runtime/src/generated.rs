@@ -192,7 +192,7 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
             );
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

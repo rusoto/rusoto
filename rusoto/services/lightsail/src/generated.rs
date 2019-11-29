@@ -12251,7 +12251,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12278,7 +12278,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12309,7 +12309,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12343,7 +12343,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12373,7 +12373,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12403,7 +12403,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12431,7 +12431,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12461,7 +12461,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12489,7 +12489,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12516,7 +12516,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12544,7 +12544,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12572,7 +12572,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12599,7 +12599,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12626,7 +12626,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12654,7 +12654,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12685,7 +12685,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12713,7 +12713,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12740,7 +12740,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12774,7 +12774,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12807,7 +12807,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12841,7 +12841,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12877,7 +12877,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12907,7 +12907,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12934,7 +12934,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12962,7 +12962,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12989,7 +12989,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13016,7 +13016,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13043,7 +13043,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13071,7 +13071,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13098,7 +13098,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13126,7 +13126,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13160,7 +13160,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13193,7 +13193,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13227,7 +13227,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13257,7 +13257,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13290,7 +13290,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13320,7 +13320,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13345,7 +13345,7 @@ impl Lightsail for LightsailClient {
         request.add_header("x-amz-target", "Lightsail_20161128.DownloadDefaultKeyPair");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13373,7 +13373,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13400,7 +13400,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13427,7 +13427,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13454,7 +13454,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13485,7 +13485,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13513,7 +13513,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13540,7 +13540,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13567,7 +13567,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13594,7 +13594,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13621,7 +13621,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13648,7 +13648,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13678,7 +13678,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13706,7 +13706,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13736,7 +13736,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13764,7 +13764,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13792,7 +13792,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13820,7 +13820,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13848,7 +13848,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13876,7 +13876,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13903,7 +13903,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13930,7 +13930,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13957,7 +13957,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13984,7 +13984,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14014,7 +14014,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14048,7 +14048,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14076,7 +14076,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14103,7 +14103,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14130,7 +14130,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14160,7 +14160,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14188,7 +14188,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14215,7 +14215,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14249,7 +14249,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14283,7 +14283,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14315,7 +14315,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14349,7 +14349,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14383,7 +14383,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14419,7 +14419,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14455,7 +14455,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14491,7 +14491,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14525,7 +14525,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14559,7 +14559,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14587,7 +14587,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14615,7 +14615,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14642,7 +14642,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14669,7 +14669,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14692,7 +14692,7 @@ impl Lightsail for LightsailClient {
         request.add_header("x-amz-target", "Lightsail_20161128.IsVpcPeered");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14719,7 +14719,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14743,7 +14743,7 @@ impl Lightsail for LightsailClient {
         request.add_header("x-amz-target", "Lightsail_20161128.PeerVpc");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14770,7 +14770,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14798,7 +14798,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14828,7 +14828,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14856,7 +14856,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14883,7 +14883,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14910,7 +14910,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14938,7 +14938,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14965,7 +14965,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14993,7 +14993,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15016,7 +15016,7 @@ impl Lightsail for LightsailClient {
         request.add_header("x-amz-target", "Lightsail_20161128.UnpeerVpc");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15043,7 +15043,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15070,7 +15070,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15101,7 +15101,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15132,7 +15132,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15166,7 +15166,7 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

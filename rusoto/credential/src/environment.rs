@@ -1,9 +1,8 @@
 //! The Credentials Provider to read from Environment Variables.
-
+use async_trait::async_trait;
 use chrono::{DateTime, FixedOffset, Utc};
 
 use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
-use futures::FutureExt;
 
 /// Provides AWS credentials from environment variables.
 ///
@@ -130,36 +129,30 @@ impl EnvironmentVariableProvider for EnvironmentProvider {
     }
 }
 
+#[async_trait]
 impl ProvideAwsCredentials for EnvironmentProvider {
-    fn credentials(&self) -> crate::CredentialsFuture {
-        futures::future::ready(credentials_from_environment(self)).boxed()
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        let env_key = get_critical_variable(self.access_key_id_var())?;
+        let env_secret = get_critical_variable(self.secret_access_key_var())?;
+        // Present when using temporary credentials, e.g. on Lambda with IAM roles
+        let token = non_empty_env_var(&self.session_token_var());
+        // Mimic botocore's behavior, see https://github.com/boto/botocore/pull/1187.
+        let var_name = self.credential_expiration_var();
+        let expires_at = match non_empty_env_var(&var_name) {
+            Some(val) => Some(
+                DateTime::<FixedOffset>::parse_from_rfc3339(&val)
+                    .map(|dt| dt.with_timezone(&Utc))
+                    .map_err(|e| {
+                        CredentialsError::new(format!(
+                            "Invalid {} in environment '{}': {}",
+                            var_name, val, e
+                        ))
+                    })?,
+            ),
+            _ => None,
+        };
+        Ok(AwsCredentials::new(env_key, env_secret, token, expires_at))
     }
-}
-
-/// Grabs the Credentials from the environment.
-fn credentials_from_environment(
-    provider: &dyn EnvironmentVariableProvider,
-) -> Result<AwsCredentials, CredentialsError> {
-    let env_key = get_critical_variable(provider.access_key_id_var())?;
-    let env_secret = get_critical_variable(provider.secret_access_key_var())?;
-    // Present when using temporary credentials, e.g. on Lambda with IAM roles
-    let token = non_empty_env_var(&provider.session_token_var());
-    // Mimic botocore's behavior, see https://github.com/boto/botocore/pull/1187.
-    let var_name = provider.credential_expiration_var();
-    let expires_at = match non_empty_env_var(&var_name) {
-        Some(val) => Some(
-            DateTime::<FixedOffset>::parse_from_rfc3339(&val)
-                .map(|dt| dt.with_timezone(&Utc))
-                .map_err(|e| {
-                    CredentialsError::new(format!(
-                        "Invalid {} in environment '{}': {}",
-                        var_name, val, e
-                    ))
-                })?,
-        ),
-        _ => None,
-    };
-    Ok(AwsCredentials::new(env_key, env_secret, token, expires_at))
 }
 
 /// Force an error if we do not see the particular variable name in the env.

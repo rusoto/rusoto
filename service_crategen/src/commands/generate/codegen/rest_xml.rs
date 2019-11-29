@@ -47,7 +47,7 @@ impl GenerateProtocol for RestXmlGenerator {
                         {set_parameters}
                         {build_payload}
 
-                        let response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
+                        let mut response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
                         if !response.status.is_success() {{
                             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
                             return Err({error_type}::from_response(response));
@@ -81,7 +81,6 @@ impl GenerateProtocol for RestXmlGenerator {
 
     fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service<'_>) -> IoResult {
         let imports = "
-            use futures::FutureExt;
             use std::str::{FromStr};
             use std::io::Write;
             use xml::reader::ParserConfig;

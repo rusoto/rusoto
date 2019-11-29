@@ -10331,7 +10331,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10361,7 +10361,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10410,7 +10410,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10460,7 +10460,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10512,7 +10512,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10563,7 +10563,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10612,7 +10612,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10639,7 +10639,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10666,7 +10666,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10693,7 +10693,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10720,7 +10720,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10747,7 +10747,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10796,7 +10796,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10825,7 +10825,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10852,7 +10852,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10876,7 +10876,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10902,7 +10902,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10950,7 +10950,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10999,7 +10999,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11048,7 +11048,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11099,7 +11099,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11150,7 +11150,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11199,7 +11199,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11248,7 +11248,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11300,7 +11300,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11351,7 +11351,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11400,7 +11400,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11452,7 +11452,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11503,7 +11503,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11549,7 +11549,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11597,7 +11597,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11646,7 +11646,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11695,7 +11695,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11743,7 +11743,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11792,7 +11792,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11844,7 +11844,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11893,7 +11893,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11942,7 +11942,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11969,7 +11969,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11996,7 +11996,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12042,7 +12042,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12069,7 +12069,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12115,7 +12115,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12164,7 +12164,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12191,7 +12191,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12237,7 +12237,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12267,7 +12267,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12316,7 +12316,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12343,7 +12343,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12370,7 +12370,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12397,7 +12397,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12446,7 +12446,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12473,7 +12473,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12524,7 +12524,7 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

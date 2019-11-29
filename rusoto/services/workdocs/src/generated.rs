@@ -4946,7 +4946,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4979,7 +4979,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5016,7 +5016,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5054,7 +5054,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5096,7 +5096,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5130,7 +5130,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5167,7 +5167,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5203,7 +5203,7 @@ impl Workdocs for WorkdocsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5237,7 +5237,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5271,7 +5271,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5306,7 +5306,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5352,7 +5352,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5386,7 +5386,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5416,7 +5416,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5449,7 +5449,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5492,7 +5492,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5523,7 +5523,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5553,7 +5553,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5612,7 +5612,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5655,7 +5655,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5703,7 +5703,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5757,7 +5757,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5800,7 +5800,7 @@ impl Workdocs for WorkdocsClient {
         params.put("searchQuery", &input.search_query);
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5842,7 +5842,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5890,7 +5890,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5927,7 +5927,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5987,7 +5987,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -6016,7 +6016,7 @@ impl Workdocs for WorkdocsClient {
 
         request.add_header("Authentication", &input.authentication_token);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -6055,7 +6055,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -6100,7 +6100,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -6143,7 +6143,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -6179,7 +6179,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -6224,7 +6224,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -6269,7 +6269,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -6306,7 +6306,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -6340,7 +6340,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -6379,7 +6379,7 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -6415,7 +6415,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -6452,7 +6452,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -6485,7 +6485,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -6518,7 +6518,7 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

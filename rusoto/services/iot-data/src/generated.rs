@@ -464,7 +464,7 @@ impl IotData for IotDataClient {
 
         request.set_endpoint_prefix("data.iot".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -494,7 +494,7 @@ impl IotData for IotDataClient {
 
         request.set_endpoint_prefix("data.iot".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -533,7 +533,7 @@ impl IotData for IotDataClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -563,7 +563,7 @@ impl IotData for IotDataClient {
         let encoded = Some(input.payload.to_owned());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

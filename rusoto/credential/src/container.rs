@@ -3,6 +3,7 @@
 use std::error::Error;
 use std::time::Duration;
 
+use async_trait::async_trait;
 use hyper::{Body, Request};
 
 use crate::request::HttpClient;
@@ -10,7 +11,6 @@ use crate::{
     non_empty_env_var, parse_credentials_from_aws_service, AwsCredentials, CredentialsError,
     ProvideAwsCredentials,
 };
-use futures::FutureExt;
 
 // The following constants are documented in AWS' ECS developers guide,
 // see https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html.
@@ -80,28 +80,17 @@ impl Default for ContainerProvider {
     }
 }
 
-async fn container_provider_credentials(provider: ContainerProvider) -> Result<AwsCredentials, CredentialsError> {
-    let resp = credentials_from_container(&provider.client, provider.timeout).await?;
-    parse_credentials_from_aws_service(&resp)
-}
-
+#[async_trait]
 impl ProvideAwsCredentials for ContainerProvider {
-    fn credentials(&self) -> crate::CredentialsFuture {
-        container_provider_credentials(self.clone()).boxed()
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        let req = request_from_env_vars().map_err(|err| {
+            CredentialsError { message: format!("Could not get request from environment: {}", err.to_string()) }
+        })?;
+        let resp = self.client.request(req, self.timeout).await.map_err(|err| {
+            CredentialsError { message: format!("Could not get credentials from container: {}", err.to_string()) }
+        })?;
+        parse_credentials_from_aws_service(&resp)
     }
-}
-
-/// Grabs the Credentials from the AWS Container Credentials Provider. (169.254.170.2).
-async fn credentials_from_container(
-    client: &HttpClient,
-    timeout: Duration,
-) -> Result<String, CredentialsError> {
-    let req = request_from_env_vars().map_err(|err| {
-        CredentialsError { message: format!("Could not get request from environment: {}", err.to_string()) }
-    })?;
-    client.request(req, timeout).await.map_err(|err| {
-        CredentialsError { message: format!("Could not get credentials from container: {}", err.to_string()) }
-    })
 }
 
 fn request_from_env_vars() -> Result<Request<Body>, CredentialsError> {

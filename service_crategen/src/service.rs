@@ -211,6 +211,11 @@ impl<'b> Service<'b> {
             },
         );
 
+        dev_dependencies.insert(
+            "tokio".to_owned(),
+            cargo::Dependency::Simple("0.2.0-alpha.6".to_owned()),
+        );
+
         if let Some(ref custom_dev_dependencies) = self.config.custom_dev_dependencies {
             dev_dependencies.extend(custom_dev_dependencies.clone());
         }

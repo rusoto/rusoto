@@ -42,7 +42,7 @@ impl GenerateProtocol for QueryGenerator {
                     {serialize_input}
                     {set_input_params}
 
-                    let response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
+                    let mut response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
                     if !response.status.is_success() {{
                         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
                         return Err({error_type}::from_response(response));

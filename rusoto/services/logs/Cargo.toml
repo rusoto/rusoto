@@ -33,6 +33,7 @@ features = ["derive"]
 
 [dev-dependencies]
 chrono = "0.4"
+tokio = "0.2.0-alpha.6"
 
 [dev-dependencies.rusoto_mock]
 version = "0.40.0"

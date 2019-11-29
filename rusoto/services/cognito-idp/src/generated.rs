@@ -12634,7 +12634,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12665,7 +12665,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12694,7 +12694,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12725,7 +12725,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12755,7 +12755,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12785,7 +12785,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12817,7 +12817,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12848,7 +12848,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12879,7 +12879,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12909,7 +12909,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12938,7 +12938,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12968,7 +12968,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12998,7 +12998,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13029,7 +13029,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13060,7 +13060,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13091,7 +13091,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13122,7 +13122,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13153,7 +13153,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13182,7 +13182,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13214,7 +13214,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13246,7 +13246,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13276,7 +13276,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13307,7 +13307,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13339,7 +13339,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13370,7 +13370,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13402,7 +13402,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13433,7 +13433,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13464,7 +13464,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13495,7 +13495,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13525,7 +13525,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13555,7 +13555,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13586,7 +13586,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13616,7 +13616,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13646,7 +13646,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13677,7 +13677,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13708,7 +13708,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13739,7 +13739,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13769,7 +13769,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13800,7 +13800,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13831,7 +13831,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13860,7 +13860,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13889,7 +13889,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13918,7 +13918,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13947,7 +13947,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13978,7 +13978,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14007,7 +14007,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14036,7 +14036,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14067,7 +14067,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14098,7 +14098,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14130,7 +14130,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14161,7 +14161,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14192,7 +14192,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14223,7 +14223,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14254,7 +14254,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14285,7 +14285,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14314,7 +14314,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14344,7 +14344,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14374,7 +14374,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14401,7 +14401,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14434,7 +14434,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14467,7 +14467,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14498,7 +14498,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14526,7 +14526,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14559,7 +14559,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14592,7 +14592,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14623,7 +14623,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14653,7 +14653,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14683,7 +14683,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14713,7 +14713,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14743,7 +14743,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14774,7 +14774,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14805,7 +14805,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14836,7 +14836,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14867,7 +14867,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14898,7 +14898,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14928,7 +14928,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14958,7 +14958,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14989,7 +14989,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15020,7 +15020,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15051,7 +15051,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15082,7 +15082,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15113,7 +15113,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15144,7 +15144,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15175,7 +15175,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15202,7 +15202,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15232,7 +15232,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15263,7 +15263,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15294,7 +15294,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15324,7 +15324,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15354,7 +15354,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15385,7 +15385,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15416,7 +15416,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15446,7 +15446,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15477,7 +15477,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15508,7 +15508,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15539,7 +15539,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15569,7 +15569,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15600,7 +15600,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15631,7 +15631,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -15662,7 +15662,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

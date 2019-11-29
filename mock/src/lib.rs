@@ -36,6 +36,7 @@ use std::fs::File;
 use std::io::Read;
 use std::time::Duration;
 
+use async_trait::async_trait;
 use futures::FutureExt;
 use http::{HeaderMap, header::HeaderName, HttpTryFrom, StatusCode};
 use rusoto_core::credential::{AwsCredentials, ProvideAwsCredentials};
@@ -48,9 +49,10 @@ use serde::Serialize;
 /// successfully
 pub struct MockCredentialsProvider;
 
+#[async_trait]
 impl ProvideAwsCredentials for MockCredentialsProvider {
-    fn credentials(&self) -> rusoto_core::credential::CredentialsFuture {
-        futures::future::ready(Ok(AwsCredentials::new("mock_key", "mock_secret", None, None))).boxed()
+    async fn credentials(&self) -> Result<rusoto_core::credential::AwsCredentials, rusoto_core::credential::CredentialsError> {
+        Ok(AwsCredentials::new("mock_key", "mock_secret", None, None))
     }
 }
 

@@ -2424,7 +2424,7 @@ impl Connect for ConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2455,7 +2455,7 @@ impl Connect for ConnectClient {
         let mut request = SignedRequest::new("DELETE", "connect", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2485,7 +2485,7 @@ impl Connect for ConnectClient {
         let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2517,7 +2517,7 @@ impl Connect for ConnectClient {
         let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2550,7 +2550,7 @@ impl Connect for ConnectClient {
         let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2581,7 +2581,7 @@ impl Connect for ConnectClient {
         let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2614,7 +2614,7 @@ impl Connect for ConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2644,7 +2644,7 @@ impl Connect for ConnectClient {
         let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2677,7 +2677,7 @@ impl Connect for ConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2716,7 +2716,7 @@ impl Connect for ConnectClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2755,7 +2755,7 @@ impl Connect for ConnectClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2794,7 +2794,7 @@ impl Connect for ConnectClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2833,7 +2833,7 @@ impl Connect for ConnectClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2864,7 +2864,7 @@ impl Connect for ConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2894,7 +2894,7 @@ impl Connect for ConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2924,7 +2924,7 @@ impl Connect for ConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2958,7 +2958,7 @@ impl Connect for ConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -2991,7 +2991,7 @@ impl Connect for ConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -3024,7 +3024,7 @@ impl Connect for ConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -3057,7 +3057,7 @@ impl Connect for ConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -3090,7 +3090,7 @@ impl Connect for ConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

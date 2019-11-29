@@ -20,7 +20,6 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
-use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -18918,7 +18917,7 @@ impl S3 for S3Client {
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -18979,7 +18978,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19226,7 +19225,7 @@ impl S3 for S3Client {
             );
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19348,7 +19347,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19516,7 +19515,7 @@ impl S3 for S3Client {
         params.put_key("uploads");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19592,7 +19591,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19620,7 +19619,7 @@ impl S3 for S3Client {
         params.put_key("analytics");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19649,7 +19648,7 @@ impl S3 for S3Client {
         params.put_key("cors");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19676,7 +19675,7 @@ impl S3 for S3Client {
         params.put_key("encryption");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19704,7 +19703,7 @@ impl S3 for S3Client {
         params.put_key("inventory");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19733,7 +19732,7 @@ impl S3 for S3Client {
         params.put_key("lifecycle");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19761,7 +19760,7 @@ impl S3 for S3Client {
         params.put_key("metrics");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19790,7 +19789,7 @@ impl S3 for S3Client {
         params.put_key("policy");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19817,7 +19816,7 @@ impl S3 for S3Client {
         params.put_key("replication");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19844,7 +19843,7 @@ impl S3 for S3Client {
         params.put_key("tagging");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19871,7 +19870,7 @@ impl S3 for S3Client {
         params.put_key("website");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19914,7 +19913,7 @@ impl S3 for S3Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -19971,7 +19970,7 @@ impl S3 for S3Client {
         params.put_key("tagging");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20036,7 +20035,7 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20082,7 +20081,7 @@ impl S3 for S3Client {
         params.put_key("publicAccessBlock");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20112,7 +20111,7 @@ impl S3 for S3Client {
         params.put_key("accelerate");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20160,7 +20159,7 @@ impl S3 for S3Client {
         params.put_key("acl");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20207,7 +20206,7 @@ impl S3 for S3Client {
         params.put_key("analytics");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20255,7 +20254,7 @@ impl S3 for S3Client {
         params.put_key("cors");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20298,7 +20297,7 @@ impl S3 for S3Client {
         params.put_key("encryption");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20346,7 +20345,7 @@ impl S3 for S3Client {
         params.put_key("inventory");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20394,7 +20393,7 @@ impl S3 for S3Client {
         params.put_key("lifecycle");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20441,7 +20440,7 @@ impl S3 for S3Client {
         params.put_key("lifecycle");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20489,7 +20488,7 @@ impl S3 for S3Client {
         params.put_key("location");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20533,7 +20532,7 @@ impl S3 for S3Client {
         params.put_key("logging");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20578,7 +20577,7 @@ impl S3 for S3Client {
         params.put_key("metrics");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20624,7 +20623,7 @@ impl S3 for S3Client {
         params.put_key("notification");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20671,7 +20670,7 @@ impl S3 for S3Client {
         params.put_key("notification");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20717,7 +20716,7 @@ impl S3 for S3Client {
         params.put_key("policy");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20748,7 +20747,7 @@ impl S3 for S3Client {
         params.put_key("policyStatus");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20792,7 +20791,7 @@ impl S3 for S3Client {
         params.put_key("replication");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20836,7 +20835,7 @@ impl S3 for S3Client {
         params.put_key("requestPayment");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20882,7 +20881,7 @@ impl S3 for S3Client {
         params.put_key("tagging");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20925,7 +20924,7 @@ impl S3 for S3Client {
         params.put_key("versioning");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -20969,7 +20968,7 @@ impl S3 for S3Client {
         params.put_key("website");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -21079,7 +21078,7 @@ impl S3 for S3Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -21255,7 +21254,7 @@ impl S3 for S3Client {
         params.put_key("acl");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -21307,7 +21306,7 @@ impl S3 for S3Client {
         params.put_key("legal-hold");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -21352,7 +21351,7 @@ impl S3 for S3Client {
         params.put_key("object-lock");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -21404,7 +21403,7 @@ impl S3 for S3Client {
         params.put_key("retention");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -21451,7 +21450,7 @@ impl S3 for S3Client {
         params.put_key("tagging");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -21500,7 +21499,7 @@ impl S3 for S3Client {
         params.put_key("torrent");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -21533,7 +21532,7 @@ impl S3 for S3Client {
         params.put_key("publicAccessBlock");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -21573,7 +21572,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -21649,7 +21648,7 @@ impl S3 for S3Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -21830,7 +21829,7 @@ impl S3 for S3Client {
         params.put_key("analytics");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -21884,7 +21883,7 @@ impl S3 for S3Client {
         params.put_key("inventory");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -21938,7 +21937,7 @@ impl S3 for S3Client {
         params.put_key("metrics");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -21979,7 +21978,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22040,7 +22039,7 @@ impl S3 for S3Client {
         params.put_key("uploads");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22102,7 +22101,7 @@ impl S3 for S3Client {
         params.put_key("versions");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22163,7 +22162,7 @@ impl S3 for S3Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22230,7 +22229,7 @@ impl S3 for S3Client {
         params.put("list-type", "2");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22282,7 +22281,7 @@ impl S3 for S3Client {
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22343,7 +22342,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22410,7 +22409,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22445,7 +22444,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22485,7 +22484,7 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22522,7 +22521,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22557,7 +22556,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22601,7 +22600,7 @@ impl S3 for S3Client {
         }
         request.set_content_md5_header();
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22640,7 +22639,7 @@ impl S3 for S3Client {
         }
         request.set_content_md5_header();
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22679,7 +22678,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22714,7 +22713,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22751,7 +22750,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22785,7 +22784,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22826,7 +22825,7 @@ impl S3 for S3Client {
         request.set_params(params);
         request.set_payload(Some(input.policy.into_bytes()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22868,7 +22867,7 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22905,7 +22904,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22939,7 +22938,7 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
         request.set_content_md5_header();
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -22980,7 +22979,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -23017,7 +23016,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -23175,7 +23174,7 @@ impl S3 for S3Client {
             request.set_payload_stream(__body);
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -23303,7 +23302,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -23370,7 +23369,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -23440,7 +23439,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -23517,7 +23516,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -23573,7 +23572,7 @@ impl S3 for S3Client {
         TaggingSerializer::serialize(&mut writer, "Tagging", &input.tagging);
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -23629,7 +23628,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -23673,7 +23672,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -23751,7 +23750,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -23831,7 +23830,7 @@ impl S3 for S3Client {
             request.set_payload_stream(__body);
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -23988,7 +23987,7 @@ impl S3 for S3Client {
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

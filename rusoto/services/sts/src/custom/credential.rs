@@ -1,8 +1,6 @@
 use async_trait::async_trait;
 use chrono::prelude::*;
 use chrono::Duration;
-use std::future::Future;
-use std::pin::Pin;
 
 use rusoto_core;
 use rusoto_core::RusotoError;
@@ -88,55 +86,55 @@ pub trait StsSessionCredentialsClient {
 #[async_trait]
 impl<T> StsSessionCredentialsClient for T
 where
-    T: Sts,
+    T: Sts + Send + Sync,
 {
     async fn assume_role(
         &self,
         input: AssumeRoleRequest,
     ) -> Result<AssumeRoleResponse, RusotoError<AssumeRoleError>> {
-        T::assume_role(self, input)
+        T::assume_role(self, input).await
     }
 
     async fn assume_role_with_saml(
         &self,
         input: AssumeRoleWithSAMLRequest,
     ) -> Result<AssumeRoleWithSAMLResponse, RusotoError<AssumeRoleWithSAMLError>> {
-        T::assume_role_with_saml(self, input)
+        T::assume_role_with_saml(self, input).await
     }
 
     async fn assume_role_with_web_identity(
         &self,
         input: AssumeRoleWithWebIdentityRequest,
     ) -> Result<AssumeRoleWithWebIdentityResponse, RusotoError<AssumeRoleWithWebIdentityError>> {
-        T::assume_role_with_web_identity(self, input)
+        T::assume_role_with_web_identity(self, input).await
     }
 
     async fn decode_authorization_message(
         &self,
         input: DecodeAuthorizationMessageRequest,
     ) -> Result<DecodeAuthorizationMessageResponse, RusotoError<DecodeAuthorizationMessageError>> {
-        T::decode_authorization_message(self, input)
+        T::decode_authorization_message(self, input).await
     }
 
     async fn get_caller_identity(
         &self,
         input: GetCallerIdentityRequest,
     ) -> Result<GetCallerIdentityResponse, RusotoError<GetCallerIdentityError>> {
-        T::get_caller_identity(self, input)
+        T::get_caller_identity(self, input).await
     }
 
     async fn get_federation_token(
         &self,
         input: GetFederationTokenRequest,
     ) -> Result<GetFederationTokenResponse, RusotoError<GetFederationTokenError>> {
-        T::get_federation_token(self, input)
+        T::get_federation_token(self, input).await
     }
 
     async fn get_session_token(
         &self,
         input: GetSessionTokenRequest,
     ) -> Result<GetSessionTokenResponse, RusotoError<GetSessionTokenError>> {
-        T::get_session_token(self, input)
+        T::get_session_token(self, input).await
     }
 }
 
@@ -188,20 +186,30 @@ impl StsSessionCredentialsProvider {
 
     /// Calls `GetSessionToken` to get a session token from the STS Api.
     /// Optionally uses MFA if the MFA serial number and code are set.
-    pub async fn get_session_token(&self) -> Result<AwsCredentials, CredentialsError> {
+    pub async fn get_session_token(&self) -> Result<GetSessionTokenResponse, RusotoError<GetSessionTokenError>> {
         let request = GetSessionTokenRequest {
             serial_number: self.mfa_serial.clone(),
             token_code: self.mfa_code.clone(),
             duration_seconds: Some(self.session_duration.num_seconds() as i64),
             ..Default::default()
         };
-        self.sts_client.get_session_token(request)
+        self.sts_client.get_session_token(request).await
     }
 }
 
+#[async_trait]
 impl ProvideAwsCredentials for StsSessionCredentialsProvider {
-    fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        self.get_session_token()
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        let resp = self.get_session_token().await
+            .map_err(|err| CredentialsError::new(format!(
+                "StsProvider get_session_token error: {:?}",
+                err
+            )))?;
+        let creds = resp
+            .credentials
+            .ok_or_else(|| CredentialsError::new("no credentials in response"))?;
+
+        AwsCredentials::new_for_credentials(creds)
     }
 }
 
@@ -269,7 +277,7 @@ impl StsAssumeRoleSessionCredentialsProvider {
 
     /// Calls `AssumeRole` to get a session token from the STS Api.
     /// Optionally uses MFA if the MFA serial number and code are set.
-    pub async fn assume_role(&self) -> Result<AwsCredentials, CredentialsError> {
+    pub async fn assume_role(&self) -> Result<AwsCredentials, RusotoError<AssumeRoleError>> {
         let request = AssumeRoleRequest {
             role_arn: self.role_arn.clone(),
             role_session_name: self.session_name.clone(),
@@ -280,7 +288,7 @@ impl StsAssumeRoleSessionCredentialsProvider {
             token_code: self.mfa_code.clone(),
             ..Default::default()
         };
-        let resp = self.sts_client.assume_role(request).await;
+        let resp = self.sts_client.assume_role(request).await?;
 
         let creds = resp
             .credentials
@@ -292,9 +300,14 @@ impl StsAssumeRoleSessionCredentialsProvider {
     }
 }
 
+#[async_trait]
 impl ProvideAwsCredentials for StsAssumeRoleSessionCredentialsProvider {
-    fn credentials(&self) -> Self::Future {
-        self.assume_role()
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        self.assume_role().await
+            .map_err(|err| CredentialsError::new(format!(
+                "StsProvider get_session_token error: {:?}",
+                err
+            )))
     }
 }
 
@@ -345,7 +358,7 @@ impl StsWebIdentityFederationSessionCredentialsProvider {
     /// Calls `AssumeRoleWithWebIdentity` to get a session token from the STS Api.
     pub async fn assume_role_with_web_identity(
         &self,
-    ) -> Result<AwsCredentials, CredentialsError> {
+    ) -> Result<AwsCredentials, RusotoError<AssumeRoleWithWebIdentityError>> {
         let request = AssumeRoleWithWebIdentityRequest {
             web_identity_token: self.wif_token.clone(),
             provider_id: self.wif_provider.clone(),
@@ -356,7 +369,7 @@ impl StsWebIdentityFederationSessionCredentialsProvider {
             ..Default::default()
         };
 
-        let resp = self.sts_client.assume_role_with_web_identity(request).await;
+        let resp = self.sts_client.assume_role_with_web_identity(request).await?;
 
         let creds = resp
             .credentials
@@ -366,7 +379,7 @@ impl StsWebIdentityFederationSessionCredentialsProvider {
 
         if let Some(subject_from_wif) = resp.subject_from_web_identity_token {
             aws_creds.claims_mut().insert(
-                rusoto_core::claims::SUBJECT.to_owned(),
+                rusoto_core::credential::claims::SUBJECT.to_owned(),
                 subject_from_wif,
             );
         }

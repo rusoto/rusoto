@@ -30,6 +30,10 @@ default-features = false
 [dependencies.serde]
 version = "1.0"
 features = ["derive"]
+
+[dev-dependencies]
+tokio = "0.2.0-alpha.6"
+
 [dev-dependencies.rusoto_mock]
 version = "0.40.0"
 path = "../../../mock"

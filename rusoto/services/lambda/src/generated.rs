@@ -4069,7 +4069,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4108,7 +4108,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4141,7 +4141,7 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4171,7 +4171,7 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4201,7 +4201,7 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4232,7 +4232,7 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4261,7 +4261,7 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4297,7 +4297,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4326,7 +4326,7 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4356,7 +4356,7 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4381,7 +4381,7 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4412,7 +4412,7 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4442,7 +4442,7 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4478,7 +4478,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4514,7 +4514,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4545,7 +4545,7 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4577,7 +4577,7 @@ impl Lambda for LambdaClient {
         params.put("find", "LayerVersion");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4608,7 +4608,7 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4644,7 +4644,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4698,7 +4698,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4745,7 +4745,7 @@ impl Lambda for LambdaClient {
         let encoded = Some(input.invoke_args.to_owned());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4788,7 +4788,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4830,7 +4830,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4872,7 +4872,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4914,7 +4914,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4953,7 +4953,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -4980,7 +4980,7 @@ impl Lambda for LambdaClient {
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5019,7 +5019,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5052,7 +5052,7 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5085,7 +5085,7 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5118,7 +5118,7 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5156,7 +5156,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5195,7 +5195,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5224,7 +5224,7 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5256,7 +5256,7 @@ impl Lambda for LambdaClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5289,7 +5289,7 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5322,7 +5322,7 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5355,7 +5355,7 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -5388,7 +5388,7 @@ impl Lambda for LambdaClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

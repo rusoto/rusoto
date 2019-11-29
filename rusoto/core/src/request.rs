@@ -97,18 +97,17 @@ impl fmt::Debug for BufferedHttpResponse {
 
 impl HttpResponse {
     /// Buffer the full response body in memory, resulting in a `BufferedHttpResponse`.
-    pub async fn buffer(self) -> Result<BufferedHttpResponse, HttpDispatchError> {
-        let mut this = self;
+    pub async fn buffer(&mut self) -> Result<BufferedHttpResponse, HttpDispatchError> {
         let mut bytes = BytesMut::new();
-        for try_chunk in this.body.next().await {
+        for try_chunk in self.body.next().await {
             let chunk = try_chunk.map_err(|e| {
                 HttpDispatchError { message: format!("Error obtaining body: {}", e) }
             })?;
             bytes.extend(chunk);
         }
         Ok(BufferedHttpResponse {
-            status: this.status,
-            headers: this.headers,
+            status: self.status,
+            headers: self.headers.clone(),
             body: bytes.freeze(),
         })
     }

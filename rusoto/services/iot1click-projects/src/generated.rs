@@ -1372,7 +1372,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1406,7 +1406,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1437,7 +1437,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1470,7 +1470,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1502,7 +1502,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1535,7 +1535,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1567,7 +1567,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1604,7 +1604,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1639,7 +1639,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1680,7 +1680,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1718,7 +1718,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1747,7 +1747,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1778,7 +1778,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1813,7 +1813,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1848,7 +1848,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1882,7 +1882,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

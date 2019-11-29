@@ -29,6 +29,7 @@ default-features = false
 
 [dev-dependencies]
 criterion = "0.3"
+tokio = "0.2.0-alpha.6"
 
 [dev-dependencies.rusoto_mock]
 version = "0.40.0"

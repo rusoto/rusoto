@@ -7158,7 +7158,7 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7191,7 +7191,7 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7226,7 +7226,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7266,7 +7266,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7302,7 +7302,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7340,7 +7340,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7377,7 +7377,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7411,7 +7411,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7451,7 +7451,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7485,7 +7485,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7525,7 +7525,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7561,7 +7561,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7598,7 +7598,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7637,7 +7637,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7671,7 +7671,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7711,7 +7711,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7745,7 +7745,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7785,7 +7785,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7821,7 +7821,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7856,7 +7856,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7896,7 +7896,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7929,7 +7929,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7959,7 +7959,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -7989,7 +7989,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8019,7 +8019,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8046,7 +8046,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8076,7 +8076,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8106,7 +8106,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8137,7 +8137,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8168,7 +8168,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8197,7 +8197,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8229,7 +8229,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8259,7 +8259,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8289,7 +8289,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8319,7 +8319,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8355,7 +8355,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8385,7 +8385,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8412,7 +8412,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8443,7 +8443,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8473,7 +8473,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8507,7 +8507,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8537,7 +8537,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8571,7 +8571,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8598,7 +8598,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8630,7 +8630,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8663,7 +8663,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8696,7 +8696,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8726,7 +8726,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8760,7 +8760,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8790,7 +8790,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8818,7 +8818,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8844,7 +8844,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8875,7 +8875,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8911,7 +8911,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8955,7 +8955,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -8993,7 +8993,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9035,7 +9035,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9073,7 +9073,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9113,7 +9113,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9149,7 +9149,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9188,7 +9188,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9228,7 +9228,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9264,7 +9264,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9306,7 +9306,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9342,7 +9342,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9375,7 +9375,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9416,7 +9416,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9452,7 +9452,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9492,7 +9492,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9528,7 +9528,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9570,7 +9570,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9606,7 +9606,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9648,7 +9648,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9687,7 +9687,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9714,7 +9714,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9751,7 +9751,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9785,7 +9785,7 @@ impl GreenGrass for GreenGrassClient {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9815,7 +9815,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9845,7 +9845,7 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9877,7 +9877,7 @@ impl GreenGrass for GreenGrassClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9909,7 +9909,7 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9943,7 +9943,7 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -9976,7 +9976,7 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10009,7 +10009,7 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10042,7 +10042,7 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10072,7 +10072,7 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10108,7 +10108,7 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10143,7 +10143,7 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10176,7 +10176,7 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -10210,7 +10210,7 @@ impl GreenGrass for GreenGrassClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

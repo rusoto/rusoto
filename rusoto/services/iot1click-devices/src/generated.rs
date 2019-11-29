@@ -1146,7 +1146,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1176,7 +1176,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1215,7 +1215,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1244,7 +1244,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1281,7 +1281,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1313,7 +1313,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1354,7 +1354,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         params.put("toTimeStamp", &input.to_time_stamp);
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1395,7 +1395,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1424,7 +1424,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1456,7 +1456,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1484,7 +1484,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1520,7 +1520,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1551,7 +1551,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

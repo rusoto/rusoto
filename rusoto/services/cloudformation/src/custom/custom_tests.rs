@@ -9,8 +9,8 @@ use rusoto_core::param::Params;
 use serde_urlencoded;
 use self::rusoto_mock::*;
 
-#[test]
-fn should_serialize_list_parameters_in_request_body() {
+#[tokio::test]
+async fn should_serialize_list_parameters_in_request_body() {
     let mock = MockRequestDispatcher::with_status(200)
         .with_body(r#"<?xml version="1.0" encoding="UTF-8"?>
         <ListStacksResponse xmlns="http://cloudformation.amazonaws.com/doc/2010-05-15/">
@@ -63,5 +63,5 @@ fn should_serialize_list_parameters_in_request_body() {
     let request = ListStacksInput { stack_status_filter: Some(filters), ..Default::default() };
 
     let client = CloudFormationClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let _result = client.list_stacks(request).sync().unwrap();
+    let _result = client.list_stacks(request).await.unwrap();
 }

@@ -561,7 +561,7 @@ impl CloudSearchDomain for CloudSearchDomainClient {
         params.put("format", "sdk&pretty");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -599,7 +599,7 @@ impl CloudSearchDomain for CloudSearchDomainClient {
         params.put("format", "sdk&pretty");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -634,7 +634,7 @@ impl CloudSearchDomain for CloudSearchDomainClient {
         params.put("format", "sdk");
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

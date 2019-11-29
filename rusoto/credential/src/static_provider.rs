@@ -1,10 +1,9 @@
 //! Provides a way to create static/programmatically generated AWS Credentials.
 //! For those who can't get them from an environment, or a file.
-
+use async_trait::async_trait;
 use chrono::{Duration, Utc};
 
-use crate::{AwsCredentials, ProvideAwsCredentials};
-use futures::FutureExt;
+use crate::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
 /// Provides AWS credentials from statically/programmatically provided strings.
 #[derive(Clone, Debug)]
@@ -67,11 +66,12 @@ impl StaticProvider {
     }
 }
 
+#[async_trait]
 impl ProvideAwsCredentials for StaticProvider {
-    fn credentials(&self) -> crate::CredentialsFuture {
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
         let mut creds = self.credentials.clone();
         creds.expires_at = self.valid_for.map(|v| Utc::now() + Duration::seconds(v));
-        futures::future::ready(Ok(creds)).boxed()
+        Ok(creds)
     }
 }
 

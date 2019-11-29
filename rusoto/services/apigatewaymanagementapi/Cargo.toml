@@ -27,6 +27,10 @@ version = "0.3.0-alpha.19"
 version = "0.40.0"
 path = "../../core"
 default-features = false
+
+[dev-dependencies]
+tokio = "0.2.0-alpha.6"
+
 [dev-dependencies.rusoto_mock]
 version = "0.40.0"
 path = "../../../mock"

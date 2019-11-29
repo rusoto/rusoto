@@ -1,14 +1,13 @@
 //! The Credentials Provider for an AWS Resource's IAM Role.
 
 use std::time::Duration;
-
+use async_trait::async_trait;
 use hyper::Uri;
 
 use crate::request::HttpClient;
 use crate::{
     parse_credentials_from_aws_service, AwsCredentials, CredentialsError, ProvideAwsCredentials,
 };
-use futures::FutureExt;
 
 const AWS_CREDENTIALS_PROVIDER_IP: &str = "169.254.169.254";
 const AWS_CREDENTIALS_PROVIDER_PATH: &str = "latest/meta-data/iam/security-credentials";
@@ -62,54 +61,35 @@ impl Default for InstanceMetadataProvider {
     }
 }
 
-async fn instance_metadata_provider_credentials(provider: InstanceMetadataProvider) -> Result<AwsCredentials, CredentialsError> {
-    let role_name = get_role_name(&provider.client, provider.timeout).await?;
-    let cred_str = get_credentials_from_role(&provider.client, provider.timeout, &role_name).await?;
-    parse_credentials_from_aws_service(&cred_str)
-}
-
+#[async_trait]
 impl ProvideAwsCredentials for InstanceMetadataProvider {
-    fn credentials(&self) -> crate::CredentialsFuture {
-        instance_metadata_provider_credentials(self.clone()).boxed()
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        let role_name_address = format!(
+            "http://{}/{}/",
+            AWS_CREDENTIALS_PROVIDER_IP, AWS_CREDENTIALS_PROVIDER_PATH
+        );
+        let uri = match role_name_address.parse::<Uri>() {
+            Ok(u) => u,
+            Err(e) => return Err(CredentialsError::new(e)),
+        };
+
+        let role_name = self.client.get(uri, self.timeout).await.map_err(|err| {
+            CredentialsError { message: format!("Could not get credentials from iam: {}", err.to_string()) }
+        })?;
+
+        let credentials_provider_url = format!(
+            "http://{}/{}/{}",
+            AWS_CREDENTIALS_PROVIDER_IP, AWS_CREDENTIALS_PROVIDER_PATH, role_name
+        );
+
+        let uri = match credentials_provider_url.parse::<Uri>() {
+            Ok(u) => u,
+            Err(e) => return Err(CredentialsError::new(e)),
+        };
+
+        let cred_str = self.client.get(uri, self.timeout).await.map_err(|err| {
+            CredentialsError { message: format!("Could not get credentials from iam: {}", err.to_string()) }
+        })?;
+        parse_credentials_from_aws_service(&cred_str)
     }
-}
-
-/// Gets the role name to get credentials for using the IAM Metadata Service (169.254.169.254).
-async fn get_role_name(
-    client: &HttpClient,
-    timeout: Duration,
-) -> Result<String, CredentialsError> {
-    let role_name_address = format!(
-        "http://{}/{}/",
-        AWS_CREDENTIALS_PROVIDER_IP, AWS_CREDENTIALS_PROVIDER_PATH
-    );
-    let uri = match role_name_address.parse::<Uri>() {
-        Ok(u) => u,
-        Err(e) => return Err(CredentialsError::new(e)),
-    };
-
-    client.get(uri, timeout).await.map_err(|err| {
-        CredentialsError { message: format!("Could not get credentials from iam: {}", err.to_string()) }
-    })
-}
-
-/// Gets the credentials for an EC2 Instances IAM Role.
-async fn get_credentials_from_role(
-    client: &HttpClient,
-    timeout: Duration,
-    role_name: &str,
-) -> Result<String, CredentialsError> {
-    let credentials_provider_url = format!(
-        "http://{}/{}/{}",
-        AWS_CREDENTIALS_PROVIDER_IP, AWS_CREDENTIALS_PROVIDER_PATH, role_name
-    );
-
-    let uri = match credentials_provider_url.parse::<Uri>() {
-        Ok(u) => u,
-        Err(e) => return Err(CredentialsError::new(e)),
-    };
-
-    client.get(uri, timeout).await.map_err(|err| {
-        CredentialsError { message: format!("Could not get credentials from iam: {}", err.to_string()) }
-    })
 }

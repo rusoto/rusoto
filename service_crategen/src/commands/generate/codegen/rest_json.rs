@@ -63,7 +63,7 @@ impl GenerateProtocol for RestJsonGenerator {
                     {load_headers}
                     {load_params}
 
-                    let response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
+                    let mut response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
                     if {status_check} {{
                         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
                         {parse_body}

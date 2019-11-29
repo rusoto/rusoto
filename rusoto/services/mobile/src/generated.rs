@@ -1035,7 +1035,7 @@ impl Mobile for MobileClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1065,7 +1065,7 @@ impl Mobile for MobileClient {
 
         request.set_endpoint_prefix("mobile".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1095,7 +1095,7 @@ impl Mobile for MobileClient {
 
         request.set_endpoint_prefix("mobile".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1132,7 +1132,7 @@ impl Mobile for MobileClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1171,7 +1171,7 @@ impl Mobile for MobileClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1201,7 +1201,7 @@ impl Mobile for MobileClient {
 
         request.set_endpoint_prefix("mobile".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1240,7 +1240,7 @@ impl Mobile for MobileClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1279,7 +1279,7 @@ impl Mobile for MobileClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -1319,7 +1319,7 @@ impl Mobile for MobileClient {
         params.put("projectId", &input.project_id);
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

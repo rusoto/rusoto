@@ -150,7 +150,7 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
         let encoded = Some(input.data.to_owned());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

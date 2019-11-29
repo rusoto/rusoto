@@ -5,15 +5,15 @@ use crate::generated::{CloudFront, CloudFrontClient, ListDistributionsRequest};
 use rusoto_core::Region;
 use self::rusoto_mock::*;
 
-#[test]
-fn should_list_distributions() {
+#[tokio::test]
+async fn should_list_distributions() {
     let body = MockResponseReader::read_response("test_resources/generated/valid", "cloudfront-list-distributions.xml");
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
 
     let request = ListDistributionsRequest::default();
 
     let client = CloudFrontClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.list_distributions(request).sync().unwrap();
+    let result = client.list_distributions(request).await.unwrap();
     assert!(&result.distribution_list.is_some());
     let parsed_result = result.distribution_list.unwrap();
     assert!(&parsed_result.items.is_some());

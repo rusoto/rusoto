@@ -20,7 +20,6 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
-use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -11921,7 +11920,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -11978,7 +11977,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12035,7 +12034,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12086,7 +12085,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12136,7 +12135,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12186,7 +12185,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12239,7 +12238,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12291,7 +12290,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12342,7 +12341,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12397,7 +12396,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12457,7 +12456,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12506,7 +12505,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12548,7 +12547,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12590,7 +12589,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12635,7 +12634,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12683,7 +12682,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12726,7 +12725,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12785,7 +12784,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12846,7 +12845,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12890,7 +12889,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12932,7 +12931,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12971,7 +12970,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13023,7 +13022,7 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13067,7 +13066,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13106,7 +13105,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13154,7 +13153,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13203,7 +13202,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13247,7 +13246,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13286,7 +13285,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13326,7 +13325,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13368,7 +13367,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13412,7 +13411,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13457,7 +13456,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13505,7 +13504,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13547,7 +13546,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13592,7 +13591,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13649,7 +13648,7 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13698,7 +13697,7 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13750,7 +13749,7 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13802,7 +13801,7 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13856,7 +13855,7 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13918,7 +13917,7 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13970,7 +13969,7 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14018,7 +14017,7 @@ impl Route53 for Route53Client {
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14072,7 +14071,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14123,7 +14122,7 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14179,7 +14178,7 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14237,7 +14236,7 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14301,7 +14300,7 @@ impl Route53 for Route53Client {
         params.put("version", &input.traffic_policy_version);
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14357,7 +14356,7 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14416,7 +14415,7 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14475,7 +14474,7 @@ impl Route53 for Route53Client {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14528,7 +14527,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14579,7 +14578,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14637,7 +14636,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14691,7 +14690,7 @@ impl Route53 for Route53Client {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

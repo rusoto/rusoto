@@ -661,7 +661,7 @@ impl MediaTailor for MediaTailorClient {
 
         request.set_endpoint_prefix("api.mediatailor".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -690,7 +690,7 @@ impl MediaTailor for MediaTailorClient {
 
         request.set_endpoint_prefix("api.mediatailor".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -729,7 +729,7 @@ impl MediaTailor for MediaTailorClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -758,7 +758,7 @@ impl MediaTailor for MediaTailorClient {
 
         request.set_endpoint_prefix("api.mediatailor".to_string());
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -789,7 +789,7 @@ impl MediaTailor for MediaTailorClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -820,7 +820,7 @@ impl MediaTailor for MediaTailorClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -854,7 +854,7 @@ impl MediaTailor for MediaTailorClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await

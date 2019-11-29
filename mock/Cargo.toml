@@ -23,6 +23,7 @@ appveyor = { repository = "rusoto/rusoto", branch = "master" }
 azure-devops = { project = "matthewkmayer/Rusoto", pipeline = "rusoto.rusoto", build="1" }
 
 [dependencies]
+async-trait = "0.1"
 chrono = "0.4"
 futures-preview = "0.3.0-alpha.19"
 http = "0.1"

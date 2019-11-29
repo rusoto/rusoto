@@ -1,5 +1,3 @@
-extern crate rusoto_mock;
-
 use crate::generated::{CloudWatch, CloudWatchClient, PutMetricDataInput, Dimension, MetricDatum};
 
 use rusoto_core::Region;
@@ -7,10 +5,10 @@ use rusoto_core::signature::SignedRequest;
 use rusoto_core::signature::SignedRequestPayload;
 use rusoto_core::param::Params;
 use serde_urlencoded;
-use self::rusoto_mock::*;
+use rusoto_mock::*;
 
-#[test]
-fn should_serialize_complex_metric_data_params() {
+#[tokio::test]
+async fn should_serialize_complex_metric_data_params() {
     let mock = MockRequestDispatcher::with_status(200)
         .with_body("")
         .with_request_checker(|request: &SignedRequest| {
@@ -53,6 +51,6 @@ fn should_serialize_complex_metric_data_params() {
     };
 
     let client = CloudWatchClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let response = client.put_metric_data(request).sync().unwrap();
+    let response = client.put_metric_data(request).await.unwrap();
     println!("{:#?}", response);
 }

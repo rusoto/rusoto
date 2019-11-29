@@ -20,7 +20,6 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
-use futures::FutureExt;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -12172,7 +12171,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12231,7 +12230,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12290,7 +12289,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12350,7 +12349,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12412,7 +12411,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12474,7 +12473,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12525,7 +12524,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12580,7 +12579,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12643,7 +12642,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12701,7 +12700,7 @@ impl CloudFront for CloudFrontClient {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12730,7 +12729,7 @@ impl CloudFront for CloudFrontClient {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12757,7 +12756,7 @@ impl CloudFront for CloudFrontClient {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12789,7 +12788,7 @@ impl CloudFront for CloudFrontClient {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12818,7 +12817,7 @@ impl CloudFront for CloudFrontClient {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12845,7 +12844,7 @@ impl CloudFront for CloudFrontClient {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12874,7 +12873,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12927,7 +12926,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -12974,7 +12973,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13016,7 +13015,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13059,7 +13058,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13108,7 +13107,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13159,7 +13158,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13210,7 +13209,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13261,7 +13260,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13300,7 +13299,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13342,7 +13341,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13385,7 +13384,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13436,7 +13435,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13493,7 +13492,7 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13546,7 +13545,7 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13599,7 +13598,7 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13653,7 +13652,7 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13709,7 +13708,7 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13765,7 +13764,7 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13814,7 +13813,7 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13863,7 +13862,7 @@ impl CloudFront for CloudFrontClient {
         }
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13909,7 +13908,7 @@ impl CloudFront for CloudFrontClient {
         params.put("Resource", &input.resource);
         request.set_params(params);
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13957,7 +13956,7 @@ impl CloudFront for CloudFrontClient {
         TagsSerializer::serialize(&mut writer, "Tags", &input.tags);
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -13988,7 +13987,7 @@ impl CloudFront for CloudFrontClient {
         TagKeysSerializer::serialize(&mut writer, "TagKeys", &input.tag_keys);
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14029,7 +14028,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14088,7 +14087,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14149,7 +14148,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14214,7 +14213,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14273,7 +14272,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
@@ -14331,7 +14330,7 @@ impl CloudFront for CloudFrontClient {
         );
         request.set_payload(Some(writer.into_inner()));
 
-        let response = self
+        let mut response = self
             .client
             .sign_and_dispatch(request)
             .await
