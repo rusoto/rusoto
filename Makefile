@@ -44,6 +44,11 @@ integration_test:
 check_integration_test:
 	(cd integration_tests && cargo +$$RUST_VERSION check --tests --features all)
 
+.PHONY: rustls_unit_test_no_doctests
+rustls_unit_test_no_doctests:
+	(cd rusoto/core && cargo +$$RUST_VERSION test --no-default-features --features=rustls --lib)
+	(cd rusoto/services && ./rustls-unit-test-no-doctests.sh $$RUST_VERSION)
+
 .PHONY: rustls_unit_test
 rustls_unit_test:
 	(cd rusoto/core && cargo +$$RUST_VERSION test --no-default-features --features=rustls)
