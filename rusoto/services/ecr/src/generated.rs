@@ -23,6 +23,19 @@ use std::fmt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
+/// <p>This data type is used in the <a>ImageScanFinding</a> data type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Attribute {
+    /// <p>The attribute key.</p>
+    #[serde(rename = "key")]
+    pub key: String,
+    /// <p>The value assigned to the attribute key.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
 /// <p>An object representing authorization data for an Amazon ECR registry.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -167,6 +180,10 @@ pub struct CompleteLayerUploadResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateRepositoryRequest {
+    /// <p>The image scanning configuration for the repository. This setting determines whether images are scanned for known vulnerabilities after being pushed to the repository.</p>
+    #[serde(rename = "imageScanningConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_scanning_configuration: Option<ImageScanningConfiguration>,
     /// <p>The tag mutability setting for the repository. If this parameter is omitted, the default setting of <code>MUTABLE</code> will be used which will allow image tags to be overwritten. If <code>IMMUTABLE</code> is specified, all image tags within the repository will be immutable which will prevent them from being overwritten.</p>
     #[serde(rename = "imageTagMutability")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -271,6 +288,55 @@ pub struct DeleteRepositoryResponse {
     #[serde(rename = "repository")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository: Option<Repository>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeImageScanFindingsRequest {
+    #[serde(rename = "imageId")]
+    pub image_id: ImageIdentifier,
+    /// <p>The maximum number of image scan results returned by <code>DescribeImageScanFindings</code> in paginated output. When this parameter is used, <code>DescribeImageScanFindings</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeImageScanFindings</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 1000. If this parameter is not used, then <code>DescribeImageScanFindings</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeImageScanFindings</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is null when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The AWS account ID associated with the registry that contains the repository in which to describe the image scan findings for. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The repository for the image for which to describe the scan findings.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeImageScanFindingsResponse {
+    #[serde(rename = "imageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_id: Option<ImageIdentifier>,
+    /// <p>The information contained in the image scan findings.</p>
+    #[serde(rename = "imageScanFindings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_scan_findings: Option<ImageScanFindings>,
+    /// <p>The current state of the scan.</p>
+    #[serde(rename = "imageScanStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_scan_status: Option<ImageScanStatus>,
+    /// <p>The <code>nextToken</code> value to include in a future <code>DescribeImageScanFindings</code> request. When the results of a <code>DescribeImageScanFindings</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is null when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The registry ID associated with the request.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The repository name associated with the request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
 }
 
 /// <p>An object representing a filter on a <a>DescribeImages</a> operation.</p>
@@ -553,6 +619,14 @@ pub struct ImageDetail {
     #[serde(rename = "imagePushedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_pushed_at: Option<f64>,
+    /// <p>A summary of the last completed image scan.</p>
+    #[serde(rename = "imageScanFindingsSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_scan_findings_summary: Option<ImageScanFindingsSummary>,
+    /// <p>The current state of the scan.</p>
+    #[serde(rename = "imageScanStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_scan_status: Option<ImageScanStatus>,
     /// <p><p>The size, in bytes, of the image in the repository.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
     #[serde(rename = "imageSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -600,6 +674,95 @@ pub struct ImageIdentifier {
     #[serde(rename = "imageTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_tag: Option<String>,
+}
+
+/// <p>Contains information about an image scan finding.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ImageScanFinding {
+    /// <p>A collection of attributes of the host from which the finding is generated.</p>
+    #[serde(rename = "attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<Attribute>>,
+    /// <p>The description of the finding.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name associated with the finding, usually a CVE number.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The finding severity.</p>
+    #[serde(rename = "severity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub severity: Option<String>,
+    /// <p>A link containing additional details about the security vulnerability.</p>
+    #[serde(rename = "uri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uri: Option<String>,
+}
+
+/// <p>The details of an image scan.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ImageScanFindings {
+    /// <p>The image vulnerability counts, sorted by severity.</p>
+    #[serde(rename = "findingSeverityCounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_severity_counts: Option<::std::collections::HashMap<String, i64>>,
+    /// <p>The findings from the image scan.</p>
+    #[serde(rename = "findings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub findings: Option<Vec<ImageScanFinding>>,
+    /// <p>The time of the last completed image scan.</p>
+    #[serde(rename = "imageScanCompletedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_scan_completed_at: Option<f64>,
+    /// <p>The time when the vulnerability data was last scanned.</p>
+    #[serde(rename = "vulnerabilitySourceUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vulnerability_source_updated_at: Option<f64>,
+}
+
+/// <p>A summary of the last completed image scan.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ImageScanFindingsSummary {
+    /// <p>The image vulnerability counts, sorted by severity.</p>
+    #[serde(rename = "findingSeverityCounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_severity_counts: Option<::std::collections::HashMap<String, i64>>,
+    /// <p>The time of the last completed image scan.</p>
+    #[serde(rename = "imageScanCompletedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_scan_completed_at: Option<f64>,
+    /// <p>The time when the vulnerability data was last scanned.</p>
+    #[serde(rename = "vulnerabilitySourceUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vulnerability_source_updated_at: Option<f64>,
+}
+
+/// <p>The current status of an image scan.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ImageScanStatus {
+    /// <p>The description of the image scan status.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The current state of an image scan.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>The image scanning configuration for a repository.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ImageScanningConfiguration {
+    /// <p>The setting that determines whether images are scanned after being pushed to a repository. If set to <code>true</code>, images will be scanned after being pushed. If this parameter is not specified, it will default to <code>false</code> and images will not be scanned unless a scan is manually started with the <a>StartImageScan</a> API.</p>
+    #[serde(rename = "scanOnPush")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_on_push: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -810,6 +973,37 @@ pub struct PutImageResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutImageScanningConfigurationRequest {
+    /// <p>The image scanning configuration for the repository. This setting determines whether images are scanned for known vulnerabilities after being pushed to the repository.</p>
+    #[serde(rename = "imageScanningConfiguration")]
+    pub image_scanning_configuration: ImageScanningConfiguration,
+    /// <p>The AWS account ID associated with the registry that contains the repository in which to update the image scanning configuration setting. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The name of the repository in which to update the image scanning configuration setting.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutImageScanningConfigurationResponse {
+    /// <p>The image scanning configuration setting for the repository.</p>
+    #[serde(rename = "imageScanningConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_scanning_configuration: Option<ImageScanningConfiguration>,
+    /// <p>The registry ID associated with the request.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The repository name associated with the request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutImageTagMutabilityRequest {
     /// <p>The tag mutability setting for the repository. If <code>MUTABLE</code> is specified, image tags can be overwritten. If <code>IMMUTABLE</code> is specified, all image tags within the repository will be immutable which will prevent them from being overwritten.</p>
     #[serde(rename = "imageTagMutability")]
@@ -879,6 +1073,9 @@ pub struct Repository {
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
+    #[serde(rename = "imageScanningConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_scanning_configuration: Option<ImageScanningConfiguration>,
     /// <p>The tag mutability setting for the repository.</p>
     #[serde(rename = "imageTagMutability")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -926,6 +1123,39 @@ pub struct SetRepositoryPolicyResponse {
     #[serde(rename = "policyText")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_text: Option<String>,
+    /// <p>The registry ID associated with the request.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The repository name associated with the request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartImageScanRequest {
+    #[serde(rename = "imageId")]
+    pub image_id: ImageIdentifier,
+    /// <p>The AWS account ID associated with the registry that contains the repository in which to start an image scan request. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The name of the repository that contains the images to scan.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartImageScanResponse {
+    #[serde(rename = "imageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_id: Option<ImageIdentifier>,
+    /// <p>The current state of the scan.</p>
+    #[serde(rename = "imageScanStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_scan_status: Option<ImageScanStatus>,
     /// <p>The registry ID associated with the request.</p>
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1518,6 +1748,71 @@ impl Error for DeleteRepositoryPolicyError {
         }
     }
 }
+/// Errors returned by DescribeImageScanFindings
+#[derive(Debug, PartialEq)]
+pub enum DescribeImageScanFindingsError {
+    /// <p>The image requested does not exist in the specified repository.</p>
+    ImageNotFound(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    RepositoryNotFound(String),
+    /// <p>The specified image scan could not be found. Ensure that image scanning is enabled on the repository and try again.</p>
+    ScanNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl DescribeImageScanFindingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImageScanFindingsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ImageNotFoundException" => {
+                    return RusotoError::Service(DescribeImageScanFindingsError::ImageNotFound(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeImageScanFindingsError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "RepositoryNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeImageScanFindingsError::RepositoryNotFound(err.msg),
+                    )
+                }
+                "ScanNotFoundException" => {
+                    return RusotoError::Service(DescribeImageScanFindingsError::ScanNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(DescribeImageScanFindingsError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeImageScanFindingsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeImageScanFindingsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeImageScanFindingsError::ImageNotFound(ref cause) => cause,
+            DescribeImageScanFindingsError::InvalidParameter(ref cause) => cause,
+            DescribeImageScanFindingsError::RepositoryNotFound(ref cause) => cause,
+            DescribeImageScanFindingsError::ScanNotFound(ref cause) => cause,
+            DescribeImageScanFindingsError::Server(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeImages
 #[derive(Debug, PartialEq)]
 pub enum DescribeImagesError {
@@ -2101,6 +2396,59 @@ impl Error for PutImageError {
         }
     }
 }
+/// Errors returned by PutImageScanningConfiguration
+#[derive(Debug, PartialEq)]
+pub enum PutImageScanningConfigurationError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    RepositoryNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl PutImageScanningConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutImageScanningConfigurationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        PutImageScanningConfigurationError::InvalidParameter(err.msg),
+                    )
+                }
+                "RepositoryNotFoundException" => {
+                    return RusotoError::Service(
+                        PutImageScanningConfigurationError::RepositoryNotFound(err.msg),
+                    )
+                }
+                "ServerException" => {
+                    return RusotoError::Service(PutImageScanningConfigurationError::Server(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for PutImageScanningConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutImageScanningConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            PutImageScanningConfigurationError::InvalidParameter(ref cause) => cause,
+            PutImageScanningConfigurationError::RepositoryNotFound(ref cause) => cause,
+            PutImageScanningConfigurationError::Server(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutImageTagMutability
 #[derive(Debug, PartialEq)]
 pub enum PutImageTagMutabilityError {
@@ -2243,6 +2591,57 @@ impl Error for SetRepositoryPolicyError {
             SetRepositoryPolicyError::InvalidParameter(ref cause) => cause,
             SetRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,
             SetRepositoryPolicyError::Server(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StartImageScan
+#[derive(Debug, PartialEq)]
+pub enum StartImageScanError {
+    /// <p>The image requested does not exist in the specified repository.</p>
+    ImageNotFound(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    RepositoryNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl StartImageScanError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartImageScanError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ImageNotFoundException" => {
+                    return RusotoError::Service(StartImageScanError::ImageNotFound(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(StartImageScanError::InvalidParameter(err.msg))
+                }
+                "RepositoryNotFoundException" => {
+                    return RusotoError::Service(StartImageScanError::RepositoryNotFound(err.msg))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(StartImageScanError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StartImageScanError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartImageScanError {
+    fn description(&self) -> &str {
+        match *self {
+            StartImageScanError::ImageNotFound(ref cause) => cause,
+            StartImageScanError::InvalidParameter(ref cause) => cause,
+            StartImageScanError::RepositoryNotFound(ref cause) => cause,
+            StartImageScanError::Server(ref cause) => cause,
         }
     }
 }
@@ -2516,7 +2915,7 @@ pub trait Ecr {
         input: CompleteLayerUploadRequest,
     ) -> RusotoFuture<CompleteLayerUploadResponse, CompleteLayerUploadError>;
 
-    /// <p>Creates an image repository.</p>
+    /// <p>Creates an Amazon Elastic Container Registry (Amazon ECR) repository, where users can push and pull Docker images. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html">Amazon ECR Repositories</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     fn create_repository(
         &self,
         input: CreateRepositoryRequest,
@@ -2539,6 +2938,12 @@ pub trait Ecr {
         &self,
         input: DeleteRepositoryPolicyRequest,
     ) -> RusotoFuture<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError>;
+
+    /// <p>Describes the image scan findings for the specified image.</p>
+    fn describe_image_scan_findings(
+        &self,
+        input: DescribeImageScanFindingsRequest,
+    ) -> RusotoFuture<DescribeImageScanFindingsResponse, DescribeImageScanFindingsError>;
 
     /// <p><p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
     fn describe_images(
@@ -2603,7 +3008,13 @@ pub trait Ecr {
     /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn put_image(&self, input: PutImageRequest) -> RusotoFuture<PutImageResponse, PutImageError>;
 
-    /// <p>Updates the image tag mutability settings for a repository.</p>
+    /// <p>Updates the image scanning configuration for a repository.</p>
+    fn put_image_scanning_configuration(
+        &self,
+        input: PutImageScanningConfigurationRequest,
+    ) -> RusotoFuture<PutImageScanningConfigurationResponse, PutImageScanningConfigurationError>;
+
+    /// <p>Updates the image tag mutability settings for a repository. When a repository is configured with tag immutability, all image tags within the repository will be prevented them from being overwritten. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html">Image Tag Mutability</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     fn put_image_tag_mutability(
         &self,
         input: PutImageTagMutabilityRequest,
@@ -2620,6 +3031,12 @@ pub trait Ecr {
         &self,
         input: SetRepositoryPolicyRequest,
     ) -> RusotoFuture<SetRepositoryPolicyResponse, SetRepositoryPolicyError>;
+
+    /// <p>Starts an image vulnerability scan. An image scan can only be started once per day on an individual image. This limit includes if an image was scanned on initial push. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html">Image Scanning</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+    fn start_image_scan(
+        &self,
+        input: StartImageScanRequest,
+    ) -> RusotoFuture<StartImageScanResponse, StartImageScanError>;
 
     /// <p>Starts a preview of the specified lifecycle policy. This allows you to see the results before creating the lifecycle policy.</p>
     fn start_lifecycle_policy_preview(
@@ -2815,7 +3232,7 @@ impl Ecr for EcrClient {
         })
     }
 
-    /// <p>Creates an image repository.</p>
+    /// <p>Creates an Amazon Elastic Container Registry (Amazon ECR) repository, where users can push and pull Docker images. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html">Amazon ECR Repositories</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     fn create_repository(
         &self,
         input: CreateRepositoryRequest,
@@ -2937,6 +3354,35 @@ impl Ecr for EcrClient {
                         Err(DeleteRepositoryPolicyError::from_response(response))
                     }),
                 )
+            }
+        })
+    }
+
+    /// <p>Describes the image scan findings for the specified image.</p>
+    fn describe_image_scan_findings(
+        &self,
+        input: DescribeImageScanFindingsRequest,
+    ) -> RusotoFuture<DescribeImageScanFindingsResponse, DescribeImageScanFindingsError> {
+        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        request.set_endpoint_prefix("api.ecr".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.DescribeImageScanFindings",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeImageScanFindingsResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeImageScanFindingsError::from_response(response))
+                }))
             }
         })
     }
@@ -3281,7 +3727,37 @@ impl Ecr for EcrClient {
         })
     }
 
-    /// <p>Updates the image tag mutability settings for a repository.</p>
+    /// <p>Updates the image scanning configuration for a repository.</p>
+    fn put_image_scanning_configuration(
+        &self,
+        input: PutImageScanningConfigurationRequest,
+    ) -> RusotoFuture<PutImageScanningConfigurationResponse, PutImageScanningConfigurationError>
+    {
+        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        request.set_endpoint_prefix("api.ecr".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.PutImageScanningConfiguration",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutImageScanningConfigurationResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutImageScanningConfigurationError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates the image tag mutability settings for a repository. When a repository is configured with tag immutability, all image tags within the repository will be prevented them from being overwritten. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html">Image Tag Mutability</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     fn put_image_tag_mutability(
         &self,
         input: PutImageTagMutabilityRequest,
@@ -3370,6 +3846,38 @@ impl Ecr for EcrClient {
                     response.buffer().from_err().and_then(|response| {
                         Err(SetRepositoryPolicyError::from_response(response))
                     }),
+                )
+            }
+        })
+    }
+
+    /// <p>Starts an image vulnerability scan. An image scan can only be started once per day on an individual image. This limit includes if an image was scanned on initial push. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html">Image Scanning</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+    fn start_image_scan(
+        &self,
+        input: StartImageScanRequest,
+    ) -> RusotoFuture<StartImageScanResponse, StartImageScanError> {
+        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        request.set_endpoint_prefix("api.ecr".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.StartImageScan",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartImageScanResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartImageScanError::from_response(response))),
                 )
             }
         })

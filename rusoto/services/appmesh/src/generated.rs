@@ -24,7 +24,7 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-/// <p>An object representing the access logging information for a virtual node.</p>
+/// <p>An object that represents the access logging information for a virtual node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AccessLog {
     /// <p>The file object to send virtual node access logs to.</p>
@@ -33,11 +33,12 @@ pub struct AccessLog {
     pub file: Option<FileAccessLog>,
 }
 
-/// <p>An object representing the AWS Cloud Map attribute information for your virtual node.</p>
+/// <p>An object that represents the AWS Cloud Map attribute information for your virtual
+/// node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsCloudMapInstanceAttribute {
-    /// <p>The name of an AWS Cloud Map service instance attribute key. Any AWS Cloud Map service instance
-    /// that contains the specified key and value is returned.</p>
+    /// <p>The name of an AWS Cloud Map service instance attribute key. Any AWS Cloud Map service
+    /// instance that contains the specified key and value is returned.</p>
     #[serde(rename = "key")]
     pub key: String,
     /// <p>The value of an AWS Cloud Map service instance attribute key. Any AWS Cloud Map service
@@ -46,7 +47,7 @@ pub struct AwsCloudMapInstanceAttribute {
     pub value: String,
 }
 
-/// <p>An object representing the AWS Cloud Map service discovery information for your virtual
+/// <p>An object that represents the AWS Cloud Map service discovery information for your virtual
 /// node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsCloudMapServiceDiscovery {
@@ -64,7 +65,7 @@ pub struct AwsCloudMapServiceDiscovery {
     pub service_name: String,
 }
 
-/// <p>An object representing the backends that a virtual node is expected to send outbound
+/// <p>An object that represents the backends that a virtual node is expected to send outbound
 /// traffic to. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Backend {
@@ -420,7 +421,7 @@ pub struct DescribeVirtualServiceOutput {
     pub virtual_service: VirtualServiceData,
 }
 
-/// <p>An object representing the DNS service discovery information for your virtual
+/// <p>An object that represents the DNS service discovery information for your virtual
 /// node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DnsServiceDiscovery {
@@ -429,20 +430,20 @@ pub struct DnsServiceDiscovery {
     pub hostname: String,
 }
 
-/// <p>An object representing the duration between retry attempts.</p>
+/// <p>An object that represents a duration of time.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Duration {
-    /// <p>The unit of time between retry attempts.</p>
+    /// <p>A unit of time.</p>
     #[serde(rename = "unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unit: Option<String>,
-    /// <p>The duration of time between retry attempts.</p>
+    /// <p>A number of time units.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<i64>,
 }
 
-/// <p>An object representing the egress filter rules for a service mesh.</p>
+/// <p>An object that represents the egress filter rules for a service mesh.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EgressFilter {
     /// <p>The egress filter type. By default, the type is <code>DROP_ALL</code>, which allows
@@ -454,7 +455,7 @@ pub struct EgressFilter {
     pub type_: String,
 }
 
-/// <p>An object representing an access log file.</p>
+/// <p>An object that represents an access log file.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FileAccessLog {
     /// <p>The file path to write access logs to. You can use <code>/dev/stdout</code> to send
@@ -472,32 +473,160 @@ pub struct FileAccessLog {
     pub path: String,
 }
 
-/// <p>An object representing the method and value to match the header value sent with a request. Specify one match method.</p>
+/// <p>An object that represents a retry policy. Specify at least one value for at least one of the types of <code>RetryEvents</code>, a value for <code>maxRetries</code>, and a value for <code>perRetryTimeout</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct HeaderMatchMethod {
-    /// <p>The header value sent by the client must match the specified value exactly.</p>
+pub struct GrpcRetryPolicy {
+    /// <p>Specify at least one of the valid values.</p>
+    #[serde(rename = "grpcRetryEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grpc_retry_events: Option<Vec<String>>,
+    /// <p>Specify at least one of the following values.</p>
+    ///
+    /// <pre><code>     &lt;ul&gt;
+    /// &lt;li&gt;
+    /// &lt;p&gt;
+    /// &lt;b&gt;server-error&lt;/b&gt; – HTTP status codes 500, 501,
+    /// 502, 503, 504, 505, 506, 507, 508, 510, and 511&lt;/p&gt;
+    /// &lt;/li&gt;
+    /// &lt;li&gt;
+    /// &lt;p&gt;
+    /// &lt;b&gt;gateway-error&lt;/b&gt; – HTTP status codes 502,
+    /// 503, and 504&lt;/p&gt;
+    /// &lt;/li&gt;
+    /// &lt;li&gt;
+    /// &lt;p&gt;
+    /// &lt;b&gt;client-error&lt;/b&gt; – HTTP status code 409&lt;/p&gt;
+    /// &lt;/li&gt;
+    /// &lt;li&gt;
+    /// &lt;p&gt;
+    /// &lt;b&gt;stream-error&lt;/b&gt; – Retry on refused
+    /// stream&lt;/p&gt;
+    /// &lt;/li&gt;
+    /// &lt;/ul&gt;
+    /// </code></pre>
+    #[serde(rename = "httpRetryEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_retry_events: Option<Vec<String>>,
+    /// <p>The maximum number of retry attempts.</p>
+    #[serde(rename = "maxRetries")]
+    pub max_retries: i64,
+    /// <p>An object that represents a duration of time.</p>
+    #[serde(rename = "perRetryTimeout")]
+    pub per_retry_timeout: Duration,
+    /// <p>Specify a valid value.</p>
+    #[serde(rename = "tcpRetryEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tcp_retry_events: Option<Vec<String>>,
+}
+
+/// <p>An object that represents a GRPC route type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GrpcRoute {
+    /// <p>An object that represents the action to take if a match is determined.</p>
+    #[serde(rename = "action")]
+    pub action: GrpcRouteAction,
+    /// <p>An object that represents the criteria for determining a request match.</p>
+    #[serde(rename = "match")]
+    pub match_: GrpcRouteMatch,
+    /// <p>An object that represents a retry policy.</p>
+    #[serde(rename = "retryPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retry_policy: Option<GrpcRetryPolicy>,
+}
+
+/// <p>An object that represents the action to take if a match is determined.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GrpcRouteAction {
+    /// <p>An object that represents the targets that traffic is routed to when a request matches the route.</p>
+    #[serde(rename = "weightedTargets")]
+    pub weighted_targets: Vec<WeightedTarget>,
+}
+
+/// <p>An object that represents the criteria for determining a request match.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GrpcRouteMatch {
+    /// <p>An object that represents the data to match from the request.</p>
+    #[serde(rename = "metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<Vec<GrpcRouteMetadata>>,
+    /// <p>The method name to match from the request. If you specify a name, you must also specify a <code>serviceName</code>.</p>
+    #[serde(rename = "methodName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method_name: Option<String>,
+    /// <p>The fully qualified domain name for the service to match from the request.</p>
+    #[serde(rename = "serviceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_name: Option<String>,
+}
+
+/// <p>An object that represents the match metadata for the route.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GrpcRouteMetadata {
+    /// <p>Specify <code>True</code> to match anything except the match criteria. The default value is <code>False</code>.</p>
+    #[serde(rename = "invert")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invert: Option<bool>,
+    /// <p>An object that represents the data to match from the request.</p>
+    #[serde(rename = "match")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub match_: Option<GrpcRouteMetadataMatchMethod>,
+    /// <p>The name of the route.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
+/// <p>An object that represents the match method. Specify one of the match values.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GrpcRouteMetadataMatchMethod {
+    /// <p>The value sent by the client must match the specified value exactly.</p>
     #[serde(rename = "exact")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exact: Option<String>,
-    /// <p>The header value sent by the client must begin with the specified characters.</p>
+    /// <p>The value sent by the client must begin with the specified characters.</p>
     #[serde(rename = "prefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prefix: Option<String>,
-    /// <p>The object that specifies the range of numbers that the header value sent by the client must be included in.</p>
+    /// <p>An object that represents the range of values to match on.</p>
     #[serde(rename = "range")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub range: Option<MatchRange>,
-    /// <p>The header value sent by the client must include the specified characters.</p>
+    /// <p>The value sent by the client must include the specified characters.</p>
     #[serde(rename = "regex")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub regex: Option<String>,
-    /// <p>The header value sent by the client must end with the specified characters.</p>
+    /// <p>The value sent by the client must end with the specified characters.</p>
     #[serde(rename = "suffix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub suffix: Option<String>,
 }
 
-/// <p>An object representing the health check policy for a virtual node's listener.</p>
+/// <p>An object that represents the method and value to match with the header value sent in a
+/// request. Specify one match method.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HeaderMatchMethod {
+    /// <p>The value sent by the client must match the specified value exactly.</p>
+    #[serde(rename = "exact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exact: Option<String>,
+    /// <p>The value sent by the client must begin with the specified characters.</p>
+    #[serde(rename = "prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix: Option<String>,
+    /// <p>An object that represents the range of values to match on.</p>
+    #[serde(rename = "range")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub range: Option<MatchRange>,
+    /// <p>The value sent by the client must include the specified characters.</p>
+    #[serde(rename = "regex")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regex: Option<String>,
+    /// <p>The value sent by the client must end with the specified characters.</p>
+    #[serde(rename = "suffix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suffix: Option<String>,
+}
+
+/// <p>An object that represents the health check policy for a virtual node's listener.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HealthCheckPolicy {
     /// <p>The number of consecutive successful health checks that must occur before declaring
@@ -530,7 +659,7 @@ pub struct HealthCheckPolicy {
     pub unhealthy_threshold: i64,
 }
 
-/// <p>An object that represents a retry policy.</p>
+/// <p>An object that represents a retry policy. Specify at least one value for at least one of the types of <code>RetryEvents</code>, a value for <code>maxRetries</code>, and a value for <code>perRetryTimeout</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HttpRetryPolicy {
     /// <p>Specify at least one of the following values.</p>
@@ -560,10 +689,10 @@ pub struct HttpRetryPolicy {
     #[serde(rename = "httpRetryEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_retry_events: Option<Vec<String>>,
-    /// <p>The maximum number of retry attempts. If no value is specified, the default is 1.</p>
+    /// <p>The maximum number of retry attempts.</p>
     #[serde(rename = "maxRetries")]
     pub max_retries: i64,
-    /// <p>An object that represents the retry duration.</p>
+    /// <p>An object that represents a duration of time.</p>
     #[serde(rename = "perRetryTimeout")]
     pub per_retry_timeout: Duration,
     /// <p>Specify a valid value.</p>
@@ -572,13 +701,13 @@ pub struct HttpRetryPolicy {
     pub tcp_retry_events: Option<Vec<String>>,
 }
 
-/// <p>An object representing the HTTP routing specification for a route.</p>
+/// <p>An object that represents an HTTP or HTTP2 route type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HttpRoute {
-    /// <p>The action to take if a match is determined.</p>
+    /// <p>An object that represents the action to take if a match is determined.</p>
     #[serde(rename = "action")]
     pub action: HttpRouteAction,
-    /// <p>The criteria for determining an HTTP request match.</p>
+    /// <p>An object that represents the criteria for determining a request match.</p>
     #[serde(rename = "match")]
     pub match_: HttpRouteMatch,
     /// <p>An object that represents a retry policy.</p>
@@ -587,20 +716,18 @@ pub struct HttpRoute {
     pub retry_policy: Option<HttpRetryPolicy>,
 }
 
-/// <p>An object representing the traffic distribution requirements for matched HTTP
-/// requests.</p>
+/// <p>An object that represents the action to take if a match is determined.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HttpRouteAction {
-    /// <p>The targets that traffic is routed to when a request matches the route. You can specify
-    /// one or more targets and their relative weights to distribute traffic with.</p>
+    /// <p>An object that represents the targets that traffic is routed to when a request matches the route.</p>
     #[serde(rename = "weightedTargets")]
     pub weighted_targets: Vec<WeightedTarget>,
 }
 
-/// <p>An object representing the HTTP header in the request.</p>
+/// <p>An object that represents the HTTP header in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HttpRouteHeader {
-    /// <p>Specify <code>True</code> to match the opposite of the <code>HeaderMatchMethod</code> method and value. The default value is <code>False</code>.</p>
+    /// <p>Specify <code>True</code> to match anything except the match criteria. The default value is <code>False</code>.</p>
     #[serde(rename = "invert")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invert: Option<bool>,
@@ -613,15 +740,15 @@ pub struct HttpRouteHeader {
     pub name: String,
 }
 
-/// <p>An object representing the requirements for a route to match HTTP requests for a virtual
+/// <p>An object that represents the requirements for a route to match HTTP requests for a virtual
 /// router.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HttpRouteMatch {
-    /// <p>The client request headers to match on.</p>
+    /// <p>An object that represents the client request headers to match on.</p>
     #[serde(rename = "headers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub headers: Option<Vec<HttpRouteHeader>>,
-    /// <p>The client request header method to match on.</p>
+    /// <p>The client request method to match on. Specify only one.</p>
     #[serde(rename = "method")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub method: Option<String>,
@@ -633,7 +760,7 @@ pub struct HttpRouteMatch {
     /// <code>/metrics</code>.</p>
     #[serde(rename = "prefix")]
     pub prefix: String,
-    /// <p>The client request header scheme to match on.</p>
+    /// <p>The client request scheme to match on. Specify only one.</p>
     #[serde(rename = "scheme")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheme: Option<String>,
@@ -885,7 +1012,7 @@ pub struct ListVirtualServicesOutput {
     pub virtual_services: Vec<VirtualServiceRef>,
 }
 
-/// <p>An object representing a listener for a virtual node.</p>
+/// <p>An object that represents a listener for a virtual node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Listener {
     /// <p>The health check information for the listener.</p>
@@ -897,7 +1024,7 @@ pub struct Listener {
     pub port_mapping: PortMapping,
 }
 
-/// <p>An object representing the logging information for a virtual node.</p>
+/// <p>An object that represents the logging information for a virtual node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Logging {
     /// <p>The access log configuration for a virtual node.</p>
@@ -906,7 +1033,7 @@ pub struct Logging {
     pub access_log: Option<AccessLog>,
 }
 
-/// <p>The range of values to match on. The first character of the range is included in the range, though the last character is not. For example, if the range specified were 1-100, only values 1-99 would be matched.</p>
+/// <p>An object that represents the range of values to match on. The first character of the range is included in the range, though the last character is not. For example, if the range specified were 1-100, only values 1-99 would be matched.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MatchRange {
     /// <p>The end of the range.</p>
@@ -917,7 +1044,7 @@ pub struct MatchRange {
     pub start: i64,
 }
 
-/// <p>An object representing a service mesh returned by a describe operation.</p>
+/// <p>An object that represents a service mesh returned by a describe operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MeshData {
@@ -935,7 +1062,7 @@ pub struct MeshData {
     pub status: MeshStatus,
 }
 
-/// <p>An object representing a service mesh returned by a list operation.</p>
+/// <p>An object that represents a service mesh returned by a list operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MeshRef {
@@ -947,7 +1074,7 @@ pub struct MeshRef {
     pub mesh_name: String,
 }
 
-/// <p>An object representing the specification of a service mesh.</p>
+/// <p>An object that represents the specification of a service mesh.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MeshSpec {
     /// <p>The egress filter rules for the service mesh.</p>
@@ -956,7 +1083,7 @@ pub struct MeshSpec {
     pub egress_filter: Option<EgressFilter>,
 }
 
-/// <p>An object representing the status of a service mesh.</p>
+/// <p>An object that represents the status of a service mesh.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MeshStatus {
@@ -966,18 +1093,18 @@ pub struct MeshStatus {
     pub status: Option<String>,
 }
 
-/// <p>An object representing a virtual node or virtual router listener port mapping.</p>
+/// <p>An object that represents a port mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PortMapping {
     /// <p>The port used for the port mapping.</p>
     #[serde(rename = "port")]
     pub port: i64,
-    /// <p>The protocol used for the port mapping.</p>
+    /// <p>The protocol used for the port mapping. Specify one protocol.</p>
     #[serde(rename = "protocol")]
     pub protocol: String,
 }
 
-/// <p>An object representing metadata for a resource.</p>
+/// <p>An object that represents metadata for a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceMetadata {
@@ -999,7 +1126,7 @@ pub struct ResourceMetadata {
     pub version: i64,
 }
 
-/// <p>An object representing a route returned by a describe operation.</p>
+/// <p>An object that represents a route returned by a describe operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RouteData {
@@ -1023,7 +1150,7 @@ pub struct RouteData {
     pub virtual_router_name: String,
 }
 
-/// <p>An object representing a route returned by a list operation.</p>
+/// <p>An object that represents a route returned by a list operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RouteRef {
@@ -1041,24 +1168,33 @@ pub struct RouteRef {
     pub virtual_router_name: String,
 }
 
-/// <p>An object representing the specification of a route.</p>
+/// <p>An object that represents a route specification. Specify one route type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RouteSpec {
-    /// <p>The HTTP routing information for the route.</p>
+    /// <p>An object that represents the specification of a GRPC route.</p>
+    #[serde(rename = "grpcRoute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grpc_route: Option<GrpcRoute>,
+    /// <p>An object that represents the specification of an HTTP2 route.</p>
+    #[serde(rename = "http2Route")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_2_route: Option<HttpRoute>,
+    /// <p>An object that represents the specification of an HTTP route.</p>
     #[serde(rename = "httpRoute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_route: Option<HttpRoute>,
-    /// <p>The priority for the route. Routes are matched based on the specified value, where 0 is the highest priority.</p>
+    /// <p>The priority for the route. Routes are matched based on the specified value, where 0 is
+    /// the highest priority.</p>
     #[serde(rename = "priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    /// <p>The TCP routing information for the route.</p>
+    /// <p>An object that represents the specification of a TCP route.</p>
     #[serde(rename = "tcpRoute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tcp_route: Option<TcpRoute>,
 }
 
-/// <p>An object representing the current status of a route.</p>
+/// <p>An object that represents the current status of a route.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RouteStatus {
@@ -1067,7 +1203,7 @@ pub struct RouteStatus {
     pub status: String,
 }
 
-/// <p>An object representing the service discovery information for a virtual node.</p>
+/// <p>An object that represents the service discovery information for a virtual node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ServiceDiscovery {
     /// <p>Specifies any AWS Cloud Map information for the virtual node.</p>
@@ -1113,7 +1249,7 @@ pub struct TagResourceInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
 
-/// <p>An object representing the TCP routing specification for a route.</p>
+/// <p>An object that represents a TCP route type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TcpRoute {
     /// <p>The action to take if a match is determined.</p>
@@ -1121,12 +1257,10 @@ pub struct TcpRoute {
     pub action: TcpRouteAction,
 }
 
-/// <p>An object representing the traffic distribution requirements for matched TCP
-/// requests.</p>
+/// <p>An object that represents the action to take if a match is determined.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TcpRouteAction {
-    /// <p>The targets that traffic is routed to when a request matches the route. You can specify
-    /// one or more targets and their relative weights to distribute traffic with.</p>
+    /// <p>An object that represents the targets that traffic is routed to when a request matches the route.</p>
     #[serde(rename = "weightedTargets")]
     pub weighted_targets: Vec<WeightedTarget>,
 }
@@ -1276,7 +1410,7 @@ pub struct UpdateVirtualServiceOutput {
     pub virtual_service: VirtualServiceData,
 }
 
-/// <p>An object representing a virtual node returned by a describe operation.</p>
+/// <p>An object that represents a virtual node returned by a describe operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualNodeData {
@@ -1297,7 +1431,7 @@ pub struct VirtualNodeData {
     pub virtual_node_name: String,
 }
 
-/// <p>An object representing a virtual node returned by a list operation.</p>
+/// <p>An object that represents a virtual node returned by a list operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualNodeRef {
@@ -1312,7 +1446,7 @@ pub struct VirtualNodeRef {
     pub virtual_node_name: String,
 }
 
-/// <p>An object representing a virtual node service provider.</p>
+/// <p>An object that represents a virtual node service provider.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VirtualNodeServiceProvider {
     /// <p>The name of the virtual node that is acting as a service provider.</p>
@@ -1320,7 +1454,7 @@ pub struct VirtualNodeServiceProvider {
     pub virtual_node_name: String,
 }
 
-/// <p>An object representing the specification of a virtual node.</p>
+/// <p>An object that represents the specification of a virtual node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VirtualNodeSpec {
     /// <p>The backends that the virtual node is expected to send outbound traffic to.</p>
@@ -1328,7 +1462,7 @@ pub struct VirtualNodeSpec {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backends: Option<Vec<Backend>>,
     /// <p>The listeners that the virtual node is expected to receive inbound traffic from.
-    /// Currently only one listener is supported per virtual node.</p>
+    /// You can specify one listener.</p>
     #[serde(rename = "listeners")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub listeners: Option<Vec<Listener>>,
@@ -1343,7 +1477,7 @@ pub struct VirtualNodeSpec {
     pub service_discovery: Option<ServiceDiscovery>,
 }
 
-/// <p>An object representing the current status of the virtual node.</p>
+/// <p>An object that represents the current status of the virtual node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualNodeStatus {
@@ -1352,7 +1486,7 @@ pub struct VirtualNodeStatus {
     pub status: String,
 }
 
-/// <p>An object representing a virtual router returned by a describe operation.</p>
+/// <p>An object that represents a virtual router returned by a describe operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualRouterData {
@@ -1373,14 +1507,14 @@ pub struct VirtualRouterData {
     pub virtual_router_name: String,
 }
 
-/// <p>An object representing a virtual router listener.</p>
+/// <p>An object that represents a virtual router listener.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VirtualRouterListener {
     #[serde(rename = "portMapping")]
     pub port_mapping: PortMapping,
 }
 
-/// <p>An object representing a virtual router returned by a list operation.</p>
+/// <p>An object that represents a virtual router returned by a list operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualRouterRef {
@@ -1395,7 +1529,7 @@ pub struct VirtualRouterRef {
     pub virtual_router_name: String,
 }
 
-/// <p>An object representing a virtual node service provider.</p>
+/// <p>An object that represents a virtual node service provider.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VirtualRouterServiceProvider {
     /// <p>The name of the virtual router that is acting as a service provider.</p>
@@ -1403,17 +1537,17 @@ pub struct VirtualRouterServiceProvider {
     pub virtual_router_name: String,
 }
 
-/// <p>An object representing the specification of a virtual router.</p>
+/// <p>An object that represents the specification of a virtual router.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VirtualRouterSpec {
     /// <p>The listeners that the virtual router is expected to receive inbound traffic from.
-    /// Currently only one listener is supported per virtual router.</p>
+    /// You can specify one listener.</p>
     #[serde(rename = "listeners")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub listeners: Option<Vec<VirtualRouterListener>>,
 }
 
-/// <p>An object representing the status of a virtual router. </p>
+/// <p>An object that represents the status of a virtual router. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualRouterStatus {
@@ -1422,7 +1556,7 @@ pub struct VirtualRouterStatus {
     pub status: String,
 }
 
-/// <p>An object representing a virtual service backend for a virtual node.</p>
+/// <p>An object that represents a virtual service backend for a virtual node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VirtualServiceBackend {
     /// <p>The name of the virtual service that is acting as a virtual node backend.</p>
@@ -1430,7 +1564,7 @@ pub struct VirtualServiceBackend {
     pub virtual_service_name: String,
 }
 
-/// <p>An object representing a virtual service returned by a describe operation.</p>
+/// <p>An object that represents a virtual service returned by a describe operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualServiceData {
@@ -1450,7 +1584,7 @@ pub struct VirtualServiceData {
     pub virtual_service_name: String,
 }
 
-/// <p>An object representing the provider for a virtual service.</p>
+/// <p>An object that represents the provider for a virtual service.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VirtualServiceProvider {
     /// <p>The virtual node associated with a virtual service.</p>
@@ -1463,7 +1597,7 @@ pub struct VirtualServiceProvider {
     pub virtual_router: Option<VirtualRouterServiceProvider>,
 }
 
-/// <p>An object representing a virtual service returned by a list operation.</p>
+/// <p>An object that represents a virtual service returned by a list operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualServiceRef {
@@ -1478,7 +1612,7 @@ pub struct VirtualServiceRef {
     pub virtual_service_name: String,
 }
 
-/// <p>An object representing the specification of a virtual service.</p>
+/// <p>An object that represents the specification of a virtual service.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VirtualServiceSpec {
     /// <p>The App Mesh object that is acting as the provider for a virtual service. You can specify
@@ -1488,7 +1622,7 @@ pub struct VirtualServiceSpec {
     pub provider: Option<VirtualServiceProvider>,
 }
 
-/// <p>An object representing the status of a virtual service.</p>
+/// <p>An object that represents the status of a virtual service.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualServiceStatus {
@@ -1497,10 +1631,10 @@ pub struct VirtualServiceStatus {
     pub status: String,
 }
 
-/// <p>An object representing a target and its relative weight. Traffic is distributed across
+/// <p>An object that represents a target and its relative weight. Traffic is distributed across
 /// targets according to their relative weight. For example, a weighted target with a relative
 /// weight of 50 receives five times as much traffic as one with a relative weight of
-/// 10.</p>
+/// 10. The total weight for all targets combined must be less than or equal to 100.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WeightedTarget {
     /// <p>The virtual node to associate with the weighted target.</p>

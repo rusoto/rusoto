@@ -76,6 +76,22 @@ pub struct Attribute {
     pub value: Option<String>,
 }
 
+/// <p>The details of the Auto Scaling group for the capacity provider.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AutoScalingGroupProvider {
+    /// <p>The Amazon Resource Name (ARN) that identifies the Auto Scaling group.</p>
+    #[serde(rename = "autoScalingGroupArn")]
+    pub auto_scaling_group_arn: String,
+    /// <p>The managed scaling settings for the Auto Scaling group capacity provider.</p>
+    #[serde(rename = "managedScaling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub managed_scaling: Option<ManagedScaling>,
+    /// <p>The managed termination protection setting to use for the Auto Scaling group capacity provider. This determines whether the Auto Scaling group has managed termination protection.</p> <p>When managed termination protection is enabled, Amazon ECS prevents the Amazon EC2 instances in an Auto Scaling group that contain tasks from being terminated during a scale-in action. The Auto Scaling group and each instance in the Auto Scaling group must have instance protection from scale-in actions enabled as well. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>AWS Auto Scaling User Guide</i>.</p> <p>When managed termination protection is disabled, your Amazon EC2 instances are not protected from termination when the Auto Scaling group scales in.</p>
+    #[serde(rename = "managedTerminationProtection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub managed_termination_protection: Option<String>,
+}
+
 /// <p>An object representing the networking details for a task or service.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsVpcConfiguration {
@@ -92,6 +108,48 @@ pub struct AwsVpcConfiguration {
     pub subnets: Vec<String>,
 }
 
+/// <p>The details of a capacity provider.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CapacityProvider {
+    /// <p>The Auto Scaling group settings for the capacity provider.</p>
+    #[serde(rename = "autoScalingGroupProvider")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_scaling_group_provider: Option<AutoScalingGroupProvider>,
+    /// <p>The Amazon Resource Name (ARN) that identifies the capacity provider.</p>
+    #[serde(rename = "capacityProviderArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_provider_arn: Option<String>,
+    /// <p>The name of the capacity provider.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The current status of the capacity provider. Only capacity providers in an <code>ACTIVE</code> state can be used in a cluster.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p><p>The metadata that you apply to the capacity provider to help you categorize and organize it. Each tag consists of a key and an optional value, both of which you define.</p> <p>The following basic restrictions apply to tags:</p> <ul> <li> <p>Maximum number of tags per resource - 50</p> </li> <li> <p>For each resource, each tag key must be unique, and each tag key can have only one value.</p> </li> <li> <p>Maximum key length - 128 Unicode characters in UTF-8</p> </li> <li> <p>Maximum value length - 256 Unicode characters in UTF-8</p> </li> <li> <p>If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : / @.</p> </li> <li> <p>Tag keys and values are case-sensitive.</p> </li> <li> <p>Do not use <code>aws:</code>, <code>AWS:</code>, or any upper or lowercase combination of such as a prefix for either keys or values as it is reserved for AWS use. You cannot edit or delete tag keys or values with this prefix. Tags with this prefix do not count against your tags per resource limit.</p> </li> </ul></p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>The details of a capacity provider strategy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CapacityProviderStrategyItem {
+    /// <p>The <i>base</i> value designates how many tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a <i>base</i> defined.</p>
+    #[serde(rename = "base")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base: Option<i64>,
+    /// <p>The short name or full Amazon Resource Name (ARN) of the capacity provider.</p>
+    #[serde(rename = "capacityProvider")]
+    pub capacity_provider: String,
+    /// <p>The <i>weight</i> value designates the relative percentage of the total number of tasks launched that should use the specified capacity provider.</p> <p>For example, if you have a strategy that contains two capacity providers and both have a weight of <code>1</code>, then when the <code>base</code> is satisfied, the tasks will be split evenly across the two capacity providers. Using that same logic, if you specify a weight of <code>1</code> for <i>capacityProviderA</i> and a weight of <code>4</code> for <i>capacityProviderB</i>, then for every one task that is run using <i>capacityProviderA</i>, four tasks would use <i>capacityProviderB</i>.</p>
+    #[serde(rename = "weight")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub weight: Option<i64>,
+}
+
 /// <p>A regional grouping of one or more container instances on which you can run task requests. Each account receives a default cluster the first time you use the Amazon ECS service, but you may also create other clusters. Clusters may contain more than one instance type simultaneously.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -100,6 +158,18 @@ pub struct Cluster {
     #[serde(rename = "activeServicesCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub active_services_count: Option<i64>,
+    /// <p>The resources attached to a cluster. When using a capacity provider with a cluster, the Auto Scaling plan that is created will be returned as a cluster attachment.</p>
+    #[serde(rename = "attachments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachments: Option<Vec<Attachment>>,
+    /// <p><p>The status of the capacity providers associated with the cluster. The following are the states that will be returned:</p> <dl> <dt>UPDATE<em>IN</em>PROGRESS</dt> <dd> <p>The available capacity providers for the cluster are updating. This occurs when the Auto Scaling plan is provisioning or deprovisioning.</p> </dd> <dt>UPDATE<em>COMPLETE</dt> <dd> <p>The capacity providers have successfully updated.</p> </dd> <dt>UPDATE</em>FAILED</dt> <dd> <p>The capacity provider updates failed.</p> </dd> </dl></p>
+    #[serde(rename = "attachmentsStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachments_status: Option<String>,
+    /// <p>The capacity providers associated with the cluster.</p>
+    #[serde(rename = "capacityProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_providers: Option<Vec<String>>,
     /// <p>The Amazon Resource Name (ARN) that identifies the cluster. The ARN contains the <code>arn:aws:ecs</code> namespace, followed by the Region of the cluster, the AWS account ID of the cluster owner, the <code>cluster</code> namespace, and then the cluster name. For example, <code>arn:aws:ecs:region:012345678910:cluster/test</code>.</p>
     #[serde(rename = "clusterArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -108,6 +178,10 @@ pub struct Cluster {
     #[serde(rename = "clusterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_name: Option<String>,
+    /// <p>The default capacity provider strategy for the cluster. When services or tasks are run in the cluster with no launch type or capacity provider strategy specified, the default capacity provider strategy is used.</p>
+    #[serde(rename = "defaultCapacityProviderStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_capacity_provider_strategy: Option<Vec<CapacityProviderStrategyItem>>,
     /// <p>The number of tasks in the cluster that are in the <code>PENDING</code> state.</p>
     #[serde(rename = "pendingTasksCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -167,10 +241,6 @@ pub struct Container {
     #[serde(rename = "exitCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exit_code: Option<i64>,
-    /// <p>The FireLens configuration for the container.</p>
-    #[serde(rename = "firelensConfiguration")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub firelens_configuration: Option<FirelensConfiguration>,
     /// <p>The IDs of each GPU assigned to the container.</p>
     #[serde(rename = "gpuIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -179,6 +249,14 @@ pub struct Container {
     #[serde(rename = "healthStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_status: Option<String>,
+    /// <p>The image used for the container.</p>
+    #[serde(rename = "image")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image: Option<String>,
+    /// <p><p>The container image manifest digest.</p> <note> <p>The <code>imageDigest</code> is only returned if the container is using an image hosted in Amazon ECR, otherwise it is omitted.</p> </note></p>
+    #[serde(rename = "imageDigest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_digest: Option<String>,
     /// <p>The last known status of the container.</p>
     #[serde(rename = "lastStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -228,7 +306,7 @@ pub struct ContainerDefinition {
     #[serde(rename = "cpu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cpu: Option<i64>,
-    /// <p>The dependencies defined for container startup and shutdown. A container can contain multiple dependencies. When a dependency is defined for container startup, for container shutdown it is reversed.</p> <p>For tasks using the EC2 launch type, the container instances require at least version 1.26.0 of the container agent to enable container dependencies. However, we recommend using the latest container agent version. For information about checking your agent version and updating to the latest version, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html">Updating the Amazon ECS Container Agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. If you are using an Amazon ECS-optimized Linux AMI, your instance needs at least version 1.26.0-1 of the <code>ecs-init</code> package. If your container instances are launched from version <code>20190301</code> or later, then they contain the required versions of the container agent and <code>ecs-init</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html">Amazon ECS-optimized Linux AMI</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>This parameter is available for tasks using the Fargate launch type in the Ohio (us-east-2) region only and the task or service requires platform version 1.3.0 or later.</p>
+    /// <p>The dependencies defined for container startup and shutdown. A container can contain multiple dependencies. When a dependency is defined for container startup, for container shutdown it is reversed.</p> <p>For tasks using the EC2 launch type, the container instances require at least version 1.26.0 of the container agent to enable container dependencies. However, we recommend using the latest container agent version. For information about checking your agent version and updating to the latest version, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html">Updating the Amazon ECS Container Agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. If you are using an Amazon ECS-optimized Linux AMI, your instance needs at least version 1.26.0-1 of the <code>ecs-init</code> package. If your container instances are launched from version <code>20190301</code> or later, then they contain the required versions of the container agent and <code>ecs-init</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html">Amazon ECS-optimized Linux AMI</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>For tasks using the Fargate launch type, the task or service requires platform version <code>1.3.0</code> or later.</p>
     #[serde(rename = "dependsOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub depends_on: Option<Vec<ContainerDependency>>,
@@ -268,7 +346,7 @@ pub struct ContainerDefinition {
     #[serde(rename = "extraHosts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_hosts: Option<Vec<HostEntry>>,
-    /// <p>The FireLens configuration for the container. This is used to specify and configure a log router for container logs.</p>
+    /// <p>The FireLens configuration for the container. This is used to specify and configure a log router for container logs. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html">Custom Log Routing</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "firelensConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub firelens_configuration: Option<FirelensConfiguration>,
@@ -344,11 +422,11 @@ pub struct ContainerDefinition {
     #[serde(rename = "secrets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secrets: Option<Vec<Secret>>,
-    /// <p>Time duration (in seconds) to wait before giving up on resolving dependencies for a container. For example, you specify two containers in a task definition with containerA having a dependency on containerB reaching a <code>COMPLETE</code>, <code>SUCCESS</code>, or <code>HEALTHY</code> status. If a <code>startTimeout</code> value is specified for containerB and it does not reach the desired status within that time then containerA will give up and not start. This results in the task transitioning to a <code>STOPPED</code> state.</p> <p>For tasks using the EC2 launch type, the container instances require at least version 1.26.0 of the container agent to enable a container start timeout value. However, we recommend using the latest container agent version. For information about checking your agent version and updating to the latest version, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html">Updating the Amazon ECS Container Agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. If you are using an Amazon ECS-optimized Linux AMI, your instance needs at least version 1.26.0-1 of the <code>ecs-init</code> package. If your container instances are launched from version <code>20190301</code> or later, then they contain the required versions of the container agent and <code>ecs-init</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html">Amazon ECS-optimized Linux AMI</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>This parameter is available for tasks using the Fargate launch type in the Ohio (us-east-2) region only and the task or service requires platform version 1.3.0 or later.</p>
+    /// <p>Time duration (in seconds) to wait before giving up on resolving dependencies for a container. For example, you specify two containers in a task definition with containerA having a dependency on containerB reaching a <code>COMPLETE</code>, <code>SUCCESS</code>, or <code>HEALTHY</code> status. If a <code>startTimeout</code> value is specified for containerB and it does not reach the desired status within that time then containerA will give up and not start. This results in the task transitioning to a <code>STOPPED</code> state.</p> <p>For tasks using the EC2 launch type, the container instances require at least version 1.26.0 of the container agent to enable a container start timeout value. However, we recommend using the latest container agent version. For information about checking your agent version and updating to the latest version, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html">Updating the Amazon ECS Container Agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. If you are using an Amazon ECS-optimized Linux AMI, your instance needs at least version 1.26.0-1 of the <code>ecs-init</code> package. If your container instances are launched from version <code>20190301</code> or later, then they contain the required versions of the container agent and <code>ecs-init</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html">Amazon ECS-optimized Linux AMI</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>For tasks using the Fargate launch type, the task or service requires platform version <code>1.3.0</code> or later.</p>
     #[serde(rename = "startTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_timeout: Option<i64>,
-    /// <p>Time duration (in seconds) to wait before the container is forcefully killed if it doesn't exit normally on its own. For tasks using the Fargate launch type, the max <code>stopTimeout</code> value is 2 minutes. This parameter is available for tasks using the Fargate launch type in the Ohio (us-east-2) region only and the task or service requires platform version 1.3.0 or later.</p> <p>For tasks using the EC2 launch type, the stop timeout value for the container takes precedence over the <code>ECS_CONTAINER_STOP_TIMEOUT</code> container agent configuration parameter, if used. Container instances require at least version 1.26.0 of the container agent to enable a container stop timeout value. However, we recommend using the latest container agent version. For information about checking your agent version and updating to the latest version, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html">Updating the Amazon ECS Container Agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. If you are using an Amazon ECS-optimized Linux AMI, your instance needs at least version 1.26.0-1 of the <code>ecs-init</code> package. If your container instances are launched from version <code>20190301</code> or later, then they contain the required versions of the container agent and <code>ecs-init</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html">Amazon ECS-optimized Linux AMI</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>Time duration (in seconds) to wait before the container is forcefully killed if it doesn't exit normally on its own.</p> <p>For tasks using the Fargate launch type, the max <code>stopTimeout</code> value is 2 minutes and the task or service requires platform version <code>1.3.0</code> or later.</p> <p>For tasks using the EC2 launch type, the stop timeout value for the container takes precedence over the <code>ECS_CONTAINER_STOP_TIMEOUT</code> container agent configuration parameter, if used. Container instances require at least version 1.26.0 of the container agent to enable a container stop timeout value. However, we recommend using the latest container agent version. For information about checking your agent version and updating to the latest version, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html">Updating the Amazon ECS Container Agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. If you are using an Amazon ECS-optimized Linux AMI, your instance needs at least version 1.26.0-1 of the <code>ecs-init</code> package. If your container instances are launched from version <code>20190301</code> or later, then they contain the required versions of the container agent and <code>ecs-init</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html">Amazon ECS-optimized Linux AMI</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "stopTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop_timeout: Option<i64>,
@@ -405,6 +483,10 @@ pub struct ContainerInstance {
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<Vec<Attribute>>,
+    /// <p>The capacity provider associated with the container instance.</p>
+    #[serde(rename = "capacityProviderName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_provider_name: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the container instance. The ARN contains the <code>arn:aws:ecs</code> namespace, followed by the Region of the container instance, the AWS account ID of the container instance owner, the <code>container-instance</code> namespace, and then the container instance ID. For example, <code>arn:aws:ecs:region:aws_account_id:container-instance/container_instance_ID</code>.</p>
     #[serde(rename = "containerInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -499,6 +581,10 @@ pub struct ContainerStateChange {
     #[serde(rename = "exitCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exit_code: Option<i64>,
+    /// <p>The container image SHA 256 digest.</p>
+    #[serde(rename = "imageDigest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_digest: Option<String>,
     /// <p>Any network bindings associated with the container.</p>
     #[serde(rename = "networkBindings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -518,11 +604,42 @@ pub struct ContainerStateChange {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateCapacityProviderRequest {
+    /// <p>The details of the Auto Scaling group for the capacity provider.</p>
+    #[serde(rename = "autoScalingGroupProvider")]
+    pub auto_scaling_group_provider: AutoScalingGroupProvider,
+    /// <p>The name of the capacity provider. Up to 255 characters are allowed, including letters (upper and lowercase), numbers, underscores, and hyphens. The name cannot be prefixed with "<code>aws</code>", "<code>ecs</code>", or "<code>fargate</code>".</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p><p>The metadata that you apply to the capacity provider to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define.</p> <p>The following basic restrictions apply to tags:</p> <ul> <li> <p>Maximum number of tags per resource - 50</p> </li> <li> <p>For each resource, each tag key must be unique, and each tag key can have only one value.</p> </li> <li> <p>Maximum key length - 128 Unicode characters in UTF-8</p> </li> <li> <p>Maximum value length - 256 Unicode characters in UTF-8</p> </li> <li> <p>If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : / @.</p> </li> <li> <p>Tag keys and values are case-sensitive.</p> </li> <li> <p>Do not use <code>aws:</code>, <code>AWS:</code>, or any upper or lowercase combination of such as a prefix for either keys or values as it is reserved for AWS use. You cannot edit or delete tag keys or values with this prefix. Tags with this prefix do not count against your tags per resource limit.</p> </li> </ul></p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateCapacityProviderResponse {
+    /// <p>The full description of the new capacity provider.</p>
+    #[serde(rename = "capacityProvider")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_provider: Option<CapacityProvider>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateClusterRequest {
+    /// <p>The short name or full Amazon Resource Name (ARN) of one or more capacity providers to associate with the cluster.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created and not already associated with another cluster. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p> <p>The <a>PutClusterCapacityProviders</a> API operation is used to update the list of available capacity providers for a cluster after the cluster is created.</p>
+    #[serde(rename = "capacityProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_providers: Option<Vec<String>>,
     /// <p>The name of your cluster. If you do not specify a name for your cluster, you create a cluster named <code>default</code>. Up to 255 letters (uppercase and lowercase), numbers, and hyphens are allowed. </p>
     #[serde(rename = "clusterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_name: Option<String>,
+    /// <p>The capacity provider strategy to use by default for the cluster.</p> <p>When creating a service or running a task on a cluster, if no capacity provider or launch type is specified then the default capacity provider strategy for the cluster is used.</p> <p>A capacity provider strategy consists of one or more capacity providers along with the <code>base</code> and <code>weight</code> to assign to them. A capacity provider must be associated with the cluster to be used in a capacity provider strategy. The <a>PutClusterCapacityProviders</a> API is used to associate a capacity provider with a cluster. Only capacity providers with an <code>ACTIVE</code> or <code>UPDATING</code> status can be used.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p> <p>If a default capacity provider strategy is not defined for a cluster during creation, it can be defined later with the <a>PutClusterCapacityProviders</a> API operation.</p>
+    #[serde(rename = "defaultCapacityProviderStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_capacity_provider_strategy: Option<Vec<CapacityProviderStrategyItem>>,
     /// <p>The setting to use when creating a cluster. This parameter is used to enable CloudWatch Container Insights for a cluster. If this value is specified, it will override the <code>containerInsights</code> value set with <a>PutAccountSetting</a> or <a>PutAccountSettingDefault</a>.</p>
     #[serde(rename = "settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -544,6 +661,10 @@ pub struct CreateClusterResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateServiceRequest {
+    /// <p>The capacity provider strategy to use for the service.</p> <p>A capacity provider strategy consists of one or more capacity providers along with the <code>base</code> and <code>weight</code> to assign to them. A capacity provider must be associated with the cluster to be used in a capacity provider strategy. The <a>PutClusterCapacityProviders</a> API is used to associate a capacity provider with a cluster. Only capacity providers with an <code>ACTIVE</code> or <code>UPDATING</code> status can be used.</p> <p>If a <code>capacityProviderStrategy</code> is specified, the <code>launchType</code> parameter must be omitted. If no <code>capacityProviderStrategy</code> or <code>launchType</code> is specified, the <code>defaultCapacityProviderStrategy</code> for the cluster is used.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p> <p>The <a>PutClusterCapacityProviders</a> API operation is used to update the list of available capacity providers for a cluster after the cluster is created.</p>
+    #[serde(rename = "capacityProviderStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_provider_strategy: Option<Vec<CapacityProviderStrategyItem>>,
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 32 ASCII characters are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -572,11 +693,11 @@ pub struct CreateServiceRequest {
     #[serde(rename = "healthCheckGracePeriodSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_check_grace_period_seconds: Option<i64>,
-    /// <p>The launch type on which to run your service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>The launch type on which to run your service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If a <code>launchType</code> is specified, the <code>capacityProviderStrategy</code> parameter must be omitted.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_type: Option<String>,
-    /// <p>A load balancer object representing the load balancers to use with your service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html">Service Load Balancing</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If the service is using the rolling update (<code>ECS</code>) deployment controller and using either an Application Load Balancer or Network Load Balancer, you can specify multiple target groups to attach to the service.</p> <p>If the service is using the <code>CODE_DEPLOY</code> deployment controller, the service is required to use either an Application Load Balancer or Network Load Balancer. When creating an AWS CodeDeploy deployment group, you specify two target groups (referred to as a <code>targetGroupPair</code>). During a deployment, AWS CodeDeploy determines which task set in your service has the status <code>PRIMARY</code> and associates one target group with it, and then associates the other target group with the replacement task set. The load balancer can also have up to two listeners: a required listener for production traffic and an optional listener that allows you perform validation tests with Lambda functions before routing production traffic to it.</p> <p>After you create a service using the <code>ECS</code> deployment controller, the load balancer name or target group ARN, container name, and container port specified in the service definition are immutable. If you are using the <code>CODE_DEPLOY</code> deployment controller, these values can be changed when updating the service.</p> <p>For Application Load Balancers and Network Load Balancers, this object must contain the load balancer target group ARN, the container name (as it appears in a container definition), and the container port to access from the load balancer. When a task from this service is placed on a container instance, the container instance and port combination is registered as a target in the target group specified here.</p> <p>For Classic Load Balancers, this object must contain the load balancer name, the container name (as it appears in a container definition), and the container port to access from the load balancer. When a task from this service is placed on a container instance, the container instance is registered with the load balancer specified here.</p> <p>Services with tasks that use the <code>awsvpc</code> network mode (for example, those with the Fargate launch type) only support Application Load Balancers and Network Load Balancers. Classic Load Balancers are not supported. Also, when you create any target groups for these services, you must choose <code>ip</code> as the target type, not <code>instance</code>, because tasks that use the <code>awsvpc</code> network mode are associated with an elastic network interface, not an Amazon EC2 instance.</p>
+    /// <p>A load balancer object representing the load balancers to use with your service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html">Service Load Balancing</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If the service is using the rolling update (<code>ECS</code>) deployment controller and using either an Application Load Balancer or Network Load Balancer, you can specify multiple target groups to attach to the service. The service-linked role is required for services that make use of multiple target groups. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If the service is using the <code>CODE_DEPLOY</code> deployment controller, the service is required to use either an Application Load Balancer or Network Load Balancer. When creating an AWS CodeDeploy deployment group, you specify two target groups (referred to as a <code>targetGroupPair</code>). During a deployment, AWS CodeDeploy determines which task set in your service has the status <code>PRIMARY</code> and associates one target group with it, and then associates the other target group with the replacement task set. The load balancer can also have up to two listeners: a required listener for production traffic and an optional listener that allows you perform validation tests with Lambda functions before routing production traffic to it.</p> <p>After you create a service using the <code>ECS</code> deployment controller, the load balancer name or target group ARN, container name, and container port specified in the service definition are immutable. If you are using the <code>CODE_DEPLOY</code> deployment controller, these values can be changed when updating the service.</p> <p>For Application Load Balancers and Network Load Balancers, this object must contain the load balancer target group ARN, the container name (as it appears in a container definition), and the container port to access from the load balancer. When a task from this service is placed on a container instance, the container instance and port combination is registered as a target in the target group specified here.</p> <p>For Classic Load Balancers, this object must contain the load balancer name, the container name (as it appears in a container definition), and the container port to access from the load balancer. When a task from this service is placed on a container instance, the container instance is registered with the load balancer specified here.</p> <p>Services with tasks that use the <code>awsvpc</code> network mode (for example, those with the Fargate launch type) only support Application Load Balancers and Network Load Balancers. Classic Load Balancers are not supported. Also, when you create any target groups for these services, you must choose <code>ip</code> as the target type, not <code>instance</code>, because tasks that use the <code>awsvpc</code> network mode are associated with an elastic network interface, not an Amazon EC2 instance.</p>
     #[serde(rename = "loadBalancers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub load_balancers: Option<Vec<LoadBalancer>>,
@@ -600,7 +721,7 @@ pub struct CreateServiceRequest {
     #[serde(rename = "propagateTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub propagate_tags: Option<String>,
-    /// <p>The name or full Amazon Resource Name (ARN) of the IAM role that allows Amazon ECS to make calls to your load balancer on your behalf. This parameter is only permitted if you are using a load balancer with your service and your task definition does not use the <code>awsvpc</code> network mode. If you specify the <code>role</code> parameter, you must also specify a load balancer object with the <code>loadBalancers</code> parameter.</p> <important> <p>If your account has already created the Amazon ECS service-linked role, that role is used by default for your service unless you specify a role here. The service-linked role is required if your task definition uses the <code>awsvpc</code> network mode, in which case you should not specify a role here. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> </important> <p>If your specified role has a path other than <code>/</code>, then you must either specify the full role ARN (this is recommended) or prefix the role name with the path. For example, if a role with the name <code>bar</code> has a path of <code>/foo/</code> then you would specify <code>/foo/bar</code> as the role name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-friendly-names">Friendly Names and Paths</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>The name or full Amazon Resource Name (ARN) of the IAM role that allows Amazon ECS to make calls to your load balancer on your behalf. This parameter is only permitted if you are using a load balancer with your service and your task definition does not use the <code>awsvpc</code> network mode. If you specify the <code>role</code> parameter, you must also specify a load balancer object with the <code>loadBalancers</code> parameter.</p> <important> <p>If your account has already created the Amazon ECS service-linked role, that role is used by default for your service unless you specify a role here. The service-linked role is required if your task definition uses the <code>awsvpc</code> network mode or if the service is configured to use service discovery, an external deployment controller, multiple target groups, or Elastic Inference accelerators in which case you should not specify a role here. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> </important> <p>If your specified role has a path other than <code>/</code>, then you must either specify the full role ARN (this is recommended) or prefix the role name with the path. For example, if a role with the name <code>bar</code> has a path of <code>/foo/</code> then you would specify <code>/foo/bar</code> as the role name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-friendly-names">Friendly Names and Paths</a> in the <i>IAM User Guide</i>.</p>
     #[serde(rename = "role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
@@ -636,6 +757,10 @@ pub struct CreateServiceResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTaskSetRequest {
+    /// <p>The capacity provider strategy to use for the task set.</p> <p>A capacity provider strategy consists of one or more capacity providers along with the <code>base</code> and <code>weight</code> to assign to them. A capacity provider must be associated with the cluster to be used in a capacity provider strategy. The <a>PutClusterCapacityProviders</a> API is used to associate a capacity provider with a cluster. Only capacity providers with an <code>ACTIVE</code> or <code>UPDATING</code> status can be used.</p> <p>If a <code>capacityProviderStrategy</code> is specified, the <code>launchType</code> parameter must be omitted. If no <code>capacityProviderStrategy</code> or <code>launchType</code> is specified, the <code>defaultCapacityProviderStrategy</code> for the cluster is used.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p> <p>The <a>PutClusterCapacityProviders</a> API operation is used to update the list of available capacity providers for a cluster after the cluster is created.</p>
+    #[serde(rename = "capacityProviderStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_provider_strategy: Option<Vec<CapacityProviderStrategyItem>>,
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Up to 32 ASCII characters are allowed.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -647,7 +772,7 @@ pub struct CreateTaskSetRequest {
     #[serde(rename = "externalId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_id: Option<String>,
-    /// <p>The launch type that new tasks in the task set will use. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>The launch type that new tasks in the task set will use. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If a <code>launchType</code> is specified, the <code>capacityProviderStrategy</code> parameter must be omitted.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_type: Option<String>,
@@ -794,6 +919,10 @@ pub struct DeleteTaskSetResponse {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Deployment {
+    /// <p>The capacity provider strategy that the deployment is using.</p>
+    #[serde(rename = "capacityProviderStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_provider_strategy: Option<Vec<CapacityProviderStrategyItem>>,
     /// <p>The Unix timestamp for when the service deployment was created.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -902,12 +1031,49 @@ pub struct DeregisterTaskDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeCapacityProvidersRequest {
+    /// <p>The short name or full Amazon Resource Name (ARN) of one or more capacity providers. Up to <code>100</code> capacity providers can be described in an action.</p>
+    #[serde(rename = "capacityProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_providers: Option<Vec<String>>,
+    /// <p>Specifies whether or not you want to see the resource tags for the capacity provider. If <code>TAGS</code> is specified, the tags are included in the response. If this field is omitted, tags are not included in the response.</p>
+    #[serde(rename = "include")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include: Option<Vec<String>>,
+    /// <p>The maximum number of account setting results returned by <code>DescribeCapacityProviders</code> in paginated output. When this parameter is used, <code>DescribeCapacityProviders</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeCapacityProviders</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 10. If this parameter is not used, then <code>DescribeCapacityProviders</code> returns up to 10 results and a <code>nextToken</code> value if applicable.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeCapacityProviders</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeCapacityProvidersResponse {
+    /// <p>The list of capacity providers.</p>
+    #[serde(rename = "capacityProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_providers: Option<Vec<CapacityProvider>>,
+    /// <p>Any failures associated with the call.</p>
+    #[serde(rename = "failures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failures: Option<Vec<Failure>>,
+    /// <p>The <code>nextToken</code> value to include in a future <code>DescribeCapacityProviders</code> request. When the results of a <code>DescribeCapacityProviders</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeClustersRequest {
     /// <p>A list of up to 100 cluster names or full cluster Amazon Resource Name (ARN) entries. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "clusters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub clusters: Option<Vec<String>>,
-    /// <p><p>Additional information about your clusters to be separated by launch type, including:</p> <ul> <li> <p>runningEC2TasksCount</p> </li> <li> <p>runningFargateTasksCount</p> </li> <li> <p>pendingEC2TasksCount</p> </li> <li> <p>pendingFargateTasksCount</p> </li> <li> <p>activeEC2ServiceCount</p> </li> <li> <p>activeFargateServiceCount</p> </li> <li> <p>drainingEC2ServiceCount</p> </li> <li> <p>drainingFargateServiceCount</p> </li> </ul></p>
+    /// <p>Whether to include additional information about your clusters in the response. If this field is omitted, the attachments, statistics, and tags are not included.</p> <p>If <code>ATTACHMENTS</code> is specified, the attachments for the container instances or tasks within the cluster are included.</p> <p>If <code>SETTINGS</code> is specified, the settings for the cluster are included.</p> <p>If <code>STATISTICS</code> is specified, the following additional information, separated by launch type, is included:</p> <ul> <li> <p>runningEC2TasksCount</p> </li> <li> <p>runningFargateTasksCount</p> </li> <li> <p>pendingEC2TasksCount</p> </li> <li> <p>pendingFargateTasksCount</p> </li> <li> <p>activeEC2ServiceCount</p> </li> <li> <p>activeFargateServiceCount</p> </li> <li> <p>drainingEC2ServiceCount</p> </li> <li> <p>drainingFargateServiceCount</p> </li> </ul> <p>If <code>TAGS</code> is specified, the metadata tags associated with the cluster are included.</p>
     #[serde(rename = "include")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include: Option<Vec<String>>,
@@ -1135,16 +1301,20 @@ pub struct Failure {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The details of the failure.</p>
+    #[serde(rename = "detail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detail: Option<String>,
     /// <p>The reason for the failure.</p>
     #[serde(rename = "reason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<String>,
 }
 
-/// <p>The FireLens configuration for the container. This is used to specify and configure a log router for container logs.</p>
+/// <p>The FireLens configuration for the container. This is used to specify and configure a log router for container logs. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html">Custom Log Routing</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FirelensConfiguration {
-    /// <p>The options to use when configuring the log router. This field is optional and can be used to add additional metadata, such as the task, task definition, cluster, and container instance details to the log event. If specified, the syntax to use is <code>"options":{"enable-ecs-log-metadata":"true|false"}</code>.</p>
+    /// <p>The options to use when configuring the log router. This field is optional and can be used to specify a custom configuration file or to add additional metadata, such as the task, task definition, cluster, and container instance details to the log event. If specified, the syntax to use is <code>"options":{"enable-ecs-log-metadata":"true|false","config-file-type:"s3|file","config-file-value":"arn:aws:s3:::mybucket/fluent.conf|filepath"}</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html#firelens-taskdef">Creating a Task Definition that Uses a FireLens Configuration</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "options")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub options: Option<::std::collections::HashMap<String, String>>,
@@ -1294,7 +1464,7 @@ pub struct ListAccountSettingsRequest {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListAccountSettings</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListAccountSettings</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1339,7 +1509,7 @@ pub struct ListAttributesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListAttributes</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListAttributes</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1367,7 +1537,7 @@ pub struct ListClustersRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListClusters</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListClusters</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1400,7 +1570,7 @@ pub struct ListContainerInstancesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListContainerInstances</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListContainerInstances</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1437,7 +1607,7 @@ pub struct ListServicesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListServices</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListServices</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1486,7 +1656,7 @@ pub struct ListTaskDefinitionFamiliesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListTaskDefinitionFamilies</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListTaskDefinitionFamilies</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1519,7 +1689,7 @@ pub struct ListTaskDefinitionsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListTaskDefinitions</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListTaskDefinitions</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1572,7 +1742,7 @@ pub struct ListTasksRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListTasks</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a <code>ListTasks</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1630,10 +1800,31 @@ pub struct LogConfiguration {
     #[serde(rename = "options")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub options: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The secrets to pass to the log configuration.</p>
+    /// <p>The secrets to pass to the log configuration. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html">Specifying Sensitive Data</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "secretOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_options: Option<Vec<Secret>>,
+}
+
+/// <p>The managed scaling settings for the Auto Scaling group capacity provider.</p> <p>When managed scaling is enabled, Amazon ECS manages the scale-in and scale-out actions of the Auto Scaling group. Amazon ECS manages a target tracking scaling policy using an Amazon ECS-managed CloudWatch metric with the specified <code>targetCapacity</code> value as the target value for the metric. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html#asg-capacity-providers-managed-scaling">Using Managed Scaling</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If managed scaling is disabled, the user must manage the scaling of the Auto Scaling group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ManagedScaling {
+    /// <p>The maximum number of container instances that Amazon ECS will scale in or scale out at one time. If this parameter is omitted, the default value of <code>10000</code> is used.</p>
+    #[serde(rename = "maximumScalingStepSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_scaling_step_size: Option<i64>,
+    /// <p>The minimum number of container instances that Amazon ECS will scale in or scale out at one time. If this parameter is omitted, the default value of <code>1</code> is used.</p>
+    #[serde(rename = "minimumScalingStepSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_scaling_step_size: Option<i64>,
+    /// <p>Whether or not to enable managed scaling for the capacity provider.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The target capacity value for the capacity provider. The specified value must be greater than <code>0</code> and less than or equal to <code>100</code>. A value of <code>100</code> will result in the Amazon EC2 instances in your Auto Scaling group being completely utilized.</p>
+    #[serde(rename = "targetCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_capacity: Option<i64>,
 }
 
 /// <p>Details on a volume mount point that is used in a container definition.</p>
@@ -1833,6 +2024,27 @@ pub struct PutAttributesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutClusterCapacityProvidersRequest {
+    /// <p>The short name or full Amazon Resource Name (ARN) of one or more capacity providers to associate with the cluster.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p>
+    #[serde(rename = "capacityProviders")]
+    pub capacity_providers: Vec<String>,
+    /// <p>The short name or full Amazon Resource Name (ARN) of the cluster to modify the capacity provider settings for. If you do not specify a cluster, the default cluster is assumed.</p>
+    #[serde(rename = "cluster")]
+    pub cluster: String,
+    /// <p>The capacity provider strategy to use by default for the cluster.</p> <p>When creating a service or running a task on a cluster, if no capacity provider or launch type is specified then the default capacity provider strategy for the cluster is used.</p> <p>A capacity provider strategy consists of one or more capacity providers along with the <code>base</code> and <code>weight</code> to assign to them. A capacity provider must be associated with the cluster to be used in a capacity provider strategy. The <a>PutClusterCapacityProviders</a> API is used to associate a capacity provider with a cluster. Only capacity providers with an <code>ACTIVE</code> or <code>UPDATING</code> status can be used.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p>
+    #[serde(rename = "defaultCapacityProviderStrategy")]
+    pub default_capacity_provider_strategy: Vec<CapacityProviderStrategyItem>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutClusterCapacityProvidersResponse {
+    #[serde(rename = "cluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster: Option<Cluster>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterContainerInstanceRequest {
     /// <p>The container instance attributes that this container instance supports.</p>
     #[serde(rename = "attributes")]
@@ -1913,7 +2125,7 @@ pub struct RegisterTaskDefinitionRequest {
     #[serde(rename = "networkMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_mode: Option<String>,
-    /// <p><p>The process namespace to use for the containers in the task. The valid values are <code>host</code> or <code>task</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> PID mode on the same container instance share the same IPC resources with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace. For more information, see <a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">PID settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> PID mode is used, be aware that there is a heightened risk of undesired process namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
+    /// <p><p>The process namespace to use for the containers in the task. The valid values are <code>host</code> or <code>task</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> PID mode on the same container instance share the same process namespace with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace. For more information, see <a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">PID settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> PID mode is used, be aware that there is a heightened risk of undesired process namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
     #[serde(rename = "pidMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pid_mode: Option<String>,
@@ -2005,6 +2217,10 @@ pub struct ResourceRequirement {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RunTaskRequest {
+    /// <p>The capacity provider strategy to use for the task.</p> <p>A capacity provider strategy consists of one or more capacity providers along with the <code>base</code> and <code>weight</code> to assign to them. A capacity provider must be associated with the cluster to be used in a capacity provider strategy. The <a>PutClusterCapacityProviders</a> API is used to associate a capacity provider with a cluster. Only capacity providers with an <code>ACTIVE</code> or <code>UPDATING</code> status can be used.</p> <p>If a <code>capacityProviderStrategy</code> is specified, the <code>launchType</code> parameter must be omitted. If no <code>capacityProviderStrategy</code> or <code>launchType</code> is specified, the <code>defaultCapacityProviderStrategy</code> for the cluster is used.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p> <p>The <a>PutClusterCapacityProviders</a> API operation is used to update the list of available capacity providers for a cluster after the cluster is created.</p>
+    #[serde(rename = "capacityProviderStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_provider_strategy: Option<Vec<CapacityProviderStrategyItem>>,
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster on which to run your task. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2021,7 +2237,7 @@ pub struct RunTaskRequest {
     #[serde(rename = "group")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group: Option<String>,
-    /// <p>The launch type on which to run your task. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>The launch type on which to run your task. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If a <code>launchType</code> is specified, the <code>capacityProviderStrategy</code> parameter must be omitted.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_type: Option<String>,
@@ -2049,6 +2265,10 @@ pub struct RunTaskRequest {
     #[serde(rename = "propagateTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub propagate_tags: Option<String>,
+    /// <p>The reference ID to use for the task.</p>
+    #[serde(rename = "referenceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reference_id: Option<String>,
     /// <p>An optional tag specified when a task is started. For example, if you automatically trigger a task to run a batch process job, you could apply a unique identifier for that job to your task with the <code>startedBy</code> parameter. You can then identify which tasks belong to that job by filtering the results of a <a>ListTasks</a> call with the <code>startedBy</code> value. Up to 36 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p> <p>If a task is started by an Amazon ECS service, then the <code>startedBy</code> parameter contains the deployment ID of the service that starts it.</p>
     #[serde(rename = "startedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2103,6 +2323,10 @@ pub struct Secret {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Service {
+    /// <p>The capacity provider strategy associated with the service.</p>
+    #[serde(rename = "capacityProviderStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_provider_strategy: Option<Vec<CapacityProviderStrategyItem>>,
     /// <p>The Amazon Resource Name (ARN) of the cluster that hosts the service.</p>
     #[serde(rename = "clusterArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2303,6 +2527,10 @@ pub struct StartTaskRequest {
     #[serde(rename = "propagateTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub propagate_tags: Option<String>,
+    /// <p>The reference ID to use for the task.</p>
+    #[serde(rename = "referenceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reference_id: Option<String>,
     /// <p>An optional tag specified when a task is started. For example, if you automatically trigger a task to run a batch process job, you could apply a unique identifier for that job to your task with the <code>startedBy</code> parameter. You can then identify which tasks belong to that job by filtering the results of a <a>ListTasks</a> call with the <code>startedBy</code> value. Up to 36 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p> <p>If a task is started by an Amazon ECS service, then the <code>startedBy</code> parameter contains the deployment ID of the service that starts it.</p>
     #[serde(rename = "startedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2495,7 +2723,7 @@ pub struct Tag {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) of the resource to which to add tags. Currently, the supported resources are Amazon ECS tasks, services, task definitions, clusters, and container instances.</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource to which to add tags. Currently, the supported resources are Amazon ECS capacity providers, tasks, services, task definitions, clusters, and container instances.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
     /// <p><p>The tags to add to the resource. A tag is an array of key-value pairs.</p> <p>The following basic restrictions apply to tags:</p> <ul> <li> <p>Maximum number of tags per resource - 50</p> </li> <li> <p>For each resource, each tag key must be unique, and each tag key can have only one value.</p> </li> <li> <p>Maximum key length - 128 Unicode characters in UTF-8</p> </li> <li> <p>Maximum value length - 256 Unicode characters in UTF-8</p> </li> <li> <p>If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : / @.</p> </li> <li> <p>Tag keys and values are case-sensitive.</p> </li> <li> <p>Do not use <code>aws:</code>, <code>AWS:</code>, or any upper or lowercase combination of such as a prefix for either keys or values as it is reserved for AWS use. You cannot edit or delete tag keys or values with this prefix. Tags with this prefix do not count against your tags per resource limit.</p> </li> </ul></p>
@@ -2515,6 +2743,18 @@ pub struct Task {
     #[serde(rename = "attachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attachments: Option<Vec<Attachment>>,
+    /// <p>The attributes of the task</p>
+    #[serde(rename = "attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<Attribute>>,
+    /// <p>The availability zone of the task.</p>
+    #[serde(rename = "availabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone: Option<String>,
+    /// <p>The capacity provider associated with the task.</p>
+    #[serde(rename = "capacityProviderName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_provider_name: Option<String>,
     /// <p>The ARN of the cluster that hosts the task.</p>
     #[serde(rename = "clusterArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2627,7 +2867,7 @@ pub struct Task {
     #[serde(rename = "taskDefinitionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_definition_arn: Option<String>,
-    /// <p>The version counter for the task. Every time a task experiences a change that triggers a CloudWatch event, the version counter is incremented. If you are replicating your Amazon ECS task state with CloudWatch Events, you can compare the version of a task reported by the Amazon ECS API actionss with the version reported in CloudWatch Events for the task (inside the <code>detail</code> object) to verify that the version in your event stream is current.</p>
+    /// <p>The version counter for the task. Every time a task experiences a change that triggers a CloudWatch event, the version counter is incremented. If you are replicating your Amazon ECS task state with CloudWatch Events, you can compare the version of a task reported by the Amazon ECS API actions with the version reported in CloudWatch Events for the task (inside the <code>detail</code> object) to verify that the version in your event stream is current.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
@@ -2657,6 +2897,10 @@ pub struct TaskDefinition {
     #[serde(rename = "family")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub family: Option<String>,
+    /// <p>The Elastic Inference accelerator associated with the task.</p>
+    #[serde(rename = "inferenceAccelerators")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inference_accelerators: Option<Vec<InferenceAccelerator>>,
     /// <p><p>The IPC resource namespace to use for the containers in the task. The valid values are <code>host</code>, <code>task</code>, or <code>none</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> IPC mode on the same container instance share the same IPC resources with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same IPC resources. If <code>none</code> is specified, then IPC resources within the containers of a task are private and not shared with other containers in a task or on the container instance. If no value is specified, then the IPC resource namespace sharing depends on the Docker daemon setting on the container instance. For more information, see <a href="https://docs.docker.com/engine/reference/run/#ipc-settings---ipc">IPC settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> IPC mode is used, be aware that there is a heightened risk of undesired IPC namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <p>If you are setting namespaced kernel parameters using <code>systemControls</code> for the containers in the task, the following will apply to your IPC resource namespace. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html">System Controls</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <ul> <li> <p>For tasks that use the <code>host</code> IPC mode, IPC namespace related <code>systemControls</code> are not supported.</p> </li> <li> <p>For tasks that use the <code>task</code> IPC mode, IPC namespace related <code>systemControls</code> will apply to all containers within a task.</p> </li> </ul> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
     #[serde(rename = "ipcMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2669,7 +2913,7 @@ pub struct TaskDefinition {
     #[serde(rename = "networkMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_mode: Option<String>,
-    /// <p><p>The process namespace to use for the containers in the task. The valid values are <code>host</code> or <code>task</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> PID mode on the same container instance share the same IPC resources with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace. For more information, see <a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">PID settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> PID mode is used, be aware that there is a heightened risk of undesired process namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
+    /// <p><p>The process namespace to use for the containers in the task. The valid values are <code>host</code> or <code>task</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> PID mode on the same container instance share the same process namespace with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace. For more information, see <a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">PID settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> PID mode is used, be aware that there is a heightened risk of undesired process namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
     #[serde(rename = "pidMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pid_mode: Option<String>,
@@ -2731,6 +2975,10 @@ pub struct TaskOverride {
     #[serde(rename = "containerOverrides")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_overrides: Option<Vec<ContainerOverride>>,
+    /// <p>The cpu override for the task.</p>
+    #[serde(rename = "cpu")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cpu: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the task execution role that the Amazon ECS container agent and the Docker daemon can assume.</p>
     #[serde(rename = "executionRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2739,6 +2987,10 @@ pub struct TaskOverride {
     #[serde(rename = "inferenceAcceleratorOverrides")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inference_accelerator_overrides: Option<Vec<InferenceAcceleratorOverride>>,
+    /// <p>The memory override for the task.</p>
+    #[serde(rename = "memory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the IAM role that containers in this task can assume. All containers in this task are granted the permissions that are specified in this role.</p>
     #[serde(rename = "taskRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2749,6 +3001,10 @@ pub struct TaskOverride {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskSet {
+    /// <p>The capacity provider strategy associated with the task set.</p>
+    #[serde(rename = "capacityProviderStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_provider_strategy: Option<Vec<CapacityProviderStrategyItem>>,
     /// <p>The Amazon Resource Name (ARN) of the cluster that the service that hosts the task set exists in.</p>
     #[serde(rename = "clusterArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2866,7 +3122,7 @@ pub struct Ulimit {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) of the resource from which to delete tags. Currently, the supported resources are Amazon ECS tasks, services, task definitions, clusters, and container instances.</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource from which to delete tags. Currently, the supported resources are Amazon ECS capacity providers, tasks, services, task definitions, clusters, and container instances.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
     /// <p>The keys of the tags to be removed.</p>
@@ -2966,6 +3222,10 @@ pub struct UpdateServicePrimaryTaskSetResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateServiceRequest {
+    /// <p><p>The capacity provider strategy to update the service to use.</p> <p>If the service is using the default capacity provider strategy for the cluster, the service can be updated to use one or more capacity providers. However, when a service is using a non-default capacity provider strategy, the service cannot be updated to use the cluster&#39;s default capacity provider strategy.</p> <p/></p>
+    #[serde(rename = "capacityProviderStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_provider_strategy: Option<Vec<CapacityProviderStrategyItem>>,
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that your service is running on. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2982,15 +3242,14 @@ pub struct UpdateServiceRequest {
     #[serde(rename = "forceNewDeployment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force_new_deployment: Option<bool>,
-    /// <p>The period of time, in seconds, that the Amazon ECS service scheduler should ignore unhealthy Elastic Load Balancing target health checks after a task has first started. This is only valid if your service is configured to use a load balancer. If your service's tasks take a while to start and respond to Elastic Load Balancing health checks, you can specify a health check grace period of up to 2,147,483,647 seconds. During that time, the ECS service scheduler ignores the Elastic Load Balancing health check status. This grace period can prevent the ECS service scheduler from marking tasks as unhealthy and stopping them before they have time to come up.</p>
+    /// <p>The period of time, in seconds, that the Amazon ECS service scheduler should ignore unhealthy Elastic Load Balancing target health checks after a task has first started. This is only valid if your service is configured to use a load balancer. If your service's tasks take a while to start and respond to Elastic Load Balancing health checks, you can specify a health check grace period of up to 2,147,483,647 seconds. During that time, the Amazon ECS service scheduler ignores the Elastic Load Balancing health check status. This grace period can prevent the ECS service scheduler from marking tasks as unhealthy and stopping them before they have time to come up.</p>
     #[serde(rename = "healthCheckGracePeriodSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_check_grace_period_seconds: Option<i64>,
-    /// <p><p>The network configuration for the service. This parameter is required for task definitions that use the <code>awsvpc</code> network mode to receive their own elastic network interface, and it is not supported for other network modes. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html">Task Networking</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>Updating a service to add a subnet to a list of existing subnets does not trigger a service deployment. For example, if your network configuration change is to keep the existing subnets and simply add another subnet to the network configuration, this does not trigger a new service deployment.</p> </note></p>
     #[serde(rename = "networkConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_configuration: Option<NetworkConfiguration>,
-    /// <p>The platform version on which your tasks in the service are running. A platform version is only specified for tasks using the Fargate launch type. If one is not specified, the <code>LATEST</code> platform version is used by default. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html">AWS Fargate Platform Versions</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>The platform version on which your tasks in the service are running. A platform version is only specified for tasks using the Fargate launch type. If a platform version is not specified, the <code>LATEST</code> platform version is used by default. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html">AWS Fargate Platform Versions</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "platformVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform_version: Option<String>,
@@ -3082,6 +3341,61 @@ pub struct VolumeFrom {
     pub source_container: Option<String>,
 }
 
+/// Errors returned by CreateCapacityProvider
+#[derive(Debug, PartialEq)]
+pub enum CreateCapacityProviderError {
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The limit for the resource has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>These errors are usually caused by a server issue.</p>
+    Server(String),
+}
+
+impl CreateCapacityProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCapacityProviderError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(CreateCapacityProviderError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateCapacityProviderError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateCapacityProviderError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(CreateCapacityProviderError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateCapacityProviderError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateCapacityProviderError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateCapacityProviderError::Client(ref cause) => cause,
+            CreateCapacityProviderError::InvalidParameter(ref cause) => cause,
+            CreateCapacityProviderError::LimitExceeded(ref cause) => cause,
+            CreateCapacityProviderError::Server(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterError {
@@ -3402,6 +3716,8 @@ pub enum DeleteClusterError {
     InvalidParameter(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
+    /// <p>There is already a current Amazon ECS container agent update in progress on the specified container instance. If the container agent becomes disconnected while it is in a transitional stage, such as <code>PENDING</code> or <code>STAGING</code>, the update process can get stuck in that state. However, when the agent reconnects, it resumes where it stopped previously.</p>
+    UpdateInProgress(String),
 }
 
 impl DeleteClusterError {
@@ -3433,6 +3749,9 @@ impl DeleteClusterError {
                 "ServerException" => {
                     return RusotoError::Service(DeleteClusterError::Server(err.msg))
                 }
+                "UpdateInProgressException" => {
+                    return RusotoError::Service(DeleteClusterError::UpdateInProgress(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -3455,6 +3774,7 @@ impl Error for DeleteClusterError {
             DeleteClusterError::ClusterNotFound(ref cause) => cause,
             DeleteClusterError::InvalidParameter(ref cause) => cause,
             DeleteClusterError::Server(ref cause) => cause,
+            DeleteClusterError::UpdateInProgress(ref cause) => cause,
         }
     }
 }
@@ -3532,7 +3852,7 @@ pub enum DeleteTaskSetError {
     ServiceNotActive(String),
     /// <p>The specified service could not be found. You can view your available services with <a>ListServices</a>. Amazon ECS services are cluster-specific and Region-specific.</p>
     ServiceNotFound(String),
-    /// <p>The specified task set could not be found. You can view your available container instances with <a>DescribeTaskSets</a>. Task sets are specific to each cluster, service and Region.</p>
+    /// <p>The specified task set could not be found. You can view your available task sets with <a>DescribeTaskSets</a>. Task sets are specific to each cluster, service and Region.</p>
     TaskSetNotFound(String),
     /// <p>The specified task is not supported in this Region.</p>
     UnsupportedFeature(String),
@@ -3697,6 +4017,53 @@ impl Error for DeregisterTaskDefinitionError {
             DeregisterTaskDefinitionError::Client(ref cause) => cause,
             DeregisterTaskDefinitionError::InvalidParameter(ref cause) => cause,
             DeregisterTaskDefinitionError::Server(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeCapacityProviders
+#[derive(Debug, PartialEq)]
+pub enum DescribeCapacityProvidersError {
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>These errors are usually caused by a server issue.</p>
+    Server(String),
+}
+
+impl DescribeCapacityProvidersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCapacityProvidersError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(DescribeCapacityProvidersError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeCapacityProvidersError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(DescribeCapacityProvidersError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeCapacityProvidersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeCapacityProvidersError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeCapacityProvidersError::Client(ref cause) => cause,
+            DescribeCapacityProvidersError::InvalidParameter(ref cause) => cause,
+            DescribeCapacityProvidersError::Server(ref cause) => cause,
         }
     }
 }
@@ -4649,6 +5016,79 @@ impl Error for PutAttributesError {
         }
     }
 }
+/// Errors returned by PutClusterCapacityProviders
+#[derive(Debug, PartialEq)]
+pub enum PutClusterCapacityProvidersError {
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are Region-specific.</p>
+    ClusterNotFound(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource is in-use and cannot be removed.</p>
+    ResourceInUse(String),
+    /// <p>These errors are usually caused by a server issue.</p>
+    Server(String),
+    /// <p>There is already a current Amazon ECS container agent update in progress on the specified container instance. If the container agent becomes disconnected while it is in a transitional stage, such as <code>PENDING</code> or <code>STAGING</code>, the update process can get stuck in that state. However, when the agent reconnects, it resumes where it stopped previously.</p>
+    UpdateInProgress(String),
+}
+
+impl PutClusterCapacityProvidersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutClusterCapacityProvidersError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(PutClusterCapacityProvidersError::Client(err.msg))
+                }
+                "ClusterNotFoundException" => {
+                    return RusotoError::Service(PutClusterCapacityProvidersError::ClusterNotFound(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        PutClusterCapacityProvidersError::InvalidParameter(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(PutClusterCapacityProvidersError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(PutClusterCapacityProvidersError::Server(err.msg))
+                }
+                "UpdateInProgressException" => {
+                    return RusotoError::Service(
+                        PutClusterCapacityProvidersError::UpdateInProgress(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for PutClusterCapacityProvidersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutClusterCapacityProvidersError {
+    fn description(&self) -> &str {
+        match *self {
+            PutClusterCapacityProvidersError::Client(ref cause) => cause,
+            PutClusterCapacityProvidersError::ClusterNotFound(ref cause) => cause,
+            PutClusterCapacityProvidersError::InvalidParameter(ref cause) => cause,
+            PutClusterCapacityProvidersError::ResourceInUse(ref cause) => cause,
+            PutClusterCapacityProvidersError::Server(ref cause) => cause,
+            PutClusterCapacityProvidersError::UpdateInProgress(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by RegisterContainerInstance
 #[derive(Debug, PartialEq)]
 pub enum RegisterContainerInstanceError {
@@ -5027,6 +5467,8 @@ pub enum SubmitTaskStateChangeError {
     AccessDenied(String),
     /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
 }
@@ -5040,6 +5482,11 @@ impl SubmitTaskStateChangeError {
                 }
                 "ClientException" => {
                     return RusotoError::Service(SubmitTaskStateChangeError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(SubmitTaskStateChangeError::InvalidParameter(
+                        err.msg,
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(SubmitTaskStateChangeError::Server(err.msg))
@@ -5061,6 +5508,7 @@ impl Error for SubmitTaskStateChangeError {
         match *self {
             SubmitTaskStateChangeError::AccessDenied(ref cause) => cause,
             SubmitTaskStateChangeError::Client(ref cause) => cause,
+            SubmitTaskStateChangeError::InvalidParameter(ref cause) => cause,
             SubmitTaskStateChangeError::Server(ref cause) => cause,
         }
     }
@@ -5472,7 +5920,7 @@ pub enum UpdateServicePrimaryTaskSetError {
     ServiceNotActive(String),
     /// <p>The specified service could not be found. You can view your available services with <a>ListServices</a>. Amazon ECS services are cluster-specific and Region-specific.</p>
     ServiceNotFound(String),
-    /// <p>The specified task set could not be found. You can view your available container instances with <a>DescribeTaskSets</a>. Task sets are specific to each cluster, service and Region.</p>
+    /// <p>The specified task set could not be found. You can view your available task sets with <a>DescribeTaskSets</a>. Task sets are specific to each cluster, service and Region.</p>
     TaskSetNotFound(String),
     /// <p>The specified task is not supported in this Region.</p>
     UnsupportedFeature(String),
@@ -5569,7 +6017,7 @@ pub enum UpdateTaskSetError {
     ServiceNotActive(String),
     /// <p>The specified service could not be found. You can view your available services with <a>ListServices</a>. Amazon ECS services are cluster-specific and Region-specific.</p>
     ServiceNotFound(String),
-    /// <p>The specified task set could not be found. You can view your available container instances with <a>DescribeTaskSets</a>. Task sets are specific to each cluster, service and Region.</p>
+    /// <p>The specified task set could not be found. You can view your available task sets with <a>DescribeTaskSets</a>. Task sets are specific to each cluster, service and Region.</p>
     TaskSetNotFound(String),
     /// <p>The specified task is not supported in this Region.</p>
     UnsupportedFeature(String),
@@ -5635,7 +6083,13 @@ impl Error for UpdateTaskSetError {
 }
 /// Trait representing the capabilities of the Amazon ECS API. Amazon ECS clients implement this trait.
 pub trait Ecs {
-    /// <p><p>Creates a new Amazon ECS cluster. By default, your account receives a <code>default</code> cluster when you launch your first container instance. However, you can create your own cluster with a unique name with the <code>CreateCluster</code> action.</p> <note> <p>When you call the <a>CreateCluster</a> API operation, Amazon ECS attempts to create the service-linked role for your account so that required resources in other AWS services can be managed on your behalf. However, if the IAM user that makes the call does not have permissions to create the service-linked role, it is not created. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> </note></p>
+    /// <p>Creates a new capacity provider. Capacity providers are associated with an Amazon ECS cluster and are used in capacity provider strategies to facilitate cluster auto scaling.</p> <p>Only capacity providers using an Auto Scaling group can be created. Amazon ECS tasks on AWS Fargate use the <code>FARGATE</code> and <code>FARGATE_SPOT</code> capacity providers which are already created and available to all accounts in Regions supported by AWS Fargate.</p>
+    fn create_capacity_provider(
+        &self,
+        input: CreateCapacityProviderRequest,
+    ) -> RusotoFuture<CreateCapacityProviderResponse, CreateCapacityProviderError>;
+
+    /// <p><p>Creates a new Amazon ECS cluster. By default, your account receives a <code>default</code> cluster when you launch your first container instance. However, you can create your own cluster with a unique name with the <code>CreateCluster</code> action.</p> <note> <p>When you call the <a>CreateCluster</a> API operation, Amazon ECS attempts to create the Amazon ECS service-linked role for your account so that required resources in other AWS services can be managed on your behalf. However, if the IAM user that makes the call does not have permissions to create the service-linked role, it is not created. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> </note></p>
     fn create_cluster(
         &self,
         input: CreateClusterRequest,
@@ -5694,6 +6148,12 @@ pub trait Ecs {
         &self,
         input: DeregisterTaskDefinitionRequest,
     ) -> RusotoFuture<DeregisterTaskDefinitionResponse, DeregisterTaskDefinitionError>;
+
+    /// <p>Describes one or more of your capacity providers.</p>
+    fn describe_capacity_providers(
+        &self,
+        input: DescribeCapacityProvidersRequest,
+    ) -> RusotoFuture<DescribeCapacityProvidersResponse, DescribeCapacityProvidersError>;
 
     /// <p>Describes one or more of your clusters.</p>
     fn describe_clusters(
@@ -5808,6 +6268,12 @@ pub trait Ecs {
         &self,
         input: PutAttributesRequest,
     ) -> RusotoFuture<PutAttributesResponse, PutAttributesError>;
+
+    /// <p>Modifies the available capacity providers and the default capacity provider strategy for a cluster.</p> <p>You must specify both the available capacity providers and a default capacity provider strategy for the cluster. If the specified cluster has existing capacity providers associated with it, you must specify all existing capacity providers in addition to any new ones you want to add. Any existing capacity providers associated with a cluster that are omitted from a <a>PutClusterCapacityProviders</a> API call will be disassociated with the cluster. You can only disassociate an existing capacity provider from a cluster if it's not being used by any existing tasks.</p> <p>When creating a service or running a task on a cluster, if no capacity provider or launch type is specified, then the cluster's default capacity provider strategy is used. It is recommended to define a default capacity provider strategy for your cluster, however you may specify an empty array (<code>[]</code>) to bypass defining a default strategy.</p>
+    fn put_cluster_capacity_providers(
+        &self,
+        input: PutClusterCapacityProvidersRequest,
+    ) -> RusotoFuture<PutClusterCapacityProvidersResponse, PutClusterCapacityProvidersError>;
 
     /// <p><note> <p>This action is only used by the Amazon ECS agent, and it is not intended for use outside of the agent.</p> </note> <p>Registers an EC2 instance into the specified cluster. This instance becomes available to place containers on.</p></p>
     fn register_container_instance(
@@ -5945,7 +6411,38 @@ impl fmt::Debug for EcsClient {
 }
 
 impl Ecs for EcsClient {
-    /// <p><p>Creates a new Amazon ECS cluster. By default, your account receives a <code>default</code> cluster when you launch your first container instance. However, you can create your own cluster with a unique name with the <code>CreateCluster</code> action.</p> <note> <p>When you call the <a>CreateCluster</a> API operation, Amazon ECS attempts to create the service-linked role for your account so that required resources in other AWS services can be managed on your behalf. However, if the IAM user that makes the call does not have permissions to create the service-linked role, it is not created. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> </note></p>
+    /// <p>Creates a new capacity provider. Capacity providers are associated with an Amazon ECS cluster and are used in capacity provider strategies to facilitate cluster auto scaling.</p> <p>Only capacity providers using an Auto Scaling group can be created. Amazon ECS tasks on AWS Fargate use the <code>FARGATE</code> and <code>FARGATE_SPOT</code> capacity providers which are already created and available to all accounts in Regions supported by AWS Fargate.</p>
+    fn create_capacity_provider(
+        &self,
+        input: CreateCapacityProviderRequest,
+    ) -> RusotoFuture<CreateCapacityProviderResponse, CreateCapacityProviderError> {
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerServiceV20141113.CreateCapacityProvider",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateCapacityProviderResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateCapacityProviderError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p><p>Creates a new Amazon ECS cluster. By default, your account receives a <code>default</code> cluster when you launch your first container instance. However, you can create your own cluster with a unique name with the <code>CreateCluster</code> action.</p> <note> <p>When you call the <a>CreateCluster</a> API operation, Amazon ECS attempts to create the Amazon ECS service-linked role for your account so that required resources in other AWS services can be managed on your behalf. However, if the IAM user that makes the call does not have permissions to create the service-linked role, it is not created. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> </note></p>
     fn create_cluster(
         &self,
         input: CreateClusterRequest,
@@ -6253,6 +6750,35 @@ impl Ecs for EcsClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeregisterTaskDefinitionError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Describes one or more of your capacity providers.</p>
+    fn describe_capacity_providers(
+        &self,
+        input: DescribeCapacityProvidersRequest,
+    ) -> RusotoFuture<DescribeCapacityProvidersResponse, DescribeCapacityProvidersError> {
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerServiceV20141113.DescribeCapacityProviders",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeCapacityProvidersResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeCapacityProvidersError::from_response(response))
                 }))
             }
         })
@@ -6847,6 +7373,35 @@ impl Ecs for EcsClient {
                         .from_err()
                         .and_then(|response| Err(PutAttributesError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Modifies the available capacity providers and the default capacity provider strategy for a cluster.</p> <p>You must specify both the available capacity providers and a default capacity provider strategy for the cluster. If the specified cluster has existing capacity providers associated with it, you must specify all existing capacity providers in addition to any new ones you want to add. Any existing capacity providers associated with a cluster that are omitted from a <a>PutClusterCapacityProviders</a> API call will be disassociated with the cluster. You can only disassociate an existing capacity provider from a cluster if it's not being used by any existing tasks.</p> <p>When creating a service or running a task on a cluster, if no capacity provider or launch type is specified, then the cluster's default capacity provider strategy is used. It is recommended to define a default capacity provider strategy for your cluster, however you may specify an empty array (<code>[]</code>) to bypass defining a default strategy.</p>
+    fn put_cluster_capacity_providers(
+        &self,
+        input: PutClusterCapacityProvidersRequest,
+    ) -> RusotoFuture<PutClusterCapacityProvidersResponse, PutClusterCapacityProvidersError> {
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerServiceV20141113.PutClusterCapacityProviders",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutClusterCapacityProvidersResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutClusterCapacityProvidersError::from_response(response))
+                }))
             }
         })
     }

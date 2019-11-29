@@ -37,6 +37,14 @@ pub struct AgeRange {
     pub low: Option<i64>,
 }
 
+/// <p>Assets are the images that you use to train and evaluate a model version. Assets are referenced by Sagemaker GroundTruth manifest files. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Asset {
+    #[serde(rename = "GroundTruthManifest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ground_truth_manifest: Option<GroundTruthManifest>,
+}
+
 /// <p>Indicates whether or not the face has a beard, and the confidence level in the determination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -159,6 +167,10 @@ pub struct CompareFacesMatch {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CompareFacesRequest {
+    /// <p>A filter that specifies a quality bar for how much filtering is done to identify faces. Filtered faces aren't compared. If you specify <code>AUTO</code>, Amazon Rekognition chooses the quality bar. If you specify <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>, filtering removes all faces that don’t meet the chosen quality bar. The quality bar is based on a variety of common use cases. Low-quality detections can occur for a number of reasons. Some examples are an object that's misidentified as a face, a face that's too blurry, or a face with a pose that's too extreme to use. If you specify <code>NONE</code>, no filtering is performed. The default value is <code>NONE</code>. </p> <p>To use quality filtering, the collection you are using must be associated with version 3 of the face model or higher.</p>
+    #[serde(rename = "QualityFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quality_filter: Option<String>,
     /// <p>The minimum level of confidence in the face matches that a match must meet to be included in the <code>FaceMatches</code> array.</p>
     #[serde(rename = "SimilarityThreshold")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -275,6 +287,50 @@ pub struct CreateCollectionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateProjectRequest {
+    /// <p>The name of the project to create.</p>
+    #[serde(rename = "ProjectName")]
+    pub project_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateProjectResponse {
+    /// <p>The Amazon Resource Name (ARN) of the new project. You can use the ARN to configure IAM access to the project. </p>
+    #[serde(rename = "ProjectArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub project_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateProjectVersionRequest {
+    /// <p>The Amazon S3 location to store the results of training.</p>
+    #[serde(rename = "OutputConfig")]
+    pub output_config: OutputConfig,
+    /// <p>The ARN of the Amazon Rekognition Custom Labels project that manages the model that you want to train.</p>
+    #[serde(rename = "ProjectArn")]
+    pub project_arn: String,
+    /// <p>The dataset to use for testing.</p>
+    #[serde(rename = "TestingData")]
+    pub testing_data: TestingData,
+    /// <p>The dataset to use for training. </p>
+    #[serde(rename = "TrainingData")]
+    pub training_data: TrainingData,
+    /// <p>A name for the version of the model. This value must be unique.</p>
+    #[serde(rename = "VersionName")]
+    pub version_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateProjectVersionResponse {
+    /// <p>The ARN of the model version that was created. Use <code>DescribeProjectVersion</code> to get the current status of the training operation.</p>
+    #[serde(rename = "ProjectVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub project_version_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateStreamProcessorRequest {
     /// <p>Kinesis video stream stream that provides the source streaming video. If you are using the AWS CLI, the parameter name is <code>StreamProcessorInput</code>.</p>
     #[serde(rename = "Input")]
@@ -300,6 +356,24 @@ pub struct CreateStreamProcessorResponse {
     #[serde(rename = "StreamProcessorArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_processor_arn: Option<String>,
+}
+
+/// <p>A custom label detected in an image by a call to <a>DetectCustomLabels</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CustomLabel {
+    /// <p>The confidence that the model has in the detection of the custom label. The range is 0-100. A higher value indicates a higher confidence.</p>
+    #[serde(rename = "Confidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confidence: Option<f32>,
+    /// <p>The location of the detected object on the image that corresponds to the custom label. Includes an axis aligned coarse bounding box surrounding the object and a finer grain polygon for more accurate spatial information.</p>
+    #[serde(rename = "Geometry")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub geometry: Option<Geometry>,
+    /// <p>The name of the custom label.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -377,6 +451,63 @@ pub struct DescribeCollectionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeProjectVersionsRequest {
+    /// <p>The maximum number of results to return per paginated call. The largest value you can specify is 100. If you specify a value greater than 100, a ValidationException error occurs. The default value is 100. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous response was incomplete (because there is more results to retrieve), Amazon Rekognition Custom Labels returns a pagination token in the response. You can use this pagination token to retrieve the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the project that contains the models you want to describe.</p>
+    #[serde(rename = "ProjectArn")]
+    pub project_arn: String,
+    /// <p>A list of model version names that you want to describe. You can add up to 10 model version names to the list. If you don't specify a value, all model descriptions are returned.</p>
+    #[serde(rename = "VersionNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_names: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeProjectVersionsResponse {
+    /// <p>If the previous response was incomplete (because there is more results to retrieve), Amazon Rekognition Custom Labels returns a pagination token in the response. You can use this pagination token to retrieve the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of model descriptions. The list is sorted by the creation date and time of the model versions, latest to earliest.</p>
+    #[serde(rename = "ProjectVersionDescriptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub project_version_descriptions: Option<Vec<ProjectVersionDescription>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeProjectsRequest {
+    /// <p>The maximum number of results to return per paginated call. The largest value you can specify is 100. If you specify a value greater than 100, a ValidationException error occurs. The default value is 100. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous response was incomplete (because there is more results to retrieve), Amazon Rekognition Custom Labels returns a pagination token in the response. You can use this pagination token to retrieve the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeProjectsResponse {
+    /// <p>If the previous response was incomplete (because there is more results to retrieve), Amazon Rekognition Custom Labels returns a pagination token in the response. You can use this pagination token to retrieve the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of project descriptions. The list is sorted by the date and time the projects are created.</p>
+    #[serde(rename = "ProjectDescriptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub project_descriptions: Option<Vec<ProjectDescription>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeStreamProcessorRequest {
     /// <p>Name of the stream processor for which you want information.</p>
     #[serde(rename = "Name")]
@@ -426,6 +557,32 @@ pub struct DescribeStreamProcessorResponse {
     #[serde(rename = "StreamProcessorArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_processor_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DetectCustomLabelsRequest {
+    #[serde(rename = "Image")]
+    pub image: Image,
+    /// <p>Maximum number of results you want the service to return in the response. The service returns the specified number of highest confidence labels ranked from highest confidence to lowest.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Specifies the minimum confidence level for the labels to return. Amazon Rekognition doesn't return any labels with a confidence lower than this specified value. If you specify a value of 0, all labels are return, regardless of the default thresholds that the model version applies.</p>
+    #[serde(rename = "MinConfidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_confidence: Option<f32>,
+    /// <p>The ARN of the model version that you want to use.</p>
+    #[serde(rename = "ProjectVersionArn")]
+    pub project_version_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DetectCustomLabelsResponse {
+    /// <p>An array of custom labels detected in the input image.</p>
+    #[serde(rename = "CustomLabels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_labels: Option<Vec<CustomLabel>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -486,6 +643,10 @@ pub struct DetectLabelsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetectModerationLabelsRequest {
+    /// <p>Sets up the configuration for human evaluation, including the FlowDefinition the image will be sent to.</p>
+    #[serde(rename = "HumanLoopConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub human_loop_config: Option<HumanLoopConfig>,
     /// <p>The input image as base64-encoded bytes or an S3 object. If you use the AWS CLI to call Amazon Rekognition operations, passing base64-encoded image bytes is not supported. </p> <p>If you are using an AWS SDK to call Amazon Rekognition, you might not need to base64-encode image bytes passed using the <code>Bytes</code> field. For more information, see Images in the Amazon Rekognition developer guide.</p>
     #[serde(rename = "Image")]
     pub image: Image,
@@ -498,6 +659,10 @@ pub struct DetectModerationLabelsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectModerationLabelsResponse {
+    /// <p>Shows the results of the human in the loop evaluation.</p>
+    #[serde(rename = "HumanLoopActivationOutput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub human_loop_activation_output: Option<HumanLoopActivationOutput>,
     /// <p>Array of detected Moderation labels and the time, in milliseconds from the start of the video, they were detected.</p>
     #[serde(rename = "ModerationLabels")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -536,6 +701,20 @@ pub struct Emotion {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>The evaluation results for the training of a model.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EvaluationResult {
+    /// <p>The F1 score for the evaluation of all labels. The F1 score metric evaluates the overall precision and recall performance of the model as a single value. A higher value indicates better precision and recall performance. A lower score indicates that precision, recall, or both are performing poorly. </p>
+    #[serde(rename = "F1Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub f1_score: Option<f32>,
+    /// <p>The S3 bucket that contains the training summary.</p>
+    #[serde(rename = "Summary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<Summary>,
 }
 
 /// <p>Indicates whether or not the eyes on the face are open, and the confidence level in the determination.</p>
@@ -624,7 +803,7 @@ pub struct FaceDetail {
     #[serde(rename = "EyesOpen")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub eyes_open: Option<EyeOpen>,
-    /// <p>Gender of the face and the confidence level in the determination.</p>
+    /// <p>The predicted gender of a detected face. </p>
     #[serde(rename = "Gender")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gender: Option<Gender>,
@@ -713,29 +892,29 @@ pub struct FaceSearchSettings {
     pub face_match_threshold: Option<f32>,
 }
 
-/// <p>Gender of the face and the confidence level in the determination.</p>
+/// <p>The predicted gender of a detected face. </p> <p>Amazon Rekognition makes gender binary (male/female) predictions based on the physical appearance of a face in a particular image. This kind of prediction is not designed to categorize a person’s gender identity, and you shouldn't use Amazon Rekognition to make such a determination. For example, a male actor wearing a long-haired wig and earrings for a role might be predicted as female.</p> <p>Using Amazon Rekognition to make gender binary predictions is best suited for use cases where aggregate gender distribution statistics need to be analyzed without identifying specific users. For example, the percentage of female users compared to male users on a social media platform. </p> <p>We don't recommend using gender binary predictions to make decisions that impact&#x2028; an individual's rights, privacy, or access to services.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Gender {
-    /// <p>Level of confidence in the determination.</p>
+    /// <p>Level of confidence in the prediction.</p>
     #[serde(rename = "Confidence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<f32>,
-    /// <p>Gender of the face.</p>
+    /// <p>The predicted gender of the face.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-/// <p>Information about where the text detected by <a>DetectText</a> is located on an image.</p>
+/// <p>Information about where an object (<a>DetectCustomLabels</a>) or text (<a>DetectText</a>) is located on an image.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Geometry {
-    /// <p>An axis-aligned coarse representation of the detected text's location on the image.</p>
+    /// <p>An axis-aligned coarse representation of the detected item's location on the image.</p>
     #[serde(rename = "BoundingBox")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bounding_box: Option<BoundingBox>,
-    /// <p>Within the bounding box, a fine-grained polygon around the detected text.</p>
+    /// <p>Within the bounding box, a fine-grained polygon around the detected item.</p>
     #[serde(rename = "Polygon")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub polygon: Option<Vec<Point>>,
@@ -1029,6 +1208,56 @@ pub struct GetPersonTrackingResponse {
     pub video_metadata: Option<VideoMetadata>,
 }
 
+/// <p>The S3 bucket that contains the Ground Truth manifest file.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GroundTruthManifest {
+    #[serde(rename = "S3Object")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_object: Option<S3Object>,
+}
+
+/// <p>Shows the results of the human in the loop evaluation. If there is no HumanLoopArn, the input did not trigger human review.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct HumanLoopActivationOutput {
+    /// <p>Shows the result of condition evaluations, including those conditions which activated a human review.</p>
+    #[serde(rename = "HumanLoopActivationConditionsEvaluationResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub human_loop_activation_conditions_evaluation_results: Option<String>,
+    /// <p>Shows if and why human review was needed.</p>
+    #[serde(rename = "HumanLoopActivationReasons")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub human_loop_activation_reasons: Option<Vec<String>>,
+    /// <p>The Amazon Resource Name (ARN) of the HumanLoop created.</p>
+    #[serde(rename = "HumanLoopArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub human_loop_arn: Option<String>,
+}
+
+/// <p>Sets up the flow definition the image will be sent to if one of the conditions is met. You can also set certain attributes of the image before review.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct HumanLoopConfig {
+    /// <p>Sets attributes of the input data.</p>
+    #[serde(rename = "DataAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_attributes: Option<HumanLoopDataAttributes>,
+    /// <p>The Amazon Resource Name (ARN) of the flow definition.</p>
+    #[serde(rename = "FlowDefinitionArn")]
+    pub flow_definition_arn: String,
+    /// <p>The name of the human review used for this image. This should be kept unique within a region.</p>
+    #[serde(rename = "HumanLoopName")]
+    pub human_loop_name: String,
+}
+
+/// <p>Allows you to set attributes of the image. Currently, you can declare an image as free of personally identifiable information.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct HumanLoopDataAttributes {
+    /// <p>Sets whether the input image is free of personally identifiable information.</p>
+    #[serde(rename = "ContentClassifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_classifiers: Option<Vec<String>>,
+}
+
 /// <p>Provides the input image either as bytes or an S3 object.</p> <p>You pass image bytes to an Amazon Rekognition API operation by using the <code>Bytes</code> property. For example, you would use the <code>Bytes</code> property to pass an image loaded from a local file system. Image bytes passed by using the <code>Bytes</code> property must be base64-encoded. Your code may not need to encode image bytes if you are using an AWS SDK to call Amazon Rekognition API operations. </p> <p>For more information, see Analyzing an Image Loaded from a Local File System in the Amazon Rekognition Developer Guide.</p> <p> You pass images stored in an S3 bucket to an Amazon Rekognition API operation by using the <code>S3Object</code> property. Images stored in an S3 bucket do not need to be base64-encoded.</p> <p>The region for the S3 bucket containing the S3 object must match the region you use for Amazon Rekognition operations.</p> <p>If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes using the Bytes property is not supported. You must first upload the image to an Amazon S3 bucket and then call the operation using the S3Object property.</p> <p>For Amazon Rekognition to process an S3 object, the user must have permission to access the S3 object. For more information, see Resource Based Policies in the Amazon Rekognition Developer Guide. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Image {
@@ -1081,7 +1310,7 @@ pub struct IndexFacesRequest {
     #[serde(rename = "MaxFaces")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_faces: Option<i64>,
-    /// <p>A filter that specifies how much filtering is done to identify faces that are detected with low quality. Filtered faces aren't indexed. If you specify <code>AUTO</code>, filtering prioritizes the identification of faces that don’t meet the required quality bar chosen by Amazon Rekognition. The quality bar is based on a variety of common use cases. Low-quality detections can occur for a number of reasons. Some examples are an object that's misidentified as a face, a face that's too blurry, or a face with a pose that's too extreme to use. If you specify <code>NONE</code>, no filtering is performed. The default value is AUTO.</p> <p>To use quality filtering, the collection you are using must be associated with version 3 of the face model.</p>
+    /// <p>A filter that specifies a quality bar for how much filtering is done to identify faces. Filtered faces aren't indexed. If you specify <code>AUTO</code>, Amazon Rekognition chooses the quality bar. If you specify <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>, filtering removes all faces that don’t meet the chosen quality bar. The default value is <code>AUTO</code>. The quality bar is based on a variety of common use cases. Low-quality detections can occur for a number of reasons. Some examples are an object that's misidentified as a face, a face that's too blurry, or a face with a pose that's too extreme to use. If you specify <code>NONE</code>, no filtering is performed. </p> <p>To use quality filtering, the collection you are using must be associated with version 3 of the face model or higher.</p>
     #[serde(rename = "QualityFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quality_filter: Option<String>,
@@ -1337,6 +1566,19 @@ pub struct NotificationChannel {
     pub sns_topic_arn: String,
 }
 
+/// <p>The S3 bucket and folder location where training output is placed.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OutputConfig {
+    /// <p>The S3 bucket where training output is placed.</p>
+    #[serde(rename = "S3Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket: Option<String>,
+    /// <p>The prefix applied to the training output files. </p>
+    #[serde(rename = "S3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_key_prefix: Option<String>,
+}
+
 /// <p>A parent label for a label. A label can have 0, 1, or more parents. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1397,7 +1639,7 @@ pub struct PersonMatch {
     pub timestamp: Option<i64>,
 }
 
-/// <p>The X and Y coordinates of a point on an image. The X and Y values returned are ratios of the overall image size. For example, if the input image is 700x200 and the operation returns X=0.5 and Y=0.25, then the point is at the (350,50) pixel coordinate on the image.</p> <p>An array of <code>Point</code> objects, <code>Polygon</code>, is returned by <a>DetectText</a>. <code>Polygon</code> represents a fine-grained polygon around detected text. For more information, see Geometry in the Amazon Rekognition Developer Guide. </p>
+/// <p>The X and Y coordinates of a point on an image. The X and Y values returned are ratios of the overall image size. For example, if the input image is 700x200 and the operation returns X=0.5 and Y=0.25, then the point is at the (350,50) pixel coordinate on the image.</p> <p>An array of <code>Point</code> objects, <code>Polygon</code>, is returned by <a>DetectText</a> and by <a>DetectCustomLabels</a>. <code>Polygon</code> represents a fine-grained polygon around a detected item. For more information, see Geometry in the Amazon Rekognition Developer Guide. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Point {
@@ -1429,6 +1671,74 @@ pub struct Pose {
     pub yaw: Option<f32>,
 }
 
+/// <p>A description of a Amazon Rekognition Custom Labels project.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProjectDescription {
+    /// <p>The Unix timestamp for the date and time that the project was created.</p>
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_timestamp: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the project.</p>
+    #[serde(rename = "ProjectArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub project_arn: Option<String>,
+    /// <p>The current status of the project.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>The description of a version of a model.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProjectVersionDescription {
+    /// <p>The duration, in seconds, that the model version has been billed for training. This value is only returned if the model version has been successfully trained.</p>
+    #[serde(rename = "BillableTrainingTimeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billable_training_time_in_seconds: Option<i64>,
+    /// <p>The Unix datetime for the date and time that training started.</p>
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_timestamp: Option<f64>,
+    /// <p>The training results. <code>EvaluationResult</code> is only returned if training is successful.</p>
+    #[serde(rename = "EvaluationResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evaluation_result: Option<EvaluationResult>,
+    /// <p>The minimum number of inference units used by the model. For more information, see <a>StartProjectVersion</a>.</p>
+    #[serde(rename = "MinInferenceUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_inference_units: Option<i64>,
+    /// <p>The location where training results are saved.</p>
+    #[serde(rename = "OutputConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_config: Option<OutputConfig>,
+    /// <p>The Amazon Resource Name (ARN) of the model version. </p>
+    #[serde(rename = "ProjectVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub project_version_arn: Option<String>,
+    /// <p>The current status of the model version.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A descriptive message for an error or warning that occurred.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+    /// <p>The manifest file that represents the testing results.</p>
+    #[serde(rename = "TestingDataResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub testing_data_result: Option<TestingDataResult>,
+    /// <p>The manifest file that represents the training results.</p>
+    #[serde(rename = "TrainingDataResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_data_result: Option<TrainingDataResult>,
+    /// <p>The Unix date and time that training of the model ended.</p>
+    #[serde(rename = "TrainingEndTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_end_timestamp: Option<f64>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RecognizeCelebritiesRequest {
     /// <p>The input image as base64-encoded bytes or an S3 object. If you use the AWS CLI to call Amazon Rekognition operations, passing base64-encoded image bytes is not supported. </p> <p>If you are using an AWS SDK to call Amazon Rekognition, you might not need to base64-encode image bytes passed using the <code>Bytes</code> field. For more information, see Images in the Amazon Rekognition developer guide.</p>
@@ -1454,7 +1764,7 @@ pub struct RecognizeCelebritiesResponse {
 }
 
 /// <p>Provides the S3 bucket name and object name.</p> <p>The region for the S3 bucket containing the S3 object must match the region you use for Amazon Rekognition operations.</p> <p>For Amazon Rekognition to process an S3 object, the user must have permission to access the S3 object. For more information, see Resource-Based Policies in the Amazon Rekognition Developer Guide. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3Object {
     /// <p>Name of the S3 bucket.</p>
     #[serde(rename = "Bucket")]
@@ -1486,6 +1796,10 @@ pub struct SearchFacesByImageRequest {
     #[serde(rename = "MaxFaces")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_faces: Option<i64>,
+    /// <p>A filter that specifies a quality bar for how much filtering is done to identify faces. Filtered faces aren't searched for in the collection. If you specify <code>AUTO</code>, Amazon Rekognition chooses the quality bar. If you specify <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>, filtering removes all faces that don’t meet the chosen quality bar. The quality bar is based on a variety of common use cases. Low-quality detections can occur for a number of reasons. Some examples are an object that's misidentified as a face, a face that's too blurry, or a face with a pose that's too extreme to use. If you specify <code>NONE</code>, no filtering is performed. The default value is <code>NONE</code>. </p> <p>To use quality filtering, the collection you are using must be associated with version 3 of the face model or higher.</p>
+    #[serde(rename = "QualityFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quality_filter: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1746,6 +2060,25 @@ pub struct StartPersonTrackingResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartProjectVersionRequest {
+    /// <p>The minimum number of inference units to use. A single inference unit represents 1 hour of processing and can support up to 5 Transaction Pers Second (TPS). Use a higher number to increase the TPS throughput of your model. You are charged for the number of inference units that you use. </p>
+    #[serde(rename = "MinInferenceUnits")]
+    pub min_inference_units: i64,
+    /// <p>The Amazon Resource Name(ARN) of the model version that you want to start.</p>
+    #[serde(rename = "ProjectVersionArn")]
+    pub project_version_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartProjectVersionResponse {
+    /// <p>The current running status of the model. </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartStreamProcessorRequest {
     /// <p>The name of the stream processor to start processing.</p>
     #[serde(rename = "Name")]
@@ -1755,6 +2088,22 @@ pub struct StartStreamProcessorRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartStreamProcessorResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StopProjectVersionRequest {
+    /// <p>The Amazon Resource Name (ARN) of the model version that you want to delete.</p> <p>This operation requires permissions to perform the <code>rekognition:StopProjectVersion</code> action.</p>
+    #[serde(rename = "ProjectVersionArn")]
+    pub project_version_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StopProjectVersionResponse {
+    /// <p>The current status of the stop operation. </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopStreamProcessorRequest {
@@ -1808,6 +2157,15 @@ pub struct StreamProcessorSettings {
     pub face_search: Option<FaceSearchSettings>,
 }
 
+/// <p>The S3 bucket that contains the training summary. The training summary includes aggregated evaluation metrics for the entire testing dataset and metrics for each individual label. </p> <p>You get the training summary S3 bucket location by calling <a>DescribeProjectVersions</a>. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Summary {
+    #[serde(rename = "S3Object")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_object: Option<S3Object>,
+}
+
 /// <p>Indicates whether or not the face is wearing sunglasses, and the confidence level in the determination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1820,6 +2178,33 @@ pub struct Sunglasses {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<bool>,
+}
+
+/// <p>The dataset used for testing. Optionally, if <code>AutoCreate</code> is set, Amazon Rekognition Custom Labels creates a testing dataset using an 80/20 split of the training dataset.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TestingData {
+    /// <p>The assets used for testing.</p>
+    #[serde(rename = "Assets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assets: Option<Vec<Asset>>,
+    /// <p>If specified, Amazon Rekognition Custom Labels creates a testing dataset with an 80/20 split of the training dataset.</p>
+    #[serde(rename = "AutoCreate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_create: Option<bool>,
+}
+
+/// <p>A Sagemaker Groundtruth format manifest file representing the dataset used for testing.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TestingDataResult {
+    /// <p>The testing dataset that was supplied for training.</p>
+    #[serde(rename = "Input")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input: Option<TestingData>,
+    /// <p>The subset of the dataset that was actually tested. Some images (assets) might not be tested due to file formatting and other issues. </p>
+    #[serde(rename = "Output")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output: Option<TestingData>,
 }
 
 /// <p>Information about a word or line of text detected by <a>DetectText</a>.</p> <p>The <code>DetectedText</code> field contains the text that Amazon Rekognition detected in the image. </p> <p>Every word and line has an identifier (<code>Id</code>). Each word belongs to a line and has a parent identifier (<code>ParentId</code>) that identifies the line of text in which the word appears. The word <code>Id</code> is also an index for the word within a line of words. </p> <p>For more information, see Detecting Text in the Amazon Rekognition Developer Guide.</p>
@@ -1850,6 +2235,29 @@ pub struct TextDetection {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>The dataset used for training.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TrainingData {
+    /// <p>A Sagemaker GroundTruth manifest file that contains the training images (assets).</p>
+    #[serde(rename = "Assets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assets: Option<Vec<Asset>>,
+}
+
+/// <p>A Sagemaker Groundtruth format manifest file that represents the dataset used for training.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TrainingDataResult {
+    /// <p>The training assets that you supplied for training.</p>
+    #[serde(rename = "Input")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input: Option<TrainingData>,
+    /// <p>The images (assets) that were actually trained by Amazon Rekognition Custom Labels. </p>
+    #[serde(rename = "Output")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output: Option<TrainingData>,
 }
 
 /// <p>A face that <a>IndexFaces</a> detected, but didn't index. Use the <code>Reasons</code> response attribute to determine why a face wasn't indexed.</p>
@@ -2048,6 +2456,160 @@ impl Error for CreateCollectionError {
             CreateCollectionError::ProvisionedThroughputExceeded(ref cause) => cause,
             CreateCollectionError::ResourceAlreadyExists(ref cause) => cause,
             CreateCollectionError::Throttling(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateProject
+#[derive(Debug, PartialEq)]
+pub enum CreateProjectError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>An Amazon Rekognition service limit was exceeded. For example, if you start too many Amazon Rekognition Video jobs concurrently, calls to start operations (<code>StartLabelDetection</code>, for example) will raise a <code>LimitExceededException</code> exception (HTTP status code: 400) until the number of concurrently running jobs is below the Amazon Rekognition service limit. </p>
+    LimitExceeded(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p><p/></p>
+    ResourceInUse(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl CreateProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateProjectError::AccessDenied(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(CreateProjectError::InternalServerError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateProjectError::InvalidParameter(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateProjectError::LimitExceeded(err.msg))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(CreateProjectError::ProvisionedThroughputExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(CreateProjectError::ResourceInUse(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateProjectError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateProjectError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateProjectError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateProjectError::AccessDenied(ref cause) => cause,
+            CreateProjectError::InternalServerError(ref cause) => cause,
+            CreateProjectError::InvalidParameter(ref cause) => cause,
+            CreateProjectError::LimitExceeded(ref cause) => cause,
+            CreateProjectError::ProvisionedThroughputExceeded(ref cause) => cause,
+            CreateProjectError::ResourceInUse(ref cause) => cause,
+            CreateProjectError::Throttling(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateProjectVersion
+#[derive(Debug, PartialEq)]
+pub enum CreateProjectVersionError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>An Amazon Rekognition service limit was exceeded. For example, if you start too many Amazon Rekognition Video jobs concurrently, calls to start operations (<code>StartLabelDetection</code>, for example) will raise a <code>LimitExceededException</code> exception (HTTP status code: 400) until the number of concurrently running jobs is below the Amazon Rekognition service limit. </p>
+    LimitExceeded(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p><p/></p>
+    ResourceInUse(String),
+    /// <p>The collection specified in the request cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl CreateProjectVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectVersionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateProjectVersionError::AccessDenied(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(CreateProjectVersionError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateProjectVersionError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateProjectVersionError::LimitExceeded(err.msg))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        CreateProjectVersionError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(CreateProjectVersionError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateProjectVersionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateProjectVersionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateProjectVersionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateProjectVersionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateProjectVersionError::AccessDenied(ref cause) => cause,
+            CreateProjectVersionError::InternalServerError(ref cause) => cause,
+            CreateProjectVersionError::InvalidParameter(ref cause) => cause,
+            CreateProjectVersionError::LimitExceeded(ref cause) => cause,
+            CreateProjectVersionError::ProvisionedThroughputExceeded(ref cause) => cause,
+            CreateProjectVersionError::ResourceInUse(ref cause) => cause,
+            CreateProjectVersionError::ResourceNotFound(ref cause) => cause,
+            CreateProjectVersionError::Throttling(ref cause) => cause,
         }
     }
 }
@@ -2402,6 +2964,156 @@ impl Error for DescribeCollectionError {
         }
     }
 }
+/// Errors returned by DescribeProjectVersions
+#[derive(Debug, PartialEq)]
+pub enum DescribeProjectVersionsError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Pagination token in the request is not valid.</p>
+    InvalidPaginationToken(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>The collection specified in the request cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl DescribeProjectVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProjectVersionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeProjectVersionsError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(DescribeProjectVersionsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidPaginationTokenException" => {
+                    return RusotoError::Service(
+                        DescribeProjectVersionsError::InvalidPaginationToken(err.msg),
+                    )
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeProjectVersionsError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        DescribeProjectVersionsError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeProjectVersionsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeProjectVersionsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeProjectVersionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeProjectVersionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeProjectVersionsError::AccessDenied(ref cause) => cause,
+            DescribeProjectVersionsError::InternalServerError(ref cause) => cause,
+            DescribeProjectVersionsError::InvalidPaginationToken(ref cause) => cause,
+            DescribeProjectVersionsError::InvalidParameter(ref cause) => cause,
+            DescribeProjectVersionsError::ProvisionedThroughputExceeded(ref cause) => cause,
+            DescribeProjectVersionsError::ResourceNotFound(ref cause) => cause,
+            DescribeProjectVersionsError::Throttling(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeProjects
+#[derive(Debug, PartialEq)]
+pub enum DescribeProjectsError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Pagination token in the request is not valid.</p>
+    InvalidPaginationToken(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl DescribeProjectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProjectsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeProjectsError::AccessDenied(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(DescribeProjectsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidPaginationTokenException" => {
+                    return RusotoError::Service(DescribeProjectsError::InvalidPaginationToken(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeProjectsError::InvalidParameter(err.msg))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        DescribeProjectsError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeProjectsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeProjectsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeProjectsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeProjectsError::AccessDenied(ref cause) => cause,
+            DescribeProjectsError::InternalServerError(ref cause) => cause,
+            DescribeProjectsError::InvalidPaginationToken(ref cause) => cause,
+            DescribeProjectsError::InvalidParameter(ref cause) => cause,
+            DescribeProjectsError::ProvisionedThroughputExceeded(ref cause) => cause,
+            DescribeProjectsError::Throttling(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeStreamProcessor
 #[derive(Debug, PartialEq)]
 pub enum DescribeStreamProcessorError {
@@ -2472,6 +3184,105 @@ impl Error for DescribeStreamProcessorError {
             DescribeStreamProcessorError::ProvisionedThroughputExceeded(ref cause) => cause,
             DescribeStreamProcessorError::ResourceNotFound(ref cause) => cause,
             DescribeStreamProcessorError::Throttling(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DetectCustomLabels
+#[derive(Debug, PartialEq)]
+pub enum DetectCustomLabelsError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>The input image size exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
+    ImageTooLarge(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>The provided image format is not supported. </p>
+    InvalidImageFormat(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
+    InvalidS3Object(String),
+    /// <p>An Amazon Rekognition service limit was exceeded. For example, if you start too many Amazon Rekognition Video jobs concurrently, calls to start operations (<code>StartLabelDetection</code>, for example) will raise a <code>LimitExceededException</code> exception (HTTP status code: 400) until the number of concurrently running jobs is below the Amazon Rekognition service limit. </p>
+    LimitExceeded(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>The collection specified in the request cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>The requested resource isn't ready. For example, this exception occurs when you call <code>DetectCustomLabels</code> with a model version that isn't deployed. </p>
+    ResourceNotReady(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl DetectCustomLabelsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectCustomLabelsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DetectCustomLabelsError::AccessDenied(err.msg))
+                }
+                "ImageTooLargeException" => {
+                    return RusotoError::Service(DetectCustomLabelsError::ImageTooLarge(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(DetectCustomLabelsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidImageFormatException" => {
+                    return RusotoError::Service(DetectCustomLabelsError::InvalidImageFormat(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DetectCustomLabelsError::InvalidParameter(err.msg))
+                }
+                "InvalidS3ObjectException" => {
+                    return RusotoError::Service(DetectCustomLabelsError::InvalidS3Object(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(DetectCustomLabelsError::LimitExceeded(err.msg))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        DetectCustomLabelsError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DetectCustomLabelsError::ResourceNotFound(err.msg))
+                }
+                "ResourceNotReadyException" => {
+                    return RusotoError::Service(DetectCustomLabelsError::ResourceNotReady(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DetectCustomLabelsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DetectCustomLabelsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DetectCustomLabelsError {
+    fn description(&self) -> &str {
+        match *self {
+            DetectCustomLabelsError::AccessDenied(ref cause) => cause,
+            DetectCustomLabelsError::ImageTooLarge(ref cause) => cause,
+            DetectCustomLabelsError::InternalServerError(ref cause) => cause,
+            DetectCustomLabelsError::InvalidImageFormat(ref cause) => cause,
+            DetectCustomLabelsError::InvalidParameter(ref cause) => cause,
+            DetectCustomLabelsError::InvalidS3Object(ref cause) => cause,
+            DetectCustomLabelsError::LimitExceeded(ref cause) => cause,
+            DetectCustomLabelsError::ProvisionedThroughputExceeded(ref cause) => cause,
+            DetectCustomLabelsError::ResourceNotFound(ref cause) => cause,
+            DetectCustomLabelsError::ResourceNotReady(ref cause) => cause,
+            DetectCustomLabelsError::Throttling(ref cause) => cause,
         }
     }
 }
@@ -2634,6 +3445,8 @@ impl Error for DetectLabelsError {
 pub enum DetectModerationLabelsError {
     /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
+    /// <p>The number of in-progress human reviews you have has exceeded the number allowed.</p>
+    HumanLoopQuotaExceeded(String),
     /// <p>The input image size exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
     ImageTooLarge(String),
     /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
@@ -2656,6 +3469,11 @@ impl DetectModerationLabelsError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetectModerationLabelsError::AccessDenied(err.msg))
+                }
+                "HumanLoopQuotaExceededException" => {
+                    return RusotoError::Service(
+                        DetectModerationLabelsError::HumanLoopQuotaExceeded(err.msg),
+                    )
                 }
                 "ImageTooLargeException" => {
                     return RusotoError::Service(DetectModerationLabelsError::ImageTooLarge(
@@ -2706,6 +3524,7 @@ impl Error for DetectModerationLabelsError {
     fn description(&self) -> &str {
         match *self {
             DetectModerationLabelsError::AccessDenied(ref cause) => cause,
+            DetectModerationLabelsError::HumanLoopQuotaExceeded(ref cause) => cause,
             DetectModerationLabelsError::ImageTooLarge(ref cause) => cause,
             DetectModerationLabelsError::InternalServerError(ref cause) => cause,
             DetectModerationLabelsError::InvalidImageFormat(ref cause) => cause,
@@ -4403,6 +5222,89 @@ impl Error for StartPersonTrackingError {
         }
     }
 }
+/// Errors returned by StartProjectVersion
+#[derive(Debug, PartialEq)]
+pub enum StartProjectVersionError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>An Amazon Rekognition service limit was exceeded. For example, if you start too many Amazon Rekognition Video jobs concurrently, calls to start operations (<code>StartLabelDetection</code>, for example) will raise a <code>LimitExceededException</code> exception (HTTP status code: 400) until the number of concurrently running jobs is below the Amazon Rekognition service limit. </p>
+    LimitExceeded(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p><p/></p>
+    ResourceInUse(String),
+    /// <p>The collection specified in the request cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl StartProjectVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartProjectVersionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(StartProjectVersionError::AccessDenied(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(StartProjectVersionError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(StartProjectVersionError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(StartProjectVersionError::LimitExceeded(err.msg))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        StartProjectVersionError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(StartProjectVersionError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StartProjectVersionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(StartProjectVersionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StartProjectVersionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartProjectVersionError {
+    fn description(&self) -> &str {
+        match *self {
+            StartProjectVersionError::AccessDenied(ref cause) => cause,
+            StartProjectVersionError::InternalServerError(ref cause) => cause,
+            StartProjectVersionError::InvalidParameter(ref cause) => cause,
+            StartProjectVersionError::LimitExceeded(ref cause) => cause,
+            StartProjectVersionError::ProvisionedThroughputExceeded(ref cause) => cause,
+            StartProjectVersionError::ResourceInUse(ref cause) => cause,
+            StartProjectVersionError::ResourceNotFound(ref cause) => cause,
+            StartProjectVersionError::Throttling(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StartStreamProcessor
 #[derive(Debug, PartialEq)]
 pub enum StartStreamProcessorError {
@@ -4477,6 +5379,79 @@ impl Error for StartStreamProcessorError {
             StartStreamProcessorError::ResourceInUse(ref cause) => cause,
             StartStreamProcessorError::ResourceNotFound(ref cause) => cause,
             StartStreamProcessorError::Throttling(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StopProjectVersion
+#[derive(Debug, PartialEq)]
+pub enum StopProjectVersionError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p><p/></p>
+    ResourceInUse(String),
+    /// <p>The collection specified in the request cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl StopProjectVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopProjectVersionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(StopProjectVersionError::AccessDenied(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(StopProjectVersionError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(StopProjectVersionError::InvalidParameter(err.msg))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        StopProjectVersionError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(StopProjectVersionError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StopProjectVersionError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(StopProjectVersionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StopProjectVersionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopProjectVersionError {
+    fn description(&self) -> &str {
+        match *self {
+            StopProjectVersionError::AccessDenied(ref cause) => cause,
+            StopProjectVersionError::InternalServerError(ref cause) => cause,
+            StopProjectVersionError::InvalidParameter(ref cause) => cause,
+            StopProjectVersionError::ProvisionedThroughputExceeded(ref cause) => cause,
+            StopProjectVersionError::ResourceInUse(ref cause) => cause,
+            StopProjectVersionError::ResourceNotFound(ref cause) => cause,
+            StopProjectVersionError::Throttling(ref cause) => cause,
         }
     }
 }
@@ -4559,7 +5534,7 @@ impl Error for StopStreamProcessorError {
 }
 /// Trait representing the capabilities of the Amazon Rekognition API. Amazon Rekognition clients implement this trait.
 pub trait Rekognition {
-    /// <p>Compares a face in the <i>source</i> input image with each of the 100 largest faces detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>You pass the input and target images either as base64-encoded image bytes or as references to images in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <p>If no faces are detected in the source or target images, <code>CompareFaces</code> returns an <code>InvalidParameterException</code> error. </p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see Comparing Faces in Images in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
+    /// <p>Compares a face in the <i>source</i> input image with each of the 100 largest faces detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>You pass the input and target images either as base64-encoded image bytes or as references to images in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>. </p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <p>If no faces are detected in the source or target images, <code>CompareFaces</code> returns an <code>InvalidParameterException</code> error. </p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see Comparing Faces in Images in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
     fn compare_faces(
         &self,
         input: CompareFacesRequest,
@@ -4570,6 +5545,18 @@ pub trait Rekognition {
         &self,
         input: CreateCollectionRequest,
     ) -> RusotoFuture<CreateCollectionResponse, CreateCollectionError>;
+
+    /// <p>Creates a new Amazon Rekognition Custom Labels project. A project is a logical grouping of resources (images, Labels, models) and operations (training, evaluation and detection). </p> <p>This operation requires permissions to perform the <code>rekognition:CreateProject</code> action.</p>
+    fn create_project(
+        &self,
+        input: CreateProjectRequest,
+    ) -> RusotoFuture<CreateProjectResponse, CreateProjectError>;
+
+    /// <p>Creates a new version of a model and begins training. Models are managed as part of an Amazon Rekognition Custom Labels project. You can specify one training dataset and one testing dataset. The response from <code>CreateProjectVersion</code> is an Amazon Resource Name (ARN) for the version of the model. </p> <p>Training takes a while to complete. You can get the current status by calling <a>DescribeProjectVersions</a>.</p> <p>Once training has successfully completed, call <a>DescribeProjectVersions</a> to get the training results and evaluate the model. </p> <p>After evaluating the model, you start the model by calling <a>StartProjectVersion</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:CreateProjectVersion</code> action.</p>
+    fn create_project_version(
+        &self,
+        input: CreateProjectVersionRequest,
+    ) -> RusotoFuture<CreateProjectVersionResponse, CreateProjectVersionError>;
 
     /// <p>Creates an Amazon Rekognition stream processor that you can use to detect and recognize faces in a streaming video.</p> <p>Amazon Rekognition Video is a consumer of live video from Amazon Kinesis Video Streams. Amazon Rekognition Video sends analysis results to Amazon Kinesis Data Streams.</p> <p>You provide as input a Kinesis video stream (<code>Input</code>) and a Kinesis data stream (<code>Output</code>) stream. You also specify the face recognition criteria in <code>Settings</code>. For example, the collection containing faces that you want to recognize. Use <code>Name</code> to assign an identifier for the stream processor. You use <code>Name</code> to manage the stream processor. For example, you can start processing the source video by calling <a>StartStreamProcessor</a> with the <code>Name</code> field. </p> <p>After you have finished analyzing a streaming video, use <a>StopStreamProcessor</a> to stop processing. You can delete the stream processor by calling <a>DeleteStreamProcessor</a>.</p>
     fn create_stream_processor(
@@ -4601,13 +5588,31 @@ pub trait Rekognition {
         input: DescribeCollectionRequest,
     ) -> RusotoFuture<DescribeCollectionResponse, DescribeCollectionError>;
 
+    /// <p>Lists and describes the models in an Amazon Rekognition Custom Labels project. You can specify up to 10 model versions in <code>ProjectVersionArns</code>. If you don't specify a value, descriptions for all models are returned.</p> <p>This operation requires permissions to perform the <code>rekognition:DescribeProjectVersions</code> action.</p>
+    fn describe_project_versions(
+        &self,
+        input: DescribeProjectVersionsRequest,
+    ) -> RusotoFuture<DescribeProjectVersionsResponse, DescribeProjectVersionsError>;
+
+    /// <p>Lists and gets information about your Amazon Rekognition Custom Labels projects.</p> <p>This operation requires permissions to perform the <code>rekognition:DescribeProjects</code> action.</p>
+    fn describe_projects(
+        &self,
+        input: DescribeProjectsRequest,
+    ) -> RusotoFuture<DescribeProjectsResponse, DescribeProjectsError>;
+
     /// <p>Provides information about a stream processor created by <a>CreateStreamProcessor</a>. You can get information about the input and output streams, the input parameters for the face recognition being performed, and the current status of the stream processor.</p>
     fn describe_stream_processor(
         &self,
         input: DescribeStreamProcessorRequest,
     ) -> RusotoFuture<DescribeStreamProcessorResponse, DescribeStreamProcessorError>;
 
-    /// <p>Detects faces within an image that is provided as input.</p> <p> <code>DetectFaces</code> detects the 100 largest faces in the image. For each face detected, the operation returns face details. These details include a bounding box of the face, a confidence value (that the bounding box contains a face), and a fixed set of attributes such as facial landmarks (for example, coordinates of eye and mouth), gender, presence of beard, sunglasses, and so on. </p> <p>The face-detection algorithm is most effective on frontal faces. For non-frontal or obscured faces, the algorithm might not detect the faces or might detect faces with lower confidence. </p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>This operation requires permissions to perform the <code>rekognition:DetectFaces</code> action. </p>
+    /// <p>Detects custom labels in a supplied image by using an Amazon Rekognition Custom Labels model. </p> <p>You specify which version of a model version to use by using the <code>ProjectVersionArn</code> input parameter. </p> <p>You pass the input image as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p> For each object that the model version detects on an image, the API returns a (<code>CustomLabel</code>) object in an array (<code>CustomLabels</code>). Each <code>CustomLabel</code> object provides the label name (<code>Name</code>), the level of confidence that the image contains the object (<code>Confidence</code>), and object location information, if it exists, for the label on the image (<code>Geometry</code>). </p> <p>During training model calculates a threshold value that determines if a prediction for a label is true. By default, <code>DetectCustomLabels</code> doesn't return labels whose confidence value is below the model's calculated threshold value. To filter labels that are returned, specify a value for <code>MinConfidence</code> that is higher than the model's calculated threshold. You can get the model's calculated threshold from the model's training results shown in the Amazon Rekognition Custom Labels console. To get all labels, regardless of confidence, specify a <code>MinConfidence</code> value of 0. </p> <p>You can also add the <code>MaxResults</code> parameter to limit the number of labels returned. </p> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectCustomLabels</code> action. </p>
+    fn detect_custom_labels(
+        &self,
+        input: DetectCustomLabelsRequest,
+    ) -> RusotoFuture<DetectCustomLabelsResponse, DetectCustomLabelsError>;
+
+    /// <p>Detects faces within an image that is provided as input.</p> <p> <code>DetectFaces</code> detects the 100 largest faces in the image. For each face detected, the operation returns face details. These details include a bounding box of the face, a confidence value (that the bounding box contains a face), and a fixed set of attributes such as facial landmarks (for example, coordinates of eye and mouth), presence of beard, sunglasses, and so on. </p> <p>The face-detection algorithm is most effective on frontal faces. For non-frontal or obscured faces, the algorithm might not detect the faces or might detect faces with lower confidence. </p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>This operation requires permissions to perform the <code>rekognition:DetectFaces</code> action. </p>
     fn detect_faces(
         &self,
         input: DetectFacesRequest,
@@ -4673,7 +5678,7 @@ pub trait Rekognition {
         input: GetPersonTrackingRequest,
     ) -> RusotoFuture<GetPersonTrackingResponse, GetPersonTrackingError>;
 
-    /// <p>Detects faces in the input image and adds them to the specified collection. </p> <p>Amazon Rekognition doesn't save the actual faces that are detected. Instead, the underlying detection algorithm first detects the faces in the input image. For each face, the algorithm extracts facial features into a feature vector, and stores it in the backend database. Amazon Rekognition uses feature vectors when it performs face match and search operations using the <a>SearchFaces</a> and <a>SearchFacesByImage</a> operations.</p> <p>For more information, see Adding Faces to a Collection in the Amazon Rekognition Developer Guide.</p> <p>To get the number of faces in a collection, call <a>DescribeCollection</a>. </p> <p>If you're using version 1.0 of the face detection model, <code>IndexFaces</code> indexes the 15 largest faces in the input image. Later versions of the face detection model index the 100 largest faces in the input image. </p> <p>If you're using version 4 or later of the face model, image orientation information is not returned in the <code>OrientationCorrection</code> field. </p> <p>To determine which version of the model you're using, call <a>DescribeCollection</a> and supply the collection ID. You can also get the model version from the value of <code>FaceModelVersion</code> in the response from <code>IndexFaces</code> </p> <p>For more information, see Model Versioning in the Amazon Rekognition Developer Guide.</p> <p>If you provide the optional <code>ExternalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the <a>ListFaces</a> operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image.</p> <p>You can specify the maximum number of faces to index with the <code>MaxFaces</code> input parameter. This is useful when you want to index the largest faces in an image and don't want to index smaller faces, such as those belonging to people standing in the background.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet the required quality bar chosen by Amazon Rekognition. The quality bar is based on a variety of common use cases. By default, <code>IndexFaces</code> filters detected faces. You can also explicitly filter detected faces by specifying <code>AUTO</code> for the value of <code>QualityFilter</code>. If you do not want to filter detected faces, specify <code>NONE</code>. </p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>Information about faces detected in an image, but not indexed, is returned in an array of <a>UnindexedFace</a> objects, <code>UnindexedFaces</code>. Faces aren't indexed for reasons such as:</p> <ul> <li> <p>The number of faces detected exceeds the value of the <code>MaxFaces</code> request parameter.</p> </li> <li> <p>The face is too small compared to the image dimensions.</p> </li> <li> <p>The face is too blurry.</p> </li> <li> <p>The image is too dark.</p> </li> <li> <p>The face has an extreme pose.</p> </li> </ul> <p>In response, the <code>IndexFaces</code> operation returns an array of metadata for all detected faces, <code>FaceRecords</code>. This includes: </p> <ul> <li> <p>The bounding box, <code>BoundingBox</code>, of the detected face. </p> </li> <li> <p>A confidence value, <code>Confidence</code>, which indicates the confidence that the bounding box contains a face.</p> </li> <li> <p>A face ID, <code>FaceId</code>, assigned by the service for each face that's detected and stored.</p> </li> <li> <p>An image ID, <code>ImageId</code>, assigned by the service for the input image.</p> </li> </ul> <p>If you request all facial attributes (by using the <code>detectionAttributes</code> parameter), Amazon Rekognition returns detailed facial attributes, such as facial landmarks (for example, location of eye and mouth) and other facial attributes like gender. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata.</p> <p/> <p>The input image is passed either as base64-encoded image bytes, or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>
+    /// <p>Detects faces in the input image and adds them to the specified collection. </p> <p>Amazon Rekognition doesn't save the actual faces that are detected. Instead, the underlying detection algorithm first detects the faces in the input image. For each face, the algorithm extracts facial features into a feature vector, and stores it in the backend database. Amazon Rekognition uses feature vectors when it performs face match and search operations using the <a>SearchFaces</a> and <a>SearchFacesByImage</a> operations.</p> <p>For more information, see Adding Faces to a Collection in the Amazon Rekognition Developer Guide.</p> <p>To get the number of faces in a collection, call <a>DescribeCollection</a>. </p> <p>If you're using version 1.0 of the face detection model, <code>IndexFaces</code> indexes the 15 largest faces in the input image. Later versions of the face detection model index the 100 largest faces in the input image. </p> <p>If you're using version 4 or later of the face model, image orientation information is not returned in the <code>OrientationCorrection</code> field. </p> <p>To determine which version of the model you're using, call <a>DescribeCollection</a> and supply the collection ID. You can also get the model version from the value of <code>FaceModelVersion</code> in the response from <code>IndexFaces</code> </p> <p>For more information, see Model Versioning in the Amazon Rekognition Developer Guide.</p> <p>If you provide the optional <code>ExternalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the <a>ListFaces</a> operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image.</p> <p>You can specify the maximum number of faces to index with the <code>MaxFaces</code> input parameter. This is useful when you want to index the largest faces in an image and don't want to index smaller faces, such as those belonging to people standing in the background.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. By default, <code>IndexFaces</code> chooses the quality bar that's used to filter faces. You can also explicitly choose the quality bar. Use <code>QualityFilter</code>, to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. </p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>Information about faces detected in an image, but not indexed, is returned in an array of <a>UnindexedFace</a> objects, <code>UnindexedFaces</code>. Faces aren't indexed for reasons such as:</p> <ul> <li> <p>The number of faces detected exceeds the value of the <code>MaxFaces</code> request parameter.</p> </li> <li> <p>The face is too small compared to the image dimensions.</p> </li> <li> <p>The face is too blurry.</p> </li> <li> <p>The image is too dark.</p> </li> <li> <p>The face has an extreme pose.</p> </li> <li> <p>The face doesn’t have enough detail to be suitable for face search.</p> </li> </ul> <p>In response, the <code>IndexFaces</code> operation returns an array of metadata for all detected faces, <code>FaceRecords</code>. This includes: </p> <ul> <li> <p>The bounding box, <code>BoundingBox</code>, of the detected face. </p> </li> <li> <p>A confidence value, <code>Confidence</code>, which indicates the confidence that the bounding box contains a face.</p> </li> <li> <p>A face ID, <code>FaceId</code>, assigned by the service for each face that's detected and stored.</p> </li> <li> <p>An image ID, <code>ImageId</code>, assigned by the service for the input image.</p> </li> </ul> <p>If you request all facial attributes (by using the <code>detectionAttributes</code> parameter), Amazon Rekognition returns detailed facial attributes, such as facial landmarks (for example, location of eye and mouth) and other facial attributes. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata.</p> <p/> <p>The input image is passed either as base64-encoded image bytes, or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>
     fn index_faces(
         &self,
         input: IndexFacesRequest,
@@ -4709,7 +5714,7 @@ pub trait Rekognition {
         input: SearchFacesRequest,
     ) -> RusotoFuture<SearchFacesResponse, SearchFacesError>;
 
-    /// <p>For a given input image, first detects the largest face in the image, and then searches the specified collection for matching faces. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>To search for all faces in an input image, you might first call the <a>IndexFaces</a> operation, and then use the face IDs returned in subsequent calls to the <a>SearchFaces</a> operation. </p> <p> You can also call the <code>DetectFaces</code> operation and use the bounding boxes in the response to make face crops, which then you can pass in to the <code>SearchFacesByImage</code> operation. </p> </note> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p> The response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match found. Along with the metadata, the response also includes a <code>similarity</code> indicating how similar the face is to the input face. In the response, the operation also returns the bounding box (and a confidence level that the bounding box contains a face) of the face that Amazon Rekognition used for the input image. </p> <p>For an example, Searching for a Face Using an Image in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFacesByImage</code> action.</p>
+    /// <p>For a given input image, first detects the largest face in the image, and then searches the specified collection for matching faces. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>To search for all faces in an input image, you might first call the <a>IndexFaces</a> operation, and then use the face IDs returned in subsequent calls to the <a>SearchFaces</a> operation. </p> <p> You can also call the <code>DetectFaces</code> operation and use the bounding boxes in the response to make face crops, which then you can pass in to the <code>SearchFacesByImage</code> operation. </p> </note> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p> The response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match found. Along with the metadata, the response also includes a <code>similarity</code> indicating how similar the face is to the input face. In the response, the operation also returns the bounding box (and a confidence level that the bounding box contains a face) of the face that Amazon Rekognition used for the input image. </p> <p>For an example, Searching for a Face Using an Image in the Amazon Rekognition Developer Guide.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar for filtering by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>.</p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>This operation requires permissions to perform the <code>rekognition:SearchFacesByImage</code> action.</p>
     fn search_faces_by_image(
         &self,
         input: SearchFacesByImageRequest,
@@ -4751,11 +5756,23 @@ pub trait Rekognition {
         input: StartPersonTrackingRequest,
     ) -> RusotoFuture<StartPersonTrackingResponse, StartPersonTrackingError>;
 
+    /// <p>Starts the running of the version of a model. Starting a model takes a while to complete. To check the current state of the model, use <a>DescribeProjectVersions</a>.</p> <p>Once the model is running, you can detect custom labels in new images by calling <a>DetectCustomLabels</a>.</p> <note> <p>You are charged for the amount of time that the model is running. To stop a running model, call <a>StopProjectVersion</a>.</p> </note> <p>This operation requires permissions to perform the <code>rekognition:StartProjectVersion</code> action.</p>
+    fn start_project_version(
+        &self,
+        input: StartProjectVersionRequest,
+    ) -> RusotoFuture<StartProjectVersionResponse, StartProjectVersionError>;
+
     /// <p>Starts processing a stream processor. You create a stream processor by calling <a>CreateStreamProcessor</a>. To tell <code>StartStreamProcessor</code> which stream processor to start, use the value of the <code>Name</code> field specified in the call to <code>CreateStreamProcessor</code>.</p>
     fn start_stream_processor(
         &self,
         input: StartStreamProcessorRequest,
     ) -> RusotoFuture<StartStreamProcessorResponse, StartStreamProcessorError>;
+
+    /// <p>Stops a running model. The operation might take a while to complete. To check the current status, call <a>DescribeProjectVersions</a>. </p>
+    fn stop_project_version(
+        &self,
+        input: StopProjectVersionRequest,
+    ) -> RusotoFuture<StopProjectVersionResponse, StopProjectVersionError>;
 
     /// <p>Stops a running stream processor that was created by <a>CreateStreamProcessor</a>.</p>
     fn stop_stream_processor(
@@ -4809,7 +5826,7 @@ impl fmt::Debug for RekognitionClient {
 }
 
 impl Rekognition for RekognitionClient {
-    /// <p>Compares a face in the <i>source</i> input image with each of the 100 largest faces detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>You pass the input and target images either as base64-encoded image bytes or as references to images in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <p>If no faces are detected in the source or target images, <code>CompareFaces</code> returns an <code>InvalidParameterException</code> error. </p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see Comparing Faces in Images in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
+    /// <p>Compares a face in the <i>source</i> input image with each of the 100 largest faces detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>You pass the input and target images either as base64-encoded image bytes or as references to images in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>. </p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <p>If no faces are detected in the source or target images, <code>CompareFaces</code> returns an <code>InvalidParameterException</code> error. </p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see Comparing Faces in Images in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
     fn compare_faces(
         &self,
         input: CompareFacesRequest,
@@ -4862,6 +5879,63 @@ impl Rekognition for RekognitionClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(CreateCollectionError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Creates a new Amazon Rekognition Custom Labels project. A project is a logical grouping of resources (images, Labels, models) and operations (training, evaluation and detection). </p> <p>This operation requires permissions to perform the <code>rekognition:CreateProject</code> action.</p>
+    fn create_project(
+        &self,
+        input: CreateProjectRequest,
+    ) -> RusotoFuture<CreateProjectResponse, CreateProjectError> {
+        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.CreateProject");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateProjectResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateProjectError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Creates a new version of a model and begins training. Models are managed as part of an Amazon Rekognition Custom Labels project. You can specify one training dataset and one testing dataset. The response from <code>CreateProjectVersion</code> is an Amazon Resource Name (ARN) for the version of the model. </p> <p>Training takes a while to complete. You can get the current status by calling <a>DescribeProjectVersions</a>.</p> <p>Once training has successfully completed, call <a>DescribeProjectVersions</a> to get the training results and evaluate the model. </p> <p>After evaluating the model, you start the model by calling <a>StartProjectVersion</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:CreateProjectVersion</code> action.</p>
+    fn create_project_version(
+        &self,
+        input: CreateProjectVersionRequest,
+    ) -> RusotoFuture<CreateProjectVersionResponse, CreateProjectVersionError> {
+        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.CreateProjectVersion");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateProjectVersionResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateProjectVersionError::from_response(response))
+                    }),
                 )
             }
         })
@@ -5010,6 +6084,61 @@ impl Rekognition for RekognitionClient {
         })
     }
 
+    /// <p>Lists and describes the models in an Amazon Rekognition Custom Labels project. You can specify up to 10 model versions in <code>ProjectVersionArns</code>. If you don't specify a value, descriptions for all models are returned.</p> <p>This operation requires permissions to perform the <code>rekognition:DescribeProjectVersions</code> action.</p>
+    fn describe_project_versions(
+        &self,
+        input: DescribeProjectVersionsRequest,
+    ) -> RusotoFuture<DescribeProjectVersionsResponse, DescribeProjectVersionsError> {
+        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.DescribeProjectVersions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeProjectVersionsResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeProjectVersionsError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists and gets information about your Amazon Rekognition Custom Labels projects.</p> <p>This operation requires permissions to perform the <code>rekognition:DescribeProjects</code> action.</p>
+    fn describe_projects(
+        &self,
+        input: DescribeProjectsRequest,
+    ) -> RusotoFuture<DescribeProjectsResponse, DescribeProjectsError> {
+        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.DescribeProjects");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeProjectsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeProjectsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Provides information about a stream processor created by <a>CreateStreamProcessor</a>. You can get information about the input and output streams, the input parameters for the face recognition being performed, and the current status of the stream processor.</p>
     fn describe_stream_processor(
         &self,
@@ -5036,7 +6165,36 @@ impl Rekognition for RekognitionClient {
         })
     }
 
-    /// <p>Detects faces within an image that is provided as input.</p> <p> <code>DetectFaces</code> detects the 100 largest faces in the image. For each face detected, the operation returns face details. These details include a bounding box of the face, a confidence value (that the bounding box contains a face), and a fixed set of attributes such as facial landmarks (for example, coordinates of eye and mouth), gender, presence of beard, sunglasses, and so on. </p> <p>The face-detection algorithm is most effective on frontal faces. For non-frontal or obscured faces, the algorithm might not detect the faces or might detect faces with lower confidence. </p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>This operation requires permissions to perform the <code>rekognition:DetectFaces</code> action. </p>
+    /// <p>Detects custom labels in a supplied image by using an Amazon Rekognition Custom Labels model. </p> <p>You specify which version of a model version to use by using the <code>ProjectVersionArn</code> input parameter. </p> <p>You pass the input image as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p> For each object that the model version detects on an image, the API returns a (<code>CustomLabel</code>) object in an array (<code>CustomLabels</code>). Each <code>CustomLabel</code> object provides the label name (<code>Name</code>), the level of confidence that the image contains the object (<code>Confidence</code>), and object location information, if it exists, for the label on the image (<code>Geometry</code>). </p> <p>During training model calculates a threshold value that determines if a prediction for a label is true. By default, <code>DetectCustomLabels</code> doesn't return labels whose confidence value is below the model's calculated threshold value. To filter labels that are returned, specify a value for <code>MinConfidence</code> that is higher than the model's calculated threshold. You can get the model's calculated threshold from the model's training results shown in the Amazon Rekognition Custom Labels console. To get all labels, regardless of confidence, specify a <code>MinConfidence</code> value of 0. </p> <p>You can also add the <code>MaxResults</code> parameter to limit the number of labels returned. </p> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectCustomLabels</code> action. </p>
+    fn detect_custom_labels(
+        &self,
+        input: DetectCustomLabelsRequest,
+    ) -> RusotoFuture<DetectCustomLabelsResponse, DetectCustomLabelsError> {
+        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.DetectCustomLabels");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DetectCustomLabelsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetectCustomLabelsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Detects faces within an image that is provided as input.</p> <p> <code>DetectFaces</code> detects the 100 largest faces in the image. For each face detected, the operation returns face details. These details include a bounding box of the face, a confidence value (that the bounding box contains a face), and a fixed set of attributes such as facial landmarks (for example, coordinates of eye and mouth), presence of beard, sunglasses, and so on. </p> <p>The face-detection algorithm is most effective on frontal faces. For non-frontal or obscured faces, the algorithm might not detect the faces or might detect faces with lower confidence. </p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>This operation requires permissions to perform the <code>rekognition:DetectFaces</code> action. </p>
     fn detect_faces(
         &self,
         input: DetectFacesRequest,
@@ -5350,7 +6508,7 @@ impl Rekognition for RekognitionClient {
         })
     }
 
-    /// <p>Detects faces in the input image and adds them to the specified collection. </p> <p>Amazon Rekognition doesn't save the actual faces that are detected. Instead, the underlying detection algorithm first detects the faces in the input image. For each face, the algorithm extracts facial features into a feature vector, and stores it in the backend database. Amazon Rekognition uses feature vectors when it performs face match and search operations using the <a>SearchFaces</a> and <a>SearchFacesByImage</a> operations.</p> <p>For more information, see Adding Faces to a Collection in the Amazon Rekognition Developer Guide.</p> <p>To get the number of faces in a collection, call <a>DescribeCollection</a>. </p> <p>If you're using version 1.0 of the face detection model, <code>IndexFaces</code> indexes the 15 largest faces in the input image. Later versions of the face detection model index the 100 largest faces in the input image. </p> <p>If you're using version 4 or later of the face model, image orientation information is not returned in the <code>OrientationCorrection</code> field. </p> <p>To determine which version of the model you're using, call <a>DescribeCollection</a> and supply the collection ID. You can also get the model version from the value of <code>FaceModelVersion</code> in the response from <code>IndexFaces</code> </p> <p>For more information, see Model Versioning in the Amazon Rekognition Developer Guide.</p> <p>If you provide the optional <code>ExternalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the <a>ListFaces</a> operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image.</p> <p>You can specify the maximum number of faces to index with the <code>MaxFaces</code> input parameter. This is useful when you want to index the largest faces in an image and don't want to index smaller faces, such as those belonging to people standing in the background.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet the required quality bar chosen by Amazon Rekognition. The quality bar is based on a variety of common use cases. By default, <code>IndexFaces</code> filters detected faces. You can also explicitly filter detected faces by specifying <code>AUTO</code> for the value of <code>QualityFilter</code>. If you do not want to filter detected faces, specify <code>NONE</code>. </p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>Information about faces detected in an image, but not indexed, is returned in an array of <a>UnindexedFace</a> objects, <code>UnindexedFaces</code>. Faces aren't indexed for reasons such as:</p> <ul> <li> <p>The number of faces detected exceeds the value of the <code>MaxFaces</code> request parameter.</p> </li> <li> <p>The face is too small compared to the image dimensions.</p> </li> <li> <p>The face is too blurry.</p> </li> <li> <p>The image is too dark.</p> </li> <li> <p>The face has an extreme pose.</p> </li> </ul> <p>In response, the <code>IndexFaces</code> operation returns an array of metadata for all detected faces, <code>FaceRecords</code>. This includes: </p> <ul> <li> <p>The bounding box, <code>BoundingBox</code>, of the detected face. </p> </li> <li> <p>A confidence value, <code>Confidence</code>, which indicates the confidence that the bounding box contains a face.</p> </li> <li> <p>A face ID, <code>FaceId</code>, assigned by the service for each face that's detected and stored.</p> </li> <li> <p>An image ID, <code>ImageId</code>, assigned by the service for the input image.</p> </li> </ul> <p>If you request all facial attributes (by using the <code>detectionAttributes</code> parameter), Amazon Rekognition returns detailed facial attributes, such as facial landmarks (for example, location of eye and mouth) and other facial attributes like gender. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata.</p> <p/> <p>The input image is passed either as base64-encoded image bytes, or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>
+    /// <p>Detects faces in the input image and adds them to the specified collection. </p> <p>Amazon Rekognition doesn't save the actual faces that are detected. Instead, the underlying detection algorithm first detects the faces in the input image. For each face, the algorithm extracts facial features into a feature vector, and stores it in the backend database. Amazon Rekognition uses feature vectors when it performs face match and search operations using the <a>SearchFaces</a> and <a>SearchFacesByImage</a> operations.</p> <p>For more information, see Adding Faces to a Collection in the Amazon Rekognition Developer Guide.</p> <p>To get the number of faces in a collection, call <a>DescribeCollection</a>. </p> <p>If you're using version 1.0 of the face detection model, <code>IndexFaces</code> indexes the 15 largest faces in the input image. Later versions of the face detection model index the 100 largest faces in the input image. </p> <p>If you're using version 4 or later of the face model, image orientation information is not returned in the <code>OrientationCorrection</code> field. </p> <p>To determine which version of the model you're using, call <a>DescribeCollection</a> and supply the collection ID. You can also get the model version from the value of <code>FaceModelVersion</code> in the response from <code>IndexFaces</code> </p> <p>For more information, see Model Versioning in the Amazon Rekognition Developer Guide.</p> <p>If you provide the optional <code>ExternalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the <a>ListFaces</a> operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image.</p> <p>You can specify the maximum number of faces to index with the <code>MaxFaces</code> input parameter. This is useful when you want to index the largest faces in an image and don't want to index smaller faces, such as those belonging to people standing in the background.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. By default, <code>IndexFaces</code> chooses the quality bar that's used to filter faces. You can also explicitly choose the quality bar. Use <code>QualityFilter</code>, to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. </p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>Information about faces detected in an image, but not indexed, is returned in an array of <a>UnindexedFace</a> objects, <code>UnindexedFaces</code>. Faces aren't indexed for reasons such as:</p> <ul> <li> <p>The number of faces detected exceeds the value of the <code>MaxFaces</code> request parameter.</p> </li> <li> <p>The face is too small compared to the image dimensions.</p> </li> <li> <p>The face is too blurry.</p> </li> <li> <p>The image is too dark.</p> </li> <li> <p>The face has an extreme pose.</p> </li> <li> <p>The face doesn’t have enough detail to be suitable for face search.</p> </li> </ul> <p>In response, the <code>IndexFaces</code> operation returns an array of metadata for all detected faces, <code>FaceRecords</code>. This includes: </p> <ul> <li> <p>The bounding box, <code>BoundingBox</code>, of the detected face. </p> </li> <li> <p>A confidence value, <code>Confidence</code>, which indicates the confidence that the bounding box contains a face.</p> </li> <li> <p>A face ID, <code>FaceId</code>, assigned by the service for each face that's detected and stored.</p> </li> <li> <p>An image ID, <code>ImageId</code>, assigned by the service for the input image.</p> </li> </ul> <p>If you request all facial attributes (by using the <code>detectionAttributes</code> parameter), Amazon Rekognition returns detailed facial attributes, such as facial landmarks (for example, location of eye and mouth) and other facial attributes. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata.</p> <p/> <p>The input image is passed either as base64-encoded image bytes, or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>
     fn index_faces(
         &self,
         input: IndexFacesRequest,
@@ -5522,7 +6680,7 @@ impl Rekognition for RekognitionClient {
         })
     }
 
-    /// <p>For a given input image, first detects the largest face in the image, and then searches the specified collection for matching faces. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>To search for all faces in an input image, you might first call the <a>IndexFaces</a> operation, and then use the face IDs returned in subsequent calls to the <a>SearchFaces</a> operation. </p> <p> You can also call the <code>DetectFaces</code> operation and use the bounding boxes in the response to make face crops, which then you can pass in to the <code>SearchFacesByImage</code> operation. </p> </note> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p> The response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match found. Along with the metadata, the response also includes a <code>similarity</code> indicating how similar the face is to the input face. In the response, the operation also returns the bounding box (and a confidence level that the bounding box contains a face) of the face that Amazon Rekognition used for the input image. </p> <p>For an example, Searching for a Face Using an Image in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFacesByImage</code> action.</p>
+    /// <p>For a given input image, first detects the largest face in the image, and then searches the specified collection for matching faces. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>To search for all faces in an input image, you might first call the <a>IndexFaces</a> operation, and then use the face IDs returned in subsequent calls to the <a>SearchFaces</a> operation. </p> <p> You can also call the <code>DetectFaces</code> operation and use the bounding boxes in the response to make face crops, which then you can pass in to the <code>SearchFacesByImage</code> operation. </p> </note> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p> The response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match found. Along with the metadata, the response also includes a <code>similarity</code> indicating how similar the face is to the input face. In the response, the operation also returns the bounding box (and a confidence level that the bounding box contains a face) of the face that Amazon Rekognition used for the input image. </p> <p>For an example, Searching for a Face Using an Image in the Amazon Rekognition Developer Guide.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar for filtering by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>.</p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>This operation requires permissions to perform the <code>rekognition:SearchFacesByImage</code> action.</p>
     fn search_faces_by_image(
         &self,
         input: SearchFacesByImageRequest,
@@ -5722,6 +6880,34 @@ impl Rekognition for RekognitionClient {
         })
     }
 
+    /// <p>Starts the running of the version of a model. Starting a model takes a while to complete. To check the current state of the model, use <a>DescribeProjectVersions</a>.</p> <p>Once the model is running, you can detect custom labels in new images by calling <a>DetectCustomLabels</a>.</p> <note> <p>You are charged for the amount of time that the model is running. To stop a running model, call <a>StopProjectVersion</a>.</p> </note> <p>This operation requires permissions to perform the <code>rekognition:StartProjectVersion</code> action.</p>
+    fn start_project_version(
+        &self,
+        input: StartProjectVersionRequest,
+    ) -> RusotoFuture<StartProjectVersionResponse, StartProjectVersionError> {
+        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.StartProjectVersion");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartProjectVersionResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StartProjectVersionError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Starts processing a stream processor. You create a stream processor by calling <a>CreateStreamProcessor</a>. To tell <code>StartStreamProcessor</code> which stream processor to start, use the value of the <code>Name</code> field specified in the call to <code>CreateStreamProcessor</code>.</p>
     fn start_stream_processor(
         &self,
@@ -5745,6 +6931,35 @@ impl Rekognition for RekognitionClient {
                     response.buffer().from_err().and_then(|response| {
                         Err(StartStreamProcessorError::from_response(response))
                     }),
+                )
+            }
+        })
+    }
+
+    /// <p>Stops a running model. The operation might take a while to complete. To check the current status, call <a>DescribeProjectVersions</a>. </p>
+    fn stop_project_version(
+        &self,
+        input: StopProjectVersionRequest,
+    ) -> RusotoFuture<StopProjectVersionResponse, StopProjectVersionError> {
+        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.StopProjectVersion");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StopProjectVersionResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StopProjectVersionError::from_response(response))),
                 )
             }
         })

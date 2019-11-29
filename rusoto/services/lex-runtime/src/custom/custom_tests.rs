@@ -45,6 +45,8 @@ fn test_post_text_resposnse_serialization() {
         slots: Some(slots),
         response_card: None,
         session_attributes: Some(HashMap::new()),
+        sentiment_response: None,
+        session_id: None,
     };
 
     let result: PostTextResponse = lex_client.post_text(post_text_req).sync().unwrap();

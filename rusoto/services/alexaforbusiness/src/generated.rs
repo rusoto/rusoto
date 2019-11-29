@@ -538,6 +538,20 @@ pub struct CreateContactResponse {
     pub contact_arn: Option<String>,
 }
 
+/// <p>Creates settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateEndOfMeetingReminder {
+    /// <p>Whether an end of meeting reminder is enabled or not.</p>
+    #[serde(rename = "Enabled")]
+    pub enabled: bool,
+    /// <p> A range of 3 to 15 minutes that determines when the reminder begins.</p>
+    #[serde(rename = "ReminderAtMinutes")]
+    pub reminder_at_minutes: Vec<i64>,
+    /// <p>The type of sound that users hear during the end of meeting reminder. </p>
+    #[serde(rename = "ReminderType")]
+    pub reminder_type: String,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateGatewayGroupRequest {
     /// <p> A unique, user-specified identifier for the request that ensures idempotency.</p>
@@ -559,6 +573,37 @@ pub struct CreateGatewayGroupResponse {
     #[serde(rename = "GatewayGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_group_arn: Option<String>,
+}
+
+/// <p>Creates settings for the instant booking feature that are applied to a room profile. When users start their meeting with Alexa, Alexa automatically books the room for the configured duration if the room is available.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateInstantBooking {
+    /// <p>Duration between 15 and 240 minutes at increments of 15 that determines how long to book an available room when a meeting is started with Alexa.</p>
+    #[serde(rename = "DurationInMinutes")]
+    pub duration_in_minutes: i64,
+    /// <p>Whether instant booking is enabled or not.</p>
+    #[serde(rename = "Enabled")]
+    pub enabled: bool,
+}
+
+/// <p>Creates meeting room settings of a room profile.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateMeetingRoomConfiguration {
+    #[serde(rename = "EndOfMeetingReminder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_of_meeting_reminder: Option<CreateEndOfMeetingReminder>,
+    /// <p>Settings to automatically book a room for a configured duration if it's free when joining a meeting with Alexa.</p>
+    #[serde(rename = "InstantBooking")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instant_booking: Option<CreateInstantBooking>,
+    /// <p>Settings for requiring a check in when a room is reserved. Alexa can cancel a room reservation if it's not checked into to make the room available for others. Users can check in by joining the meeting with Alexa or an AVS device, or by saying “Alexa, check in.”</p>
+    #[serde(rename = "RequireCheckIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub require_check_in: Option<CreateRequireCheckIn>,
+    /// <p>Whether room utilization metrics are enabled or not.</p>
+    #[serde(rename = "RoomUtilizationMetricsEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub room_utilization_metrics_enabled: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -621,7 +666,7 @@ pub struct CreateProfileRequest {
     /// <p>The distance unit to be used by devices in the profile.</p>
     #[serde(rename = "DistanceUnit")]
     pub distance_unit: String,
-    /// <p>The locale of the room profile.</p>
+    /// <p>The locale of the room profile. (This is currently only available to a limited preview audience.)</p>
     #[serde(rename = "Locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
@@ -629,6 +674,10 @@ pub struct CreateProfileRequest {
     #[serde(rename = "MaxVolumeLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_volume_limit: Option<i64>,
+    /// <p>The meeting room settings of a room profile.</p>
+    #[serde(rename = "MeetingRoomConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub meeting_room_configuration: Option<CreateMeetingRoomConfiguration>,
     /// <p>Whether PSTN calling is enabled.</p>
     #[serde(rename = "PSTNEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -658,6 +707,17 @@ pub struct CreateProfileResponse {
     #[serde(rename = "ProfileArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub profile_arn: Option<String>,
+}
+
+/// <p>Creates settings for the require check in feature that are applied to a room profile. Require check in allows a meeting room’s Alexa or AVS device to prompt the user to check in; otherwise, the room will be released.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateRequireCheckIn {
+    /// <p>Whether require check in is enabled or not.</p>
+    #[serde(rename = "Enabled")]
+    pub enabled: bool,
+    /// <p>Duration between 5 and 20 minutes to determine when to release the room if it's not checked into.</p>
+    #[serde(rename = "ReleaseAfterMinutes")]
+    pub release_after_minutes: i64,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1185,6 +1245,24 @@ pub struct DisassociateSkillGroupFromRoomRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateSkillGroupFromRoomResponse {}
 
+/// <p>Settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EndOfMeetingReminder {
+    /// <p>Whether an end of meeting reminder is enabled or not.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>A range of 3 to 15 minutes that determines when the reminder begins.</p>
+    #[serde(rename = "ReminderAtMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reminder_at_minutes: Option<Vec<i64>>,
+    /// <p>The type of sound that users hear during the end of meeting reminder. </p>
+    #[serde(rename = "ReminderType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reminder_type: Option<String>,
+}
+
 /// <p>A filter name and value pair that is used to return a more specific list of results. Filters can be used to match a set of resources by various criteria.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Filter {
@@ -1524,6 +1602,20 @@ pub struct IPDialIn {
     pub endpoint: String,
 }
 
+/// <p>Settings for the instant booking feature that are applied to a room profile. When users start their meeting with Alexa, Alexa automatically books the room for the configured duration if the room is available.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct InstantBooking {
+    /// <p>Duration between 15 and 240 minutes at increments of 15 that determines how long to book an available room when a meeting is started with Alexa. </p>
+    #[serde(rename = "DurationInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration_in_minutes: Option<i64>,
+    /// <p>Whether instant booking is enabled or not.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListBusinessReportSchedulesRequest {
     /// <p>The maximum number of schedules listed in the call.</p>
@@ -1662,19 +1754,19 @@ pub struct ListGatewaysResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListSkillsRequest {
-    /// <p>Whether the skill is enabled under the user's account, or if it requires linking to be used.</p>
+    /// <p>Whether the skill is enabled under the user's account.</p>
     #[serde(rename = "EnablementType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enablement_type: Option<String>,
-    /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved. Required.</p>
+    /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>. Required.</p>
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ARN of the skill group for which to list enabled skills. Required.</p>
+    /// <p>The ARN of the skill group for which to list enabled skills.</p>
     #[serde(rename = "SkillGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub skill_group_arn: Option<String>,
@@ -1804,6 +1896,28 @@ pub struct ListTagsResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Meeting room settings of a room profile.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MeetingRoomConfiguration {
+    /// <p>Settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending. </p>
+    #[serde(rename = "EndOfMeetingReminder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_of_meeting_reminder: Option<EndOfMeetingReminder>,
+    /// <p>Settings to automatically book the room if available for a configured duration when joining a meeting with Alexa. </p>
+    #[serde(rename = "InstantBooking")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instant_booking: Option<InstantBooking>,
+    /// <p>Settings for requiring a check in when a room is reserved. Alexa can cancel a room reservation if it's not checked into. This makes the room available for others. Users can check in by joining the meeting with Alexa or an AVS device, or by saying “Alexa, check in.” </p>
+    #[serde(rename = "RequireCheckIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub require_check_in: Option<RequireCheckIn>,
+    /// <p>Whether room utilization metrics are enabled or not.</p>
+    #[serde(rename = "RoomUtilizationMetricsEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub room_utilization_metrics_enabled: Option<bool>,
 }
 
 /// <p><p>The values that indicate whether a pin is always required (YES), never required (NO), or OPTIONAL.</p> <ul> <li> <p>If YES, Alexa will always ask for a meeting pin.</p> </li> <li> <p>If NO, Alexa will never ask for a meeting pin.</p> </li> <li> <p>If OPTIONAL, Alexa will ask if you have a meeting pin and if the customer responds with yes, it will ask for the meeting pin.</p> </li> </ul></p>
@@ -1942,7 +2056,7 @@ pub struct Profile {
     #[serde(rename = "IsDefault")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default: Option<bool>,
-    /// <p>The locale of a room profile.</p>
+    /// <p>The locale of a room profile. (This is currently available only to a limited preview audience.)</p>
     #[serde(rename = "Locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
@@ -1950,6 +2064,10 @@ pub struct Profile {
     #[serde(rename = "MaxVolumeLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_volume_limit: Option<i64>,
+    /// <p>Meeting room settings of a room profile.</p>
+    #[serde(rename = "MeetingRoomConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub meeting_room_configuration: Option<MeetingRoomConfiguration>,
     /// <p>The PSTN setting of a room profile.</p>
     #[serde(rename = "PSTNEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1996,7 +2114,7 @@ pub struct ProfileData {
     #[serde(rename = "IsDefault")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default: Option<bool>,
-    /// <p>The locale of a room profile.</p>
+    /// <p>The locale of a room profile. (This is currently available only to a limited preview audience.)</p>
     #[serde(rename = "Locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
@@ -2012,7 +2130,7 @@ pub struct ProfileData {
     #[serde(rename = "TemperatureUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temperature_unit: Option<String>,
-    /// <p>The timezone of a room profile.</p>
+    /// <p>The time zone of a room profile.</p>
     #[serde(rename = "Timezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timezone: Option<String>,
@@ -2126,6 +2244,20 @@ pub struct RejectSkillRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectSkillResponse {}
+
+/// <p>Settings for the require check in feature that are applied to a room profile. Require check in allows a meeting room’s Alexa or AVS device to prompt the user to check in; otherwise, the room will be released. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RequireCheckIn {
+    /// <p>Whether require check in is enabled or not.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>Duration between 5 and 20 minutes to determine when to release the room if it's not checked into. </p>
+    #[serde(rename = "ReleaseAfterMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub release_after_minutes: Option<i64>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ResolveRoomRequest {
@@ -2800,7 +2932,7 @@ pub struct Tag {
     /// <p>The key of a tag. Tag keys are case-sensitive. </p>
     #[serde(rename = "Key")]
     pub key: String,
-    /// <p>The value of a tag. Tag values are case-sensitive and can be null.</p>
+    /// <p>The value of a tag. Tag values are case sensitive and can be null.</p>
     #[serde(rename = "Value")]
     pub value: String,
 }
@@ -2970,6 +3102,23 @@ pub struct UpdateDeviceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceResponse {}
 
+/// <p>Settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateEndOfMeetingReminder {
+    /// <p>Whether an end of meeting reminder is enabled or not.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>Updates settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending. </p>
+    #[serde(rename = "ReminderAtMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reminder_at_minutes: Option<Vec<i64>>,
+    /// <p>The type of sound that users hear during the end of meeting reminder. </p>
+    #[serde(rename = "ReminderType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reminder_type: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGatewayGroupRequest {
     /// <p>The updated description of the gateway group.</p>
@@ -3011,6 +3160,40 @@ pub struct UpdateGatewayRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGatewayResponse {}
+
+/// <p>Updates settings for the instant booking feature that are applied to a room profile. If instant booking is enabled, Alexa automatically reserves a room if it is free when a user joins a meeting with Alexa.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateInstantBooking {
+    /// <p>Duration between 15 and 240 minutes at increments of 15 that determines how long to book an available room when a meeting is started with Alexa.</p>
+    #[serde(rename = "DurationInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration_in_minutes: Option<i64>,
+    /// <p>Whether instant booking is enabled or not.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+}
+
+/// <p>Updates meeting room settings of a room profile.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateMeetingRoomConfiguration {
+    /// <p>Settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending. </p>
+    #[serde(rename = "EndOfMeetingReminder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_of_meeting_reminder: Option<UpdateEndOfMeetingReminder>,
+    /// <p>Settings to automatically book an available room available for a configured duration when joining a meeting with Alexa.</p>
+    #[serde(rename = "InstantBooking")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instant_booking: Option<UpdateInstantBooking>,
+    /// <p>Settings for requiring a check in when a room is reserved. Alexa can cancel a room reservation if it's not checked into to make the room available for others. Users can check in by joining the meeting with Alexa or an AVS device, or by saying “Alexa, check in.” </p>
+    #[serde(rename = "RequireCheckIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub require_check_in: Option<UpdateRequireCheckIn>,
+    /// <p>Whether room utilization metrics are enabled or not.</p>
+    #[serde(rename = "RoomUtilizationMetricsEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub room_utilization_metrics_enabled: Option<bool>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateNetworkProfileRequest {
@@ -3061,7 +3244,7 @@ pub struct UpdateProfileRequest {
     #[serde(rename = "IsDefault")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default: Option<bool>,
-    /// <p>The updated locale for the room profile.</p>
+    /// <p>The updated locale for the room profile. (This is currently only available to a limited preview audience.)</p>
     #[serde(rename = "Locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
@@ -3069,6 +3252,10 @@ pub struct UpdateProfileRequest {
     #[serde(rename = "MaxVolumeLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_volume_limit: Option<i64>,
+    /// <p>The updated meeting room settings of a room profile.</p>
+    #[serde(rename = "MeetingRoomConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub meeting_room_configuration: Option<UpdateMeetingRoomConfiguration>,
     /// <p>Whether the PSTN setting of the room profile is enabled.</p>
     #[serde(rename = "PSTNEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3102,6 +3289,19 @@ pub struct UpdateProfileRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProfileResponse {}
+
+/// <p>Updates settings for the require check in feature that are applied to a room profile. Require check in allows a meeting room’s Alexa or AVS device to prompt the user to check in; otherwise, the room will be released. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateRequireCheckIn {
+    /// <p>Whether require check in is enabled or not.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>Duration between 5 and 20 minutes to determine when to release the room if it's not checked into. </p>
+    #[serde(rename = "ReleaseAfterMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub release_after_minutes: Option<i64>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateRoomRequest {
@@ -6969,7 +7169,7 @@ pub trait AlexaForBusiness {
         input: GetSkillGroupRequest,
     ) -> RusotoFuture<GetSkillGroupResponse, GetSkillGroupError>;
 
-    /// <p>Lists the details of the schedules that a user configured.</p>
+    /// <p>Lists the details of the schedules that a user configured. A download URL of the report associated with each schedule is returned every time this action is called. A new download URL is returned each time, and is valid for 24 hours.</p>
     fn list_business_report_schedules(
         &self,
         input: ListBusinessReportSchedulesRequest,
@@ -8700,7 +8900,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
-    /// <p>Lists the details of the schedules that a user configured.</p>
+    /// <p>Lists the details of the schedules that a user configured. A download URL of the report associated with each schedule is returned every time this action is called. A new download URL is returned each time, and is valid for 24 hours.</p>
     fn list_business_report_schedules(
         &self,
         input: ListBusinessReportSchedulesRequest,

@@ -98,6 +98,54 @@ pub struct CancelSchemaExtensionRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelSchemaExtensionResult {}
 
+/// <p>Information about the certificate.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Certificate {
+    /// <p>The identifier of the certificate.</p>
+    #[serde(rename = "CertificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_id: Option<String>,
+    /// <p>The common name for the certificate.</p>
+    #[serde(rename = "CommonName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub common_name: Option<String>,
+    /// <p>The date and time when the certificate will expire.</p>
+    #[serde(rename = "ExpiryDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiry_date_time: Option<f64>,
+    /// <p>The date and time that the certificate was registered.</p>
+    #[serde(rename = "RegisteredDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registered_date_time: Option<f64>,
+    /// <p>The state of the certificate.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>Describes a state change for the certificate.</p>
+    #[serde(rename = "StateReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_reason: Option<String>,
+}
+
+/// <p>Contains general information about a certificate.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CertificateInfo {
+    /// <p>The identifier of the certificate.</p>
+    #[serde(rename = "CertificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_id: Option<String>,
+    /// <p>The common name for the certificate.</p>
+    #[serde(rename = "CommonName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub common_name: Option<String>,
+    /// <p>The state of the certificate.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
 /// <p>Contains information about a computer account in a directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -140,7 +188,7 @@ pub struct ConnectDirectoryRequest {
     /// <p>A <a>DirectoryConnectSettings</a> object that contains additional information for the operation.</p>
     #[serde(rename = "ConnectSettings")]
     pub connect_settings: DirectoryConnectSettings,
-    /// <p>A textual description for the directory.</p>
+    /// <p>A description for the directory.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -252,17 +300,17 @@ pub struct CreateConditionalForwarderResult {}
 /// <p>Contains the inputs for the <a>CreateDirectory</a> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDirectoryRequest {
-    /// <p>A textual description for the directory.</p>
+    /// <p>A description for the directory.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// <p>The fully qualified name for the directory, such as <code>corp.example.com</code>.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The password for the directory administrator. The directory creation process creates a directory administrator account with the user name <code>Administrator</code> and this password.</p>
+    /// <p>The password for the directory administrator. The directory creation process creates a directory administrator account with the user name <code>Administrator</code> and this password.</p> <p>If you need to change the password for the administrator account, you can use the <a>ResetUserPassword</a> API call.</p>
     #[serde(rename = "Password")]
     pub password: String,
-    /// <p>The short name of the directory, such as <code>CORP</code>.</p>
+    /// <p>The NetBIOS name of the directory, such as <code>CORP</code>.</p>
     #[serde(rename = "ShortName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub short_name: Option<String>,
@@ -291,7 +339,7 @@ pub struct CreateDirectoryResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateLogSubscriptionRequest {
-    /// <p>Identifier (ID) of the directory to which you want to subscribe and receive real-time logs to your specified CloudWatch log group.</p>
+    /// <p>Identifier of the directory to which you want to subscribe and receive real-time logs to your specified CloudWatch log group.</p>
     #[serde(rename = "DirectoryId")]
     pub directory_id: String,
     /// <p>The name of the CloudWatch log group where the real-time domain controller logs are forwarded.</p>
@@ -306,21 +354,21 @@ pub struct CreateLogSubscriptionResult {}
 /// <p>Creates an AWS Managed Microsoft AD directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateMicrosoftADRequest {
-    /// <p>A textual description for the directory. This label will appear on the AWS console <code>Directory Details</code> page after the directory is created.</p>
+    /// <p>A description for the directory. This label will appear on the AWS console <code>Directory Details</code> page after the directory is created.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>AWS Managed Microsoft AD is available in two editions: Standard and Enterprise. Enterprise is the default.</p>
+    /// <p>AWS Managed Microsoft AD is available in two editions: <code>Standard</code> and <code>Enterprise</code>. <code>Enterprise</code> is the default.</p>
     #[serde(rename = "Edition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub edition: Option<String>,
-    /// <p>The fully qualified domain name for the directory, such as <code>corp.example.com</code>. This name will resolve inside your VPC only. It does not need to be publicly resolvable.</p>
+    /// <p>The fully qualified domain name for the AWS Managed Microsoft AD directory, such as <code>corp.example.com</code>. This name will resolve inside your VPC only. It does not need to be publicly resolvable.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The password for the default administrative user named <code>Admin</code>.</p>
+    /// <p>The password for the default administrative user named <code>Admin</code>.</p> <p>If you need to change the password for the administrator account, you can use the <a>ResetUserPassword</a> API call.</p>
     #[serde(rename = "Password")]
     pub password: String,
-    /// <p>The NetBIOS name for your domain. A short identifier for your domain, such as <code>CORP</code>. If you don't specify a NetBIOS name, it will default to the first part of your directory DNS. For example, <code>CORP</code> for the directory DNS <code>corp.example.com</code>. </p>
+    /// <p>The NetBIOS name for your domain, such as <code>CORP</code>. If you don't specify a NetBIOS name, it will default to the first part of your directory DNS. For example, <code>CORP</code> for the directory DNS <code>corp.example.com</code>. </p>
     #[serde(rename = "ShortName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub short_name: Option<String>,
@@ -440,7 +488,7 @@ pub struct DeleteDirectoryResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteLogSubscriptionRequest {
-    /// <p>Identifier (ID) of the directory whose log subscription you want to delete.</p>
+    /// <p>Identifier of the directory whose log subscription you want to delete.</p>
     #[serde(rename = "DirectoryId")]
     pub directory_id: String,
 }
@@ -489,6 +537,20 @@ pub struct DeleteTrustResult {
     pub trust_id: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeregisterCertificateRequest {
+    /// <p>The identifier of the certificate.</p>
+    #[serde(rename = "CertificateId")]
+    pub certificate_id: String,
+    /// <p>The identifier of the directory.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeregisterCertificateResult {}
+
 /// <p>Removes the specified directory as a publisher to the specified SNS topic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterEventTopicRequest {
@@ -504,6 +566,25 @@ pub struct DeregisterEventTopicRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterEventTopicResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeCertificateRequest {
+    /// <p>The identifier of the certificate.</p>
+    #[serde(rename = "CertificateId")]
+    pub certificate_id: String,
+    /// <p>The identifier of the directory.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeCertificateResult {
+    /// <p>Information about the certificate, including registered date time, certificate state, the reason for the state, expiration date time, and certificate common name.</p>
+    #[serde(rename = "Certificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate: Option<Certificate>,
+}
 
 /// <p>Describes a conditional forwarder.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -611,6 +692,38 @@ pub struct DescribeEventTopicsResult {
     #[serde(rename = "EventTopics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_topics: Option<Vec<EventTopic>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeLDAPSSettingsRequest {
+    /// <p>The identifier of the directory.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>Specifies the number of items that should be displayed on one page.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The type of next token used for pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The type of LDAP security the customer wants to enable, either server or client. Currently supports only <code>Client</code>, (the default).</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeLDAPSSettingsResult {
+    /// <p>Information about LDAP security for the specified directory, including status of enablement, state last updated date time, and the reason for the state.</p>
+    #[serde(rename = "LDAPSSettingsInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ldaps_settings_info: Option<Vec<LDAPSSettingInfo>>,
+    /// <p>The next token used to retrieve the LDAPS settings if the number of setting types exceeds page limit and there is another page.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -752,7 +865,7 @@ pub struct DirectoryConnectSettingsDescription {
     #[serde(rename = "SecurityGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_id: Option<String>,
-    /// <p>A list of subnet identifiers in the VPC that the AD connector is in.</p>
+    /// <p>A list of subnet identifiers in the VPC that the AD Connector is in.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
@@ -778,7 +891,7 @@ pub struct DirectoryDescription {
     #[serde(rename = "ConnectSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connect_settings: Option<DirectoryConnectSettingsDescription>,
-    /// <p>The textual description for the directory.</p>
+    /// <p>The description for the directory.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -864,15 +977,15 @@ pub struct DirectoryDescription {
     pub vpc_settings: Option<DirectoryVpcSettingsDescription>,
 }
 
-/// <p>Contains directory limit information for a region.</p>
+/// <p>Contains directory limit information for a Region.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DirectoryLimits {
-    /// <p>The current number of cloud directories in the region.</p>
+    /// <p>The current number of cloud directories in the Region.</p>
     #[serde(rename = "CloudOnlyDirectoriesCurrentCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_only_directories_current_count: Option<i64>,
-    /// <p>The maximum number of cloud directories allowed in the region.</p>
+    /// <p>The maximum number of cloud directories allowed in the Region.</p>
     #[serde(rename = "CloudOnlyDirectoriesLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_only_directories_limit: Option<i64>,
@@ -892,11 +1005,11 @@ pub struct DirectoryLimits {
     #[serde(rename = "CloudOnlyMicrosoftADLimitReached")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_only_microsoft_ad_limit_reached: Option<bool>,
-    /// <p>The current number of connected directories in the region.</p>
+    /// <p>The current number of connected directories in the Region.</p>
     #[serde(rename = "ConnectedDirectoriesCurrentCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connected_directories_current_count: Option<i64>,
-    /// <p>The maximum number of connected directories allowed in the region.</p>
+    /// <p>The maximum number of connected directories allowed in the Region.</p>
     #[serde(rename = "ConnectedDirectoriesLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connected_directories_limit: Option<i64>,
@@ -938,6 +1051,21 @@ pub struct DirectoryVpcSettingsDescription {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisableLDAPSRequest {
+    /// <p>The identifier of the directory.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>The type of LDAP security that the customer wants to enable. The security can be either server or client, but currently only the default <code>Client</code> is supported.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisableLDAPSResult {}
 
 /// <p>Contains the inputs for the <a>DisableRadius</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1019,6 +1147,21 @@ pub struct DomainController {
     pub vpc_id: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct EnableLDAPSRequest {
+    /// <p>The identifier of the directory.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>The type of LDAP security the customer wants to enable. The security can be either server or client, but currently only the default <code>Client</code> is supported.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EnableLDAPSResult {}
+
 /// <p>Contains the inputs for the <a>EnableRadius</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EnableRadiusRequest {
@@ -1090,7 +1233,7 @@ pub struct GetDirectoryLimitsRequest {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDirectoryLimitsResult {
-    /// <p>A <a>DirectoryLimits</a> object that contains the directory limits for the current region.</p>
+    /// <p>A <a>DirectoryLimits</a> object that contains the directory limits for the current rRegion.</p>
     #[serde(rename = "DirectoryLimits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_limits: Option<DirectoryLimits>,
@@ -1155,6 +1298,52 @@ pub struct IpRouteInfo {
     #[serde(rename = "IpRouteStatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_route_status_reason: Option<String>,
+}
+
+/// <p>Contains general information about the LDAPS settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct LDAPSSettingInfo {
+    /// <p>The state of the LDAPS settings.</p>
+    #[serde(rename = "LDAPSStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ldaps_status: Option<String>,
+    /// <p>Describes a state change for LDAPS.</p>
+    #[serde(rename = "LDAPSStatusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ldaps_status_reason: Option<String>,
+    /// <p>The date and time when the LDAPS settings were last updated.</p>
+    #[serde(rename = "LastUpdatedDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date_time: Option<f64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListCertificatesRequest {
+    /// <p>The identifier of the directory.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>The number of items that should show up on one page</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>A token for requesting another page of certificates if the <code>NextToken</code> response element indicates that more certificates are available. Use the value of the returned <code>NextToken</code> element in your request until the token comes back as <code>null</code>. Pass <code>null</code> if this is the first call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListCertificatesResult {
+    /// <p>A list of certificates with basic details including certificate ID, certificate common name, certificate state.</p>
+    #[serde(rename = "CertificatesInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificates_info: Option<Vec<CertificateInfo>>,
+    /// <p>Indicates whether another page of certificates is available when the number of available certificates exceeds the page limit.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1353,6 +1542,25 @@ pub struct RadiusSettings {
     #[serde(rename = "UseSameUsername")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_same_username: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RegisterCertificateRequest {
+    /// <p>The certificate PEM string that needs to be registered.</p>
+    #[serde(rename = "CertificateData")]
+    pub certificate_data: String,
+    /// <p>The identifier of the directory.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RegisterCertificateResult {
+    /// <p>The identifier of the certificate.</p>
+    #[serde(rename = "CertificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_id: Option<String>,
 }
 
 /// <p>Registers a new event topic.</p>
@@ -2904,6 +3112,93 @@ impl Error for DeleteTrustError {
         }
     }
 }
+/// Errors returned by DeregisterCertificate
+#[derive(Debug, PartialEq)]
+pub enum DeregisterCertificateError {
+    /// <p>The certificate is not present in the system for describe or deregister activities.</p>
+    CertificateDoesNotExist(String),
+    /// <p>The certificate is being used for the LDAP security connection and cannot be removed without disabling LDAP security.</p>
+    CertificateInUse(String),
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory does not exist in the system.</p>
+    DirectoryDoesNotExist(String),
+    /// <p>The specified directory is unavailable or could not be found.</p>
+    DirectoryUnavailable(String),
+    /// <p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl DeregisterCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterCertificateError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "CertificateDoesNotExistException" => {
+                    return RusotoError::Service(
+                        DeregisterCertificateError::CertificateDoesNotExist(err.msg),
+                    )
+                }
+                "CertificateInUseException" => {
+                    return RusotoError::Service(DeregisterCertificateError::CertificateInUse(
+                        err.msg,
+                    ))
+                }
+                "ClientException" => {
+                    return RusotoError::Service(DeregisterCertificateError::Client(err.msg))
+                }
+                "DirectoryDoesNotExistException" => {
+                    return RusotoError::Service(DeregisterCertificateError::DirectoryDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "DirectoryUnavailableException" => {
+                    return RusotoError::Service(DeregisterCertificateError::DirectoryUnavailable(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DeregisterCertificateError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DeregisterCertificateError::Service(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(DeregisterCertificateError::UnsupportedOperation(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeregisterCertificateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeregisterCertificateError {
+    fn description(&self) -> &str {
+        match *self {
+            DeregisterCertificateError::CertificateDoesNotExist(ref cause) => cause,
+            DeregisterCertificateError::CertificateInUse(ref cause) => cause,
+            DeregisterCertificateError::Client(ref cause) => cause,
+            DeregisterCertificateError::DirectoryDoesNotExist(ref cause) => cause,
+            DeregisterCertificateError::DirectoryUnavailable(ref cause) => cause,
+            DeregisterCertificateError::InvalidParameter(ref cause) => cause,
+            DeregisterCertificateError::Service(ref cause) => cause,
+            DeregisterCertificateError::UnsupportedOperation(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeregisterEventTopic
 #[derive(Debug, PartialEq)]
 pub enum DeregisterEventTopicError {
@@ -2956,6 +3251,77 @@ impl Error for DeregisterEventTopicError {
             DeregisterEventTopicError::EntityDoesNotExist(ref cause) => cause,
             DeregisterEventTopicError::InvalidParameter(ref cause) => cause,
             DeregisterEventTopicError::Service(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeCertificate
+#[derive(Debug, PartialEq)]
+pub enum DescribeCertificateError {
+    /// <p>The certificate is not present in the system for describe or deregister activities.</p>
+    CertificateDoesNotExist(String),
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory does not exist in the system.</p>
+    DirectoryDoesNotExist(String),
+    /// <p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl DescribeCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCertificateError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "CertificateDoesNotExistException" => {
+                    return RusotoError::Service(DescribeCertificateError::CertificateDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "ClientException" => {
+                    return RusotoError::Service(DescribeCertificateError::Client(err.msg))
+                }
+                "DirectoryDoesNotExistException" => {
+                    return RusotoError::Service(DescribeCertificateError::DirectoryDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeCertificateError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DescribeCertificateError::Service(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(DescribeCertificateError::UnsupportedOperation(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeCertificateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeCertificateError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeCertificateError::CertificateDoesNotExist(ref cause) => cause,
+            DescribeCertificateError::Client(ref cause) => cause,
+            DescribeCertificateError::DirectoryDoesNotExist(ref cause) => cause,
+            DescribeCertificateError::InvalidParameter(ref cause) => cause,
+            DescribeCertificateError::Service(ref cause) => cause,
+            DescribeCertificateError::UnsupportedOperation(ref cause) => cause,
         }
     }
 }
@@ -3225,6 +3591,77 @@ impl Error for DescribeEventTopicsError {
         }
     }
 }
+/// Errors returned by DescribeLDAPSSettings
+#[derive(Debug, PartialEq)]
+pub enum DescribeLDAPSSettingsError {
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory does not exist in the system.</p>
+    DirectoryDoesNotExist(String),
+    /// <p>The <code>NextToken</code> value is not valid.</p>
+    InvalidNextToken(String),
+    /// <p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl DescribeLDAPSSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLDAPSSettingsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(DescribeLDAPSSettingsError::Client(err.msg))
+                }
+                "DirectoryDoesNotExistException" => {
+                    return RusotoError::Service(DescribeLDAPSSettingsError::DirectoryDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(DescribeLDAPSSettingsError::InvalidNextToken(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeLDAPSSettingsError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DescribeLDAPSSettingsError::Service(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(DescribeLDAPSSettingsError::UnsupportedOperation(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeLDAPSSettingsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeLDAPSSettingsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeLDAPSSettingsError::Client(ref cause) => cause,
+            DescribeLDAPSSettingsError::DirectoryDoesNotExist(ref cause) => cause,
+            DescribeLDAPSSettingsError::InvalidNextToken(ref cause) => cause,
+            DescribeLDAPSSettingsError::InvalidParameter(ref cause) => cause,
+            DescribeLDAPSSettingsError::Service(ref cause) => cause,
+            DescribeLDAPSSettingsError::UnsupportedOperation(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeSharedDirectories
 #[derive(Debug, PartialEq)]
 pub enum DescribeSharedDirectoriesError {
@@ -3418,6 +3855,75 @@ impl Error for DescribeTrustsError {
         }
     }
 }
+/// Errors returned by DisableLDAPS
+#[derive(Debug, PartialEq)]
+pub enum DisableLDAPSError {
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory does not exist in the system.</p>
+    DirectoryDoesNotExist(String),
+    /// <p>The specified directory is unavailable or could not be found.</p>
+    DirectoryUnavailable(String),
+    /// <p>The LDAP activities could not be performed because they are limited by the LDAPS status.</p>
+    InvalidLDAPSStatus(String),
+    /// <p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl DisableLDAPSError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableLDAPSError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(DisableLDAPSError::Client(err.msg))
+                }
+                "DirectoryDoesNotExistException" => {
+                    return RusotoError::Service(DisableLDAPSError::DirectoryDoesNotExist(err.msg))
+                }
+                "DirectoryUnavailableException" => {
+                    return RusotoError::Service(DisableLDAPSError::DirectoryUnavailable(err.msg))
+                }
+                "InvalidLDAPSStatusException" => {
+                    return RusotoError::Service(DisableLDAPSError::InvalidLDAPSStatus(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DisableLDAPSError::InvalidParameter(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DisableLDAPSError::Service(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(DisableLDAPSError::UnsupportedOperation(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DisableLDAPSError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisableLDAPSError {
+    fn description(&self) -> &str {
+        match *self {
+            DisableLDAPSError::Client(ref cause) => cause,
+            DisableLDAPSError::DirectoryDoesNotExist(ref cause) => cause,
+            DisableLDAPSError::DirectoryUnavailable(ref cause) => cause,
+            DisableLDAPSError::InvalidLDAPSStatus(ref cause) => cause,
+            DisableLDAPSError::InvalidParameter(ref cause) => cause,
+            DisableLDAPSError::Service(ref cause) => cause,
+            DisableLDAPSError::UnsupportedOperation(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DisableRadius
 #[derive(Debug, PartialEq)]
 pub enum DisableRadiusError {
@@ -3515,6 +4021,81 @@ impl Error for DisableSsoError {
             DisableSsoError::EntityDoesNotExist(ref cause) => cause,
             DisableSsoError::InsufficientPermissions(ref cause) => cause,
             DisableSsoError::Service(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by EnableLDAPS
+#[derive(Debug, PartialEq)]
+pub enum EnableLDAPSError {
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory does not exist in the system.</p>
+    DirectoryDoesNotExist(String),
+    /// <p>The specified directory is unavailable or could not be found.</p>
+    DirectoryUnavailable(String),
+    /// <p>The LDAP activities could not be performed because they are limited by the LDAPS status.</p>
+    InvalidLDAPSStatus(String),
+    /// <p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The LDAP activities could not be performed because at least one valid certificate must be registered with the system.</p>
+    NoAvailableCertificate(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl EnableLDAPSError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableLDAPSError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(EnableLDAPSError::Client(err.msg))
+                }
+                "DirectoryDoesNotExistException" => {
+                    return RusotoError::Service(EnableLDAPSError::DirectoryDoesNotExist(err.msg))
+                }
+                "DirectoryUnavailableException" => {
+                    return RusotoError::Service(EnableLDAPSError::DirectoryUnavailable(err.msg))
+                }
+                "InvalidLDAPSStatusException" => {
+                    return RusotoError::Service(EnableLDAPSError::InvalidLDAPSStatus(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(EnableLDAPSError::InvalidParameter(err.msg))
+                }
+                "NoAvailableCertificateException" => {
+                    return RusotoError::Service(EnableLDAPSError::NoAvailableCertificate(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(EnableLDAPSError::Service(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(EnableLDAPSError::UnsupportedOperation(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for EnableLDAPSError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for EnableLDAPSError {
+    fn description(&self) -> &str {
+        match *self {
+            EnableLDAPSError::Client(ref cause) => cause,
+            EnableLDAPSError::DirectoryDoesNotExist(ref cause) => cause,
+            EnableLDAPSError::DirectoryUnavailable(ref cause) => cause,
+            EnableLDAPSError::InvalidLDAPSStatus(ref cause) => cause,
+            EnableLDAPSError::InvalidParameter(ref cause) => cause,
+            EnableLDAPSError::NoAvailableCertificate(ref cause) => cause,
+            EnableLDAPSError::Service(ref cause) => cause,
+            EnableLDAPSError::UnsupportedOperation(ref cause) => cause,
         }
     }
 }
@@ -3721,6 +4302,73 @@ impl Error for GetSnapshotLimitsError {
             GetSnapshotLimitsError::Client(ref cause) => cause,
             GetSnapshotLimitsError::EntityDoesNotExist(ref cause) => cause,
             GetSnapshotLimitsError::Service(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListCertificates
+#[derive(Debug, PartialEq)]
+pub enum ListCertificatesError {
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory does not exist in the system.</p>
+    DirectoryDoesNotExist(String),
+    /// <p>The <code>NextToken</code> value is not valid.</p>
+    InvalidNextToken(String),
+    /// <p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl ListCertificatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCertificatesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(ListCertificatesError::Client(err.msg))
+                }
+                "DirectoryDoesNotExistException" => {
+                    return RusotoError::Service(ListCertificatesError::DirectoryDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListCertificatesError::InvalidNextToken(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListCertificatesError::InvalidParameter(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(ListCertificatesError::Service(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(ListCertificatesError::UnsupportedOperation(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListCertificatesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListCertificatesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListCertificatesError::Client(ref cause) => cause,
+            ListCertificatesError::DirectoryDoesNotExist(ref cause) => cause,
+            ListCertificatesError::InvalidNextToken(ref cause) => cause,
+            ListCertificatesError::InvalidParameter(ref cause) => cause,
+            ListCertificatesError::Service(ref cause) => cause,
+            ListCertificatesError::UnsupportedOperation(ref cause) => cause,
         }
     }
 }
@@ -3951,6 +4599,101 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::InvalidNextToken(ref cause) => cause,
             ListTagsForResourceError::InvalidParameter(ref cause) => cause,
             ListTagsForResourceError::Service(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by RegisterCertificate
+#[derive(Debug, PartialEq)]
+pub enum RegisterCertificateError {
+    /// <p>The certificate has already been registered into the system.</p>
+    CertificateAlreadyExists(String),
+    /// <p>The certificate could not be added because the certificate limit has been reached.</p>
+    CertificateLimitExceeded(String),
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory does not exist in the system.</p>
+    DirectoryDoesNotExist(String),
+    /// <p>The specified directory is unavailable or could not be found.</p>
+    DirectoryUnavailable(String),
+    /// <p>The certificate PEM that was provided has incorrect encoding.</p>
+    InvalidCertificate(String),
+    /// <p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl RegisterCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterCertificateError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "CertificateAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        RegisterCertificateError::CertificateAlreadyExists(err.msg),
+                    )
+                }
+                "CertificateLimitExceededException" => {
+                    return RusotoError::Service(
+                        RegisterCertificateError::CertificateLimitExceeded(err.msg),
+                    )
+                }
+                "ClientException" => {
+                    return RusotoError::Service(RegisterCertificateError::Client(err.msg))
+                }
+                "DirectoryDoesNotExistException" => {
+                    return RusotoError::Service(RegisterCertificateError::DirectoryDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "DirectoryUnavailableException" => {
+                    return RusotoError::Service(RegisterCertificateError::DirectoryUnavailable(
+                        err.msg,
+                    ))
+                }
+                "InvalidCertificateException" => {
+                    return RusotoError::Service(RegisterCertificateError::InvalidCertificate(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(RegisterCertificateError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(RegisterCertificateError::Service(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(RegisterCertificateError::UnsupportedOperation(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for RegisterCertificateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RegisterCertificateError {
+    fn description(&self) -> &str {
+        match *self {
+            RegisterCertificateError::CertificateAlreadyExists(ref cause) => cause,
+            RegisterCertificateError::CertificateLimitExceeded(ref cause) => cause,
+            RegisterCertificateError::Client(ref cause) => cause,
+            RegisterCertificateError::DirectoryDoesNotExist(ref cause) => cause,
+            RegisterCertificateError::DirectoryUnavailable(ref cause) => cause,
+            RegisterCertificateError::InvalidCertificate(ref cause) => cause,
+            RegisterCertificateError::InvalidParameter(ref cause) => cause,
+            RegisterCertificateError::Service(ref cause) => cause,
+            RegisterCertificateError::UnsupportedOperation(ref cause) => cause,
         }
     }
 }
@@ -4898,19 +5641,19 @@ pub trait DirectoryService {
         input: CreateConditionalForwarderRequest,
     ) -> RusotoFuture<CreateConditionalForwarderResult, CreateConditionalForwarderError>;
 
-    /// <p>Creates a Simple AD directory.</p> <p>Before you call <code>CreateDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>CreateDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    /// <p>Creates a Simple AD directory. For more information, see <a href="https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_simple_ad.html">Simple Active Directory</a> in the <i>AWS Directory Service Admin Guide</i>.</p> <p>Before you call <code>CreateDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>CreateDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_directory(
         &self,
         input: CreateDirectoryRequest,
     ) -> RusotoFuture<CreateDirectoryResult, CreateDirectoryError>;
 
-    /// <p>Creates a subscription to forward real time Directory Service domain controller security logs to the specified CloudWatch log group in your AWS account.</p>
+    /// <p>Creates a subscription to forward real-time Directory Service domain controller security logs to the specified Amazon CloudWatch log group in your AWS account.</p>
     fn create_log_subscription(
         &self,
         input: CreateLogSubscriptionRequest,
     ) -> RusotoFuture<CreateLogSubscriptionResult, CreateLogSubscriptionError>;
 
-    /// <p>Creates an AWS Managed Microsoft AD directory.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    /// <p>Creates a Microsoft AD directory in the AWS Cloud. For more information, see <a href="https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_microsoft_ad.html">AWS Managed Microsoft AD</a> in the <i>AWS Directory Service Admin Guide</i>.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_microsoft_ad(
         &self,
         input: CreateMicrosoftADRequest,
@@ -4958,11 +5701,23 @@ pub trait DirectoryService {
         input: DeleteTrustRequest,
     ) -> RusotoFuture<DeleteTrustResult, DeleteTrustError>;
 
+    /// <p>Deletes from the system the certificate that was registered for a secured LDAP connection.</p>
+    fn deregister_certificate(
+        &self,
+        input: DeregisterCertificateRequest,
+    ) -> RusotoFuture<DeregisterCertificateResult, DeregisterCertificateError>;
+
     /// <p>Removes the specified directory as a publisher to the specified SNS topic.</p>
     fn deregister_event_topic(
         &self,
         input: DeregisterEventTopicRequest,
     ) -> RusotoFuture<DeregisterEventTopicResult, DeregisterEventTopicError>;
+
+    /// <p>Displays information about the certificate registered for a secured LDAP connection.</p>
+    fn describe_certificate(
+        &self,
+        input: DescribeCertificateRequest,
+    ) -> RusotoFuture<DescribeCertificateResult, DescribeCertificateError>;
 
     /// <p>Obtains information about the conditional forwarders for this account.</p> <p>If no input parameters are provided for RemoteDomainNames, this request describes all conditional forwarders for the specified directory ID.</p>
     fn describe_conditional_forwarders(
@@ -4988,6 +5743,12 @@ pub trait DirectoryService {
         input: DescribeEventTopicsRequest,
     ) -> RusotoFuture<DescribeEventTopicsResult, DescribeEventTopicsError>;
 
+    /// <p>Describes the status of LDAP security for the specified directory.</p>
+    fn describe_ldaps_settings(
+        &self,
+        input: DescribeLDAPSSettingsRequest,
+    ) -> RusotoFuture<DescribeLDAPSSettingsResult, DescribeLDAPSSettingsError>;
+
     /// <p>Returns the shared directories in your account. </p>
     fn describe_shared_directories(
         &self,
@@ -5006,6 +5767,12 @@ pub trait DirectoryService {
         input: DescribeTrustsRequest,
     ) -> RusotoFuture<DescribeTrustsResult, DescribeTrustsError>;
 
+    /// <p>Deactivates LDAP secure calls for the specified directory.</p>
+    fn disable_ldaps(
+        &self,
+        input: DisableLDAPSRequest,
+    ) -> RusotoFuture<DisableLDAPSResult, DisableLDAPSError>;
+
     /// <p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector or Microsoft AD directory.</p>
     fn disable_radius(
         &self,
@@ -5018,16 +5785,22 @@ pub trait DirectoryService {
         input: DisableSsoRequest,
     ) -> RusotoFuture<DisableSsoResult, DisableSsoError>;
 
+    /// <p>Activates the switch for the specific directory to always use LDAP secure calls.</p>
+    fn enable_ldaps(
+        &self,
+        input: EnableLDAPSRequest,
+    ) -> RusotoFuture<EnableLDAPSResult, EnableLDAPSError>;
+
     /// <p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector or Microsoft AD directory.</p>
     fn enable_radius(
         &self,
         input: EnableRadiusRequest,
     ) -> RusotoFuture<EnableRadiusResult, EnableRadiusError>;
 
-    /// <p>Enables single sign-on for a directory.</p>
+    /// <p>Enables single sign-on for a directory. Single sign-on allows users in your directory to access certain AWS services from a computer joined to the directory without having to enter their credentials separately.</p>
     fn enable_sso(&self, input: EnableSsoRequest) -> RusotoFuture<EnableSsoResult, EnableSsoError>;
 
-    /// <p>Obtains directory limit information for the current region.</p>
+    /// <p>Obtains directory limit information for the current Region.</p>
     fn get_directory_limits(
         &self,
     ) -> RusotoFuture<GetDirectoryLimitsResult, GetDirectoryLimitsError>;
@@ -5037,6 +5810,12 @@ pub trait DirectoryService {
         &self,
         input: GetSnapshotLimitsRequest,
     ) -> RusotoFuture<GetSnapshotLimitsResult, GetSnapshotLimitsError>;
+
+    /// <p>For the specified directory, lists all the certificates registered for a secured LDAP connection.</p>
+    fn list_certificates(
+        &self,
+        input: ListCertificatesRequest,
+    ) -> RusotoFuture<ListCertificatesResult, ListCertificatesError>;
 
     /// <p>Lists the address blocks that you have added to a directory.</p>
     fn list_ip_routes(
@@ -5062,6 +5841,12 @@ pub trait DirectoryService {
         input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError>;
 
+    /// <p>Registers a certificate for secured LDAP connection.</p>
+    fn register_certificate(
+        &self,
+        input: RegisterCertificateRequest,
+    ) -> RusotoFuture<RegisterCertificateResult, RegisterCertificateError>;
+
     /// <p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>
     fn register_event_topic(
         &self,
@@ -5086,7 +5871,7 @@ pub trait DirectoryService {
         input: RemoveTagsFromResourceRequest,
     ) -> RusotoFuture<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
 
-    /// <p>Resets the password for any user in your AWS Managed Microsoft AD or Simple AD directory.</p>
+    /// <p><p>Resets the password for any user in your AWS Managed Microsoft AD or Simple AD directory.</p> <p>You can reset the password for any user in your directory with the following exceptions:</p> <ul> <li> <p>For Simple AD, you cannot reset the password for any user that is a member of either the <b>Domain Admins</b> or <b>Enterprise Admins</b> group except for the administrator user.</p> </li> <li> <p>For AWS Managed Microsoft AD, you can only reset the password for a user that is in an OU based off of the NetBIOS name that you typed when you created your directory. For example, you cannot reset the password for a user in the <b>AWS Reserved</b> OU. For more information about the OU structure for an AWS Managed Microsoft AD directory, see <a href="https://docs.aws.amazon.com/directoryservice/latest/admin-guide/ms_ad_getting_started_what_gets_created.html">What Gets Created</a> in the <i>AWS Directory Service Administration Guide</i>.</p> </li> </ul></p>
     fn reset_user_password(
         &self,
         input: ResetUserPasswordRequest,
@@ -5431,7 +6216,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Creates a Simple AD directory.</p> <p>Before you call <code>CreateDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>CreateDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    /// <p>Creates a Simple AD directory. For more information, see <a href="https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_simple_ad.html">Simple Active Directory</a> in the <i>AWS Directory Service Admin Guide</i>.</p> <p>Before you call <code>CreateDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>CreateDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_directory(
         &self,
         input: CreateDirectoryRequest,
@@ -5460,7 +6245,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Creates a subscription to forward real time Directory Service domain controller security logs to the specified CloudWatch log group in your AWS account.</p>
+    /// <p>Creates a subscription to forward real-time Directory Service domain controller security logs to the specified Amazon CloudWatch log group in your AWS account.</p>
     fn create_log_subscription(
         &self,
         input: CreateLogSubscriptionRequest,
@@ -5491,7 +6276,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Creates an AWS Managed Microsoft AD directory.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    /// <p>Creates a Microsoft AD directory in the AWS Cloud. For more information, see <a href="https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_microsoft_ad.html">AWS Managed Microsoft AD</a> in the <i>AWS Directory Service Admin Guide</i>.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_microsoft_ad(
         &self,
         input: CreateMicrosoftADRequest,
@@ -5728,6 +6513,37 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
+    /// <p>Deletes from the system the certificate that was registered for a secured LDAP connection.</p>
+    fn deregister_certificate(
+        &self,
+        input: DeregisterCertificateRequest,
+    ) -> RusotoFuture<DeregisterCertificateResult, DeregisterCertificateError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DirectoryService_20150416.DeregisterCertificate",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeregisterCertificateResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeregisterCertificateError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Removes the specified directory as a publisher to the specified SNS topic.</p>
     fn deregister_event_topic(
         &self,
@@ -5753,6 +6569,37 @@ impl DirectoryService for DirectoryServiceClient {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
                         Err(DeregisterEventTopicError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Displays information about the certificate registered for a secured LDAP connection.</p>
+    fn describe_certificate(
+        &self,
+        input: DescribeCertificateRequest,
+    ) -> RusotoFuture<DescribeCertificateResult, DescribeCertificateError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DirectoryService_20150416.DescribeCertificate",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeCertificateResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeCertificateError::from_response(response))
                     }),
                 )
             }
@@ -5879,6 +6726,37 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
+    /// <p>Describes the status of LDAP security for the specified directory.</p>
+    fn describe_ldaps_settings(
+        &self,
+        input: DescribeLDAPSSettingsRequest,
+    ) -> RusotoFuture<DescribeLDAPSSettingsResult, DescribeLDAPSSettingsError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DirectoryService_20150416.DescribeLDAPSSettings",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeLDAPSSettingsResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeLDAPSSettingsError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Returns the shared directories in your account. </p>
     fn describe_shared_directories(
         &self,
@@ -5969,6 +6847,35 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
+    /// <p>Deactivates LDAP secure calls for the specified directory.</p>
+    fn disable_ldaps(
+        &self,
+        input: DisableLDAPSRequest,
+    ) -> RusotoFuture<DisableLDAPSResult, DisableLDAPSError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DirectoryService_20150416.DisableLDAPS");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisableLDAPSResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DisableLDAPSError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector or Microsoft AD directory.</p>
     fn disable_radius(
         &self,
@@ -6027,6 +6934,35 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
+    /// <p>Activates the switch for the specific directory to always use LDAP secure calls.</p>
+    fn enable_ldaps(
+        &self,
+        input: EnableLDAPSRequest,
+    ) -> RusotoFuture<EnableLDAPSResult, EnableLDAPSError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DirectoryService_20150416.EnableLDAPS");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<EnableLDAPSResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(EnableLDAPSError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector or Microsoft AD directory.</p>
     fn enable_radius(
         &self,
@@ -6056,7 +6992,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Enables single sign-on for a directory.</p>
+    /// <p>Enables single sign-on for a directory. Single sign-on allows users in your directory to access certain AWS services from a computer joined to the directory without having to enter their credentials separately.</p>
     fn enable_sso(&self, input: EnableSsoRequest) -> RusotoFuture<EnableSsoResult, EnableSsoError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6081,7 +7017,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Obtains directory limit information for the current region.</p>
+    /// <p>Obtains directory limit information for the current Region.</p>
     fn get_directory_limits(
         &self,
     ) -> RusotoFuture<GetDirectoryLimitsResult, GetDirectoryLimitsError> {
@@ -6138,6 +7074,35 @@ impl DirectoryService for DirectoryServiceClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(GetSnapshotLimitsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>For the specified directory, lists all the certificates registered for a secured LDAP connection.</p>
+    fn list_certificates(
+        &self,
+        input: ListCertificatesRequest,
+    ) -> RusotoFuture<ListCertificatesResult, ListCertificatesError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DirectoryService_20150416.ListCertificates");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListCertificatesResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListCertificatesError::from_response(response))),
                 )
             }
         })
@@ -6259,6 +7224,37 @@ impl DirectoryService for DirectoryServiceClient {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
                         Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Registers a certificate for secured LDAP connection.</p>
+    fn register_certificate(
+        &self,
+        input: RegisterCertificateRequest,
+    ) -> RusotoFuture<RegisterCertificateResult, RegisterCertificateError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DirectoryService_20150416.RegisterCertificate",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RegisterCertificateResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RegisterCertificateError::from_response(response))
                     }),
                 )
             }
@@ -6388,7 +7384,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Resets the password for any user in your AWS Managed Microsoft AD or Simple AD directory.</p>
+    /// <p><p>Resets the password for any user in your AWS Managed Microsoft AD or Simple AD directory.</p> <p>You can reset the password for any user in your directory with the following exceptions:</p> <ul> <li> <p>For Simple AD, you cannot reset the password for any user that is a member of either the <b>Domain Admins</b> or <b>Enterprise Admins</b> group except for the administrator user.</p> </li> <li> <p>For AWS Managed Microsoft AD, you can only reset the password for a user that is in an OU based off of the NetBIOS name that you typed when you created your directory. For example, you cannot reset the password for a user in the <b>AWS Reserved</b> OU. For more information about the OU structure for an AWS Managed Microsoft AD directory, see <a href="https://docs.aws.amazon.com/directoryservice/latest/admin-guide/ms_ad_getting_started_what_gets_created.html">What Gets Created</a> in the <i>AWS Directory Service Administration Guide</i>.</p> </li> </ul></p>
     fn reset_user_password(
         &self,
         input: ResetUserPasswordRequest,
