@@ -5509,6 +5509,8 @@ pub enum UpdateAvailabilityOptionsError {
     LimitExceeded(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
+    /// <p>The request was rejected because it has invalid parameters.</p>
+    Validation(String),
 }
 
 impl UpdateAvailabilityOptionsError {
@@ -5583,6 +5585,7 @@ impl Error for UpdateAvailabilityOptionsError {
             UpdateAvailabilityOptionsError::InvalidType(ref cause) => cause,
             UpdateAvailabilityOptionsError::LimitExceeded(ref cause) => cause,
             UpdateAvailabilityOptionsError::ResourceNotFound(ref cause) => cause,
+            UpdateAvailabilityOptionsError::Validation(ref cause) => cause,
         }
     }
 }
@@ -5601,6 +5604,8 @@ pub enum UpdateDomainEndpointOptionsError {
     LimitExceeded(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
+    /// <p>The request was rejected because it has invalid parameters.</p>
+    Validation(String),
 }
 
 impl UpdateDomainEndpointOptionsError {
@@ -5681,6 +5686,7 @@ impl Error for UpdateDomainEndpointOptionsError {
             UpdateDomainEndpointOptionsError::InvalidType(ref cause) => cause,
             UpdateDomainEndpointOptionsError::LimitExceeded(ref cause) => cause,
             UpdateDomainEndpointOptionsError::ResourceNotFound(ref cause) => cause,
+            UpdateDomainEndpointOptionsError::Validation(ref cause) => cause,
         }
     }
 }

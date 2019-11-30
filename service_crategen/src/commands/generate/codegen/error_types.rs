@@ -70,7 +70,7 @@ pub trait GenerateErrorTypes {
             error_from_body_impl =
                 self.generate_error_from_body_impl(operation_name, operation, service),
             error_types = self
-                .generate_error_enum_types(operation, error_documentation)
+                .generate_error_enum_types(operation, error_documentation, service)
                 .unwrap_or_else(|| String::from("")),
             description_matchers = self
                 .generate_error_description_matchers(operation_name, operation, service)
@@ -83,6 +83,7 @@ pub trait GenerateErrorTypes {
         &self,
         operation: &Operation,
         error_documentation: &BTreeMap<&String, &String>,
+        service: &Service,
     ) -> Option<String> {
         let mut enum_types: Vec<String> = Vec::new();
 
@@ -90,7 +91,8 @@ pub trait GenerateErrorTypes {
             for error in operation.errors() {
                 // some botocore definitions include Validation in every errors list, some take it as assumed
                 // skip it if it's listed, as we implement it for all error types in the RusotoError enum.
-                if error.idiomatic_error_name() != "Validation" {
+                // Cloudsearch needs this, look into why.
+                if error.idiomatic_error_name() != "Validation" || service.service_id() == Some("CloudSearch") {
                     enum_types.push(format!(
                         "\n{}\n{}(String)",
                         crate::doco::Item(
@@ -121,7 +123,8 @@ pub trait GenerateErrorTypes {
             for error in operation.errors() {
                 // some botocore definitions include Validation in every errors list, some take it as assumed
                 // skip it if it's listed, as we implement it for all error types below.
-                if error.idiomatic_error_name() != "Validation" {
+                // Cloudsearch needs this, look into why.
+                if error.idiomatic_error_name() != "Validation" || service.service_id() == Some("CloudSearch") {
                     type_matchers.push(format!(
                         "{error_type}::{error_shape}(ref cause) => cause",
                         error_type = error_type_name(service, operation_name),
