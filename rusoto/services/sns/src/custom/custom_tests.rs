@@ -18,23 +18,24 @@ fn should_serialize_map_parameters_in_create_platform_application_request_body()
 
             if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {
                 let params: Params = serde_urlencoded::from_bytes(buffer).unwrap();
-                assert_eq!(
-                    Some(&Some("PlatformCredential".to_owned())),
-                    params.get("Attributes.entry.1.key")
-                );
-                assert_eq!(
-                    Some(&Some("YOUR_PLATFORM_CREDENTIAL".to_owned())),
-                    params.get("Attributes.entry.1.value")
-                );
-
-                assert_eq!(
-                    Some(&Some("PlatformPrincipal".to_owned())),
-                    params.get("Attributes.entry.2.key")
-                );
-                assert_eq!(
-                    Some(&Some("YOUR_PLATFORM_PRINCIPAL".to_owned())),
-                    params.get("Attributes.entry.2.value")
-                );
+                for idx in 1..2 {
+                    let key = params.get(format!("Attributes.entry.{}.key", idx).as_str());
+                    match key.unwrap().as_ref().unwrap().as_str() {
+                        "PlatformCredential" => {
+                            assert_eq!(
+                                Some(&Some("YOUR_PLATFORM_CREDENTIAL".to_owned())),
+                                params.get(format!("Attributes.entry.{}.value", idx).as_str())
+                            );
+                        },
+                        "PlatformPrincipal" => {
+                            assert_eq!(
+                                Some(&Some("YOUR_PLATFORM_PRINCIPAL".to_owned())),
+                                params.get(format!("Attributes.entry.{}.value", idx).as_str())
+                            );
+                        },
+                        _ => panic!("invalid params. {:?}", params),
+                    }
+                }
             } else {
                 panic!("Unexpected request.payload: {:?}", request.payload);
             }
