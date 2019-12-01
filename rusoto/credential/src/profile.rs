@@ -45,6 +45,8 @@ pub struct ProfileProvider {
     profile: String,
     /// If `true` disable [`credential_process`][credential_process] option, making sure not to
     /// call any external process.
+    ///
+    /// [credential_process]: https://docs.aws.amazon.com/cli/latest/topic/config-vars.html#sourcing-credentials-from-external-processes
     secure: bool,
 }
 
