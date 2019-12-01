@@ -23,7 +23,7 @@ To use `rusoto_docdb` in your application, add it as a dependency in your `Cargo
 
 ```toml
 [dependencies]
-rusoto_docdb = "0.41.0"
+rusoto_docdb = "0.42.0"
 ```
 
 ## Crate Features

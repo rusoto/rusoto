@@ -354,9 +354,7 @@ fn generate_body_parser(operation: &Operation, service: &Service<'_>) -> String 
             // is the shape required?
             let payload_shape_required = match output_shape.required {
                 Some(ref s) => {
-                    // if there's any required shape present the body payload parser will handle it
-                    // This can't be converted to `s.is_empty()`. TODO: find out why.
-                    s.len() > 0
+                    !s.is_empty()
                 }
                 None => false,
             };

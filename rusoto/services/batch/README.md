@@ -23,7 +23,7 @@ To use `rusoto_batch` in your application, add it as a dependency in your `Cargo
 
 ```toml
 [dependencies]
-rusoto_batch = "0.41.0"
+rusoto_batch = "0.42.0"
 ```
 
 ## Crate Features

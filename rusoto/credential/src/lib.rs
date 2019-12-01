@@ -71,7 +71,7 @@ impl Anonymous for AwsCredentials {
 /// do not require authenticated credential identity. For these
 /// cases you can use a default set which are considered anonymous
 ///
-/// ```rust,2018edition
+/// ```rust,ignore
 /// use rusoto_core::request::HttpClient;
 /// use rusoto_s3::S3Client;
 /// use rusoto_credential::{StaticProvider, AwsCredentials};
