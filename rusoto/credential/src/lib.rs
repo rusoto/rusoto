@@ -414,7 +414,8 @@ impl<P: ProvideAwsCredentials + 'static> ProvideAwsCredentials for AutoRefreshin
 /// Wraps a `ChainProvider` in an `AutoRefreshingProvider`.
 ///
 /// **Note**: Consider using `rusoto_sts::DefaultCredentialsProvider` instead as it supports
-/// additional credentials sources and uses a security first approach.
+/// additional credentials sources that depend on STS and uses a security first approach by
+/// disabling [`credential_process`][credential_process] by default.
 ///
 /// The underlying `ChainProvider` checks multiple sources for credentials, and the `AutoRefreshingProvider`
 /// refreshes the credentials automatically when they expire.

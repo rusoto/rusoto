@@ -37,7 +37,7 @@ impl Drop for Secret {
 /// ```
 impl std::fmt::Debug for Secret {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "*******")
+        write!(f, "\"*******\"")
     }
 }
 
