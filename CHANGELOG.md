@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 (Please put changes here)
+- Fixed SNS API's attributes and value keyword https://github.com/rusoto/rusoto/pull/1591
 
 ## [0.42.0] - 2019-11-18
 
