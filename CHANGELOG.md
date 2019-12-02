@@ -4,6 +4,7 @@
 
 (Please put changes here)
 - Fixed SNS API's attributes and value keyword https://github.com/rusoto/rusoto/pull/1591
+- Adding support for web identity provider, which enables IAM roles for Kubernetes service accounts.
 
 ## [0.42.0] - 2019-11-18
 
