@@ -165,7 +165,7 @@ where
     // See https://github.com/rusoto/rusoto/issues/519
     writeln!(writer,
              "/// Trait representing the capabilities of the {service_name} API. {service_name} clients implement this trait.
-        pub trait {trait_name} {{
+        pub trait {trait_name}: region::GetRegion {{
         ",
              trait_name = service.service_type_name(),
              service_name = service.name())?;
@@ -213,6 +213,12 @@ where
                 f.debug_struct(\"{type_name}\")
                     .field(\"region\", &self.region)
                     .finish()
+            }}
+        }}
+
+        impl region::GetRegion for {type_name} {{
+            fn region(&self) -> &region::Region {{
+                &self.region
             }}
         }}
 
