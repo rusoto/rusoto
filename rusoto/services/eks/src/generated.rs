@@ -24,11 +24,11 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-/// <p>An AutoScaling group that is associated with an Amazon EKS managed node group.</p>
+/// <p>An Auto Scaling group that is associated with an Amazon EKS managed node group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoScalingGroup {
-    /// <p>The name of the AutoScaling group associated with an Amazon EKS managed node group.</p>
+    /// <p>The name of the Auto Scaling group associated with an Amazon EKS managed node group.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -145,8 +145,46 @@ pub struct CreateClusterResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateFargateProfileRequest {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The name of the Amazon EKS cluster to apply the Fargate profile to.</p>
+    #[serde(rename = "clusterName")]
+    pub cluster_name: String,
+    /// <p>The name of the Fargate profile.</p>
+    #[serde(rename = "fargateProfileName")]
+    pub fargate_profile_name: String,
+    /// <p>The Amazon Resource Name (ARN) of the pod execution role to use for pods that match the selectors in the Fargate profile. The pod execution role allows Fargate infrastructure to register with your cluster as a node, and it provides read access to Amazon ECR image repositories. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html">Pod Execution Role</a> in the <i>Amazon EKS User Guide</i>.</p>
+    #[serde(rename = "podExecutionRoleArn")]
+    pub pod_execution_role_arn: String,
+    /// <p>The selectors to match for pods to use this Fargate profile. Each selector must have an associated namespace. Optionally, you can also specify labels for a namespace. You may specify up to five selectors in a Fargate profile.</p>
+    #[serde(rename = "selectors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selectors: Option<Vec<FargateProfileSelector>>,
+    /// <p>The IDs of subnets to launch Fargate pods into. At this time, Fargate pods are not assigned public IP addresses, so only private subnets (with no direct route to an Internet Gateway) are accepted for this parameter.</p>
+    #[serde(rename = "subnets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnets: Option<Vec<String>>,
+    /// <p>The metadata to apply to the Fargate profile to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Fargate profile tags do not propagate to any other resources associated with the Fargate profile, such as the pods that are scheduled with it.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateFargateProfileResponse {
+    /// <p>The full description of your new Fargate profile.</p>
+    #[serde(rename = "fargateProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fargate_profile: Option<FargateProfile>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateNodegroupRequest {
-    /// <p>The AMI type for your node group. GPU instance types should use the <code>AL2_x86_64_GPU</code> AMI type, which uses the Amazon EKS-optimized Linux AMI with GPU support; non-GPU instances should use the <code>AL2_x86_64</code> AMI type, which uses the Amazon EKS-optimized Linux AMI.</p>
+    /// <p>The AMI type for your node group. GPU instance types should use the <code>AL2_x86_64_GPU</code> AMI type, which uses the Amazon EKS-optimized Linux AMI with GPU support. Non-GPU instances should use the <code>AL2_x86_64</code> AMI type, which uses the Amazon EKS-optimized Linux AMI.</p>
     #[serde(rename = "amiType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_type: Option<String>,
@@ -183,11 +221,11 @@ pub struct CreateNodegroupRequest {
     #[serde(rename = "remoteAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access: Option<RemoteAccessConfig>,
-    /// <p>The scaling configuration details for the AutoScaling group that is created for your node group.</p>
+    /// <p>The scaling configuration details for the Auto Scaling group that is created for your node group.</p>
     #[serde(rename = "scalingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_config: Option<NodegroupScalingConfig>,
-    /// <p>The subnets to use for the AutoScaling group that is created for your node group. These subnets must have the tag key <code>kubernetes.io/cluster/CLUSTER_NAME</code> with a value of <code>shared</code>, where <code>CLUSTER_NAME</code> is replaced with the name of your cluster.</p>
+    /// <p>The subnets to use for the Auto Scaling group that is created for your node group. These subnets must have the tag key <code>kubernetes.io/cluster/CLUSTER_NAME</code> with a value of <code>shared</code>, where <code>CLUSTER_NAME</code> is replaced with the name of your cluster.</p>
     #[serde(rename = "subnets")]
     pub subnets: Vec<String>,
     /// <p>The metadata to apply to the node group to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Node group tags do not propagate to any other resources associated with the node group, such as the Amazon EC2 instances or subnets.</p>
@@ -226,6 +264,25 @@ pub struct DeleteClusterResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteFargateProfileRequest {
+    /// <p>The name of the Amazon EKS cluster associated with the Fargate profile to delete.</p>
+    #[serde(rename = "clusterName")]
+    pub cluster_name: String,
+    /// <p>The name of the Fargate profile to delete.</p>
+    #[serde(rename = "fargateProfileName")]
+    pub fargate_profile_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteFargateProfileResponse {
+    /// <p>The deleted Fargate profile.</p>
+    #[serde(rename = "fargateProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fargate_profile: Option<FargateProfile>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteNodegroupRequest {
     /// <p>The name of the Amazon EKS cluster that is associated with your node group.</p>
     #[serde(rename = "clusterName")]
@@ -258,6 +315,25 @@ pub struct DescribeClusterResponse {
     #[serde(rename = "cluster")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster: Option<Cluster>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeFargateProfileRequest {
+    /// <p>The name of the Amazon EKS cluster associated with the Fargate profile.</p>
+    #[serde(rename = "clusterName")]
+    pub cluster_name: String,
+    /// <p>The name of the Fargate profile to describe.</p>
+    #[serde(rename = "fargateProfileName")]
+    pub fargate_profile_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeFargateProfileResponse {
+    /// <p>The full description of your Fargate profile.</p>
+    #[serde(rename = "fargateProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fargate_profile: Option<FargateProfile>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -320,6 +396,61 @@ pub struct ErrorDetail {
     pub resource_ids: Option<Vec<String>>,
 }
 
+/// <p>An object representing an AWS Fargate profile.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FargateProfile {
+    /// <p>The name of the Amazon EKS cluster that the Fargate profile belongs to.</p>
+    #[serde(rename = "clusterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_name: Option<String>,
+    /// <p>The Unix epoch timestamp in seconds for when the Fargate profile was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The full Amazon Resource Name (ARN) of the Fargate profile.</p>
+    #[serde(rename = "fargateProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fargate_profile_arn: Option<String>,
+    /// <p>The name of the Fargate profile.</p>
+    #[serde(rename = "fargateProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fargate_profile_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the pod execution role to use for pods that match the selectors in the Fargate profile. For more information, see <a href="eks/latest/userguide/pod-execution-role.html">Pod Execution Role</a> in the <i>Amazon EKS User Guide</i>.</p>
+    #[serde(rename = "podExecutionRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pod_execution_role_arn: Option<String>,
+    /// <p>The selectors to match for pods to use this Fargate profile.</p>
+    #[serde(rename = "selectors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selectors: Option<Vec<FargateProfileSelector>>,
+    /// <p>The current status of the Fargate profile.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The IDs of subnets to launch Fargate pods into.</p>
+    #[serde(rename = "subnets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnets: Option<Vec<String>>,
+    /// <p>The metadata applied to the Fargate profile to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Fargate profile tags do not propagate to any other resources associated with the Fargate profile, such as the pods that are scheduled with it.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>An object representing an AWS Fargate profile selector.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FargateProfileSelector {
+    /// <p>The Kubernetes labels that the selector should match. A pod must contain all of the labels that are specified in the selector for it to be considered a match.</p>
+    #[serde(rename = "labels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub labels: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The Kubernetes namespace that the selector should match.</p>
+    #[serde(rename = "namespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace: Option<String>,
+}
+
 /// <p>An object representing an identity provider for authentication credentials.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -334,7 +465,7 @@ pub struct Identity {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Issue {
-    /// <p><p>A brief description of the error.</p> <ul> <li> <p> <b>AutoScalingGroupNotFound</b>: We couldn&#39;t find the Auto Scaling group associated with the managed node group. You may be able to recreate an Auto Scaling group with the same settings to recover.</p> </li> <li> <p> <b>Ec2SecurityGroupNotFound</b>: We couldn&#39;t find the cluster security group for the cluster. You must recreate your cluster.</p> </li> <li> <p> <b>Ec2SecurityGroupDeletionFailure</b>: We could not delete the remote access security group for your managed node group. Remove any dependencies from the security group.</p> </li> <li> <p> <b>Ec2LaunchTemplateNotFound</b>: We couldn&#39;t find the Amazon EC2 launch template for your managed node group. You may be able to recreate a launch template with the same settings to recover.</p> </li> <li> <p> <b>Ec2LaunchTemplateVersionMismatch</b>: The Amazon EC2 launch template version for your managed node group does not match the version that Amazon EKS created. You may be able to revert to the Amazon EKS-created version to recover.</p> </li> <li> <p> <b>IamInstanceProfileNotFound</b>: We couldn&#39;t find the IAM instance profile for your managed node group. You may be able to recreate an instance profile with the same settings to recover.</p> </li> <li> <p> <b>IamNodeRoleNotFound</b>: We couldn&#39;t find the IAM role for your managed node group. You may be able to recreate an IAM role with the same settings to recover.</p> </li> <li> <p> <b>AsgInstanceLaunchFailures</b>: Your Auto Scaling group is experiencing failures while attempting to launch instances.</p> </li> <li> <p> <b>InstanceLimitExceeded</b>: Your AWS account is unable to launch any more instances of the specified instance type. You may be able to request an Amazon EC2 instance limit increase to recover.</p> </li> <li> <p> <b>InsufficientFreeAddresses</b>: One or more of the subnets associated with your managed node group does not have enough available IP addresses for new nodes.</p> </li> <li> <p> <b>AccessDenied</b>: Amazon EKS and or one or more of your managed nodes is unable to communicate with your cluster API server.</p> </li> <li> <p> <b>InternalFailure</b>: These errors are usually caused by an Amazon EKS server-side issue.</p> </li> </ul></p>
+    /// <p><p>A brief description of the error.</p> <ul> <li> <p> <b>AutoScalingGroupNotFound</b>: We couldn&#39;t find the Auto Scaling group associated with the managed node group. You may be able to recreate an Auto Scaling group with the same settings to recover.</p> </li> <li> <p> <b>Ec2SecurityGroupNotFound</b>: We couldn&#39;t find the cluster security group for the cluster. You must recreate your cluster.</p> </li> <li> <p> <b>Ec2SecurityGroupDeletionFailure</b>: We could not delete the remote access security group for your managed node group. Remove any dependencies from the security group.</p> </li> <li> <p> <b>Ec2LaunchTemplateNotFound</b>: We couldn&#39;t find the Amazon EC2 launch template for your managed node group. You may be able to recreate a launch template with the same settings to recover.</p> </li> <li> <p> <b>Ec2LaunchTemplateVersionMismatch</b>: The Amazon EC2 launch template version for your managed node group does not match the version that Amazon EKS created. You may be able to revert to the version that Amazon EKS created to recover.</p> </li> <li> <p> <b>IamInstanceProfileNotFound</b>: We couldn&#39;t find the IAM instance profile for your managed node group. You may be able to recreate an instance profile with the same settings to recover.</p> </li> <li> <p> <b>IamNodeRoleNotFound</b>: We couldn&#39;t find the IAM role for your managed node group. You may be able to recreate an IAM role with the same settings to recover.</p> </li> <li> <p> <b>AsgInstanceLaunchFailures</b>: Your Auto Scaling group is experiencing failures while attempting to launch instances.</p> </li> <li> <p> <b>NodeCreationFailure</b>: Your launched instances are unable to register with your Amazon EKS cluster. Common causes of this failure are insufficient <a href="https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html">worker node IAM role</a> permissions or lack of outbound internet access for the nodes. </p> </li> <li> <p> <b>InstanceLimitExceeded</b>: Your AWS account is unable to launch any more instances of the specified instance type. You may be able to request an Amazon EC2 instance limit increase to recover.</p> </li> <li> <p> <b>InsufficientFreeAddresses</b>: One or more of the subnets associated with your managed node group does not have enough available IP addresses for new nodes.</p> </li> <li> <p> <b>AccessDenied</b>: Amazon EKS or one or more of your managed nodes is unable to communicate with your cluster API server.</p> </li> <li> <p> <b>InternalFailure</b>: These errors are usually caused by an Amazon EKS server-side issue.</p> </li> </ul></p>
     #[serde(rename = "code")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
@@ -368,6 +499,34 @@ pub struct ListClustersResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub clusters: Option<Vec<String>>,
     /// <p>The <code>nextToken</code> value to include in a future <code>ListClusters</code> request. When the results of a <code>ListClusters</code> request exceed <code>maxResults</code>, you can use this value to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListFargateProfilesRequest {
+    /// <p>The name of the Amazon EKS cluster that you would like to listFargate profiles in.</p>
+    #[serde(rename = "clusterName")]
+    pub cluster_name: String,
+    /// <p>The maximum number of Fargate profile results returned by <code>ListFargateProfiles</code> in paginated output. When you use this parameter, <code>ListFargateProfiles</code> returns only <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. You can see the remaining results of the initial request by sending another <code>ListFargateProfiles</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If you don't use this parameter, <code>ListFargateProfiles</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListFargateProfiles</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFargateProfilesResponse {
+    /// <p>A list of all of the Fargate profiles associated with the specified cluster.</p>
+    #[serde(rename = "fargateProfileNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fargate_profile_names: Option<Vec<String>>,
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListFargateProfiles</code> request. When the results of a <code>ListFargateProfiles</code> request exceed <code>maxResults</code>, you can use this value to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -475,7 +634,7 @@ pub struct Logging {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Nodegroup {
-    /// <p>The AMI type associated with your node group. GPU instance types should use the <code>AL2_x86_64_GPU</code> AMI type, which uses the Amazon EKS-optimized Linux AMI with GPU support; non-GPU instances should use the <code>AL2_x86_64</code> AMI type, which uses the Amazon EKS-optimized Linux AMI.</p>
+    /// <p>The AMI type associated with your node group. GPU instance types should use the <code>AL2_x86_64_GPU</code> AMI type, which uses the Amazon EKS-optimized Linux AMI with GPU support. Non-GPU instances should use the <code>AL2_x86_64</code> AMI type, which uses the Amazon EKS-optimized Linux AMI.</p>
     #[serde(rename = "amiType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_type: Option<String>,
@@ -527,11 +686,11 @@ pub struct Nodegroup {
     #[serde(rename = "remoteAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access: Option<RemoteAccessConfig>,
-    /// <p>The resources associated with the nodegroup, such as AutoScaling groups and security groups for remote access.</p>
+    /// <p>The resources associated with the node group, such as Auto Scaling groups and security groups for remote access.</p>
     #[serde(rename = "resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resources: Option<NodegroupResources>,
-    /// <p>The scaling configuration details for the AutoScaling group that is associated with your node group.</p>
+    /// <p>The scaling configuration details for the Auto Scaling group that is associated with your node group.</p>
     #[serde(rename = "scalingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_config: Option<NodegroupScalingConfig>,
@@ -539,11 +698,11 @@ pub struct Nodegroup {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The subnets allowed for the AutoScaling group that is associated with your node group. These subnets must have the following tag: <code>kubernetes.io/cluster/CLUSTER_NAME</code>, where <code>CLUSTER_NAME</code> is replaced with the name of your cluster.</p>
+    /// <p>The subnets allowed for the Auto Scaling group that is associated with your node group. These subnets must have the following tag: <code>kubernetes.io/cluster/CLUSTER_NAME</code>, where <code>CLUSTER_NAME</code> is replaced with the name of your cluster.</p>
     #[serde(rename = "subnets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnets: Option<Vec<String>>,
-    /// <p>The metadata applied the node group to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Node group tags do not propagate to any other resources associated with the node group, such as the Amazon EC2 instances or subnets. </p>
+    /// <p>The metadata applied to the node group to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Node group tags do not propagate to any other resources associated with the node group, such as the Amazon EC2 instances or subnets. </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -563,11 +722,11 @@ pub struct NodegroupHealth {
     pub issues: Option<Vec<Issue>>,
 }
 
-/// <p>An object representing the resources associated with the nodegroup, such as AutoScaling groups and security groups for remote access.</p>
+/// <p>An object representing the resources associated with the node group, such as Auto Scaling groups and security groups for remote access.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NodegroupResources {
-    /// <p>The autoscaling groups associated with the node group.</p>
+    /// <p>The Auto Scaling groups associated with the node group.</p>
     #[serde(rename = "autoScalingGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_groups: Option<Vec<AutoScalingGroup>>,
@@ -577,7 +736,7 @@ pub struct NodegroupResources {
     pub remote_access_security_group: Option<String>,
 }
 
-/// <p>An object representing the scaling configuration details for the AutoScaling group that is associated with your node group.</p>
+/// <p>An object representing the scaling configuration details for the Auto Scaling group that is associated with your node group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NodegroupScalingConfig {
     /// <p>The current number of worker nodes that the managed node group should maintain.</p>
@@ -611,7 +770,7 @@ pub struct RemoteAccessConfig {
     #[serde(rename = "ec2SshKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_ssh_key: Option<String>,
-    /// <p>The security groups to allow SSH access (port 22) from on the worker nodes. If you specify an Amazon EC2 SSH key, but you do not specify a source security group when you create a managed node group, port 22 on the worker nodes is opened to the internet (0.0.0.0/0). For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>The security groups that are allowed SSH access (port 22) to the worker nodes. If you specify an Amazon EC2 SSH key but do not specify a source security group when you create a managed node group, then port 22 on the worker nodes is opened to the internet (0.0.0.0/0). For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     #[serde(rename = "sourceSecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_security_groups: Option<Vec<String>>,
@@ -753,7 +912,7 @@ pub struct UpdateNodegroupConfigRequest {
     /// <p>The name of the managed node group to update.</p>
     #[serde(rename = "nodegroupName")]
     pub nodegroup_name: String,
-    /// <p>The scaling configuration details for the AutoScaling group after the update.</p>
+    /// <p>The scaling configuration details for the Auto Scaling group after the update.</p>
     #[serde(rename = "scalingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_config: Option<NodegroupScalingConfig>,
@@ -776,7 +935,7 @@ pub struct UpdateNodegroupVersionRequest {
     /// <p>The name of the Amazon EKS cluster that is associated with the managed node group to update.</p>
     #[serde(rename = "clusterName")]
     pub cluster_name: String,
-    /// <p>Force the update if the existing node group's pods are unable to be drained due to a pod disruption budget issue. If a previous update fails because pods could not be drained, you can force the update after it fails to terminate the old node regardless of whether or not any pods are running on the node.</p>
+    /// <p>Force the update if the existing node group's pods are unable to be drained due to a pod disruption budget issue. If an update fails because pods could not be drained, you can force the update after it fails to terminate the old node whether or not any pods are running on the node.</p>
     #[serde(rename = "force")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force: Option<bool>,
@@ -840,7 +999,7 @@ pub struct VpcConfigRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcConfigResponse {
-    /// <p>The cluster security group that was created by Amazon EKS for the cluster. Managed node groups use this security group for control plane to data plane communication.</p>
+    /// <p>The cluster security group that was created by Amazon EKS for the cluster. Managed node groups use this security group for control-plane-to-data-plane communication.</p>
     #[serde(rename = "clusterSecurityGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_security_group_id: Option<String>,
@@ -934,6 +1093,75 @@ impl Error for CreateClusterError {
             CreateClusterError::Server(ref cause) => cause,
             CreateClusterError::ServiceUnavailable(ref cause) => cause,
             CreateClusterError::UnsupportedAvailabilityZone(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateFargateProfile
+#[derive(Debug, PartialEq)]
+pub enum CreateFargateProfileError {
+    /// <p>These errors are usually caused by a client action. Actions can include using an action or resource on behalf of a user that doesn't have permissions to use the action or resource or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The request is invalid given the state of the cluster. Check the state of the cluster and the associated operations.</p>
+    InvalidRequest(String),
+    /// <p>You have encountered a service limit on the specified resource.</p>
+    ResourceLimitExceeded(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+    /// <p>At least one of your specified cluster subnets is in an Availability Zone that does not support Amazon EKS. The exception output specifies the supported Availability Zones for your account, from which you can choose subnets for your cluster.</p>
+    UnsupportedAvailabilityZone(String),
+}
+
+impl CreateFargateProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFargateProfileError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(CreateFargateProfileError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateFargateProfileError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateFargateProfileError::InvalidRequest(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CreateFargateProfileError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(CreateFargateProfileError::Server(err.msg))
+                }
+                "UnsupportedAvailabilityZoneException" => {
+                    return RusotoError::Service(
+                        CreateFargateProfileError::UnsupportedAvailabilityZone(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateFargateProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateFargateProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateFargateProfileError::Client(ref cause) => cause,
+            CreateFargateProfileError::InvalidParameter(ref cause) => cause,
+            CreateFargateProfileError::InvalidRequest(ref cause) => cause,
+            CreateFargateProfileError::ResourceLimitExceeded(ref cause) => cause,
+            CreateFargateProfileError::Server(ref cause) => cause,
+            CreateFargateProfileError::UnsupportedAvailabilityZone(ref cause) => cause,
         }
     }
 }
@@ -1065,6 +1293,61 @@ impl Error for DeleteClusterError {
         }
     }
 }
+/// Errors returned by DeleteFargateProfile
+#[derive(Debug, PartialEq)]
+pub enum DeleteFargateProfileError {
+    /// <p>These errors are usually caused by a client action. Actions can include using an action or resource on behalf of a user that doesn't have permissions to use the action or resource or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource could not be found. You can view your available clusters with <a>ListClusters</a>. You can view your available managed node groups with <a>ListNodegroups</a>. Amazon EKS clusters and node groups are Region-specific.</p>
+    ResourceNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl DeleteFargateProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFargateProfileError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(DeleteFargateProfileError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DeleteFargateProfileError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteFargateProfileError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(DeleteFargateProfileError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteFargateProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteFargateProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteFargateProfileError::Client(ref cause) => cause,
+            DeleteFargateProfileError::InvalidParameter(ref cause) => cause,
+            DeleteFargateProfileError::ResourceNotFound(ref cause) => cause,
+            DeleteFargateProfileError::Server(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteNodegroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteNodegroupError {
@@ -1176,6 +1459,61 @@ impl Error for DescribeClusterError {
             DescribeClusterError::ResourceNotFound(ref cause) => cause,
             DescribeClusterError::Server(ref cause) => cause,
             DescribeClusterError::ServiceUnavailable(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeFargateProfile
+#[derive(Debug, PartialEq)]
+pub enum DescribeFargateProfileError {
+    /// <p>These errors are usually caused by a client action. Actions can include using an action or resource on behalf of a user that doesn't have permissions to use the action or resource or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource could not be found. You can view your available clusters with <a>ListClusters</a>. You can view your available managed node groups with <a>ListNodegroups</a>. Amazon EKS clusters and node groups are Region-specific.</p>
+    ResourceNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl DescribeFargateProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFargateProfileError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(DescribeFargateProfileError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeFargateProfileError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeFargateProfileError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(DescribeFargateProfileError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeFargateProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeFargateProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeFargateProfileError::Client(ref cause) => cause,
+            DescribeFargateProfileError::InvalidParameter(ref cause) => cause,
+            DescribeFargateProfileError::ResourceNotFound(ref cause) => cause,
+            DescribeFargateProfileError::Server(ref cause) => cause,
         }
     }
 }
@@ -1337,6 +1675,61 @@ impl Error for ListClustersError {
             ListClustersError::InvalidParameter(ref cause) => cause,
             ListClustersError::Server(ref cause) => cause,
             ListClustersError::ServiceUnavailable(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListFargateProfiles
+#[derive(Debug, PartialEq)]
+pub enum ListFargateProfilesError {
+    /// <p>These errors are usually caused by a client action. Actions can include using an action or resource on behalf of a user that doesn't have permissions to use the action or resource or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource could not be found. You can view your available clusters with <a>ListClusters</a>. You can view your available managed node groups with <a>ListNodegroups</a>. Amazon EKS clusters and node groups are Region-specific.</p>
+    ResourceNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl ListFargateProfilesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFargateProfilesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(ListFargateProfilesError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListFargateProfilesError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListFargateProfilesError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(ListFargateProfilesError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListFargateProfilesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListFargateProfilesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListFargateProfilesError::Client(ref cause) => cause,
+            ListFargateProfilesError::InvalidParameter(ref cause) => cause,
+            ListFargateProfilesError::ResourceNotFound(ref cause) => cause,
+            ListFargateProfilesError::Server(ref cause) => cause,
         }
     }
 }
@@ -1847,17 +2240,29 @@ pub trait Eks {
         input: CreateClusterRequest,
     ) -> RusotoFuture<CreateClusterResponse, CreateClusterError>;
 
+    /// <p>Creates an AWS Fargate profile for your Amazon EKS cluster. You must have at least one Fargate profile in a cluster to be able to schedule pods on Fargate infrastructure.</p> <p>The Fargate profile allows an administrator to declare which pods run on Fargate infrastructure and specify which pods run on which Fargate profile. This declaration is done through the profile’s selectors. Each profile can have up to five selectors that contain a namespace and labels. A namespace is required for every selector. The label field consists of multiple optional key-value pairs. Pods that match the selectors are scheduled on Fargate infrastructure. If a to-be-scheduled pod matches any of the selectors in the Fargate profile, then that pod is scheduled on Fargate infrastructure.</p> <p>When you create a Fargate profile, you must specify a pod execution role to use with the pods that are scheduled with the profile. This role is added to the cluster's Kubernetes <a href="https://kubernetes.io/docs/admin/authorization/rbac/">Role Based Access Control</a> (RBAC) for authorization so that the <code>kubelet</code> that is running on the Fargate infrastructure can register with your Amazon EKS cluster. This role is what allows Fargate infrastructure to appear in your cluster as nodes. The pod execution role also provides IAM permissions to the Fargate infrastructure to allow read access to Amazon ECR image repositories. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html">Pod Execution Role</a> in the <i>Amazon EKS User Guide</i>.</p> <p>Fargate profiles are immutable. However, you can create a new updated profile to replace an existing profile and then delete the original after the updated profile has finished creating.</p> <p>If any Fargate profiles in a cluster are in the <code>DELETING</code> status, you must wait for that Fargate profile to finish deleting before you can create any other profiles in that cluster.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/fargate-profile.html">AWS Fargate Profile</a> in the <i>Amazon EKS User Guide</i>.</p>
+    fn create_fargate_profile(
+        &self,
+        input: CreateFargateProfileRequest,
+    ) -> RusotoFuture<CreateFargateProfileResponse, CreateFargateProfileError>;
+
     /// <p>Creates a managed worker node group for an Amazon EKS cluster. You can only create a node group for your cluster that is equal to the current Kubernetes version for the cluster. All node groups are created with the latest AMI release version for the respective minor Kubernetes version of the cluster.</p> <p>An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and associated Amazon EC2 instances that are managed by AWS for an Amazon EKS cluster. Each node group uses a version of the Amazon EKS-optimized Amazon Linux 2 AMI. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html">Managed Node Groups</a> in the <i>Amazon EKS User Guide</i>. </p>
     fn create_nodegroup(
         &self,
         input: CreateNodegroupRequest,
     ) -> RusotoFuture<CreateNodegroupResponse, CreateNodegroupError>;
 
-    /// <p>Deletes the Amazon EKS cluster control plane.</p> <p>If you have active services in your cluster that are associated with a load balancer, you must delete those services before deleting the cluster so that the load balancers are deleted properly. Otherwise, you can have orphaned resources in your VPC that prevent you from being able to delete the VPC. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/delete-cluster.html">Deleting a Cluster</a> in the <i>Amazon EKS User Guide</i>.</p> <p>If you have managed node groups attached to the cluster, you must delete them first. For more information, see <a>DeleteNodegroup</a>.</p>
+    /// <p>Deletes the Amazon EKS cluster control plane.</p> <p>If you have active services in your cluster that are associated with a load balancer, you must delete those services before deleting the cluster so that the load balancers are deleted properly. Otherwise, you can have orphaned resources in your VPC that prevent you from being able to delete the VPC. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/delete-cluster.html">Deleting a Cluster</a> in the <i>Amazon EKS User Guide</i>.</p> <p>If you have managed node groups or Fargate profiles attached to the cluster, you must delete them first. For more information, see <a>DeleteNodegroup</a> and<a>DeleteFargateProfile</a>.</p>
     fn delete_cluster(
         &self,
         input: DeleteClusterRequest,
     ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError>;
+
+    /// <p>Deletes an AWS Fargate profile.</p> <p>When you delete a Fargate profile, any pods that were scheduled onto Fargate infrastructure with the profile are deleted. If those pods match another Fargate profile, then they are scheduled on Fargate infrastructure with that profile. If they no longer match any Fargate profiles, then they are not scheduled on Fargate infrastructure.</p> <p>Only one Fargate profile in a cluster can be in the <code>DELETING</code> status at a time. You must wait for a Fargate profile to finish deleting before you can delete any other profiles in that cluster.</p>
+    fn delete_fargate_profile(
+        &self,
+        input: DeleteFargateProfileRequest,
+    ) -> RusotoFuture<DeleteFargateProfileResponse, DeleteFargateProfileError>;
 
     /// <p>Deletes an Amazon EKS node group for a cluster.</p>
     fn delete_nodegroup(
@@ -1870,6 +2275,12 @@ pub trait Eks {
         &self,
         input: DescribeClusterRequest,
     ) -> RusotoFuture<DescribeClusterResponse, DescribeClusterError>;
+
+    /// <p>Returns descriptive information about an AWS Fargate profile.</p>
+    fn describe_fargate_profile(
+        &self,
+        input: DescribeFargateProfileRequest,
+    ) -> RusotoFuture<DescribeFargateProfileResponse, DescribeFargateProfileError>;
 
     /// <p>Returns descriptive information about an Amazon EKS node group.</p>
     fn describe_nodegroup(
@@ -1888,6 +2299,12 @@ pub trait Eks {
         &self,
         input: ListClustersRequest,
     ) -> RusotoFuture<ListClustersResponse, ListClustersError>;
+
+    /// <p>Lists the AWS Fargate profiles associated with the specified cluster in your AWS account in the specified Region.</p>
+    fn list_fargate_profiles(
+        &self,
+        input: ListFargateProfilesRequest,
+    ) -> RusotoFuture<ListFargateProfilesResponse, ListFargateProfilesError>;
 
     /// <p>Lists the Amazon EKS node groups associated with the specified cluster in your AWS account in the specified Region.</p>
     fn list_nodegroups(
@@ -2013,6 +2430,40 @@ impl Eks for EksClient {
         })
     }
 
+    /// <p>Creates an AWS Fargate profile for your Amazon EKS cluster. You must have at least one Fargate profile in a cluster to be able to schedule pods on Fargate infrastructure.</p> <p>The Fargate profile allows an administrator to declare which pods run on Fargate infrastructure and specify which pods run on which Fargate profile. This declaration is done through the profile’s selectors. Each profile can have up to five selectors that contain a namespace and labels. A namespace is required for every selector. The label field consists of multiple optional key-value pairs. Pods that match the selectors are scheduled on Fargate infrastructure. If a to-be-scheduled pod matches any of the selectors in the Fargate profile, then that pod is scheduled on Fargate infrastructure.</p> <p>When you create a Fargate profile, you must specify a pod execution role to use with the pods that are scheduled with the profile. This role is added to the cluster's Kubernetes <a href="https://kubernetes.io/docs/admin/authorization/rbac/">Role Based Access Control</a> (RBAC) for authorization so that the <code>kubelet</code> that is running on the Fargate infrastructure can register with your Amazon EKS cluster. This role is what allows Fargate infrastructure to appear in your cluster as nodes. The pod execution role also provides IAM permissions to the Fargate infrastructure to allow read access to Amazon ECR image repositories. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html">Pod Execution Role</a> in the <i>Amazon EKS User Guide</i>.</p> <p>Fargate profiles are immutable. However, you can create a new updated profile to replace an existing profile and then delete the original after the updated profile has finished creating.</p> <p>If any Fargate profiles in a cluster are in the <code>DELETING</code> status, you must wait for that Fargate profile to finish deleting before you can create any other profiles in that cluster.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/fargate-profile.html">AWS Fargate Profile</a> in the <i>Amazon EKS User Guide</i>.</p>
+    fn create_fargate_profile(
+        &self,
+        input: CreateFargateProfileRequest,
+    ) -> RusotoFuture<CreateFargateProfileResponse, CreateFargateProfileError> {
+        let request_uri = format!(
+            "/clusters/{name}/fargate-profiles",
+            name = input.cluster_name
+        );
+
+        let mut request = SignedRequest::new("POST", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateFargateProfileResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateFargateProfileError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Creates a managed worker node group for an Amazon EKS cluster. You can only create a node group for your cluster that is equal to the current Kubernetes version for the cluster. All node groups are created with the latest AMI release version for the respective minor Kubernetes version of the cluster.</p> <p>An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and associated Amazon EC2 instances that are managed by AWS for an Amazon EKS cluster. Each node group uses a version of the Amazon EKS-optimized Amazon Linux 2 AMI. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html">Managed Node Groups</a> in the <i>Amazon EKS User Guide</i>. </p>
     fn create_nodegroup(
         &self,
@@ -2045,7 +2496,7 @@ impl Eks for EksClient {
         })
     }
 
-    /// <p>Deletes the Amazon EKS cluster control plane.</p> <p>If you have active services in your cluster that are associated with a load balancer, you must delete those services before deleting the cluster so that the load balancers are deleted properly. Otherwise, you can have orphaned resources in your VPC that prevent you from being able to delete the VPC. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/delete-cluster.html">Deleting a Cluster</a> in the <i>Amazon EKS User Guide</i>.</p> <p>If you have managed node groups attached to the cluster, you must delete them first. For more information, see <a>DeleteNodegroup</a>.</p>
+    /// <p>Deletes the Amazon EKS cluster control plane.</p> <p>If you have active services in your cluster that are associated with a load balancer, you must delete those services before deleting the cluster so that the load balancers are deleted properly. Otherwise, you can have orphaned resources in your VPC that prevent you from being able to delete the VPC. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/delete-cluster.html">Deleting a Cluster</a> in the <i>Amazon EKS User Guide</i>.</p> <p>If you have managed node groups or Fargate profiles attached to the cluster, you must delete them first. For more information, see <a>DeleteNodegroup</a> and<a>DeleteFargateProfile</a>.</p>
     fn delete_cluster(
         &self,
         input: DeleteClusterRequest,
@@ -2069,6 +2520,38 @@ impl Eks for EksClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(DeleteClusterError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes an AWS Fargate profile.</p> <p>When you delete a Fargate profile, any pods that were scheduled onto Fargate infrastructure with the profile are deleted. If those pods match another Fargate profile, then they are scheduled on Fargate infrastructure with that profile. If they no longer match any Fargate profiles, then they are not scheduled on Fargate infrastructure.</p> <p>Only one Fargate profile in a cluster can be in the <code>DELETING</code> status at a time. You must wait for a Fargate profile to finish deleting before you can delete any other profiles in that cluster.</p>
+    fn delete_fargate_profile(
+        &self,
+        input: DeleteFargateProfileRequest,
+    ) -> RusotoFuture<DeleteFargateProfileResponse, DeleteFargateProfileError> {
+        let request_uri = format!(
+            "/clusters/{name}/fargate-profiles/{fargate_profile_name}",
+            name = input.cluster_name,
+            fargate_profile_name = input.fargate_profile_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteFargateProfileResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteFargateProfileError::from_response(response))
+                    }),
                 )
             }
         })
@@ -2131,6 +2614,38 @@ impl Eks for EksClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(DescribeClusterError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns descriptive information about an AWS Fargate profile.</p>
+    fn describe_fargate_profile(
+        &self,
+        input: DescribeFargateProfileRequest,
+    ) -> RusotoFuture<DescribeFargateProfileResponse, DescribeFargateProfileError> {
+        let request_uri = format!(
+            "/clusters/{name}/fargate-profiles/{fargate_profile_name}",
+            name = input.cluster_name,
+            fargate_profile_name = input.fargate_profile_name
+        );
+
+        let mut request = SignedRequest::new("GET", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeFargateProfileResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeFargateProfileError::from_response(response))
+                    }),
                 )
             }
         })
@@ -2241,6 +2756,46 @@ impl Eks for EksClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(ListClustersError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Lists the AWS Fargate profiles associated with the specified cluster in your AWS account in the specified Region.</p>
+    fn list_fargate_profiles(
+        &self,
+        input: ListFargateProfilesRequest,
+    ) -> RusotoFuture<ListFargateProfilesResponse, ListFargateProfilesError> {
+        let request_uri = format!(
+            "/clusters/{name}/fargate-profiles",
+            name = input.cluster_name
+        );
+
+        let mut request = SignedRequest::new("GET", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListFargateProfilesResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListFargateProfilesError::from_response(response))
+                    }),
                 )
             }
         })
