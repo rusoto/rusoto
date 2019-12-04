@@ -4,13 +4,12 @@
 extern crate log;
 extern crate env_logger;
 extern crate rusoto_core;
-extern crate rusoto_credential;
 extern crate rusoto_logs;
 
+use rusoto_core::credential::DefaultCredentialsProvider;
 use rusoto_core::encoding::ContentEncoding;
 use rusoto_core::encoding::DEFAULT_GZIP_COMPRESSION_LEVEL;
 use rusoto_core::{Client, HttpClient, Region, RusotoError};
-use rusoto_credential::DefaultCredentialsProvider;
 use rusoto_logs::{
     CloudWatchLogs, CloudWatchLogsClient, CreateLogGroupError, CreateLogGroupRequest,
     CreateLogStreamError, CreateLogStreamRequest, DeleteLogGroupRequest, DescribeLogStreamsRequest,

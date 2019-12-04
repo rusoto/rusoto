@@ -24,9 +24,6 @@ debug = false
 path = "../rusoto/core"
 default-features = false
 
-[dependencies.rusoto_credential]
-path = "../rusoto/credential"
-
 [dependencies.rusoto_acm]
 optional = true
 path = "../rusoto/services/acm"

@@ -50,7 +50,8 @@ impl ContentEncoding {
                                 return;
                             }
                         }
-                        let mut encoder = GzEncoder::new(Vec::<u8>::new(), Compression::new(*level));
+                        let mut encoder =
+                            GzEncoder::new(Vec::<u8>::new(), Compression::new(*level));
                         encoder
                             .write_all(payload)
                             .expect("Request payload was not written to encoder.");
