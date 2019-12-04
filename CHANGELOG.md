@@ -4,6 +4,8 @@
 
 (Please put changes here)
 
+- Encode request payload optionally with Gzip : https://github.com/rusoto/rusoto/pull/1615
+
 ## [0.42.0] - 2019-11-18
 
 - Use static initializer for AWS profile regex
