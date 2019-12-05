@@ -13295,6 +13295,14 @@ impl GlueClient {
     }
 }
 
+impl fmt::Debug for GlueClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("GlueClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Glue for GlueClient {
     /// <p>Creates one or more partitions in a batch operation.</p>
     fn batch_create_partition(

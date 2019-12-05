@@ -3788,6 +3788,14 @@ impl CodePipelineClient {
     }
 }
 
+impl fmt::Debug for CodePipelineClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("CodePipelineClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl CodePipeline for CodePipelineClient {
     /// <p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>
     fn acknowledge_job(

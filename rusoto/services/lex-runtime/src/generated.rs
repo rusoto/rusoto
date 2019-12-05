@@ -795,6 +795,14 @@ impl LexRuntimeClient {
     }
 }
 
+impl fmt::Debug for LexRuntimeClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("LexRuntimeClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl LexRuntime for LexRuntimeClient {
     /// <p>Removes session information for a specified bot, alias, and user ID. </p>
     fn delete_session(

@@ -1268,6 +1268,14 @@ impl FmsClient {
     }
 }
 
+impl fmt::Debug for FmsClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("FmsClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Fms for FmsClient {
     /// <p>Sets the AWS Firewall Manager administrator account. AWS Firewall Manager must be associated with the master account your AWS organization or associated with a member account that has the appropriate permissions. If the account ID that you submit is not an AWS Organizations master account, AWS Firewall Manager will set the appropriate permissions for the given member account.</p> <p>The account that you associate with AWS Firewall Manager is called the AWS Firewall Manager administrator account. </p>
     fn associate_admin_account(

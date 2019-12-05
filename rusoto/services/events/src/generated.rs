@@ -2770,6 +2770,14 @@ impl EventBridgeClient {
     }
 }
 
+impl fmt::Debug for EventBridgeClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("EventBridgeClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl EventBridge for EventBridgeClient {
     /// <p><p>Activates a partner event source that has been deactivated. Once activated, your matching event bus will start receiving events from the event source.</p> <note> <p>This operation is performed by AWS customers, not by SaaS partners.</p> </note></p>
     fn activate_event_source(

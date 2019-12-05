@@ -2682,6 +2682,14 @@ impl EcrClient {
     }
 }
 
+impl fmt::Debug for EcrClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("EcrClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Ecr for EcrClient {
     /// <p><p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn batch_check_layer_availability(

@@ -19297,6 +19297,14 @@ impl IotClient {
     }
 }
 
+impl fmt::Debug for IotClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("IotClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Iot for IotClient {
     /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
     fn accept_certificate_transfer(

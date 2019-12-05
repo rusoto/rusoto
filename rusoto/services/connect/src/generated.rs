@@ -2404,6 +2404,14 @@ impl ConnectClient {
     }
 }
 
+impl fmt::Debug for ConnectClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ConnectClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Connect for ConnectClient {
     /// <p>Creates a new user account in your Amazon Connect instance.</p>
     fn create_user(

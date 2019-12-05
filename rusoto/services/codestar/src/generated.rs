@@ -1661,6 +1661,14 @@ impl CodeStarClient {
     }
 }
 
+impl fmt::Debug for CodeStarClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("CodeStarClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl CodeStar for CodeStarClient {
     /// <p>Adds an IAM user to the team for an AWS CodeStar project.</p>
     fn associate_team_member(

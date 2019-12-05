@@ -1054,6 +1054,14 @@ impl PollyClient {
     }
 }
 
+impl fmt::Debug for PollyClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("PollyClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Polly for PollyClient {
     /// <p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn delete_lexicon(

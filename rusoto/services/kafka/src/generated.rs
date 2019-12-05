@@ -2442,6 +2442,14 @@ impl KafkaClient {
     }
 }
 
+impl fmt::Debug for KafkaClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("KafkaClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Kafka for KafkaClient {
     /// <pre><code>        &lt;p&gt;Creates a new MSK cluster.&lt;/p&gt;
     /// </code></pre>

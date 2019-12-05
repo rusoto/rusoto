@@ -10996,6 +10996,14 @@ impl CodeCommitClient {
     }
 }
 
+impl fmt::Debug for CodeCommitClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("CodeCommitClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl CodeCommit for CodeCommitClient {
     /// <p>Returns information about one or more merge conflicts in the attempted merge of two commit specifiers using the squash or three-way merge strategy.</p>
     fn batch_describe_merge_conflicts(

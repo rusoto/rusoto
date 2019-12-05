@@ -3123,6 +3123,14 @@ impl MachineLearningClient {
     }
 }
 
+impl fmt::Debug for MachineLearningClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("MachineLearningClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl MachineLearning for MachineLearningClient {
     /// <p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>
     fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {

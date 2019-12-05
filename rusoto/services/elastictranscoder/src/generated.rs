@@ -2463,6 +2463,14 @@ impl EtsClient {
     }
 }
 
+impl fmt::Debug for EtsClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("EtsClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Ets for EtsClient {
     /// <p><p>The CancelJob operation cancels an unfinished job.</p> <note> <p>You can only cancel a job that has a status of <code>Submitted</code>. To prevent a pipeline from starting to process a job while you&#39;re getting the job identifier, use <a>UpdatePipelineStatus</a> to temporarily pause the pipeline.</p> </note></p>
     fn cancel_job(

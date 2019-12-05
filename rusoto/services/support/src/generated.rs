@@ -1453,6 +1453,14 @@ impl AWSSupportClient {
     }
 }
 
+impl fmt::Debug for AWSSupportClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("AWSSupportClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl AWSSupport for AWSSupportClient {
     /// <p>Adds one or more attachments to an attachment set. If an <code>attachmentSetId</code> is not specified, a new attachment set is created, and the ID of the set is returned in the response. If an <code>attachmentSetId</code> is specified, the attachments are added to the specified set, if it exists.</p> <p>An attachment set is a temporary container for attachments that are to be added to a case or case communication. The set is available for one hour after it is created; the <code>expiryTime</code> returned in the response indicates when the set expires. The maximum number of attachments in a set is 3, and the maximum size of any attachment in the set is 5 MB.</p>
     fn add_attachments_to_set(

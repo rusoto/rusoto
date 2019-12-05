@@ -3648,6 +3648,14 @@ impl AppSyncClient {
     }
 }
 
+impl fmt::Debug for AppSyncClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("AppSyncClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl AppSync for AppSyncClient {
     /// <p>Creates a unique key that you can distribute to clients who are executing your API.</p>
     fn create_api_key(

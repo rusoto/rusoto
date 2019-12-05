@@ -977,6 +977,14 @@ impl TranscribeClient {
     }
 }
 
+impl fmt::Debug for TranscribeClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("TranscribeClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Transcribe for TranscribeClient {
     /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file. </p>
     fn create_vocabulary(

@@ -11036,6 +11036,14 @@ impl SesClient {
     }
 }
 
+impl fmt::Debug for SesClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("SesClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Ses for SesClient {
     /// <p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn clone_receipt_rule_set(

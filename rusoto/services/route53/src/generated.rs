@@ -11880,6 +11880,14 @@ impl Route53Client {
     }
 }
 
+impl fmt::Debug for Route53Client {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Route53Client")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Route53 for Route53Client {
     /// <p><p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can&#39;t convert a public hosted zone into a private hosted zone.</p> </important> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note></p>
     #[allow(unused_variables, warnings)]

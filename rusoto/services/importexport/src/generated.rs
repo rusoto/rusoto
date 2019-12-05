@@ -1604,6 +1604,14 @@ impl ImportExportClient {
     }
 }
 
+impl fmt::Debug for ImportExportClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ImportExportClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl ImportExport for ImportExportClient {
     /// <p>This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete.</p>
     fn cancel_job(&self, input: CancelJobInput) -> RusotoFuture<CancelJobOutput, CancelJobError> {

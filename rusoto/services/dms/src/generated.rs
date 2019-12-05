@@ -5243,6 +5243,14 @@ impl DatabaseMigrationServiceClient {
     }
 }
 
+impl fmt::Debug for DatabaseMigrationServiceClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("DatabaseMigrationServiceClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl DatabaseMigrationService for DatabaseMigrationServiceClient {
     /// <p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
     fn add_tags_to_resource(

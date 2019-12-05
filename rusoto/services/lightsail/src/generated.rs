@@ -12190,6 +12190,14 @@ impl LightsailClient {
     }
 }
 
+impl fmt::Debug for LightsailClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("LightsailClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Lightsail for LightsailClient {
     /// <p>Allocates a static IP address.</p>
     fn allocate_static_ip(

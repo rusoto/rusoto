@@ -12,6 +12,7 @@
 - Introduce `Variable` to abstract over certain credential provider input parameters.
 
 - Encode request payload optionally with Gzip : https://github.com/rusoto/rusoto/pull/1615
+- Add Debug trait to generated Clients
 
 ## [0.42.0] - 2019-11-18
 

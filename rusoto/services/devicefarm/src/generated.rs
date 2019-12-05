@@ -6850,6 +6850,14 @@ impl DeviceFarmClient {
     }
 }
 
+impl fmt::Debug for DeviceFarmClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("DeviceFarmClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl DeviceFarm for DeviceFarmClient {
     /// <p>Creates a device pool.</p>
     fn create_device_pool(

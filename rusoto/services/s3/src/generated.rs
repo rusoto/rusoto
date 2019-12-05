@@ -18870,6 +18870,14 @@ impl S3Client {
     }
 }
 
+impl fmt::Debug for S3Client {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("S3Client")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl S3 for S3Client {
     /// <p>Aborts a multipart upload.</p> <p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>
     #[allow(unused_variables, warnings)]

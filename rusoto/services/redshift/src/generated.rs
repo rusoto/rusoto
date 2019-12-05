@@ -16804,6 +16804,14 @@ impl RedshiftClient {
     }
 }
 
+impl fmt::Debug for RedshiftClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("RedshiftClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Redshift for RedshiftClient {
     /// <p>Exchanges a DC1 Reserved Node for a DC2 Reserved Node with no changes to the configuration (term, payment type, or number of nodes) and no additional costs. </p>
     fn accept_reserved_node_exchange(

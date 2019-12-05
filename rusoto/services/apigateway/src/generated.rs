@@ -10624,6 +10624,14 @@ impl ApiGatewayClient {
     }
 }
 
+impl fmt::Debug for ApiGatewayClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ApiGatewayClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl ApiGateway for ApiGatewayClient {
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
     fn create_api_key(

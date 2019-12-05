@@ -352,6 +352,14 @@ impl ComprehendMedicalClient {
     }
 }
 
+impl fmt::Debug for ComprehendMedicalClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ComprehendMedicalClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl ComprehendMedical for ComprehendMedicalClient {
     /// <p> Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information .</p>
     fn detect_entities(

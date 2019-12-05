@@ -1680,6 +1680,14 @@ impl TransferClient {
     }
 }
 
+impl fmt::Debug for TransferClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("TransferClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Transfer for TransferClient {
     /// <p>Instantiates an autoscaling virtual server based on Secure File Transfer Protocol (SFTP) in AWS. When you make updates to your server or when you work with users, use the service-generated <code>ServerId</code> property that is assigned to the newly created server.</p>
     fn create_server(

@@ -1821,6 +1821,14 @@ impl DataPipelineClient {
     }
 }
 
+impl fmt::Debug for DataPipelineClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("DataPipelineClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl DataPipeline for DataPipelineClient {
     /// <p>Validates the specified pipeline and starts processing pipeline tasks. If the pipeline does not pass validation, activation fails.</p> <p>If you need to pause the pipeline to investigate an issue with a component, such as a data source or script, call <a>DeactivatePipeline</a>.</p> <p>To activate a finished pipeline, modify the end date for the pipeline and then activate it.</p>
     fn activate_pipeline(

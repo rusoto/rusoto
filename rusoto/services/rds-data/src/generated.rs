@@ -975,6 +975,14 @@ impl RdsDataClient {
     }
 }
 
+impl fmt::Debug for RdsDataClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("RdsDataClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl RdsData for RdsDataClient {
     /// <p>Runs a batch SQL statement over an array of data.</p>
     ///

@@ -3435,6 +3435,14 @@ impl WorkmailClient {
     }
 }
 
+impl fmt::Debug for WorkmailClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("WorkmailClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Workmail for WorkmailClient {
     /// <p>Adds a member (user or group) to the resource's set of delegates.</p>
     fn associate_delegate_to_resource(

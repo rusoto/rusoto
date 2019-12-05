@@ -5621,6 +5621,14 @@ impl CloudSearchClient {
     }
 }
 
+impl fmt::Debug for CloudSearchClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("CloudSearchClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl CloudSearch for CloudSearchClient {
     /// <p>Indexes the search suggestions. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn build_suggesters(

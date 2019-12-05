@@ -2980,6 +2980,14 @@ impl WorkspacesClient {
     }
 }
 
+impl fmt::Debug for WorkspacesClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("WorkspacesClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Workspaces for WorkspacesClient {
     /// <p>Associates the specified IP access control group with the specified directory.</p>
     fn associate_ip_groups(

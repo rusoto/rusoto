@@ -4712,6 +4712,14 @@ impl DirectConnectClient {
     }
 }
 
+impl fmt::Debug for DirectConnectClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("DirectConnectClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl DirectConnect for DirectConnectClient {
     /// <p>Accepts a proposal request to attach a virtual private gateway or transit gateway to a Direct Connect gateway.</p>
     fn accept_direct_connect_gateway_association_proposal(

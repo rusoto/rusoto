@@ -197,6 +197,14 @@ impl MarketplaceEntitlementClient {
     }
 }
 
+impl fmt::Debug for MarketplaceEntitlementClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("MarketplaceEntitlementClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl MarketplaceEntitlement for MarketplaceEntitlementClient {
     /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>
     fn get_entitlements(

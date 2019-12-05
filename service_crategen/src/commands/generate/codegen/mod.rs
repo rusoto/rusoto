@@ -208,6 +208,14 @@ where
             }}
         }}
 
+        impl fmt::Debug for {type_name} {{
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {{
+                f.debug_struct(\"{type_name}\")
+                    .field(\"region\", &self.region)
+                    .finish()
+            }}
+        }}
+
         impl {trait_name} for {type_name} {{
         ",
         service_name = service.name(),

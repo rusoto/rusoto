@@ -7261,6 +7261,14 @@ impl AlexaForBusinessClient {
     }
 }
 
+impl fmt::Debug for AlexaForBusinessClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("AlexaForBusinessClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl AlexaForBusiness for AlexaForBusinessClient {
     /// <p>Associates a skill with the organization under the customer's AWS account. If a skill is private, the user implicitly accepts access to this skill during enablement.</p>
     fn approve_skill(

@@ -391,6 +391,14 @@ impl PerformanceInsightsClient {
     }
 }
 
+impl fmt::Debug for PerformanceInsightsClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("PerformanceInsightsClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl PerformanceInsights for PerformanceInsightsClient {
     /// <p>For a specific time period, retrieve the top <code>N</code> dimension keys for a metric.</p>
     fn describe_dimension_keys(

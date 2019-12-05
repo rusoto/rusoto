@@ -451,6 +451,14 @@ impl IotDataClient {
     }
 }
 
+impl fmt::Debug for IotDataClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("IotDataClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl IotData for IotDataClient {
     /// <p>Deletes the thing shadow for the specified thing.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/API_DeleteThingShadow.html">DeleteThingShadow</a> in the <i>AWS IoT Developer Guide</i>.</p>
     fn delete_thing_shadow(

@@ -7241,6 +7241,14 @@ impl MediaLiveClient {
     }
 }
 
+impl fmt::Debug for MediaLiveClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("MediaLiveClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl MediaLive for MediaLiveClient {
     /// <p>Update a channel schedule</p>
     fn batch_update_schedule(

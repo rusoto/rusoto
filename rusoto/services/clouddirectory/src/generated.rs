@@ -8723,6 +8723,14 @@ impl CloudDirectoryClient {
     }
 }
 
+impl fmt::Debug for CloudDirectoryClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("CloudDirectoryClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl CloudDirectory for CloudDirectoryClient {
     /// <p>Adds a new <a>Facet</a> to an object. An object can have more than one facet applied on it.</p>
     fn add_facet_to_object(

@@ -6358,6 +6358,14 @@ impl StorageGatewayClient {
     }
 }
 
+impl fmt::Debug for StorageGatewayClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("StorageGatewayClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl StorageGateway for StorageGatewayClient {
     /// <p><p>Activates the gateway you previously deployed on your host. In the activation process, you specify information such as the AWS Region that you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note></p>
     fn activate_gateway(

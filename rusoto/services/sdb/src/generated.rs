@@ -1668,6 +1668,14 @@ impl SimpleDbClient {
     }
 }
 
+impl fmt::Debug for SimpleDbClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("SimpleDbClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl SimpleDb for SimpleDbClient {
     /// <p> Performs multiple DeleteAttributes operations in a single call, which reduces round trips and latencies. This enables Amazon SimpleDB to optimize requests, which generally yields better throughput. </p> <p> The following limitations are enforced for this operation: <ul> <li>1 MB request size</li> <li>25 item limit per BatchDeleteAttributes operation</li> </ul> </p>
     fn batch_delete_attributes(

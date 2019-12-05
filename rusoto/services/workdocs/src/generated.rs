@@ -4909,6 +4909,14 @@ impl WorkdocsClient {
     }
 }
 
+impl fmt::Debug for WorkdocsClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("WorkdocsClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Workdocs for WorkdocsClient {
     /// <p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>
     fn abort_document_version_upload(

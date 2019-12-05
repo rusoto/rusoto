@@ -1401,6 +1401,14 @@ impl CloudHsmv2Client {
     }
 }
 
+impl fmt::Debug for CloudHsmv2Client {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("CloudHsmv2Client")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl CloudHsmv2 for CloudHsmv2Client {
     /// <p>Copy an AWS CloudHSM cluster backup to a different region.</p>
     fn copy_backup_to_region(

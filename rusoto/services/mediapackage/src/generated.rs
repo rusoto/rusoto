@@ -2082,6 +2082,14 @@ impl MediaPackageClient {
     }
 }
 
+impl fmt::Debug for MediaPackageClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("MediaPackageClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl MediaPackage for MediaPackageClient {
     /// <p>Creates a new Channel.</p>
     fn create_channel(

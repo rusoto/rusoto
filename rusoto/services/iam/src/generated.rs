@@ -20788,6 +20788,14 @@ impl IamClient {
     }
 }
 
+impl fmt::Debug for IamClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("IamClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Iam for IamClient {
     /// <p>Adds a new client ID (also known as audience) to the list of client IDs already registered for the specified IAM OpenID Connect (OIDC) provider resource.</p> <p>This operation is idempotent; it does not fail or return an error if you add an existing client ID to the provider.</p>
     fn add_client_id_to_open_id_connect_provider(

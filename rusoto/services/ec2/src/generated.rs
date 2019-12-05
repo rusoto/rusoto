@@ -69594,6 +69594,14 @@ impl Ec2Client {
     }
 }
 
+impl fmt::Debug for Ec2Client {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Ec2Client")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Ec2 for Ec2Client {
     /// <p>Accepts the Convertible Reserved Instance exchange quote described in the <a>GetReservedInstancesExchangeQuote</a> call.</p>
     fn accept_reserved_instances_exchange_quote(

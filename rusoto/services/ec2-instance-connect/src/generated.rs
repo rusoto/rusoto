@@ -156,6 +156,14 @@ impl Ec2InstanceConnectClient {
     }
 }
 
+impl fmt::Debug for Ec2InstanceConnectClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Ec2InstanceConnectClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Ec2InstanceConnect for Ec2InstanceConnectClient {
     /// <p>Pushes an SSH public key to a particular OS user on a given EC2 instance for 60 seconds.</p>
     fn send_ssh_public_key(

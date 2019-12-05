@@ -12117,6 +12117,14 @@ impl CloudFrontClient {
     }
 }
 
+impl fmt::Debug for CloudFrontClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("CloudFrontClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl CloudFront for CloudFrontClient {
     /// <p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     #[allow(unused_variables, warnings)]

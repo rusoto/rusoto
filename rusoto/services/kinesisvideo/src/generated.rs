@@ -1004,6 +1004,14 @@ impl KinesisVideoClient {
     }
 }
 
+impl fmt::Debug for KinesisVideoClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("KinesisVideoClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl KinesisVideo for KinesisVideoClient {
     /// <p>Creates a new Kinesis video stream. </p> <p>When you create a new stream, Kinesis Video Streams assigns it a version number. When you change the stream's metadata, Kinesis Video Streams updates the version. </p> <p> <code>CreateStream</code> is an asynchronous operation.</p> <p>For information about how the service works, see <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/how-it-works.html">How it Works</a>. </p> <p>You must have permissions for the <code>KinesisVideo:CreateStream</code> action.</p>
     fn create_stream(

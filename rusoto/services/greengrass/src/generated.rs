@@ -7059,6 +7059,14 @@ impl GreenGrassClient {
     }
 }
 
+impl fmt::Debug for GreenGrassClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("GreenGrassClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl GreenGrass for GreenGrassClient {
     /// <p>Associates a role with a group. Your Greengrass core will use the role to access AWS cloud services. The role&#39;s permissions should allow Greengrass core Lambda functions to perform actions against the cloud.</p>
     fn associate_role_to_group(

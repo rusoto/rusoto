@@ -3134,6 +3134,14 @@ impl AmplifyClient {
     }
 }
 
+impl fmt::Debug for AmplifyClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("AmplifyClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Amplify for AmplifyClient {
     /// <p> Creates a new Amplify App. </p>
     fn create_app(&self, input: CreateAppRequest) -> RusotoFuture<CreateAppResult, CreateAppError> {

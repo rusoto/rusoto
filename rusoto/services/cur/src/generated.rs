@@ -340,6 +340,14 @@ impl CostAndUsageReportClient {
     }
 }
 
+impl fmt::Debug for CostAndUsageReportClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("CostAndUsageReportClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl CostAndUsageReport for CostAndUsageReportClient {
     /// <p>Deletes the specified report.</p>
     fn delete_report_definition(

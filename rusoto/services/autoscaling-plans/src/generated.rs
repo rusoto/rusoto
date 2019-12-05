@@ -825,6 +825,14 @@ impl AutoscalingPlansClient {
     }
 }
 
+impl fmt::Debug for AutoscalingPlansClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("AutoscalingPlansClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl AutoscalingPlans for AutoscalingPlansClient {
     /// <p>Creates a scaling plan.</p>
     fn create_scaling_plan(

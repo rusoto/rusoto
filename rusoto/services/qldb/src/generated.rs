@@ -1187,6 +1187,14 @@ impl QldbClient {
     }
 }
 
+impl fmt::Debug for QldbClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("QldbClient")
+            .field("region", &self.region)
+            .finish()
+    }
+}
+
 impl Qldb for QldbClient {
     /// <p>Creates a new ledger in your AWS account.</p>
     fn create_ledger(
