@@ -33,7 +33,7 @@ impl Drop for Secret {
 ///
 /// ```rust
 /// # use rusoto_credential::Secret;
-/// assert_eq!(format!("{:?}",Secret::from("hello".to_string())), "*******");
+/// assert_eq!(format!("{:?}",Secret::from("hello".to_string())), "\"*******\"");
 /// ```
 impl std::fmt::Debug for Secret {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
