@@ -94,8 +94,8 @@ jobs:
     - script: |
         rustup install nightly
         rustup default nightly
-      displayName: 'Install Rust beta'
-    - script: RUST_VERSION=nightly make unit_test
+      displayName: 'Install Rust nightly'
+    - script: RUST_VERSION=nightly make unit_test_no_doctests
       displayName: 'Run unit tests'
       continueOnError: true
     - script: RUST_VERSION=nightly make check_integration_test
@@ -118,8 +118,8 @@ jobs:
     - script: |
         rustup install nightly
         rustup default nightly
-      displayName: 'Install Rust beta'
-    - script:  RUST_VERSION=nightly make rustls_unit_test
+      displayName: 'Install Rust nightly'
+    - script:  RUST_VERSION=nightly make rustls_unit_test_no_doctests
       displayName: 'Run unit tests with rustls'
       continueOnError: true
 
@@ -204,7 +204,7 @@ jobs:
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
       displayName: 'Install Rust'
-    - script: RUST_VERSION=nightly make unit_test
+    - script: RUST_VERSION=nightly make unit_test_no_doctests
       displayName: 'Run unit tests'
       continueOnError: true
     - script: RUST_VERSION=nightly make check_integration_test
@@ -224,7 +224,7 @@ jobs:
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
       displayName: 'Install Rust'
-    - script: RUST_VERSION=nightly make rustls_unit_test
+    - script: RUST_VERSION=nightly make rustls_unit_test_no_doctests
       displayName: 'Run unit tests with rustls'
       continueOnError: true
 
