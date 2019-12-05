@@ -6,6 +6,7 @@ use futures::{Async, Future, Poll};
 use crate::credential::{
     Anonymous, CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials, StaticProvider,
 };
+use crate::encoding::ContentEncoding;
 use crate::error::RusotoError;
 use crate::future::{self, RusotoFuture};
 use crate::request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
@@ -35,6 +36,7 @@ impl Client {
         let inner = Arc::new(ClientInner {
             credentials_provider: Some(Arc::new(credentials_provider)),
             dispatcher: Arc::new(dispatcher),
+            content_encoding: Default::default(),
         });
         *lock = Arc::downgrade(&inner);
         Client { inner }
@@ -51,6 +53,7 @@ impl Client {
         let inner = ClientInner {
             credentials_provider: Some(Arc::new(credentials_provider)),
             dispatcher: Arc::new(dispatcher),
+            content_encoding: Default::default(),
         };
         Client {
             inner: Arc::new(inner),
@@ -70,6 +73,30 @@ impl Client {
         let inner = ClientInner::<StaticProvider, D> {
             credentials_provider: None,
             dispatcher: Arc::new(dispatcher),
+            content_encoding: Default::default(),
+        };
+        Client {
+            inner: Arc::new(inner),
+        }
+    }
+
+    #[cfg(feature = "encoding")]
+    /// Create a client with content encoding to compress payload before sending requests
+    pub fn new_with_encoding<P, D>(
+        credentials_provider: P,
+        dispatcher: D,
+        content_encoding: ContentEncoding,
+    ) -> Self
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        let inner = ClientInner {
+            credentials_provider: Some(Arc::new(credentials_provider)),
+            dispatcher: Arc::new(dispatcher),
+            content_encoding,
         };
         Client {
             inner: Arc::new(inner),
@@ -108,6 +135,7 @@ pub trait TimeoutFuture: Future {
 struct ClientInner<P, D> {
     credentials_provider: Option<Arc<P>>,
     dispatcher: Arc<D>,
+    content_encoding: ContentEncoding,
 }
 
 impl<P, D> Clone for ClientInner<P, D> {
@@ -115,6 +143,7 @@ impl<P, D> Clone for ClientInner<P, D> {
         ClientInner {
             credentials_provider: self.credentials_provider.clone(),
             dispatcher: self.dispatcher.clone(),
+            content_encoding: self.content_encoding.clone(),
         }
     }
 }
@@ -208,6 +237,7 @@ where
                     Ok(Async::NotReady)
                 }
                 Ok(Async::Ready(credentials)) => {
+                    self.inner.content_encoding.encode(&mut request);
                     if credentials.is_anonymous() {
                         request.complement_with_plus(true);
                     } else {

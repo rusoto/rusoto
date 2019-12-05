@@ -285,7 +285,7 @@ impl CreatePlatformApplicationInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Attributes"),
+            &format!("{}{}.entry", prefix, "Attributes"),
             &obj.attributes,
         );
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -350,7 +350,7 @@ impl CreatePlatformEndpointInputSerializer {
         if let Some(ref field_value) = obj.attributes {
             MapStringToStringSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Attributes"),
+                &format!("{}{}.entry", prefix, "Attributes"),
                 field_value,
             );
         }
@@ -1270,7 +1270,7 @@ impl MapStringToStringSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "key"), &key);
-            params.put(&format!("{}.{}", prefix, "Value"), &value);
+            params.put(&format!("{}.{}", prefix, "value"), &value);
         }
     }
 }
@@ -1587,7 +1587,7 @@ impl SetEndpointAttributesInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Attributes"),
+            &format!("{}{}.entry", prefix, "Attributes"),
             &obj.attributes,
         );
         params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
@@ -1614,7 +1614,7 @@ impl SetPlatformApplicationAttributesInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Attributes"),
+            &format!("{}{}.entry", prefix, "Attributes"),
             &obj.attributes,
         );
         params.put(
@@ -1642,7 +1642,7 @@ impl SetSMSAttributesInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "attributes"),
+            &format!("{}{}.entry", prefix, "attributes"),
             &obj.attributes,
         );
     }
@@ -1911,7 +1911,7 @@ impl SubscriptionAttributesMapSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.entry.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "key"), &key);
-            params.put(&format!("{}.{}", prefix, "Value"), &value);
+            params.put(&format!("{}.{}", prefix, "value"), &value);
         }
     }
 }
@@ -2147,7 +2147,7 @@ impl TopicAttributesMapSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.entry.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "key"), &key);
-            params.put(&format!("{}.{}", prefix, "Value"), &value);
+            params.put(&format!("{}.{}", prefix, "value"), &value);
         }
     }
 }
