@@ -877,7 +877,8 @@
     "coreVersion": "0.42.0",
     "protocolVersion": "2011-06-15",
     "customDependencies": {
-      "chrono": "0.4.0"
+      "chrono": "0.4.0",
+      "tempfile": "^3.1.0"
     },
     "baseTypeName": "Sts"
   },

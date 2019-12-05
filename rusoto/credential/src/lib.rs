@@ -23,25 +23,32 @@ extern crate tokio_timer;
 pub use crate::container::{ContainerProvider, ContainerProviderFuture};
 pub use crate::environment::{EnvironmentProvider, EnvironmentProviderFuture};
 pub use crate::instance_metadata::{InstanceMetadataProvider, InstanceMetadataProviderFuture};
+pub use crate::object_safe::{AwsCredentialProviderChain, AwsCredentialsProvider, WithFallback};
 pub use crate::profile::{ProfileProvider, ProfileProviderFuture};
+pub use crate::secrets::Secret;
 pub use crate::static_provider::StaticProvider;
+pub use crate::variable::Variable;
 
 pub mod claims;
 mod container;
 mod environment;
 mod instance_metadata;
+mod object_safe;
 mod profile;
 mod request;
+mod secrets;
 mod static_provider;
 pub(crate) mod test_utils;
+mod variable;
 
 use std::collections::BTreeMap;
-use std::env::var as env_var;
+use std::env::{var as env_var, VarError};
 use std::error::Error;
 use std::fmt;
 use std::io::Error as IoError;
 use std::ops::Deref;
 use std::rc::Rc;
+use std::string::FromUtf8Error;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
@@ -182,7 +189,7 @@ impl fmt::Debug for AwsCredentials {
 ///
 /// This generally is an error message from one of our underlying libraries, however
 /// we wrap it up with this type so we can export one single error type.
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct CredentialsError {
     /// The underlying error message for the credentials error.
     pub message: String,
@@ -238,6 +245,18 @@ impl From<serde_json::Error> for CredentialsError {
     }
 }
 
+impl From<VarError> for CredentialsError {
+    fn from(err: VarError) -> CredentialsError {
+        CredentialsError::new(err.description())
+    }
+}
+
+impl From<FromUtf8Error> for CredentialsError {
+    fn from(err: FromUtf8Error) -> CredentialsError {
+        CredentialsError::new(err.description())
+    }
+}
+
 /// A trait for types that produce `AwsCredentials`.
 pub trait ProvideAwsCredentials {
     /// The future response value.
@@ -245,6 +264,13 @@ pub trait ProvideAwsCredentials {
 
     /// Produce a new `AwsCredentials` future.
     fn credentials(&self) -> Self::Future;
+}
+
+impl<P: ProvideAwsCredentials> ProvideAwsCredentials for Box<P> {
+    type Future = P::Future;
+    fn credentials(&self) -> Self::Future {
+        P::credentials(&*self)
+    }
 }
 
 impl<P: ProvideAwsCredentials> ProvideAwsCredentials for Rc<P> {
@@ -275,12 +301,18 @@ pub struct AutoRefreshingProvider<P: ProvideAwsCredentials + 'static> {
 
 impl<P: ProvideAwsCredentials + 'static> AutoRefreshingProvider<P> {
     /// Create a new `AutoRefreshingProvider` around the provided base provider.
+    #[deprecated(note = "Please use the from function instead")]
     pub fn new(provider: P) -> Result<AutoRefreshingProvider<P>, CredentialsError> {
+        Ok(Self::from(provider))
+    }
+
+    /// Create a new `AutoRefreshingProvider` around the provided base provider.
+    pub fn from(provider: P) -> Self {
         let future = provider.credentials();
-        Ok(AutoRefreshingProvider {
+        AutoRefreshingProvider {
             credentials_provider: provider,
             shared_future: Mutex::new(future.shared()),
-        })
+        }
     }
 
     /// Get a shared reference to the wrapped provider.
@@ -294,6 +326,12 @@ impl<P: ProvideAwsCredentials + 'static> AutoRefreshingProvider<P> {
     /// provider.
     pub fn get_mut(&mut self) -> &mut P {
         &mut self.credentials_provider
+    }
+}
+
+impl<P: Clone + ProvideAwsCredentials + 'static> Clone for AutoRefreshingProvider<P> {
+    fn clone(&self) -> Self {
+        Self::from(self.credentials_provider.clone())
     }
 }
 
@@ -375,6 +413,10 @@ impl<P: ProvideAwsCredentials + 'static> ProvideAwsCredentials for AutoRefreshin
 
 /// Wraps a `ChainProvider` in an `AutoRefreshingProvider`.
 ///
+/// **Note**: Consider using `rusoto_sts::DefaultCredentialsProvider` instead as it supports
+/// additional credentials sources that depend on STS and uses a security first approach by
+/// disabling [`credential_process`][credential_process] by default.
+///
 /// The underlying `ChainProvider` checks multiple sources for credentials, and the `AutoRefreshingProvider`
 /// refreshes the credentials automatically when they expire.
 ///
@@ -392,7 +434,7 @@ pub struct DefaultCredentialsProvider(AutoRefreshingProvider<ChainProvider>);
 impl DefaultCredentialsProvider {
     /// Creates a new thread-safe `DefaultCredentialsProvider`.
     pub fn new() -> Result<DefaultCredentialsProvider, CredentialsError> {
-        let inner = AutoRefreshingProvider::new(ChainProvider::new())?;
+        let inner = AutoRefreshingProvider::from(ChainProvider::new());
         Ok(DefaultCredentialsProvider(inner))
     }
 }
@@ -420,6 +462,9 @@ impl Future for DefaultCredentialsProviderFuture {
 
 /// Provides AWS credentials from multiple possible sources using a priority order.
 ///
+/// **Note**: Consider using `rusoto_sts::DefaultCredentialsProvider` instead as it supports
+/// additional credentials sources and uses a security first approach.
+///
 /// The following sources are checked in order for credentials when calling `credentials`:
 ///
 /// 1. Environment variables: `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
@@ -438,7 +483,6 @@ impl Future for DefaultCredentialsProviderFuture {
 /// extern crate rusoto_credential;
 ///
 /// use std::time::Duration;
-///
 /// use rusoto_credential::ChainProvider;
 ///
 /// fn main() {
@@ -574,6 +618,7 @@ extern crate quickcheck;
 
 #[cfg(test)]
 mod tests {
+
     use std::fs::{self, File};
     use std::io::Read;
     use std::path::Path;

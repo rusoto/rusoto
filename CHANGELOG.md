@@ -4,6 +4,12 @@
 
 (Please put changes here)
 - Fixed SNS API's attributes and value keyword https://github.com/rusoto/rusoto/pull/1591
+- Adding support for web identity provider, which enables IAM roles for Kubernetes service accounts.
+- Add object-safe AwsCredentialsProvider trait as alternative to the existing generic `ProvideAwsCredentials
+  trait.
+- Introduce `Secret` type to automatically zero-out memory use to stored secret credentials. So far, 
+  only used in the new web identity provider.
+- Introduce `Variable` to abstract over certain credential provider input parameters.
 
 - Encode request payload optionally with Gzip : https://github.com/rusoto/rusoto/pull/1615
 

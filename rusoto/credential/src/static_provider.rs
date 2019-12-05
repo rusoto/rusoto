@@ -79,7 +79,10 @@ impl ProvideAwsCredentials for StaticProvider {
 
 impl From<AwsCredentials> for StaticProvider {
     fn from(credentials: AwsCredentials) -> Self {
-        StaticProvider{ credentials, valid_for: None }
+        StaticProvider {
+            credentials,
+            valid_for: None,
+        }
     }
 }
 

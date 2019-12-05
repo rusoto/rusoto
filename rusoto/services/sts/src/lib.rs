@@ -21,6 +21,7 @@ extern crate chrono;
 extern crate futures;
 extern crate rusoto_core;
 extern crate serde_urlencoded;
+extern crate tempfile;
 extern crate xml;
 
 mod generated;
