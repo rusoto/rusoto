@@ -5,6 +5,8 @@
 (Please put changes here)
 - Fixed SNS API's attributes and value keyword https://github.com/rusoto/rusoto/pull/1591
 
+- Encode request payload optionally with Gzip : https://github.com/rusoto/rusoto/pull/1615
+
 ## [0.42.0] - 2019-11-18
 
 - Use static initializer for AWS profile regex

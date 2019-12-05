@@ -42,6 +42,7 @@ time = "0.1.35"
 tokio = "0.1.7"
 tokio-timer = "0.2.6"
 xml-rs = "0.8"
+flate2 = {version = "1.0", optional = true}
 
 [dependencies.rusoto_credential]
 path = "../credential"
@@ -63,6 +64,7 @@ serde_test = "1.0.1"
 
 [features]
 default = ["native-tls"]
+encoding = ["flate2"]
 nightly-testing = ["rusoto_credential/nightly-testing"]
 native-tls = ["hyper-tls"]
 rustls = ["hyper-rustls"]
