@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -42,7 +43,7 @@ pub struct AccountAggregationSource {
 
 /// <p>Indicates whether an AWS Config rule is compliant based on account ID, region, compliance, and rule name.</p> <p>A rule is compliant if all of the resources that the rule evaluated comply with it. It is noncompliant if any of these resources do not comply.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregateComplianceByConfigRule {
     /// <p>The 12-digit account ID of the source account.</p>
     #[serde(rename = "AccountId")]
@@ -64,7 +65,7 @@ pub struct AggregateComplianceByConfigRule {
 
 /// <p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregateComplianceCount {
     /// <p>The number of compliant and noncompliant AWS Config rules.</p>
     #[serde(rename = "ComplianceSummary")]
@@ -78,7 +79,7 @@ pub struct AggregateComplianceCount {
 
 /// <p>The details of an AWS Config evaluation for an account ID and region in an aggregator. Provides the AWS resource that was evaluated, the compliance of the resource, related time stamps, and supplementary information. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregateEvaluationResult {
     /// <p>The 12-digit account ID of the source account.</p>
     #[serde(rename = "AccountId")]
@@ -133,7 +134,7 @@ pub struct AggregateResourceIdentifier {
 
 /// <p>The current sync status between the source and the aggregator account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregatedSourceStatus {
     /// <p>The region authorized to collect aggregated data.</p>
     #[serde(rename = "AwsRegion")]
@@ -167,7 +168,7 @@ pub struct AggregatedSourceStatus {
 
 /// <p>An object that represents the authorizations granted to aggregator accounts and regions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregationAuthorization {
     /// <p>The Amazon Resource Name (ARN) of the aggregation object.</p>
     #[serde(rename = "AggregationAuthorizationArn")]
@@ -189,7 +190,7 @@ pub struct AggregationAuthorization {
 
 /// <p>The detailed configuration of a specified resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BaseConfigurationItem {
     /// <p>The 12-digit AWS account ID associated with the resource.</p>
     #[serde(rename = "accountId")]
@@ -260,7 +261,7 @@ pub struct BatchGetAggregateResourceConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetAggregateResourceConfigResponse {
     /// <p>A list that contains the current configuration of one or more resources.</p>
     #[serde(rename = "BaseConfigurationItems")]
@@ -280,7 +281,7 @@ pub struct BatchGetResourceConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetResourceConfigResponse {
     /// <p>A list that contains the current configuration of one or more resources.</p>
     #[serde(rename = "baseConfigurationItems")]
@@ -294,7 +295,7 @@ pub struct BatchGetResourceConfigResponse {
 
 /// <p>Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Compliance {
     /// <p>The number of AWS resources or AWS Config rules that cause a result of <code>NON_COMPLIANT</code>, up to a maximum number.</p>
     #[serde(rename = "ComplianceContributorCount")]
@@ -308,7 +309,7 @@ pub struct Compliance {
 
 /// <p>Indicates whether an AWS Config rule is compliant. A rule is compliant if all of the resources that the rule evaluated comply with it. A rule is noncompliant if any of these resources do not comply.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceByConfigRule {
     /// <p>Indicates whether the AWS Config rule is compliant.</p>
     #[serde(rename = "Compliance")]
@@ -322,7 +323,7 @@ pub struct ComplianceByConfigRule {
 
 /// <p>Indicates whether an AWS resource that is evaluated according to one or more AWS Config rules is compliant. A resource is compliant if it complies with all of the rules that evaluate it. A resource is noncompliant if it does not comply with one or more of these rules.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceByResource {
     /// <p>Indicates whether the AWS resource complies with all of the AWS Config rules that evaluated it.</p>
     #[serde(rename = "Compliance")]
@@ -340,7 +341,7 @@ pub struct ComplianceByResource {
 
 /// <p>The number of AWS resources or AWS Config rules responsible for the current compliance of the item, up to a maximum number.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceContributorCount {
     /// <p>Indicates whether the maximum count is reached.</p>
     #[serde(rename = "CapExceeded")]
@@ -354,7 +355,7 @@ pub struct ComplianceContributorCount {
 
 /// <p>The number of AWS Config rules or AWS resources that are compliant and noncompliant.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceSummary {
     /// <p>The time that AWS Config created the compliance summary.</p>
     #[serde(rename = "ComplianceSummaryTimestamp")]
@@ -372,7 +373,7 @@ pub struct ComplianceSummary {
 
 /// <p>The number of AWS resources of a specific type that are compliant or noncompliant, up to a maximum of 100 for each.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceSummaryByResourceType {
     /// <p>The number of AWS resources that are compliant or noncompliant, up to a maximum of 100 for each.</p>
     #[serde(rename = "ComplianceSummary")]
@@ -386,7 +387,7 @@ pub struct ComplianceSummaryByResourceType {
 
 /// <p>Provides status of the delivery of the snapshot or the configuration history to the specified Amazon S3 bucket. Also provides the status of notifications about the Amazon S3 delivery to the specified Amazon SNS topic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigExportDeliveryInfo {
     /// <p>The time of the last attempted delivery.</p>
     #[serde(rename = "lastAttemptTime")]
@@ -494,7 +495,7 @@ pub struct ConfigRuleComplianceSummaryFilters {
 
 /// <p>Status information for your AWS managed Config rules. The status includes information such as the last time the rule ran, the last time it failed, and the related error for the last failure.</p> <p>This action does not return status information about custom AWS Config rules.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigRuleEvaluationStatus {
     /// <p>The Amazon Resource Name (ARN) of the AWS Config rule.</p>
     #[serde(rename = "ConfigRuleArn")]
@@ -553,7 +554,7 @@ pub struct ConfigSnapshotDeliveryProperties {
 
 /// <p>A list that contains the status of the delivery of the configuration stream notification to the Amazon SNS topic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigStreamDeliveryInfo {
     /// <p>The error code from the last attempted delivery.</p>
     #[serde(rename = "lastErrorCode")]
@@ -575,7 +576,7 @@ pub struct ConfigStreamDeliveryInfo {
 
 /// <p>The details about the configuration aggregator, including information about source accounts, regions, and metadata of the aggregator. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationAggregator {
     /// <p>Provides a list of source accounts and regions to be aggregated.</p>
     #[serde(rename = "AccountAggregationSources")]
@@ -605,7 +606,7 @@ pub struct ConfigurationAggregator {
 
 /// <p>A list that contains detailed configurations of a specified resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationItem {
     /// <p>The 12-digit AWS account ID associated with the resource.</p>
     #[serde(rename = "accountId")]
@@ -700,7 +701,7 @@ pub struct ConfigurationRecorder {
 
 /// <p>The current status of the configuration recorder.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationRecorderStatus {
     /// <p>The error code indicating that the recording failed.</p>
     #[serde(rename = "lastErrorCode")]
@@ -787,8 +788,15 @@ pub struct DeleteEvaluationResultsRequest {
 
 /// <p>The output when you delete the evaluation results for the specified AWS Config rule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEvaluationResultsResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteOrganizationConfigRuleRequest {
+    /// <p>The name of organization config rule that you want to delete.</p>
+    #[serde(rename = "OrganizationConfigRuleName")]
+    pub organization_config_rule_name: String,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePendingAggregationRequestRequest {
@@ -812,8 +820,27 @@ pub struct DeleteRemediationConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRemediationConfigurationResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteRemediationExceptionsRequest {
+    /// <p>The name of the AWS Config rule for which you want to delete remediation exception configuration.</p>
+    #[serde(rename = "ConfigRuleName")]
+    pub config_rule_name: String,
+    /// <p>An exception list of resource exception keys to be processed with the current request. AWS Config adds exception for each resource key. For example, AWS Config adds 3 exceptions for 3 resource keys. </p>
+    #[serde(rename = "ResourceKeys")]
+    pub resource_keys: Vec<RemediationExceptionResourceKey>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteRemediationExceptionsResponse {
+    /// <p>Returns a list of failed delete remediation exceptions batch objects. Each object in the batch consists of a list of failed items and failure messages.</p>
+    #[serde(rename = "FailedBatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_batches: Option<Vec<FailedDeleteRemediationExceptionsBatch>>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRetentionConfigurationRequest {
@@ -832,7 +859,7 @@ pub struct DeliverConfigSnapshotRequest {
 
 /// <p>The output for the <a>DeliverConfigSnapshot</a> action, in JSON format.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeliverConfigSnapshotResponse {
     /// <p>The ID of the snapshot that is being created.</p>
     #[serde(rename = "configSnapshotId")]
@@ -867,7 +894,7 @@ pub struct DeliveryChannel {
 
 /// <p>The status of a specified delivery channel.</p> <p>Valid values: <code>Success</code> | <code>Failure</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeliveryChannelStatus {
     /// <p>A list that contains the status of the delivery of the configuration history to the specified Amazon S3 bucket.</p>
     #[serde(rename = "configHistoryDeliveryInfo")]
@@ -900,20 +927,20 @@ pub struct DescribeAggregateComplianceByConfigRulesRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAggregateComplianceByConfigRulesResponse {
     /// <p>Returns a list of AggregateComplianceByConfigRule object.</p>
     #[serde(rename = "AggregateComplianceByConfigRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aggregate_compliance_by_config_rules: Option<Vec<AggregateComplianceByConfigRule>>,
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -925,20 +952,20 @@ pub struct DescribeAggregationAuthorizationsRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAggregationAuthorizationsResponse {
     /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
     #[serde(rename = "AggregationAuthorizations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aggregation_authorizations: Option<Vec<AggregationAuthorization>>,
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -963,7 +990,7 @@ pub struct DescribeComplianceByConfigRuleRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeComplianceByConfigRuleResponse {
     /// <p>Indicates whether each of the specified AWS Config rules is compliant.</p>
     #[serde(rename = "ComplianceByConfigRules")]
@@ -1002,7 +1029,7 @@ pub struct DescribeComplianceByResourceRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeComplianceByResourceResponse {
     /// <p>Indicates whether the specified AWS resource complies with all of the AWS Config rules that evaluate it.</p>
     #[serde(rename = "ComplianceByResources")]
@@ -1033,7 +1060,7 @@ pub struct DescribeConfigRuleEvaluationStatusRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigRuleEvaluationStatusResponse {
     /// <p>Status information about your AWS managed Config rules.</p>
     #[serde(rename = "ConfigRulesEvaluationStatus")]
@@ -1060,7 +1087,7 @@ pub struct DescribeConfigRulesRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigRulesResponse {
     /// <p>The details about your AWS Config rules.</p>
     #[serde(rename = "ConfigRules")]
@@ -1081,7 +1108,7 @@ pub struct DescribeConfigurationAggregatorSourcesStatusRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1092,13 +1119,13 @@ pub struct DescribeConfigurationAggregatorSourcesStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationAggregatorSourcesStatusResponse {
     /// <p>Returns an AggregatedSourceStatus object. </p>
     #[serde(rename = "AggregatedSourceStatusList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aggregated_source_status_list: Option<Vec<AggregatedSourceStatus>>,
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1114,20 +1141,20 @@ pub struct DescribeConfigurationAggregatorsRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationAggregatorsResponse {
     /// <p>Returns a ConfigurationAggregators object.</p>
     #[serde(rename = "ConfigurationAggregators")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_aggregators: Option<Vec<ConfigurationAggregator>>,
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1144,7 +1171,7 @@ pub struct DescribeConfigurationRecorderStatusRequest {
 
 /// <p>The output for the <a>DescribeConfigurationRecorderStatus</a> action, in JSON format.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationRecorderStatusResponse {
     /// <p>A list that contains status of the specified recorders.</p>
     #[serde(rename = "ConfigurationRecordersStatus")]
@@ -1163,7 +1190,7 @@ pub struct DescribeConfigurationRecordersRequest {
 
 /// <p>The output for the <a>DescribeConfigurationRecorders</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationRecordersResponse {
     /// <p>A list that contains the descriptions of the specified configuration recorders.</p>
     #[serde(rename = "ConfigurationRecorders")]
@@ -1182,7 +1209,7 @@ pub struct DescribeDeliveryChannelStatusRequest {
 
 /// <p>The output for the <a>DescribeDeliveryChannelStatus</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeliveryChannelStatusResponse {
     /// <p>A list that contains the status of a specified delivery channel.</p>
     #[serde(rename = "DeliveryChannelsStatus")]
@@ -1201,7 +1228,7 @@ pub struct DescribeDeliveryChannelsRequest {
 
 /// <p>The output for the <a>DescribeDeliveryChannels</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeliveryChannelsResponse {
     /// <p>A list that contains the descriptions of the specified delivery channel.</p>
     #[serde(rename = "DeliveryChannels")]
@@ -1210,21 +1237,79 @@ pub struct DescribeDeliveryChannelsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeOrganizationConfigRuleStatusesRequest {
+    /// <p>The maximum number of <code>OrganizationConfigRuleStatuses</code> returned on each page. If you do no specify a number, AWS Config uses the default. The default is 100.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The names of organization config rules for which you want status details. If you do not specify any names, AWS Config returns details for all your organization AWS Confg rules.</p>
+    #[serde(rename = "OrganizationConfigRuleNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_config_rule_names: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeOrganizationConfigRuleStatusesResponse {
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of <code>OrganizationConfigRuleStatus</code> objects.</p>
+    #[serde(rename = "OrganizationConfigRuleStatuses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_config_rule_statuses: Option<Vec<OrganizationConfigRuleStatus>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeOrganizationConfigRulesRequest {
+    /// <p>The maximum number of organization config rules returned on each page. If you do no specify a number, AWS Config uses the default. The default is 100.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The names of organization config rules for which you want details. If you do not specify any names, AWS Config returns details for all your organization config rules.</p>
+    #[serde(rename = "OrganizationConfigRuleNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_config_rule_names: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeOrganizationConfigRulesResponse {
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Retuns a list <code>OrganizationConfigRule</code> objects.</p>
+    #[serde(rename = "OrganizationConfigRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_config_rules: Option<Vec<OrganizationConfigRule>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribePendingAggregationRequestsRequest {
     /// <p>The maximum number of evaluation results returned on each page. The default is maximum. If you specify 0, AWS Config uses the default.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePendingAggregationRequestsResponse {
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1242,12 +1327,44 @@ pub struct DescribeRemediationConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRemediationConfigurationsResponse {
     /// <p>Returns a remediation configuration object.</p>
     #[serde(rename = "RemediationConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remediation_configurations: Option<Vec<RemediationConfiguration>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeRemediationExceptionsRequest {
+    /// <p>The name of the AWS Config rule.</p>
+    #[serde(rename = "ConfigRuleName")]
+    pub config_rule_name: String,
+    /// <p>The maximum number of RemediationExceptionResourceKey returned on each page. The default is 25. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An exception list of resource exception keys to be processed with the current request. AWS Config adds exception for each resource key. For example, AWS Config adds 3 exceptions for 3 resource keys. </p>
+    #[serde(rename = "ResourceKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_keys: Option<Vec<RemediationExceptionResourceKey>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeRemediationExceptionsResponse {
+    /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Returns a list of remediation exception objects.</p>
+    #[serde(rename = "RemediationExceptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remediation_exceptions: Option<Vec<RemediationException>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1270,7 +1387,7 @@ pub struct DescribeRemediationExecutionStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRemediationExecutionStatusResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
@@ -1295,7 +1412,7 @@ pub struct DescribeRetentionConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRetentionConfigurationsResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
     #[serde(rename = "NextToken")]
@@ -1330,7 +1447,7 @@ pub struct Evaluation {
 
 /// <p>The details of an AWS Config evaluation. Provides the AWS resource that was evaluated, the compliance of the resource, related time stamps, and supplementary information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluationResult {
     /// <p>Supplementary information about how the evaluation determined the compliance.</p>
     #[serde(rename = "Annotation")]
@@ -1360,7 +1477,7 @@ pub struct EvaluationResult {
 
 /// <p>Uniquely identifies an evaluation result.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluationResultIdentifier {
     /// <p>Identifies an AWS Config rule used to evaluate an AWS resource, and provides the type and ID of the evaluated resource.</p>
     #[serde(rename = "EvaluationResultQualifier")]
@@ -1374,7 +1491,7 @@ pub struct EvaluationResultIdentifier {
 
 /// <p>Identifies an AWS Config rule that evaluated an AWS resource, and provides the type and ID of the resource that the rule evaluated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluationResultQualifier {
     /// <p>The name of the AWS Config rule that was used in the evaluation.</p>
     #[serde(rename = "ConfigRuleName")]
@@ -1390,9 +1507,32 @@ pub struct EvaluationResultQualifier {
     pub resource_type: Option<String>,
 }
 
+/// <p>The controls that AWS Config uses for executing remediations.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ExecutionControls {
+    /// <p>A SsmControls object.</p>
+    #[serde(rename = "SsmControls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssm_controls: Option<SsmControls>,
+}
+
+/// <p>List of each of the failed delete remediation exceptions with specific reasons.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FailedDeleteRemediationExceptionsBatch {
+    /// <p>Returns remediation exception resource key object of the failed items.</p>
+    #[serde(rename = "FailedItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_items: Option<Vec<RemediationExceptionResourceKey>>,
+    /// <p>Returns a failure message for delete remediation exception. For example, AWS Config creates an exception due to an internal error.</p>
+    #[serde(rename = "FailureMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_message: Option<String>,
+}
+
 /// <p>List of each of the failed remediations with specific reasons.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedRemediationBatch {
     /// <p>Returns remediation configurations of the failed items.</p>
     #[serde(rename = "FailedItems")]
@@ -1404,9 +1544,23 @@ pub struct FailedRemediationBatch {
     pub failure_message: Option<String>,
 }
 
+/// <p>List of each of the failed remediation exceptions with specific reasons.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FailedRemediationExceptionBatch {
+    /// <p>Returns remediation exception resource key object of the failed items.</p>
+    #[serde(rename = "FailedItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_items: Option<Vec<RemediationException>>,
+    /// <p>Returns a failure message. For example, the auto-remediation has failed.</p>
+    #[serde(rename = "FailureMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_message: Option<String>,
+}
+
 /// <p>Details about the fields such as name of the field.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FieldInfo {
     /// <p>Name of the field.</p>
     #[serde(rename = "Name")]
@@ -1436,20 +1590,20 @@ pub struct GetAggregateComplianceDetailsByConfigRuleRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateComplianceDetailsByConfigRuleResponse {
     /// <p>Returns an AggregateEvaluationResults object.</p>
     #[serde(rename = "AggregateEvaluationResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aggregate_evaluation_results: Option<Vec<AggregateEvaluationResult>>,
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1472,14 +1626,14 @@ pub struct GetAggregateConfigRuleComplianceSummaryRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateConfigRuleComplianceSummaryResponse {
     /// <p>Returns a list of AggregateComplianceCounts object.</p>
     #[serde(rename = "AggregateComplianceCounts")]
@@ -1489,7 +1643,7 @@ pub struct GetAggregateConfigRuleComplianceSummaryResponse {
     #[serde(rename = "GroupByKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_by_key: Option<String>,
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1519,7 +1673,7 @@ pub struct GetAggregateDiscoveredResourceCountsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateDiscoveredResourceCountsResponse {
     /// <p>The key passed into the request object. If <code>GroupByKey</code> is not provided, the result will be empty.</p>
     #[serde(rename = "GroupByKey")]
@@ -1549,7 +1703,7 @@ pub struct GetAggregateResourceConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateResourceConfigResponse {
     /// <p>Returns a <code>ConfigurationItem</code> object.</p>
     #[serde(rename = "ConfigurationItem")]
@@ -1579,7 +1733,7 @@ pub struct GetComplianceDetailsByConfigRuleRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceDetailsByConfigRuleResponse {
     /// <p>Indicates whether the AWS resource complies with the specified AWS Config rule.</p>
     #[serde(rename = "EvaluationResults")]
@@ -1612,7 +1766,7 @@ pub struct GetComplianceDetailsByResourceRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceDetailsByResourceResponse {
     /// <p>Indicates whether the specified AWS resource complies each AWS Config rule.</p>
     #[serde(rename = "EvaluationResults")]
@@ -1626,7 +1780,7 @@ pub struct GetComplianceDetailsByResourceResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceSummaryByConfigRuleResponse {
     /// <p>The number of AWS Config rules that are compliant and the number that are noncompliant, up to a maximum of 25 for each.</p>
     #[serde(rename = "ComplianceSummary")]
@@ -1645,7 +1799,7 @@ pub struct GetComplianceSummaryByResourceTypeRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceSummaryByResourceTypeResponse {
     /// <p>The number of resources that are compliant and the number that are noncompliant. If one or more resource types were provided with the request, the numbers are returned for each resource type. The maximum number returned is 100.</p>
     #[serde(rename = "ComplianceSummariesByResourceType")]
@@ -1670,7 +1824,7 @@ pub struct GetDiscoveredResourceCountsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDiscoveredResourceCountsResponse {
     /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
     #[serde(rename = "nextToken")]
@@ -1684,6 +1838,38 @@ pub struct GetDiscoveredResourceCountsResponse {
     #[serde(rename = "totalDiscoveredResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_discovered_resources: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetOrganizationConfigRuleDetailedStatusRequest {
+    /// <p>A <code>StatusDetailFilters</code> object.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<StatusDetailFilters>,
+    /// <p>The maximum number of <code>OrganizationConfigRuleDetailedStatus</code> returned on each page. If you do not specify a number, AWS Config uses the default. The default is 100.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The name of organization config rule for which you want status details for member accounts.</p>
+    #[serde(rename = "OrganizationConfigRuleName")]
+    pub organization_config_rule_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetOrganizationConfigRuleDetailedStatusResponse {
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of <code>MemberAccountStatus</code> objects.</p>
+    #[serde(rename = "OrganizationConfigRuleDetailedStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_config_rule_detailed_status: Option<Vec<MemberAccountStatus>>,
 }
 
 /// <p>The input for the <a>GetResourceConfigHistory</a> action.</p>
@@ -1719,7 +1905,7 @@ pub struct GetResourceConfigHistoryRequest {
 
 /// <p>The output for the <a>GetResourceConfigHistory</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceConfigHistoryResponse {
     /// <p>A list that contains the configuration history of one or more resources.</p>
     #[serde(rename = "configurationItems")]
@@ -1733,7 +1919,7 @@ pub struct GetResourceConfigHistoryResponse {
 
 /// <p>The count of resources that are grouped by the group name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupedResourceCount {
     /// <p>The name of the group that can be region, account ID, or resource type. For example, region1, region2 if the region was chosen as <code>GroupByKey</code>.</p>
     #[serde(rename = "GroupName")]
@@ -1766,7 +1952,7 @@ pub struct ListAggregateDiscoveredResourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAggregateDiscoveredResourcesResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
@@ -1808,7 +1994,7 @@ pub struct ListDiscoveredResourcesRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDiscoveredResourcesResponse {
     /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
     #[serde(rename = "nextToken")]
@@ -1826,7 +2012,7 @@ pub struct ListTagsForResourceRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1836,9 +2022,9 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
-    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1846,6 +2032,33 @@ pub struct ListTagsForResourceResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Organization config rule creation or deletion status in each member account. This includes the name of the rule, the status, error code and error message when the rule creation or deletion failed.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MemberAccountStatus {
+    /// <p>The 12-digit account ID of a member account.</p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    /// <p>The name of config rule deployed in the member account.</p>
+    #[serde(rename = "ConfigRuleName")]
+    pub config_rule_name: String,
+    /// <p>An error code that is returned when config rule creation or deletion failed in the member account.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>An error message indicating that config rule account creation or deletion has failed due to an error in the member account.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>The timestamp of the last status update.</p>
+    #[serde(rename = "LastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_time: Option<f64>,
+    /// <p><p>Indicates deployment status for config rule in the member account. When master account calls <code>PutOrganizationConfigRule</code> action for the first time, config rule status is created in the member account. When master account calls <code>PutOrganizationConfigRule</code> action for the second time, config rule status is updated in the member account. Config rule status is deleted when the master account deletes <code>OrganizationConfigRule</code> and disables service access for <code>config-multiaccountsetup.amazonaws.com</code>. </p> <p> AWS Config sets the state of the rule to:</p> <ul> <li> <p> <code>CREATE<em>SUCCESSFUL</code> when config rule has been created in the member account. </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> when config rule is being created in the member account.</p> </li> <li> <p> <code>CREATE</em>FAILED</code> when config rule creation has failed in the member account.</p> </li> <li> <p> <code>DELETE<em>FAILED</code> when config rule deletion has failed in the member account.</p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> when config rule is being deleted in the member account.</p> </li> <li> <p> <code>DELETE</em>SUCCESSFUL</code> when config rule has been deleted in the member account. </p> </li> <li> <p> <code>UPDATE<em>SUCCESSFUL</code> when config rule has been updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>IN<em>PROGRESS</code> when config rule is being updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>FAILED</code> when config rule deletion has failed in the member account.</p> </li> </ul></p>
+    #[serde(rename = "MemberAccountRuleStatus")]
+    pub member_account_rule_status: String,
 }
 
 /// <p>This object contains regions to set up the aggregator and an IAM role to retrieve organization details.</p>
@@ -1864,9 +2077,136 @@ pub struct OrganizationAggregationSource {
     pub role_arn: String,
 }
 
+/// <p>An organization config rule that has information about config rules that AWS Config creates in member accounts.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OrganizationConfigRule {
+    /// <p>A comma-separated list of accounts excluded from organization config rule.</p>
+    #[serde(rename = "ExcludedAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub excluded_accounts: Option<Vec<String>>,
+    /// <p>The timestamp of the last update.</p>
+    #[serde(rename = "LastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of organization config rule.</p>
+    #[serde(rename = "OrganizationConfigRuleArn")]
+    pub organization_config_rule_arn: String,
+    /// <p>The name that you assign to organization config rule.</p>
+    #[serde(rename = "OrganizationConfigRuleName")]
+    pub organization_config_rule_name: String,
+    /// <p>An <code>OrganizationCustomRuleMetadata</code> object.</p>
+    #[serde(rename = "OrganizationCustomRuleMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_custom_rule_metadata: Option<OrganizationCustomRuleMetadata>,
+    /// <p>An <code>OrganizationManagedRuleMetadata</code> object.</p>
+    #[serde(rename = "OrganizationManagedRuleMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_managed_rule_metadata: Option<OrganizationManagedRuleMetadata>,
+}
+
+/// <p>Returns the status for an organization config rule in an organization.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OrganizationConfigRuleStatus {
+    /// <p>An error code that is returned when organization config rule creation or deletion has failed.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>An error message indicating that organization config rule creation or deletion failed due to an error.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>The timestamp of the last update.</p>
+    #[serde(rename = "LastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_time: Option<f64>,
+    /// <p>The name that you assign to organization config rule.</p>
+    #[serde(rename = "OrganizationConfigRuleName")]
+    pub organization_config_rule_name: String,
+    /// <p><p>Indicates deployment status of an organization config rule. When master account calls PutOrganizationConfigRule action for the first time, config rule status is created in all the member accounts. When master account calls PutOrganizationConfigRule action for the second time, config rule status is updated in all the member accounts. Additionally, config rule status is updated when one or more member accounts join or leave an organization. Config rule status is deleted when the master account deletes OrganizationConfigRule in all the member accounts and disables service access for <code>config-multiaccountsetup.amazonaws.com</code>.</p> <p>AWS Config sets the state of the rule to:</p> <ul> <li> <p> <code>CREATE<em>SUCCESSFUL</code> when an organization config rule has been successfully created in all the member accounts. </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> when an organization config rule creation is in progress.</p> </li> <li> <p> <code>CREATE</em>FAILED</code> when an organization config rule creation failed in one or more member accounts within that organization.</p> </li> <li> <p> <code>DELETE<em>FAILED</code> when an organization config rule deletion failed in one or more member accounts within that organization.</p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> when an organization config rule deletion is in progress.</p> </li> <li> <p> <code>DELETE</em>SUCCESSFUL</code> when an organization config rule has been successfully deleted from all the member accounts.</p> </li> <li> <p> <code>UPDATE<em>SUCCESSFUL</code> when an organization config rule has been successfully updated in all the member accounts.</p> </li> <li> <p> <code>UPDATE</em>IN<em>PROGRESS</code> when an organization config rule update is in progress.</p> </li> <li> <p> <code>UPDATE</em>FAILED</code> when an organization config rule update failed in one or more member accounts within that organization.</p> </li> </ul></p>
+    #[serde(rename = "OrganizationRuleStatus")]
+    pub organization_rule_status: String,
+}
+
+/// <p>An object that specifies organization custom rule metadata such as resource type, resource ID of AWS resource, Lamdba function ARN, and organization trigger types that trigger AWS Config to evaluate your AWS resources against a rule. It also provides the frequency with which you want AWS Config to run evaluations for the rule if the trigger type is periodic.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrganizationCustomRuleMetadata {
+    /// <p>The description that you provide for organization config rule.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>A string, in JSON format, that is passed to organization config rule Lambda function.</p>
+    #[serde(rename = "InputParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_parameters: Option<String>,
+    /// <p>The lambda function ARN.</p>
+    #[serde(rename = "LambdaFunctionArn")]
+    pub lambda_function_arn: String,
+    /// <p><p>The maximum frequency with which AWS Config runs evaluations for a rule. Your custom rule is triggered when AWS Config delivers the configuration snapshot. For more information, see <a>ConfigSnapshotDeliveryProperties</a>.</p> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note></p>
+    #[serde(rename = "MaximumExecutionFrequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_execution_frequency: Option<String>,
+    /// <p><p>The type of notification that triggers AWS Config to run an evaluation for a rule. You can specify the following notification types:</p> <ul> <li> <p> <code>ConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers a configuration item as a result of a resource change.</p> </li> <li> <p> <code>OversizedConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers an oversized configuration item. AWS Config may generate this notification type when a resource changes and the notification exceeds the maximum size allowed by Amazon SNS.</p> </li> <li> <p> <code>ScheduledNotification</code> - Triggers a periodic evaluation at the frequency specified for <code>MaximumExecutionFrequency</code>.</p> </li> </ul></p>
+    #[serde(rename = "OrganizationConfigRuleTriggerTypes")]
+    pub organization_config_rule_trigger_types: Vec<String>,
+    /// <p>The ID of the AWS resource that was evaluated.</p>
+    #[serde(rename = "ResourceIdScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id_scope: Option<String>,
+    /// <p>The type of the AWS resource that was evaluated.</p>
+    #[serde(rename = "ResourceTypesScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_types_scope: Option<Vec<String>>,
+    /// <p>One part of a key-value pair that make up a tag. A key is a general label that acts like a category for more specific tag values. </p>
+    #[serde(rename = "TagKeyScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_key_scope: Option<String>,
+    /// <p>The optional part of a key-value pair that make up a tag. A value acts as a descriptor within a tag category (key). </p>
+    #[serde(rename = "TagValueScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_value_scope: Option<String>,
+}
+
+/// <p>An object that specifies organization managed rule metadata such as resource type and ID of AWS resource along with the rule identifier. It also provides the frequency with which you want AWS Config to run evaluations for the rule if the trigger type is periodic.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrganizationManagedRuleMetadata {
+    /// <p>The description that you provide for organization config rule.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>A string, in JSON format, that is passed to organization config rule Lambda function.</p>
+    #[serde(rename = "InputParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_parameters: Option<String>,
+    /// <p><p>The maximum frequency with which AWS Config runs evaluations for a rule. You are using an AWS managed rule that is triggered at a periodic frequency.</p> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note></p>
+    #[serde(rename = "MaximumExecutionFrequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_execution_frequency: Option<String>,
+    /// <p>The ID of the AWS resource that was evaluated.</p>
+    #[serde(rename = "ResourceIdScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id_scope: Option<String>,
+    /// <p>The type of the AWS resource that was evaluated.</p>
+    #[serde(rename = "ResourceTypesScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_types_scope: Option<Vec<String>>,
+    /// <p>For organization config managed rules, a predefined identifier from a list. For example, <code>IAM_PASSWORD_POLICY</code> is a managed rule. To reference a managed rule, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html">Using AWS Managed Config Rules</a>.</p>
+    #[serde(rename = "RuleIdentifier")]
+    pub rule_identifier: String,
+    /// <p>One part of a key-value pair that make up a tag. A key is a general label that acts like a category for more specific tag values. </p>
+    #[serde(rename = "TagKeyScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_key_scope: Option<String>,
+    /// <p>The optional part of a key-value pair that make up a tag. A value acts as a descriptor within a tag category (key).</p>
+    #[serde(rename = "TagValueScope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_value_scope: Option<String>,
+}
+
 /// <p>An object that represents the account ID and region of an aggregator account that is requesting authorization but is not yet authorized.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PendingAggregationRequest {
     /// <p>The 12-digit account ID of the account requesting to aggregate data.</p>
     #[serde(rename = "RequesterAccountId")]
@@ -1886,13 +2226,14 @@ pub struct PutAggregationAuthorizationRequest {
     /// <p>The region authorized to collect aggregated data.</p>
     #[serde(rename = "AuthorizedAwsRegion")]
     pub authorized_aws_region: String,
+    /// <p>An array of tag object.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAggregationAuthorizationResponse {
     /// <p>Returns an AggregationAuthorization object. </p>
     #[serde(rename = "AggregationAuthorization")]
@@ -1905,6 +2246,7 @@ pub struct PutConfigRuleRequest {
     /// <p>The rule that you want to add to your account.</p>
     #[serde(rename = "ConfigRule")]
     pub config_rule: ConfigRule,
+    /// <p>An array of tag object.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1923,13 +2265,14 @@ pub struct PutConfigurationAggregatorRequest {
     #[serde(rename = "OrganizationAggregationSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub organization_aggregation_source: Option<OrganizationAggregationSource>,
+    /// <p>An array of tag object.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConfigurationAggregatorResponse {
     /// <p>Returns a ConfigurationAggregator object.</p>
     #[serde(rename = "ConfigurationAggregator")]
@@ -1971,12 +2314,40 @@ pub struct PutEvaluationsRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEvaluationsResponse {
     /// <p>Requests that failed because of a client or server error.</p>
     #[serde(rename = "FailedEvaluations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_evaluations: Option<Vec<Evaluation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutOrganizationConfigRuleRequest {
+    /// <p>A comma-separated list of accounts that you want to exclude from an organization config rule.</p>
+    #[serde(rename = "ExcludedAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub excluded_accounts: Option<Vec<String>>,
+    /// <p>The name that you assign to an organization config rule.</p>
+    #[serde(rename = "OrganizationConfigRuleName")]
+    pub organization_config_rule_name: String,
+    /// <p>An <code>OrganizationCustomRuleMetadata</code> object.</p>
+    #[serde(rename = "OrganizationCustomRuleMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_custom_rule_metadata: Option<OrganizationCustomRuleMetadata>,
+    /// <p>An <code>OrganizationManagedRuleMetadata</code> object. </p>
+    #[serde(rename = "OrganizationManagedRuleMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_managed_rule_metadata: Option<OrganizationManagedRuleMetadata>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutOrganizationConfigRuleResponse {
+    /// <p>The Amazon Resource Name (ARN) of an organization config rule.</p>
+    #[serde(rename = "OrganizationConfigRuleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_config_rule_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1987,12 +2358,39 @@ pub struct PutRemediationConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRemediationConfigurationsResponse {
     /// <p>Returns a list of failed remediation batch objects.</p>
     #[serde(rename = "FailedBatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_batches: Option<Vec<FailedRemediationBatch>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutRemediationExceptionsRequest {
+    /// <p>The name of the AWS Config rule for which you want to create remediation exception.</p>
+    #[serde(rename = "ConfigRuleName")]
+    pub config_rule_name: String,
+    /// <p>The exception is automatically deleted after the expiration date.</p>
+    #[serde(rename = "ExpirationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_time: Option<f64>,
+    /// <p>The message contains an explanation of the exception.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>An exception list of resource exception keys to be processed with the current request. AWS Config adds exception for each resource key. For example, AWS Config adds 3 exceptions for 3 resource keys. </p>
+    #[serde(rename = "ResourceKeys")]
+    pub resource_keys: Vec<RemediationExceptionResourceKey>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutRemediationExceptionsResponse {
+    /// <p>Returns a list of failed remediation exceptions batch objects. Each object in the batch consists of a list of failed items and failure messages.</p>
+    #[serde(rename = "FailedBatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_batches: Option<Vec<FailedRemediationExceptionBatch>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2003,7 +2401,7 @@ pub struct PutRetentionConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRetentionConfigurationResponse {
     /// <p>Returns a retention configuration object.</p>
     #[serde(rename = "RetentionConfiguration")]
@@ -2013,7 +2411,7 @@ pub struct PutRetentionConfigurationResponse {
 
 /// <p>Details about the query.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryInfo {
     /// <p>Returns a <code>FieldInfo</code> object.</p>
     #[serde(rename = "SelectFields")]
@@ -2040,7 +2438,7 @@ pub struct RecordingGroup {
 
 /// <p>The relationship of the related resource to the main resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Relationship {
     /// <p>The type of relationship with the related resource.</p>
     #[serde(rename = "relationshipName")]
@@ -2063,9 +2461,29 @@ pub struct Relationship {
 /// <p>An object that represents the details about the remediation configuration that includes the remediation action, parameters, and data to execute the action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemediationConfiguration {
+    /// <p>Amazon Resource Name (ARN) of remediation configuration.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The remediation is triggered automatically.</p>
+    #[serde(rename = "Automatic")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub automatic: Option<bool>,
     /// <p>The name of the AWS Config rule.</p>
     #[serde(rename = "ConfigRuleName")]
     pub config_rule_name: String,
+    /// <p>Name of the service that owns the service linked rule, if applicable.</p>
+    #[serde(rename = "CreatedByService")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by_service: Option<String>,
+    /// <p>An ExecutionControls object.</p>
+    #[serde(rename = "ExecutionControls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_controls: Option<ExecutionControls>,
+    /// <p>The maximum number of failed attempts for auto-remediation. If you do not select a number, the default is 5.</p> <p>For example, if you specify MaximumAutomaticAttempts as 5 with RetryAttemptsSeconds as 50 seconds, AWS Config throws an exception after the 5th failed attempt within 50 seconds.</p>
+    #[serde(rename = "MaximumAutomaticAttempts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_automatic_attempts: Option<i64>,
     /// <p>An object of the RemediationParameterValue.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2074,6 +2492,10 @@ pub struct RemediationConfiguration {
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
+    /// <p>Maximum time in seconds that AWS Config runs auto-remediation. If you do not select a number, the default is 60 seconds. </p> <p>For example, if you specify RetryAttemptsSeconds as 50 seconds and MaximumAutomaticAttempts as 5, AWS Config will run auto-remediations 5 times within 50 seconds before throwing an exception. </p>
+    #[serde(rename = "RetryAttemptSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retry_attempt_seconds: Option<i64>,
     /// <p>Target ID is the name of the public document.</p>
     #[serde(rename = "TargetId")]
     pub target_id: String,
@@ -2086,9 +2508,45 @@ pub struct RemediationConfiguration {
     pub target_version: Option<String>,
 }
 
+/// <p>An object that represents the details about the remediation exception. The details include the rule name, an explanation of an exception, the time when the exception will be deleted, the resource ID, and resource type. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RemediationException {
+    /// <p>The name of the AWS Config rule.</p>
+    #[serde(rename = "ConfigRuleName")]
+    pub config_rule_name: String,
+    /// <p>The time when the remediation exception will be deleted.</p>
+    #[serde(rename = "ExpirationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_time: Option<f64>,
+    /// <p>An explanation of an remediation exception.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The ID of the resource (for example., sg-xxxxxx).</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+    /// <p>The type of a resource.</p>
+    #[serde(rename = "ResourceType")]
+    pub resource_type: String,
+}
+
+/// <p>The details that identify a resource within AWS Config, including the resource type and resource ID. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RemediationExceptionResourceKey {
+    /// <p>The ID of the resource (for example., sg-xxxxxx).</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+    /// <p>The type of a resource.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+}
+
 /// <p>Provides details of the current status of the invoked remediation action for that resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemediationExecutionStatus {
     /// <p>Start time when the remediation was executed.</p>
     #[serde(rename = "InvocationTime")]
@@ -2113,7 +2571,7 @@ pub struct RemediationExecutionStatus {
 
 /// <p>Name of the step from the SSM document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemediationExecutionStep {
     /// <p>An error message if the step was interrupted during execution.</p>
     #[serde(rename = "ErrorMessage")]
@@ -2152,7 +2610,7 @@ pub struct RemediationParameterValue {
 
 /// <p>An object that contains the resource type and the number of resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceCount {
     /// <p>The number of resources.</p>
     #[serde(rename = "count")]
@@ -2204,7 +2662,7 @@ pub struct ResourceFilters {
 
 /// <p>The details that identify a resource that is discovered by AWS Config, including the resource type, ID, and (if available) the custom resource name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceIdentifier {
     /// <p>The time that the resource was deleted.</p>
     #[serde(rename = "resourceDeletionTime")]
@@ -2240,13 +2698,12 @@ pub struct ResourceKey {
 pub struct ResourceValue {
     /// <p>The value is a resource ID.</p>
     #[serde(rename = "Value")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub value: Option<String>,
+    pub value: String,
 }
 
 /// <p>An object with the name of the retention configuration and the retention period in days. The object stores the configuration for data retention in AWS Config.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RetentionConfiguration {
     /// <p>The name of the retention configuration object.</p>
     #[serde(rename = "Name")]
@@ -2293,7 +2750,7 @@ pub struct SelectResourceConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SelectResourceConfigResponse {
     /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response. </p>
     #[serde(rename = "NextToken")]
@@ -2341,6 +2798,19 @@ pub struct SourceDetail {
     pub message_type: Option<String>,
 }
 
+/// <p>AWS Systems Manager (SSM) specific remediation controls.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SsmControls {
+    /// <p>The maximum percentage of remediation actions allowed to run in parallel on the non-compliant resources for that specific rule. You can specify a percentage, such as 10%. The default value is 10. </p>
+    #[serde(rename = "ConcurrentExecutionRatePercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub concurrent_execution_rate_percentage: Option<i64>,
+    /// <p>The percentage of errors that are allowed before SSM stops running automations on non-compliant resources for that specific rule. You can specify a percentage of errors, for example 10%. If you do not specifiy a percentage, the default is 50%. For example, if you set the ErrorPercentage to 40% for 10 non-compliant resources, then SSM stops running the automations when the fifth error is received. </p>
+    #[serde(rename = "ErrorPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_percentage: Option<i64>,
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartConfigRulesEvaluationRequest {
@@ -2352,7 +2822,7 @@ pub struct StartConfigRulesEvaluationRequest {
 
 /// <p>The output when you start the evaluation for the specified AWS Config rule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartConfigRulesEvaluationResponse {}
 
 /// <p>The input for the <a>StartConfigurationRecorder</a> action.</p>
@@ -2374,7 +2844,7 @@ pub struct StartRemediationExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartRemediationExecutionResponse {
     /// <p>For resources that have failed to start execution, the API returns a resource key object.</p>
     #[serde(rename = "FailedItems")]
@@ -2391,8 +2861,20 @@ pub struct StartRemediationExecutionResponse {
 pub struct StaticValue {
     /// <p>A list of values. For example, the ARN of the assumed role. </p>
     #[serde(rename = "Values")]
+    pub values: Vec<String>,
+}
+
+/// <p>Status filter object to filter results based on specific member account ID or status type for an organization config rule. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StatusDetailFilters {
+    /// <p>The 12-digit account ID of the member account within an organization.</p>
+    #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub values: Option<Vec<String>>,
+    pub account_id: Option<String>,
+    /// <p><p>Indicates deployment status for config rule in the member account. When master account calls <code>PutOrganizationConfigRule</code> action for the first time, config rule status is created in the member account. When master account calls <code>PutOrganizationConfigRule</code> action for the second time, config rule status is updated in the member account. Config rule status is deleted when the master account deletes <code>OrganizationConfigRule</code> and disables service access for <code>config-multiaccountsetup.amazonaws.com</code>. </p> <p>AWS Config sets the state of the rule to:</p> <ul> <li> <p> <code>CREATE<em>SUCCESSFUL</code> when config rule has been created in the member account.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> when config rule is being created in the member account.</p> </li> <li> <p> <code>CREATE</em>FAILED</code> when config rule creation has failed in the member account.</p> </li> <li> <p> <code>DELETE<em>FAILED</code> when config rule deletion has failed in the member account.</p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> when config rule is being deleted in the member account.</p> </li> <li> <p> <code>DELETE</em>SUCCESSFUL</code> when config rule has been deleted in the member account.</p> </li> <li> <p> <code>UPDATE<em>SUCCESSFUL</code> when config rule has been updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>IN<em>PROGRESS</code> when config rule is being updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>FAILED</code> when config rule deletion has failed in the member account.</p> </li> </ul></p>
+    #[serde(rename = "MemberAccountRuleStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_account_rule_status: Option<String>,
 }
 
 /// <p>The input for the <a>StopConfigurationRecorder</a> action.</p>
@@ -2552,7 +3034,7 @@ impl Error for DeleteAggregationAuthorizationError {
 pub enum DeleteConfigRuleError {
     /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
-    /// <p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule API, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> </ul></p>
     ResourceInUse(String),
 }
 
@@ -2708,7 +3190,7 @@ impl Error for DeleteDeliveryChannelError {
 pub enum DeleteEvaluationResultsError {
     /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
-    /// <p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule API, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> </ul></p>
     ResourceInUse(String),
 }
 
@@ -2743,6 +3225,59 @@ impl Error for DeleteEvaluationResultsError {
         match *self {
             DeleteEvaluationResultsError::NoSuchConfigRule(ref cause) => cause,
             DeleteEvaluationResultsError::ResourceInUse(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteOrganizationConfigRule
+#[derive(Debug, PartialEq)]
+pub enum DeleteOrganizationConfigRuleError {
+    /// <p>You specified one or more organization config rules that do not exist.</p>
+    NoSuchOrganizationConfigRule(String),
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    OrganizationAccessDenied(String),
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule API, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> </ul></p>
+    ResourceInUse(String),
+}
+
+impl DeleteOrganizationConfigRuleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteOrganizationConfigRuleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "NoSuchOrganizationConfigRuleException" => {
+                    return RusotoError::Service(
+                        DeleteOrganizationConfigRuleError::NoSuchOrganizationConfigRule(err.msg),
+                    )
+                }
+                "OrganizationAccessDeniedException" => {
+                    return RusotoError::Service(
+                        DeleteOrganizationConfigRuleError::OrganizationAccessDenied(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteOrganizationConfigRuleError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteOrganizationConfigRuleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteOrganizationConfigRuleError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteOrganizationConfigRuleError::NoSuchOrganizationConfigRule(ref cause) => cause,
+            DeleteOrganizationConfigRuleError::OrganizationAccessDenied(ref cause) => cause,
+            DeleteOrganizationConfigRuleError::ResourceInUse(ref cause) => cause,
         }
     }
 }
@@ -2788,6 +3323,8 @@ impl Error for DeletePendingAggregationRequestError {
 pub enum DeleteRemediationConfigurationError {
     /// <p>You specified an AWS Config rule without a remediation configuration.</p>
     NoSuchRemediationConfiguration(String),
+    /// <p>Remediation action is in progress. You can either cancel execution in AWS Systems Manager or wait and try again later. </p>
+    RemediationInProgress(String),
 }
 
 impl DeleteRemediationConfigurationError {
@@ -2801,6 +3338,11 @@ impl DeleteRemediationConfigurationError {
                         DeleteRemediationConfigurationError::NoSuchRemediationConfiguration(
                             err.msg,
                         ),
+                    )
+                }
+                "RemediationInProgressException" => {
+                    return RusotoError::Service(
+                        DeleteRemediationConfigurationError::RemediationInProgress(err.msg),
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
@@ -2819,6 +3361,44 @@ impl Error for DeleteRemediationConfigurationError {
     fn description(&self) -> &str {
         match *self {
             DeleteRemediationConfigurationError::NoSuchRemediationConfiguration(ref cause) => cause,
+            DeleteRemediationConfigurationError::RemediationInProgress(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteRemediationExceptions
+#[derive(Debug, PartialEq)]
+pub enum DeleteRemediationExceptionsError {
+    /// <p>You tried to delete a remediation exception that does not exist.</p>
+    NoSuchRemediation(String),
+}
+
+impl DeleteRemediationExceptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteRemediationExceptionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "NoSuchRemediationExceptionException" => {
+                    return RusotoError::Service(
+                        DeleteRemediationExceptionsError::NoSuchRemediation(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteRemediationExceptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteRemediationExceptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteRemediationExceptionsError::NoSuchRemediation(ref cause) => cause,
         }
     }
 }
@@ -3484,6 +4064,136 @@ impl Error for DescribeDeliveryChannelsError {
         }
     }
 }
+/// Errors returned by DescribeOrganizationConfigRuleStatuses
+#[derive(Debug, PartialEq)]
+pub enum DescribeOrganizationConfigRuleStatusesError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>You specified one or more organization config rules that do not exist.</p>
+    NoSuchOrganizationConfigRule(String),
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    OrganizationAccessDenied(String),
+}
+
+impl DescribeOrganizationConfigRuleStatusesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeOrganizationConfigRuleStatusesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidLimitException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigRuleStatusesError::InvalidLimit(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigRuleStatusesError::InvalidNextToken(err.msg),
+                    )
+                }
+                "NoSuchOrganizationConfigRuleException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigRuleStatusesError::NoSuchOrganizationConfigRule(
+                            err.msg,
+                        ),
+                    )
+                }
+                "OrganizationAccessDeniedException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigRuleStatusesError::OrganizationAccessDenied(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeOrganizationConfigRuleStatusesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeOrganizationConfigRuleStatusesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeOrganizationConfigRuleStatusesError::InvalidLimit(ref cause) => cause,
+            DescribeOrganizationConfigRuleStatusesError::InvalidNextToken(ref cause) => cause,
+            DescribeOrganizationConfigRuleStatusesError::NoSuchOrganizationConfigRule(
+                ref cause,
+            ) => cause,
+            DescribeOrganizationConfigRuleStatusesError::OrganizationAccessDenied(ref cause) => {
+                cause
+            }
+        }
+    }
+}
+/// Errors returned by DescribeOrganizationConfigRules
+#[derive(Debug, PartialEq)]
+pub enum DescribeOrganizationConfigRulesError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>You specified one or more organization config rules that do not exist.</p>
+    NoSuchOrganizationConfigRule(String),
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    OrganizationAccessDenied(String),
+}
+
+impl DescribeOrganizationConfigRulesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeOrganizationConfigRulesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidLimitException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigRulesError::InvalidLimit(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigRulesError::InvalidNextToken(err.msg),
+                    )
+                }
+                "NoSuchOrganizationConfigRuleException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigRulesError::NoSuchOrganizationConfigRule(err.msg),
+                    )
+                }
+                "OrganizationAccessDeniedException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigRulesError::OrganizationAccessDenied(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeOrganizationConfigRulesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeOrganizationConfigRulesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeOrganizationConfigRulesError::InvalidLimit(ref cause) => cause,
+            DescribeOrganizationConfigRulesError::InvalidNextToken(ref cause) => cause,
+            DescribeOrganizationConfigRulesError::NoSuchOrganizationConfigRule(ref cause) => cause,
+            DescribeOrganizationConfigRulesError::OrganizationAccessDenied(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribePendingAggregationRequests
 #[derive(Debug, PartialEq)]
 pub enum DescribePendingAggregationRequestsError {
@@ -3564,9 +4274,56 @@ impl Error for DescribeRemediationConfigurationsError {
         match *self {}
     }
 }
+/// Errors returned by DescribeRemediationExceptions
+#[derive(Debug, PartialEq)]
+pub enum DescribeRemediationExceptionsError {
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+}
+
+impl DescribeRemediationExceptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeRemediationExceptionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        DescribeRemediationExceptionsError::InvalidNextToken(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DescribeRemediationExceptionsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeRemediationExceptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeRemediationExceptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeRemediationExceptionsError::InvalidNextToken(ref cause) => cause,
+            DescribeRemediationExceptionsError::InvalidParameterValue(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeRemediationExecutionStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeRemediationExecutionStatusError {
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
     /// <p>You specified an AWS Config rule without a remediation configuration.</p>
     NoSuchRemediationConfiguration(String),
 }
@@ -3577,6 +4334,11 @@ impl DescribeRemediationExecutionStatusError {
     ) -> RusotoError<DescribeRemediationExecutionStatusError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        DescribeRemediationExecutionStatusError::InvalidNextToken(err.msg),
+                    )
+                }
                 "NoSuchRemediationConfigurationException" => {
                     return RusotoError::Service(
                         DescribeRemediationExecutionStatusError::NoSuchRemediationConfiguration(
@@ -3599,6 +4361,7 @@ impl fmt::Display for DescribeRemediationExecutionStatusError {
 impl Error for DescribeRemediationExecutionStatusError {
     fn description(&self) -> &str {
         match *self {
+            DescribeRemediationExecutionStatusError::InvalidNextToken(ref cause) => cause,
             DescribeRemediationExecutionStatusError::NoSuchRemediationConfiguration(ref cause) => {
                 cause
             }
@@ -4079,6 +4842,75 @@ impl Error for GetDiscoveredResourceCountsError {
         }
     }
 }
+/// Errors returned by GetOrganizationConfigRuleDetailedStatus
+#[derive(Debug, PartialEq)]
+pub enum GetOrganizationConfigRuleDetailedStatusError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>You specified one or more organization config rules that do not exist.</p>
+    NoSuchOrganizationConfigRule(String),
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    OrganizationAccessDenied(String),
+}
+
+impl GetOrganizationConfigRuleDetailedStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetOrganizationConfigRuleDetailedStatusError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidLimitException" => {
+                    return RusotoError::Service(
+                        GetOrganizationConfigRuleDetailedStatusError::InvalidLimit(err.msg),
+                    )
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        GetOrganizationConfigRuleDetailedStatusError::InvalidNextToken(err.msg),
+                    )
+                }
+                "NoSuchOrganizationConfigRuleException" => {
+                    return RusotoError::Service(
+                        GetOrganizationConfigRuleDetailedStatusError::NoSuchOrganizationConfigRule(
+                            err.msg,
+                        ),
+                    )
+                }
+                "OrganizationAccessDeniedException" => {
+                    return RusotoError::Service(
+                        GetOrganizationConfigRuleDetailedStatusError::OrganizationAccessDenied(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetOrganizationConfigRuleDetailedStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetOrganizationConfigRuleDetailedStatusError {
+    fn description(&self) -> &str {
+        match *self {
+            GetOrganizationConfigRuleDetailedStatusError::InvalidLimit(ref cause) => cause,
+            GetOrganizationConfigRuleDetailedStatusError::InvalidNextToken(ref cause) => cause,
+            GetOrganizationConfigRuleDetailedStatusError::NoSuchOrganizationConfigRule(
+                ref cause,
+            ) => cause,
+            GetOrganizationConfigRuleDetailedStatusError::OrganizationAccessDenied(ref cause) => {
+                cause
+            }
+        }
+    }
+}
 /// Errors returned by GetResourceConfigHistory
 #[derive(Debug, PartialEq)]
 pub enum GetResourceConfigHistoryError {
@@ -4343,7 +5175,7 @@ impl Error for PutAggregationAuthorizationError {
 /// Errors returned by PutConfigRule
 #[derive(Debug, PartialEq)]
 pub enum PutConfigRuleError {
-    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>The rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>The AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> </ul></p>
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For OrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create service linked role.</p> </li> </ul></p>
     InsufficientPermissions(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
@@ -4351,7 +5183,7 @@ pub enum PutConfigRuleError {
     MaxNumberOfConfigRulesExceeded(String),
     /// <p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
     NoAvailableConfigurationRecorder(String),
-    /// <p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule API, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> </ul></p>
     ResourceInUse(String),
 }
 
@@ -4412,11 +5244,11 @@ pub enum PutConfigurationAggregatorError {
     InvalidRole(String),
     /// <p>For <code>StartConfigRulesEvaluation</code> API, this exception is thrown if an evaluation is in progress or if you call the <a>StartConfigRulesEvaluation</a> API more than once per minute.</p> <p>For <code>PutConfigurationAggregator</code> API, this exception is thrown if the number of accounts and aggregators exceeds the limit.</p>
     LimitExceeded(String),
-    /// <p>Organization does is no longer available.</p>
+    /// <p>Organization is no longer available.</p>
     NoAvailableOrganization(String),
-    /// <p>No permission to call the EnableAWSServiceAccess API.</p>
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
-    /// <p>The configuration aggregator cannot be created because organization does not have all features enabled.</p>
+    /// <p>AWS Config resource cannot be created because your organization does not have all features enabled.</p>
     OrganizationAllFeaturesNotEnabled(String),
 }
 
@@ -4671,10 +5503,97 @@ impl Error for PutEvaluationsError {
         }
     }
 }
+/// Errors returned by PutOrganizationConfigRule
+#[derive(Debug, PartialEq)]
+pub enum PutOrganizationConfigRuleError {
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For OrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create service linked role.</p> </li> </ul></p>
+    InsufficientPermissions(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>You have reached the limit of the number of organization config rules you can create.</p>
+    MaxNumberOfOrganizationConfigRulesExceeded(String),
+    /// <p>Organization is no longer available.</p>
+    NoAvailableOrganization(String),
+    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    OrganizationAccessDenied(String),
+    /// <p>AWS Config resource cannot be created because your organization does not have all features enabled.</p>
+    OrganizationAllFeaturesNotEnabled(String),
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule API, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> </ul></p>
+    ResourceInUse(String),
+}
+
+impl PutOrganizationConfigRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutOrganizationConfigRuleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InsufficientPermissionsException" => {
+                    return RusotoError::Service(
+                        PutOrganizationConfigRuleError::InsufficientPermissions(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        PutOrganizationConfigRuleError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "MaxNumberOfOrganizationConfigRulesExceededException" => {
+                    return RusotoError::Service(
+                        PutOrganizationConfigRuleError::MaxNumberOfOrganizationConfigRulesExceeded(
+                            err.msg,
+                        ),
+                    )
+                }
+                "NoAvailableOrganizationException" => {
+                    return RusotoError::Service(
+                        PutOrganizationConfigRuleError::NoAvailableOrganization(err.msg),
+                    )
+                }
+                "OrganizationAccessDeniedException" => {
+                    return RusotoError::Service(
+                        PutOrganizationConfigRuleError::OrganizationAccessDenied(err.msg),
+                    )
+                }
+                "OrganizationAllFeaturesNotEnabledException" => {
+                    return RusotoError::Service(
+                        PutOrganizationConfigRuleError::OrganizationAllFeaturesNotEnabled(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(PutOrganizationConfigRuleError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for PutOrganizationConfigRuleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutOrganizationConfigRuleError {
+    fn description(&self) -> &str {
+        match *self {
+            PutOrganizationConfigRuleError::InsufficientPermissions(ref cause) => cause,
+            PutOrganizationConfigRuleError::InvalidParameterValue(ref cause) => cause,
+            PutOrganizationConfigRuleError::MaxNumberOfOrganizationConfigRulesExceeded(
+                ref cause,
+            ) => cause,
+            PutOrganizationConfigRuleError::NoAvailableOrganization(ref cause) => cause,
+            PutOrganizationConfigRuleError::OrganizationAccessDenied(ref cause) => cause,
+            PutOrganizationConfigRuleError::OrganizationAllFeaturesNotEnabled(ref cause) => cause,
+            PutOrganizationConfigRuleError::ResourceInUse(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutRemediationConfigurations
 #[derive(Debug, PartialEq)]
 pub enum PutRemediationConfigurationsError {
-    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>The rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>The AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> </ul></p>
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For OrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create service linked role.</p> </li> </ul></p>
     InsufficientPermissions(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
@@ -4713,6 +5632,41 @@ impl Error for PutRemediationConfigurationsError {
         match *self {
             PutRemediationConfigurationsError::InsufficientPermissions(ref cause) => cause,
             PutRemediationConfigurationsError::InvalidParameterValue(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by PutRemediationExceptions
+#[derive(Debug, PartialEq)]
+pub enum PutRemediationExceptionsError {
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+}
+
+impl PutRemediationExceptionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRemediationExceptionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        PutRemediationExceptionsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for PutRemediationExceptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutRemediationExceptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            PutRemediationExceptionsError::InvalidParameterValue(ref cause) => cause,
         }
     }
 }
@@ -4821,7 +5775,7 @@ pub enum StartConfigRulesEvaluationError {
     LimitExceeded(String),
     /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
-    /// <p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
+    /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule API, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule API, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> </ul></p>
     ResourceInUse(String),
 }
 
@@ -4921,8 +5875,10 @@ impl Error for StartConfigurationRecorderError {
 /// Errors returned by StartRemediationExecution
 #[derive(Debug, PartialEq)]
 pub enum StartRemediationExecutionError {
-    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>The rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>The AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> </ul></p>
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For OrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create service linked role.</p> </li> </ul></p>
     InsufficientPermissions(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
     /// <p>You specified an AWS Config rule without a remediation configuration.</p>
     NoSuchRemediationConfiguration(String),
 }
@@ -4934,6 +5890,11 @@ impl StartRemediationExecutionError {
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(
                         StartRemediationExecutionError::InsufficientPermissions(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        StartRemediationExecutionError::InvalidParameterValue(err.msg),
                     )
                 }
                 "NoSuchRemediationConfigurationException" => {
@@ -4957,6 +5918,7 @@ impl Error for StartRemediationExecutionError {
     fn description(&self) -> &str {
         match *self {
             StartRemediationExecutionError::InsufficientPermissions(ref cause) => cause,
+            StartRemediationExecutionError::InvalidParameterValue(ref cause) => cause,
             StartRemediationExecutionError::NoSuchRemediationConfiguration(ref cause) => cause,
         }
     }
@@ -5122,6 +6084,12 @@ pub trait ConfigService {
         input: DeleteEvaluationResultsRequest,
     ) -> Result<DeleteEvaluationResultsResponse, RusotoError<DeleteEvaluationResultsError>>;
 
+    /// <p>Deletes the specified organization config rule and all of its evaluation results from all member accounts in that organization. Only a master account can delete an organization config rule.</p> <p>AWS Config sets the state of a rule to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a rule while it is in this state.</p>
+    async fn delete_organization_config_rule(
+        &self,
+        input: DeleteOrganizationConfigRuleRequest,
+    ) -> Result<(), RusotoError<DeleteOrganizationConfigRuleError>>;
+
     /// <p>Deletes pending authorization requests for a specified aggregator account in a specified region.</p>
     async fn delete_pending_aggregation_request(
         &self,
@@ -5137,6 +6105,12 @@ pub trait ConfigService {
         RusotoError<DeleteRemediationConfigurationError>,
     >;
 
+    /// <p>Deletes one or more remediation exceptions mentioned in the resource keys.</p>
+    async fn delete_remediation_exceptions(
+        &self,
+        input: DeleteRemediationExceptionsRequest,
+    ) -> Result<DeleteRemediationExceptionsResponse, RusotoError<DeleteRemediationExceptionsError>>;
+
     /// <p>Deletes the retention configuration.</p>
     async fn delete_retention_configuration(
         &self,
@@ -5149,7 +6123,7 @@ pub trait ConfigService {
         input: DeliverConfigSnapshotRequest,
     ) -> Result<DeliverConfigSnapshotResponse, RusotoError<DeliverConfigSnapshotError>>;
 
-    /// <p><p>Returns a list of compliant and noncompliant rules with the number of resources for compliant and noncompliant rules. </p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
+    /// <p><p>Returns a list of compliant and noncompliant rules with the number of resources for compliant and noncompliant rules. </p> <note> <p>The results can return an empty result page, but if you have a <code>nextToken</code>, the results are displayed on the next page.</p> </note></p>
     async fn describe_aggregate_compliance_by_config_rules(
         &self,
         input: DescribeAggregateComplianceByConfigRulesRequest,
@@ -5248,6 +6222,24 @@ pub trait ConfigService {
         input: DescribeDeliveryChannelsRequest,
     ) -> Result<DescribeDeliveryChannelsResponse, RusotoError<DescribeDeliveryChannelsError>>;
 
+    /// <p><p>Provides organization config rule deployment status for an organization.</p> <note> <p>The status is not considered successful until organization config rule is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> <p>Only a master account can call this API.</p> </note></p>
+    async fn describe_organization_config_rule_statuses(
+        &self,
+        input: DescribeOrganizationConfigRuleStatusesRequest,
+    ) -> Result<
+        DescribeOrganizationConfigRuleStatusesResponse,
+        RusotoError<DescribeOrganizationConfigRuleStatusesError>,
+    >;
+
+    /// <p><p>Returns a list of organization config rules.</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> <p>Only a master account can call this API.</p> </note></p>
+    async fn describe_organization_config_rules(
+        &self,
+        input: DescribeOrganizationConfigRulesRequest,
+    ) -> Result<
+        DescribeOrganizationConfigRulesResponse,
+        RusotoError<DescribeOrganizationConfigRulesError>,
+    >;
+
     /// <p>Returns a list of all pending aggregation requests.</p>
     async fn describe_pending_aggregation_requests(
         &self,
@@ -5264,6 +6256,15 @@ pub trait ConfigService {
     ) -> Result<
         DescribeRemediationConfigurationsResponse,
         RusotoError<DescribeRemediationConfigurationsError>,
+    >;
+
+    /// <p><p>Returns the details of one or more remediation exceptions. A detailed view of a remediation exception for a set of resources that includes an explanation of an exception and the time when the exception will be deleted. When you specify the limit and the next token, you receive a paginated response. </p> <note> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you request resources in batch. It is only applicable, when you request all resources.</p> </note></p>
+    async fn describe_remediation_exceptions(
+        &self,
+        input: DescribeRemediationExceptionsRequest,
+    ) -> Result<
+        DescribeRemediationExceptionsResponse,
+        RusotoError<DescribeRemediationExceptionsError>,
     >;
 
     /// <p>Provides a detailed view of a Remediation Execution for a set of resources including state, timestamps for when steps for the remediation execution occur, and any error messages for steps that have failed. When you specify the limit and the next token, you receive a paginated response.</p>
@@ -5284,7 +6285,7 @@ pub trait ConfigService {
         RusotoError<DescribeRetentionConfigurationsError>,
     >;
 
-    /// <p><p>Returns the evaluation results for the specified AWS Config rule for a specific resource in a rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule. </p> <note> <p>The results can return an empty result page. But if you have a nextToken, the results are displayed on the next page.</p> </note></p>
+    /// <p><p>Returns the evaluation results for the specified AWS Config rule for a specific resource in a rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule. </p> <note> <p>The results can return an empty result page. But if you have a <code>nextToken</code>, the results are displayed on the next page.</p> </note></p>
     async fn get_aggregate_compliance_details_by_config_rule(
         &self,
         input: GetAggregateComplianceDetailsByConfigRuleRequest,
@@ -5358,6 +6359,15 @@ pub trait ConfigService {
         input: GetDiscoveredResourceCountsRequest,
     ) -> Result<GetDiscoveredResourceCountsResponse, RusotoError<GetDiscoveredResourceCountsError>>;
 
+    /// <p><p>Returns detailed status for each member account within an organization for a given organization config rule.</p> <note> <p>Only a master account can call this API.</p> </note></p>
+    async fn get_organization_config_rule_detailed_status(
+        &self,
+        input: GetOrganizationConfigRuleDetailedStatusRequest,
+    ) -> Result<
+        GetOrganizationConfigRuleDetailedStatusResponse,
+        RusotoError<GetOrganizationConfigRuleDetailedStatusError>,
+    >;
+
     /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval. If you specified a retention period to retain your <code>ConfigurationItems</code> between a minimum of 30 days and a maximum of 7 years (2557 days), AWS Config returns the <code>ConfigurationItems</code> for the specified retention period. </p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
     async fn get_resource_config_history(
         &self,
@@ -5421,11 +6431,23 @@ pub trait ConfigService {
         input: PutEvaluationsRequest,
     ) -> Result<PutEvaluationsResponse, RusotoError<PutEvaluationsError>>;
 
+    /// <p><p>Adds or updates organization config rule for your entire organization evaluating whether your AWS resources comply with your desired configurations. Only a master account can create or update an organization config rule.</p> <p>This API enables organization service access through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master account of your organization. The service linked role is created only when the role does not exist in the master account. AWS Config verifies the existence of role with <code>GetRole</code> action.</p> <p>You can use this action to create both custom AWS Config rules and AWS managed Config rules. If you are adding a new custom AWS Config rule, you must first create AWS Lambda function in the master account that the rule invokes to evaluate your resources. When you use the <code>PutOrganizationConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. If you are adding an AWS managed Config rule, specify the rule&#39;s identifier for the <code>RuleIdentifier</code> key.</p> <p>The maximum number of organization config rules that AWS Config supports is 150.</p> <note> <p>Specify either <code>OrganizationCustomRuleMetadata</code> or <code>OrganizationManagedRuleMetadata</code>.</p> </note></p>
+    async fn put_organization_config_rule(
+        &self,
+        input: PutOrganizationConfigRuleRequest,
+    ) -> Result<PutOrganizationConfigRuleResponse, RusotoError<PutOrganizationConfigRuleError>>;
+
     /// <p>Adds or updates the remediation configuration with a specific AWS Config rule with the selected target or action. The API creates the <code>RemediationConfiguration</code> object for the AWS Config rule. The AWS Config rule must already exist for you to add a remediation configuration. The target (SSM document) must exist and have permissions to use the target. </p>
     async fn put_remediation_configurations(
         &self,
         input: PutRemediationConfigurationsRequest,
     ) -> Result<PutRemediationConfigurationsResponse, RusotoError<PutRemediationConfigurationsError>>;
+
+    /// <p>A remediation exception is when a specific resource is no longer considered for auto-remediation. This API adds a new exception or updates an exisiting exception for a specific resource with a specific AWS Config rule. </p>
+    async fn put_remediation_exceptions(
+        &self,
+        input: PutRemediationExceptionsRequest,
+    ) -> Result<PutRemediationExceptionsResponse, RusotoError<PutRemediationExceptionsError>>;
 
     /// <p><p>Creates and updates the retention configuration with details about retention period (number of days) that AWS Config stores your historical information. The API creates the <code>RetentionConfiguration</code> object and names the object as <b>default</b>. When you have a <code>RetentionConfiguration</code> object named <b>default</b>, calling the API modifies the default object. </p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
     async fn put_retention_configuration(
@@ -5487,10 +6509,7 @@ impl ConfigServiceClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> ConfigServiceClient {
-        ConfigServiceClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -5502,10 +6521,14 @@ impl ConfigServiceClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        ConfigServiceClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ConfigServiceClient {
+        ConfigServiceClient { client, region }
     }
 }
 
@@ -5745,6 +6768,35 @@ impl ConfigService for ConfigServiceClient {
         }
     }
 
+    /// <p>Deletes the specified organization config rule and all of its evaluation results from all member accounts in that organization. Only a master account can delete an organization config rule.</p> <p>AWS Config sets the state of a rule to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a rule while it is in this state.</p>
+    async fn delete_organization_config_rule(
+        &self,
+        input: DeleteOrganizationConfigRuleRequest,
+    ) -> Result<(), RusotoError<DeleteOrganizationConfigRuleError>> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DeleteOrganizationConfigRule",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteOrganizationConfigRuleError::from_response(response))
+        }
+    }
+
     /// <p>Deletes pending authorization requests for a specified aggregator account in a specified region.</p>
     async fn delete_pending_aggregation_request(
         &self,
@@ -5810,6 +6862,38 @@ impl ConfigService for ConfigServiceClient {
         }
     }
 
+    /// <p>Deletes one or more remediation exceptions mentioned in the resource keys.</p>
+    async fn delete_remediation_exceptions(
+        &self,
+        input: DeleteRemediationExceptionsRequest,
+    ) -> Result<DeleteRemediationExceptionsResponse, RusotoError<DeleteRemediationExceptionsError>>
+    {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DeleteRemediationExceptions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteRemediationExceptionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRemediationExceptionsError::from_response(response))
+        }
+    }
+
     /// <p>Deletes the retention configuration.</p>
     async fn delete_retention_configuration(
         &self,
@@ -5867,7 +6951,7 @@ impl ConfigService for ConfigServiceClient {
         }
     }
 
-    /// <p><p>Returns a list of compliant and noncompliant rules with the number of resources for compliant and noncompliant rules. </p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
+    /// <p><p>Returns a list of compliant and noncompliant rules with the number of resources for compliant and noncompliant rules. </p> <note> <p>The results can return an empty result page, but if you have a <code>nextToken</code>, the results are displayed on the next page.</p> </note></p>
     async fn describe_aggregate_compliance_by_config_rules(
         &self,
         input: DescribeAggregateComplianceByConfigRulesRequest,
@@ -6272,6 +7356,78 @@ impl ConfigService for ConfigServiceClient {
         }
     }
 
+    /// <p><p>Provides organization config rule deployment status for an organization.</p> <note> <p>The status is not considered successful until organization config rule is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> <p>Only a master account can call this API.</p> </note></p>
+    async fn describe_organization_config_rule_statuses(
+        &self,
+        input: DescribeOrganizationConfigRuleStatusesRequest,
+    ) -> Result<
+        DescribeOrganizationConfigRuleStatusesResponse,
+        RusotoError<DescribeOrganizationConfigRuleStatusesError>,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeOrganizationConfigRuleStatuses",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeOrganizationConfigRuleStatusesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeOrganizationConfigRuleStatusesError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p><p>Returns a list of organization config rules.</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> <p>Only a master account can call this API.</p> </note></p>
+    async fn describe_organization_config_rules(
+        &self,
+        input: DescribeOrganizationConfigRulesRequest,
+    ) -> Result<
+        DescribeOrganizationConfigRulesResponse,
+        RusotoError<DescribeOrganizationConfigRulesError>,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeOrganizationConfigRules",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeOrganizationConfigRulesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeOrganizationConfigRulesError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Returns a list of all pending aggregation requests.</p>
     async fn describe_pending_aggregation_requests(
         &self,
@@ -6341,6 +7497,40 @@ impl ConfigService for ConfigServiceClient {
             Err(DescribeRemediationConfigurationsError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p><p>Returns the details of one or more remediation exceptions. A detailed view of a remediation exception for a set of resources that includes an explanation of an exception and the time when the exception will be deleted. When you specify the limit and the next token, you receive a paginated response. </p> <note> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you request resources in batch. It is only applicable, when you request all resources.</p> </note></p>
+    async fn describe_remediation_exceptions(
+        &self,
+        input: DescribeRemediationExceptionsRequest,
+    ) -> Result<
+        DescribeRemediationExceptionsResponse,
+        RusotoError<DescribeRemediationExceptionsError>,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeRemediationExceptions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeRemediationExceptionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeRemediationExceptionsError::from_response(response))
         }
     }
 
@@ -6416,7 +7606,7 @@ impl ConfigService for ConfigServiceClient {
         }
     }
 
-    /// <p><p>Returns the evaluation results for the specified AWS Config rule for a specific resource in a rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule. </p> <note> <p>The results can return an empty result page. But if you have a nextToken, the results are displayed on the next page.</p> </note></p>
+    /// <p><p>Returns the evaluation results for the specified AWS Config rule for a specific resource in a rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule. </p> <note> <p>The results can return an empty result page. But if you have a <code>nextToken</code>, the results are displayed on the next page.</p> </note></p>
     async fn get_aggregate_compliance_details_by_config_rule(
         &self,
         input: GetAggregateComplianceDetailsByConfigRuleRequest,
@@ -6726,6 +7916,42 @@ impl ConfigService for ConfigServiceClient {
         }
     }
 
+    /// <p><p>Returns detailed status for each member account within an organization for a given organization config rule.</p> <note> <p>Only a master account can call this API.</p> </note></p>
+    async fn get_organization_config_rule_detailed_status(
+        &self,
+        input: GetOrganizationConfigRuleDetailedStatusRequest,
+    ) -> Result<
+        GetOrganizationConfigRuleDetailedStatusResponse,
+        RusotoError<GetOrganizationConfigRuleDetailedStatusError>,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetOrganizationConfigRuleDetailedStatus",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetOrganizationConfigRuleDetailedStatusResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetOrganizationConfigRuleDetailedStatusError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval. If you specified a retention period to retain your <code>ConfigurationItems</code> between a minimum of 30 days and a maximum of 7 years (2557 days), AWS Config returns the <code>ConfigurationItems</code> for the specified retention period. </p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
     async fn get_resource_config_history(
         &self,
@@ -7024,6 +8250,38 @@ impl ConfigService for ConfigServiceClient {
         }
     }
 
+    /// <p><p>Adds or updates organization config rule for your entire organization evaluating whether your AWS resources comply with your desired configurations. Only a master account can create or update an organization config rule.</p> <p>This API enables organization service access through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master account of your organization. The service linked role is created only when the role does not exist in the master account. AWS Config verifies the existence of role with <code>GetRole</code> action.</p> <p>You can use this action to create both custom AWS Config rules and AWS managed Config rules. If you are adding a new custom AWS Config rule, you must first create AWS Lambda function in the master account that the rule invokes to evaluate your resources. When you use the <code>PutOrganizationConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. If you are adding an AWS managed Config rule, specify the rule&#39;s identifier for the <code>RuleIdentifier</code> key.</p> <p>The maximum number of organization config rules that AWS Config supports is 150.</p> <note> <p>Specify either <code>OrganizationCustomRuleMetadata</code> or <code>OrganizationManagedRuleMetadata</code>.</p> </note></p>
+    async fn put_organization_config_rule(
+        &self,
+        input: PutOrganizationConfigRuleRequest,
+    ) -> Result<PutOrganizationConfigRuleResponse, RusotoError<PutOrganizationConfigRuleError>>
+    {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.PutOrganizationConfigRule",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutOrganizationConfigRuleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutOrganizationConfigRuleError::from_response(response))
+        }
+    }
+
     /// <p>Adds or updates the remediation configuration with a specific AWS Config rule with the selected target or action. The API creates the <code>RemediationConfiguration</code> object for the AWS Config rule. The AWS Config rule must already exist for you to add a remediation configuration. The target (SSM document) must exist and have permissions to use the target. </p>
     async fn put_remediation_configurations(
         &self,
@@ -7053,6 +8311,37 @@ impl ConfigService for ConfigServiceClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(PutRemediationConfigurationsError::from_response(response))
+        }
+    }
+
+    /// <p>A remediation exception is when a specific resource is no longer considered for auto-remediation. This API adds a new exception or updates an exisiting exception for a specific resource with a specific AWS Config rule. </p>
+    async fn put_remediation_exceptions(
+        &self,
+        input: PutRemediationExceptionsRequest,
+    ) -> Result<PutRemediationExceptionsResponse, RusotoError<PutRemediationExceptionsError>> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.PutRemediationExceptions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutRemediationExceptionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutRemediationExceptionsError::from_response(response))
         }
     }
 

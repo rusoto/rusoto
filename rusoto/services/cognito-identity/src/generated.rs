@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -78,7 +79,7 @@ pub struct CreateIdentityPoolInput {
 
 /// <p>Credentials for the provided identity ID.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Credentials {
     /// <p>The Access Key portion of the credentials.</p>
     #[serde(rename = "AccessKeyId")]
@@ -108,7 +109,7 @@ pub struct DeleteIdentitiesInput {
 
 /// <p>Returned in response to a successful <code>DeleteIdentities</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteIdentitiesResponse {
     /// <p>An array of UnprocessedIdentityId objects, each of which contains an ErrorCode and IdentityId.</p>
     #[serde(rename = "UnprocessedIdentityIds")]
@@ -158,7 +159,7 @@ pub struct GetCredentialsForIdentityInput {
 
 /// <p>Returned in response to a successful <code>GetCredentialsForIdentity</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCredentialsForIdentityResponse {
     /// <p>Credentials for the provided identity ID.</p>
     #[serde(rename = "Credentials")]
@@ -188,7 +189,7 @@ pub struct GetIdInput {
 
 /// <p>Returned in response to a GetId request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIdResponse {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
@@ -206,7 +207,7 @@ pub struct GetIdentityPoolRolesInput {
 
 /// <p>Returned in response to a successful <code>GetIdentityPoolRoles</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIdentityPoolRolesResponse {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
@@ -243,7 +244,7 @@ pub struct GetOpenIdTokenForDeveloperIdentityInput {
 
 /// <p>Returned in response to a successful <code>GetOpenIdTokenForDeveloperIdentity</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOpenIdTokenForDeveloperIdentityResponse {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
@@ -269,7 +270,7 @@ pub struct GetOpenIdTokenInput {
 
 /// <p>Returned in response to a successful GetOpenIdToken request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOpenIdTokenResponse {
     /// <p>A unique identifier in the format REGION:GUID. Note that the IdentityId returned may not match the one passed on input.</p>
     #[serde(rename = "IdentityId")]
@@ -283,7 +284,7 @@ pub struct GetOpenIdTokenResponse {
 
 /// <p>A description of the identity.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IdentityDescription {
     /// <p>Date on which the identity was created.</p>
     #[serde(rename = "CreationDate")]
@@ -343,7 +344,7 @@ pub struct IdentityPool {
 
 /// <p>A description of the identity pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IdentityPoolShortDescription {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
@@ -376,7 +377,7 @@ pub struct ListIdentitiesInput {
 
 /// <p>The response to a ListIdentities request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIdentitiesResponse {
     /// <p>An object containing a set of identities and associated mappings.</p>
     #[serde(rename = "Identities")]
@@ -406,7 +407,7 @@ pub struct ListIdentityPoolsInput {
 
 /// <p>The result of a successful ListIdentityPools action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIdentityPoolsResponse {
     /// <p>The identity pools returned by the ListIdentityPools action.</p>
     #[serde(rename = "IdentityPools")]
@@ -426,7 +427,7 @@ pub struct ListTagsForResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags that are assigned to the identity pool.</p>
     #[serde(rename = "Tags")]
@@ -460,7 +461,7 @@ pub struct LookupDeveloperIdentityInput {
 
 /// <p>Returned in response to a successful <code>LookupDeveloperIdentity</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LookupDeveloperIdentityResponse {
     /// <p>This is the list of developer user identifiers associated with an identity ID. Cognito supports the association of multiple developer user identifiers with an identity ID.</p>
     #[serde(rename = "DeveloperUserIdentifierList")]
@@ -512,7 +513,7 @@ pub struct MergeDeveloperIdentitiesInput {
 
 /// <p>Returned in response to a successful <code>MergeDeveloperIdentities</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeDeveloperIdentitiesResponse {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
@@ -571,7 +572,7 @@ pub struct TagResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Input to the <code>UnlinkDeveloperIdentity</code> action.</p>
@@ -607,7 +608,7 @@ pub struct UnlinkIdentityInput {
 
 /// <p>An array of UnprocessedIdentityId objects, each of which contains an ErrorCode and IdentityId.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnprocessedIdentityId {
     /// <p>The error code indicating the type of error that occurred.</p>
     #[serde(rename = "ErrorCode")]
@@ -631,7 +632,7 @@ pub struct UntagResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// Errors returned by CreateIdentityPool
@@ -2194,10 +2195,7 @@ impl CognitoIdentityClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> CognitoIdentityClient {
-        CognitoIdentityClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -2209,10 +2207,14 @@ impl CognitoIdentityClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        CognitoIdentityClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CognitoIdentityClient {
+        CognitoIdentityClient { client, region }
     }
 }
 

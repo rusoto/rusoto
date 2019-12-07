@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -26,7 +27,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Information for one billing record.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BillingRecord {
     /// <p>The date that the operation was billed, in Unix format.</p>
     #[serde(rename = "BillDate")]
@@ -64,7 +65,7 @@ pub struct CheckDomainAvailabilityRequest {
 
 /// <p>The CheckDomainAvailability response includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CheckDomainAvailabilityResponse {
     /// <p><p>Whether the domain name is available for registering.</p> <note> <p>You can register only domains designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE<em>RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE</em>PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT<em>KNOW</dt> <dd> <p>The TLD registry didn&#39;t reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn&#39;t return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE</em>PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl></p>
     #[serde(rename = "Availability")]
@@ -85,7 +86,7 @@ pub struct CheckDomainTransferabilityRequest {
 
 /// <p>The CheckDomainTransferability response includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CheckDomainTransferabilityResponse {
     /// <p>A complex type that contains information about whether the specified domain can be transferred to Amazon Route 53.</p>
     #[serde(rename = "Transferability")]
@@ -165,7 +166,7 @@ pub struct DeleteTagsForDomainRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTagsForDomainResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -176,7 +177,7 @@ pub struct DisableDomainAutoRenewRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableDomainAutoRenewResponse {}
 
 /// <p>The DisableDomainTransferLock request includes the following element.</p>
@@ -189,7 +190,7 @@ pub struct DisableDomainTransferLockRequest {
 
 /// <p>The DisableDomainTransferLock response includes the following element.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableDomainTransferLockResponse {
     /// <p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>
     #[serde(rename = "OperationId")]
@@ -198,7 +199,7 @@ pub struct DisableDomainTransferLockResponse {
 
 /// <p>Information about one suggested domain name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainSuggestion {
     /// <p><p>Whether the domain name is available for registering.</p> <note> <p>You can register only the domains that are designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE<em>RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE</em>PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT<em>KNOW</dt> <dd> <p>The TLD registry didn&#39;t reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn&#39;t return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE</em>PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl></p>
     #[serde(rename = "Availability")]
@@ -212,7 +213,7 @@ pub struct DomainSuggestion {
 
 /// <p>Summary information about one domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainSummary {
     /// <p>Indicates whether the domain is automatically renewed upon expiration.</p>
     #[serde(rename = "AutoRenew")]
@@ -233,7 +234,7 @@ pub struct DomainSummary {
 
 /// <p>A complex type that contains information about whether the specified domain can be transferred to Amazon Route 53.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainTransferability {
     #[serde(rename = "Transferable")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -248,7 +249,7 @@ pub struct EnableDomainAutoRenewRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableDomainAutoRenewResponse {}
 
 /// <p>A request to set the transfer lock for the specified domain.</p>
@@ -261,7 +262,7 @@ pub struct EnableDomainTransferLockRequest {
 
 /// <p>The EnableDomainTransferLock response includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableDomainTransferLockResponse {
     /// <p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use GetOperationDetail.</p>
     #[serde(rename = "OperationId")]
@@ -288,7 +289,7 @@ pub struct GetContactReachabilityStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContactReachabilityStatusResponse {
     /// <p>The domain name for which you requested the reachability status.</p>
     #[serde(rename = "domainName")]
@@ -310,7 +311,7 @@ pub struct GetDomainDetailRequest {
 
 /// <p>The GetDomainDetail response includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainDetailResponse {
     /// <p>Email address to contact to report incorrect contact information for a domain, to report that the domain is being used to send spam, to report that someone is cybersquatting on a domain name, or report some other type of abuse.</p>
     #[serde(rename = "AbuseContactEmail")]
@@ -407,7 +408,7 @@ pub struct GetDomainSuggestionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainSuggestionsResponse {
     /// <p>A list of possible domain names. If you specified <code>true</code> for <code>OnlyAvailable</code> in the request, the list contains only domains that are available for registration.</p>
     #[serde(rename = "SuggestionsList")]
@@ -425,7 +426,7 @@ pub struct GetOperationDetailRequest {
 
 /// <p>The GetOperationDetail response includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOperationDetailResponse {
     /// <p>The name of a domain.</p>
     #[serde(rename = "DomainName")]
@@ -468,7 +469,7 @@ pub struct ListDomainsRequest {
 
 /// <p>The ListDomains response includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainsResponse {
     /// <p>A summary of domains.</p>
     #[serde(rename = "Domains")]
@@ -498,7 +499,7 @@ pub struct ListOperationsRequest {
 
 /// <p>The ListOperations response includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOperationsResponse {
     /// <p>If there are more operations than you specified for <code>MaxItems</code> in the request, submit another request and include the value of <code>NextPageMarker</code> in the value of <code>Marker</code>.</p>
     #[serde(rename = "NextPageMarker")]
@@ -519,7 +520,7 @@ pub struct ListTagsForDomainRequest {
 
 /// <p>The ListTagsForDomain response includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForDomainResponse {
     /// <p>A list of the tags that are associated with the specified domain.</p>
     #[serde(rename = "TagList")]
@@ -540,7 +541,7 @@ pub struct Nameserver {
 
 /// <p>OperationSummary includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OperationSummary {
     /// <p>Identifier returned to track the requested action.</p>
     #[serde(rename = "OperationId")]
@@ -598,7 +599,7 @@ pub struct RegisterDomainRequest {
 
 /// <p>The RegisterDomain response includes the following element.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterDomainResponse {
     /// <p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>
     #[serde(rename = "OperationId")]
@@ -621,7 +622,7 @@ pub struct RenewDomainRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RenewDomainResponse {
     /// <p>The identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>
     #[serde(rename = "OperationId")]
@@ -637,7 +638,7 @@ pub struct ResendContactReachabilityEmailRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResendContactReachabilityEmailResponse {
     /// <p>The domain name for which you requested a confirmation email.</p>
     #[serde(rename = "domainName")]
@@ -663,7 +664,7 @@ pub struct RetrieveDomainAuthCodeRequest {
 
 /// <p>The RetrieveDomainAuthCode response includes the following element.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RetrieveDomainAuthCodeResponse {
     /// <p>The authorization code for the domain.</p>
     #[serde(rename = "AuthCode")]
@@ -733,7 +734,7 @@ pub struct TransferDomainRequest {
 
 /// <p>The TranserDomain response includes the following element.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransferDomainResponse {
     /// <p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>
     #[serde(rename = "OperationId")]
@@ -762,7 +763,7 @@ pub struct UpdateDomainContactPrivacyRequest {
 
 /// <p>The UpdateDomainContactPrivacy response includes the following element.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainContactPrivacyResponse {
     /// <p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use GetOperationDetail.</p>
     #[serde(rename = "OperationId")]
@@ -791,7 +792,7 @@ pub struct UpdateDomainContactRequest {
 
 /// <p>The UpdateDomainContact response includes the following element.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainContactResponse {
     /// <p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>
     #[serde(rename = "OperationId")]
@@ -811,7 +812,7 @@ pub struct UpdateDomainNameserversRequest {
 
 /// <p>The UpdateDomainNameservers response includes the following element.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainNameserversResponse {
     /// <p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>
     #[serde(rename = "OperationId")]
@@ -831,7 +832,7 @@ pub struct UpdateTagsForDomainRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTagsForDomainResponse {}
 
 /// <p>The ViewBilling request includes the following elements.</p>
@@ -857,7 +858,7 @@ pub struct ViewBillingRequest {
 
 /// <p>The ViewBilling response includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ViewBillingResponse {
     /// <p>A summary of billing records.</p>
     #[serde(rename = "BillingRecords")]
@@ -2227,10 +2228,7 @@ impl Route53DomainsClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> Route53DomainsClient {
-        Route53DomainsClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -2242,10 +2240,14 @@ impl Route53DomainsClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        Route53DomainsClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> Route53DomainsClient {
+        Route53DomainsClient { client, region }
     }
 }
 

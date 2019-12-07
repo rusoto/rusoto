@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -26,7 +27,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p> An extracted segment of the text that is an attribute of an entity, or otherwise related to an entity, such as the dosage of a medication taken. It contains information about the attribute such as id, begin and end offset within the input text, and the segment of the input text. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Attribute {
     /// <p> The 0-based character offset in the input text that shows where the attribute begins. The offset returns the UTF-8 code point in the string. </p>
     #[serde(rename = "BeginOffset")]
@@ -70,7 +71,7 @@ pub struct DetectEntitiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectEntitiesResponse {
     /// <p> The collection of medical entities extracted from the input text and their associated information. For each entity, the response provides the entity text, the entity category, where the entity text begins and ends, and the level of confidence that Comprehend Medical has in the detection and analysis. Attributes and traits of the entity are also returned.</p>
     #[serde(rename = "Entities")]
@@ -93,7 +94,7 @@ pub struct DetectPHIRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectPHIResponse {
     /// <p> The collection of PHI entities extracted from the input text and their associated information. For each entity, the response provides the entity text, the entity category, where the entity text begins and ends, and the level of confidence that Comprehend Medical has in its detection. </p>
     #[serde(rename = "Entities")]
@@ -106,7 +107,7 @@ pub struct DetectPHIResponse {
 
 /// <p> Provides information about an extracted medical entity.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Entity {
     /// <p> The extracted attributes that relate to this entity.</p>
     #[serde(rename = "Attributes")]
@@ -148,7 +149,7 @@ pub struct Entity {
 
 /// <p> Provides contextual information about the extracted entity. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Trait {
     /// <p> Provides a name or contextual description about the trait. </p>
     #[serde(rename = "Name")]
@@ -162,7 +163,7 @@ pub struct Trait {
 
 /// <p> An attribute that we extracted, but were unable to relate to an entity. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnmappedAttribute {
     /// <p> The specific attribute that has been extracted but not mapped to an entity. </p>
     #[serde(rename = "Attribute")]
@@ -329,10 +330,7 @@ impl ComprehendMedicalClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> ComprehendMedicalClient {
-        ComprehendMedicalClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -344,10 +342,14 @@ impl ComprehendMedicalClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        ComprehendMedicalClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ComprehendMedicalClient {
+        ComprehendMedicalClient { client, region }
     }
 }
 

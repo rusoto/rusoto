@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -258,7 +259,9 @@ pub struct AudioOnlyHlsSettings {
     #[serde(rename = "AudioGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_group_id: Option<String>,
-    /// <p>For use with an audio only Stream. Must be a .jpg or .png file. If given, this image will be used as the cover-art for the audio only output. Ideally, it should be formatted for an iPhone screen for two reasons. The iPhone does not resize the image, it crops a centered image on the top/bottom and left/right. Additionally, this image file gets saved bit-for-bit into every 10-second segment file, so will increase bandwidth by {image file size} * {segment count} * {user count.}.</p>
+    /// <p>Optional. Specifies the .jpg or .png image to use as the cover art for an audio-only output. We recommend a low bit-size file because the image increases the output audio bandwidth.</p>
+    ///
+    /// <p>The image is attached to the audio as an ID3 tag, frame type APIC, picture type 0x10, as per the &quot;ID3 tag version 2.4.0 - Native Frames&quot; standard.</p>
     #[serde(rename = "AudioOnlyImage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_only_image: Option<InputLocation>,
@@ -354,7 +357,7 @@ pub struct BatchScheduleActionCreateRequest {
 
 /// <p>List of actions that have been created in the schedule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchScheduleActionCreateResult {
     /// <p>List of actions that have been created in the schedule.</p>
     #[serde(rename = "ScheduleActions")]
@@ -371,7 +374,7 @@ pub struct BatchScheduleActionDeleteRequest {
 
 /// <p>List of actions that have been deleted from the schedule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchScheduleActionDeleteResult {
     /// <p>List of actions that have been deleted from the schedule.</p>
     #[serde(rename = "ScheduleActions")]
@@ -396,7 +399,7 @@ pub struct BatchUpdateScheduleRequest {
 
 /// <p>Placeholder documentation for BatchUpdateScheduleResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdateScheduleResponse {
     /// <p>Schedule actions created in the schedule.</p>
     #[serde(rename = "Creates")]
@@ -625,7 +628,7 @@ pub struct CaptionSelectorSettings {
 
 /// <p>Placeholder documentation for Channel</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Channel {
     /// <p>The unique arn of the channel.</p>
     #[serde(rename = "Arn")]
@@ -667,6 +670,10 @@ pub struct Channel {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Runtime details for the pipelines of a running channel.</p>
+    #[serde(rename = "PipelineDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_details: Option<Vec<PipelineDetail>>,
     /// <p>The number of currently healthy pipelines.</p>
     #[serde(rename = "PipelinesRunningCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -686,7 +693,7 @@ pub struct Channel {
 
 /// <p>Placeholder documentation for ChannelEgressEndpoint</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelEgressEndpoint {
     /// <p>Public IP of where a channel&#39;s output comes from</p>
     #[serde(rename = "SourceIp")]
@@ -696,7 +703,7 @@ pub struct ChannelEgressEndpoint {
 
 /// <p>Placeholder documentation for ChannelSummary</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelSummary {
     /// <p>The unique arn of the channel.</p>
     #[serde(rename = "Arn")]
@@ -752,6 +759,10 @@ pub struct ChannelSummary {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>Passthrough applies no color space conversion to the output</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ColorSpacePassthroughSettings {}
+
 /// <p>A request to create a channel</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateChannelRequest {
@@ -798,7 +809,7 @@ pub struct CreateChannelRequest {
 
 /// <p>Placeholder documentation for CreateChannelResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateChannelResponse {
     #[serde(rename = "Channel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -855,7 +866,7 @@ pub struct CreateInputRequest {
 
 /// <p>Placeholder documentation for CreateInputResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInputResponse {
     #[serde(rename = "Input")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -877,7 +888,7 @@ pub struct CreateInputSecurityGroupRequest {
 
 /// <p>Placeholder documentation for CreateInputSecurityGroupResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInputSecurityGroupResponse {
     #[serde(rename = "SecurityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -904,7 +915,7 @@ pub struct DeleteChannelRequest {
 
 /// <p>Placeholder documentation for DeleteChannelResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteChannelResponse {
     /// <p>The unique arn of the channel.</p>
     #[serde(rename = "Arn")]
@@ -946,6 +957,10 @@ pub struct DeleteChannelResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Runtime details for the pipelines of a running channel.</p>
+    #[serde(rename = "PipelineDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_details: Option<Vec<PipelineDetail>>,
     /// <p>The number of currently healthy pipelines.</p>
     #[serde(rename = "PipelinesRunningCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -973,7 +988,7 @@ pub struct DeleteInputRequest {
 
 /// <p>Placeholder documentation for DeleteInputResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInputResponse {}
 
 /// <p>Placeholder documentation for DeleteInputSecurityGroupRequest</p>
@@ -986,7 +1001,7 @@ pub struct DeleteInputSecurityGroupRequest {
 
 /// <p>Placeholder documentation for DeleteInputSecurityGroupResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInputSecurityGroupResponse {}
 
 /// <p>Placeholder documentation for DeleteReservationRequest</p>
@@ -999,7 +1014,7 @@ pub struct DeleteReservationRequest {
 
 /// <p>Placeholder documentation for DeleteReservationResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReservationResponse {
     /// <p>Unique reservation ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:reservation:1234567&#39;</p>
     #[serde(rename = "Arn")]
@@ -1085,7 +1100,7 @@ pub struct DeleteScheduleRequest {
 
 /// <p>Placeholder documentation for DeleteScheduleResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteScheduleResponse {}
 
 /// <p>Placeholder documentation for DeleteTagsRequest</p>
@@ -1108,7 +1123,7 @@ pub struct DescribeChannelRequest {
 
 /// <p>Placeholder documentation for DescribeChannelResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelResponse {
     /// <p>The unique arn of the channel.</p>
     #[serde(rename = "Arn")]
@@ -1150,6 +1165,10 @@ pub struct DescribeChannelResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Runtime details for the pipelines of a running channel.</p>
+    #[serde(rename = "PipelineDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_details: Option<Vec<PipelineDetail>>,
     /// <p>The number of currently healthy pipelines.</p>
     #[serde(rename = "PipelinesRunningCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1177,7 +1196,7 @@ pub struct DescribeInputRequest {
 
 /// <p>Placeholder documentation for DescribeInputResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInputResponse {
     /// <p>The Unique ARN of the input (generated, immutable).</p>
     #[serde(rename = "Arn")]
@@ -1200,6 +1219,11 @@ pub struct DescribeInputResponse {
     #[serde(rename = "InputClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_class: Option<String>,
+    /// <p>Certain pull input sources can be dynamic, meaning that they can have their URL&#39;s dynamically changes
+    /// during input switch actions. Presently, this functionality only works with MP4_FILE inputs.</p>
+    #[serde(rename = "InputSourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_source_type: Option<String>,
     /// <p>A list of MediaConnect Flows for this input.</p>
     #[serde(rename = "MediaConnectFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1242,7 +1266,7 @@ pub struct DescribeInputSecurityGroupRequest {
 
 /// <p>Placeholder documentation for DescribeInputSecurityGroupResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInputSecurityGroupResponse {
     /// <p>Unique ARN of Input Security Group</p>
     #[serde(rename = "Arn")]
@@ -1280,7 +1304,7 @@ pub struct DescribeOfferingRequest {
 
 /// <p>Placeholder documentation for DescribeOfferingResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOfferingResponse {
     /// <p>Unique offering ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:offering:87654321&#39;</p>
     #[serde(rename = "Arn")]
@@ -1338,7 +1362,7 @@ pub struct DescribeReservationRequest {
 
 /// <p>Placeholder documentation for DescribeReservationResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReservationResponse {
     /// <p>Unique reservation ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:reservation:1234567&#39;</p>
     #[serde(rename = "Arn")]
@@ -1430,7 +1454,7 @@ pub struct DescribeScheduleRequest {
 
 /// <p>Placeholder documentation for DescribeScheduleResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeScheduleResponse {
     /// <p>The next token; for use in pagination.</p>
     #[serde(rename = "NextToken")]
@@ -1810,6 +1834,20 @@ pub struct GlobalConfiguration {
     pub support_low_framerate_inputs: Option<String>,
 }
 
+/// <p>H264 Color Space Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct H264ColorSpaceSettings {
+    #[serde(rename = "ColorSpacePassthroughSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub color_space_passthrough_settings: Option<ColorSpacePassthroughSettings>,
+    #[serde(rename = "Rec601Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rec_601_settings: Option<Rec601Settings>,
+    #[serde(rename = "Rec709Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rec_709_settings: Option<Rec709Settings>,
+}
+
 /// <p>H264 Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct H264Settings {
@@ -1829,7 +1867,7 @@ pub struct H264Settings {
     #[serde(rename = "BufFillPct")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub buf_fill_pct: Option<i64>,
-    /// <p>Size of buffer (HRD buffer model) in bits/second.</p>
+    /// <p>Size of buffer (HRD buffer model) in bits.</p>
     #[serde(rename = "BufSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub buf_size: Option<i64>,
@@ -1837,6 +1875,10 @@ pub struct H264Settings {
     #[serde(rename = "ColorMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color_metadata: Option<String>,
+    /// <p>Color Space settings</p>
+    #[serde(rename = "ColorSpaceSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub color_space_settings: Option<H264ColorSpaceSettings>,
     /// <p>Entropy encoding mode.  Use cabac (must be in Main or High profile) or cavlc.</p>
     #[serde(rename = "EntropyEncoding")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1889,7 +1931,7 @@ pub struct H264Settings {
     #[serde(rename = "LookAheadRateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub look_ahead_rate_control: Option<String>,
-    /// <p>For QVBR: See the tooltip for Quality level </p>
+    /// <p>For QVBR: See the tooltip for Quality level</p>
     ///
     /// <p>For VBR: Set the maximum bitrate in order to accommodate expected spikes in the complexity of the video.</p>
     #[serde(rename = "MaxBitrate")]
@@ -1926,7 +1968,7 @@ pub struct H264Settings {
     #[serde(rename = "QvbrQualityLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub qvbr_quality_level: Option<i64>,
-    /// <p>Rate control mode. </p>
+    /// <p>Rate control mode.</p>
     ///
     /// <p>QVBR: Quality will match the specified quality level except when it is constrained by the
     /// maximum bitrate.  Recommended if you or your viewers pay for bandwidth.</p>
@@ -1983,6 +2025,167 @@ pub struct H264Settings {
     #[serde(rename = "TimecodeInsertion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timecode_insertion: Option<String>,
+}
+
+/// <p>H265 Color Space Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct H265ColorSpaceSettings {
+    #[serde(rename = "ColorSpacePassthroughSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub color_space_passthrough_settings: Option<ColorSpacePassthroughSettings>,
+    #[serde(rename = "Hdr10Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hdr_10_settings: Option<Hdr10Settings>,
+    #[serde(rename = "Rec601Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rec_601_settings: Option<Rec601Settings>,
+    #[serde(rename = "Rec709Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rec_709_settings: Option<Rec709Settings>,
+}
+
+/// <p>H265 Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct H265Settings {
+    /// <p>Adaptive quantization. Allows intra-frame quantizers to vary to improve visual quality.</p>
+    #[serde(rename = "AdaptiveQuantization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub adaptive_quantization: Option<String>,
+    /// <p>Indicates that AFD values will be written into the output stream.  If afdSignaling is &quot;auto&quot;, the system will try to preserve the input AFD value (in cases where multiple AFD values are valid). If set to &quot;fixed&quot;, the AFD value will be the value configured in the fixedAfd parameter.</p>
+    #[serde(rename = "AfdSignaling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub afd_signaling: Option<String>,
+    /// <p>Whether or not EML should insert an Alternative Transfer Function SEI message to support backwards compatibility with non-HDR decoders and displays.</p>
+    #[serde(rename = "AlternativeTransferFunction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alternative_transfer_function: Option<String>,
+    /// <p>Average bitrate in bits/second. Required when the rate control mode is VBR or CBR. Not used for QVBR. In an MS Smooth output group, each output must have a unique value when its bitrate is rounded down to the nearest multiple of 1000.</p>
+    #[serde(rename = "Bitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bitrate: Option<i64>,
+    /// <p>Size of buffer (HRD buffer model) in bits.</p>
+    #[serde(rename = "BufSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub buf_size: Option<i64>,
+    /// <p>Includes colorspace metadata in the output.</p>
+    #[serde(rename = "ColorMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub color_metadata: Option<String>,
+    /// <p>Color Space settings</p>
+    #[serde(rename = "ColorSpaceSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub color_space_settings: Option<H265ColorSpaceSettings>,
+    /// <p>Four bit AFD value to write on all frames of video in the output stream. Only valid when afdSignaling is set to &#39;Fixed&#39;.</p>
+    #[serde(rename = "FixedAfd")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fixed_afd: Option<String>,
+    /// <p>If set to enabled, adjust quantization within each frame to reduce flicker or &#39;pop&#39; on I-frames.</p>
+    #[serde(rename = "FlickerAq")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flicker_aq: Option<String>,
+    /// <p>Framerate denominator.</p>
+    #[serde(rename = "FramerateDenominator")]
+    pub framerate_denominator: i64,
+    /// <p>Framerate numerator - framerate is a fraction, e.g. 24000 / 1001 = 23.976 fps.</p>
+    #[serde(rename = "FramerateNumerator")]
+    pub framerate_numerator: i64,
+    /// <p>Frequency of closed GOPs. In streaming applications, it is recommended that this be set to 1 so a decoder joining mid-stream will receive an IDR frame as quickly as possible. Setting this value to 0 will break output segmenting.</p>
+    #[serde(rename = "GopClosedCadence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gop_closed_cadence: Option<i64>,
+    /// <p>GOP size (keyframe interval) in units of either frames or seconds per gopSizeUnits. Must be greater than zero.</p>
+    #[serde(rename = "GopSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gop_size: Option<f64>,
+    /// <p>Indicates if the gopSize is specified in frames or seconds. If seconds the system will convert the gopSize into a frame count at run time.</p>
+    #[serde(rename = "GopSizeUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gop_size_units: Option<String>,
+    /// <p>H.265 Level.</p>
+    #[serde(rename = "Level")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub level: Option<String>,
+    /// <p>Amount of lookahead. A value of low can decrease latency and memory usage, while high can produce better quality for certain content.</p>
+    #[serde(rename = "LookAheadRateControl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub look_ahead_rate_control: Option<String>,
+    /// <p>For QVBR: See the tooltip for Quality level</p>
+    #[serde(rename = "MaxBitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_bitrate: Option<i64>,
+    /// <p>Only meaningful if sceneChangeDetect is set to enabled.  Enforces separation between repeated (cadence) I-frames and I-frames inserted by Scene Change Detection. If a scene change I-frame is within I-interval frames of a cadence I-frame, the GOP is shrunk and/or stretched to the scene change I-frame. GOP stretch requires enabling lookahead as well as setting I-interval. The normal cadence resumes for the next GOP. Note: Maximum GOP stretch = GOP size + Min-I-interval - 1</p>
+    #[serde(rename = "MinIInterval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_i_interval: Option<i64>,
+    /// <p>Pixel Aspect Ratio denominator.</p>
+    #[serde(rename = "ParDenominator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub par_denominator: Option<i64>,
+    /// <p>Pixel Aspect Ratio numerator.</p>
+    #[serde(rename = "ParNumerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub par_numerator: Option<i64>,
+    /// <p>H.265 Profile.</p>
+    #[serde(rename = "Profile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profile: Option<String>,
+    /// <p>Controls the target quality for the video encode. Applies only when the rate control mode is QVBR. Set values for the QVBR quality level field and Max bitrate field that suit your most important viewing devices. Recommended values are:
+    /// - Primary screen: Quality level: 8 to 10. Max bitrate: 4M
+    /// - PC or tablet: Quality level: 7. Max bitrate: 1.5M to 3M
+    /// - Smartphone: Quality level: 6. Max bitrate: 1M to 1.5M</p>
+    #[serde(rename = "QvbrQualityLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qvbr_quality_level: Option<i64>,
+    /// <p>Rate control mode.</p>
+    ///
+    /// <p>QVBR: Quality will match the specified quality level except when it is constrained by the
+    /// maximum bitrate.  Recommended if you or your viewers pay for bandwidth.</p>
+    ///
+    /// <p>CBR: Quality varies, depending on the video complexity. Recommended only if you distribute
+    /// your assets to devices that cannot handle variable bitrates.</p>
+    #[serde(rename = "RateControlMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rate_control_mode: Option<String>,
+    /// <p>Sets the scan type of the output to progressive or top-field-first interlaced.</p>
+    #[serde(rename = "ScanType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_type: Option<String>,
+    /// <p>Scene change detection.</p>
+    #[serde(rename = "SceneChangeDetect")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scene_change_detect: Option<String>,
+    /// <p>Number of slices per picture. Must be less than or equal to the number of macroblock rows for progressive pictures, and less than or equal to half the number of macroblock rows for interlaced pictures.
+    /// This field is optional; when no value is specified the encoder will choose the number of slices based on encode resolution.</p>
+    #[serde(rename = "Slices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub slices: Option<i64>,
+    /// <p>H.265 Tier.</p>
+    #[serde(rename = "Tier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tier: Option<String>,
+    /// <p>Determines how timecodes should be inserted into the video elementary stream.
+    /// - &#39;disabled&#39;: Do not include timecodes
+    /// - &#39;picTimingSei&#39;: Pass through picture timing SEI messages from the source specified in Timecode Config</p>
+    #[serde(rename = "TimecodeInsertion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timecode_insertion: Option<String>,
+}
+
+/// <p>Hdr10 Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Hdr10Settings {
+    /// <p>Maximum Content Light Level
+    /// An integer metadata value defining the maximum light level, in nits,
+    /// of any single pixel within an encoded HDR video stream or file.</p>
+    #[serde(rename = "MaxCll")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_cll: Option<i64>,
+    /// <p>Maximum Frame Average Light Level
+    /// An integer metadata value defining the maximum average light level, in nits,
+    /// for any single frame within an encoded HDR video stream or file.</p>
+    #[serde(rename = "MaxFall")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_fall: Option<i64>,
 }
 
 /// <p>Hls Akamai Settings</p>
@@ -2329,9 +2532,13 @@ pub struct HlsWebdavSettings {
     pub restart_delay: Option<i64>,
 }
 
+/// <p>Settings to configure an action so that it occurs immediately. This is only supported for input switch actions currently.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ImmediateModeScheduleActionStartSettings {}
+
 /// <p>Placeholder documentation for Input</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Input {
     /// <p>The Unique ARN of the input (generated, immutable).</p>
     #[serde(rename = "Arn")]
@@ -2354,6 +2561,11 @@ pub struct Input {
     #[serde(rename = "InputClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_class: Option<String>,
+    /// <p>Certain pull input sources can be dynamic, meaning that they can have their URL&#39;s dynamically changes
+    /// during input switch actions. Presently, this functionality only works with MP4_FILE inputs.</p>
+    #[serde(rename = "InputSourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_source_type: Option<String>,
     /// <p>A list of MediaConnect Flows for this input.</p>
     #[serde(rename = "MediaConnectFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2414,9 +2626,25 @@ pub struct InputChannelLevel {
     pub input_channel: i64,
 }
 
+/// <p>Settings to let you create a clip of the file input, in order to set up the input to ingest only a portion of the file.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct InputClippingSettings {
+    /// <p>The source of the timecodes in the source being clipped.</p>
+    #[serde(rename = "InputTimecodeSource")]
+    pub input_timecode_source: String,
+    /// <p>Settings to identify the start of the clip.</p>
+    #[serde(rename = "StartTimecode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_timecode: Option<StartTimecode>,
+    /// <p>Settings to identify the end of the clip.</p>
+    #[serde(rename = "StopTimecode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stop_timecode: Option<StopTimecode>,
+}
+
 /// <p>The settings for a PUSH type input.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputDestination {
     /// <p>The system-generated static IP address of endpoint.
     /// It remains fixed for the lifetime of the input.</p>
@@ -2449,7 +2677,7 @@ pub struct InputDestinationRequest {
 
 /// <p>The properties for a VPC type input destination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputDestinationVpc {
     /// <p>The availability zone of the Input destination.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -2504,7 +2732,7 @@ pub struct InputLossBehavior {
 
 /// <p>An Input Security Group</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputSecurityGroup {
     /// <p>Unique ARN of Input Security Group</p>
     #[serde(rename = "Arn")]
@@ -2578,7 +2806,7 @@ pub struct InputSettings {
 
 /// <p>The settings for a PULL type input.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputSource {
     /// <p>The key used to extract the password from EC2 Parameter store.</p>
     #[serde(rename = "PasswordParam")]
@@ -2630,12 +2858,20 @@ pub struct InputSpecification {
     pub resolution: Option<String>,
 }
 
-/// <p>Settings for the action to switch an input.</p>
+/// <p>Settings for the &quot;switch input&quot; action: to switch from ingesting one input to ingesting another input.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InputSwitchScheduleActionSettings {
-    /// <p>The name of the input attachment that should be switched to by this action.</p>
+    /// <p>The name of the input attachment (not the name of the input!) to switch to. The name is specified in the channel configuration.</p>
     #[serde(rename = "InputAttachmentNameReference")]
     pub input_attachment_name_reference: String,
+    /// <p>Settings to let you create a clip of the file input, in order to set up the input to ingest only a portion of the file.</p>
+    #[serde(rename = "InputClippingSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_clipping_settings: Option<InputClippingSettings>,
+    /// <p>The value for the variable portion of the URL for the dynamic input, for this instance of the input. Each time you use the same dynamic input in an input switch action, you can provide a different value, in order to connect the input to a different content source.</p>
+    #[serde(rename = "UrlPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url_path: Option<Vec<String>>,
 }
 
 /// <p>Settings for a private VPC Input.
@@ -2657,7 +2893,7 @@ pub struct InputVpcRequest {
 
 /// <p>Whitelist rule</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputWhitelistRule {
     /// <p>The IPv4 CIDR that&#39;s whitelisted.</p>
     #[serde(rename = "Cidr")]
@@ -2695,7 +2931,7 @@ pub struct ListChannelsRequest {
 
 /// <p>Placeholder documentation for ListChannelsResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelsResponse {
     #[serde(rename = "Channels")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2718,7 +2954,7 @@ pub struct ListInputSecurityGroupsRequest {
 
 /// <p>Placeholder documentation for ListInputSecurityGroupsResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInputSecurityGroupsResponse {
     /// <p>List of input security groups</p>
     #[serde(rename = "InputSecurityGroups")]
@@ -2742,7 +2978,7 @@ pub struct ListInputsRequest {
 
 /// <p>Placeholder documentation for ListInputsResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInputsResponse {
     #[serde(rename = "Inputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2801,7 +3037,7 @@ pub struct ListOfferingsRequest {
 
 /// <p>Placeholder documentation for ListOfferingsResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOfferingsResponse {
     /// <p>Token to retrieve the next page of results</p>
     #[serde(rename = "NextToken")]
@@ -2858,7 +3094,7 @@ pub struct ListReservationsRequest {
 
 /// <p>Placeholder documentation for ListReservationsResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReservationsResponse {
     /// <p>Token to retrieve the next page of results</p>
     #[serde(rename = "NextToken")]
@@ -2879,7 +3115,7 @@ pub struct ListTagsForResourceRequest {
 
 /// <p>Placeholder documentation for ListTagsForResourceResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3150,7 +3386,7 @@ pub struct M3u8Settings {
 
 /// <p>The settings for a MediaConnect Flow.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MediaConnectFlow {
     /// <p>The unique ARN of the MediaConnect Flow being used as a source.</p>
     #[serde(rename = "FlowArn")]
@@ -3175,7 +3411,7 @@ pub struct MediaPackageGroupSettings {
     pub destination: OutputLocationRef,
 }
 
-/// <p>Media Package Output Destination Settings</p>
+/// <p>MediaPackage Output Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MediaPackageOutputDestinationSettings {
     /// <p>ID of the channel in MediaPackage that is the destination for this output group. You do not need to specify the individual inputs in MediaPackage; MediaLive will handle the connection of the two MediaLive pipelines to the two MediaPackage inputs. The MediaPackage channel and MediaLive channel must be in the same region.</p>
@@ -3297,6 +3533,11 @@ pub struct MsSmoothGroupSettings {
 /// <p>Ms Smooth Output Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MsSmoothOutputSettings {
+    /// <p>Only applicable when this output is referencing an H.265 video description.
+    /// Specifies whether MP4 segments should be packaged as HEV1 or HVC1.</p>
+    #[serde(rename = "H265PackagingType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub h265_packaging_type: Option<String>,
     /// <p>String concatenated to the end of the destination filename.  Required for multiple outputs of the same type.</p>
     #[serde(rename = "NameModifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3318,7 +3559,7 @@ pub struct NetworkInputSettings {
 
 /// <p>Reserved resources available for purchase</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Offering {
     /// <p>Unique offering ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:offering:87654321&#39;</p>
     #[serde(rename = "Arn")]
@@ -3514,6 +3755,24 @@ pub struct PauseStateScheduleActionSettings {
     pub pipelines: Option<Vec<PipelinePauseStateSettings>>,
 }
 
+/// <p>Runtime details of a pipeline when a channel is running.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PipelineDetail {
+    /// <p>The name of the active input attachment currently being ingested by this pipeline.</p>
+    #[serde(rename = "ActiveInputAttachmentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_input_attachment_name: Option<String>,
+    /// <p>The name of the input switch schedule action that occurred most recently and that resulted in the switch to the current input attachment for this pipeline.</p>
+    #[serde(rename = "ActiveInputSwitchActionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_input_switch_action_name: Option<String>,
+    /// <p>Pipeline ID</p>
+    #[serde(rename = "PipelineId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_id: Option<String>,
+}
+
 /// <p>Settings for pausing a pipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PipelinePauseStateSettings {
@@ -3551,12 +3810,20 @@ pub struct PurchaseOfferingRequest {
 
 /// <p>Placeholder documentation for PurchaseOfferingResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PurchaseOfferingResponse {
     #[serde(rename = "Reservation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reservation: Option<Reservation>,
 }
+
+/// <p>Rec601 Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Rec601Settings {}
+
+/// <p>Rec709 Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Rec709Settings {}
 
 /// <p>Remix Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -3577,7 +3844,7 @@ pub struct RemixSettings {
 
 /// <p>Reserved resources available to use</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Reservation {
     /// <p>Unique reservation ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:reservation:1234567&#39;</p>
     #[serde(rename = "Arn")]
@@ -3655,7 +3922,7 @@ pub struct Reservation {
 
 /// <p>Resource configuration (codec, resolution, bitrate, ...)</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReservationResourceSpecification {
     /// <p>Channel class, e.g. &#39;STANDARD&#39;</p>
     #[serde(rename = "ChannelClass")]
@@ -3800,17 +4067,22 @@ pub struct ScheduleActionSettings {
     pub static_image_deactivate_settings: Option<StaticImageDeactivateScheduleActionSettings>,
 }
 
-/// <p>Settings to specify the start time for an action.</p>
+/// <p>Settings to specify when an action should occur. Only one of the options must be selected.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScheduleActionStartSettings {
-    /// <p>Holds the start time for the action.</p>
+    /// <p>Option for specifying the start time for an action.</p>
     #[serde(rename = "FixedModeScheduleActionStartSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fixed_mode_schedule_action_start_settings: Option<FixedModeScheduleActionStartSettings>,
-    /// <p>Specifies an action to follow for scheduling this action.</p>
+    /// <p>Option for specifying an action as relative to another action.</p>
     #[serde(rename = "FollowModeScheduleActionStartSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub follow_mode_schedule_action_start_settings: Option<FollowModeScheduleActionStartSettings>,
+    /// <p>Option for specifying an action that should be applied immediately.</p>
+    #[serde(rename = "ImmediateModeScheduleActionStartSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub immediate_mode_schedule_action_start_settings:
+        Option<ImmediateModeScheduleActionStartSettings>,
 }
 
 /// <p>Scte20 Plus Embedded Destination Settings</p>
@@ -4014,7 +4286,7 @@ pub struct StartChannelRequest {
 
 /// <p>Placeholder documentation for StartChannelResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartChannelResponse {
     /// <p>The unique arn of the channel.</p>
     #[serde(rename = "Arn")]
@@ -4056,6 +4328,10 @@ pub struct StartChannelResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Runtime details for the pipelines of a running channel.</p>
+    #[serde(rename = "PipelineDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_details: Option<Vec<PipelineDetail>>,
     /// <p>The number of currently healthy pipelines.</p>
     #[serde(rename = "PipelinesRunningCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4071,6 +4347,15 @@ pub struct StartChannelResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Settings to identify the start of the clip.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StartTimecode {
+    /// <p>The timecode for the frame where you want to start the clip. Optional; if not specified, the clip starts at first frame in the file. Enter the timecode as HH:MM:SS:FF or HH:MM:SS;FF.</p>
+    #[serde(rename = "Timecode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timecode: Option<String>,
 }
 
 /// <p>Settings for the action to activate a static image.</p>
@@ -4152,7 +4437,7 @@ pub struct StopChannelRequest {
 
 /// <p>Placeholder documentation for StopChannelResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopChannelResponse {
     /// <p>The unique arn of the channel.</p>
     #[serde(rename = "Arn")]
@@ -4194,6 +4479,10 @@ pub struct StopChannelResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Runtime details for the pipelines of a running channel.</p>
+    #[serde(rename = "PipelineDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_details: Option<Vec<PipelineDetail>>,
     /// <p>The number of currently healthy pipelines.</p>
     #[serde(rename = "PipelinesRunningCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4209,6 +4498,19 @@ pub struct StopChannelResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Settings to identify the end of the clip.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StopTimecode {
+    /// <p>If you specify a StopTimecode in an input (in order to clip the file), you can specify if you want the clip to exclude (the default) or include the frame specified by the timecode.</p>
+    #[serde(rename = "LastFrameClippingBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_frame_clipping_behavior: Option<String>,
+    /// <p>The timecode for the frame where you want to stop the clip. Optional; if not specified, the clip continues to the end of the file. Enter the timecode as HH:MM:SS:FF or HH:MM:SS;FF.</p>
+    #[serde(rename = "Timecode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timecode: Option<String>,
 }
 
 /// <p>Teletext Destination Settings</p>
@@ -4308,7 +4610,7 @@ pub struct UpdateChannelClassRequest {
 
 /// <p>Placeholder documentation for UpdateChannelClassResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateChannelClassResponse {
     #[serde(rename = "Channel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4352,7 +4654,7 @@ pub struct UpdateChannelRequest {
 
 /// <p>Placeholder documentation for UpdateChannelResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateChannelResponse {
     #[serde(rename = "Channel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4397,7 +4699,7 @@ pub struct UpdateInputRequest {
 
 /// <p>Placeholder documentation for UpdateInputResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInputResponse {
     #[serde(rename = "Input")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4422,7 +4724,7 @@ pub struct UpdateInputSecurityGroupRequest {
 
 /// <p>Placeholder documentation for UpdateInputSecurityGroupResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInputSecurityGroupResponse {
     #[serde(rename = "SecurityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4443,7 +4745,7 @@ pub struct UpdateReservationRequest {
 
 /// <p>Placeholder documentation for UpdateReservationResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateReservationResponse {
     #[serde(rename = "Reservation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4466,6 +4768,9 @@ pub struct VideoCodecSettings {
     #[serde(rename = "H264Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub h264_settings: Option<H264Settings>,
+    #[serde(rename = "H265Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub h265_settings: Option<H265Settings>,
 }
 
 /// <p>Video settings for this stream.</p>
@@ -4503,7 +4808,7 @@ pub struct VideoDescription {
 /// <p>Specifies a particular video stream within an input source. An input may have only a single video selector.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VideoSelector {
-    /// <p>Specifies the colorspace of an input. This setting works in tandem with colorSpaceConversion to determine if any conversion will be performed.</p>
+    /// <p>Specifies the color space of an input. This setting works in tandem with colorSpaceUsage and a video description&#39;s colorSpaceSettingsChoice to determine if any conversion will be performed.</p>
     #[serde(rename = "ColorSpace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color_space: Option<String>,
@@ -6920,10 +7225,7 @@ impl MediaLiveClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> MediaLiveClient {
-        MediaLiveClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -6935,10 +7237,14 @@ impl MediaLiveClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        MediaLiveClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MediaLiveClient {
+        MediaLiveClient { client, region }
     }
 }
 

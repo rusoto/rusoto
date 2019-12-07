@@ -13,13 +13,13 @@ license = "MIT"
 name = "rusoto_core"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.40.0"
+version = "0.42.0"
 homepage = "https://www.rusoto.org/"
 exclude = ["test_resources/*"]
 edition = "2018"
 
 [badges]
-appveyor = { repository = "rusoto/rusoto", branch = "master" }
+appveyor = { repository = "matthewkmayer/rusoto", branch = "master" }
 azure-devops = { project = "matthewkmayer/Rusoto", pipeline = "rusoto.rusoto", build="1" }
 
 [build-dependencies]
@@ -48,23 +48,30 @@ time = "0.1"
 url = "2.1"
 tokio = "0.2.0-alpha.6"
 xml-rs = "0.7"
+flate2 = {version = "1.0", optional = true}
+
 
 [dependencies.rusoto_credential]
 path = "../credential"
-version = "0.40"
+version = "0.42"
+
+[dependencies.rusoto_signature]
+path = "../signature"
+version = "0.42"
 
 [dependencies.clippy]
 optional = true
 version = "0.0"
 
 [dev-dependencies]
-env_logger = "0.5"
-rand = "0.4"
+env_logger = "0.7"
+rand = "0.7"
 serde_json = "1.0"
 serde_test = "1.0"
 
 [features]
 default = ["native-tls"]
+encoding = ["flate2"]
 nightly-testing = ["rusoto_credential/nightly-testing"]
 native-tls = ["hyper-tls"]
 rustls = ["hyper-rustls"]

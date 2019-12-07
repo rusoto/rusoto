@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -42,7 +43,7 @@ pub struct AddAttributesActivity {
 
 /// <p>Contains informations about errors.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchPutMessageErrorEntry {
     /// <p>The code associated with the error.</p>
     #[serde(rename = "errorCode")]
@@ -69,7 +70,7 @@ pub struct BatchPutMessageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchPutMessageResponse {
     /// <p>A list of any errors encountered when sending the messages to the channel.</p>
     #[serde(rename = "batchPutMessageErrorEntries")]
@@ -88,12 +89,12 @@ pub struct CancelPipelineReprocessingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelPipelineReprocessingResponse {}
 
 /// <p>A collection of data from an MQTT topic. Channels archive the raw, unprocessed messages before publishing the data to a pipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Channel {
     /// <p>The ARN of the channel.</p>
     #[serde(rename = "arn")]
@@ -142,7 +143,7 @@ pub struct ChannelActivity {
 
 /// <p>Statistics information about the channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelStatistics {
     /// <p>The estimated size of the channel.</p>
     #[serde(rename = "size")]
@@ -165,7 +166,7 @@ pub struct ChannelStorage {
 
 /// <p>Where channel data is stored.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelStorageSummary {
     /// <p>Used to store channel data in an S3 bucket that you manage.</p>
     #[serde(rename = "customerManagedS3")]
@@ -179,7 +180,7 @@ pub struct ChannelStorageSummary {
 
 /// <p>A summary of information about a channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelSummary {
     /// <p>The name of the channel.</p>
     #[serde(rename = "channelName")]
@@ -241,7 +242,7 @@ pub struct CreateChannelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateChannelResponse {
     /// <p>The ARN of the channel.</p>
     #[serde(rename = "channelArn")]
@@ -265,7 +266,7 @@ pub struct CreateDatasetContentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetContentResponse {
     /// <p>The version ID of the data set contents which are being created.</p>
     #[serde(rename = "versionId")]
@@ -304,7 +305,7 @@ pub struct CreateDatasetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetResponse {
     /// <p>The ARN of the data set.</p>
     #[serde(rename = "datasetArn")]
@@ -340,7 +341,7 @@ pub struct CreateDatastoreRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatastoreResponse {
     /// <p>The ARN of the data store.</p>
     #[serde(rename = "datastoreArn")]
@@ -371,7 +372,7 @@ pub struct CreatePipelineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePipelineResponse {
     /// <p>The ARN of the pipeline.</p>
     #[serde(rename = "pipelineArn")]
@@ -400,7 +401,7 @@ pub struct CustomerManagedChannelS3Storage {
 
 /// <p>Used to store channel data in an S3 bucket that you manage.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CustomerManagedChannelS3StorageSummary {
     /// <p>The name of the Amazon S3 bucket in which channel data is stored.</p>
     #[serde(rename = "bucket")]
@@ -433,7 +434,7 @@ pub struct CustomerManagedDatastoreS3Storage {
 
 /// <p>Used to store data store data in an S3 bucket that you manage.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CustomerManagedDatastoreS3StorageSummary {
     /// <p>The name of the Amazon S3 bucket in which data store data is stored.</p>
     #[serde(rename = "bucket")]
@@ -451,7 +452,7 @@ pub struct CustomerManagedDatastoreS3StorageSummary {
 
 /// <p>Information about a data set.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Dataset {
     /// <p>The "DatasetAction" objects that automatically create the data set contents.</p>
     #[serde(rename = "actions")]
@@ -514,7 +515,7 @@ pub struct DatasetAction {
 
 /// <p>Information about the action which automatically creates the data set's contents.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetActionSummary {
     /// <p>The name of the action which automatically creates the data set's contents.</p>
     #[serde(rename = "actionName")]
@@ -553,7 +554,7 @@ pub struct DatasetContentDeliveryRule {
 
 /// <p>The state of the data set contents and the reason they are in this state.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetContentStatus {
     /// <p>The reason the data set contents are in this state.</p>
     #[serde(rename = "reason")]
@@ -567,7 +568,7 @@ pub struct DatasetContentStatus {
 
 /// <p>Summary information about data set contents.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetContentSummary {
     /// <p>The actual time the creation of the data set contents was started.</p>
     #[serde(rename = "creationTime")]
@@ -597,7 +598,7 @@ pub struct DatasetContentVersionValue {
 
 /// <p>The reference to a data set entry.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetEntry {
     /// <p>The pre-signed URI of the data set item.</p>
     #[serde(rename = "dataURI")]
@@ -611,7 +612,7 @@ pub struct DatasetEntry {
 
 /// <p>A summary of information about a data set.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetSummary {
     /// <p>A list of "DataActionSummary" objects.</p>
     #[serde(rename = "actions")]
@@ -654,7 +655,7 @@ pub struct DatasetTrigger {
 
 /// <p>Information about a data store.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Datastore {
     /// <p>The ARN of the data store.</p>
     #[serde(rename = "arn")]
@@ -699,7 +700,7 @@ pub struct DatastoreActivity {
 
 /// <p>Statistical information about the data store.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatastoreStatistics {
     /// <p>The estimated size of the data store.</p>
     #[serde(rename = "size")]
@@ -722,7 +723,7 @@ pub struct DatastoreStorage {
 
 /// <p>Where data store data is stored.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatastoreStorageSummary {
     /// <p>Used to store data store data in an S3 bucket that you manage.</p>
     #[serde(rename = "customerManagedS3")]
@@ -736,7 +737,7 @@ pub struct DatastoreStorageSummary {
 
 /// <p>A summary of information about a data store.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatastoreSummary {
     /// <p>When the data store was created.</p>
     #[serde(rename = "creationTime")]
@@ -822,7 +823,7 @@ pub struct DescribeChannelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelResponse {
     /// <p>An object that contains information about the channel.</p>
     #[serde(rename = "channel")]
@@ -842,7 +843,7 @@ pub struct DescribeDatasetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetResponse {
     /// <p>An object that contains information about the data set.</p>
     #[serde(rename = "dataset")]
@@ -862,7 +863,7 @@ pub struct DescribeDatastoreRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatastoreResponse {
     /// <p>Information about the data store.</p>
     #[serde(rename = "datastore")]
@@ -878,7 +879,7 @@ pub struct DescribeDatastoreResponse {
 pub struct DescribeLoggingOptionsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLoggingOptionsResponse {
     /// <p>The current settings of the AWS IoT Analytics logging options.</p>
     #[serde(rename = "loggingOptions")]
@@ -894,7 +895,7 @@ pub struct DescribePipelineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePipelineResponse {
     /// <p>A "Pipeline" object that contains information about the pipeline.</p>
     #[serde(rename = "pipeline")]
@@ -946,7 +947,7 @@ pub struct DeviceShadowEnrichActivity {
 
 /// <p>The estimated size of the resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EstimatedResourceSize {
     /// <p>The time when the estimate of the size of the resource was made.</p>
     #[serde(rename = "estimatedOn")]
@@ -985,7 +986,7 @@ pub struct GetDatasetContentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDatasetContentResponse {
     /// <p>A list of "DatasetEntry" objects.</p>
     #[serde(rename = "entries")]
@@ -1054,7 +1055,7 @@ pub struct ListChannelsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelsResponse {
     /// <p>A list of "ChannelSummary" objects.</p>
     #[serde(rename = "channelSummaries")]
@@ -1090,7 +1091,7 @@ pub struct ListDatasetContentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetContentsResponse {
     /// <p>Summary information about data set contents that have been created.</p>
     #[serde(rename = "datasetContentSummaries")]
@@ -1115,7 +1116,7 @@ pub struct ListDatasetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetsResponse {
     /// <p>A list of "DatasetSummary" objects.</p>
     #[serde(rename = "datasetSummaries")]
@@ -1140,7 +1141,7 @@ pub struct ListDatastoresRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatastoresResponse {
     /// <p>A list of "DatastoreSummary" objects.</p>
     #[serde(rename = "datastoreSummaries")]
@@ -1165,7 +1166,7 @@ pub struct ListPipelinesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPipelinesResponse {
     /// <p>The token to retrieve the next set of results, or <code>null</code> if there are no more results.</p>
     #[serde(rename = "nextToken")]
@@ -1185,7 +1186,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags (metadata) which you have assigned to the resource.</p>
     #[serde(rename = "tags")]
@@ -1251,7 +1252,7 @@ pub struct OutputFileUriValue {
 
 /// <p>Contains information about a pipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Pipeline {
     /// <p>The activities that perform transformations on the messages.</p>
     #[serde(rename = "activities")]
@@ -1326,7 +1327,7 @@ pub struct PipelineActivity {
 
 /// <p>A summary of information about a pipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PipelineSummary {
     /// <p>When the pipeline was created.</p>
     #[serde(rename = "creationTime")]
@@ -1379,7 +1380,7 @@ pub struct RemoveAttributesActivity {
 
 /// <p>Information about pipeline reprocessing.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReprocessingSummary {
     /// <p>The time the pipeline reprocessing was created.</p>
     #[serde(rename = "creationTime")]
@@ -1435,7 +1436,7 @@ pub struct RunPipelineActivityRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RunPipelineActivityResponse {
     /// <p>In case the pipeline activity fails, the log message that is generated.</p>
     #[serde(rename = "logResult")]
@@ -1490,7 +1491,7 @@ pub struct SampleChannelDataRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SampleChannelDataResponse {
     /// <p>The list of message samples. Each sample message is returned as a base64-encoded string.</p>
     #[serde(rename = "payloads")]
@@ -1533,7 +1534,7 @@ pub struct ServiceManagedChannelS3Storage {}
 
 /// <p>Used to store channel data in an S3 bucket managed by the AWS IoT Analytics service.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceManagedChannelS3StorageSummary {}
 
 /// <p>Use this to store data store data in an S3 bucket managed by the AWS IoT Analytics service.</p>
@@ -1542,7 +1543,7 @@ pub struct ServiceManagedDatastoreS3Storage {}
 
 /// <p>Used to store data store data in an S3 bucket managed by the AWS IoT Analytics service.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceManagedDatastoreS3StorageSummary {}
 
 /// <p>The SQL query to modify the message.</p>
@@ -1573,7 +1574,7 @@ pub struct StartPipelineReprocessingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartPipelineReprocessingResponse {
     /// <p>The ID of the pipeline reprocessing activity that was started.</p>
     #[serde(rename = "reprocessingId")]
@@ -1603,7 +1604,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Information about the data set whose content generation triggers the new data set content generation.</p>
@@ -1625,7 +1626,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3971,10 +3972,7 @@ impl IotAnalyticsClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> IotAnalyticsClient {
-        IotAnalyticsClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -3986,10 +3984,14 @@ impl IotAnalyticsClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        IotAnalyticsClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> IotAnalyticsClient {
+        IotAnalyticsClient { client, region }
     }
 }
 

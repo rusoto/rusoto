@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -134,10 +135,7 @@ impl SageMakerRuntimeClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> SageMakerRuntimeClient {
-        SageMakerRuntimeClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -149,10 +147,14 @@ impl SageMakerRuntimeClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        SageMakerRuntimeClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> SageMakerRuntimeClient {
+        SageMakerRuntimeClient { client, region }
     }
 }
 

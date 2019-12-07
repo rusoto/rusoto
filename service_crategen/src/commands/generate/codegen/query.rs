@@ -185,7 +185,7 @@ fn generate_list_serializer(service: &Service<'_>, shape: &Shape) -> String {
     if primitive {
         parts.push(format!(
             "params.put(&key, {});",
-            serialize_primitive_expression(&member_shape.shape_type, "obj")
+            serialize_primitive_expression(member_shape.shape_type, "obj")
         ));
     } else {
         parts.push(format!(
@@ -215,16 +215,15 @@ fn list_member_format(service: &Service<'_>, flattened: bool) -> String {
 fn generate_map_serializer(service: &Service<'_>, shape: &Shape) -> String {
     let mut parts = Vec::new();
 
-    let prefix_snip: String;
-    if service.service_id() == Some("SNS")
+     let prefix_snip = if service.service_id() == Some("SNS")
         && shape.value.is_some()
         && (shape.value.as_ref().unwrap().shape == "MessageAttributeValue"
             || shape.value.as_ref().unwrap().shape == "AttributeValue")
     {
-        prefix_snip = "let prefix = format!(\"{}.entry.{}\", name, index+1);".to_string();
+        "let prefix = format!(\"{}.entry.{}\", name, index+1);".to_string()
     } else {
-        prefix_snip = "let prefix = format!(\"{}.{}\", name, index+1);".to_string();
-    }
+        "let prefix = format!(\"{}.{}\", name, index+1);".to_string()
+    };
 
     // the key is always a string type
     parts.push(format!(
@@ -241,9 +240,15 @@ fn generate_map_serializer(service: &Service<'_>, shape: &Shape) -> String {
     let primitive_value = value_shape.is_primitive();
 
     if primitive_value {
-        parts.push(format!(
-            "params.put(&format!(\"{{}}.{{}}\", prefix, \"Value\"), &value);"
-        ));
+        if service.service_id() == Some("SNS") {
+            parts.push(
+                "params.put(&format!(\"{}.{}\", prefix, \"value\"), &value);".to_string()
+            );
+        } else {
+            parts.push(
+                "params.put(&format!(\"{}.{}\", prefix, \"Value\"), &value);".to_string()
+            );
+        }
     } else {
         parts.push(format!(
             "{value_type}Serializer::serialize(
@@ -355,7 +360,7 @@ fn optional_primitive_field_serializer(
         return "".to_owned();
     }
     let member_shape = service.shape_for_member(member).unwrap();
-    let expression = serialize_primitive_expression(&member_shape.shape_type, "field_value");
+    let expression = serialize_primitive_expression(member_shape.shape_type, "field_value");
 
     format!(
         "if let Some(ref field_value) = obj.{field_name} {{
@@ -374,7 +379,7 @@ fn required_primitive_field_serializer(
 ) -> String {
     let member_shape = service.shape_for_member(member).unwrap();
     let expression = serialize_primitive_expression(
-        &member_shape.shape_type,
+        member_shape.shape_type,
         &format!("obj.{}", generate_field_name(member_name)),
     );
 
@@ -385,8 +390,8 @@ fn required_primitive_field_serializer(
     )
 }
 
-fn serialize_primitive_expression(shape_type: &ShapeType, var_name: &str) -> String {
-    match *shape_type {
+fn serialize_primitive_expression(shape_type: ShapeType, var_name: &str) -> String {
+    match shape_type {
         ShapeType::String
         | ShapeType::Timestamp
         | ShapeType::Integer
@@ -403,15 +408,29 @@ fn required_complex_field_serializer(
     member_name: &str,
     member: &Member,
 ) -> String {
+    let tag_snip: String;
+    let tag_name = member_location(service, member, member_name);
+    if service.service_id() == Some("SNS") && member.shape == "MapStringToString" {
+        tag_snip = format!(
+            "&format!(\"{{}}{{}}.entry\", prefix, \"{tag_name}\")",
+            tag_name = tag_name
+        );
+    } else {
+        tag_snip = format!(
+            "&format!(\"{{}}{{}}\", prefix, \"{tag_name}\")",
+            tag_name = tag_name
+        );
+    }
+
     format!(
         "{member_shape}Serializer::serialize(
                 params,
-                &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
+                {tag_snip},
                 &obj.{field_name},
             );",
         field_name = generate_field_name(member_name),
         member_shape = member.shape,
-        tag_name = member_location(service, member, member_name)
+        tag_snip = tag_snip,
     )
 }
 
@@ -420,17 +439,30 @@ fn optional_complex_field_serializer(
     member_name: &str,
     member: &Member,
 ) -> String {
+    let tag_snip: String;
+    let tag_name = member_location(service, member, member_name);
+    if service.service_id() == Some("SNS") && member.shape == "MapStringToString" {
+        tag_snip = format!(
+            "&format!(\"{{}}{{}}.entry\", prefix, \"{tag_name}\")",
+            tag_name = tag_name
+        );
+    } else {
+        tag_snip = format!(
+            "&format!(\"{{}}{{}}\", prefix, \"{tag_name}\")",
+            tag_name = tag_name
+        );
+    }
     format!(
         "if let Some(ref field_value) = obj.{field_name} {{
                 {member_shape_name}Serializer::serialize(
                     params,
-                    &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
+                    {tag_snip},
                     field_value,
                 );
             }}",
         field_name = generate_field_name(member_name),
         member_shape_name = member.shape,
-        tag_name = member_location(service, member, member_name)
+        tag_snip = tag_snip,
     )
 }
 

@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -26,7 +27,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>The values of a given attribute, such as <code>Throughput Optimized HDD</code> or <code>Provisioned IOPS</code> for the <code>Amazon EC2</code> <code>volumeType</code> attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttributeValue {
     /// <p>The specific value of an <code>attributeName</code>.</p>
     #[serde(rename = "Value")]
@@ -55,7 +56,7 @@ pub struct DescribeServicesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeServicesResponse {
     /// <p>The format version of the response. For example, <code>aws_v1</code>.</p>
     #[serde(rename = "FormatVersion")]
@@ -104,7 +105,7 @@ pub struct GetAttributeValuesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAttributeValuesResponse {
     /// <p>The list of values for an attribute. For example, <code>Throughput Optimized HDD</code> and <code>Provisioned IOPS</code> are two available values for the <code>AmazonEC2</code> <code>volumeType</code>.</p>
     #[serde(rename = "AttributeValues")]
@@ -141,7 +142,7 @@ pub struct GetProductsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetProductsResponse {
     /// <p>The format version of the response. For example, aws_v1.</p>
     #[serde(rename = "FormatVersion")]
@@ -159,7 +160,7 @@ pub struct GetProductsResponse {
 
 /// <p>The metadata for a service, such as the service code and available attribute names.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Service {
     /// <p>The attributes that are available for this service.</p>
     #[serde(rename = "AttributeNames")]
@@ -375,10 +376,7 @@ impl PricingClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> PricingClient {
-        PricingClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -390,10 +388,14 @@ impl PricingClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        PricingClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> PricingClient {
+        PricingClient { client, region }
     }
 }
 

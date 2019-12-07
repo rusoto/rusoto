@@ -11,25 +11,31 @@ pub use crate::container::ContainerProvider;
 pub use crate::environment::EnvironmentProvider;
 pub use crate::instance_metadata::InstanceMetadataProvider;
 pub use crate::profile::ProfileProvider;
+
 pub use crate::static_provider::StaticProvider;
+pub use crate::variable::Variable;
 
 pub mod claims;
 mod container;
 mod environment;
 mod instance_metadata;
+mod object_safe;
 mod profile;
 mod request;
+mod secrets;
 mod static_provider;
 #[cfg(test)]
 pub(crate) mod test_utils;
+mod variable;
 
 use async_trait::async_trait;
 use std::collections::BTreeMap;
-use std::env::var as env_var;
+use std::env::{var as env_var, VarError};
 use std::error::Error;
 use std::fmt;
 use std::io::Error as IoError;
 use std::sync::Arc;
+
 use std::time::Duration;
 
 use chrono::{DateTime, Duration as ChronoDuration, ParseError, Utc};
@@ -37,15 +43,49 @@ use hyper::Error as HyperError;
 use serde::Deserialize;
 use tokio::sync::Mutex;
 
+/// Representation of anonymity
+pub trait Anonymous {
+    /// Return true if a type is anonymous, false otherwise
+    fn is_anonymous(&self) -> bool;
+}
+
+impl Anonymous for AwsCredentials {
+    fn is_anonymous(&self) -> bool {
+        self.aws_access_key_id().is_empty() && self.aws_secret_access_key().is_empty()
+    }
+}
+
 /// AWS API access credentials, including access key, secret key, token (for IAM profiles),
 /// expiration timestamp, and claims from federated login.
-#[derive(Clone, Deserialize)]
+///
+/// # Anonymous example
+///
+/// Some AWS services, like [s3](https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html)
+/// do not require authenticated credential identity. For these
+/// cases you can use a default set which are considered anonymous
+///
+/// ```rust,ignore
+/// use rusoto_core::request::HttpClient;
+/// use rusoto_s3::S3Client;
+/// use rusoto_credential::{StaticProvider, AwsCredentials};
+/// # use std::error::Error;
+///
+/// # fn main() -> Result<(), Box<dyn Error>> {
+/// let s3 = S3Client::new_with(
+///     HttpClient::new()?,
+///     StaticProvider::from(AwsCredentials::default()),
+///     Default::default()
+/// );
+/// # Ok(())
+/// # }
+/// ```
+#[derive(Clone, Deserialize, Default)]
 pub struct AwsCredentials {
     #[serde(rename = "AccessKeyId")]
     key: String,
     #[serde(rename = "SecretAccessKey")]
     secret: String,
-    #[serde(rename = "Token")]
+    #[serde(rename = "SessionToken", alias = "Token")]
     token: Option<String>,
     #[serde(rename = "Expiration")]
     expires_at: Option<DateTime<Utc>>,
@@ -191,6 +231,18 @@ impl From<serde_json::Error> for CredentialsError {
     }
 }
 
+impl From<VarError> for CredentialsError {
+    fn from(err: VarError) -> CredentialsError {
+        CredentialsError::new(err.description())
+    }
+}
+
+impl From<FromUtf8Error> for CredentialsError {
+    fn from(err: FromUtf8Error) -> CredentialsError {
+        CredentialsError::new(err.description())
+    }
+}
+
 /// A trait for types that produce `AwsCredentials`.
 #[async_trait]
 pub trait ProvideAwsCredentials {
@@ -226,6 +278,7 @@ pub struct AutoRefreshingProvider<P: ProvideAwsCredentials + 'static> {
 
 impl<P: ProvideAwsCredentials + 'static> AutoRefreshingProvider<P> {
     /// Create a new `AutoRefreshingProvider` around the provided base provider.
+    #[deprecated(note = "Please use the from function instead")]
     pub fn new(provider: P) -> Result<AutoRefreshingProvider<P>, CredentialsError> {
         Ok(AutoRefreshingProvider {
             credentials_provider: provider,
@@ -248,7 +301,9 @@ impl<P: ProvideAwsCredentials + 'static> AutoRefreshingProvider<P> {
 }
 
 #[async_trait]
-impl<P: ProvideAwsCredentials + Send + Sync + 'static> ProvideAwsCredentials for AutoRefreshingProvider<P> {
+impl<P: ProvideAwsCredentials + Send + Sync + 'static> ProvideAwsCredentials
+    for AutoRefreshingProvider<P>
+{
     async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
         loop {
             let mut guard = self.current_credentials.lock().await;
@@ -257,12 +312,10 @@ impl<P: ProvideAwsCredentials + Send + Sync + 'static> ProvideAwsCredentials for
                 None => {
                     let res = self.credentials_provider.credentials().await;
                     *guard = Some(res);
-                },
-                Some(Err(e)) => {
-                    return Err(e.clone())
                 }
+                Some(Err(e)) => return Err(e.clone()),
                 Some(Ok(creds)) => {
-                    if creds.credentials_are_expired(){
+                    if creds.credentials_are_expired() {
                         *guard = None;
                     } else {
                         return Ok(creds.clone());
@@ -274,6 +327,10 @@ impl<P: ProvideAwsCredentials + Send + Sync + 'static> ProvideAwsCredentials for
 }
 
 /// Wraps a `ChainProvider` in an `AutoRefreshingProvider`.
+///
+/// **Note**: Consider using `rusoto_sts::DefaultCredentialsProvider` instead as it supports
+/// additional credentials sources that depend on STS and uses a security first approach by
+/// disabling [`credential_process`][credential_process] by default.
 ///
 /// The underlying `ChainProvider` checks multiple sources for credentials, and the `AutoRefreshingProvider`
 /// refreshes the credentials automatically when they expire.
@@ -292,7 +349,7 @@ pub struct DefaultCredentialsProvider(AutoRefreshingProvider<ChainProvider>);
 impl DefaultCredentialsProvider {
     /// Creates a new thread-safe `DefaultCredentialsProvider`.
     pub fn new() -> Result<DefaultCredentialsProvider, CredentialsError> {
-        let inner = AutoRefreshingProvider::new(ChainProvider::new())?;
+        let inner = AutoRefreshingProvider::from(ChainProvider::new());
         Ok(DefaultCredentialsProvider(inner))
     }
 }
@@ -305,6 +362,9 @@ impl ProvideAwsCredentials for DefaultCredentialsProvider {
 }
 
 /// Provides AWS credentials from multiple possible sources using a priority order.
+///
+/// **Note**: Consider using `rusoto_sts::DefaultCredentialsProvider` instead as it supports
+/// additional credentials sources and uses a security first approach.
 ///
 /// The following sources are checked in order for credentials when calling `credentials`:
 ///
@@ -324,7 +384,6 @@ impl ProvideAwsCredentials for DefaultCredentialsProvider {
 /// extern crate rusoto_credential;
 ///
 /// use std::time::Duration;
-///
 /// use rusoto_credential::ChainProvider;
 ///
 /// fn main() {
@@ -361,7 +420,9 @@ impl ChainProvider {
     }
 }
 
-async fn chain_provider_credentials(provider: ChainProvider) -> Result<AwsCredentials, CredentialsError> {
+async fn chain_provider_credentials(
+    provider: ChainProvider,
+) -> Result<AwsCredentials, CredentialsError> {
     if let Ok(creds) = provider.environment_provider.credentials().await {
         return Ok(creds);
     }
@@ -438,6 +499,7 @@ fn parse_credentials_from_aws_service(response: &str) -> Result<AwsCredentials, 
 
 #[cfg(test)]
 mod tests {
+
     use std::fs::{self, File};
     use std::io::Read;
     use std::path::Path;
@@ -446,6 +508,16 @@ mod tests {
     use quickcheck::quickcheck;
 
     use super::*;
+
+    #[test]
+    fn default_empty_credentials_are_considered_anonymous() {
+        assert!(AwsCredentials::default().is_anonymous())
+    }
+
+    #[test]
+    fn credentials_with_values_are_not_considered_anonymous() {
+        assert!(!AwsCredentials::new("foo", "bar", None, None).is_anonymous())
+    }
 
     #[test]
     fn providers_are_send_and_sync() {
@@ -505,6 +577,7 @@ mod tests {
             credentials.aws_secret_access_key(),
             "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
         );
+        assert!(credentials.token().is_some());
 
         assert_eq!(
             credentials.expires_at().expect(""),

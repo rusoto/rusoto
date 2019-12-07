@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -32,7 +33,7 @@ pub struct BatchDeleteBuildsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteBuildsOutput {
     /// <p>The IDs of the builds that were successfully deleted.</p>
     #[serde(rename = "buildsDeleted")]
@@ -52,7 +53,7 @@ pub struct BatchGetBuildsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetBuildsOutput {
     /// <p>Information about the requested builds.</p>
     #[serde(rename = "builds")]
@@ -72,7 +73,7 @@ pub struct BatchGetProjectsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetProjectsOutput {
     /// <p>Information about the requested build projects.</p>
     #[serde(rename = "projects")]
@@ -86,7 +87,7 @@ pub struct BatchGetProjectsOutput {
 
 /// <p>Information about a build.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Build {
     /// <p>The Amazon Resource Name (ARN) of the build.</p>
     #[serde(rename = "arn")]
@@ -176,7 +177,7 @@ pub struct Build {
     #[serde(rename = "source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<ProjectSource>,
-    /// <p>Any version identifier for the version of the source code to be built.</p>
+    /// <p>Any version identifier for the version of the source code to be built. If <code>sourceVersion</code> is specified at the project level, then this <code>sourceVersion</code> (at the build level) takes precedence. </p> <p> For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
     #[serde(rename = "sourceVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_version: Option<String>,
@@ -196,7 +197,7 @@ pub struct Build {
 
 /// <p>Information about build output artifacts.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BuildArtifacts {
     /// <p> An identifier for this artifact definition. </p>
     #[serde(rename = "artifactIdentifier")]
@@ -226,7 +227,7 @@ pub struct BuildArtifacts {
 
 /// <p>Information about a build that could not be successfully deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BuildNotDeleted {
     /// <p>The ID of the build that could not be successfully deleted.</p>
     #[serde(rename = "id")]
@@ -240,7 +241,7 @@ pub struct BuildNotDeleted {
 
 /// <p>Information about a stage for a build.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BuildPhase {
     /// <p>Additional information about a build phase, especially to help troubleshoot a failed build.</p>
     #[serde(rename = "contexts")]
@@ -323,6 +324,10 @@ pub struct CreateProjectInput {
     #[serde(rename = "secondaryArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secondary_artifacts: Option<Vec<ProjectArtifacts>>,
+    /// <p> An array of <code>ProjectSourceVersion</code> objects. If <code>secondarySourceVersions</code> is specified at the build level, then they take precedence over these <code>secondarySourceVersions</code> (at the project level). </p>
+    #[serde(rename = "secondarySourceVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_source_versions: Option<Vec<ProjectSourceVersion>>,
     /// <p> An array of <code>ProjectSource</code> objects. </p>
     #[serde(rename = "secondarySources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -333,6 +338,10 @@ pub struct CreateProjectInput {
     /// <p>Information about the build input source code for the build project.</p>
     #[serde(rename = "source")]
     pub source: ProjectSource,
+    /// <p> A version of the build input to be built for this project. If not specified, the latest version is used. If specified, it must be one of: </p> <ul> <li> <p>For AWS CodeCommit: the commit ID to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object that represents the build input ZIP file to use.</p> </li> </ul> <p> If <code>sourceVersion</code> is specified at the build level, then that version takes precedence over this <code>sourceVersion</code> (at the project level). </p> <p> For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
+    #[serde(rename = "sourceVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_version: Option<String>,
     /// <p>A set of tags for this build project.</p> <p>These tags are available for use by AWS services that support AWS CodeBuild build project tags.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -348,7 +357,7 @@ pub struct CreateProjectInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectOutput {
     /// <p>Information about the build project that was created.</p>
     #[serde(rename = "project")]
@@ -372,7 +381,7 @@ pub struct CreateWebhookInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWebhookOutput {
     /// <p>Information about a webhook that connects repository events to a build project in AWS CodeBuild.</p>
     #[serde(rename = "webhook")]
@@ -388,7 +397,7 @@ pub struct DeleteProjectInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProjectOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -399,7 +408,7 @@ pub struct DeleteSourceCredentialsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSourceCredentialsOutput {
     /// <p> The Amazon Resource Name (ARN) of the token. </p>
     #[serde(rename = "arn")]
@@ -415,12 +424,12 @@ pub struct DeleteWebhookInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWebhookOutput {}
 
 /// <p>Information about a Docker image that is managed by AWS CodeBuild.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentImage {
     /// <p>The description of the Docker image.</p>
     #[serde(rename = "description")]
@@ -438,7 +447,7 @@ pub struct EnvironmentImage {
 
 /// <p>A set of Docker images that are related by programming language and are managed by AWS CodeBuild.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentLanguage {
     /// <p>The list of Docker images that are related by the specified programming language.</p>
     #[serde(rename = "images")]
@@ -452,7 +461,7 @@ pub struct EnvironmentLanguage {
 
 /// <p>A set of Docker images that are related by platform and are managed by AWS CodeBuild.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentPlatform {
     /// <p>The list of programming languages that are available for the specified platform.</p>
     #[serde(rename = "languages")]
@@ -495,6 +504,10 @@ pub struct ImportSourceCredentialsInput {
     /// <p> The source provider used for this project. </p>
     #[serde(rename = "serverType")]
     pub server_type: String,
+    /// <p> Set to <code>false</code> to prevent overwriting the repository source credentials. Set to <code>true</code> to overwrite the repository source credentials. The default value is <code>true</code>. </p>
+    #[serde(rename = "shouldOverwrite")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub should_overwrite: Option<bool>,
     /// <p> For GitHub or GitHub Enterprise, this is the personal access token. For Bitbucket, this is the app password. </p>
     #[serde(rename = "token")]
     pub token: String,
@@ -505,7 +518,7 @@ pub struct ImportSourceCredentialsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportSourceCredentialsOutput {
     /// <p> The Amazon Resource Name (ARN) of the token. </p>
     #[serde(rename = "arn")]
@@ -521,7 +534,7 @@ pub struct InvalidateProjectCacheInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InvalidateProjectCacheOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -540,7 +553,7 @@ pub struct ListBuildsForProjectInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBuildsForProjectOutput {
     /// <p>A list of build IDs for the specified build project, with each build ID representing a single build.</p>
     #[serde(rename = "ids")]
@@ -565,7 +578,7 @@ pub struct ListBuildsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBuildsOutput {
     /// <p>A list of build IDs, with each build ID representing a single build.</p>
     #[serde(rename = "ids")]
@@ -581,7 +594,7 @@ pub struct ListBuildsOutput {
 pub struct ListCuratedEnvironmentImagesInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCuratedEnvironmentImagesOutput {
     /// <p>Information about supported platforms for Docker images that are managed by AWS CodeBuild.</p>
     #[serde(rename = "platforms")]
@@ -606,7 +619,7 @@ pub struct ListProjectsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProjectsOutput {
     /// <p>If there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call.</p>
     #[serde(rename = "nextToken")]
@@ -622,7 +635,7 @@ pub struct ListProjectsOutput {
 pub struct ListSourceCredentialsInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSourceCredentialsOutput {
     /// <p> A list of <code>SourceCredentialsInfo</code> objects. Each <code>SourceCredentialsInfo</code> object includes the authentication type, token ARN, and type of source provider for one set of credentials. </p>
     #[serde(rename = "sourceCredentialsInfos")]
@@ -645,7 +658,7 @@ pub struct LogsConfig {
 
 /// <p>Information about build logs in Amazon CloudWatch Logs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LogsLocation {
     /// <p> Information about Amazon CloudWatch Logs for a build project. </p>
     #[serde(rename = "cloudWatchLogs")]
@@ -675,7 +688,7 @@ pub struct LogsLocation {
 
 /// <p>Describes a network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkInterface {
     /// <p>The ID of the network interface.</p>
     #[serde(rename = "networkInterfaceId")]
@@ -689,7 +702,7 @@ pub struct NetworkInterface {
 
 /// <p>Additional information about a build phase that has an error. You can use this information for troubleshooting.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PhaseContext {
     /// <p>An explanation of the build phase's context. This might include a command ID and an exit code.</p>
     #[serde(rename = "message")]
@@ -703,7 +716,7 @@ pub struct PhaseContext {
 
 /// <p>Information about a build project.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Project {
     /// <p>The Amazon Resource Name (ARN) of the build project.</p>
     #[serde(rename = "arn")]
@@ -757,6 +770,10 @@ pub struct Project {
     #[serde(rename = "secondaryArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secondary_artifacts: Option<Vec<ProjectArtifacts>>,
+    /// <p> An array of <code>ProjectSourceVersion</code> objects. If <code>secondarySourceVersions</code> is specified at the build level, then they take over these <code>secondarySourceVersions</code> (at the project level). </p>
+    #[serde(rename = "secondarySourceVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_source_versions: Option<Vec<ProjectSourceVersion>>,
     /// <p> An array of <code>ProjectSource</code> objects. </p>
     #[serde(rename = "secondarySources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -769,6 +786,10 @@ pub struct Project {
     #[serde(rename = "source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<ProjectSource>,
+    /// <p>A version of the build input to be built for this project. If not specified, the latest version is used. If specified, it must be one of:</p> <ul> <li> <p>For AWS CodeCommit: the commit ID to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object that represents the build input ZIP file to use.</p> </li> </ul> <p> If <code>sourceVersion</code> is specified at the build level, then that version takes precedence over this <code>sourceVersion</code> (at the project level). </p> <p> For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
+    #[serde(rename = "sourceVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_version: Option<String>,
     /// <p>The tags for this build project.</p> <p>These tags are available for use by AWS services that support AWS CodeBuild build project tags.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -829,7 +850,7 @@ pub struct ProjectArtifacts {
 
 /// <p>Information about the build badge for the build project.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProjectBadge {
     /// <p>Set this to true to generate a publicly accessible URL for your project's build badge.</p>
     #[serde(rename = "badgeEnabled")]
@@ -848,7 +869,7 @@ pub struct ProjectCache {
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    /// <p><p> If you use a <code>LOCAL</code> cache, the local cache mode. You can use one or more local cache modes at the same time. </p> <ul> <li> <p> <code>LOCAL<em>SOURCE</em>CACHE</code> mode caches Git metadata for primary and secondary sources. After the cache is created, subsequent builds pull only the change between commits. This mode is a good choice for projects with a clean working directory and a source that is a large Git repository. If you choose this option and your project does not use a Git repository (GitHub, GitHub Enterprise, or Bitbucket), the option is ignored. </p> </li> <li> <p> <code>LOCAL<em>DOCKER</em>LAYER<em>CACHE</code> mode caches existing Docker layers. This mode is a good choice for projects that build or pull large Docker images. It can prevent the performance issues caused by pulling large Docker images down from the network. </p> <note> <ul> <li> <p> You can use a Docker layer cache in the Linux enviornment only. </p> </li> <li> <p> The <code>privileged</code> flag must be set so that your project has the required Docker permissions. </p> </li> <li> <p> You should consider the security implications before you use a Docker layer cache. </p> </li> </ul> </note> </li> </ul> <ul> <li> <p> <code>LOCAL</em>CUSTOM_CACHE</code> mode caches directories you specify in the buildspec file. This mode is a good choice if your build scenario is not suited to one of the other three local cache modes. If you use a custom cache: </p> <ul> <li> <p> Only directories can be specified for caching. You cannot specify individual files. </p> </li> <li> <p> Symlinks are used to reference cached directories. </p> </li> <li> <p> Cached directories are linked to your build before it downloads its project sources. Cached items are overriden if a source item has the same name. Directories are specified using cache paths in the buildspec file. </p> </li> </ul> </li> </ul></p>
+    /// <p><p> If you use a <code>LOCAL</code> cache, the local cache mode. You can use one or more local cache modes at the same time. </p> <ul> <li> <p> <code>LOCAL<em>SOURCE</em>CACHE</code> mode caches Git metadata for primary and secondary sources. After the cache is created, subsequent builds pull only the change between commits. This mode is a good choice for projects with a clean working directory and a source that is a large Git repository. If you choose this option and your project does not use a Git repository (GitHub, GitHub Enterprise, or Bitbucket), the option is ignored. </p> </li> <li> <p> <code>LOCAL<em>DOCKER</em>LAYER<em>CACHE</code> mode caches existing Docker layers. This mode is a good choice for projects that build or pull large Docker images. It can prevent the performance issues caused by pulling large Docker images down from the network. </p> <note> <ul> <li> <p> You can use a Docker layer cache in the Linux environment only. </p> </li> <li> <p> The <code>privileged</code> flag must be set so that your project has the required Docker permissions. </p> </li> <li> <p> You should consider the security implications before you use a Docker layer cache. </p> </li> </ul> </note> </li> </ul> <ul> <li> <p> <code>LOCAL</em>CUSTOM_CACHE</code> mode caches directories you specify in the buildspec file. This mode is a good choice if your build scenario is not suited to one of the other three local cache modes. If you use a custom cache: </p> <ul> <li> <p> Only directories can be specified for caching. You cannot specify individual files. </p> </li> <li> <p> Symlinks are used to reference cached directories. </p> </li> <li> <p> Cached directories are linked to your build before it downloads its project sources. Cached items are overriden if a source item has the same name. Directories are specified using cache paths in the buildspec file. </p> </li> </ul> </li> </ul></p>
     #[serde(rename = "modes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub modes: Option<Vec<String>>,
@@ -878,7 +899,7 @@ pub struct ProjectEnvironment {
     #[serde(rename = "imagePullCredentialsType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_pull_credentials_type: Option<String>,
-    /// <p>Enables running the Docker daemon inside a Docker container. Set to true only if the build project is be used to build Docker images, and the specified build environment image is not provided by AWS CodeBuild with Docker support. Otherwise, all associated builds that attempt to interact with the Docker daemon fail. You must also start the Docker daemon so that builds can interact with it. One way to do this is to initialize the Docker daemon during the install phase of your build spec by running the following build commands. (Do not run these commands if the specified build environment image is provided by AWS CodeBuild with Docker support.)</p> <p>If the operating system's base image is Ubuntu Linux:</p> <p> <code>- nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay&amp; - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"</code> </p> <p>If the operating system's base image is Alpine Linux, add the <code>-t</code> argument to <code>timeout</code>:</p> <p> <code>- nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay&amp; - timeout 15 -t sh -c "until docker info; do echo .; sleep 1; done"</code> </p>
+    /// <p>Enables running the Docker daemon inside a Docker container. Set to true only if the build project is used to build Docker images. Otherwise, a build that attempts to interact with the Docker daemon fails.</p> <p>You can initialize the Docker daemon during the install phase of your build by adding one of the following sets of commands to the install phase of your buildspec file:</p> <p>If the operating system's base image is Ubuntu Linux:</p> <p> <code>- nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay&amp;</code> </p> <p> <code>- timeout 15 sh -c "until docker info; do echo .; sleep 1; done"</code> </p> <p>If the operating system's base image is Alpine Linux and the previous command does not work, add the <code>-t</code> argument to <code>timeout</code>:</p> <p> <code>- nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay&amp;</code> </p> <p> <code>- timeout -t 15 sh -c "until docker info; do echo .; sleep 1; done"</code> </p>
     #[serde(rename = "privilegedMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub privileged_mode: Option<bool>,
@@ -931,13 +952,13 @@ pub struct ProjectSource {
     pub type_: String,
 }
 
-/// <p>A source identifier and its corresponding version.</p>
+/// <p> A source identifier and its corresponding version. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProjectSourceVersion {
     /// <p>An identifier for a source in the build project.</p>
     #[serde(rename = "sourceIdentifier")]
     pub source_identifier: String,
-    /// <p><p>The source version for the corresponding source identifier. If specified, must be one of:</p> <ul> <li> <p>For AWS CodeCommit: the commit ID to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example, <code>pr/25</code>). If a branch name is specified, the branch&#39;s HEAD commit ID is used. If not specified, the default branch&#39;s HEAD commit ID is used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch&#39;s HEAD commit ID is used. If not specified, the default branch&#39;s HEAD commit ID is used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object that represents the build input ZIP file to use.</p> </li> </ul></p>
+    /// <p>The source version for the corresponding source identifier. If specified, must be one of:</p> <ul> <li> <p>For AWS CodeCommit: the commit ID to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example, <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object that represents the build input ZIP file to use.</p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
     #[serde(rename = "sourceVersion")]
     pub source_version: String,
 }
@@ -983,7 +1004,7 @@ pub struct SourceAuth {
 
 /// <p> Information about the credentials for a GitHub, GitHub Enterprise, or Bitbucket repository. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SourceCredentialsInfo {
     /// <p> The Amazon Resource Name (ARN) of the token. </p>
     #[serde(rename = "arn")]
@@ -1104,7 +1125,7 @@ pub struct StartBuildInput {
     #[serde(rename = "sourceTypeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type_override: Option<String>,
-    /// <p><p>A version of the build input to be built, for this build only. If not specified, the latest version is used. If specified, must be one of:</p> <ul> <li> <p>For AWS CodeCommit: the commit ID to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch&#39;s HEAD commit ID is used. If not specified, the default branch&#39;s HEAD commit ID is used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch&#39;s HEAD commit ID is used. If not specified, the default branch&#39;s HEAD commit ID is used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object that represents the build input ZIP file to use.</p> </li> </ul></p>
+    /// <p>A version of the build input to be built, for this build only. If not specified, the latest version is used. If specified, must be one of:</p> <ul> <li> <p>For AWS CodeCommit: the commit ID to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object that represents the build input ZIP file to use.</p> </li> </ul> <p> If <code>sourceVersion</code> is specified at the project level, then this <code>sourceVersion</code> (at the build level) takes precedence. </p> <p> For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
     #[serde(rename = "sourceVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_version: Option<String>,
@@ -1115,7 +1136,7 @@ pub struct StartBuildInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartBuildOutput {
     /// <p>Information about the build to be run.</p>
     #[serde(rename = "build")]
@@ -1131,7 +1152,7 @@ pub struct StopBuildInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopBuildOutput {
     /// <p>Information about the build.</p>
     #[serde(rename = "build")]
@@ -1193,6 +1214,10 @@ pub struct UpdateProjectInput {
     #[serde(rename = "secondaryArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secondary_artifacts: Option<Vec<ProjectArtifacts>>,
+    /// <p> An array of <code>ProjectSourceVersion</code> objects. If <code>secondarySourceVersions</code> is specified at the build level, then they take over these <code>secondarySourceVersions</code> (at the project level). </p>
+    #[serde(rename = "secondarySourceVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_source_versions: Option<Vec<ProjectSourceVersion>>,
     /// <p> An array of <code>ProjectSource</code> objects. </p>
     #[serde(rename = "secondarySources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1205,6 +1230,10 @@ pub struct UpdateProjectInput {
     #[serde(rename = "source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<ProjectSource>,
+    /// <p> A version of the build input to be built for this project. If not specified, the latest version is used. If specified, it must be one of: </p> <ul> <li> <p>For AWS CodeCommit: the commit ID to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object that represents the build input ZIP file to use.</p> </li> </ul> <p> If <code>sourceVersion</code> is specified at the build level, then that version takes precedence over this <code>sourceVersion</code> (at the project level). </p> <p> For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
+    #[serde(rename = "sourceVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_version: Option<String>,
     /// <p>The replacement set of tags for this build project.</p> <p>These tags are available for use by AWS services that support AWS CodeBuild build project tags.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1220,7 +1249,7 @@ pub struct UpdateProjectInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProjectOutput {
     /// <p>Information about the build project that was changed.</p>
     #[serde(rename = "project")]
@@ -1248,7 +1277,7 @@ pub struct UpdateWebhookInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWebhookOutput {
     /// <p> Information about a repository's webhook that is associated with a project in AWS CodeBuild. </p>
     #[serde(rename = "webhook")]
@@ -1275,7 +1304,7 @@ pub struct VpcConfig {
 
 /// <p>Information about a webhook that connects repository events to a build project in AWS CodeBuild.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Webhook {
     /// <p><p>A regular expression used to determine which repository branches are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If <code>branchFilter</code> is empty, then all branches are built.</p> <note> <p> It is recommended that you use <code>filterGroups</code> instead of <code>branchFilter</code>. </p> </note></p>
     #[serde(rename = "branchFilter")]
@@ -1641,6 +1670,8 @@ pub enum ImportSourceCredentialsError {
     AccountLimitExceeded(String),
     /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
+    /// <p>The specified AWS resource cannot be created, because an AWS resource with the same settings already exists.</p>
+    ResourceAlreadyExists(String),
 }
 
 impl ImportSourceCredentialsError {
@@ -1656,6 +1687,11 @@ impl ImportSourceCredentialsError {
                     return RusotoError::Service(ImportSourceCredentialsError::InvalidInput(
                         err.msg,
                     ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        ImportSourceCredentialsError::ResourceAlreadyExists(err.msg),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1674,6 +1710,7 @@ impl Error for ImportSourceCredentialsError {
         match *self {
             ImportSourceCredentialsError::AccountLimitExceeded(ref cause) => cause,
             ImportSourceCredentialsError::InvalidInput(ref cause) => cause,
+            ImportSourceCredentialsError::ResourceAlreadyExists(ref cause) => cause,
         }
     }
 }
@@ -2172,10 +2209,7 @@ impl CodeBuildClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> CodeBuildClient {
-        CodeBuildClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -2187,10 +2221,14 @@ impl CodeBuildClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        CodeBuildClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CodeBuildClient {
+        CodeBuildClient { client, region }
     }
 }
 

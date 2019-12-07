@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -33,7 +34,7 @@ pub struct AssociateAdminAccountRequest {
 
 /// <p>Details of the resource that is not protected by the policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceViolator {
     /// <p>The resource ID.</p>
     #[serde(rename = "ResourceId")]
@@ -68,7 +69,7 @@ pub struct DisassociateAdminAccountRequest {}
 
 /// <p>Describes the compliance status for the account. An account is considered non-compliant if it includes resources that are not protected by the specified policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluationResult {
     /// <p>Describes an AWS account's compliance with the AWS Firewall Manager policy.</p>
     #[serde(rename = "ComplianceStatus")]
@@ -88,7 +89,7 @@ pub struct EvaluationResult {
 pub struct GetAdminAccountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAdminAccountResponse {
     /// <p>The AWS account that is set as the AWS Firewall Manager administrator.</p>
     #[serde(rename = "AdminAccount")]
@@ -111,7 +112,7 @@ pub struct GetComplianceDetailRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceDetailResponse {
     /// <p>Information about the resources and the policy that you specified in the <code>GetComplianceDetail</code> request.</p>
     #[serde(rename = "PolicyComplianceDetail")]
@@ -123,7 +124,7 @@ pub struct GetComplianceDetailResponse {
 pub struct GetNotificationChannelRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNotificationChannelResponse {
     /// <p>The IAM role that is used by AWS Firewall Manager to record activity to SNS.</p>
     #[serde(rename = "SnsRoleName")]
@@ -143,7 +144,7 @@ pub struct GetPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPolicyResponse {
     /// <p>Information about the specified AWS Firewall Manager policy.</p>
     #[serde(rename = "Policy")]
@@ -183,7 +184,7 @@ pub struct GetProtectionStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetProtectionStatusResponse {
     /// <p>The ID of the AWS Firewall administrator account for this policy.</p>
     #[serde(rename = "AdminAccountId")]
@@ -219,7 +220,7 @@ pub struct ListComplianceStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComplianceStatusResponse {
     /// <p>If you have more <code>PolicyComplianceStatus</code> objects than the number that you specified for <code>MaxResults</code> in the request, the response includes a <code>NextToken</code> value. To list more <code>PolicyComplianceStatus</code> objects, submit another <code>ListComplianceStatus</code> request, and specify the <code>NextToken</code> value from the response in the <code>NextToken</code> value in the next request.</p>
     #[serde(rename = "NextToken")]
@@ -244,7 +245,7 @@ pub struct ListMemberAccountsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMemberAccountsResponse {
     /// <p>An array of account IDs.</p>
     #[serde(rename = "MemberAccounts")]
@@ -269,7 +270,7 @@ pub struct ListPoliciesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPoliciesResponse {
     /// <p>If you have more <code>PolicySummary</code> objects than the number that you specified for <code>MaxResults</code> in the request, the response includes a <code>NextToken</code> value. To list more <code>PolicySummary</code> objects, submit another <code>ListPolicies</code> request, and specify the <code>NextToken</code> value from the response in the <code>NextToken</code> value in the next request.</p>
     #[serde(rename = "NextToken")]
@@ -327,7 +328,7 @@ pub struct Policy {
 
 /// <p>Describes the non-compliant resources in a member account for a specific AWS Firewall Manager policy. A maximum of 100 entries are displayed. If more than 100 resources are non-compliant, <code>EvaluationLimitExceeded</code> is set to <code>True</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PolicyComplianceDetail {
     /// <p>Indicates if over 100 resources are non-compliant with the AWS Firewall Manager policy.</p>
     #[serde(rename = "EvaluationLimitExceeded")]
@@ -361,7 +362,7 @@ pub struct PolicyComplianceDetail {
 
 /// <p>Indicates whether the account is compliant with the specified policy. An account is considered non-compliant if it includes resources that are not protected by the policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PolicyComplianceStatus {
     /// <p>An array of <code>EvaluationResult</code> objects.</p>
     #[serde(rename = "EvaluationResults")]
@@ -395,7 +396,7 @@ pub struct PolicyComplianceStatus {
 
 /// <p>Details of the AWS Firewall Manager policy. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PolicySummary {
     /// <p>The Amazon Resource Name (ARN) of the specified policy.</p>
     #[serde(rename = "PolicyArn")]
@@ -441,7 +442,7 @@ pub struct PutPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutPolicyResponse {
     /// <p>The details of the AWS Firewall Manager policy that was created.</p>
     #[serde(rename = "Policy")]
@@ -1254,10 +1255,7 @@ impl FmsClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> FmsClient {
-        FmsClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -1269,10 +1267,14 @@ impl FmsClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        FmsClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> FmsClient {
+        FmsClient { client, region }
     }
 }
 

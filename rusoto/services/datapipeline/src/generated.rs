@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -42,7 +43,7 @@ pub struct ActivatePipelineInput {
 
 /// <p>Contains the output of ActivatePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivatePipelineOutput {}
 
 /// <p>Contains the parameters for AddTags.</p>
@@ -58,7 +59,7 @@ pub struct AddTagsInput {
 
 /// <p>Contains the output of AddTags.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsOutput {}
 
 /// <p>Contains the parameters for CreatePipeline.</p>
@@ -82,7 +83,7 @@ pub struct CreatePipelineInput {
 
 /// <p>Contains the output of CreatePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePipelineOutput {
     /// <p>The ID that AWS Data Pipeline assigns the newly created pipeline. For example, <code>df-06372391ZG65EXAMPLE</code>.</p>
     #[serde(rename = "pipelineId")]
@@ -103,7 +104,7 @@ pub struct DeactivatePipelineInput {
 
 /// <p>Contains the output of DeactivatePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeactivatePipelineOutput {}
 
 /// <p>Contains the parameters for DeletePipeline.</p>
@@ -135,7 +136,7 @@ pub struct DescribeObjectsInput {
 
 /// <p>Contains the output of DescribeObjects.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeObjectsOutput {
     /// <p>Indicates whether there are more results to return.</p>
     #[serde(rename = "hasMoreResults")]
@@ -160,7 +161,7 @@ pub struct DescribePipelinesInput {
 
 /// <p>Contains the output of DescribePipelines.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePipelinesOutput {
     /// <p>An array of descriptions for the specified pipelines.</p>
     #[serde(rename = "pipelineDescriptionList")]
@@ -183,7 +184,7 @@ pub struct EvaluateExpressionInput {
 
 /// <p>Contains the output of EvaluateExpression.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluateExpressionOutput {
     /// <p>The evaluated expression.</p>
     #[serde(rename = "evaluatedExpression")]
@@ -220,7 +221,7 @@ pub struct GetPipelineDefinitionInput {
 
 /// <p>Contains the output of GetPipelineDefinition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPipelineDefinitionOutput {
     /// <p>The parameter objects used in the pipeline definition.</p>
     #[serde(rename = "parameterObjects")]
@@ -260,7 +261,7 @@ pub struct ListPipelinesInput {
 
 /// <p>Contains the output of ListPipelines.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPipelinesOutput {
     /// <p>Indicates whether there are more results that can be obtained by a subsequent call.</p>
     #[serde(rename = "hasMoreResults")]
@@ -323,7 +324,7 @@ pub struct ParameterValue {
 
 /// <p>Contains pipeline metadata.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PipelineDescription {
     /// <p>Description of the pipeline.</p>
     #[serde(rename = "description")]
@@ -346,7 +347,7 @@ pub struct PipelineDescription {
 
 /// <p>Contains the name and identifier of a pipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PipelineIdName {
     /// <p>The ID of the pipeline that was assigned by AWS Data Pipeline. This is a string of the form <code>df-297EG78HU43EEXAMPLE</code>.</p>
     #[serde(rename = "id")]
@@ -390,7 +391,7 @@ pub struct PollForTaskInput {
 
 /// <p>Contains the output of PollForTask.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PollForTaskOutput {
     /// <p>The information needed to complete the task that is being assigned to the task runner. One of the fields returned in this object is <code>taskId</code>, which contains an identifier for the task being assigned. The calling task runner uses <code>taskId</code> in subsequent calls to <a>ReportTaskProgress</a> and <a>SetTaskStatus</a>.</p>
     #[serde(rename = "taskObject")]
@@ -419,7 +420,7 @@ pub struct PutPipelineDefinitionInput {
 
 /// <p>Contains the output of PutPipelineDefinition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutPipelineDefinitionOutput {
     /// <p>Indicates whether there were validation errors, and the pipeline definition is stored but cannot be activated until you correct the pipeline and call <code>PutPipelineDefinition</code> to commit the corrected pipeline.</p>
     #[serde(rename = "errored")]
@@ -468,7 +469,7 @@ pub struct QueryObjectsInput {
 
 /// <p>Contains the output of QueryObjects.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryObjectsOutput {
     /// <p>Indicates whether there are more results that can be obtained by a subsequent call.</p>
     #[serde(rename = "hasMoreResults")]
@@ -497,7 +498,7 @@ pub struct RemoveTagsInput {
 
 /// <p>Contains the output of RemoveTags.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsOutput {}
 
 /// <p>Contains the parameters for ReportTaskProgress.</p>
@@ -514,7 +515,7 @@ pub struct ReportTaskProgressInput {
 
 /// <p>Contains the output of ReportTaskProgress.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReportTaskProgressOutput {
     /// <p>If true, the calling task runner should cancel processing of the task. The task runner does not need to call <a>SetTaskStatus</a> for canceled tasks.</p>
     #[serde(rename = "canceled")]
@@ -539,7 +540,7 @@ pub struct ReportTaskRunnerHeartbeatInput {
 
 /// <p>Contains the output of ReportTaskRunnerHeartbeat.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReportTaskRunnerHeartbeatOutput {
     /// <p>Indicates whether the calling task runner should terminate.</p>
     #[serde(rename = "terminate")]
@@ -597,7 +598,7 @@ pub struct SetTaskStatusInput {
 
 /// <p>Contains the output of SetTaskStatus.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetTaskStatusOutput {}
 
 /// <p>Tags are key/value pairs defined by a user and associated with a pipeline to control access. AWS Data Pipeline allows you to associate ten tags per pipeline. For more information, see <a href="http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-control-access.html">Controlling User Access to Pipelines</a> in the <i>AWS Data Pipeline Developer Guide</i>.</p>
@@ -613,7 +614,7 @@ pub struct Tag {
 
 /// <p>Contains information about a pipeline task that is assigned to a task runner.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskObject {
     /// <p>The ID of the pipeline task attempt object. AWS Data Pipeline uses this value to track how many times a task is attempted.</p>
     #[serde(rename = "attemptId")]
@@ -654,7 +655,7 @@ pub struct ValidatePipelineDefinitionInput {
 
 /// <p>Contains the output of ValidatePipelineDefinition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ValidatePipelineDefinitionOutput {
     /// <p>Indicates whether there were validation errors.</p>
     #[serde(rename = "errored")]
@@ -671,7 +672,7 @@ pub struct ValidatePipelineDefinitionOutput {
 
 /// <p>Defines a validation error. Validation errors prevent pipeline activation. The set of validation errors that can be returned are defined by AWS Data Pipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ValidationError {
     /// <p>A description of the validation error.</p>
     #[serde(rename = "errors")]
@@ -685,7 +686,7 @@ pub struct ValidationError {
 
 /// <p>Defines a validation warning. Validation warnings do not prevent pipeline activation. The set of validation warnings that can be returned are defined by AWS Data Pipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ValidationWarning {
     /// <p>The identifier of the object that contains the validation warning.</p>
     #[serde(rename = "id")]
@@ -1804,10 +1805,7 @@ impl DataPipelineClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> DataPipelineClient {
-        DataPipelineClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -1819,10 +1817,14 @@ impl DataPipelineClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        DataPipelineClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> DataPipelineClient {
+        DataPipelineClient { client, region }
     }
 }
 

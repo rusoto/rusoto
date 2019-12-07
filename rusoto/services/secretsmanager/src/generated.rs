@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -32,7 +33,7 @@ pub struct CancelRotateSecretRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelRotateSecretResponse {
     /// <p>The ARN of the secret for which rotation was canceled.</p>
     #[serde(rename = "ARN")]
@@ -85,7 +86,7 @@ pub struct CreateSecretRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSecretResponse {
     /// <p><p>The Amazon Resource Name (ARN) of the secret that you just created.</p> <note> <p>Secrets Manager automatically adds several random characters to the name at the end of the ARN when you initially create a secret. This affects only the ARN and not the actual friendly name. This ensures that if you create a new secret with the same name as an old secret that you previously deleted, then users with access to the old secret <i>don&#39;t</i> automatically get access to the new secret because the ARNs are different.</p> </note></p>
     #[serde(rename = "ARN")]
@@ -109,7 +110,7 @@ pub struct DeleteResourcePolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourcePolicyResponse {
     /// <p>The ARN of the secret that the resource-based policy was deleted for.</p>
     #[serde(rename = "ARN")]
@@ -137,7 +138,7 @@ pub struct DeleteSecretRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSecretResponse {
     /// <p>The ARN of the secret that is now scheduled for deletion.</p>
     #[serde(rename = "ARN")]
@@ -161,7 +162,7 @@ pub struct DescribeSecretRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSecretResponse {
     /// <p>The ARN of the secret.</p>
     #[serde(rename = "ARN")]
@@ -195,6 +196,9 @@ pub struct DescribeSecretResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    #[serde(rename = "OwningService")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owning_service: Option<String>,
     /// <p>Specifies whether automatic rotation is enabled for this secret.</p> <p>To enable rotation, use <a>RotateSecret</a> with <code>AutomaticallyRotateAfterDays</code> set to a value greater than 0. To disable rotation, use <a>CancelRotateSecret</a>.</p>
     #[serde(rename = "RotationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -254,7 +258,7 @@ pub struct GetRandomPasswordRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRandomPasswordResponse {
     /// <p>A string with the generated password.</p>
     #[serde(rename = "RandomPassword")]
@@ -270,7 +274,7 @@ pub struct GetResourcePolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourcePolicyResponse {
     /// <p>The ARN of the secret that the resource-based policy was retrieved for.</p>
     #[serde(rename = "ARN")]
@@ -302,7 +306,7 @@ pub struct GetSecretValueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSecretValueResponse {
     /// <p>The ARN of the secret.</p>
     #[serde(rename = "ARN")]
@@ -359,7 +363,7 @@ pub struct ListSecretVersionIdsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecretVersionIdsResponse {
     /// <p><p>The Amazon Resource Name (ARN) for the secret.</p> <note> <p>Secrets Manager automatically adds several random characters to the name at the end of the ARN when you initially create a secret. This affects only the ARN and not the actual friendly name. This ensures that if you create a new secret with the same name as an old secret that you previously deleted, then users with access to the old secret <i>don&#39;t</i> automatically get access to the new secret because the ARNs are different.</p> </note></p>
     #[serde(rename = "ARN")]
@@ -392,7 +396,7 @@ pub struct ListSecretsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecretsResponse {
     /// <p>If present in the response, this value indicates that there's more output available than what's included in the current response. This can occur even when the response includes no values at all, such as when you ask for a filtered view of a very long list. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to continue processing and get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back empty (as <code>null</code>).</p>
     #[serde(rename = "NextToken")]
@@ -415,7 +419,7 @@ pub struct PutResourcePolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutResourcePolicyResponse {
     /// <p>The ARN of the secret that the resource-based policy was retrieved for.</p>
     #[serde(rename = "ARN")]
@@ -456,7 +460,7 @@ pub struct PutSecretValueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSecretValueResponse {
     /// <p>The Amazon Resource Name (ARN) for the secret for which you just created a version.</p>
     #[serde(rename = "ARN")]
@@ -484,7 +488,7 @@ pub struct RestoreSecretRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreSecretResponse {
     /// <p>The ARN of the secret that was restored.</p>
     #[serde(rename = "ARN")]
@@ -516,7 +520,7 @@ pub struct RotateSecretRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RotateSecretResponse {
     /// <p>The ARN of the secret.</p>
     #[serde(rename = "ARN")]
@@ -543,7 +547,7 @@ pub struct RotationRulesType {
 
 /// <p>A structure that contains the details about a secret. It does not include the encrypted <code>SecretString</code> and <code>SecretBinary</code> values. To get those values, use the <a>GetSecretValue</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecretListEntry {
     /// <p>The Amazon Resource Name (ARN) of the secret.</p> <p>For more information about ARNs in Secrets Manager, see <a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_iam-permissions.html#iam-resources">Policy Resources</a> in the <i>AWS Secrets Manager User Guide</i>.</p>
     #[serde(rename = "ARN")]
@@ -577,6 +581,9 @@ pub struct SecretListEntry {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    #[serde(rename = "OwningService")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owning_service: Option<String>,
     /// <p>Indicated whether automatic, scheduled rotation is enabled for this secret.</p>
     #[serde(rename = "RotationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -601,7 +608,7 @@ pub struct SecretListEntry {
 
 /// <p>A structure that contains information about one version of a secret.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecretVersionsListEntry {
     /// <p>The date and time this version of the secret was created.</p>
     #[serde(rename = "CreatedDate")]
@@ -687,7 +694,7 @@ pub struct UpdateSecretRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSecretResponse {
     /// <p><p>The ARN of the secret that was updated.</p> <note> <p>Secrets Manager automatically adds several random characters to the name at the end of the ARN when you initially create a secret. This affects only the ARN and not the actual friendly name. This ensures that if you create a new secret with the same name as an old secret that you previously deleted, then users with access to the old secret <i>don&#39;t</i> automatically get access to the new secret because the ARNs are different.</p> </note></p>
     #[serde(rename = "ARN")]
@@ -722,7 +729,7 @@ pub struct UpdateSecretVersionStageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSecretVersionStageResponse {
     /// <p>The ARN of the secret with the staging label that was modified.</p>
     #[serde(rename = "ARN")]
@@ -1863,10 +1870,7 @@ impl SecretsManagerClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> SecretsManagerClient {
-        SecretsManagerClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -1878,10 +1882,14 @@ impl SecretsManagerClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        SecretsManagerClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> SecretsManagerClient {
+        SecretsManagerClient { client, region }
     }
 }
 

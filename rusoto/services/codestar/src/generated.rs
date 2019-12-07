@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -46,7 +47,7 @@ pub struct AssociateTeamMemberRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateTeamMemberResult {
     /// <p>The user- or system-generated token from the initial request that can be used to repeat the request.</p>
     #[serde(rename = "clientRequestToken")]
@@ -125,7 +126,7 @@ pub struct CreateProjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectResult {
     /// <p>The Amazon Resource Name (ARN) of the created project.</p>
     #[serde(rename = "arn")]
@@ -161,7 +162,7 @@ pub struct CreateUserProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserProfileResult {
     /// <p>The date the user profile was created, in timestamp format.</p>
     #[serde(rename = "createdTimestamp")]
@@ -204,7 +205,7 @@ pub struct DeleteProjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProjectResult {
     /// <p>The Amazon Resource Name (ARN) of the deleted project.</p>
     #[serde(rename = "projectArn")]
@@ -224,7 +225,7 @@ pub struct DeleteUserProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserProfileResult {
     /// <p>The Amazon Resource Name (ARN) of the user deleted from AWS CodeStar.</p>
     #[serde(rename = "userArn")]
@@ -239,7 +240,7 @@ pub struct DescribeProjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProjectResult {
     /// <p>The Amazon Resource Name (ARN) for the project.</p>
     #[serde(rename = "arn")]
@@ -287,7 +288,7 @@ pub struct DescribeUserProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserProfileResult {
     /// <p>The date and time when the user profile was created in AWS CodeStar, in timestamp format.</p>
     #[serde(rename = "createdTimestamp")]
@@ -323,7 +324,7 @@ pub struct DisassociateTeamMemberRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateTeamMemberResult {}
 
 /// <p>Information about the GitHub repository to be created in AWS CodeStar. This is where the source code files provided with the project request will be uploaded after project creation.</p>
@@ -366,7 +367,7 @@ pub struct ListProjectsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProjectsResult {
     /// <p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>
     #[serde(rename = "nextToken")]
@@ -393,7 +394,7 @@ pub struct ListResourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourcesResult {
     /// <p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>
     #[serde(rename = "nextToken")]
@@ -421,7 +422,7 @@ pub struct ListTagsForProjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForProjectResult {
     /// <p>Reserved for future use.</p>
     #[serde(rename = "nextToken")]
@@ -449,7 +450,7 @@ pub struct ListTeamMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTeamMembersResult {
     /// <p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>
     #[serde(rename = "nextToken")]
@@ -473,7 +474,7 @@ pub struct ListUserProfilesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUserProfilesResult {
     /// <p>The continuation token to use when requesting the next set of results, if there are more results to be returned.</p>
     #[serde(rename = "nextToken")]
@@ -486,7 +487,7 @@ pub struct ListUserProfilesResult {
 
 /// <p>An indication of whether a project creation or deletion is failed or successful.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProjectStatus {
     /// <p>In the case of a project creation or deletion failure, a reason for the failure.</p>
     #[serde(rename = "reason")]
@@ -499,7 +500,7 @@ pub struct ProjectStatus {
 
 /// <p>Information about the metadata for a project.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProjectSummary {
     /// <p>The Amazon Resource Name (ARN) of the project.</p>
     #[serde(rename = "projectArn")]
@@ -513,7 +514,7 @@ pub struct ProjectSummary {
 
 /// <p>Information about a resource for a project.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Resource {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "id")]
@@ -544,7 +545,7 @@ pub struct TagProjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagProjectResult {
     /// <p>The tags for the project.</p>
     #[serde(rename = "tags")]
@@ -554,7 +555,7 @@ pub struct TagProjectResult {
 
 /// <p>Information about a team member in a project.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TeamMember {
     /// <p>The role assigned to the user in the project. Project roles have different levels of access. For more information, see <a href="http://docs.aws.amazon.com/codestar/latest/userguide/working-with-teams.html">Working with Teams</a> in the <i>AWS CodeStar User Guide</i>. </p>
     #[serde(rename = "projectRole")]
@@ -603,7 +604,7 @@ pub struct UntagProjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagProjectResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -622,7 +623,7 @@ pub struct UpdateProjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProjectResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -644,7 +645,7 @@ pub struct UpdateTeamMemberRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTeamMemberResult {
     /// <p>The project role granted to the user.</p>
     #[serde(rename = "projectRole")]
@@ -680,7 +681,7 @@ pub struct UpdateUserProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserProfileResult {
     /// <p>The date the user profile was created, in timestamp format.</p>
     #[serde(rename = "createdTimestamp")]
@@ -709,7 +710,7 @@ pub struct UpdateUserProfileResult {
 
 /// <p>Information about a user's profile in AWS CodeStar.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserProfileSummary {
     /// <p>The display name of a user in AWS CodeStar. For example, this could be set to both first and last name ("Mary Major") or a single name ("Mary"). The display name is also used to generate the initial icon associated with the user in AWS CodeStar projects. If spaces are included in the display name, the first character that appears after the space will be used as the second character in the user initial icon. The initial icon displays a maximum of two characters, so a display name with more than one space (for example "Mary Jane Major") would generate an initial icon using the first character and the first character after the space ("MJ", not "MM").</p>
     #[serde(rename = "displayName")]
@@ -1638,10 +1639,7 @@ impl CodeStarClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> CodeStarClient {
-        CodeStarClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -1653,10 +1651,14 @@ impl CodeStarClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        CodeStarClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CodeStarClient {
+        CodeStarClient { client, region }
     }
 }
 

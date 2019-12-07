@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -35,7 +36,7 @@ pub struct AddTagsToResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsToResourceResponse {
     /// <p>The status of the operation.</p>
     #[serde(rename = "Status")]
@@ -52,7 +53,7 @@ pub struct CreateHapgRequest {
 
 /// <p>Contains the output of the <a>CreateHAPartitionGroup</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHapgResponse {
     /// <p>The ARN of the high-availability partition group.</p>
     #[serde(rename = "HapgArn")]
@@ -94,7 +95,7 @@ pub struct CreateHsmRequest {
 
 /// <p>Contains the output of the <code>CreateHsm</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHsmResponse {
     /// <p>The ARN of the HSM.</p>
     #[serde(rename = "HsmArn")]
@@ -116,7 +117,7 @@ pub struct CreateLunaClientRequest {
 
 /// <p>Contains the output of the <a>CreateLunaClient</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLunaClientResponse {
     /// <p>The ARN of the client.</p>
     #[serde(rename = "ClientArn")]
@@ -134,7 +135,7 @@ pub struct DeleteHapgRequest {
 
 /// <p>Contains the output of the <a>DeleteHapg</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteHapgResponse {
     /// <p>The status of the action.</p>
     #[serde(rename = "Status")]
@@ -151,7 +152,7 @@ pub struct DeleteHsmRequest {
 
 /// <p>Contains the output of the <a>DeleteHsm</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteHsmResponse {
     /// <p>The status of the operation.</p>
     #[serde(rename = "Status")]
@@ -166,7 +167,7 @@ pub struct DeleteLunaClientRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLunaClientResponse {
     /// <p>The status of the action.</p>
     #[serde(rename = "Status")]
@@ -183,7 +184,7 @@ pub struct DescribeHapgRequest {
 
 /// <p>Contains the output of the <a>DescribeHapg</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHapgResponse {
     /// <p>The ARN of the high-availability partition group.</p>
     #[serde(rename = "HapgArn")]
@@ -238,7 +239,7 @@ pub struct DescribeHsmRequest {
 
 /// <p>Contains the output of the <a>DescribeHsm</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHsmResponse {
     /// <p>The Availability Zone that the HSM is in.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -338,7 +339,7 @@ pub struct DescribeLunaClientRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLunaClientResponse {
     /// <p>The certificate installed on the HSMs used by this client.</p>
     #[serde(rename = "Certificate")]
@@ -376,7 +377,7 @@ pub struct GetConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConfigResponse {
     /// <p>The certificate file containing the server.pem files of the HSMs.</p>
     #[serde(rename = "ConfigCred")]
@@ -397,7 +398,7 @@ pub struct GetConfigResponse {
 pub struct ListAvailableZonesRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAvailableZonesResponse {
     /// <p>The list of Availability Zones that have available AWS CloudHSM capacity.</p>
     #[serde(rename = "AZList")]
@@ -414,7 +415,7 @@ pub struct ListHapgsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHapgsResponse {
     /// <p>The list of high-availability partition groups.</p>
     #[serde(rename = "HapgList")]
@@ -435,7 +436,7 @@ pub struct ListHsmsRequest {
 
 /// <p>Contains the output of the <code>ListHsms</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHsmsResponse {
     /// <p>The list of ARNs that identify the HSMs.</p>
     #[serde(rename = "HsmList")]
@@ -456,7 +457,7 @@ pub struct ListLunaClientsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLunaClientsResponse {
     /// <p>The list of clients.</p>
     #[serde(rename = "ClientList")]
@@ -475,7 +476,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>One or more tags.</p>
     #[serde(rename = "TagList")]
@@ -498,7 +499,7 @@ pub struct ModifyHapgRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyHapgResponse {
     /// <p>The ARN of the high-availability partition group.</p>
     #[serde(rename = "HapgArn")]
@@ -536,7 +537,7 @@ pub struct ModifyHsmRequest {
 
 /// <p>Contains the output of the <a>ModifyHsm</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyHsmResponse {
     /// <p>The ARN of the HSM.</p>
     #[serde(rename = "HsmArn")]
@@ -555,7 +556,7 @@ pub struct ModifyLunaClientRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyLunaClientResponse {
     /// <p>The ARN of the client.</p>
     #[serde(rename = "ClientArn")]
@@ -574,7 +575,7 @@ pub struct RemoveTagsFromResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsFromResourceResponse {
     /// <p>The status of the operation.</p>
     #[serde(rename = "Status")]
@@ -1622,10 +1623,7 @@ impl CloudHsmClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> CloudHsmClient {
-        CloudHsmClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -1637,10 +1635,14 @@ impl CloudHsmClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        CloudHsmClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CloudHsmClient {
+        CloudHsmClient { client, region }
     }
 }
 

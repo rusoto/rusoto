@@ -202,39 +202,36 @@ fn xml_body_parser(
 }
 
 fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) -> String {
-    match (service.endpoint_prefix(), name) {
-        ("s3", "GetBucketLocationOutput") => {
-            // override custom deserializer
-            let struct_field_deserializers = shape
-                .members
-                .as_ref()
-                .unwrap()
-                .iter()
-                .map(|(member_name, member)| {
-                    format!(
-                        "obj.{field_name} = {parse_expression};",
-                        field_name = generate_field_name(member_name),
-                        parse_expression = generate_struct_field_parse_expression(
-                            shape,
-                            service,
-                            member_name,
-                            member,
-                            &member_name.to_string(),
-                            false
-                        )
+    if let ("s3", "GetBucketLocationOutput") = (service.endpoint_prefix(), name) {
+        // override custom deserializer
+        let struct_field_deserializers = shape
+            .members
+            .as_ref()
+            .unwrap()
+            .iter()
+            .map(|(member_name, member)| {
+                format!(
+                    "obj.{field_name} = {parse_expression};",
+                    field_name = generate_field_name(member_name),
+                    parse_expression = generate_struct_field_parse_expression(
+                        shape,
+                        service,
+                        member_name,
+                        member,
+                        &member_name.to_string(),
+                        false
                     )
-                })
-                .collect::<Vec<String>>()
-                .join("\n");
-            return format!(
-                "let mut obj = {name}::default();
+                )
+            })
+            .collect::<Vec<String>>()
+            .join("\n");
+        return format!(
+            "let mut obj = {name}::default();
                             {struct_field_deserializers}
                             Ok(obj)",
-                name = name,
-                struct_field_deserializers = struct_field_deserializers
-            );
-        }
-        _ => {}
+            name = name,
+            struct_field_deserializers = struct_field_deserializers
+        );
     }
     match shape.shape_type {
         ShapeType::List => generate_list_deserializer(shape, service),

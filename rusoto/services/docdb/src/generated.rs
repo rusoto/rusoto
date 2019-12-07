@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -450,6 +451,8 @@ pub struct CreateDBClusterMessage {
     pub db_cluster_parameter_group_name: Option<String>,
     /// <p>A DB subnet group to associate with this DB cluster.</p> <p>Constraints: Must match the name of an existing <code>DBSubnetGroup</code>. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>
     pub db_subnet_group_name: Option<String>,
+    /// <p>Specifies whether this cluster can be deleted. If <code>DeletionProtection</code> is enabled, the cluster cannot be deleted unless it is modified and <code>DeletionProtection</code> is disabled. <code>DeletionProtection</code> protects clusters from being accidentally deleted.</p>
+    pub deletion_protection: Option<bool>,
     /// <p>A list of log types that need to be enabled for exporting to Amazon CloudWatch Logs.</p>
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>The name of the database engine to be used for this DB cluster.</p> <p>Valid values: <code>docdb</code> </p>
@@ -458,10 +461,10 @@ pub struct CreateDBClusterMessage {
     pub engine_version: Option<String>,
     /// <p>The AWS KMS key identifier for an encrypted DB cluster.</p> <p>The AWS KMS key identifier is the Amazon Resource Name (ARN) for the AWS KMS encryption key. If you are creating a DB cluster using the same AWS account that owns the AWS KMS encryption key that is used to encrypt the new DB cluster, you can use the AWS KMS key alias instead of the ARN for the AWS KMS encryption key.</p> <p>If an encryption key is not specified in <code>KmsKeyId</code>:</p> <ul> <li> <p>If <code>ReplicationSourceIdentifier</code> identifies an encrypted source, then Amazon DocumentDB uses the encryption key that is used to encrypt the source. Otherwise, Amazon DocumentDB uses your default encryption key. </p> </li> <li> <p>If the <code>StorageEncrypted</code> parameter is <code>true</code> and <code>ReplicationSourceIdentifier</code> is not specified, Amazon DocumentDB uses your default encryption key.</p> </li> </ul> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p> <p>If you create a replica of an encrypted DB cluster in another AWS Region, you must set <code>KmsKeyId</code> to a KMS key ID that is valid in the destination AWS Region. This key is used to encrypt the replica in that AWS Region.</p>
     pub kms_key_id: Option<String>,
-    /// <p>The password for the master database user. This password can contain any printable ASCII character except "/", """, or "@".</p> <p>Constraints: Must contain from 8 to 41 characters.</p>
-    pub master_user_password: Option<String>,
+    /// <p>The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@).</p> <p>Constraints: Must contain from 8 to 41 characters.</p>
+    pub master_user_password: String,
     /// <p><p>The name of the master user for the DB cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must be from 1 to 16 letters or numbers.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot be a reserved word for the chosen database engine.</p> </li> </ul></p>
-    pub master_username: Option<String>,
+    pub master_username: String,
     /// <p>The port number on which the instances in the DB cluster accept connections.</p>
     pub port: Option<i64>,
     /// <p><p>The daily time range during which automated backups are created if automated backups are enabled using the <code>BackupRetentionPeriod</code> parameter. </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region. </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Must be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
@@ -511,6 +514,9 @@ impl CreateDBClusterMessageSerializer {
         if let Some(ref field_value) = obj.db_subnet_group_name {
             params.put(&format!("{}{}", prefix, "DBSubnetGroupName"), &field_value);
         }
+        if let Some(ref field_value) = obj.deletion_protection {
+            params.put(&format!("{}{}", prefix, "DeletionProtection"), &field_value);
+        }
         if let Some(ref field_value) = obj.enable_cloudwatch_logs_exports {
             LogTypeListSerializer::serialize(
                 params,
@@ -525,12 +531,14 @@ impl CreateDBClusterMessageSerializer {
         if let Some(ref field_value) = obj.kms_key_id {
             params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
         }
-        if let Some(ref field_value) = obj.master_user_password {
-            params.put(&format!("{}{}", prefix, "MasterUserPassword"), &field_value);
-        }
-        if let Some(ref field_value) = obj.master_username {
-            params.put(&format!("{}{}", prefix, "MasterUsername"), &field_value);
-        }
+        params.put(
+            &format!("{}{}", prefix, "MasterUserPassword"),
+            &obj.master_user_password,
+        );
+        params.put(
+            &format!("{}{}", prefix, "MasterUsername"),
+            &obj.master_username,
+        );
         if let Some(ref field_value) = obj.port {
             params.put(&format!("{}{}", prefix, "Port"), &field_value);
         }
@@ -726,7 +734,7 @@ pub struct CreateDBInstanceMessage {
     pub availability_zone: Option<String>,
     /// <p>The identifier of the DB cluster that the instance will belong to.</p>
     pub db_cluster_identifier: String,
-    /// <p>The compute and memory capacity of the DB instance; for example, <code>db.m4.large</code>. </p>
+    /// <p>The compute and memory capacity of the DB instance; for example, <code>db.r5.large</code>. </p>
     pub db_instance_class: String,
     /// <p>The DB instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>mydbinstance</code> </p>
     pub db_instance_identifier: String,
@@ -904,6 +912,8 @@ pub struct DBCluster {
     pub db_subnet_group: Option<String>,
     /// <p>The AWS Region-unique, immutable identifier for the DB cluster. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB cluster is accessed.</p>
     pub db_cluster_resource_id: Option<String>,
+    /// <p>Specifies whether this cluster can be deleted. If <code>DeletionProtection</code> is enabled, the cluster cannot be deleted unless it is modified and <code>DeletionProtection</code> is disabled. <code>DeletionProtection</code> protects clusters from being accidentally deleted.</p>
+    pub deletion_protection: Option<bool>,
     /// <p>The earliest time to which a database can be restored with point-in-time restore.</p>
     pub earliest_restorable_time: Option<String>,
     /// <p>A list of log types that this DB cluster is configured to export to Amazon CloudWatch Logs.</p>
@@ -999,6 +1009,12 @@ impl DBClusterDeserializer {
                 "DbClusterResourceId" => {
                     obj.db_cluster_resource_id = Some(StringDeserializer::deserialize(
                         "DbClusterResourceId",
+                        stack,
+                    )?);
+                }
+                "DeletionProtection" => {
+                    obj.deletion_protection = Some(BooleanDeserializer::deserialize(
+                        "DeletionProtection",
                         stack,
                     )?);
                 }
@@ -3681,9 +3697,11 @@ pub struct ModifyDBClusterMessage {
     pub db_cluster_identifier: String,
     /// <p>The name of the DB cluster parameter group to use for the DB cluster.</p>
     pub db_cluster_parameter_group_name: Option<String>,
+    /// <p>Specifies whether this cluster can be deleted. If <code>DeletionProtection</code> is enabled, the cluster cannot be deleted unless it is modified and <code>DeletionProtection</code> is disabled. <code>DeletionProtection</code> protects clusters from being accidentally deleted.</p>
+    pub deletion_protection: Option<bool>,
     /// <p>The version number of the database engine to which you want to upgrade. Changing this parameter results in an outage. The change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code>.</p>
     pub engine_version: Option<String>,
-    /// <p>The new password for the master database user. This password can contain any printable ASCII character except "<code>/</code>", "<code>"</code>", or "<code>@</code>".</p> <p>Constraints: Must contain from 8 to 41 characters.</p>
+    /// <p>The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@).</p> <p>Constraints: Must contain from 8 to 41 characters.</p>
     pub master_user_password: Option<String>,
     /// <p>The new DB cluster identifier for the DB cluster when renaming a DB cluster. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster2</code> </p>
     pub new_db_cluster_identifier: Option<String>,
@@ -3731,6 +3749,9 @@ impl ModifyDBClusterMessageSerializer {
                 &format!("{}{}", prefix, "DBClusterParameterGroupName"),
                 &field_value,
             );
+        }
+        if let Some(ref field_value) = obj.deletion_protection {
+            params.put(&format!("{}{}", prefix, "DeletionProtection"), &field_value);
         }
         if let Some(ref field_value) = obj.engine_version {
             params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
@@ -3907,7 +3928,7 @@ pub struct ModifyDBInstanceMessage {
     pub apply_immediately: Option<bool>,
     /// <p>Indicates that minor version upgrades are applied automatically to the DB instance during the maintenance window. Changing this parameter doesn't result in an outage except in the following case, and the change is asynchronously applied as soon as possible. An outage results if this parameter is set to <code>true</code> during the maintenance window, and a newer minor version is available, and Amazon DocumentDB has enabled automatic patching for that engine version. </p>
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>The new compute and memory capacity of the DB instance; for example, <code>db.m4.large</code>. Not all DB instance classes are available in all AWS Regions. </p> <p>If you modify the DB instance class, an outage occurs during the change. The change is applied during the next maintenance window, unless <code>ApplyImmediately</code> is specified as <code>true</code> for this request. </p> <p>Default: Uses existing setting.</p>
+    /// <p>The new compute and memory capacity of the DB instance; for example, <code>db.r5.large</code>. Not all DB instance classes are available in all AWS Regions. </p> <p>If you modify the DB instance class, an outage occurs during the change. The change is applied during the next maintenance window, unless <code>ApplyImmediately</code> is specified as <code>true</code> for this request. </p> <p>Default: Uses existing setting.</p>
     pub db_instance_class: Option<String>,
     /// <p><p>The DB instance identifier. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing <code>DBInstance</code>.</p> </li> </ul></p>
     pub db_instance_identifier: String,
@@ -4783,6 +4804,8 @@ pub struct RestoreDBClusterFromSnapshotMessage {
     pub db_cluster_identifier: String,
     /// <p>The name of the DB subnet group to use for the new DB cluster.</p> <p>Constraints: If provided, must match the name of an existing <code>DBSubnetGroup</code>.</p> <p>Example: <code>mySubnetgroup</code> </p>
     pub db_subnet_group_name: Option<String>,
+    /// <p>Specifies whether this cluster can be deleted. If <code>DeletionProtection</code> is enabled, the cluster cannot be deleted unless it is modified and <code>DeletionProtection</code> is disabled. <code>DeletionProtection</code> protects clusters from being accidentally deleted.</p>
+    pub deletion_protection: Option<bool>,
     /// <p>A list of log types that must be enabled for exporting to Amazon CloudWatch Logs.</p>
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>The database engine to use for the new DB cluster.</p> <p>Default: The same as source.</p> <p>Constraint: Must be compatible with the engine of the source.</p>
@@ -4823,6 +4846,9 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
         );
         if let Some(ref field_value) = obj.db_subnet_group_name {
             params.put(&format!("{}{}", prefix, "DBSubnetGroupName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.deletion_protection {
+            params.put(&format!("{}{}", prefix, "DeletionProtection"), &field_value);
         }
         if let Some(ref field_value) = obj.enable_cloudwatch_logs_exports {
             LogTypeListSerializer::serialize(
@@ -4893,6 +4919,8 @@ pub struct RestoreDBClusterToPointInTimeMessage {
     pub db_cluster_identifier: String,
     /// <p>The DB subnet group name to use for the new DB cluster.</p> <p>Constraints: If provided, must match the name of an existing <code>DBSubnetGroup</code>.</p> <p>Example: <code>mySubnetgroup</code> </p>
     pub db_subnet_group_name: Option<String>,
+    /// <p>Specifies whether this cluster can be deleted. If <code>DeletionProtection</code> is enabled, the cluster cannot be deleted unless it is modified and <code>DeletionProtection</code> is disabled. <code>DeletionProtection</code> protects clusters from being accidentally deleted.</p>
+    pub deletion_protection: Option<bool>,
     /// <p>A list of log types that must be enabled for exporting to Amazon CloudWatch Logs.</p>
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>The AWS KMS key identifier to use when restoring an encrypted DB cluster from an encrypted DB cluster.</p> <p>The AWS KMS key identifier is the Amazon Resource Name (ARN) for the AWS KMS encryption key. If you are restoring a DB cluster with the same AWS account that owns the AWS KMS encryption key used to encrypt the new DB cluster, then you can use the AWS KMS key alias instead of the ARN for the AWS KMS encryption key.</p> <p>You can restore to a new DB cluster and encrypt the new DB cluster with an AWS KMS key that is different from the AWS KMS key used to encrypt the source DB cluster. The new DB cluster is encrypted with the AWS KMS key identified by the <code>KmsKeyId</code> parameter.</p> <p>If you do not specify a value for the <code>KmsKeyId</code> parameter, then the following occurs:</p> <ul> <li> <p>If the DB cluster is encrypted, then the restored DB cluster is encrypted using the AWS KMS key that was used to encrypt the source DB cluster.</p> </li> <li> <p>If the DB cluster is not encrypted, then the restored DB cluster is not encrypted.</p> </li> </ul> <p>If <code>DBClusterIdentifier</code> refers to a DB cluster that is not encrypted, then the restore request is rejected.</p>
@@ -4926,6 +4954,9 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
         );
         if let Some(ref field_value) = obj.db_subnet_group_name {
             params.put(&format!("{}{}", prefix, "DBSubnetGroupName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.deletion_protection {
+            params.put(&format!("{}{}", prefix, "DeletionProtection"), &field_value);
         }
         if let Some(ref field_value) = obj.enable_cloudwatch_logs_exports {
             LogTypeListSerializer::serialize(
@@ -5003,6 +5034,96 @@ impl SourceTypeDeserializer {
         end_element(tag_name, stack)?;
 
         Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StartDBClusterMessage {
+    /// <p>The identifier of the cluster to restart. Example: <code>docdb-2019-05-28-15-24-52</code> </p>
+    pub db_cluster_identifier: String,
+}
+
+/// Serialize `StartDBClusterMessage` contents to a `SignedRequest`.
+struct StartDBClusterMessageSerializer;
+impl StartDBClusterMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &StartDBClusterMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DBClusterIdentifier"),
+            &obj.db_cluster_identifier,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StartDBClusterResult {
+    pub db_cluster: Option<DBCluster>,
+}
+
+struct StartDBClusterResultDeserializer;
+impl StartDBClusterResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StartDBClusterResult, XmlParseError> {
+        deserialize_elements::<_, StartDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DBCluster" => {
+                    obj.db_cluster = Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StopDBClusterMessage {
+    /// <p>The identifier of the cluster to stop. Example: <code>docdb-2019-05-28-15-24-52</code> </p>
+    pub db_cluster_identifier: String,
+}
+
+/// Serialize `StopDBClusterMessage` contents to a `SignedRequest`.
+struct StopDBClusterMessageSerializer;
+impl StopDBClusterMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &StopDBClusterMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DBClusterIdentifier"),
+            &obj.db_cluster_identifier,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct StopDBClusterResult {
+    pub db_cluster: Option<DBCluster>,
+}
+
+struct StopDBClusterResultDeserializer;
+impl StopDBClusterResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StopDBClusterResult, XmlParseError> {
+        deserialize_elements::<_, StopDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DBCluster" => {
+                    obj.db_cluster = Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 struct StringDeserializer;
@@ -5400,6 +5521,10 @@ impl Error for AddTagsToResourceError {
 /// Errors returned by ApplyPendingMaintenanceAction
 #[derive(Debug, PartialEq)]
 pub enum ApplyPendingMaintenanceActionError {
+    /// <p>The DB cluster isn't in a valid state.</p>
+    InvalidDBClusterStateFault(String),
+    /// <p> The specified DB instance isn't in the <i>available</i> state. </p>
+    InvalidDBInstanceStateFault(String),
     /// <p>The specified resource ID was not found.</p>
     ResourceNotFoundFault(String),
 }
@@ -5414,6 +5539,20 @@ impl ApplyPendingMaintenanceActionError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
+                    "InvalidDBClusterStateFault" => {
+                        return RusotoError::Service(
+                            ApplyPendingMaintenanceActionError::InvalidDBClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidDBInstanceState" => {
+                        return RusotoError::Service(
+                            ApplyPendingMaintenanceActionError::InvalidDBInstanceStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
                     "ResourceNotFoundFault" => {
                         return RusotoError::Service(
                             ApplyPendingMaintenanceActionError::ResourceNotFoundFault(
@@ -5444,6 +5583,8 @@ impl fmt::Display for ApplyPendingMaintenanceActionError {
 impl Error for ApplyPendingMaintenanceActionError {
     fn description(&self) -> &str {
         match *self {
+            ApplyPendingMaintenanceActionError::InvalidDBClusterStateFault(ref cause) => cause,
+            ApplyPendingMaintenanceActionError::InvalidDBInstanceStateFault(ref cause) => cause,
             ApplyPendingMaintenanceActionError::ResourceNotFoundFault(ref cause) => cause,
         }
     }
@@ -8361,6 +8502,132 @@ impl Error for RestoreDBClusterToPointInTimeError {
         }
     }
 }
+/// Errors returned by StartDBCluster
+#[derive(Debug, PartialEq)]
+pub enum StartDBClusterError {
+    /// <p> <code>DBClusterIdentifier</code> doesn't refer to an existing DB cluster. </p>
+    DBClusterNotFoundFault(String),
+    /// <p>The DB cluster isn't in a valid state.</p>
+    InvalidDBClusterStateFault(String),
+    /// <p> The specified DB instance isn't in the <i>available</i> state. </p>
+    InvalidDBInstanceStateFault(String),
+}
+
+impl StartDBClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDBClusterError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DBClusterNotFoundFault" => {
+                        return RusotoError::Service(StartDBClusterError::DBClusterNotFoundFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidDBClusterStateFault" => {
+                        return RusotoError::Service(
+                            StartDBClusterError::InvalidDBClusterStateFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidDBInstanceState" => {
+                        return RusotoError::Service(
+                            StartDBClusterError::InvalidDBInstanceStateFault(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for StartDBClusterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartDBClusterError {
+    fn description(&self) -> &str {
+        match *self {
+            StartDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
+            StartDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
+            StartDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StopDBCluster
+#[derive(Debug, PartialEq)]
+pub enum StopDBClusterError {
+    /// <p> <code>DBClusterIdentifier</code> doesn't refer to an existing DB cluster. </p>
+    DBClusterNotFoundFault(String),
+    /// <p>The DB cluster isn't in a valid state.</p>
+    InvalidDBClusterStateFault(String),
+    /// <p> The specified DB instance isn't in the <i>available</i> state. </p>
+    InvalidDBInstanceStateFault(String),
+}
+
+impl StopDBClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopDBClusterError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DBClusterNotFoundFault" => {
+                        return RusotoError::Service(StopDBClusterError::DBClusterNotFoundFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidDBClusterStateFault" => {
+                        return RusotoError::Service(
+                            StopDBClusterError::InvalidDBClusterStateFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidDBInstanceState" => {
+                        return RusotoError::Service(
+                            StopDBClusterError::InvalidDBInstanceStateFault(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for StopDBClusterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopDBClusterError {
+    fn description(&self) -> &str {
+        match *self {
+            StopDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
+            StopDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
+            StopDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon DocDB API. Amazon DocDB clients implement this trait.
 #[async_trait]
 pub trait Docdb {
@@ -8609,6 +8876,18 @@ pub trait Docdb {
         &self,
         input: RestoreDBClusterToPointInTimeMessage,
     ) -> Result<RestoreDBClusterToPointInTimeResult, RusotoError<RestoreDBClusterToPointInTimeError>>;
+
+    /// <p>Restarts the stopped cluster that is specified by <code>DBClusterIdentifier</code>. For more information, see <a href="https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-stop-start.html">Stopping and Starting an Amazon DocumentDB Cluster</a>.</p>
+    async fn start_db_cluster(
+        &self,
+        input: StartDBClusterMessage,
+    ) -> Result<StartDBClusterResult, RusotoError<StartDBClusterError>>;
+
+    /// <p>Stops the running cluster that is specified by <code>DBClusterIdentifier</code>. The cluster must be in the <i>available</i> state. For more information, see <a href="https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-stop-start.html">Stopping and Starting an Amazon DocumentDB Cluster</a>.</p>
+    async fn stop_db_cluster(
+        &self,
+        input: StopDBClusterMessage,
+    ) -> Result<StopDBClusterResult, RusotoError<StopDBClusterError>>;
 }
 /// A client for the Amazon DocDB API.
 #[derive(Clone)]
@@ -8622,10 +8901,7 @@ impl DocdbClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> DocdbClient {
-        DocdbClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -8637,10 +8913,14 @@ impl DocdbClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        DocdbClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> DocdbClient {
+        DocdbClient { client, region }
     }
 }
 
@@ -10488,6 +10768,100 @@ impl Docdb for DocdbClient {
                 "RestoreDBClusterToPointInTimeResult",
                 &mut stack,
             )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Restarts the stopped cluster that is specified by <code>DBClusterIdentifier</code>. For more information, see <a href="https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-stop-start.html">Stopping and Starting an Amazon DocumentDB Cluster</a>.</p>
+    async fn start_db_cluster(
+        &self,
+        input: StartDBClusterMessage,
+    ) -> Result<StartDBClusterResult, RusotoError<StartDBClusterError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "StartDBCluster");
+        params.put("Version", "2014-10-31");
+        StartDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(StartDBClusterError::from_response(response));
+        }
+
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
+
+        if xml_response.body.is_empty() {
+            result = StartDBClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                StartDBClusterResultDeserializer::deserialize("StartDBClusterResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Stops the running cluster that is specified by <code>DBClusterIdentifier</code>. The cluster must be in the <i>available</i> state. For more information, see <a href="https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-stop-start.html">Stopping and Starting an Amazon DocumentDB Cluster</a>.</p>
+    async fn stop_db_cluster(
+        &self,
+        input: StopDBClusterMessage,
+    ) -> Result<StopDBClusterResult, RusotoError<StopDBClusterError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "StopDBCluster");
+        params.put("Version", "2014-10-31");
+        StopDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(StopDBClusterError::from_response(response));
+        }
+
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
+
+        if xml_response.body.is_empty() {
+            result = StopDBClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                StopDBClusterResultDeserializer::deserialize("StopDBClusterResult", &mut stack)?;
             skip_tree(&mut stack);
             end_element(&actual_tag_name, &mut stack)?;
         }

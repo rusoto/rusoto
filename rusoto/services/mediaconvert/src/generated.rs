@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -32,7 +33,7 @@ pub struct AacSettings {
     #[serde(rename = "AudioDescriptionBroadcasterMix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_description_broadcaster_mix: Option<String>,
-    /// <p>Average bitrate in bits/second. The set of valid values for this setting is: 6000, 8000, 10000, 12000, 14000, 16000, 20000, 24000, 28000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 160000, 192000, 224000, 256000, 288000, 320000, 384000, 448000, 512000, 576000, 640000, 768000, 896000, 1024000. The value you set is also constrained by the values you choose for Profile (codecProfile), Bitrate control mode (codingMode), and Sample rate (sampleRate). Default values depend on Bitrate control mode and Profile.</p>
+    /// <p>Specify the average bitrate in bits per second. The set of valid values for this setting is: 6000, 8000, 10000, 12000, 14000, 16000, 20000, 24000, 28000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 160000, 192000, 224000, 256000, 288000, 320000, 384000, 448000, 512000, 576000, 640000, 768000, 896000, 1024000. The value you set is also constrained by the values that you choose for Profile (codecProfile), Bitrate control mode (codingMode), and Sample rate (sampleRate). Default values depend on Bitrate control mode and Profile.</p>
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitrate: Option<i64>,
@@ -69,11 +70,11 @@ pub struct AacSettings {
 /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value AC3.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Ac3Settings {
-    /// <p>Average bitrate in bits/second. Valid bitrates depend on the coding mode.</p>
+    /// <p>Specify the average bitrate in bits per second. Valid bitrates depend on the coding mode.</p>
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitrate: Option<i64>,
-    /// <p>Specifies the &quot;Bitstream Mode&quot; (bsmod) for the emitted AC-3 stream. See ATSC A/52-2012 for background on these values.</p>
+    /// <p>Specify the bitstream mode for the AC-3 stream that the encoder emits. For more information about the AC3 bitstream mode, see ATSC A/52-2012 (Annex E).</p>
     #[serde(rename = "BitstreamMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitstream_mode: Option<String>,
@@ -97,7 +98,7 @@ pub struct Ac3Settings {
     #[serde(rename = "MetadataControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata_control: Option<String>,
-    /// <p>Sample rate in hz. Sample rate is always 48000.</p>
+    /// <p>This value is always 48000. It represents the sample rate in Hz.</p>
     #[serde(rename = "SampleRate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_rate: Option<i64>,
@@ -118,7 +119,7 @@ pub struct AiffSettings {
     #[serde(rename = "BitDepth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bit_depth: Option<i64>,
-    /// <p>Set Channels to specify the number of channels in this output audio track. Choosing Mono in the console will give you 1 output channel; choosing Stereo will give you 2. In the API, valid values are 1 and 2.</p>
+    /// <p>Specify the number of channels in this output audio track. Valid values are 1 and even numbers up to 64. For example, 1, 2, 4, 6, and so on, up to 64.</p>
     #[serde(rename = "Channels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channels: Option<i64>,
@@ -131,10 +132,18 @@ pub struct AiffSettings {
 /// <p>Settings for ancillary captions source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AncillarySourceSettings {
+    /// <p>Specify whether this set of input captions appears in your outputs in both 608 and 708 format. If you choose Upconvert (UPCONVERT), MediaConvert includes the captions data in two ways: it passes the 608 data through using the 608 compatibility bytes fields of the 708 wrapper, and it also translates the 608 data into 708.</p>
+    #[serde(rename = "Convert608To708")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub convert_608_to_708: Option<String>,
     /// <p>Specifies the 608 channel number in the ancillary data track from which to extract captions. Unused for passthrough.</p>
     #[serde(rename = "SourceAncillaryChannelNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_ancillary_channel_number: Option<i64>,
+    /// <p>By default, the service terminates any unterminated captions at the end of each input. If you want the caption to continue onto your next input, disable this setting.</p>
+    #[serde(rename = "TerminateCaptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub terminate_captions: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -145,10 +154,10 @@ pub struct AssociateCertificateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateCertificateResponse {}
 
-/// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value you choose for Audio codec (Codec). For each codec enum you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings</p>
+/// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value that you choose for Audio codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings * EAC3_ATMOS, Eac3AtmosSettings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioCodecSettings {
     /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value AAC. The service accepts one of two mutually exclusive groups of AAC settings--VBR and CBR. To select one of these modes, set the value of Bitrate control mode (rateControlMode) to &quot;VBR&quot; or &quot;CBR&quot;.  In VBR mode, you control the audio quality with the setting VBR quality (vbrQuality). In CBR mode, you use the setting Bitrate (bitrate). Defaults and valid values depend on the rate control mode.</p>
@@ -167,6 +176,10 @@ pub struct AudioCodecSettings {
     #[serde(rename = "Codec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec: Option<String>,
+    /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value EAC3_ATMOS.</p>
+    #[serde(rename = "Eac3AtmosSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub eac_3_atmos_settings: Option<Eac3AtmosSettings>,
     /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value EAC3.</p>
     #[serde(rename = "Eac3Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -184,7 +197,7 @@ pub struct AudioCodecSettings {
 /// <p>Description of audio output</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioDescription {
-    /// <p>Advanced audio normalization settings.</p>
+    /// <p>Advanced audio normalization settings. Ignore these settings unless you need to comply with a loudness standard.</p>
     #[serde(rename = "AudioNormalizationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_normalization_settings: Option<AudioNormalizationSettings>,
@@ -200,7 +213,7 @@ pub struct AudioDescription {
     #[serde(rename = "AudioTypeControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_type_control: Option<String>,
-    /// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value you choose for Audio codec (Codec). For each codec enum you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings</p>
+    /// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value that you choose for Audio codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings * EAC3_ATMOS, Eac3AtmosSettings</p>
     #[serde(rename = "CodecSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_settings: Option<AudioCodecSettings>,
@@ -220,16 +233,16 @@ pub struct AudioDescription {
     #[serde(rename = "RemixSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remix_settings: Option<RemixSettings>,
-    /// <p>Used for MS Smooth and Apple HLS outputs. Indicates the name displayed by the player (eg. English, or Director Commentary). Alphanumeric characters, spaces, and underscore are legal.</p>
+    /// <p>Specify a label for this output audio stream. For example, &quot;English&quot;, &quot;Director commentary&quot;, or &quot;track_2&quot;. For streaming outputs, MediaConvert passes this information into destination manifests for display on the end-viewer&#39;s player device. For outputs in other output groups, the service ignores this setting.</p>
     #[serde(rename = "StreamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_name: Option<String>,
 }
 
-/// <p>Advanced audio normalization settings.</p>
+/// <p>Advanced audio normalization settings. Ignore these settings unless you need to comply with a loudness standard.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioNormalizationSettings {
-    /// <p>Audio normalization algorithm to use. 1770-1 conforms to the CALM Act specification, 1770-2 conforms to the EBU R-128 specification.</p>
+    /// <p>Choose one of the following audio normalization algorithms: ITU-R BS.1770-1: Ungated loudness. A measurement of ungated average loudness for an entire piece of content, suitable for measurement of short-form content under ATSC recommendation A/85. Supports up to 5.1 audio channels. ITU-R BS.1770-2: Gated loudness. A measurement of gated average loudness compliant with the requirements of EBU-R128. Supports up to 5.1 audio channels. ITU-R BS.1770-3: Modified peak. The same loudness measurement algorithm as 1770-2, with an updated true peak measurement. ITU-R BS.1770-4: Higher channel count. Allows for more audio channels than the other algorithms, including configurations such as 7.1.</p>
     #[serde(rename = "Algorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub algorithm: Option<String>,
@@ -249,7 +262,7 @@ pub struct AudioNormalizationSettings {
     #[serde(rename = "PeakCalculation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub peak_calculation: Option<String>,
-    /// <p>Target LKFS(loudness) to adjust volume to. If no value is entered, a default value will be used according to the chosen algorithm. The CALM Act (1770-1) recommends a target of -24 LKFS. The EBU R-128 specification (1770-2) recommends a target of -23 LKFS.</p>
+    /// <p>When you use Audio normalization (AudioNormalizationSettings), optionally use this setting to specify a target loudness. If you don&#39;t specify a value here, the encoder chooses a value for you, based on the algorithm that you choose for Algorithm (algorithm). If you choose algorithm 1770-1, the encoder will choose -24 LKFS; otherwise, the encoder will choose -23 LKFS.</p>
     #[serde(rename = "TargetLkfs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_lkfs: Option<f64>,
@@ -403,7 +416,7 @@ pub struct CancelJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelJobResponse {}
 
 /// <p>Description of Caption output</p>
@@ -425,7 +438,7 @@ pub struct CaptionDescription {
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
-    /// <p>Human readable information to indicate captions available for players (eg. English, or Spanish). Alphanumeric characters, spaces, and underscore are legal.</p>
+    /// <p>Specify a label for this set of output captions. For example, &quot;English&quot;, &quot;Director commentary&quot;, or &quot;track_2&quot;. For streaming outputs, MediaConvert passes this information into destination manifests for display on the end-viewer&#39;s player device. For outputs in other output groups, the service ignores this setting.</p>
     #[serde(rename = "LanguageDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_description: Option<String>,
@@ -446,7 +459,7 @@ pub struct CaptionDescriptionPreset {
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
-    /// <p>Human readable information to indicate captions available for players (eg. English, or Spanish). Alphanumeric characters, spaces, and underscore are legal.</p>
+    /// <p>Specify a label for this set of output captions. For example, &quot;English&quot;, &quot;Director commentary&quot;, or &quot;track_2&quot;. For streaming outputs, MediaConvert passes this information into destination manifests for display on the end-viewer&#39;s player device. For outputs in other output groups, the service ignores this setting.</p>
     #[serde(rename = "LanguageDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_description: Option<String>,
@@ -459,7 +472,7 @@ pub struct CaptionDestinationSettings {
     #[serde(rename = "BurninDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub burnin_destination_settings: Option<BurninDestinationSettings>,
-    /// <p>Specify the format for this set of captions on this output. The default format is embedded without SCTE-20. Other options are embedded with SCTE-20, burn-in, DVB-sub, SCC, SRT, teletext, TTML, and web-VTT. If you are using SCTE-20, choose SCTE-20 plus embedded (SCTE20<em>PLUS</em>EMBEDDED) to create an output that complies with the SCTE-43 spec. To create a non-compliant output where the embedded captions come first, choose Embedded plus SCTE-20 (EMBEDDED<em>PLUS</em>SCTE20).</p>
+    /// <p>Specify the format for this set of captions on this output. The default format is embedded without SCTE-20. Other options are embedded with SCTE-20, burn-in, DVB-sub, IMSC, SCC, SRT, teletext, TTML, and web-VTT. If you are using SCTE-20, choose SCTE-20 plus embedded (SCTE20<em>PLUS</em>EMBEDDED) to create an output that complies with the SCTE-43 spec. To create a non-compliant output where the embedded captions come first, choose Embedded plus SCTE-20 (EMBEDDED<em>PLUS</em>SCTE20).</p>
     #[serde(rename = "DestinationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_type: Option<String>,
@@ -471,6 +484,10 @@ pub struct CaptionDestinationSettings {
     #[serde(rename = "EmbeddedDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub embedded_destination_settings: Option<EmbeddedDestinationSettings>,
+    /// <p>Settings specific to IMSC caption outputs.</p>
+    #[serde(rename = "ImscDestinationSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub imsc_destination_settings: Option<ImscDestinationSettings>,
     /// <p>Settings for SCC caption output.</p>
     #[serde(rename = "SccDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -496,13 +513,13 @@ pub struct CaptionSelector {
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
-    /// <p>Source settings (SourceSettings) contains the group of settings for captions in the input.</p>
+    /// <p>If your input captions are SCC, TTML, STL, SMI, SRT, or IMSC in an xml file, specify the URI of the input captions source file. If your input captions are IMSC in an IMF package, use TrackSourceSettings instead of FileSoureSettings.</p>
     #[serde(rename = "SourceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_settings: Option<CaptionSourceSettings>,
 }
 
-/// <p>Source settings (SourceSettings) contains the group of settings for captions in the input.</p>
+/// <p>If your input captions are SCC, TTML, STL, SMI, SRT, or IMSC in an xml file, specify the URI of the input captions source file. If your input captions are IMSC in an IMF package, use TrackSourceSettings instead of FileSoureSettings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CaptionSourceSettings {
     /// <p>Settings for ancillary captions source.</p>
@@ -517,7 +534,7 @@ pub struct CaptionSourceSettings {
     #[serde(rename = "EmbeddedSourceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub embedded_source_settings: Option<EmbeddedSourceSettings>,
-    /// <p>Settings for File-based Captions in Source</p>
+    /// <p>If your input captions are SCC, SMI, SRT, STL, TTML, or IMSC 1.1 in an xml file, specify the URI of the input caption source file. If your caption source is IMSC in an IMF package, use TrackSourceSettings instead of FileSoureSettings.</p>
     #[serde(rename = "FileSourceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_source_settings: Option<FileSourceSettings>,
@@ -529,7 +546,7 @@ pub struct CaptionSourceSettings {
     #[serde(rename = "TeletextSourceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub teletext_source_settings: Option<TeletextSourceSettings>,
-    /// <p>Settings specific to caption sources that are specfied by track number. Sources include IMSC in IMF.</p>
+    /// <p>Settings specific to caption sources that are specified by track number. Currently, this is only IMSC captions in an IMF package. If your caption source is IMSC 1.1 in a separate xml file, use FileSourceSettings instead of TrackSourceSettings.</p>
     #[serde(rename = "TrackSourceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub track_source_settings: Option<TrackSourceSettings>,
@@ -551,19 +568,23 @@ pub struct CmafEncryptionSettings {
     #[serde(rename = "ConstantInitializationVector")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub constant_initialization_vector: Option<String>,
-    /// <p>Encrypts the segments with the given encryption scheme. Leave blank to disable. Selecting &#39;Disabled&#39; in the web interface also disables encryption.</p>
+    /// <p>Specify the encryption scheme that you want the service to use when encrypting your CMAF segments. Choose AES-CBC subsample (SAMPLE-AES) or AES_CTR (AES-CTR).</p>
     #[serde(rename = "EncryptionMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_method: Option<String>,
-    /// <p>The Initialization Vector is a 128-bit number used in conjunction with the key for encrypting blocks. If set to INCLUDE, Initialization Vector is listed in the manifest. Otherwise Initialization Vector is not in the manifest.</p>
+    /// <p>When you use DRM with CMAF outputs, choose whether the service writes the 128-bit encryption initialization vector in the HLS and DASH manifests.</p>
     #[serde(rename = "InitializationVectorInManifest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub initialization_vector_in_manifest: Option<String>,
+    /// <p>If your output group type is CMAF, use these settings when doing DRM encryption with a SPEKE-compliant key provider. If your output group type is HLS, DASH, or Microsoft Smooth, use the SpekeKeyProvider settings instead.</p>
+    #[serde(rename = "SpekeKeyProvider")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub speke_key_provider: Option<SpekeKeyProviderCmaf>,
     /// <p>Use these settings to set up encryption with a static key provider.</p>
     #[serde(rename = "StaticKeyProvider")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub static_key_provider: Option<StaticKeyProvider>,
-    /// <p>Indicates which type of key provider is used for encryption.</p>
+    /// <p>Specify whether your DRM encryption key is static or from a key provider that follows the SPEKE standard. For more information about SPEKE, see https://docs.aws.amazon.com/speke/latest/documentation/what-is-speke.html.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -645,7 +666,7 @@ pub struct ColorCorrector {
     #[serde(rename = "Brightness")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub brightness: Option<i64>,
-    /// <p>Determines if colorspace conversion will be performed. If set to <em>None</em>, no conversion will be performed. If <em>Force 601</em> or <em>Force 709</em> are selected, conversion will be performed for inputs with differing colorspaces. An input&#39;s colorspace can be specified explicitly in the &quot;Video Selector&quot;:#inputs-video_selector if necessary.</p>
+    /// <p>Specify the color space you want for this output. The service supports conversion between HDR formats, between SDR formats, and from SDR to HDR. The service doesn&#39;t support conversion from HDR to SDR. SDR to HDR conversion doesn&#39;t upgrade the dynamic range. The converted video has an HDR format, but visually appears the same as an unconverted output.</p>
     #[serde(rename = "ColorSpaceConversion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color_space_conversion: Option<String>,
@@ -653,7 +674,7 @@ pub struct ColorCorrector {
     #[serde(rename = "Contrast")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contrast: Option<i64>,
-    /// <p>Use the HDR master display (Hdr10Metadata) settings to correct HDR metadata or to provide missing metadata. Note that these settings are not color correction.</p>
+    /// <p>Use these settings when you convert to the HDR 10 color space. Specify the SMPTE ST 2086 Mastering Display Color Volume static metadata that you want signaled in the output. These values don&#39;t affect the pixel values that are encoded in the video stream. They are intended to help the downstream video player display content in a way that reflects the intentions of the the content creator. When you set Color space conversion (ColorSpaceConversion) to HDR 10 (FORCE_HDR10), these settings are required. You must set values for Max frame average light level (maxFrameAverageLightLevel) and Max content light level (maxContentLightLevel); these settings don&#39;t have a default value. The default values for the other HDR 10 metadata settings are defined by the P3D65 color space. For more information about MediaConvert HDR jobs, see https://docs.aws.amazon.com/console/mediaconvert/hdr.</p>
     #[serde(rename = "Hdr10Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hdr_10_metadata: Option<Hdr10Metadata>,
@@ -690,7 +711,7 @@ pub struct ContainerSettings {
     #[serde(rename = "MovSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mov_settings: Option<MovSettings>,
-    /// <p>Settings for MP4 Container</p>
+    /// <p>Settings for MP4 container. You can create audio-only AAC outputs with this container.</p>
     #[serde(rename = "Mp4Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mp_4_settings: Option<Mp4Settings>,
@@ -714,6 +735,10 @@ pub struct CreateJobRequest {
     #[serde(rename = "JobTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_template: Option<String>,
+    /// <p>Specify the relative priority for this job. In any given queue, the service begins processing the job with the highest value first. When more than one job has the same priority, the service begins processing the job that you submitted first. If you don&#39;t specify a priority, the service uses the default value 0.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
     /// <p>Optional. When you create a job, you can specify a queue to send it to. If you don&#39;t specify, the job will go to the default queue. For more about queues, see the User Guide topic at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html.</p>
     #[serde(rename = "Queue")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -724,6 +749,10 @@ pub struct CreateJobRequest {
     /// <p>JobSettings contains all the transcode settings for a job.</p>
     #[serde(rename = "Settings")]
     pub settings: JobSettings,
+    /// <p>Enable this setting when you run a test job to estimate how many reserved transcoding slots (RTS) you need. When this is enabled, MediaConvert runs your job from an on-demand queue with similar performance to what you will see with one RTS in a reserved queue. This setting is disabled by default.</p>
+    #[serde(rename = "SimulateReservedQueue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub simulate_reserved_queue: Option<String>,
     /// <p>Specify how often MediaConvert sends STATUS_UPDATE events to Amazon CloudWatch Events. Set the interval, in seconds, between status updates. MediaConvert sends an update at this interval from the time the service begins processing your job to the time it completes the transcode or encounters an error.</p>
     #[serde(rename = "StatusUpdateInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -735,7 +764,7 @@ pub struct CreateJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobResponse {
     /// <p>Each job converts an input file into an output file or files. For more information, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
     #[serde(rename = "Job")]
@@ -760,6 +789,10 @@ pub struct CreateJobTemplateRequest {
     /// <p>The name of the job template you are creating.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>Specify the relative priority for this job. In any given queue, the service begins processing the job with the highest value first. When more than one job has the same priority, the service begins processing the job that you submitted first. If you don&#39;t specify a priority, the service uses the default value 0.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
     /// <p>Optional. The queue that jobs created from this template are assigned to. If you don&#39;t specify this, jobs will go to the default queue.</p>
     #[serde(rename = "Queue")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -778,7 +811,7 @@ pub struct CreateJobTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobTemplateResponse {
     /// <p>A job template is a pre-made set of encoding instructions that you can use to quickly create a job.</p>
     #[serde(rename = "JobTemplate")]
@@ -809,7 +842,7 @@ pub struct CreatePresetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePresetResponse {
     /// <p>A preset is a collection of preconfigured media conversion settings that you want MediaConvert to apply to the output during the conversion process.</p>
     #[serde(rename = "Preset")]
@@ -834,6 +867,10 @@ pub struct CreateQueueRequest {
     #[serde(rename = "ReservationPlanSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reservation_plan_settings: Option<ReservationPlanSettings>,
+    /// <p>Initial state of the queue. If you create a paused queue, then jobs in that queue won&#39;t begin.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
     /// <p>The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -841,7 +878,7 @@ pub struct CreateQueueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateQueueResponse {
     /// <p>You can use queues to manage the resources that are available to your AWS account for running multiple transcoding jobs at the same time. If you don&#39;t specify a queue, the service sends all jobs through the default queue. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html.</p>
     #[serde(rename = "Queue")]
@@ -856,7 +893,7 @@ pub struct DashIsoEncryptionSettings {
     #[serde(rename = "PlaybackDeviceCompatibility")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub playback_device_compatibility: Option<String>,
-    /// <p>Settings for use with a SPEKE key provider</p>
+    /// <p>If your output group type is HLS, DASH, or Microsoft Smooth, use these settings when doing DRM encryption with a SPEKE-compliant key provider.  If your output group type is CMAF, use the SpekeKeyProviderCmaf settings instead.</p>
     #[serde(rename = "SpekeKeyProvider")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub speke_key_provider: Option<SpekeKeyProvider>,
@@ -934,7 +971,7 @@ pub struct DeleteJobTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteJobTemplateResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -945,7 +982,7 @@ pub struct DeletePresetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePresetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -956,7 +993,7 @@ pub struct DeleteQueueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteQueueResponse {}
 
 /// <p>DescribeEndpointsRequest</p>
@@ -977,7 +1014,7 @@ pub struct DescribeEndpointsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointsResponse {
     /// <p>List of endpoints</p>
     #[serde(rename = "Endpoints")]
@@ -1006,7 +1043,7 @@ pub struct DisassociateCertificateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateCertificateResponse {}
 
 /// <p>Inserts DVB Network Information Table (NIT) at the specified table repetition interval.</p>
@@ -1142,6 +1179,75 @@ pub struct DvbTdtSettings {
     pub tdt_interval: Option<i64>,
 }
 
+/// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value EAC3_ATMOS.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Eac3AtmosSettings {
+    /// <p>Specify the average bitrate in bits per second.
+    /// Valid values: 384k, 448k, 640k, 768k</p>
+    #[serde(rename = "Bitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bitrate: Option<i64>,
+    /// <p>Specify the bitstream mode for the E-AC-3 stream that the encoder emits. For more information about the EAC3 bitstream mode, see ATSC A/52-2012 (Annex E).</p>
+    #[serde(rename = "BitstreamMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bitstream_mode: Option<String>,
+    /// <p>The coding mode for Dolby Digital Plus JOC (Atmos) is always 9.1.6 (CODING<em>MODE</em>9<em>1</em>6).</p>
+    #[serde(rename = "CodingMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub coding_mode: Option<String>,
+    /// <p>Enable Dolby Dialogue Intelligence to adjust loudness based on dialogue analysis.</p>
+    #[serde(rename = "DialogueIntelligence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dialogue_intelligence: Option<String>,
+    /// <p>Specify the absolute peak level for a signal with dynamic range compression.</p>
+    #[serde(rename = "DynamicRangeCompressionLine")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dynamic_range_compression_line: Option<String>,
+    /// <p>Specify how the service limits the audio dynamic range when compressing the audio.</p>
+    #[serde(rename = "DynamicRangeCompressionRf")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dynamic_range_compression_rf: Option<String>,
+    /// <p>Specify a value for the following Dolby Atmos setting: Left only/Right only center mix
+    /// (Lo/Ro center). MediaConvert uses this value for downmixing. How the service uses this
+    /// value depends on the value that you choose for Stereo downmix (Eac3AtmosStereoDownmix).
+    /// Valid values: 3.0, 1.5, 0.0, -1.5, -3.0, -4.5, and -6.0.</p>
+    #[serde(rename = "LoRoCenterMixLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lo_ro_center_mix_level: Option<f64>,
+    /// <p>Specify a value for the following Dolby Atmos setting: Left only/Right only (Lo/Ro surround). MediaConvert uses this value for downmixing. How the service uses this value depends on the value that you choose for Stereo downmix (Eac3AtmosStereoDownmix). Valid values: -1.5, -3.0, -4.5, -6.0, and -60. The value -60 mutes the channel.</p>
+    #[serde(rename = "LoRoSurroundMixLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lo_ro_surround_mix_level: Option<f64>,
+    /// <p>Specify a value for the following Dolby Atmos setting: Left total/Right total center mix (Lt/Rt center). MediaConvert uses this value for downmixing. How the service uses this value depends on the value that you choose for Stereo downmix (Eac3AtmosStereoDownmix). Valid values: 3.0, 1.5, 0.0, -1.5, -3.0, -4.5, and -6.0.</p>
+    #[serde(rename = "LtRtCenterMixLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lt_rt_center_mix_level: Option<f64>,
+    /// <p>Specify a value for the following Dolby Atmos setting: Left total/Right total surround mix (Lt/Rt surround). MediaConvert uses this value for downmixing. How the service uses this value depends on the value that you choose for Stereo downmix (Eac3AtmosStereoDownmix). Valid values: -1.5, -3.0, -4.5, -6.0, and -60. The value -60 mutes the channel.</p>
+    #[serde(rename = "LtRtSurroundMixLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lt_rt_surround_mix_level: Option<f64>,
+    /// <p>Choose how the service meters the loudness of your audio.</p>
+    #[serde(rename = "MeteringMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metering_mode: Option<String>,
+    /// <p>This value is always 48000. It represents the sample rate in Hz.</p>
+    #[serde(rename = "SampleRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sample_rate: Option<i64>,
+    /// <p>Specify the percentage of audio content that must be speech before the encoder uses the measured speech loudness as the overall program loudness.</p>
+    #[serde(rename = "SpeechThreshold")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub speech_threshold: Option<i64>,
+    /// <p>Choose how the service does stereo downmixing.</p>
+    #[serde(rename = "StereoDownmix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stereo_downmix: Option<String>,
+    /// <p>Specify whether your input audio has an additional center rear surround channel matrix encoded into your left and right surround channels.</p>
+    #[serde(rename = "SurroundExMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub surround_ex_mode: Option<String>,
+}
+
 /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value EAC3.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Eac3Settings {
@@ -1149,11 +1255,11 @@ pub struct Eac3Settings {
     #[serde(rename = "AttenuationControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attenuation_control: Option<String>,
-    /// <p>Average bitrate in bits/second. Valid bitrates depend on the coding mode.</p>
+    /// <p>Specify the average bitrate in bits per second. Valid bitrates depend on the coding mode.</p>
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitrate: Option<i64>,
-    /// <p>Specifies the &quot;Bitstream Mode&quot; (bsmod) for the emitted E-AC-3 stream. See ATSC A/52-2012 (Annex E) for background on these values.</p>
+    /// <p>Specify the bitstream mode for the E-AC-3 stream that the encoder emits. For more information about the EAC3 bitstream mode, see ATSC A/52-2012 (Annex E).</p>
     #[serde(rename = "BitstreamMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitstream_mode: Option<String>,
@@ -1169,11 +1275,11 @@ pub struct Eac3Settings {
     #[serde(rename = "Dialnorm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dialnorm: Option<i64>,
-    /// <p>Enables Dynamic Range Compression that restricts the absolute peak level for a signal.</p>
+    /// <p>Specify the absolute peak level for a signal with dynamic range compression.</p>
     #[serde(rename = "DynamicRangeCompressionLine")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamic_range_compression_line: Option<String>,
-    /// <p>Enables Heavy Dynamic Range Compression, ensures that the instantaneous signal peaks do not exceed specified levels.</p>
+    /// <p>Specify how the service limits the audio dynamic range when compressing the audio.</p>
     #[serde(rename = "DynamicRangeCompressionRf")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamic_range_compression_rf: Option<String>,
@@ -1185,23 +1291,19 @@ pub struct Eac3Settings {
     #[serde(rename = "LfeFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lfe_filter: Option<String>,
-    /// <p>Left only/Right only center mix level. Only used for 3/2 coding mode.
-    /// Valid values: 3.0, 1.5, 0.0, -1.5 -3.0 -4.5 -6.0 -60</p>
+    /// <p>Specify a value for the following Dolby Digital Plus setting: Left only/Right only center mix (Lo/Ro center). MediaConvert uses this value for downmixing. How the service uses this value depends on the value that you choose for Stereo downmix (Eac3StereoDownmix). Valid values: 3.0, 1.5, 0.0, -1.5, -3.0, -4.5, -6.0, and -60. The value -60 mutes the channel. This setting applies only if you keep the default value of 3/2 - L, R, C, Ls, Rs (CODING<em>MODE</em>3_2) for the setting Coding mode (Eac3CodingMode). If you choose a different value for Coding mode, the service ignores Left only/Right only center (loRoCenterMixLevel).</p>
     #[serde(rename = "LoRoCenterMixLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lo_ro_center_mix_level: Option<f64>,
-    /// <p>Left only/Right only surround mix level. Only used for 3/2 coding mode.
-    /// Valid values: -1.5 -3.0 -4.5 -6.0 -60</p>
+    /// <p>Specify a value for the following Dolby Digital Plus setting: Left only/Right only (Lo/Ro surround). MediaConvert uses this value for downmixing. How the service uses this value depends on the value that you choose for Stereo downmix (Eac3StereoDownmix). Valid values: -1.5, -3.0, -4.5, -6.0, and -60. The value -60 mutes the channel. This setting applies only if you keep the default value of 3/2 - L, R, C, Ls, Rs (CODING<em>MODE</em>3_2) for the setting Coding mode (Eac3CodingMode). If you choose a different value for Coding mode, the service ignores Left only/Right only surround (loRoSurroundMixLevel).</p>
     #[serde(rename = "LoRoSurroundMixLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lo_ro_surround_mix_level: Option<f64>,
-    /// <p>Left total/Right total center mix level. Only used for 3/2 coding mode.
-    /// Valid values: 3.0, 1.5, 0.0, -1.5 -3.0 -4.5 -6.0 -60</p>
+    /// <p>Specify a value for the following Dolby Digital Plus setting: Left total/Right total center mix (Lt/Rt center). MediaConvert uses this value for downmixing. How the service uses this value depends on the value that you choose for Stereo downmix (Eac3StereoDownmix). Valid values: 3.0, 1.5, 0.0, -1.5, -3.0, -4.5, -6.0, and -60. The value -60 mutes the channel. This setting applies only if you keep the default value of 3/2 - L, R, C, Ls, Rs (CODING<em>MODE</em>3_2) for the setting Coding mode (Eac3CodingMode). If you choose a different value for Coding mode, the service ignores Left total/Right total center (ltRtCenterMixLevel).</p>
     #[serde(rename = "LtRtCenterMixLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lt_rt_center_mix_level: Option<f64>,
-    /// <p>Left total/Right total surround mix level. Only used for 3/2 coding mode.
-    /// Valid values: -1.5 -3.0 -4.5 -6.0 -60</p>
+    /// <p>Specify a value for the following Dolby Digital Plus setting: Left total/Right total surround mix (Lt/Rt surround). MediaConvert uses this value for downmixing. How the service uses this value depends on the value that you choose for Stereo downmix (Eac3StereoDownmix). Valid values: -1.5, -3.0, -4.5, -6.0, and -60. The value -60 mutes the channel. This setting applies only if you keep the default value of 3/2 - L, R, C, Ls, Rs (CODING<em>MODE</em>3_2) for the setting Coding mode (Eac3CodingMode). If you choose a different value for Coding mode, the service ignores Left total/Right total surround (ltRtSurroundMixLevel).</p>
     #[serde(rename = "LtRtSurroundMixLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lt_rt_surround_mix_level: Option<f64>,
@@ -1217,11 +1319,11 @@ pub struct Eac3Settings {
     #[serde(rename = "PhaseControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phase_control: Option<String>,
-    /// <p>Sample rate in hz. Sample rate is always 48000.</p>
+    /// <p>This value is always 48000. It represents the sample rate in Hz.</p>
     #[serde(rename = "SampleRate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_rate: Option<i64>,
-    /// <p>Stereo downmix preference. Only used for 3/2 coding mode.</p>
+    /// <p>Choose how the service does stereo downmixing. This setting only applies if you keep the default value of 3/2 - L, R, C, Ls, Rs (CODING<em>MODE</em>3_2) for the setting Coding mode (Eac3CodingMode). If you choose a different value for Coding mode, the service ignores Stereo downmix (Eac3StereoDownmix).</p>
     #[serde(rename = "StereoDownmix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stereo_downmix: Option<String>,
@@ -1238,16 +1340,20 @@ pub struct Eac3Settings {
 /// <p>Settings specific to embedded/ancillary caption outputs, including 608/708 Channel destination number.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EmbeddedDestinationSettings {
-    /// <p>Ignore this setting unless your input captions are SCC format and your output container is MXF. With this combination of input captions format and output container, you can optionally use this setting to replace the input channel number with the track number that you specify. Specify a different number for each output captions track. If you don&#39;t specify an output track number, the system uses the input channel number for the output channel number. This setting applies to each output individually. You can optionally combine two captions channels in your output. The two output channel numbers can be one of the following pairs: 1,3; 2,4; 1,4; or 2,3.</p>
+    /// <p>Ignore this setting unless your input captions are SCC format and your output captions are embedded in the video stream. Specify a CC number for each captions channel in this output. If you have two channels, choose CC numbers that aren&#39;t in the same field. For example, choose 1 and 3. For more information, see https://docs.aws.amazon.com/console/mediaconvert/dual-scc-to-embedded.</p>
     #[serde(rename = "Destination608ChannelNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_608_channel_number: Option<i64>,
+    /// <p>Ignore this setting unless your input captions are SCC format and you want both 608 and 708 captions embedded in your output stream. Optionally, specify the 708 service number for each output captions channel. Choose a different number for each channel. To use this setting, also set Force 608 to 708 upconvert (Convert608To708) to Upconvert (UPCONVERT) in your input captions selector settings. If you choose to upconvert but don&#39;t specify a 708 service number, MediaConvert uses the number that you specify for CC channel number (destination608ChannelNumber) for the 708 service number. For more information, see https://docs.aws.amazon.com/console/mediaconvert/dual-scc-to-embedded.</p>
+    #[serde(rename = "Destination708ServiceNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_708_service_number: Option<i64>,
 }
 
 /// <p>Settings for embedded captions Source</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EmbeddedSourceSettings {
-    /// <p>When set to UPCONVERT, 608 data is both passed through via the &quot;608 compatibility bytes&quot; fields of the 708 wrapper as well as translated into 708. 708 data present in the source content will be discarded.</p>
+    /// <p>Specify whether this set of input captions appears in your outputs in both 608 and 708 format. If you choose Upconvert (UPCONVERT), MediaConvert includes the captions data in two ways: it passes the 608 data through using the 608 compatibility bytes fields of the 708 wrapper, and it also translates the 608 data into 708.</p>
     #[serde(rename = "Convert608To708")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub convert_608_to_708: Option<String>,
@@ -1259,11 +1365,15 @@ pub struct EmbeddedSourceSettings {
     #[serde(rename = "Source608TrackNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_608_track_number: Option<i64>,
+    /// <p>By default, the service terminates any unterminated captions at the end of each input. If you want the caption to continue onto your next input, disable this setting.</p>
+    #[serde(rename = "TerminateCaptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub terminate_captions: Option<String>,
 }
 
 /// <p>Describes an account-specific API endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Endpoint {
     /// <p>URL of endpoint</p>
     #[serde(rename = "Url")]
@@ -1300,7 +1410,7 @@ pub struct EsamSettings {
 /// <p>ESAM SignalProcessingNotification data defined by OC-SP-ESAM-API-I03-131025.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EsamSignalProcessingNotification {
-    /// <p>Provide your ESAM SignalProcessingNotification XML document inside your JSON job settings. Form the XML document as per OC-SP-ESAM-API-I03-131025. The transcoder will use the signal processing instructions in the message that you supply. Provide your ESAM SignalProcessingNotification XML document inside your JSON job settings. If you want the service to place SCTE-35 markers at the insertion points you specify in the XML document, you must also enable SCTE-35 ESAM (scte35Esam). Note that you can either specify an ESAM XML document or enable SCTE-35 passthrough. You can&#39;t do both.</p>
+    /// <p>Provide your ESAM SignalProcessingNotification XML document inside your JSON job settings. Form the XML document as per OC-SP-ESAM-API-I03-131025. The transcoder will use the signal processing instructions in the message that you supply. Provide your ESAM SignalProcessingNotification XML document inside your JSON job settings. For your MPEG2-TS file outputs, if you want the service to place SCTE-35 markers at the insertion points you specify in the XML document, you must also enable SCTE-35 ESAM (scte35Esam). Note that you can either specify an ESAM XML document or enable SCTE-35 passthrough. You can&#39;t do both.</p>
     #[serde(rename = "SccXml")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scc_xml: Option<String>,
@@ -1328,14 +1438,14 @@ pub struct FileGroupSettings {
     pub destination_settings: Option<DestinationSettings>,
 }
 
-/// <p>Settings for File-based Captions in Source</p>
+/// <p>If your input captions are SCC, SMI, SRT, STL, TTML, or IMSC 1.1 in an xml file, specify the URI of the input caption source file. If your caption source is IMSC in an IMF package, use TrackSourceSettings instead of FileSoureSettings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FileSourceSettings {
-    /// <p>If set to UPCONVERT, 608 caption data is both passed through via the &quot;608 compatibility bytes&quot; fields of the 708 wrapper as well as translated into 708. 708 data present in the source content will be discarded.</p>
+    /// <p>Specify whether this set of input captions appears in your outputs in both 608 and 708 format. If you choose Upconvert (UPCONVERT), MediaConvert includes the captions data in two ways: it passes the 608 data through using the 608 compatibility bytes fields of the 708 wrapper, and it also translates the 608 data into 708.</p>
     #[serde(rename = "Convert608To708")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub convert_608_to_708: Option<String>,
-    /// <p>External caption file used for loading captions. Accepted file extensions are &#39;scc&#39;, &#39;ttml&#39;, &#39;dfxp&#39;, &#39;stl&#39;, &#39;srt&#39;, and &#39;smi&#39;.</p>
+    /// <p>External caption file used for loading captions. Accepted file extensions are &#39;scc&#39;, &#39;ttml&#39;, &#39;dfxp&#39;, &#39;stl&#39;, &#39;srt&#39;, &#39;xml&#39;, and &#39;smi&#39;.</p>
     #[serde(rename = "SourceFile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_file: Option<String>,
@@ -1374,7 +1484,7 @@ pub struct GetJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobResponse {
     /// <p>Each job converts an input file into an output file or files. For more information, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
     #[serde(rename = "Job")]
@@ -1390,7 +1500,7 @@ pub struct GetJobTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobTemplateResponse {
     /// <p>A job template is a pre-made set of encoding instructions that you can use to quickly create a job.</p>
     #[serde(rename = "JobTemplate")]
@@ -1406,7 +1516,7 @@ pub struct GetPresetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPresetResponse {
     /// <p>A preset is a collection of preconfigured media conversion settings that you want MediaConvert to apply to the output during the conversion process.</p>
     #[serde(rename = "Preset")]
@@ -1422,7 +1532,7 @@ pub struct GetQueueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetQueueResponse {
     /// <p>You can use queues to manage the resources that are available to your AWS account for running multiple transcoding jobs at the same time. If you don&#39;t specify a queue, the service sends all jobs through the default queue. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html.</p>
     #[serde(rename = "Queue")]
@@ -1433,7 +1543,7 @@ pub struct GetQueueResponse {
 /// <p>Settings for quality-defined variable bitrate encoding with the H.264 codec. Required when you set Rate control mode to QVBR. Not valid when you set Rate control mode to a value other than QVBR, or when you don&#39;t define Rate control mode.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct H264QvbrSettings {
-    /// <p>Use this setting only when Rate control mode is QVBR and Quality tuning level is Multi-pass HQ. For Max average bitrate values suited to the complexity of your input video, the service limits the average bitrate of the video part of this output to the value you choose. That is, the total size of the video element is less than or equal to the value you set multiplied by the number of seconds of encoded output.</p>
+    /// <p>Use this setting only when Rate control mode is QVBR and Quality tuning level is Multi-pass HQ. For Max average bitrate values suited to the complexity of your input video, the service limits the average bitrate of the video part of this output to the value that you choose. That is, the total size of the video element is less than or equal to the value you set multiplied by the number of seconds of encoded output.</p>
     #[serde(rename = "MaxAverageBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_average_bitrate: Option<i64>,
@@ -1450,7 +1560,7 @@ pub struct H264Settings {
     #[serde(rename = "AdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub adaptive_quantization: Option<String>,
-    /// <p>Average bitrate in bits/second. Required for VBR and CBR. For MS Smooth outputs, bitrates must be unique when rounded down to the nearest multiple of 1000.</p>
+    /// <p>Specify the average bitrate in bits per second. Required for VBR and CBR. For MS Smooth outputs, bitrates must be unique when rounded down to the nearest multiple of 1000.</p>
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitrate: Option<i64>,
@@ -1568,7 +1678,7 @@ pub struct H264Settings {
     #[serde(rename = "RepeatPps")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repeat_pps: Option<String>,
-    /// <p>Scene change detection (inserts I-frames on scene changes).</p>
+    /// <p>Enable this setting to insert I-frames at scene changes that the service automatically detects. This improves video quality and is enabled by default. If this output uses QVBR, choose Transition detection (TRANSITION_DETECTION) for further video quality improvement. For more information about QVBR, see https://docs.aws.amazon.com/console/mediaconvert/cbr-vbr-qvbr.</p>
     #[serde(rename = "SceneChangeDetect")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scene_change_detect: Option<String>,
@@ -1609,7 +1719,7 @@ pub struct H264Settings {
 /// <p>Settings for quality-defined variable bitrate encoding with the H.265 codec. Required when you set Rate control mode to QVBR. Not valid when you set Rate control mode to a value other than QVBR, or when you don&#39;t define Rate control mode.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct H265QvbrSettings {
-    /// <p>Use this setting only when Rate control mode is QVBR and Quality tuning level is Multi-pass HQ. For Max average bitrate values suited to the complexity of your input video, the service limits the average bitrate of the video part of this output to the value you choose. That is, the total size of the video element is less than or equal to the value you set multiplied by the number of seconds of encoded output.</p>
+    /// <p>Use this setting only when Rate control mode is QVBR and Quality tuning level is Multi-pass HQ. For Max average bitrate values suited to the complexity of your input video, the service limits the average bitrate of the video part of this output to the value that you choose. That is, the total size of the video element is less than or equal to the value you set multiplied by the number of seconds of encoded output.</p>
     #[serde(rename = "MaxAverageBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_average_bitrate: Option<i64>,
@@ -1630,7 +1740,7 @@ pub struct H265Settings {
     #[serde(rename = "AlternateTransferFunctionSei")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alternate_transfer_function_sei: Option<String>,
-    /// <p>Average bitrate in bits/second. Required for VBR and CBR. For MS Smooth outputs, bitrates must be unique when rounded down to the nearest multiple of 1000.</p>
+    /// <p>Specify the average bitrate in bits per second. Required for VBR and CBR. For MS Smooth outputs, bitrates must be unique when rounded down to the nearest multiple of 1000.</p>
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitrate: Option<i64>,
@@ -1690,9 +1800,7 @@ pub struct H265Settings {
     #[serde(rename = "HrdBufferSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hrd_buffer_size: Option<i64>,
-    /// <p>Use Interlace mode (InterlaceMode) to choose the scan line type for the output. * Top Field First (TOP<em>FIELD) and Bottom Field First (BOTTOM</em>FIELD) produce interlaced output with the entire output having the same field polarity (top or bottom first). * Follow, Default Top (FOLLOW<em>TOP</em>FIELD) and Follow, Default Bottom (FOLLOW<em>BOTTOM</em>FIELD) use the same field polarity as the source. Therefore, behavior depends on the input scan type.
-    /// - If the source is interlaced, the output will be interlaced with the same polarity as the source (it will follow the source). The output could therefore be a mix of &quot;top field first&quot; and &quot;bottom field first&quot;.
-    /// - If the source is progressive, the output will be interlaced with &quot;top field first&quot; or &quot;bottom field first&quot; polarity, depending on which of the Follow options you chose.</p>
+    /// <p>Choose the scan line type for the output. Choose Progressive (PROGRESSIVE) to create a progressive output, regardless of the scan type of your input. Choose Top Field First (TOP<em>FIELD) or Bottom Field First (BOTTOM</em>FIELD) to create an output that&#39;s interlaced with the same field polarity throughout. Choose Follow, Default Top (FOLLOW<em>TOP</em>FIELD) or Follow, Default Bottom (FOLLOW<em>BOTTOM</em>FIELD) to create an interlaced output with the same field polarity as the source. If the source is interlaced, the output will be interlaced with the same polarity as the source (it will follow the source). The output could therefore be a mix of &quot;top field first&quot; and &quot;bottom field first&quot;. If the source is progressive, your output will be interlaced with &quot;top field first&quot; or &quot;bottom field first&quot; polarity, depending on which of the Follow options you chose. If you don&#39;t choose a value, the service will default to Progressive (PROGRESSIVE).</p>
     #[serde(rename = "InterlaceMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interlace_mode: Option<String>,
@@ -1740,7 +1848,7 @@ pub struct H265Settings {
     #[serde(rename = "SampleAdaptiveOffsetFilterMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_adaptive_offset_filter_mode: Option<String>,
-    /// <p>Scene change detection (inserts I-frames on scene changes).</p>
+    /// <p>Enable this setting to insert I-frames at scene changes that the service automatically detects. This improves video quality and is enabled by default. If this output uses QVBR, choose Transition detection (TRANSITION_DETECTION) for further video quality improvement. For more information about QVBR, see https://docs.aws.amazon.com/console/mediaconvert/cbr-vbr-qvbr.</p>
     #[serde(rename = "SceneChangeDetect")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scene_change_detect: Option<String>,
@@ -1782,7 +1890,7 @@ pub struct H265Settings {
     pub write_mp_4_packaging_type: Option<String>,
 }
 
-/// <p>Use the &quot;HDR master display information&quot; (Hdr10Metadata) settings to correct HDR metadata or to provide missing metadata. These values vary depending on the input video and must be provided by a color grader. Range is 0 to 50,000; each increment represents 0.00002 in CIE1931 color coordinate. Note that these settings are not color correction. Note that if you are creating HDR outputs inside of an HLS CMAF package, to comply with the Apple specification, you must use the following settings. Set &quot;MP4 packaging type&quot; (writeMp4PackagingType) to HVC1 (HVC1). Set &quot;Profile&quot; (H265Settings &gt; codecProfile) to Main10/High (MAIN10<em>HIGH). Set &quot;Level&quot; (H265Settings &gt; codecLevel) to 5 (LEVEL</em>5).</p>
+/// <p>Use these settings to specify static color calibration metadata, as defined by SMPTE ST 2086. These values don&#39;t affect the pixel values that are encoded in the video stream. They are intended to help the downstream video player display content in a way that reflects the intentions of the the content creator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Hdr10Metadata {
     /// <p>HDR Master Display Information must be provided by a color grader, using color grading tools. Range is 0 to 50,000, each increment represents 0.00002 in CIE1931 color coordinate. Note that this setting is not for color correction.</p>
@@ -1801,11 +1909,11 @@ pub struct Hdr10Metadata {
     #[serde(rename = "GreenPrimaryY")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub green_primary_y: Option<i64>,
-    /// <p>Maximum light level among all samples in the coded video sequence, in units of candelas per square meter.</p>
+    /// <p>Maximum light level among all samples in the coded video sequence, in units of candelas per square meter.  This setting doesn&#39;t have a default value; you must specify a value that is suitable for the content.</p>
     #[serde(rename = "MaxContentLightLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_content_light_level: Option<i64>,
-    /// <p>Maximum average light level of any frame in the coded video sequence, in units of candelas per square meter.</p>
+    /// <p>Maximum average light level of any frame in the coded video sequence, in units of candelas per square meter. This setting doesn&#39;t have a default value; you must specify a value that is suitable for the content.</p>
     #[serde(rename = "MaxFrameAverageLightLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_frame_average_light_level: Option<i64>,
@@ -1875,7 +1983,7 @@ pub struct HlsEncryptionSettings {
     #[serde(rename = "OfflineEncrypted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub offline_encrypted: Option<String>,
-    /// <p>Settings for use with a SPEKE key provider</p>
+    /// <p>If your output group type is HLS, DASH, or Microsoft Smooth, use these settings when doing DRM encryption with a SPEKE-compliant key provider.  If your output group type is CMAF, use the SpekeKeyProviderCmaf settings instead.</p>
     #[serde(rename = "SpekeKeyProvider")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub speke_key_provider: Option<SpekeKeyProvider>,
@@ -1883,7 +1991,7 @@ pub struct HlsEncryptionSettings {
     #[serde(rename = "StaticKeyProvider")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub static_key_provider: Option<StaticKeyProvider>,
-    /// <p>Indicates which type of key provider is used for encryption.</p>
+    /// <p>Specify whether your DRM encryption key is static or from a key provider that follows the SPEKE standard. For more information about SPEKE, see https://docs.aws.amazon.com/speke/latest/documentation/what-is-speke.html.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1892,7 +2000,7 @@ pub struct HlsEncryptionSettings {
 /// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to HLS<em>GROUP</em>SETTINGS.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HlsGroupSettings {
-    /// <p>Choose one or more ad marker types to pass SCTE35 signals through to this group of Apple HLS outputs.</p>
+    /// <p>Choose one or more ad marker types to decorate your Apple HLS manifest. This setting does not determine whether SCTE-35 markers appear in the outputs themselves.</p>
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_markers: Option<Vec<String>>,
@@ -1997,6 +2105,10 @@ pub struct HlsSettings {
     #[serde(rename = "AudioGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_group_id: Option<String>,
+    /// <p>Use this setting only in audio-only outputs. Choose MPEG-2 Transport Stream (M2TS) to create a file in an MPEG2-TS container. Keep the default value Automatic (AUTOMATIC) to create an audio-only file in a raw container. Regardless of the value that you specify here, if this output has video, the service will place the output into an MPEG2-TS container.</p>
+    #[serde(rename = "AudioOnlyContainer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_only_container: Option<String>,
     /// <p>List all the audio groups that are used with the video output stream. Input all the audio GROUP-IDs that are associated to the video, separate by &#39;,&#39;.</p>
     #[serde(rename = "AudioRenditionSets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2037,6 +2149,15 @@ pub struct ImageInserter {
     pub insertable_images: Option<Vec<InsertableImage>>,
 }
 
+/// <p>Settings specific to IMSC caption outputs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ImscDestinationSettings {
+    /// <p>Keep this setting enabled to have MediaConvert use the font style and position information from the captions source in the output. This option is available only when your input captions are CFF-TT, IMSC, SMPTE-TT, or TTML. Disable this setting for simplified output captions.</p>
+    #[serde(rename = "StylePassthrough")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub style_passthrough: Option<String>,
+}
+
 /// <p>Specifies media input</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Input {
@@ -2052,6 +2173,10 @@ pub struct Input {
     #[serde(rename = "CaptionSelectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption_selectors: Option<::std::collections::HashMap<String, CaptionSelector>>,
+    /// <p>Use Cropping selection (crop) to specify the video area that the service will include in the output video frame. If you specify a value here, it will override any value that you specify in the output setting Cropping selection (crop).</p>
+    #[serde(rename = "Crop")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crop: Option<Rectangle>,
     /// <p>Enable Deblock (InputDeblockFilter) to produce smoother motion in the output. Default is disabled. Only manaully controllable for MPEG2 and uncompressed video inputs.</p>
     #[serde(rename = "DeblockFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2084,6 +2209,10 @@ pub struct Input {
     #[serde(rename = "InputClippings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_clippings: Option<Vec<InputClipping>>,
+    /// <p>Use Selection placement (position) to define the video area in your output frame. The area outside of the rectangle that you specify here is black. If you specify a value here, it will override any value that you specify in the output setting Selection placement (position). If you specify a value here, this will override any AFD values in your input, even if you set Respond to AFD (RespondToAfd) to Respond (RESPOND). If you specify a value here, this will ignore anything that you specify for the setting Scaling Behavior (scalingBehavior).</p>
+    #[serde(rename = "Position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<Rectangle>,
     /// <p>Use Program (programNumber) to select a specific program from within a multi-program transport stream. Note that Quad 4K is not currently supported. Default is the first program within the transport stream. If the program you specify doesn&#39;t exist, the transcoding service will use this default.</p>
     #[serde(rename = "ProgramNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2096,10 +2225,14 @@ pub struct Input {
     #[serde(rename = "SupplementalImps")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supplemental_imps: Option<Vec<String>>,
-    /// <p>Timecode source under input settings (InputTimecodeSource) only affects the behavior of features that apply to a single input at a time, such as input clipping and synchronizing some captions formats. Use this setting to specify whether the service counts frames by timecodes embedded in the video (EMBEDDED) or by starting the first frame at zero (ZEROBASED). In both cases, the timecode format is HH:MM:SS:FF or HH:MM:SS;FF, where FF is the frame number. Only set this to EMBEDDED if your source video has embedded timecodes.</p>
+    /// <p>Use this Timecode source setting, located under the input settings (InputTimecodeSource), to specify how the service counts input video frames. This input frame count affects only the behavior of features that apply to a single input at a time, such as input clipping and synchronizing some captions formats. Choose Embedded (EMBEDDED) to use the timecodes in your input video. Choose Start at zero (ZEROBASED) to start the first frame at zero. Choose Specified start (SPECIFIEDSTART) to start the first frame at the timecode that you specify in the setting Start timecode (timecodeStart). If you don&#39;t specify a value for Timecode source, the service will use Embedded by default. For more information about timecodes, see https://docs.aws.amazon.com/console/mediaconvert/timecode.</p>
     #[serde(rename = "TimecodeSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timecode_source: Option<String>,
+    /// <p>Specify the timecode that you want the service to use for this input&#39;s initial frame. To use this setting, you must set the Timecode source setting, located under the input settings (InputTimecodeSource), to Specified start (SPECIFIEDSTART). For more information about timecodes, see https://docs.aws.amazon.com/console/mediaconvert/timecode.</p>
+    #[serde(rename = "TimecodeStart")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timecode_start: Option<String>,
     /// <p>Selector for video.</p>
     #[serde(rename = "VideoSelector")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2155,6 +2288,10 @@ pub struct InputTemplate {
     #[serde(rename = "CaptionSelectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption_selectors: Option<::std::collections::HashMap<String, CaptionSelector>>,
+    /// <p>Use Cropping selection (crop) to specify the video area that the service will include in the output video frame. If you specify a value here, it will override any value that you specify in the output setting Cropping selection (crop).</p>
+    #[serde(rename = "Crop")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crop: Option<Rectangle>,
     /// <p>Enable Deblock (InputDeblockFilter) to produce smoother motion in the output. Default is disabled. Only manaully controllable for MPEG2 and uncompressed video inputs.</p>
     #[serde(rename = "DeblockFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2179,6 +2316,10 @@ pub struct InputTemplate {
     #[serde(rename = "InputClippings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_clippings: Option<Vec<InputClipping>>,
+    /// <p>Use Selection placement (position) to define the video area in your output frame. The area outside of the rectangle that you specify here is black. If you specify a value here, it will override any value that you specify in the output setting Selection placement (position). If you specify a value here, this will override any AFD values in your input, even if you set Respond to AFD (RespondToAfd) to Respond (RESPOND). If you specify a value here, this will ignore anything that you specify for the setting Scaling Behavior (scalingBehavior).</p>
+    #[serde(rename = "Position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<Rectangle>,
     /// <p>Use Program (programNumber) to select a specific program from within a multi-program transport stream. Note that Quad 4K is not currently supported. Default is the first program within the transport stream. If the program you specify doesn&#39;t exist, the transcoding service will use this default.</p>
     #[serde(rename = "ProgramNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2187,10 +2328,14 @@ pub struct InputTemplate {
     #[serde(rename = "PsiControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub psi_control: Option<String>,
-    /// <p>Timecode source under input settings (InputTimecodeSource) only affects the behavior of features that apply to a single input at a time, such as input clipping and synchronizing some captions formats. Use this setting to specify whether the service counts frames by timecodes embedded in the video (EMBEDDED) or by starting the first frame at zero (ZEROBASED). In both cases, the timecode format is HH:MM:SS:FF or HH:MM:SS;FF, where FF is the frame number. Only set this to EMBEDDED if your source video has embedded timecodes.</p>
+    /// <p>Use this Timecode source setting, located under the input settings (InputTimecodeSource), to specify how the service counts input video frames. This input frame count affects only the behavior of features that apply to a single input at a time, such as input clipping and synchronizing some captions formats. Choose Embedded (EMBEDDED) to use the timecodes in your input video. Choose Start at zero (ZEROBASED) to start the first frame at zero. Choose Specified start (SPECIFIEDSTART) to start the first frame at the timecode that you specify in the setting Start timecode (timecodeStart). If you don&#39;t specify a value for Timecode source, the service will use Embedded by default. For more information about timecodes, see https://docs.aws.amazon.com/console/mediaconvert/timecode.</p>
     #[serde(rename = "TimecodeSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timecode_source: Option<String>,
+    /// <p>Specify the timecode that you want the service to use for this input&#39;s initial frame. To use this setting, you must set the Timecode source setting, located under the input settings (InputTimecodeSource), to Specified start (SPECIFIEDSTART). For more information about timecodes, see https://docs.aws.amazon.com/console/mediaconvert/timecode.</p>
+    #[serde(rename = "TimecodeStart")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timecode_start: Option<String>,
     /// <p>Selector for video.</p>
     #[serde(rename = "VideoSelector")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2248,7 +2393,7 @@ pub struct InsertableImage {
 
 /// <p>Each job converts an input file into an output file or files. For more information, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Job {
     /// <p>Accelerated transcoding can significantly speed up jobs with long, visually complex content.</p>
     #[serde(rename = "AccelerationSettings")]
@@ -2282,7 +2427,7 @@ pub struct Job {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>An estimate of how far your job has progressed. This estimate is shown as a percentage of the total time from when your job leaves its queue to when your output files appear in your output Amazon S3 bucket. AWS Elemental MediaConvert provides jobPercentComplete in CloudWatch STATUS_UPDATE events and in the response to GetJob and ListJobs requests. The jobPercentComplete estimate is reliable for the following input containers: Quicktime, Transport Stream, MP4, and MXF. For some jobs, including audio-only jobs and jobs that use input clipping, the service can&#39;t provide information about job progress. In those cases, jobPercentComplete returns a null value.</p>
+    /// <p>An estimate of how far your job has progressed. This estimate is shown as a percentage of the total time from when your job leaves its queue to when your output files appear in your output Amazon S3 bucket. AWS Elemental MediaConvert provides jobPercentComplete in CloudWatch STATUS_UPDATE events and in the response to GetJob and ListJobs requests. The jobPercentComplete estimate is reliable for the following input containers: Quicktime, Transport Stream, MP4, and MXF. For some jobs, the service can&#39;t provide information about job progress. In those cases, jobPercentComplete returns a null value.</p>
     #[serde(rename = "JobPercentComplete")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_percent_complete: Option<i64>,
@@ -2294,6 +2439,10 @@ pub struct Job {
     #[serde(rename = "OutputGroupDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_group_details: Option<Vec<OutputGroupDetail>>,
+    /// <p>Relative priority on the job.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
     /// <p>Optional. When you create a job, you can specify a queue to send it to. If you don&#39;t specify, the job will go to the default queue. For more about queues, see the User Guide topic at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
     #[serde(rename = "Queue")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2308,6 +2457,10 @@ pub struct Job {
     /// <p>JobSettings contains all the transcode settings for a job.</p>
     #[serde(rename = "Settings")]
     pub settings: JobSettings,
+    /// <p>Enable this setting when you run a test job to estimate how many reserved transcoding slots (RTS) you need. When this is enabled, MediaConvert runs your job from an on-demand queue with similar performance to what you will see with one RTS in a reserved queue. This setting is disabled by default.</p>
+    #[serde(rename = "SimulateReservedQueue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub simulate_reserved_queue: Option<String>,
     /// <p>A job&#39;s status can be SUBMITTED, PROGRESSING, COMPLETE, CANCELED, or ERROR.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2349,7 +2502,7 @@ pub struct JobSettings {
     #[serde(rename = "MotionImageInserter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub motion_image_inserter: Option<MotionImageInserter>,
-    /// <p>Settings for Nielsen Configuration</p>
+    /// <p>Settings for your Nielsen configuration. If you don&#39;t do Nielsen measurement and analytics, ignore these settings. When you enable Nielsen configuration (nielsenConfiguration), MediaConvert enables PCM to ID3 tagging for all outputs in the job. To enable Nielsen configuration programmatically, include an instance of nielsenConfiguration in your JSON job specification. Even if you don&#39;t include any children of nielsenConfiguration, you still enable the setting.</p>
     #[serde(rename = "NielsenConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nielsen_configuration: Option<NielsenConfiguration>,
@@ -2369,9 +2522,9 @@ pub struct JobSettings {
 
 /// <p>A job template is a pre-made set of encoding instructions that you can use to quickly create a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobTemplate {
-    /// <p>Accelerated transcoding is currently in private preview. Contact AWS for more information.</p>
+    /// <p>Accelerated transcoding can significantly speed up jobs with long, visually complex content.</p>
     #[serde(rename = "AccelerationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub acceleration_settings: Option<AccelerationSettings>,
@@ -2398,6 +2551,10 @@ pub struct JobTemplate {
     /// <p>A name you create for each job template. Each name must be unique within your account.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>Relative priority on the job.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
     /// <p>Optional. The queue that jobs created from this template are assigned to. If you don&#39;t specify this, jobs will go to the default queue.</p>
     #[serde(rename = "Queue")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2438,7 +2595,7 @@ pub struct JobTemplateSettings {
     #[serde(rename = "MotionImageInserter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub motion_image_inserter: Option<MotionImageInserter>,
-    /// <p>Settings for Nielsen Configuration</p>
+    /// <p>Settings for your Nielsen configuration. If you don&#39;t do Nielsen measurement and analytics, ignore these settings. When you enable Nielsen configuration (nielsenConfiguration), MediaConvert enables PCM to ID3 tagging for all outputs in the job. To enable Nielsen configuration programmatically, include an instance of nielsenConfiguration in your JSON job specification. Even if you don&#39;t include any children of nielsenConfiguration, you still enable the setting.</p>
     #[serde(rename = "NielsenConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nielsen_configuration: Option<NielsenConfiguration>,
@@ -2481,7 +2638,7 @@ pub struct ListJobTemplatesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobTemplatesResponse {
     /// <p>List of Job templates.</p>
     #[serde(rename = "JobTemplates")]
@@ -2518,7 +2675,7 @@ pub struct ListJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResponse {
     /// <p>List of jobs</p>
     #[serde(rename = "Jobs")]
@@ -2555,7 +2712,7 @@ pub struct ListPresetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPresetsResponse {
     /// <p>Use this string to request the next batch of presets.</p>
     #[serde(rename = "NextToken")]
@@ -2588,7 +2745,7 @@ pub struct ListQueuesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListQueuesResponse {
     /// <p>Use this string to request the next batch of queues.</p>
     #[serde(rename = "NextToken")]
@@ -2608,7 +2765,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The Amazon Resource Name (ARN) and tags for an AWS Elemental MediaConvert resource.</p>
     #[serde(rename = "ResourceTags")]
@@ -2744,7 +2901,7 @@ pub struct M2tsSettings {
     #[serde(rename = "Scte35Pid")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scte_35_pid: Option<i64>,
-    /// <p>Enables SCTE-35 passthrough (scte35Source) to pass any SCTE-35 signals from input to output.</p>
+    /// <p>For SCTE-35 markers from your input-- Choose Passthrough (PASSTHROUGH) if you want SCTE-35 markers that appear in your input to also appear in this output. Choose None (NONE) if you don&#39;t want SCTE-35 markers in this output. For SCTE-35 markers from an ESAM XML document-- Choose None (NONE). Also provide the ESAM XML as a string in the setting Signal processing notification XML (sccXml). Also enable ESAM SCTE-35 (include the property scte35Esam).</p>
     #[serde(rename = "Scte35Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scte_35_source: Option<String>,
@@ -2821,7 +2978,7 @@ pub struct M3u8Settings {
     #[serde(rename = "Scte35Pid")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scte_35_pid: Option<i64>,
-    /// <p>Enables SCTE-35 passthrough (scte35Source) to pass any SCTE-35 signals from input to output.</p>
+    /// <p>For SCTE-35 markers from your input-- Choose Passthrough (PASSTHROUGH) if you want SCTE-35 markers that appear in your input to also appear in this output. Choose None (NONE) if you don&#39;t want SCTE-35 markers in this output. For SCTE-35 markers from an ESAM XML document-- Choose None (NONE) if you don&#39;t want manifest conditioning. Choose Passthrough (PASSTHROUGH) and choose Ad markers (adMarkers) if you do want manifest conditioning. In both cases, also provide the ESAM XML as a string in the setting Signal processing notification XML (sccXml).</p>
     #[serde(rename = "Scte35Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scte_35_source: Option<String>,
@@ -2926,7 +3083,7 @@ pub struct MovSettings {
 /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value MP2.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Mp2Settings {
-    /// <p>Average bitrate in bits/second.</p>
+    /// <p>Specify the average bitrate in bits per second.</p>
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitrate: Option<i64>,
@@ -2940,7 +3097,7 @@ pub struct Mp2Settings {
     pub sample_rate: Option<i64>,
 }
 
-/// <p>Settings for MP4 Container</p>
+/// <p>Settings for MP4 container. You can create audio-only AAC outputs with this container.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Mp4Settings {
     /// <p>When enabled, file composition times will start at zero, composition times in the &#39;ctts&#39; (composition time to sample) box for B-frames will be negative, and a &#39;cslg&#39; (composition shift least greatest) box will be included per 14496-1 amendment 1. This improves compatibility with Apple players and tools.</p>
@@ -2968,7 +3125,7 @@ pub struct Mpeg2Settings {
     #[serde(rename = "AdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub adaptive_quantization: Option<String>,
-    /// <p>Average bitrate in bits/second. Required for VBR and CBR. For MS Smooth outputs, bitrates must be unique when rounded down to the nearest multiple of 1000.</p>
+    /// <p>Specify the average bitrate in bits per second. Required for VBR and CBR. For MS Smooth outputs, bitrates must be unique when rounded down to the nearest multiple of 1000.</p>
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitrate: Option<i64>,
@@ -3062,7 +3219,7 @@ pub struct Mpeg2Settings {
     #[serde(rename = "RateControlMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rate_control_mode: Option<String>,
-    /// <p>Scene change detection (inserts I-frames on scene changes).</p>
+    /// <p>Enable this setting to insert I-frames at scene changes that the service automatically detects. This improves video quality and is enabled by default.</p>
     #[serde(rename = "SceneChangeDetect")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scene_change_detect: Option<String>,
@@ -3095,7 +3252,7 @@ pub struct Mpeg2Settings {
 /// <p>If you are using DRM, set DRM System (MsSmoothEncryptionSettings) to specify the value SpekeKeyProvider.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MsSmoothEncryptionSettings {
-    /// <p>Settings for use with a SPEKE key provider</p>
+    /// <p>If your output group type is HLS, DASH, or Microsoft Smooth, use these settings when doing DRM encryption with a SPEKE-compliant key provider.  If your output group type is CMAF, use the SpekeKeyProviderCmaf settings instead.</p>
     #[serde(rename = "SpekeKeyProvider")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub speke_key_provider: Option<SpekeKeyProvider>,
@@ -3130,10 +3287,10 @@ pub struct MsSmoothGroupSettings {
     pub manifest_encoding: Option<String>,
 }
 
-/// <p>Settings for Nielsen Configuration</p>
+/// <p>Settings for your Nielsen configuration. If you don&#39;t do Nielsen measurement and analytics, ignore these settings. When you enable Nielsen configuration (nielsenConfiguration), MediaConvert enables PCM to ID3 tagging for all outputs in the job. To enable Nielsen configuration programmatically, include an instance of nielsenConfiguration in your JSON job specification. Even if you don&#39;t include any children of nielsenConfiguration, you still enable the setting.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NielsenConfiguration {
-    /// <p>Use Nielsen Configuration (NielsenConfiguration) to set the Nielsen measurement system breakout code. Supported values are 0, 3, 7, and 9.</p>
+    /// <p>Nielsen has discontinued the use of breakout code functionality. If you must include this property, set the value to zero.</p>
     #[serde(rename = "BreakoutCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub breakout_code: Option<i64>,
@@ -3146,7 +3303,7 @@ pub struct NielsenConfiguration {
 /// <p>Enable the Noise reducer (NoiseReducer) feature to remove noise from your video output if necessary. Enable or disable this feature for each output individually. This setting is disabled by default. When you enable Noise reducer (NoiseReducer), you must also select a value for Noise reducer filter (NoiseReducerFilter).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NoiseReducer {
-    /// <p>Use Noise reducer filter (NoiseReducerFilter) to select one of the following spatial image filtering functions. To use this setting, you must also enable Noise reducer (NoiseReducer). * Bilateral is an edge preserving noise reduction filter. * Mean (softest), Gaussian, Lanczos, and Sharpen (sharpest) are convolution filters. * Conserve is a min/max noise reduction filter. * Spatial is a frequency-domain filter based on JND principles.</p>
+    /// <p>Use Noise reducer filter (NoiseReducerFilter) to select one of the following spatial image filtering functions. To use this setting, you must also enable Noise reducer (NoiseReducer). * Bilateral preserves edges while reducing noise. * Mean (softest), Gaussian, Lanczos, and Sharpen (sharpest) do convolution filtering. * Conserve does min/max noise reduction. * Spatial does frequency-domain filtering based on JND principles. * Temporal optimizes video quality for complex motion.</p>
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<String>,
@@ -3158,6 +3315,10 @@ pub struct NoiseReducer {
     #[serde(rename = "SpatialFilterSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spatial_filter_settings: Option<NoiseReducerSpatialFilterSettings>,
+    /// <p>Noise reducer filter settings for temporal filter.</p>
+    #[serde(rename = "TemporalFilterSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub temporal_filter_settings: Option<NoiseReducerTemporalFilterSettings>,
 }
 
 /// <p>Settings for a noise reducer filter</p>
@@ -3181,6 +3342,23 @@ pub struct NoiseReducerSpatialFilterSettings {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub speed: Option<i64>,
     /// <p>Relative strength of noise reducing filter. Higher values produce stronger filtering.</p>
+    #[serde(rename = "Strength")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub strength: Option<i64>,
+}
+
+/// <p>Noise reducer filter settings for temporal filter.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NoiseReducerTemporalFilterSettings {
+    /// <p>Use Aggressive mode for content that has complex motion. Higher values produce stronger temporal filtering. This filters highly complex scenes more aggressively and creates better VQ for low bitrate outputs.</p>
+    #[serde(rename = "AggressiveMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggressive_mode: Option<i64>,
+    /// <p>The speed of the filter (higher number is faster). Low setting reduces bit rate at the cost of transcode time, high setting improves transcode time at the cost of bit rate.</p>
+    #[serde(rename = "Speed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub speed: Option<i64>,
+    /// <p>Specify the strength of the noise reducing filter on this output. Higher values produce stronger filtering. We recommend the following value ranges, depending on the result that you want: * 0-2 for complexity reduction with minimal sharpness loss * 2-8 for complexity reduction with image preservation * 8-16 for a high level of complexity reduction</p>
     #[serde(rename = "Strength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub strength: Option<i64>,
@@ -3217,7 +3395,7 @@ pub struct Output {
     #[serde(rename = "Preset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preset: Option<String>,
-    /// <p>(VideoDescription) contains a group of video encoding settings. The specific video settings depend on the video codec you choose when you specify a value for Video codec (codec). Include one instance of (VideoDescription) per output.</p>
+    /// <p>(VideoDescription) contains a group of video encoding settings. The specific video settings depend on the video codec that you choose when you specify a value for Video codec (codec). Include one instance of (VideoDescription) per output.</p>
     #[serde(rename = "VideoDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video_description: Option<VideoDescription>,
@@ -3234,7 +3412,7 @@ pub struct OutputChannelMapping {
 
 /// <p>Details regarding output</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OutputDetail {
     /// <p>Duration in milliseconds</p>
     #[serde(rename = "DurationInMs")]
@@ -3269,7 +3447,7 @@ pub struct OutputGroup {
 
 /// <p>Contains details about the output groups specified in the job settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OutputGroupDetail {
     /// <p>Details about the output</p>
     #[serde(rename = "OutputDetails")]
@@ -3317,7 +3495,7 @@ pub struct OutputSettings {
 
 /// <p>A preset is a collection of preconfigured media conversion settings that you want MediaConvert to apply to the output during the conversion process.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Preset {
     /// <p>An identifier for this resource that is unique within all of AWS.</p>
     #[serde(rename = "Arn")]
@@ -3366,7 +3544,7 @@ pub struct PresetSettings {
     #[serde(rename = "ContainerSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_settings: Option<ContainerSettings>,
-    /// <p>(VideoDescription) contains a group of video encoding settings. The specific video settings depend on the video codec you choose when you specify a value for Video codec (codec). Include one instance of (VideoDescription) per output.</p>
+    /// <p>(VideoDescription) contains a group of video encoding settings. The specific video settings depend on the video codec that you choose when you specify a value for Video codec (codec). Include one instance of (VideoDescription) per output.</p>
     #[serde(rename = "VideoDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video_description: Option<VideoDescription>,
@@ -3425,7 +3603,7 @@ pub struct ProresSettings {
 
 /// <p>You can use queues to manage the resources that are available to your AWS account for running multiple transcoding jobs at the same time. If you don&#39;t specify a queue, the service sends all jobs through the default queue. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Queue {
     /// <p>An identifier for this resource that is unique within all of AWS.</p>
     #[serde(rename = "Arn")]
@@ -3504,7 +3682,7 @@ pub struct RemixSettings {
     #[serde(rename = "ChannelsIn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channels_in: Option<i64>,
-    /// <p>Specify the number of channels in this output after remixing. Valid values: 1, 2, 4, 6, 8</p>
+    /// <p>Specify the number of channels in this output after remixing. Valid values: 1, 2, 4, 6, 8... 64. (1 and even numbers to 64.)</p>
     #[serde(rename = "ChannelsOut")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channels_out: Option<i64>,
@@ -3512,7 +3690,7 @@ pub struct RemixSettings {
 
 /// <p>Details about the pricing plan for your reserved queue. Required for reserved queues and not applicable to on-demand queues.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReservationPlan {
     /// <p>The length of the term of your reserved queue pricing plan commitment.</p>
     #[serde(rename = "Commitment")]
@@ -3556,7 +3734,7 @@ pub struct ReservationPlanSettings {
 
 /// <p>The Amazon Resource Name (ARN) and tags for an AWS Elemental MediaConvert resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceTags {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "Arn")]
@@ -3599,22 +3777,48 @@ pub struct SccDestinationSettings {
     pub framerate: Option<String>,
 }
 
-/// <p>Settings for use with a SPEKE key provider</p>
+/// <p>If your output group type is HLS, DASH, or Microsoft Smooth, use these settings when doing DRM encryption with a SPEKE-compliant key provider.  If your output group type is CMAF, use the SpekeKeyProviderCmaf settings instead.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SpekeKeyProvider {
-    /// <p>Optional AWS Certificate Manager ARN for a certificate to send to the keyprovider. The certificate holds a key used by the keyprovider to encrypt the keys in its response.</p>
+    /// <p>If you want your key provider to encrypt the content keys that it provides to MediaConvert, set up a certificate with a master key using AWS Certificate Manager. Specify the certificate&#39;s Amazon Resource Name (ARN) here.</p>
     #[serde(rename = "CertificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    /// <p>The SPEKE-compliant server uses Resource ID (ResourceId) to identify content.</p>
+    /// <p>Specify the resource ID that your SPEKE-compliant key provider uses to identify this content.</p>
     #[serde(rename = "ResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
-    /// <p>Relates to SPEKE implementation. DRM system identifiers. DASH output groups support a max of two system ids. Other group types support one system id.</p>
+    /// <p>Relates to SPEKE implementation. DRM system identifiers. DASH output groups support a max of two system ids. Other group types support one system id. See
+    /// https://dashif.org/identifiers/content_protection/ for more details.</p>
     #[serde(rename = "SystemIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub system_ids: Option<Vec<String>>,
-    /// <p>Use URL (Url) to specify the SPEKE-compliant server that will provide keys for content.</p>
+    /// <p>Specify the URL to the key server that your SPEKE-compliant DRM key provider uses to provide keys for encrypting your content.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+}
+
+/// <p>If your output group type is CMAF, use these settings when doing DRM encryption with a SPEKE-compliant key provider. If your output group type is HLS, DASH, or Microsoft Smooth, use the SpekeKeyProvider settings instead.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SpekeKeyProviderCmaf {
+    /// <p>If you want your key provider to encrypt the content keys that it provides to MediaConvert, set up a certificate with a master key using AWS Certificate Manager. Specify the certificate&#39;s Amazon Resource Name (ARN) here.</p>
+    #[serde(rename = "CertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_arn: Option<String>,
+    /// <p>Specify the DRM system IDs that you want signaled in the DASH manifest that MediaConvert creates as part of this CMAF package. The DASH manifest can currently signal up to three system IDs. For more information, see https://dashif.org/identifiers/content_protection/.</p>
+    #[serde(rename = "DashSignaledSystemIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dash_signaled_system_ids: Option<Vec<String>>,
+    /// <p>Specify the DRM system ID that you want signaled in the HLS manifest that MediaConvert creates as part of this CMAF package. The HLS manifest can currently signal only one system ID. For more information, see https://dashif.org/identifiers/content_protection/.</p>
+    #[serde(rename = "HlsSignaledSystemIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hls_signaled_system_ids: Option<Vec<String>>,
+    /// <p>Specify the resource ID that your SPEKE-compliant key provider uses to identify this content.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+    /// <p>Specify the URL to the key server that your SPEKE-compliant DRM key provider uses to provide keys for encrypting your content.</p>
     #[serde(rename = "Url")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
@@ -3652,7 +3856,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Settings for Teletext caption output</p>
@@ -3662,6 +3866,10 @@ pub struct TeletextDestinationSettings {
     #[serde(rename = "PageNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_number: Option<String>,
+    /// <p>Specify the page types for this Teletext page. If you don&#39;t specify a value here, the service sets the page type to the default value Subtitle (PAGE<em>TYPE</em>SUBTITLE). If you pass through the entire set of Teletext data, don&#39;t use this field. When you pass through a set of Teletext pages, your output has the same page types as your input.</p>
+    #[serde(rename = "PageTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_types: Option<Vec<String>>,
 }
 
 /// <p>Settings specific to Teletext caption sources, including Page number.</p>
@@ -3722,7 +3930,7 @@ pub struct TimedMetadataInsertion {
 
 /// <p>Information about when jobs are submitted, started, and finished is specified in Unix epoch format in seconds.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Timing {
     /// <p>The time, in Unix epoch format, that the transcoding job finished</p>
     #[serde(rename = "FinishTime")]
@@ -3738,7 +3946,7 @@ pub struct Timing {
     pub submit_time: Option<f64>,
 }
 
-/// <p>Settings specific to caption sources that are specfied by track number. Sources include IMSC in IMF.</p>
+/// <p>Settings specific to caption sources that are specified by track number. Currently, this is only IMSC captions in an IMF package. If your caption source is IMSC 1.1 in a separate xml file, use FileSourceSettings instead of TrackSourceSettings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrackSourceSettings {
     /// <p>Use this setting to select a single captions track from a source. Track numbers correspond to the order in the captions source file. For IMF sources, track numbering is based on the order that the captions appear in the CPL. For example, use 1 to select the captions asset that is listed first in the CPL. To include more than one captions track in your job outputs, create multiple input captions selectors. Specify one track per selector.</p>
@@ -3768,7 +3976,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3788,6 +3996,10 @@ pub struct UpdateJobTemplateRequest {
     /// <p>The name of the job template you are modifying</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>Specify the relative priority for this job. In any given queue, the service begins processing the job with the highest value first. When more than one job has the same priority, the service begins processing the job that you submitted first. If you don&#39;t specify a priority, the service uses the default value 0.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
     /// <p>The new queue for the job template, if you are changing it.</p>
     #[serde(rename = "Queue")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3803,7 +4015,7 @@ pub struct UpdateJobTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateJobTemplateResponse {
     /// <p>A job template is a pre-made set of encoding instructions that you can use to quickly create a job.</p>
     #[serde(rename = "JobTemplate")]
@@ -3831,7 +4043,7 @@ pub struct UpdatePresetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePresetResponse {
     /// <p>A preset is a collection of preconfigured media conversion settings that you want MediaConvert to apply to the output during the conversion process.</p>
     #[serde(rename = "Preset")]
@@ -3859,7 +4071,7 @@ pub struct UpdateQueueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateQueueResponse {
     /// <p>You can use queues to manage the resources that are available to your AWS account for running multiple transcoding jobs at the same time. If you don&#39;t specify a queue, the service sends all jobs through the default queue. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html.</p>
     #[serde(rename = "Queue")]
@@ -3867,7 +4079,7 @@ pub struct UpdateQueueResponse {
     pub queue: Option<Queue>,
 }
 
-/// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value you choose for Video codec (Codec). For each codec enum you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * H<em>264, H264Settings * H</em>265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * FRAME_CAPTURE, FrameCaptureSettings</p>
+/// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * H<em>264, H264Settings * H</em>265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * FRAME_CAPTURE, FrameCaptureSettings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VideoCodecSettings {
     /// <p>Specifies the video codec. This must be equal to one of the enum values defined by the object  VideoCodec.</p>
@@ -3903,19 +4115,19 @@ pub struct VideoDescription {
     #[serde(rename = "AfdSignaling")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub afd_signaling: Option<String>,
-    /// <p>The service automatically applies the anti-alias filter to all outputs. The service no longer accepts the value DISABLED for AntiAlias. If you specify that in your job, the service will ignore the setting.</p>
+    /// <p>The anti-alias filter is automatically applied to all outputs. The service no longer accepts the value DISABLED for AntiAlias. If you specify that in your job, the service will ignore the setting.</p>
     #[serde(rename = "AntiAlias")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub anti_alias: Option<String>,
-    /// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value you choose for Video codec (Codec). For each codec enum you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * H<em>264, H264Settings * H</em>265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * FRAME_CAPTURE, FrameCaptureSettings</p>
+    /// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * H<em>264, H264Settings * H</em>265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * FRAME_CAPTURE, FrameCaptureSettings</p>
     #[serde(rename = "CodecSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_settings: Option<VideoCodecSettings>,
-    /// <p>Enable Insert color metadata (ColorMetadata) to include color metadata in this output. This setting is enabled by default.</p>
+    /// <p>Choose Insert (INSERT) for this setting to include color metadata in this output. Choose Ignore (IGNORE) to exclude color metadata from this output. If you don&#39;t specify a value, the service sets this to Insert by default.</p>
     #[serde(rename = "ColorMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color_metadata: Option<String>,
-    /// <p>Applies only if your input aspect ratio is different from your output aspect ratio. Use Input cropping rectangle (Crop) to specify the  video area the service will include in the output. This will crop the input source, causing video pixels to be removed on encode. If you crop your input frame size to smaller than your output frame size, make sure to specify the behavior you want in your output setting &quot;Scaling behavior&quot;.</p>
+    /// <p>Use Cropping selection (crop) to specify the video area that the service will include in the output video frame.</p>
     #[serde(rename = "Crop")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub crop: Option<Rectangle>,
@@ -3931,7 +4143,7 @@ pub struct VideoDescription {
     #[serde(rename = "Height")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub height: Option<i64>,
-    /// <p>Use Position (Position) to point to a rectangle object to define your position. This setting overrides any other aspect ratio.</p>
+    /// <p>Use Selection placement (position) to define the video area in your output frame. The area outside of the rectangle that you specify here is black.</p>
     #[serde(rename = "Position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<Rectangle>,
@@ -3939,7 +4151,7 @@ pub struct VideoDescription {
     #[serde(rename = "RespondToAfd")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub respond_to_afd: Option<String>,
-    /// <p>Applies only if your input aspect ratio is different from your output aspect ratio. Choose &quot;Stretch to output&quot; to have the service stretch your video image to fit. Keep the setting &quot;Default&quot; to allow the service to letterbox your video instead. This setting overrides any positioning value you specify elsewhere in the job.</p>
+    /// <p>Specify how the service handles outputs that have a different aspect ratio from the input aspect ratio. Choose Stretch to output (STRETCH<em>TO</em>OUTPUT) to have the service stretch your video image to fit. Keep the setting Default (DEFAULT) to have the service letterbox your video instead. This setting overrides any value that you specify for the setting Selection placement (position) in this output.</p>
     #[serde(rename = "ScalingBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_behavior: Option<String>,
@@ -3963,7 +4175,7 @@ pub struct VideoDescription {
 
 /// <p>Contains details about the output&#39;s video stream</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VideoDetail {
     /// <p>Height in pixels for the output</p>
     #[serde(rename = "HeightInPx")]
@@ -4003,15 +4215,15 @@ pub struct VideoPreprocessor {
 /// <p>Selector for video.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VideoSelector {
-    /// <p>If your input video has accurate color space metadata, or if you don&#39;t know about color space, leave this set to the default value FOLLOW. The service will automatically detect your input color space. If your input video has metadata indicating the wrong color space, or if your input video is missing color space metadata that should be there, specify the accurate color space here. If you choose HDR10, you can also correct inaccurate color space coefficients, using the HDR master display information controls. You must also set Color space usage (ColorSpaceUsage) to FORCE for the service to use these values.</p>
+    /// <p>If your input video has accurate color space metadata, or if you don&#39;t know about color space, leave this set to the default value Follow (FOLLOW). The service will automatically detect your input color space. If your input video has metadata indicating the wrong color space, specify the accurate color space here. If your input video is HDR 10 and the SMPTE ST 2086 Mastering Display Color Volume static metadata isn&#39;t present in your video stream, or if that metadata is present but not accurate, choose Force HDR 10 (FORCE_HDR10) here and specify correct values in the input HDR 10 metadata (Hdr10Metadata) settings. For more information about MediaConvert HDR jobs, see https://docs.aws.amazon.com/console/mediaconvert/hdr.</p>
     #[serde(rename = "ColorSpace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color_space: Option<String>,
-    /// <p>There are two sources for color metadata, the input file and the job configuration (in the Color space and HDR master display informaiton settings). The Color space usage setting controls which takes precedence. FORCE: The system will use color metadata supplied by user, if any. If the user does not supply color metadata, the system will use data from the source. FALLBACK: The system will use color metadata from the source. If source has no color metadata, the system will use user-supplied color metadata values if available.</p>
+    /// <p>There are two sources for color metadata, the input file and the job input settings Color space (ColorSpace) and HDR master display information settings(Hdr10Metadata). The Color space usage setting determines which takes precedence. Choose Force (FORCE) to use color metadata from the input job settings. If you don&#39;t specify values for those settings, the service defaults to using metadata from your input. FALLBACK - Choose Fallback (FALLBACK) to use color metadata from the source when it is present. If there&#39;s no color metadata in your input file, the service defaults to using values you specify in the input settings.</p>
     #[serde(rename = "ColorSpaceUsage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color_space_usage: Option<String>,
-    /// <p>Use the &quot;HDR master display information&quot; (Hdr10Metadata) settings to correct HDR metadata or to provide missing metadata. These values vary depending on the input video and must be provided by a color grader. Range is 0 to 50,000; each increment represents 0.00002 in CIE1931 color coordinate. Note that these settings are not color correction. Note that if you are creating HDR outputs inside of an HLS CMAF package, to comply with the Apple specification, you must use the following settings. Set &quot;MP4 packaging type&quot; (writeMp4PackagingType) to HVC1 (HVC1). Set &quot;Profile&quot; (H265Settings &gt; codecProfile) to Main10/High (MAIN10<em>HIGH). Set &quot;Level&quot; (H265Settings &gt; codecLevel) to 5 (LEVEL</em>5).</p>
+    /// <p>Use these settings to provide HDR 10 metadata that is missing or inaccurate in your input video. Appropriate values vary depending on the input video and must be provided by a color grader. The color grader generates these values during the HDR 10 mastering process. The valid range for each of these settings is 0 to 50,000. Each increment represents 0.00002 in CIE1931 color coordinate. Related settings - When you specify these values, you must also set Color space (ColorSpace) to HDR 10 (HDR10). To specify whether the the values you specify here take precedence over the values in the metadata of your input file, set Color space usage (ColorSpaceUsage). To specify whether color metadata is included in an output, set Color metadata (ColorMetadata). For more information about MediaConvert HDR jobs, see https://docs.aws.amazon.com/console/mediaconvert/hdr.</p>
     #[serde(rename = "Hdr10Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hdr_10_metadata: Option<Hdr10Metadata>,
@@ -4036,7 +4248,7 @@ pub struct WavSettings {
     #[serde(rename = "BitDepth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bit_depth: Option<i64>,
-    /// <p>Set Channels to specify the number of channels in this output audio track. With WAV, valid values 1, 2, 4, and 8. In the console, these values are Mono, Stereo, 4-Channel, and 8-Channel, respectively.</p>
+    /// <p>Specify the number of channels in this output audio track. Valid values are 1 and even numbers up to 64. For example, 1, 2, 4, 6, and so on, up to 64.</p>
     #[serde(rename = "Channels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channels: Option<i64>,
@@ -5806,10 +6018,7 @@ impl MediaConvertClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> MediaConvertClient {
-        MediaConvertClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -5821,10 +6030,14 @@ impl MediaConvertClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        MediaConvertClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MediaConvertClient {
+        MediaConvertClient { client, region }
     }
 }
 

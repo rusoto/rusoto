@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -61,7 +62,7 @@ pub struct CreateUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {
     /// <p>The Amazon Resource Name (ARN) of the user account created.</p>
     #[serde(rename = "UserArn")]
@@ -75,7 +76,7 @@ pub struct CreateUserResponse {
 
 /// <p>The credentials to use for federation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Credentials {
     /// <p>An access token generated for a federated user to access Amazon Connect</p>
     #[serde(rename = "AccessToken")]
@@ -110,7 +111,7 @@ pub struct CurrentMetric {
 
 /// <p>A <code>CurrentMetricData</code> object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CurrentMetricData {
     /// <p>The metric in a <code>CurrentMetricData</code> object.</p>
     #[serde(rename = "Metric")]
@@ -124,7 +125,7 @@ pub struct CurrentMetricData {
 
 /// <p>A <code>CurrentMetricResult</code> object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CurrentMetricResult {
     /// <p>The <code>Collections</code> for the <code>CurrentMetricResult</code> object.</p>
     #[serde(rename = "Collections")]
@@ -157,7 +158,7 @@ pub struct DescribeUserHierarchyGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserHierarchyGroupResponse {
     /// <p>Returns a <code>HierarchyGroup</code> object.</p>
     #[serde(rename = "HierarchyGroup")]
@@ -173,7 +174,7 @@ pub struct DescribeUserHierarchyStructureRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserHierarchyStructureResponse {
     /// <p>A <code>HierarchyStructure</code> object.</p>
     #[serde(rename = "HierarchyStructure")]
@@ -192,7 +193,7 @@ pub struct DescribeUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserResponse {
     /// <p>A <code>User</code> object that contains information about the user account and configuration settings.</p>
     #[serde(rename = "User")]
@@ -202,7 +203,7 @@ pub struct DescribeUserResponse {
 
 /// <p>A <code>Dimensions</code> object that includes the Channel and Queue for the metric.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Dimensions {
     /// <p>The channel used for grouping and filters. Only VOICE is supported.</p>
     #[serde(rename = "Channel")]
@@ -238,7 +239,7 @@ pub struct GetContactAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContactAttributesResponse {
     /// <p>The attributes to update.</p>
     #[serde(rename = "Attributes")]
@@ -272,7 +273,7 @@ pub struct GetCurrentMetricDataRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCurrentMetricDataResponse {
     /// <p>The time at which <code>CurrentMetricData</code> was retrieved and cached for pagination.</p>
     #[serde(rename = "DataSnapshotTime")]
@@ -296,7 +297,7 @@ pub struct GetFederationTokenRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFederationTokenResponse {
     /// <p>The credentials to use for federation.</p>
     #[serde(rename = "Credentials")]
@@ -336,7 +337,7 @@ pub struct GetMetricDataRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMetricDataResponse {
     /// <p>A list of <code>HistoricalMetricResult</code> objects, organized by <code>Dimensions</code>, which is the ID of the resource specified in the <code>Filters</code> used for the request. The metrics are combined with the metrics included in <code>Collections</code>, which is a list of <code>HisotricalMetricData</code> objects.</p> <p>If no <code>Grouping</code> is specified in the request, <code>Collections</code> includes summary data for the <code>HistoricalMetrics</code>.</p>
     #[serde(rename = "MetricResults")]
@@ -350,7 +351,7 @@ pub struct GetMetricDataResponse {
 
 /// <p>A <code>HierarchyGroup</code> object that contains information about a hierarchy group in your Amazon Connect instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HierarchyGroup {
     /// <p>The Amazon Resource Name (ARN) for the hierarchy group.</p>
     #[serde(rename = "Arn")]
@@ -376,7 +377,7 @@ pub struct HierarchyGroup {
 
 /// <p>A <code>HierarchyGroupSummary</code> object that contains information about the hierarchy group, including ARN, Id, and Name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HierarchyGroupSummary {
     /// <p>The ARN for the hierarchy group.</p>
     #[serde(rename = "Arn")]
@@ -394,7 +395,7 @@ pub struct HierarchyGroupSummary {
 
 /// <p>A <code>HierarchyLevel</code> object that contains information about the levels in a hierarchy group, including ARN, Id, and Name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HierarchyLevel {
     /// <p>The ARN for the hierarchy group level.</p>
     #[serde(rename = "Arn")]
@@ -412,7 +413,7 @@ pub struct HierarchyLevel {
 
 /// <p>A <code>HierarchyPath</code> object that contains information about the levels of the hierarchy group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HierarchyPath {
     /// <p>A <code>HierarchyGroupSummary</code> object that contains information about the level of the hierarchy group, including ARN, Id, and Name.</p>
     #[serde(rename = "LevelFive")]
@@ -438,7 +439,7 @@ pub struct HierarchyPath {
 
 /// <p>A <code>HierarchyStructure</code> object that contains information about the hierarchy group structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HierarchyStructure {
     /// <p>A <code>HierarchyLevel</code> object that contains information about the hierarchy group level.</p>
     #[serde(rename = "LevelFive")]
@@ -485,7 +486,7 @@ pub struct HistoricalMetric {
 
 /// <p>A <code>HistoricalMetricData</code> object than contains a <code>Metric</code> and a <code>Value</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HistoricalMetricData {
     /// <p>A <code>HistoricalMetric</code> object.</p>
     #[serde(rename = "Metric")]
@@ -499,7 +500,7 @@ pub struct HistoricalMetricData {
 
 /// <p>The metrics data returned from a <code>GetMetricData</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HistoricalMetricResult {
     /// <p>A list of <code>HistoricalMetricData</code> objects.</p>
     #[serde(rename = "Collections")]
@@ -527,7 +528,7 @@ pub struct ListRoutingProfilesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRoutingProfilesResponse {
     /// <p>A string returned in the response. Use the value returned in the response as the value of the NextToken in a subsequent request to retrieve the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -555,7 +556,7 @@ pub struct ListSecurityProfilesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecurityProfilesResponse {
     /// <p>A string returned in the response. Use the value returned in the response as the value of the NextToken in a subsequent request to retrieve the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -583,7 +584,7 @@ pub struct ListUserHierarchyGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUserHierarchyGroupsResponse {
     /// <p>A string returned in the response. Use the value returned in the response as the value of the NextToken in a subsequent request to retrieve the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -611,7 +612,7 @@ pub struct ListUsersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersResponse {
     /// <p>A string returned in the response. Use the value returned in the response as the value of the NextToken in a subsequent request to retrieve the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -625,7 +626,7 @@ pub struct ListUsersResponse {
 
 /// <p>A QueueReference object that contains the the QueueId and ARN for the queue resource for which metrics are returned.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueueReference {
     /// <p>The Amazon Resource Name (ARN) of queue.</p>
     #[serde(rename = "Arn")]
@@ -639,7 +640,7 @@ pub struct QueueReference {
 
 /// <p>A <code>RoutingProfileSummary</code> object that contains information about a routing profile, including ARN, Id, and Name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RoutingProfileSummary {
     /// <p>The ARN of the routing profile.</p>
     #[serde(rename = "Arn")]
@@ -657,7 +658,7 @@ pub struct RoutingProfileSummary {
 
 /// <p>A <code>SecurityProfileSummary</code> object that contains information about a security profile, including ARN, Id, Name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityProfileSummary {
     /// <p>The ARN of the security profile.</p>
     #[serde(rename = "Arn")]
@@ -703,7 +704,7 @@ pub struct StartOutboundVoiceContactRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartOutboundVoiceContactResponse {
     /// <p>The unique identifier of this contact within your Amazon Connect instance.</p>
     #[serde(rename = "ContactId")]
@@ -722,7 +723,7 @@ pub struct StopContactRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopContactResponse {}
 
 /// <p>A <code>Threshold</code> object that includes a comparison and <code>ThresholdValue</code> to compare to. Used with service level metrics.</p>
@@ -752,7 +753,7 @@ pub struct UpdateContactAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateContactAttributesResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -823,7 +824,7 @@ pub struct UpdateUserSecurityProfilesRequest {
 
 /// <p>A <code>User</code> object that contains information about a user account in your Amazon Connect instance, including configuration settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct User {
     /// <p>The ARN of the user account.</p>
     #[serde(rename = "Arn")]
@@ -902,7 +903,7 @@ pub struct UserPhoneConfig {
 
 /// <p>A <code>UserSummary</code> object that contains Information about a user, including ARN, Id, and user name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserSummary {
     /// <p>The ARN for the user account.</p>
     #[serde(rename = "Arn")]
@@ -2387,10 +2388,7 @@ impl ConnectClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> ConnectClient {
-        ConnectClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -2402,10 +2400,14 @@ impl ConnectClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        ConnectClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ConnectClient {
+        ConnectClient { client, region }
     }
 }
 

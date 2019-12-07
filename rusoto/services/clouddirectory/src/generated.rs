@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -42,7 +43,7 @@ pub struct AddFacetToObjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddFacetToObjectResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -56,7 +57,7 @@ pub struct ApplySchemaRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplySchemaResponse {
     /// <p>The applied schema ARN that is associated with the copied schema in the <a>Directory</a>. You can use this ARN to describe the schema information applied on this directory. For more information, see <a>arns</a>.</p>
     #[serde(rename = "AppliedSchemaArn")]
@@ -85,7 +86,7 @@ pub struct AttachObjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachObjectResponse {
     /// <p>The attached <code>ObjectIdentifier</code>, which is the child <code>ObjectIdentifier</code>.</p>
     #[serde(rename = "AttachedObjectIdentifier")]
@@ -107,7 +108,7 @@ pub struct AttachPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachPolicyResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -124,7 +125,7 @@ pub struct AttachToIndexRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachToIndexResponse {
     /// <p>The <code>ObjectIdentifier</code> of the object that was attached to the index.</p>
     #[serde(rename = "AttachedObjectIdentifier")]
@@ -152,7 +153,7 @@ pub struct AttachTypedLinkRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachTypedLinkResponse {
     /// <p>Returns a typed link specifier as output.</p>
     #[serde(rename = "TypedLinkSpecifier")]
@@ -212,7 +213,7 @@ pub struct BatchAddFacetToObject {
 
 /// <p>The result of a batch add facet to object operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAddFacetToObjectResponse {}
 
 /// <p>Represents the output of an <a>AttachObject</a> operation.</p>
@@ -231,7 +232,7 @@ pub struct BatchAttachObject {
 
 /// <p>Represents the output batch <a>AttachObject</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAttachObjectResponse {
     /// <p>The <code>ObjectIdentifier</code> of the object that has been attached.</p>
     #[serde(rename = "attachedObjectIdentifier")]
@@ -252,7 +253,7 @@ pub struct BatchAttachPolicy {
 
 /// <p>Represents the output of an <a>AttachPolicy</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAttachPolicyResponse {}
 
 /// <p>Attaches the specified object to the specified index inside a <a>BatchRead</a> operation. For more information, see <a>AttachToIndex</a> and <a>BatchReadRequest$Operations</a>.</p>
@@ -268,7 +269,7 @@ pub struct BatchAttachToIndex {
 
 /// <p>Represents the output of a <a>AttachToIndex</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAttachToIndexResponse {
     /// <p>The <code>ObjectIdentifier</code> of the object that was attached to the index.</p>
     #[serde(rename = "AttachedObjectIdentifier")]
@@ -295,7 +296,7 @@ pub struct BatchAttachTypedLink {
 
 /// <p>Represents the output of a <a>AttachTypedLink</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAttachTypedLinkResponse {
     /// <p>Returns a typed link specifier as output.</p>
     #[serde(rename = "TypedLinkSpecifier")]
@@ -306,7 +307,7 @@ pub struct BatchAttachTypedLinkResponse {
 /// <p>Creates an index object inside of a <a>BatchRead</a> operation. For more information, see <a>CreateIndex</a> and <a>BatchReadRequest$Operations</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchCreateIndex {
-    /// <p>The batch reference name. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_advanced.html#batches">Batches</a> for more information.</p>
+    /// <p>The batch reference name. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/transaction_support.html">Transaction Support</a> for more information.</p>
     #[serde(rename = "BatchReferenceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_reference_name: Option<String>,
@@ -328,7 +329,7 @@ pub struct BatchCreateIndex {
 
 /// <p>Represents the output of a <a>CreateIndex</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCreateIndexResponse {
     /// <p>The <code>ObjectIdentifier</code> of the index created by this operation.</p>
     #[serde(rename = "ObjectIdentifier")]
@@ -339,7 +340,7 @@ pub struct BatchCreateIndexResponse {
 /// <p>Represents the output of a <a>CreateObject</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchCreateObject {
-    /// <p>The batch reference name. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_advanced.html#batches">Batches</a> for more information.</p>
+    /// <p>The batch reference name. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/transaction_support.html">Transaction Support</a> for more information.</p>
     #[serde(rename = "BatchReferenceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_reference_name: Option<String>,
@@ -361,7 +362,7 @@ pub struct BatchCreateObject {
 
 /// <p>Represents the output of a <a>CreateObject</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCreateObjectResponse {
     /// <p>The ID that is associated with the object.</p>
     #[serde(rename = "ObjectIdentifier")]
@@ -379,7 +380,7 @@ pub struct BatchDeleteObject {
 
 /// <p>Represents the output of a <a>DeleteObject</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteObjectResponse {}
 
 /// <p>Detaches the specified object from the specified index inside a <a>BatchRead</a> operation. For more information, see <a>DetachFromIndex</a> and <a>BatchReadRequest$Operations</a>.</p>
@@ -395,7 +396,7 @@ pub struct BatchDetachFromIndex {
 
 /// <p>Represents the output of a <a>DetachFromIndex</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetachFromIndexResponse {
     /// <p>The <code>ObjectIdentifier</code> of the object that was detached from the index.</p>
     #[serde(rename = "DetachedObjectIdentifier")]
@@ -406,7 +407,7 @@ pub struct BatchDetachFromIndexResponse {
 /// <p>Represents the output of a <a>DetachObject</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDetachObject {
-    /// <p>The batch reference name. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_advanced.html#batches">Batches</a> for more information.</p>
+    /// <p>The batch reference name. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/transaction_support.html">Transaction Support</a> for more information.</p>
     #[serde(rename = "BatchReferenceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_reference_name: Option<String>,
@@ -420,7 +421,7 @@ pub struct BatchDetachObject {
 
 /// <p>Represents the output of a <a>DetachObject</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetachObjectResponse {
     /// <p>The <code>ObjectIdentifier</code> of the detached object.</p>
     #[serde(rename = "detachedObjectIdentifier")]
@@ -441,7 +442,7 @@ pub struct BatchDetachPolicy {
 
 /// <p>Represents the output of a <a>DetachPolicy</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetachPolicyResponse {}
 
 /// <p>Detaches a typed link from a specified source and target object inside a <a>BatchRead</a> operation. For more information, see <a>DetachTypedLink</a> and <a>BatchReadRequest$Operations</a>.</p>
@@ -454,7 +455,7 @@ pub struct BatchDetachTypedLink {
 
 /// <p>Represents the output of a <a>DetachTypedLink</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetachTypedLinkResponse {}
 
 /// <p>Retrieves attributes that are associated with a typed link inside a <a>BatchRead</a> operation. For more information, see <a>GetLinkAttributes</a> and <a>BatchReadRequest$Operations</a>.</p>
@@ -470,7 +471,7 @@ pub struct BatchGetLinkAttributes {
 
 /// <p>Represents the output of a <a>GetLinkAttributes</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetLinkAttributesResponse {
     /// <p>The attributes that are associated with the typed link.</p>
     #[serde(rename = "Attributes")]
@@ -494,7 +495,7 @@ pub struct BatchGetObjectAttributes {
 
 /// <p>Represents the output of a <a>GetObjectAttributes</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetObjectAttributesResponse {
     /// <p>The attribute values that are associated with an object.</p>
     #[serde(rename = "Attributes")]
@@ -512,7 +513,7 @@ pub struct BatchGetObjectInformation {
 
 /// <p>Represents the output of a <a>GetObjectInformation</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetObjectInformationResponse {
     /// <p>The <code>ObjectIdentifier</code> of the specified object.</p>
     #[serde(rename = "ObjectIdentifier")]
@@ -542,7 +543,7 @@ pub struct BatchListAttachedIndices {
 
 /// <p>Represents the output of a <a>ListAttachedIndices</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListAttachedIndicesResponse {
     /// <p>The indices attached to the specified object.</p>
     #[serde(rename = "IndexAttachments")]
@@ -580,7 +581,7 @@ pub struct BatchListIncomingTypedLinks {
 
 /// <p>Represents the output of a <a>ListIncomingTypedLinks</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListIncomingTypedLinksResponse {
     /// <p>Returns one or more typed link specifiers as output.</p>
     #[serde(rename = "LinkSpecifiers")]
@@ -614,7 +615,7 @@ pub struct BatchListIndex {
 
 /// <p>Represents the output of a <a>ListIndex</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListIndexResponse {
     /// <p>The objects and indexed values attached to the index.</p>
     #[serde(rename = "IndexAttachments")]
@@ -648,7 +649,7 @@ pub struct BatchListObjectAttributes {
 
 /// <p>Represents the output of a <a>ListObjectAttributes</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListObjectAttributesResponse {
     /// <p>The attributes map that is associated with the object. <code>AttributeArn</code> is the key; attribute value is the value.</p>
     #[serde(rename = "Attributes")]
@@ -678,7 +679,7 @@ pub struct BatchListObjectChildren {
 
 /// <p>Represents the output of a <a>ListObjectChildren</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListObjectChildrenResponse {
     /// <p>The children structure, which is a map with the key as the <code>LinkName</code> and <code>ObjectIdentifier</code> as the value.</p>
     #[serde(rename = "Children")]
@@ -708,7 +709,7 @@ pub struct BatchListObjectParentPaths {
 
 /// <p>Represents the output of a <a>ListObjectParentPaths</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListObjectParentPathsResponse {
     /// <p>The pagination token.</p>
     #[serde(rename = "NextToken")]
@@ -718,6 +719,29 @@ pub struct BatchListObjectParentPathsResponse {
     #[serde(rename = "PathToObjectIdentifiersList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path_to_object_identifiers_list: Option<Vec<PathToObjectIdentifiers>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchListObjectParents {
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "ObjectReference")]
+    pub object_reference: ObjectReference,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchListObjectParentsResponse {
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "ParentLinks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_links: Option<Vec<ObjectIdentifierAndLinkNameTuple>>,
 }
 
 /// <p>Returns policies attached to an object in pagination fashion inside a <a>BatchRead</a> operation. For more information, see <a>ListObjectPolicies</a> and <a>BatchReadRequest$Operations</a>.</p>
@@ -738,7 +762,7 @@ pub struct BatchListObjectPolicies {
 
 /// <p>Represents the output of a <a>ListObjectPolicies</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListObjectPoliciesResponse {
     /// <p>A list of policy <code>ObjectIdentifiers</code>, that are attached to the object.</p>
     #[serde(rename = "AttachedPolicyIds")]
@@ -776,7 +800,7 @@ pub struct BatchListOutgoingTypedLinks {
 
 /// <p>Represents the output of a <a>ListOutgoingTypedLinks</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListOutgoingTypedLinksResponse {
     /// <p>The pagination token.</p>
     #[serde(rename = "NextToken")]
@@ -806,7 +830,7 @@ pub struct BatchListPolicyAttachments {
 
 /// <p>Represents the output of a <a>ListPolicyAttachments</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListPolicyAttachmentsResponse {
     /// <p>The pagination token.</p>
     #[serde(rename = "NextToken")]
@@ -836,13 +860,13 @@ pub struct BatchLookupPolicy {
 
 /// <p>Represents the output of a <a>LookupPolicy</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchLookupPolicyResponse {
     /// <p>The pagination token.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Provides list of path to policies. Policies contain <code>PolicyId</code>, <code>ObjectIdentifier</code>, and <code>PolicyType</code>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
+    /// <p>Provides list of path to policies. Policies contain <code>PolicyId</code>, <code>ObjectIdentifier</code>, and <code>PolicyType</code>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directory.html#key_concepts_policies">Policies</a>.</p>
     #[serde(rename = "PolicyToPathList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_to_path_list: Option<Vec<PolicyToPath>>,
@@ -850,7 +874,7 @@ pub struct BatchLookupPolicyResponse {
 
 /// <p>The batch read exception structure, which contains the exception type and message.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchReadException {
     /// <p>An exception message that is associated with the failure.</p>
     #[serde(rename = "Message")]
@@ -881,7 +905,7 @@ pub struct BatchReadOperation {
     #[serde(rename = "ListAttachedIndices")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_attached_indices: Option<BatchListAttachedIndices>,
-    /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     #[serde(rename = "ListIncomingTypedLinks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_incoming_typed_links: Option<BatchListIncomingTypedLinks>,
@@ -897,15 +921,18 @@ pub struct BatchReadOperation {
     #[serde(rename = "ListObjectChildren")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_object_children: Option<BatchListObjectChildren>,
-    /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure">Directory Structure</a>.</p>
+    /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directorystructure.html">Directory Structure</a>.</p>
     #[serde(rename = "ListObjectParentPaths")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_object_parent_paths: Option<BatchListObjectParentPaths>,
+    #[serde(rename = "ListObjectParents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_object_parents: Option<BatchListObjectParents>,
     /// <p>Returns policies attached to an object in pagination fashion.</p>
     #[serde(rename = "ListObjectPolicies")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_object_policies: Option<BatchListObjectPolicies>,
-    /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     #[serde(rename = "ListOutgoingTypedLinks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_outgoing_typed_links: Option<BatchListOutgoingTypedLinks>,
@@ -913,7 +940,7 @@ pub struct BatchReadOperation {
     #[serde(rename = "ListPolicyAttachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_policy_attachments: Option<BatchListPolicyAttachments>,
-    /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
+    /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directory.html#key_concepts_policies">Policies</a>.</p>
     #[serde(rename = "LookupPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lookup_policy: Option<BatchLookupPolicy>,
@@ -921,7 +948,7 @@ pub struct BatchReadOperation {
 
 /// <p>Represents the output of a <code>BatchRead</code> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchReadOperationResponse {
     /// <p>Identifies which operation in a batch has failed.</p>
     #[serde(rename = "ExceptionResponse")]
@@ -948,7 +975,7 @@ pub struct BatchReadRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchReadResponse {
     /// <p>A list of all the responses for each batch read.</p>
     #[serde(rename = "Responses")]
@@ -958,7 +985,7 @@ pub struct BatchReadResponse {
 
 /// <p>Represents the output of a <code>BatchRead</code> success response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchReadSuccessfulResponse {
     /// <p>The list of attributes to retrieve from the typed link.</p>
     #[serde(rename = "GetLinkAttributes")]
@@ -976,7 +1003,7 @@ pub struct BatchReadSuccessfulResponse {
     #[serde(rename = "ListAttachedIndices")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_attached_indices: Option<BatchListAttachedIndicesResponse>,
-    /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     #[serde(rename = "ListIncomingTypedLinks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_incoming_typed_links: Option<BatchListIncomingTypedLinksResponse>,
@@ -992,15 +1019,18 @@ pub struct BatchReadSuccessfulResponse {
     #[serde(rename = "ListObjectChildren")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_object_children: Option<BatchListObjectChildrenResponse>,
-    /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure">Directory Structure</a>.</p>
+    /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directorystructure.html">Directory Structure</a>.</p>
     #[serde(rename = "ListObjectParentPaths")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_object_parent_paths: Option<BatchListObjectParentPathsResponse>,
+    #[serde(rename = "ListObjectParents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_object_parents: Option<BatchListObjectParentsResponse>,
     /// <p>Returns policies attached to an object in pagination fashion.</p>
     #[serde(rename = "ListObjectPolicies")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_object_policies: Option<BatchListObjectPoliciesResponse>,
-    /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     #[serde(rename = "ListOutgoingTypedLinks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_outgoing_typed_links: Option<BatchListOutgoingTypedLinksResponse>,
@@ -1008,7 +1038,7 @@ pub struct BatchReadSuccessfulResponse {
     #[serde(rename = "ListPolicyAttachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_policy_attachments: Option<BatchListPolicyAttachmentsResponse>,
-    /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
+    /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directory.html#key_concepts_policies">Policies</a>.</p>
     #[serde(rename = "LookupPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lookup_policy: Option<BatchLookupPolicyResponse>,
@@ -1027,7 +1057,7 @@ pub struct BatchRemoveFacetFromObject {
 
 /// <p>An empty result that represents success.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchRemoveFacetFromObjectResponse {}
 
 /// <p>Updates a given typed link’s attributes inside a <a>BatchRead</a> operation. Attributes to be updated must not contribute to the typed link’s identity, as defined by its <code>IdentityAttributeOrder</code>. For more information, see <a>UpdateLinkAttributes</a> and <a>BatchReadRequest$Operations</a>.</p>
@@ -1043,7 +1073,7 @@ pub struct BatchUpdateLinkAttributes {
 
 /// <p>Represents the output of a <a>UpdateLinkAttributes</a> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdateLinkAttributesResponse {}
 
 /// <p>Represents the output of a <code>BatchUpdate</code> operation. </p>
@@ -1059,7 +1089,7 @@ pub struct BatchUpdateObjectAttributes {
 
 /// <p>Represents the output of a <code>BatchUpdate</code> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdateObjectAttributesResponse {
     /// <p>ID that is associated with the object.</p>
     #[serde(rename = "ObjectIdentifier")]
@@ -1086,11 +1116,11 @@ pub struct BatchWriteOperation {
     #[serde(rename = "AttachToIndex")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attach_to_index: Option<BatchAttachToIndex>,
-    /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     #[serde(rename = "AttachTypedLink")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attach_typed_link: Option<BatchAttachTypedLink>,
-    /// <p>Creates an index object. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_indexing.html">Indexing</a> for more information.</p>
+    /// <p>Creates an index object. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/indexing_search.htm">Indexing and search</a> for more information.</p>
     #[serde(rename = "CreateIndex")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_index: Option<BatchCreateIndex>,
@@ -1114,7 +1144,7 @@ pub struct BatchWriteOperation {
     #[serde(rename = "DetachPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detach_policy: Option<BatchDetachPolicy>,
-    /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     #[serde(rename = "DetachTypedLink")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detach_typed_link: Option<BatchDetachTypedLink>,
@@ -1134,7 +1164,7 @@ pub struct BatchWriteOperation {
 
 /// <p>Represents the output of a <code>BatchWrite</code> response operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchWriteOperationResponse {
     /// <p>The result of an add facet to object batch operation.</p>
     #[serde(rename = "AddFacetToObject")]
@@ -1152,11 +1182,11 @@ pub struct BatchWriteOperationResponse {
     #[serde(rename = "AttachToIndex")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attach_to_index: Option<BatchAttachToIndexResponse>,
-    /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     #[serde(rename = "AttachTypedLink")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attach_typed_link: Option<BatchAttachTypedLinkResponse>,
-    /// <p>Creates an index object. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_indexing.html">Indexing</a> for more information.</p>
+    /// <p>Creates an index object. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/indexing_search.htm">Indexing and search</a> for more information.</p>
     #[serde(rename = "CreateIndex")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_index: Option<BatchCreateIndexResponse>,
@@ -1180,7 +1210,7 @@ pub struct BatchWriteOperationResponse {
     #[serde(rename = "DetachPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detach_policy: Option<BatchDetachPolicyResponse>,
-    /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     #[serde(rename = "DetachTypedLink")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detach_typed_link: Option<BatchDetachTypedLinkResponse>,
@@ -1209,7 +1239,7 @@ pub struct BatchWriteRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchWriteResponse {
     /// <p>A list of all the responses for each batch write.</p>
     #[serde(rename = "Responses")]
@@ -1228,7 +1258,7 @@ pub struct CreateDirectoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDirectoryResponse {
     /// <p>The ARN of the published schema in the <a>Directory</a>. Once a published schema is copied into the directory, it has its own ARN, which is referred to applied schema ARN. For more information, see <a>arns</a>.</p>
     #[serde(rename = "AppliedSchemaArn")]
@@ -1250,19 +1280,24 @@ pub struct CreateFacetRequest {
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<Vec<FacetAttribute>>,
+    /// <p>There are two different styles that you can define on any given facet, <code>Static</code> and <code>Dynamic</code>. For static facets, all attributes must be defined in the schema. For dynamic facets, attributes can be defined during data plane operations.</p>
+    #[serde(rename = "FacetStyle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub facet_style: Option<String>,
     /// <p>The name of the <a>Facet</a>, which is unique for a given schema.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p><p>Specifies whether a given object created from this facet is of type node, leaf node, policy or index.</p> <ul> <li> <p>Node: Can have multiple children but one parent.</p> </li> </ul> <ul> <li> <p>Leaf node: Cannot have children but can have multiple parents.</p> </li> </ul> <ul> <li> <p>Policy: Allows you to store a policy document and policy type. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p> </li> </ul> <ul> <li> <p>Index: Can be created with the Index API.</p> </li> </ul></p>
+    /// <p><p>Specifies whether a given object created from this facet is of type node, leaf node, policy or index.</p> <ul> <li> <p>Node: Can have multiple children but one parent.</p> </li> </ul> <ul> <li> <p>Leaf node: Cannot have children but can have multiple parents.</p> </li> </ul> <ul> <li> <p>Policy: Allows you to store a policy document and policy type. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directory.html#key_concepts_policies">Policies</a>.</p> </li> </ul> <ul> <li> <p>Index: Can be created with the Index API.</p> </li> </ul></p>
     #[serde(rename = "ObjectType")]
-    pub object_type: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object_type: Option<String>,
     /// <p>The schema ARN in which the new <a>Facet</a> will be created. For more information, see <a>arns</a>.</p>
     #[serde(rename = "SchemaArn")]
     pub schema_arn: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFacetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1287,7 +1322,7 @@ pub struct CreateIndexRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIndexResponse {
     /// <p>The <code>ObjectIdentifier</code> of the index created by this operation.</p>
     #[serde(rename = "ObjectIdentifier")]
@@ -1318,7 +1353,7 @@ pub struct CreateObjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateObjectResponse {
     /// <p>The identifier that is associated with the object.</p>
     #[serde(rename = "ObjectIdentifier")]
@@ -1334,7 +1369,7 @@ pub struct CreateSchemaRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSchemaResponse {
     /// <p>The Amazon Resource Name (ARN) that is associated with the schema. For more information, see <a>arns</a>.</p>
     #[serde(rename = "SchemaArn")]
@@ -1353,7 +1388,7 @@ pub struct CreateTypedLinkFacetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTypedLinkFacetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1364,7 +1399,7 @@ pub struct DeleteDirectoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDirectoryResponse {
     /// <p>The ARN of the deleted directory.</p>
     #[serde(rename = "DirectoryArn")]
@@ -1382,7 +1417,7 @@ pub struct DeleteFacetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFacetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1396,7 +1431,7 @@ pub struct DeleteObjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteObjectResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1407,7 +1442,7 @@ pub struct DeleteSchemaRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSchemaResponse {
     /// <p>The input ARN that is returned as part of the response. For more information, see <a>arns</a>.</p>
     #[serde(rename = "SchemaArn")]
@@ -1426,7 +1461,7 @@ pub struct DeleteTypedLinkFacetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTypedLinkFacetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1443,7 +1478,7 @@ pub struct DetachFromIndexRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachFromIndexResponse {
     /// <p>The <code>ObjectIdentifier</code> of the object that was detached from the index.</p>
     #[serde(rename = "DetachedObjectIdentifier")]
@@ -1465,7 +1500,7 @@ pub struct DetachObjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachObjectResponse {
     /// <p>The <code>ObjectIdentifier</code> that was detached from the object.</p>
     #[serde(rename = "DetachedObjectIdentifier")]
@@ -1487,7 +1522,7 @@ pub struct DetachPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachPolicyResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1502,7 +1537,7 @@ pub struct DetachTypedLinkRequest {
 
 /// <p>Directory structure that includes the directory name and directory ARN.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Directory {
     /// <p>The date and time when the directory was created.</p>
     #[serde(rename = "CreationDateTime")]
@@ -1530,7 +1565,7 @@ pub struct DisableDirectoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableDirectoryResponse {
     /// <p>The ARN of the directory that has been disabled.</p>
     #[serde(rename = "DirectoryArn")]
@@ -1545,17 +1580,21 @@ pub struct EnableDirectoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableDirectoryResponse {
     /// <p>The ARN of the enabled directory.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
 }
 
-/// <p>A structure that contains <code>Name</code>, <code>ARN</code>, <code>Attributes</code>, <code> <a>Rule</a>s</code>, and <code>ObjectTypes</code>. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/whatarefacets.html">Facets</a> for more information.</p>
+/// <p>A structure that contains <code>Name</code>, <code>ARN</code>, <code>Attributes</code>, <code> <a>Rule</a>s</code>, and <code>ObjectTypes</code>. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_whatarefacets.html">Facets</a> for more information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Facet {
+    /// <p>There are two different styles that you can define on any given facet, <code>Static</code> and <code>Dynamic</code>. For static facets, all attributes must be defined in the schema. For dynamic facets, attributes can be defined during data plane operations.</p>
+    #[serde(rename = "FacetStyle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub facet_style: Option<String>,
     /// <p>The name of the <a>Facet</a>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1569,11 +1608,11 @@ pub struct Facet {
 /// <p>An attribute that is associated with the <a>Facet</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FacetAttribute {
-    /// <p>A facet attribute consists of either a definition or a reference. This structure contains the attribute definition. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_advanced.html#attributereferences">Attribute References</a> for more information.</p>
+    /// <p>A facet attribute consists of either a definition or a reference. This structure contains the attribute definition. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_attributereferences.html">Attribute References</a> for more information.</p>
     #[serde(rename = "AttributeDefinition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_definition: Option<FacetAttributeDefinition>,
-    /// <p>An attribute reference that is associated with the attribute. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_advanced.html#attributereferences">Attribute References</a> for more information.</p>
+    /// <p>An attribute reference that is associated with the attribute. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_attributereferences.html">Attribute References</a> for more information.</p>
     #[serde(rename = "AttributeReference")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_reference: Option<FacetAttributeReference>,
@@ -1586,7 +1625,7 @@ pub struct FacetAttribute {
     pub required_behavior: Option<String>,
 }
 
-/// <p>A facet attribute definition. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_advanced.html#attributereferences">Attribute References</a> for more information.</p>
+/// <p>A facet attribute definition. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_attributereferences.html">Attribute References</a> for more information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FacetAttributeDefinition {
     /// <p>The default value of the attribute (if configured).</p>
@@ -1609,10 +1648,10 @@ pub struct FacetAttributeDefinition {
 /// <p>The facet attribute reference that specifies the attribute definition that contains the attribute facet name and attribute name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FacetAttributeReference {
-    /// <p>The target attribute name that is associated with the facet reference. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_advanced.html#attributereferences">Attribute References</a> for more information.</p>
+    /// <p>The target attribute name that is associated with the facet reference. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_attributereferences.html">Attribute References</a> for more information.</p>
     #[serde(rename = "TargetAttributeName")]
     pub target_attribute_name: String,
-    /// <p>The target facet name that is associated with the facet reference. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_advanced.html#attributereferences">Attribute References</a> for more information.</p>
+    /// <p>The target facet name that is associated with the facet reference. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_attributereferences.html">Attribute References</a> for more information.</p>
     #[serde(rename = "TargetFacetName")]
     pub target_facet_name: String,
 }
@@ -1638,7 +1677,7 @@ pub struct GetAppliedSchemaVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppliedSchemaVersionResponse {
     /// <p>Current applied schema ARN, including the minor version in use if one was provided.</p>
     #[serde(rename = "AppliedSchemaArn")]
@@ -1654,7 +1693,7 @@ pub struct GetDirectoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDirectoryResponse {
     /// <p>Metadata about the directory.</p>
     #[serde(rename = "Directory")]
@@ -1672,7 +1711,7 @@ pub struct GetFacetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFacetResponse {
     /// <p>The <a>Facet</a> structure that is associated with the facet.</p>
     #[serde(rename = "Facet")]
@@ -1689,7 +1728,7 @@ pub struct GetLinkAttributesRequest {
     #[serde(rename = "ConsistencyLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub consistency_level: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) that is associated with the Directory where the typed link resides. For more information, see <a>arns</a> or <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>The Amazon Resource Name (ARN) that is associated with the Directory where the typed link resides. For more information, see <a>arns</a> or <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
     /// <p>Allows a typed link specifier to be accepted as input.</p>
@@ -1698,7 +1737,7 @@ pub struct GetLinkAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLinkAttributesResponse {
     /// <p>The attributes that are associated with the typed link.</p>
     #[serde(rename = "Attributes")]
@@ -1727,7 +1766,7 @@ pub struct GetObjectAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetObjectAttributesResponse {
     /// <p>The attributes that are associated with the object.</p>
     #[serde(rename = "Attributes")]
@@ -1750,7 +1789,7 @@ pub struct GetObjectInformationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetObjectInformationResponse {
     /// <p>The <code>ObjectIdentifier</code> of the specified object.</p>
     #[serde(rename = "ObjectIdentifier")]
@@ -1770,7 +1809,7 @@ pub struct GetSchemaAsJsonRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSchemaAsJsonResponse {
     /// <p>The JSON representation of the schema document.</p>
     #[serde(rename = "Document")]
@@ -1793,9 +1832,9 @@ pub struct GetTypedLinkFacetInformationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTypedLinkFacetInformationResponse {
-    /// <p>The order of identity attributes for the facet, from most significant to least significant. The ability to filter typed links considers the order that the attributes are defined on the typed link facet. When providing ranges to typed link selection, any inexact ranges must be specified at the end. Any attributes that do not have a range specified are presumed to match the entire range. Filters are interpreted in the order of the attributes on the typed link facet, not the order in which they are supplied to any API calls. For more information about identity attributes, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>The order of identity attributes for the facet, from most significant to least significant. The ability to filter typed links considers the order that the attributes are defined on the typed link facet. When providing ranges to typed link selection, any inexact ranges must be specified at the end. Any attributes that do not have a range specified are presumed to match the entire range. Filters are interpreted in the order of the attributes on the typed link facet, not the order in which they are supplied to any API calls. For more information about identity attributes, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     #[serde(rename = "IdentityAttributeOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_attribute_order: Option<Vec<String>>,
@@ -1803,7 +1842,7 @@ pub struct GetTypedLinkFacetInformationResponse {
 
 /// <p>Represents an index and an attached object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IndexAttachment {
     /// <p>The indexed attribute values.</p>
     #[serde(rename = "IndexedAttributes")]
@@ -1861,7 +1900,7 @@ pub struct ListAppliedSchemaArnsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppliedSchemaArnsResponse {
     /// <p>The pagination token.</p>
     #[serde(rename = "NextToken")]
@@ -1896,7 +1935,7 @@ pub struct ListAttachedIndicesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAttachedIndicesResponse {
     /// <p>The indices attached to the specified object.</p>
     #[serde(rename = "IndexAttachments")]
@@ -1921,7 +1960,7 @@ pub struct ListDevelopmentSchemaArnsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevelopmentSchemaArnsResponse {
     /// <p>The pagination token.</p>
     #[serde(rename = "NextToken")]
@@ -1950,7 +1989,7 @@ pub struct ListDirectoriesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDirectoriesResponse {
     /// <p>Lists all directories that are associated with your account in pagination fashion.</p>
     #[serde(rename = "Directories")]
@@ -1980,7 +2019,7 @@ pub struct ListFacetAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFacetAttributesResponse {
     /// <p>The attributes attached to the facet.</p>
     #[serde(rename = "Attributes")]
@@ -2008,7 +2047,7 @@ pub struct ListFacetNamesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFacetNamesResponse {
     /// <p>The names of facets that exist within the schema.</p>
     #[serde(rename = "FacetNames")]
@@ -2051,7 +2090,7 @@ pub struct ListIncomingTypedLinksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIncomingTypedLinksResponse {
     /// <p>Returns one or more typed link specifiers as output.</p>
     #[serde(rename = "LinkSpecifiers")]
@@ -2075,7 +2114,7 @@ pub struct ListIndexRequest {
     /// <p>The reference to the index to list.</p>
     #[serde(rename = "IndexReference")]
     pub index_reference: ObjectReference,
-    /// <p>The maximum number of objects in a single page to retrieve from the index during a request. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html#limits_cd">AWS Directory Service Limits</a>.</p>
+    /// <p>The maximum number of objects in a single page to retrieve from the index during a request. For more information, see <a href="http://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Amazon Cloud Directory Limits</a>.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -2090,7 +2129,7 @@ pub struct ListIndexRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIndexResponse {
     /// <p>The objects and indexed values attached to the index.</p>
     #[serde(rename = "IndexAttachments")]
@@ -2100,6 +2139,35 @@ pub struct ListIndexResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListManagedSchemaArnsRequest {
+    /// <p>The maximum number of results to retrieve.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The pagination token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The response for ListManagedSchemaArns. When this parameter is used, all minor version ARNs for a major version are listed.</p>
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListManagedSchemaArnsResponse {
+    /// <p>The pagination token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The ARNs for all AWS managed schemas.</p>
+    #[serde(rename = "SchemaArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arns: Option<Vec<String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2129,7 +2197,7 @@ pub struct ListObjectAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectAttributesResponse {
     /// <p>Attributes map that is associated with the object. <code>AttributeArn</code> is the key, and attribute value is the value.</p>
     #[serde(rename = "Attributes")]
@@ -2164,7 +2232,7 @@ pub struct ListObjectChildrenRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectChildrenResponse {
     /// <p>Children structure, which is a map with key as the <code>LinkName</code> and <code>ObjectIdentifier</code> as the value.</p>
     #[serde(rename = "Children")]
@@ -2195,7 +2263,7 @@ pub struct ListObjectParentPathsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectParentPathsResponse {
     /// <p>The pagination token.</p>
     #[serde(rename = "NextToken")]
@@ -2216,6 +2284,10 @@ pub struct ListObjectParentsRequest {
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where the object resides. For more information, see <a>arns</a>.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
+    /// <p>When set to True, returns all <a>ListObjectParentsResponse$ParentLinks</a>. There could be multiple links between a parent-child pair.</p>
+    #[serde(rename = "IncludeAllLinksToEachParent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_all_links_to_each_parent: Option<bool>,
     /// <p>The maximum number of items to be retrieved in a single call. This is an approximate number.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2230,12 +2302,16 @@ pub struct ListObjectParentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectParentsResponse {
     /// <p>The pagination token.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>Returns a list of parent reference and LinkName Tuples.</p>
+    #[serde(rename = "ParentLinks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_links: Option<Vec<ObjectIdentifierAndLinkNameTuple>>,
     /// <p>The parent structure, which is a map with key as the <code>ObjectIdentifier</code> and LinkName as the value.</p>
     #[serde(rename = "Parents")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2265,7 +2341,7 @@ pub struct ListObjectPoliciesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectPoliciesResponse {
     /// <p>A list of policy <code>ObjectIdentifiers</code>, that are attached to the object.</p>
     #[serde(rename = "AttachedPolicyIds")]
@@ -2308,7 +2384,7 @@ pub struct ListOutgoingTypedLinksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOutgoingTypedLinksResponse {
     /// <p>The pagination token.</p>
     #[serde(rename = "NextToken")]
@@ -2343,7 +2419,7 @@ pub struct ListPolicyAttachmentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPolicyAttachmentsResponse {
     /// <p>The pagination token.</p>
     #[serde(rename = "NextToken")]
@@ -2372,7 +2448,7 @@ pub struct ListPublishedSchemaArnsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPublishedSchemaArnsResponse {
     /// <p>The pagination token.</p>
     #[serde(rename = "NextToken")]
@@ -2400,7 +2476,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -2431,7 +2507,7 @@ pub struct ListTypedLinkFacetAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTypedLinkFacetAttributesResponse {
     /// <p>An ordered set of attributes associate with the typed link.</p>
     #[serde(rename = "Attributes")]
@@ -2459,7 +2535,7 @@ pub struct ListTypedLinkFacetNamesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTypedLinkFacetNamesResponse {
     /// <p>The names of typed link facets that exist within the schema.</p>
     #[serde(rename = "FacetNames")]
@@ -2490,13 +2566,13 @@ pub struct LookupPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LookupPolicyResponse {
     /// <p>The pagination token.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Provides list of path to policies. Policies contain <code>PolicyId</code>, <code>ObjectIdentifier</code>, and <code>PolicyType</code>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
+    /// <p>Provides list of path to policies. Policies contain <code>PolicyId</code>, <code>ObjectIdentifier</code>, and <code>PolicyType</code>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directory.html#key_concepts_policies">Policies</a>.</p>
     #[serde(rename = "PolicyToPathList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_to_path_list: Option<Vec<PolicyToPath>>,
@@ -2541,10 +2617,24 @@ pub struct ObjectAttributeUpdate {
     pub object_attribute_key: Option<AttributeKey>,
 }
 
+/// <p>A pair of ObjectIdentifier and LinkName.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ObjectIdentifierAndLinkNameTuple {
+    /// <p>The name of the link between the parent and the child object.</p>
+    #[serde(rename = "LinkName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub link_name: Option<String>,
+    /// <p>The ID that is associated with the object.</p>
+    #[serde(rename = "ObjectIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object_identifier: Option<String>,
+}
+
 /// <p>The reference that identifies an object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ObjectReference {
-    /// <p><p>A path selector supports easy selection of an object by the parent/child links leading to it from the directory root. Use the link names from each parent/child link to construct the path. Path selectors start with a slash (/) and link names are separated by slashes. For more information about paths, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#accessingobjects">Accessing Objects</a>. You can identify an object in one of the following ways:</p> <ul> <li> <p> <i>$ObjectIdentifier</i> - An object identifier is an opaque string provided by Amazon Cloud Directory. When creating objects, the system will provide you with the identifier of the created object. An object’s identifier is immutable and no two objects will ever share the same object identifier</p> </li> <li> <p> <i>/some/path</i> - Identifies the object based on path</p> </li> <li> <p> <i>#SomeBatchReference</i> - Identifies the object in a batch call</p> </li> </ul></p>
+    /// <p><p>A path selector supports easy selection of an object by the parent/child links leading to it from the directory root. Use the link names from each parent/child link to construct the path. Path selectors start with a slash (/) and link names are separated by slashes. For more information about paths, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_access_objects.html">Access Objects</a>. You can identify an object in one of the following ways:</p> <ul> <li> <p> <i>$ObjectIdentifier</i> - An object identifier is an opaque string provided by Amazon Cloud Directory. When creating objects, the system will provide you with the identifier of the created object. An object’s identifier is immutable and no two objects will ever share the same object identifier</p> </li> <li> <p> <i>/some/path</i> - Identifies the object based on path</p> </li> <li> <p> <i>#SomeBatchReference</i> - Identifies the object in a batch call</p> </li> </ul></p>
     #[serde(rename = "Selector")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub selector: Option<String>,
@@ -2552,7 +2642,7 @@ pub struct ObjectReference {
 
 /// <p>Returns the path to the <code>ObjectIdentifiers</code> that is associated with the directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PathToObjectIdentifiers {
     /// <p>Lists <code>ObjectIdentifiers</code> starting from directory root to the object in the request.</p>
     #[serde(rename = "ObjectIdentifiers")]
@@ -2564,9 +2654,9 @@ pub struct PathToObjectIdentifiers {
     pub path: Option<String>,
 }
 
-/// <p>Contains the <code>PolicyType</code>, <code>PolicyId</code>, and the <code>ObjectIdentifier</code> to which it is attached. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
+/// <p>Contains the <code>PolicyType</code>, <code>PolicyId</code>, and the <code>ObjectIdentifier</code> to which it is attached. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directory.html#key_concepts_policies">Policies</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PolicyAttachment {
     /// <p>The <code>ObjectIdentifier</code> that is associated with <code>PolicyAttachment</code>.</p>
     #[serde(rename = "ObjectIdentifier")]
@@ -2584,7 +2674,7 @@ pub struct PolicyAttachment {
 
 /// <p>Used when a regular object exists in a <a>Directory</a> and you want to find all of the policies that are associated with that object and the parent to that object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PolicyToPath {
     /// <p>The path that is referenced from the root.</p>
     #[serde(rename = "Path")]
@@ -2615,7 +2705,7 @@ pub struct PublishSchemaRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PublishSchemaResponse {
     /// <p>The ARN that is associated with the published schema. For more information, see <a>arns</a>.</p>
     #[serde(rename = "PublishedSchemaArn")]
@@ -2634,7 +2724,7 @@ pub struct PutSchemaFromJsonRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSchemaFromJsonResponse {
     /// <p>The ARN of the schema to update.</p>
     #[serde(rename = "Arn")]
@@ -2656,7 +2746,7 @@ pub struct RemoveFacetFromObjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveFacetFromObjectResponse {}
 
 /// <p>Contains an Amazon Resource Name (ARN) and parameters that are associated with the rule.</p>
@@ -2679,7 +2769,7 @@ pub struct SchemaFacet {
     #[serde(rename = "FacetName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub facet_name: Option<String>,
-    /// <p>The ARN of the schema that contains the facet with no minor component. See <a>arns</a> and <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/inplaceschemaupgrade.html">In-Place Schema Upgrade</a> for a description of when to provide minor versions.</p>
+    /// <p>The ARN of the schema that contains the facet with no minor component. See <a>arns</a> and <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_inplaceschemaupgrade.html">In-Place Schema Upgrade</a> for a description of when to provide minor versions.</p>
     #[serde(rename = "SchemaArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_arn: Option<String>,
@@ -2709,7 +2799,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Represents the data for a typed attribute. You can set one, and only one, of the elements. Each attribute in an item is a name-value pair. Attributes have a single value.</p>
@@ -2742,7 +2832,7 @@ pub struct TypedAttributeValue {
     pub string_value: Option<String>,
 }
 
-/// <p>A range of attribute values. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#rangefilters">Range Filters</a>.</p>
+/// <p>A range of attribute values. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_range_filters.html">Range Filters</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TypedAttributeValueRange {
     /// <p>The inclusive or exclusive range end.</p>
@@ -2863,7 +2953,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2885,7 +2975,7 @@ pub struct UpdateFacetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFacetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2893,7 +2983,7 @@ pub struct UpdateLinkAttributesRequest {
     /// <p>The attributes update structure.</p>
     #[serde(rename = "AttributeUpdates")]
     pub attribute_updates: Vec<LinkAttributeUpdate>,
-    /// <p>The Amazon Resource Name (ARN) that is associated with the Directory where the updated typed link resides. For more information, see <a>arns</a> or <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>The Amazon Resource Name (ARN) that is associated with the Directory where the updated typed link resides. For more information, see <a>arns</a> or <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
     /// <p>Allows a typed link specifier to be accepted as input.</p>
@@ -2902,7 +2992,7 @@ pub struct UpdateLinkAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLinkAttributesResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2919,7 +3009,7 @@ pub struct UpdateObjectAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateObjectAttributesResponse {
     /// <p>The <code>ObjectIdentifier</code> of the updated object.</p>
     #[serde(rename = "ObjectIdentifier")]
@@ -2938,7 +3028,7 @@ pub struct UpdateSchemaRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSchemaResponse {
     /// <p>The ARN that is associated with the updated schema. For more information, see <a>arns</a>.</p>
     #[serde(rename = "SchemaArn")]
@@ -2951,7 +3041,7 @@ pub struct UpdateTypedLinkFacetRequest {
     /// <p>Attributes update structure.</p>
     #[serde(rename = "AttributeUpdates")]
     pub attribute_updates: Vec<TypedLinkFacetAttributeUpdate>,
-    /// <p>The order of identity attributes for the facet, from most significant to least significant. The ability to filter typed links considers the order that the attributes are defined on the typed link facet. When providing ranges to a typed link selection, any inexact ranges must be specified at the end. Any attributes that do not have a range specified are presumed to match the entire range. Filters are interpreted in the order of the attributes on the typed link facet, not the order in which they are supplied to any API calls. For more information about identity attributes, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>The order of identity attributes for the facet, from most significant to least significant. The ability to filter typed links considers the order that the attributes are defined on the typed link facet. When providing ranges to a typed link selection, any inexact ranges must be specified at the end. Any attributes that do not have a range specified are presumed to match the entire range. Filters are interpreted in the order of the attributes on the typed link facet, not the order in which they are supplied to any API calls. For more information about identity attributes, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     #[serde(rename = "IdentityAttributeOrder")]
     pub identity_attribute_order: Vec<String>,
     /// <p>The unique name of the typed link facet.</p>
@@ -2963,7 +3053,7 @@ pub struct UpdateTypedLinkFacetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTypedLinkFacetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2981,7 +3071,7 @@ pub struct UpgradeAppliedSchemaRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpgradeAppliedSchemaResponse {
     /// <p>The ARN of the directory that is returned as part of the response.</p>
     #[serde(rename = "DirectoryArn")]
@@ -3011,7 +3101,7 @@ pub struct UpgradePublishedSchemaRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpgradePublishedSchemaResponse {
     /// <p>The ARN of the upgraded schema that is returned as part of the response.</p>
     #[serde(rename = "UpgradedSchemaArn")]
@@ -3032,7 +3122,7 @@ pub enum AddFacetToObjectError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -3105,14 +3195,16 @@ pub enum ApplySchemaError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
+    /// <p>Indicates that an attempt to make an attachment was invalid. For example, attaching two nodes with a link type that is not applicable to the nodes or attempting to apply a schema to a directory a second time.</p>
     InvalidAttachment(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
+    /// <p>Indicates that a schema could not be created due to a naming conflict. Please select a different name and then try again.</p>
+    SchemaAlreadyExists(String),
 }
 
 impl ApplySchemaError {
@@ -3140,6 +3232,9 @@ impl ApplySchemaError {
                 "RetryableConflictException" => {
                     return RusotoError::Service(ApplySchemaError::RetryableConflict(err.msg))
                 }
+                "SchemaAlreadyExistsException" => {
+                    return RusotoError::Service(ApplySchemaError::SchemaAlreadyExists(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -3162,6 +3257,7 @@ impl Error for ApplySchemaError {
             ApplySchemaError::LimitExceeded(ref cause) => cause,
             ApplySchemaError::ResourceNotFound(ref cause) => cause,
             ApplySchemaError::RetryableConflict(ref cause) => cause,
+            ApplySchemaError::SchemaAlreadyExists(ref cause) => cause,
         }
     }
 }
@@ -3178,9 +3274,9 @@ pub enum AttachObjectError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
+    /// <p>Indicates that an attempt to make an attachment was invalid. For example, attaching two nodes with a link type that is not applicable to the nodes or attempting to apply a schema to a directory a second time.</p>
     InvalidAttachment(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
     LinkNameAlreadyInUse(String),
@@ -3263,7 +3359,7 @@ pub enum AttachPolicyError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Indicates that the requested operation can only operate on policy objects.</p>
     NotPolicy(String),
@@ -3340,9 +3436,9 @@ pub enum AttachToIndexError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
+    /// <p>Indicates that an attempt to make an attachment was invalid. For example, attaching two nodes with a link type that is not applicable to the nodes or attempting to apply a schema to a directory a second time.</p>
     InvalidAttachment(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
     LinkNameAlreadyInUse(String),
@@ -3435,9 +3531,9 @@ pub enum AttachTypedLinkError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
+    /// <p>Indicates that an attempt to make an attachment was invalid. For example, attaching two nodes with a link type that is not applicable to the nodes or attempting to apply a schema to a directory a second time.</p>
     InvalidAttachment(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -3514,7 +3610,7 @@ pub enum BatchReadError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
@@ -3579,7 +3675,7 @@ pub enum BatchWriteError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
@@ -3646,7 +3742,7 @@ pub enum CreateDirectoryError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -3721,7 +3817,7 @@ pub enum CreateFacetError {
     InvalidArn(String),
     /// <p>Occurs when any of the rule parameter keys or values are invalid.</p>
     InvalidRule(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -3800,7 +3896,7 @@ pub enum CreateIndexError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
     LinkNameAlreadyInUse(String),
@@ -3887,7 +3983,7 @@ pub enum CreateObjectError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
     LinkNameAlreadyInUse(String),
@@ -3970,7 +4066,7 @@ pub enum CreateSchemaError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
@@ -4039,7 +4135,7 @@ pub enum CreateTypedLinkFacetError {
     InvalidArn(String),
     /// <p>Occurs when any of the rule parameter keys or values are invalid.</p>
     InvalidRule(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -4128,7 +4224,7 @@ pub enum DeleteDirectoryError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -4205,7 +4301,7 @@ pub enum DeleteFacetError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -4278,7 +4374,7 @@ pub enum DeleteObjectError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Indicates that the requested operation cannot be completed because the object has not been detached from the tree.</p>
     ObjectNotDetached(String),
@@ -4351,7 +4447,7 @@ pub enum DeleteSchemaError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -4422,7 +4518,7 @@ pub enum DeleteTypedLinkFacetError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -4497,7 +4593,7 @@ pub enum DetachFromIndexError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Indicates that the requested operation can only operate on index objects.</p>
     NotIndex(String),
@@ -4580,7 +4676,7 @@ pub enum DetachObjectError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Occurs when any invalid operations are performed on an object that is not a node, such as calling <code>ListObjectChildren</code> for a leaf node object.</p>
     NotNode(String),
@@ -4655,7 +4751,7 @@ pub enum DetachPolicyError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Indicates that the requested operation can only operate on policy objects.</p>
     NotPolicy(String),
@@ -4732,7 +4828,7 @@ pub enum DetachTypedLinkError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -4805,7 +4901,7 @@ pub enum DisableDirectoryError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -4874,7 +4970,7 @@ pub enum EnableDirectoryError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -4941,7 +5037,7 @@ pub enum GetAppliedSchemaVersionError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -5014,7 +5110,7 @@ pub enum GetDirectoryError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
@@ -5073,7 +5169,7 @@ pub enum GetFacetError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -5144,7 +5240,7 @@ pub enum GetLinkAttributesError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -5221,7 +5317,7 @@ pub enum GetObjectAttributesError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -5300,7 +5396,7 @@ pub enum GetObjectInformationError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -5375,7 +5471,7 @@ pub enum GetSchemaAsJsonError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -5442,7 +5538,7 @@ pub enum GetTypedLinkFacetInformationError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -5533,7 +5629,7 @@ pub enum ListAppliedSchemaArnsError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -5610,7 +5706,7 @@ pub enum ListAttachedIndicesError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -5685,7 +5781,7 @@ pub enum ListDevelopmentSchemaArnsError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -5768,7 +5864,7 @@ pub enum ListDirectoriesError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
@@ -5833,7 +5929,7 @@ pub enum ListFacetAttributesError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -5912,7 +6008,7 @@ pub enum ListFacetNamesError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -5985,7 +6081,7 @@ pub enum ListIncomingTypedLinksError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -6080,7 +6176,7 @@ pub enum ListIndexError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Indicates that the requested operation can only operate on index objects.</p>
     NotIndex(String),
@@ -6152,6 +6248,69 @@ impl Error for ListIndexError {
         }
     }
 }
+/// Errors returned by ListManagedSchemaArns
+#[derive(Debug, PartialEq)]
+pub enum ListManagedSchemaArnsError {
+    /// <p>Access denied. Check your permissions.</p>
+    AccessDenied(String),
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    InternalService(String),
+    /// <p>Indicates that the provided ARN value is not valid.</p>
+    InvalidArn(String),
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    InvalidNextToken(String),
+    /// <p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListManagedSchemaArnsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListManagedSchemaArnsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListManagedSchemaArnsError::AccessDenied(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(ListManagedSchemaArnsError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidArnException" => {
+                    return RusotoError::Service(ListManagedSchemaArnsError::InvalidArn(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListManagedSchemaArnsError::InvalidNextToken(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListManagedSchemaArnsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListManagedSchemaArnsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListManagedSchemaArnsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListManagedSchemaArnsError::AccessDenied(ref cause) => cause,
+            ListManagedSchemaArnsError::InternalService(ref cause) => cause,
+            ListManagedSchemaArnsError::InvalidArn(ref cause) => cause,
+            ListManagedSchemaArnsError::InvalidNextToken(ref cause) => cause,
+            ListManagedSchemaArnsError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListObjectAttributes
 #[derive(Debug, PartialEq)]
 pub enum ListObjectAttributesError {
@@ -6167,7 +6326,7 @@ pub enum ListObjectAttributesError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -6258,7 +6417,7 @@ pub enum ListObjectChildrenError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Occurs when any invalid operations are performed on an object that is not a node, such as calling <code>ListObjectChildren</code> for a leaf node object.</p>
     NotNode(String),
@@ -6343,7 +6502,7 @@ pub enum ListObjectParentPathsError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -6430,7 +6589,7 @@ pub enum ListObjectParentsError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -6513,7 +6672,7 @@ pub enum ListObjectPoliciesError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -6594,7 +6753,7 @@ pub enum ListOutgoingTypedLinksError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -6687,7 +6846,7 @@ pub enum ListPolicyAttachmentsError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Indicates that the requested operation can only operate on policy objects.</p>
     NotPolicy(String),
@@ -6776,7 +6935,7 @@ pub enum ListPublishedSchemaArnsError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -6857,7 +7016,7 @@ pub enum ListTagsForResourceError {
     InvalidArn(String),
     /// <p>Can occur for multiple reasons such as when you tag a resource that doesn’t exist or if you specify a higher number of tags for a resource than the allowed limit. Allowed limit is 50 tags per resource.</p>
     InvalidTaggingRequest(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -6934,7 +7093,7 @@ pub enum ListTypedLinkFacetAttributesError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -7025,7 +7184,7 @@ pub enum ListTypedLinkFacetNamesError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -7108,7 +7267,7 @@ pub enum LookupPolicyError {
     InvalidArn(String),
     /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -7179,7 +7338,7 @@ pub enum PublishSchemaError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -7254,7 +7413,7 @@ pub enum PutSchemaFromJsonError {
     InvalidRule(String),
     /// <p>Indicates that the provided <code>SchemaDoc</code> value is not valid.</p>
     InvalidSchemaDoc(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
@@ -7323,7 +7482,7 @@ pub enum RemoveFacetFromObjectError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -7406,7 +7565,7 @@ pub enum TagResourceError {
     InvalidArn(String),
     /// <p>Can occur for multiple reasons such as when you tag a resource that doesn’t exist or if you specify a higher number of tags for a resource than the allowed limit. Allowed limit is 50 tags per resource.</p>
     InvalidTaggingRequest(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -7475,7 +7634,7 @@ pub enum UntagResourceError {
     InvalidArn(String),
     /// <p>Can occur for multiple reasons such as when you tag a resource that doesn’t exist or if you specify a higher number of tags for a resource than the allowed limit. Allowed limit is 50 tags per resource.</p>
     InvalidTaggingRequest(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -7540,6 +7699,8 @@ pub enum UpdateFacetError {
     AccessDenied(String),
     /// <p>The specified <a>Facet</a> could not be found.</p>
     FacetNotFound(String),
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    FacetValidation(String),
     /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
@@ -7548,7 +7709,7 @@ pub enum UpdateFacetError {
     InvalidFacetUpdate(String),
     /// <p>Occurs when any of the rule parameter keys or values are invalid.</p>
     InvalidRule(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -7565,6 +7726,9 @@ impl UpdateFacetError {
                 }
                 "FacetNotFoundException" => {
                     return RusotoError::Service(UpdateFacetError::FacetNotFound(err.msg))
+                }
+                "FacetValidationException" => {
+                    return RusotoError::Service(UpdateFacetError::FacetValidation(err.msg))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateFacetError::InternalService(err.msg))
@@ -7604,6 +7768,7 @@ impl Error for UpdateFacetError {
         match *self {
             UpdateFacetError::AccessDenied(ref cause) => cause,
             UpdateFacetError::FacetNotFound(ref cause) => cause,
+            UpdateFacetError::FacetValidation(ref cause) => cause,
             UpdateFacetError::InternalService(ref cause) => cause,
             UpdateFacetError::InvalidArn(ref cause) => cause,
             UpdateFacetError::InvalidFacetUpdate(ref cause) => cause,
@@ -7627,7 +7792,7 @@ pub enum UpdateLinkAttributesError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -7712,7 +7877,7 @@ pub enum UpdateObjectAttributesError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
     LinkNameAlreadyInUse(String),
@@ -7803,7 +7968,7 @@ pub enum UpdateSchemaError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -7874,7 +8039,7 @@ pub enum UpdateTypedLinkFacetError {
     InvalidFacetUpdate(String),
     /// <p>Occurs when any of the rule parameter keys or values are invalid.</p>
     InvalidRule(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -7965,12 +8130,14 @@ pub enum UpgradeAppliedSchemaError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
+    /// <p>Indicates that an attempt to make an attachment was invalid. For example, attaching two nodes with a link type that is not applicable to the nodes or attempting to apply a schema to a directory a second time.</p>
     InvalidAttachment(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
+    /// <p>Indicates that a schema could not be created due to a naming conflict. Please select a different name and then try again.</p>
+    SchemaAlreadyExists(String),
 }
 
 impl UpgradeAppliedSchemaError {
@@ -8008,6 +8175,11 @@ impl UpgradeAppliedSchemaError {
                         err.msg,
                     ))
                 }
+                "SchemaAlreadyExistsException" => {
+                    return RusotoError::Service(UpgradeAppliedSchemaError::SchemaAlreadyExists(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -8030,6 +8202,7 @@ impl Error for UpgradeAppliedSchemaError {
             UpgradeAppliedSchemaError::InvalidAttachment(ref cause) => cause,
             UpgradeAppliedSchemaError::ResourceNotFound(ref cause) => cause,
             UpgradeAppliedSchemaError::RetryableConflict(ref cause) => cause,
+            UpgradeAppliedSchemaError::SchemaAlreadyExists(ref cause) => cause,
         }
     }
 }
@@ -8044,9 +8217,9 @@ pub enum UpgradePublishedSchemaError {
     InternalService(String),
     /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    /// <p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
+    /// <p>Indicates that an attempt to make an attachment was invalid. For example, attaching two nodes with a link type that is not applicable to the nodes or attempting to apply a schema to a directory a second time.</p>
     InvalidAttachment(String),
-    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
     /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
@@ -8153,7 +8326,7 @@ pub trait CloudDirectory {
         input: AttachToIndexRequest,
     ) -> Result<AttachToIndexResponse, RusotoError<AttachToIndexError>>;
 
-    /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn attach_typed_link(
         &self,
         input: AttachTypedLinkRequest,
@@ -8171,7 +8344,7 @@ pub trait CloudDirectory {
         input: BatchWriteRequest,
     ) -> Result<BatchWriteResponse, RusotoError<BatchWriteError>>;
 
-    /// <p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p>
+    /// <p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p> <p>You can also quickly create a directory using a managed schema, called the <code>QuickStartSchema</code>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_managed.html">Managed Schema</a> in the <i>Amazon Cloud Directory Developer Guide</i>.</p>
     async fn create_directory(
         &self,
         input: CreateDirectoryRequest,
@@ -8183,7 +8356,7 @@ pub trait CloudDirectory {
         input: CreateFacetRequest,
     ) -> Result<CreateFacetResponse, RusotoError<CreateFacetError>>;
 
-    /// <p>Creates an index object. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_indexing.html">Indexing</a> for more information.</p>
+    /// <p>Creates an index object. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/indexing_search.html">Indexing and search</a> for more information.</p>
     async fn create_index(
         &self,
         input: CreateIndexRequest,
@@ -8201,7 +8374,7 @@ pub trait CloudDirectory {
         input: CreateSchemaRequest,
     ) -> Result<CreateSchemaResponse, RusotoError<CreateSchemaError>>;
 
-    /// <p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn create_typed_link_facet(
         &self,
         input: CreateTypedLinkFacetRequest,
@@ -8219,7 +8392,7 @@ pub trait CloudDirectory {
         input: DeleteFacetRequest,
     ) -> Result<DeleteFacetResponse, RusotoError<DeleteFacetError>>;
 
-    /// <p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted.</p>
+    /// <p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted. The maximum number of attributes that can be deleted during an object deletion is 30. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Amazon Cloud Directory Limits</a>.</p>
     async fn delete_object(
         &self,
         input: DeleteObjectRequest,
@@ -8231,7 +8404,7 @@ pub trait CloudDirectory {
         input: DeleteSchemaRequest,
     ) -> Result<DeleteSchemaResponse, RusotoError<DeleteSchemaError>>;
 
-    /// <p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn delete_typed_link_facet(
         &self,
         input: DeleteTypedLinkFacetRequest,
@@ -8255,7 +8428,7 @@ pub trait CloudDirectory {
         input: DetachPolicyRequest,
     ) -> Result<DetachPolicyResponse, RusotoError<DetachPolicyError>>;
 
-    /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn detach_typed_link(
         &self,
         input: DetachTypedLinkRequest,
@@ -8309,13 +8482,13 @@ pub trait CloudDirectory {
         input: GetObjectInformationRequest,
     ) -> Result<GetObjectInformationResponse, RusotoError<GetObjectInformationError>>;
 
-    /// <p>Retrieves a JSON representation of the schema. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
+    /// <p>Retrieves a JSON representation of the schema. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_jsonformat.html#schemas_json">JSON Schema Format</a> for more information.</p>
     async fn get_schema_as_json(
         &self,
         input: GetSchemaAsJsonRequest,
     ) -> Result<GetSchemaAsJsonResponse, RusotoError<GetSchemaAsJsonError>>;
 
-    /// <p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn get_typed_link_facet_information(
         &self,
         input: GetTypedLinkFacetInformationRequest,
@@ -8357,7 +8530,7 @@ pub trait CloudDirectory {
         input: ListFacetNamesRequest,
     ) -> Result<ListFacetNamesResponse, RusotoError<ListFacetNamesError>>;
 
-    /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn list_incoming_typed_links(
         &self,
         input: ListIncomingTypedLinksRequest,
@@ -8368,6 +8541,12 @@ pub trait CloudDirectory {
         &self,
         input: ListIndexRequest,
     ) -> Result<ListIndexResponse, RusotoError<ListIndexError>>;
+
+    /// <p>Lists the major version families of each managed schema. If a major version ARN is provided as SchemaArn, the minor version revisions in that family are listed instead.</p>
+    async fn list_managed_schema_arns(
+        &self,
+        input: ListManagedSchemaArnsRequest,
+    ) -> Result<ListManagedSchemaArnsResponse, RusotoError<ListManagedSchemaArnsError>>;
 
     /// <p>Lists all attributes that are associated with an object. </p>
     async fn list_object_attributes(
@@ -8381,7 +8560,7 @@ pub trait CloudDirectory {
         input: ListObjectChildrenRequest,
     ) -> Result<ListObjectChildrenResponse, RusotoError<ListObjectChildrenError>>;
 
-    /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>
+    /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directorystructure.html">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>
     async fn list_object_parent_paths(
         &self,
         input: ListObjectParentPathsRequest,
@@ -8399,7 +8578,7 @@ pub trait CloudDirectory {
         input: ListObjectPoliciesRequest,
     ) -> Result<ListObjectPoliciesResponse, RusotoError<ListObjectPoliciesError>>;
 
-    /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn list_outgoing_typed_links(
         &self,
         input: ListOutgoingTypedLinksRequest,
@@ -8423,19 +8602,19 @@ pub trait CloudDirectory {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
-    /// <p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn list_typed_link_facet_attributes(
         &self,
         input: ListTypedLinkFacetAttributesRequest,
     ) -> Result<ListTypedLinkFacetAttributesResponse, RusotoError<ListTypedLinkFacetAttributesError>>;
 
-    /// <p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn list_typed_link_facet_names(
         &self,
         input: ListTypedLinkFacetNamesRequest,
     ) -> Result<ListTypedLinkFacetNamesResponse, RusotoError<ListTypedLinkFacetNamesError>>;
 
-    /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
+    /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directory.html#key_concepts_policies">Policies</a>.</p>
     async fn lookup_policy(
         &self,
         input: LookupPolicyRequest,
@@ -8447,7 +8626,7 @@ pub trait CloudDirectory {
         input: PublishSchemaRequest,
     ) -> Result<PublishSchemaResponse, RusotoError<PublishSchemaError>>;
 
-    /// <p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
+    /// <p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_jsonformat.html#schemas_json">JSON Schema Format</a> for more information.</p>
     async fn put_schema_from_json(
         &self,
         input: PutSchemaFromJsonRequest,
@@ -8495,7 +8674,7 @@ pub trait CloudDirectory {
         input: UpdateSchemaRequest,
     ) -> Result<UpdateSchemaResponse, RusotoError<UpdateSchemaError>>;
 
-    /// <p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn update_typed_link_facet(
         &self,
         input: UpdateTypedLinkFacetRequest,
@@ -8525,10 +8704,7 @@ impl CloudDirectoryClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> CloudDirectoryClient {
-        CloudDirectoryClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -8540,10 +8716,14 @@ impl CloudDirectoryClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        CloudDirectoryClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CloudDirectoryClient {
+        CloudDirectoryClient { client, region }
     }
 }
 
@@ -8704,7 +8884,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn attach_typed_link(
         &self,
         input: AttachTypedLinkRequest,
@@ -8801,7 +8981,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p>
+    /// <p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p> <p>You can also quickly create a directory using a managed schema, called the <code>QuickStartSchema</code>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_managed.html">Managed Schema</a> in the <i>Amazon Cloud Directory Developer Guide</i>.</p>
     async fn create_directory(
         &self,
         input: CreateDirectoryRequest,
@@ -8863,7 +9043,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Creates an index object. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_indexing.html">Indexing</a> for more information.</p>
+    /// <p>Creates an index object. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/indexing_search.html">Indexing and search</a> for more information.</p>
     async fn create_index(
         &self,
         input: CreateIndexRequest,
@@ -8955,7 +9135,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn create_typed_link_facet(
         &self,
         input: CreateTypedLinkFacetRequest,
@@ -9046,7 +9226,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted.</p>
+    /// <p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted. The maximum number of attributes that can be deleted during an object deletion is 30. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Amazon Cloud Directory Limits</a>.</p>
     async fn delete_object(
         &self,
         input: DeleteObjectRequest,
@@ -9106,7 +9286,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn delete_typed_link_facet(
         &self,
         input: DeleteTypedLinkFacetRequest,
@@ -9230,7 +9410,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn detach_typed_link(
         &self,
         input: DetachTypedLinkRequest,
@@ -9509,7 +9689,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Retrieves a JSON representation of the schema. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
+    /// <p>Retrieves a JSON representation of the schema. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_jsonformat.html#schemas_json">JSON Schema Format</a> for more information.</p>
     async fn get_schema_as_json(
         &self,
         input: GetSchemaAsJsonRequest,
@@ -9538,7 +9718,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn get_typed_link_facet_information(
         &self,
         input: GetTypedLinkFacetInformationRequest,
@@ -9758,7 +9938,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn list_incoming_typed_links(
         &self,
         input: ListIncomingTypedLinksRequest,
@@ -9821,6 +10001,36 @@ impl CloudDirectory for CloudDirectoryClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListIndexError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the major version families of each managed schema. If a major version ARN is provided as SchemaArn, the minor version revisions in that family are listed instead.</p>
+    async fn list_managed_schema_arns(
+        &self,
+        input: ListManagedSchemaArnsRequest,
+    ) -> Result<ListManagedSchemaArnsResponse, RusotoError<ListManagedSchemaArnsError>> {
+        let request_uri = "/amazonclouddirectory/2017-01-11/schema/managed";
+
+        let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListManagedSchemaArnsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListManagedSchemaArnsError::from_response(response))
         }
     }
 
@@ -9894,7 +10104,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>
+    /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directorystructure.html">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>
     async fn list_object_parent_paths(
         &self,
         input: ListObjectParentPathsRequest,
@@ -9995,7 +10205,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn list_outgoing_typed_links(
         &self,
         input: ListOutgoingTypedLinksRequest,
@@ -10121,7 +10331,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn list_typed_link_facet_attributes(
         &self,
         input: ListTypedLinkFacetAttributesRequest,
@@ -10153,7 +10363,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn list_typed_link_facet_names(
         &self,
         input: ListTypedLinkFacetNamesRequest,
@@ -10184,7 +10394,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
+    /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directory.html#key_concepts_policies">Policies</a>.</p>
     async fn lookup_policy(
         &self,
         input: LookupPolicyRequest,
@@ -10246,7 +10456,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
+    /// <p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_jsonformat.html#schemas_json">JSON Schema Format</a> for more information.</p>
     async fn put_schema_from_json(
         &self,
         input: PutSchemaFromJsonRequest,
@@ -10492,7 +10702,7 @@ impl CloudDirectory for CloudDirectoryClient {
         }
     }
 
-    /// <p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    /// <p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn update_typed_link_facet(
         &self,
         input: UpdateTypedLinkFacetRequest,

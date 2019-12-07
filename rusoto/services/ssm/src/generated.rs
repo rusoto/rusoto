@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -26,7 +27,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>An activation registers one or more on-premises servers or virtual machines (VMs) with AWS so that you can configure those servers or VMs using Run Command. A server or VM that has been registered with AWS is called a managed instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Activation {
     /// <p>The ID created by Systems Manager when you submitted the activation.</p>
     #[serde(rename = "ActivationId")]
@@ -84,12 +85,12 @@ pub struct AddTagsToResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsToResourceResult {}
 
 /// <p>Describes an association of a Systems Manager document and an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Association {
     /// <p>The ID created by the system when you create an association. An association is a binding between a document and a set of targets with a schedule.</p>
     #[serde(rename = "AssociationId")]
@@ -135,7 +136,7 @@ pub struct Association {
 
 /// <p>Describes the parameters for a document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociationDescription {
     /// <p>The association ID.</p>
     #[serde(rename = "AssociationId")]
@@ -221,7 +222,7 @@ pub struct AssociationDescription {
 
 /// <p>Includes information about the specified association.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociationExecution {
     /// <p>The association ID.</p>
     #[serde(rename = "AssociationId")]
@@ -273,7 +274,7 @@ pub struct AssociationExecutionFilter {
 
 /// <p>Includes information about the specified association execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociationExecutionTarget {
     /// <p>The association ID.</p>
     #[serde(rename = "AssociationId")]
@@ -337,7 +338,7 @@ pub struct AssociationFilter {
 
 /// <p>Information about the association.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociationOverview {
     /// <p>Returns the number of targets for the association status. For example, if you created an association with two instances, and one of them was successful, this would return the count of instances by status.</p>
     #[serde(rename = "AssociationStatusAggregatedCount")]
@@ -373,7 +374,7 @@ pub struct AssociationStatus {
 
 /// <p>Information about the association version.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociationVersionInfo {
     /// <p>The ID created by the system when the association was created.</p>
     #[serde(rename = "AssociationId")]
@@ -431,7 +432,7 @@ pub struct AssociationVersionInfo {
 
 /// <p>A structure that includes attributes that describe a document attachment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachmentContent {
     /// <p>The cryptographic hash value of the document content.</p>
     #[serde(rename = "Hash")]
@@ -457,7 +458,7 @@ pub struct AttachmentContent {
 
 /// <p>An attribute of an attachment, such as the attachment name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachmentInformation {
     /// <p>The name of the attachment.</p>
     #[serde(rename = "Name")]
@@ -480,7 +481,7 @@ pub struct AttachmentsSource {
 
 /// <p>Detailed information about the current state of an individual Automation execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutomationExecution {
     /// <p>The execution ID.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -597,7 +598,7 @@ pub struct AutomationExecutionFilter {
 
 /// <p>Details about a specific Automation execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutomationExecutionMetadata {
     /// <p>The execution ID.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -703,7 +704,7 @@ pub struct CancelCommandRequest {
 
 /// <p>Whether or not the command was successfully canceled. There is no guarantee that a request can be canceled.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelCommandResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -714,7 +715,7 @@ pub struct CancelMaintenanceWindowExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelMaintenanceWindowExecutionResult {
     /// <p>The ID of the maintenance window execution that has been stopped.</p>
     #[serde(rename = "WindowExecutionId")]
@@ -737,7 +738,7 @@ pub struct CloudWatchOutputConfig {
 
 /// <p>Describes a command request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Command {
     /// <p>CloudWatch Logs information where you want Systems Manager to send the command output.</p>
     #[serde(rename = "CloudWatchOutputConfig")]
@@ -846,7 +847,7 @@ pub struct CommandFilter {
 
 /// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user runs SendCommand against three instances, then a command invocation is created for each requested instance ID. A command invocation returns status and detail information about a command you ran. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CommandInvocation {
     /// <p>CloudWatch Logs information where you want Systems Manager to send the command output.</p>
     #[serde(rename = "CloudWatchOutputConfig")]
@@ -915,7 +916,7 @@ pub struct CommandInvocation {
 
 /// <p>Describes plugin details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CommandPlugin {
     /// <p>The name of the plugin. Must be one of the following: aws:updateAgent, aws:domainjoin, aws:applications, aws:runPowerShellScript, aws:psmodule, aws:cloudWatch, aws:runShellScript, or aws:updateSSMAgent. </p>
     #[serde(rename = "Name")]
@@ -985,7 +986,7 @@ pub struct ComplianceExecutionSummary {
 
 /// <p>Information about the compliance as defined by the resource type. For example, for a patch resource type, <code>Items</code> includes information about the PatchSeverity, Classification, etc.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceItem {
     /// <p>The compliance type. For example, Association (for a State Manager association), Patch, or Custom:<code>string</code> are all valid compliance types.</p>
     #[serde(rename = "ComplianceType")]
@@ -1067,7 +1068,7 @@ pub struct ComplianceStringFilter {
 
 /// <p>A summary of compliance information by compliance type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceSummaryItem {
     /// <p>The type of compliance item. For example, the compliance type can be Association, Patch, or Custom:string.</p>
     #[serde(rename = "ComplianceType")]
@@ -1085,7 +1086,7 @@ pub struct ComplianceSummaryItem {
 
 /// <p>A summary of resources that are compliant. The summary is organized according to the resource count for each compliance type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CompliantSummary {
     /// <p>The total number of resources that are compliant.</p>
     #[serde(rename = "CompliantCount")]
@@ -1125,7 +1126,7 @@ pub struct CreateActivationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateActivationResult {
     /// <p>The code the system generates when it processes the activation. The activation code functions like a password to validate the activation ID. </p>
     #[serde(rename = "ActivationCode")]
@@ -1197,7 +1198,7 @@ pub struct CreateAssociationBatchRequestEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAssociationBatchResult {
     /// <p>Information about the associations that failed.</p>
     #[serde(rename = "Failed")]
@@ -1227,7 +1228,7 @@ pub struct CreateAssociationRequest {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    /// <p>The instance ID.</p>
+    /// <p><p>The instance ID.</p> <note> <p> <code>InstanceId</code> has been deprecated. To specify an instance ID for an association, use the <code>Targets</code> parameter. If you use the parameter <code>InstanceId</code>, you cannot use the parameters <code>AssociationName</code>, <code>DocumentVersion</code>, <code>MaxErrors</code>, <code>MaxConcurrency</code>, <code>OutputLocation</code>, or <code>ScheduleExpression</code>. To use these parameters, you must use the <code>Targets</code> parameter.</p> </note></p>
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
@@ -1254,14 +1255,14 @@ pub struct CreateAssociationRequest {
     #[serde(rename = "ScheduleExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
-    /// <p>The targets (either instances or tags) for the association.</p>
+    /// <p>The targets (either instances or tags) for the association. You must specify a value for <code>Targets</code> if you don't specify a value for <code>InstanceId</code>.</p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAssociationResult {
     /// <p>Information about the association.</p>
     #[serde(rename = "AssociationDescription")]
@@ -1304,7 +1305,7 @@ pub struct CreateDocumentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDocumentResult {
     /// <p>Information about the Systems Manager document.</p>
     #[serde(rename = "DocumentDescription")]
@@ -1356,7 +1357,7 @@ pub struct CreateMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMaintenanceWindowResult {
     /// <p>The ID of the created maintenance window.</p>
     #[serde(rename = "WindowId")]
@@ -1373,7 +1374,7 @@ pub struct CreateOpsItemRequest {
     #[serde(rename = "Notifications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notifications: Option<Vec<OpsItemNotification>>,
-    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <p>This custom data is searchable, but with restrictions. For the <code>Searchable operational data</code> feature, all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. For the <code>Private operational data</code> feature, the data is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p>
+    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <important> <p>Operational data keys <i>can't</i> begin with the following: amazon, aws, amzn, ssm, /amazon, /aws, /amzn, /ssm.</p> </important> <p>You can choose to make the data searchable by other users in the account or you can restrict search access. Searchable data means that all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. Operational data that is not searchable is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p> <p>Use the <code>/aws/resources</code> key in OperationalData to specify a related resource in the request. Use the <code>/aws/automations</code> key in OperationalData to associate an Automation runbook with the OpsItem. To view AWS CLI example commands that use these keys, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-creating-OpsItems.html#OpsCenter-manually-create-OpsItems">Creating OpsItems Manually</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "OperationalData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operational_data: Option<::std::collections::HashMap<String, OpsItemDataValue>>,
@@ -1388,7 +1389,7 @@ pub struct CreateOpsItemRequest {
     /// <p>The origin of the OpsItem, such as Amazon EC2 or AWS Systems Manager.</p>
     #[serde(rename = "Source")]
     pub source: String,
-    /// <p><p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag an OpsItem to identify the AWS resource or the type of issue. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=source,Value=EC2-instance</code> </p> </li> <li> <p> <code>Key=status,Value=stopped</code> </p> </li> </ul> <note> <p>To add tags to an existing OpsItem, use the <a>AddTagsToResource</a> action.</p> </note></p>
+    /// <p><p>Optional metadata that you assign to a resource. You can restrict access to OpsItems by using an inline IAM policy that specifies tags. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html#OpsCenter-getting-started-user-permissions">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Tags use a key-value pair. For example:</p> <p> <code>Key=Department,Value=Finance</code> </p> <note> <p>To add tags to an existing OpsItem, use the <a>AddTagsToResource</a> action.</p> </note></p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1398,7 +1399,7 @@ pub struct CreateOpsItemRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateOpsItemResponse {
     /// <p>The ID of the OpsItem.</p>
     #[serde(rename = "OpsItemId")]
@@ -1462,7 +1463,7 @@ pub struct CreatePatchBaselineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePatchBaselineResult {
     /// <p>The ID of the created patch baseline.</p>
     #[serde(rename = "BaselineId")]
@@ -1481,7 +1482,7 @@ pub struct CreateResourceDataSyncRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceDataSyncResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1492,7 +1493,7 @@ pub struct DeleteActivationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteActivationResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1512,18 +1513,26 @@ pub struct DeleteAssociationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAssociationResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDocumentRequest {
+    /// <p>The version of the document that you want to delete. If not provided, all versions of the document are deleted.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_version: Option<String>,
     /// <p>The name of the document.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The version name of the document that you want to delete. If not provided, all versions of the document are deleted.</p>
+    #[serde(rename = "VersionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDocumentResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1546,7 +1555,7 @@ pub struct DeleteInventoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInventoryResult {
     /// <p>Every <code>DeleteInventory</code> action is assigned a unique ID. This option returns a unique ID. You can use this ID to query the status of a delete operation. This option is useful for ensuring that a delete operation has completed before you begin other actions. </p>
     #[serde(rename = "DeletionId")]
@@ -1570,7 +1579,7 @@ pub struct DeleteMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMaintenanceWindowResult {
     /// <p>The ID of the deleted maintenance window.</p>
     #[serde(rename = "WindowId")]
@@ -1586,7 +1595,7 @@ pub struct DeleteParameterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteParameterResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1597,7 +1606,7 @@ pub struct DeleteParametersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteParametersResult {
     /// <p>The names of the deleted parameters.</p>
     #[serde(rename = "DeletedParameters")]
@@ -1617,7 +1626,7 @@ pub struct DeletePatchBaselineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePatchBaselineResult {
     /// <p>The ID of the deleted patch baseline.</p>
     #[serde(rename = "BaselineId")]
@@ -1633,7 +1642,7 @@ pub struct DeleteResourceDataSyncRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourceDataSyncResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1644,7 +1653,7 @@ pub struct DeregisterManagedInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterManagedInstanceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1658,7 +1667,7 @@ pub struct DeregisterPatchBaselineForPatchGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterPatchBaselineForPatchGroupResult {
     /// <p>The ID of the patch baseline the patch group was deregistered from.</p>
     #[serde(rename = "BaselineId")]
@@ -1685,7 +1694,7 @@ pub struct DeregisterTargetFromMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterTargetFromMaintenanceWindowResult {
     /// <p>The ID of the maintenance window the target was removed from.</p>
     #[serde(rename = "WindowId")]
@@ -1708,7 +1717,7 @@ pub struct DeregisterTaskFromMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterTaskFromMaintenanceWindowResult {
     /// <p>The ID of the maintenance window the task was removed from.</p>
     #[serde(rename = "WindowId")]
@@ -1750,7 +1759,7 @@ pub struct DescribeActivationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeActivationsResult {
     /// <p>A list of activations for your AWS account.</p>
     #[serde(rename = "ActivationList")]
@@ -1785,7 +1794,7 @@ pub struct DescribeAssociationExecutionTargetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssociationExecutionTargetsResult {
     /// <p>Information about the execution.</p>
     #[serde(rename = "AssociationExecutionTargets")]
@@ -1817,7 +1826,7 @@ pub struct DescribeAssociationExecutionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssociationExecutionsResult {
     /// <p>A list of the executions for the specified association ID.</p>
     #[serde(rename = "AssociationExecutions")]
@@ -1850,7 +1859,7 @@ pub struct DescribeAssociationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssociationResult {
     /// <p>Information about the association.</p>
     #[serde(rename = "AssociationDescription")]
@@ -1875,7 +1884,7 @@ pub struct DescribeAutomationExecutionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAutomationExecutionsResult {
     /// <p>The list of details about each automation execution which has occurred which matches the filter specification, if any.</p>
     #[serde(rename = "AutomationExecutionMetadataList")]
@@ -1911,7 +1920,7 @@ pub struct DescribeAutomationStepExecutionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAutomationStepExecutionsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1940,7 +1949,7 @@ pub struct DescribeAvailablePatchesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAvailablePatchesResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1963,7 +1972,7 @@ pub struct DescribeDocumentPermissionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDocumentPermissionResponse {
     /// <p>The account IDs that have permission to use this document. The ID can be either an AWS account or <i>All</i>.</p>
     #[serde(rename = "AccountIds")]
@@ -1987,7 +1996,7 @@ pub struct DescribeDocumentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDocumentResult {
     /// <p>Information about the Systems Manager document.</p>
     #[serde(rename = "Document")]
@@ -2011,7 +2020,7 @@ pub struct DescribeEffectiveInstanceAssociationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEffectiveInstanceAssociationsResult {
     /// <p>The associations for the requested instance.</p>
     #[serde(rename = "Associations")]
@@ -2039,7 +2048,7 @@ pub struct DescribeEffectivePatchesForPatchBaselineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEffectivePatchesForPatchBaselineResult {
     /// <p>An array of patches and patch status.</p>
     #[serde(rename = "EffectivePatches")]
@@ -2067,7 +2076,7 @@ pub struct DescribeInstanceAssociationsStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstanceAssociationsStatusResult {
     /// <p>Status information about the association.</p>
     #[serde(rename = "InstanceAssociationStatusInfos")]
@@ -2100,7 +2109,7 @@ pub struct DescribeInstanceInformationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstanceInformationResult {
     /// <p>The instance information list.</p>
     #[serde(rename = "InstanceInformationList")]
@@ -2132,7 +2141,7 @@ pub struct DescribeInstancePatchStatesForPatchGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstancePatchStatesForPatchGroupResult {
     /// <p>The high-level patch state for the requested instances. </p>
     #[serde(rename = "InstancePatchStates")]
@@ -2160,7 +2169,7 @@ pub struct DescribeInstancePatchStatesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstancePatchStatesResult {
     /// <p>The high-level patch state for the requested instances.</p>
     #[serde(rename = "InstancePatchStates")]
@@ -2174,7 +2183,7 @@ pub struct DescribeInstancePatchStatesResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeInstancePatchesRequest {
-    /// <p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string between 1 and 256 characters)</p>
+    /// <p>An array of structures. Each entry in the array is a structure containing a Key, Value combination. Valid values for Key are <code>Classification</code> | <code>KBId</code> | <code>Severity</code> | <code>State</code>.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<PatchOrchestratorFilter>>,
@@ -2192,7 +2201,7 @@ pub struct DescribeInstancePatchesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstancePatchesResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2221,7 +2230,7 @@ pub struct DescribeInventoryDeletionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInventoryDeletionsResult {
     /// <p>A list of status items for deleted inventory.</p>
     #[serde(rename = "InventoryDeletions")]
@@ -2256,7 +2265,7 @@ pub struct DescribeMaintenanceWindowExecutionTaskInvocationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowExecutionTaskInvocationsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2289,7 +2298,7 @@ pub struct DescribeMaintenanceWindowExecutionTasksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowExecutionTasksResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2321,7 +2330,7 @@ pub struct DescribeMaintenanceWindowExecutionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowExecutionsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2362,7 +2371,7 @@ pub struct DescribeMaintenanceWindowScheduleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowScheduleResult {
     /// <p>The token for the next set of items to return. (You use this token in the next call.)</p>
     #[serde(rename = "NextToken")]
@@ -2394,7 +2403,7 @@ pub struct DescribeMaintenanceWindowTargetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowTargetsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2426,7 +2435,7 @@ pub struct DescribeMaintenanceWindowTasksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowTasksResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2457,7 +2466,7 @@ pub struct DescribeMaintenanceWindowsForTargetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowsForTargetResult {
     /// <p>The token for the next set of items to return. (You use this token in the next call.)</p>
     #[serde(rename = "NextToken")]
@@ -2486,7 +2495,7 @@ pub struct DescribeMaintenanceWindowsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2508,14 +2517,14 @@ pub struct DescribeOpsItemsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p><p>One or more filters to limit the reponse.</p> <ul> <li> <p>Key: CreatedTime</p> <p>Operations: GreaterThan, LessThan</p> </li> <li> <p>Key: LastModifiedBy</p> <p>Operations: Contains, Equals</p> </li> <li> <p>Key: LastModifiedTime</p> <p>Operations: GreaterThan, LessThan</p> </li> <li> <p>Key: Priority</p> <p>Operations: Equals</p> </li> <li> <p>Key: Source</p> <p>Operations: Contains, Equals</p> </li> <li> <p>Key: Status</p> <p>Operations: Equals</p> </li> <li> <p>Key: Title</p> <p>Operations: Contains</p> </li> <li> <p>Key: OperationalData</p> <p>Operations: Equals</p> </li> <li> <p>Key: OperationalDataKey</p> <p>Operations: Equals</p> </li> <li> <p>Key: OperationalDataValue</p> <p>Operations: Equals, Contains</p> </li> <li> <p>Key: OpsItemId</p> <p>Operations: Equals</p> </li> <li> <p>Key: ResourceId</p> <p>Operations: Contains</p> </li> <li> <p>Key: AutomationId</p> <p>Operations: Equals</p> </li> </ul></p>
+    /// <p>One or more filters to limit the reponse.</p> <ul> <li> <p>Key: CreatedTime</p> <p>Operations: GreaterThan, LessThan</p> </li> <li> <p>Key: LastModifiedBy</p> <p>Operations: Contains, Equals</p> </li> <li> <p>Key: LastModifiedTime</p> <p>Operations: GreaterThan, LessThan</p> </li> <li> <p>Key: Priority</p> <p>Operations: Equals</p> </li> <li> <p>Key: Source</p> <p>Operations: Contains, Equals</p> </li> <li> <p>Key: Status</p> <p>Operations: Equals</p> </li> <li> <p>Key: Title</p> <p>Operations: Contains</p> </li> <li> <p>Key: OperationalData*</p> <p>Operations: Equals</p> </li> <li> <p>Key: OperationalDataKey</p> <p>Operations: Equals</p> </li> <li> <p>Key: OperationalDataValue</p> <p>Operations: Equals, Contains</p> </li> <li> <p>Key: OpsItemId</p> <p>Operations: Equals</p> </li> <li> <p>Key: ResourceId</p> <p>Operations: Contains</p> </li> <li> <p>Key: AutomationId</p> <p>Operations: Equals</p> </li> </ul> <p>*If you filter the response by using the OperationalData operator, specify a key-value pair by using the following JSON format: {"key":"key_name","value":"a_value"}</p>
     #[serde(rename = "OpsItemFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ops_item_filters: Option<Vec<OpsItemFilter>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOpsItemsResponse {
     /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -2548,7 +2557,7 @@ pub struct DescribeParametersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeParametersResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2577,7 +2586,7 @@ pub struct DescribePatchBaselinesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePatchBaselinesResult {
     /// <p>An array of PatchBaselineIdentity elements.</p>
     #[serde(rename = "BaselineIdentities")]
@@ -2597,7 +2606,7 @@ pub struct DescribePatchGroupStateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePatchGroupStateResult {
     /// <p>The number of instances in the patch group.</p>
     #[serde(rename = "Instances")]
@@ -2650,7 +2659,7 @@ pub struct DescribePatchGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePatchGroupsResult {
     /// <p>Each entry in the array contains:</p> <p>PatchGroup: string (between 1 and 256 characters, Regex: ^([\p{L}\p{Z}\p{N}_.:/=+\-@]*)$)</p> <p>PatchBaselineIdentity: A PatchBaselineIdentity element. </p>
     #[serde(rename = "Mappings")]
@@ -2685,7 +2694,7 @@ pub struct DescribePatchPropertiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePatchPropertiesResult {
     /// <p>The token for the next set of items to return. (You use this token in the next call.)</p>
     #[serde(rename = "NextToken")]
@@ -2717,7 +2726,7 @@ pub struct DescribeSessionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSessionsResponse {
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     #[serde(rename = "NextToken")]
@@ -2731,7 +2740,7 @@ pub struct DescribeSessionsResponse {
 
 /// <p>A default version of a document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentDefaultVersionDescription {
     /// <p>The default version of the document.</p>
     #[serde(rename = "DefaultVersion")]
@@ -2749,7 +2758,7 @@ pub struct DocumentDefaultVersionDescription {
 
 /// <p>Describes a Systems Manager document. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentDescription {
     /// <p>Details about the document attachments, including names, locations, sizes, etc.</p>
     #[serde(rename = "AttachmentsInformation")]
@@ -2850,7 +2859,7 @@ pub struct DocumentFilter {
 
 /// <p>Describes the name of a Systems Manager document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentIdentifier {
     /// <p>The document format, either JSON or YAML.</p>
     #[serde(rename = "DocumentFormat")]
@@ -2909,7 +2918,7 @@ pub struct DocumentKeyValuesFilter {
 
 /// <p>Parameters specified in a System Manager document that run on the server when the command is run. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentParameter {
     /// <p>If specified, the default values for the parameters. Parameters without a default value are required. Parameters with a default value are optional.</p>
     #[serde(rename = "DefaultValue")]
@@ -2931,7 +2940,7 @@ pub struct DocumentParameter {
 
 /// <p>Version information about the document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentVersionInfo {
     /// <p>The date the document was created.</p>
     #[serde(rename = "CreatedDate")]
@@ -2969,7 +2978,7 @@ pub struct DocumentVersionInfo {
 
 /// <p>The EffectivePatch structure defines metadata about a patch along with the approval state of the patch in a particular patch baseline. The approval state includes information about whether the patch is currently approved, due to be approved by a rule, explicitly approved, or explicitly rejected and the date the patch was or will be approved.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EffectivePatch {
     /// <p>Provides metadata for a patch, including information such as the KB ID, severity, classification and a URL for where more information can be obtained about the patch.</p>
     #[serde(rename = "Patch")]
@@ -2983,7 +2992,7 @@ pub struct EffectivePatch {
 
 /// <p>Describes a failed association.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedCreateAssociation {
     /// <p>The association.</p>
     #[serde(rename = "Entry")]
@@ -3001,7 +3010,7 @@ pub struct FailedCreateAssociation {
 
 /// <p>Information about an Automation failure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailureDetails {
     /// <p>Detailed information about the Automation step failure.</p>
     #[serde(rename = "Details")]
@@ -3025,7 +3034,7 @@ pub struct GetAutomationExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAutomationExecutionResult {
     /// <p>Detailed information about the current state of an automation execution.</p>
     #[serde(rename = "AutomationExecution")]
@@ -3048,7 +3057,7 @@ pub struct GetCommandInvocationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommandInvocationResult {
     /// <p>CloudWatch Logs information where Systems Manager sent the command output.</p>
     #[serde(rename = "CloudWatchOutputConfig")]
@@ -3128,7 +3137,7 @@ pub struct GetConnectionStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectionStatusResponse {
     /// <p>The status of the connection to the instance. For example, 'Connected' or 'Not Connected'.</p>
     #[serde(rename = "Status")]
@@ -3149,7 +3158,7 @@ pub struct GetDefaultPatchBaselineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDefaultPatchBaselineResult {
     /// <p>The ID of the default patch baseline.</p>
     #[serde(rename = "BaselineId")]
@@ -3172,7 +3181,7 @@ pub struct GetDeployablePatchSnapshotForInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeployablePatchSnapshotForInstanceResult {
     /// <p>The ID of the instance.</p>
     #[serde(rename = "InstanceId")]
@@ -3212,7 +3221,7 @@ pub struct GetDocumentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDocumentResult {
     /// <p>A description of the document attachments, including names, locations, sizes, etc.</p>
     #[serde(rename = "AttachmentsContent")]
@@ -3277,7 +3286,7 @@ pub struct GetInventoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInventoryResult {
     /// <p>Collection of inventory entities such as a collection of instance inventory. </p>
     #[serde(rename = "Entities")]
@@ -3314,7 +3323,7 @@ pub struct GetInventorySchemaRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInventorySchemaResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -3334,7 +3343,7 @@ pub struct GetMaintenanceWindowExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMaintenanceWindowExecutionResult {
     /// <p>The time the maintenance window finished running.</p>
     #[serde(rename = "EndTime")]
@@ -3376,7 +3385,7 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
     /// <p>The time that the task finished running on the target.</p>
     #[serde(rename = "EndTime")]
@@ -3414,7 +3423,7 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
     #[serde(rename = "TaskExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_execution_id: Option<String>,
-    /// <p>Retrieves the task type for a maintenance window. Task types include the following: LAMBDA, STEP_FUNCTION, AUTOMATION, RUN_COMMAND.</p>
+    /// <p>Retrieves the task type for a maintenance window. Task types include the following: LAMBDA, STEP_FUNCTIONS, AUTOMATION, RUN_COMMAND.</p>
     #[serde(rename = "TaskType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_type: Option<String>,
@@ -3439,7 +3448,7 @@ pub struct GetMaintenanceWindowExecutionTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMaintenanceWindowExecutionTaskResult {
     /// <p>The time the task execution completed.</p>
     #[serde(rename = "EndTime")]
@@ -3505,7 +3514,7 @@ pub struct GetMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMaintenanceWindowResult {
     /// <p>Whether targets must be registered with the maintenance window before tasks can be defined for those targets.</p>
     #[serde(rename = "AllowUnassociatedTargets")]
@@ -3576,7 +3585,7 @@ pub struct GetMaintenanceWindowTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMaintenanceWindowTaskResult {
     /// <p>The retrieved task description.</p>
     #[serde(rename = "Description")]
@@ -3610,7 +3619,7 @@ pub struct GetMaintenanceWindowTaskResult {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    /// <p>The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the Systems Manager Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTION tasks, the value is the state machine ARN.</p>
+    /// <p>The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the Systems Manager Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTIONS tasks, the value is the state machine ARN.</p>
     #[serde(rename = "TaskArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
@@ -3645,7 +3654,7 @@ pub struct GetOpsItemRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOpsItemResponse {
     /// <p>The OpsItem.</p>
     #[serde(rename = "OpsItem")]
@@ -3673,7 +3682,7 @@ pub struct GetOpsSummaryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOpsSummaryResult {
     /// <p>The list of aggregated and filtered OpsItems.</p>
     #[serde(rename = "Entities")]
@@ -3705,7 +3714,7 @@ pub struct GetParameterHistoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetParameterHistoryResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -3729,7 +3738,7 @@ pub struct GetParameterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetParameterResult {
     /// <p>Information about a parameter.</p>
     #[serde(rename = "Parameter")]
@@ -3765,7 +3774,7 @@ pub struct GetParametersByPathRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetParametersByPathResult {
     /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -3789,7 +3798,7 @@ pub struct GetParametersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetParametersResult {
     /// <p>A list of parameters that are not formatted correctly or do not run during an execution.</p>
     #[serde(rename = "InvalidParameters")]
@@ -3813,7 +3822,7 @@ pub struct GetPatchBaselineForPatchGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPatchBaselineForPatchGroupResult {
     /// <p>The ID of the patch baseline that should be used for the patch group.</p>
     #[serde(rename = "BaselineId")]
@@ -3837,7 +3846,7 @@ pub struct GetPatchBaselineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPatchBaselineResult {
     /// <p>A set of rules used to include patches in the baseline.</p>
     #[serde(rename = "ApprovalRules")]
@@ -3911,7 +3920,7 @@ pub struct GetServiceSettingRequest {
 
 /// <p>The query result body of the GetServiceSetting API action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceSettingResult {
     /// <p>The query result of the current service setting.</p>
     #[serde(rename = "ServiceSetting")]
@@ -3921,7 +3930,7 @@ pub struct GetServiceSettingResult {
 
 /// <p>Status information about the aggregated associations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceAggregatedAssociationOverview {
     /// <p>Detailed status information about the aggregated associations.</p>
     #[serde(rename = "DetailedStatus")]
@@ -3936,7 +3945,7 @@ pub struct InstanceAggregatedAssociationOverview {
 
 /// <p>One or more association documents on the instance. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceAssociation {
     /// <p>The association ID.</p>
     #[serde(rename = "AssociationId")]
@@ -3967,7 +3976,7 @@ pub struct InstanceAssociationOutputLocation {
 
 /// <p>The URL of Amazon S3 bucket where you want to store the results of this request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceAssociationOutputUrl {
     /// <p>The URL of Amazon S3 bucket where you want to store the results of this request.</p>
     #[serde(rename = "S3OutputUrl")]
@@ -3977,7 +3986,7 @@ pub struct InstanceAssociationOutputUrl {
 
 /// <p>Status information about the instance association.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceAssociationStatusInfo {
     /// <p>The association ID.</p>
     #[serde(rename = "AssociationId")]
@@ -4031,7 +4040,7 @@ pub struct InstanceAssociationStatusInfo {
 
 /// <p>Describes a filter for a specific list of instances. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceInformation {
     /// <p>The activation ID created by Systems Manager when the server or VM was registered.</p>
     #[serde(rename = "ActivationId")]
@@ -4135,7 +4144,7 @@ pub struct InstanceInformationStringFilter {
 
 /// <p>Defines the high-level patch compliance state for a managed instance, providing information about the number of installed, missing, not applicable, and failed patches along with metadata about the operation when this information was gathered for the instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstancePatchState {
     /// <p>The ID of the patch baseline used to patch the instance.</p>
     #[serde(rename = "BaselineId")]
@@ -4230,7 +4239,7 @@ pub struct InventoryAggregator {
 
 /// <p>Status information returned by the <code>DeleteInventory</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InventoryDeletionStatusItem {
     /// <p>The deletion ID returned by the <code>DeleteInventory</code> action.</p>
     #[serde(rename = "DeletionId")]
@@ -4264,7 +4273,7 @@ pub struct InventoryDeletionStatusItem {
 
 /// <p>Information about the delete operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InventoryDeletionSummary {
     /// <p>Remaining number of items to delete.</p>
     #[serde(rename = "RemainingCount")]
@@ -4282,7 +4291,7 @@ pub struct InventoryDeletionSummary {
 
 /// <p>Either a count, remaining count, or a version number in a delete inventory summary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InventoryDeletionSummaryItem {
     /// <p>A count of the number of deleted items.</p>
     #[serde(rename = "Count")]
@@ -4352,7 +4361,7 @@ pub struct InventoryItem {
 
 /// <p>Attributes are the entries within the inventory item content. It contains name and value.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InventoryItemAttribute {
     /// <p>The data type of the inventory item attribute. </p>
     #[serde(rename = "DataType")]
@@ -4364,7 +4373,7 @@ pub struct InventoryItemAttribute {
 
 /// <p>The inventory item schema definition. Users can use this to compose inventory query filters.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InventoryItemSchema {
     /// <p>The schema attributes for inventory. This contains data type and attribute name.</p>
     #[serde(rename = "Attributes")]
@@ -4384,7 +4393,7 @@ pub struct InventoryItemSchema {
 
 /// <p>Inventory query results.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InventoryResultEntity {
     /// <p>The data section in the inventory result entity JSON.</p>
     #[serde(rename = "Data")]
@@ -4398,7 +4407,7 @@ pub struct InventoryResultEntity {
 
 /// <p>The inventory result item.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InventoryResultItem {
     /// <p>The time inventory item data was captured.</p>
     #[serde(rename = "CaptureTime")]
@@ -4434,7 +4443,7 @@ pub struct LabelParameterVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LabelParameterVersionResult {
     /// <p>The label does not meet the requirements. For information about parameter label requirements, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-labels.html">Labeling Parameters</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "InvalidLabels")]
@@ -4458,7 +4467,7 @@ pub struct ListAssociationVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssociationVersionsResult {
     /// <p>Information about all versions of the association for the specified association ID.</p>
     #[serde(rename = "AssociationVersions")]
@@ -4487,7 +4496,7 @@ pub struct ListAssociationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssociationsResult {
     /// <p>The associations.</p>
     #[serde(rename = "Associations")]
@@ -4528,7 +4537,7 @@ pub struct ListCommandInvocationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCommandInvocationsResult {
     /// <p>(Optional) A list of all invocations. </p>
     #[serde(rename = "CommandInvocations")]
@@ -4565,7 +4574,7 @@ pub struct ListCommandsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCommandsResult {
     /// <p>(Optional) The list of commands requested by the user. </p>
     #[serde(rename = "Commands")]
@@ -4602,7 +4611,7 @@ pub struct ListComplianceItemsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComplianceItemsResult {
     /// <p>A list of compliance information for the specified resource ID. </p>
     #[serde(rename = "ComplianceItems")]
@@ -4631,7 +4640,7 @@ pub struct ListComplianceSummariesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComplianceSummariesResult {
     /// <p>A list of compliant and non-compliant summary counts based on compliance types. For example, this call returns State Manager associations, patches, or custom compliance types according to the filter criteria that you specified.</p>
     #[serde(rename = "ComplianceSummaryItems")]
@@ -4659,7 +4668,7 @@ pub struct ListDocumentVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDocumentVersionsResult {
     /// <p>The document versions.</p>
     #[serde(rename = "DocumentVersions")]
@@ -4692,7 +4701,7 @@ pub struct ListDocumentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDocumentsResult {
     /// <p>The names of the Systems Manager documents.</p>
     #[serde(rename = "DocumentIdentifiers")]
@@ -4727,7 +4736,7 @@ pub struct ListInventoryEntriesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInventoryEntriesResult {
     /// <p>The time that inventory information was collected for the instance(s).</p>
     #[serde(rename = "CaptureTime")]
@@ -4772,7 +4781,7 @@ pub struct ListResourceComplianceSummariesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceComplianceSummariesResult {
     /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -4797,7 +4806,7 @@ pub struct ListResourceDataSyncRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceDataSyncResult {
     /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -4820,7 +4829,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResult {
     /// <p>A list of tags.</p>
     #[serde(rename = "TagList")]
@@ -4858,7 +4867,7 @@ pub struct MaintenanceWindowAutomationParameters {
 
 /// <p>Describes the information about an execution of a maintenance window. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MaintenanceWindowExecution {
     /// <p>The time the execution finished.</p>
     #[serde(rename = "EndTime")]
@@ -4888,7 +4897,7 @@ pub struct MaintenanceWindowExecution {
 
 /// <p>Information about a task execution performed as part of a maintenance window execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MaintenanceWindowExecutionTaskIdentity {
     /// <p>The time the task execution finished.</p>
     #[serde(rename = "EndTime")]
@@ -4926,7 +4935,7 @@ pub struct MaintenanceWindowExecutionTaskIdentity {
 
 /// <p>Describes the information about a task invocation for a particular target as part of a task execution performed as part of a maintenance window execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
     /// <p>The time the invocation finished.</p>
     #[serde(rename = "EndTime")]
@@ -4993,7 +5002,7 @@ pub struct MaintenanceWindowFilter {
 
 /// <p>Information about the maintenance window.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MaintenanceWindowIdentity {
     /// <p>The number of hours before the end of the maintenance window that Systems Manager stops scheduling new tasks for execution.</p>
     #[serde(rename = "Cutoff")]
@@ -5043,7 +5052,7 @@ pub struct MaintenanceWindowIdentity {
 
 /// <p>The maintenance window to which the specified target belongs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MaintenanceWindowIdentityForTarget {
     /// <p>The name of the maintenance window.</p>
     #[serde(rename = "Name")]
@@ -5118,14 +5127,14 @@ pub struct MaintenanceWindowRunCommandParameters {
     pub timeout_seconds: Option<i64>,
 }
 
-/// <p><p>The parameters for a STEP_FUNCTION task.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Step Functions tasks, Systems Manager ignores any values specified for <code>TaskParameters</code> and <code>LoggingInfo</code>.</p> </note></p>
+/// <p><p>The parameters for a STEP_FUNCTIONS task.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Step Functions tasks, Systems Manager ignores any values specified for <code>TaskParameters</code> and <code>LoggingInfo</code>.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MaintenanceWindowStepFunctionsParameters {
-    /// <p>The inputs for the STEP_FUNCTION task.</p>
+    /// <p>The inputs for the STEP_FUNCTIONS task.</p>
     #[serde(rename = "Input")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
-    /// <p>The name of the STEP_FUNCTION task.</p>
+    /// <p>The name of the STEP_FUNCTIONS task.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -5133,7 +5142,7 @@ pub struct MaintenanceWindowStepFunctionsParameters {
 
 /// <p>The target registered with the maintenance window.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MaintenanceWindowTarget {
     /// <p>A description for the target.</p>
     #[serde(rename = "Description")]
@@ -5167,7 +5176,7 @@ pub struct MaintenanceWindowTarget {
 
 /// <p>Information about a task defined for a maintenance window.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MaintenanceWindowTask {
     /// <p>A description of the task.</p>
     #[serde(rename = "Description")]
@@ -5201,7 +5210,7 @@ pub struct MaintenanceWindowTask {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    /// <p>The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, <code>TaskArn</code> is the Systems Manager document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTION tasks, it's the state machine ARN.</p>
+    /// <p>The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, <code>TaskArn</code> is the Systems Manager document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTIONS tasks, it's the state machine ARN.</p>
     #[serde(rename = "TaskArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
@@ -5210,7 +5219,7 @@ pub struct MaintenanceWindowTask {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
         Option<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
-    /// <p>The type of task. The type can be one of the following: RUN_COMMAND, AUTOMATION, LAMBDA, or STEP_FUNCTION.</p>
+    /// <p>The type of task. The type can be one of the following: RUN_COMMAND, AUTOMATION, LAMBDA, or STEP_FUNCTIONS.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -5239,7 +5248,7 @@ pub struct MaintenanceWindowTaskInvocationParameters {
     #[serde(rename = "RunCommand")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub run_command: Option<MaintenanceWindowRunCommandParameters>,
-    /// <p>The parameters for a STEP_FUNCTION task type.</p>
+    /// <p>The parameters for a STEP_FUNCTIONS task type.</p>
     #[serde(rename = "StepFunctions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step_functions: Option<MaintenanceWindowStepFunctionsParameters>,
@@ -5273,12 +5282,12 @@ pub struct ModifyDocumentPermissionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyDocumentPermissionResponse {}
 
 /// <p>A summary of resources that are not compliant. The summary is organized according to resource type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NonCompliantSummary {
     /// <p>The total number of compliance items that are not compliant.</p>
     #[serde(rename = "NonCompliantCount")]
@@ -5338,7 +5347,7 @@ pub struct OpsAggregator {
 
 /// <p>The result of the query.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OpsEntity {
     /// <p>The data returned by the query.</p>
     #[serde(rename = "Data")]
@@ -5352,7 +5361,7 @@ pub struct OpsEntity {
 
 /// <p>The OpsItem summaries result item.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OpsEntityItem {
     /// <p>The detailed data content for an OpsItem summaries result item.</p>
     #[serde(rename = "Content")]
@@ -5375,9 +5384,9 @@ pub struct OpsFilter {
     pub values: Vec<String>,
 }
 
-/// <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+/// <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OpsItem {
     /// <p>The ARN of the AWS account that created the OpsItem.</p>
     #[serde(rename = "CreatedBy")]
@@ -5403,7 +5412,7 @@ pub struct OpsItem {
     #[serde(rename = "Notifications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notifications: Option<Vec<OpsItemNotification>>,
-    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <p>This custom data is searchable, but with restrictions. For the <code>Searchable operational data</code> feature, all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. For the <code>Private operational data</code> feature, the data is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p>
+    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <important> <p>Operational data keys <i>can't</i> begin with the following: amazon, aws, amzn, ssm, /amazon, /aws, /amzn, /ssm.</p> </important> <p>You can choose to make the data searchable by other users in the account or you can restrict search access. Searchable data means that all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. Operational data that is not searchable is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p> <p>Use the <code>/aws/resources</code> key in OperationalData to specify a related resource in the request. Use the <code>/aws/automations</code> key in OperationalData to associate an Automation runbook with the OpsItem. To view AWS CLI example commands that use these keys, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-creating-OpsItems.html#OpsCenter-manually-create-OpsItems">Creating OpsItems Manually</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "OperationalData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operational_data: Option<::std::collections::HashMap<String, OpsItemDataValue>>,
@@ -5415,7 +5424,7 @@ pub struct OpsItem {
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    /// <p>One or more OpsItems that share something in common with the current OpsItems. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>
+    /// <p>One or more OpsItems that share something in common with the current OpsItem. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>
     #[serde(rename = "RelatedOpsItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub related_ops_items: Option<Vec<RelatedOpsItem>>,
@@ -5423,7 +5432,7 @@ pub struct OpsItem {
     #[serde(rename = "Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
-    /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-working-with-OpsItems-editing-details.html">Editing OpsItem Details</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-working-with-OpsItems-editing-details.html">Editing OpsItem Details</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -5450,7 +5459,7 @@ pub struct OpsItemDataValue {
     pub value: Option<String>,
 }
 
-/// <p>Describes an OpsCenter filter.</p>
+/// <p>Describes an OpsItem filter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct OpsItemFilter {
     /// <p>The name of the filter.</p>
@@ -5475,7 +5484,7 @@ pub struct OpsItemNotification {
 
 /// <p>A count of OpsItems.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OpsItemSummary {
     /// <p>The Amazon Resource Name (ARN) of the IAM entity that created the OpsItem.</p>
     #[serde(rename = "CreatedBy")]
@@ -5493,7 +5502,7 @@ pub struct OpsItemSummary {
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_time: Option<f64>,
-    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <p>This custom data is searchable, but with restrictions. For the <code>Searchable operational data</code> feature, all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. For the <code>Private operational data</code> feature, the data is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p>
+    /// <p>Operational data is custom data that provides useful reference details about the OpsItem. </p>
     #[serde(rename = "OperationalData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operational_data: Option<::std::collections::HashMap<String, OpsItemDataValue>>,
@@ -5521,7 +5530,7 @@ pub struct OpsItemSummary {
 
 /// <p>Information about the source where the association execution details are stored.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OutputSource {
     /// <p>The ID of the output source, for example the URL of an Amazon S3 bucket.</p>
     #[serde(rename = "OutputSourceId")]
@@ -5535,7 +5544,7 @@ pub struct OutputSource {
 
 /// <p>An Amazon EC2 Systems Manager parameter in Parameter Store.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Parameter {
     /// <p>The Amazon Resource Name (ARN) of the parameter.</p>
     #[serde(rename = "ARN")]
@@ -5573,7 +5582,7 @@ pub struct Parameter {
 
 /// <p>Information about parameter usage.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ParameterHistory {
     /// <p>Parameter names can include the following letters and symbols.</p> <p>a-zA-Z0-9_.-</p>
     #[serde(rename = "AllowedPattern")]
@@ -5627,7 +5636,7 @@ pub struct ParameterHistory {
 
 /// <p>One or more policies assigned to a parameter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ParameterInlinePolicy {
     /// <p>The status of the policy. Policies report the following statuses: Pending (the policy has not been enforced or applied yet), Finished (the policy was applied), Failed (the policy was not applied), or InProgress (the policy is being applied now). </p>
     #[serde(rename = "PolicyStatus")]
@@ -5645,7 +5654,7 @@ pub struct ParameterInlinePolicy {
 
 /// <p>Metadata includes information like the ARN of the last user and the date/time the parameter was last used.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ParameterMetadata {
     /// <p>A parameter name can include only the following letters and symbols.</p> <p>a-zA-Z0-9_.-</p>
     #[serde(rename = "AllowedPattern")]
@@ -5718,7 +5727,7 @@ pub struct ParametersFilter {
 
 /// <p>Represents metadata about a patch.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Patch {
     /// <p>The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).</p>
     #[serde(rename = "Classification")]
@@ -5776,7 +5785,7 @@ pub struct Patch {
 
 /// <p>Defines the basic information about a patch baseline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PatchBaselineIdentity {
     /// <p>The description of the patch baseline.</p>
     #[serde(rename = "BaselineDescription")]
@@ -5802,7 +5811,7 @@ pub struct PatchBaselineIdentity {
 
 /// <p>Information about the state of a patch on a particular instance as it relates to the patch baseline used to patch the instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PatchComplianceData {
     /// <p>The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).</p>
     #[serde(rename = "Classification")]
@@ -5845,7 +5854,7 @@ pub struct PatchFilterGroup {
 
 /// <p>The mapping between a patch group and the patch baseline the patch group is registered with.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PatchGroupPatchBaselineMapping {
     /// <p>The patch baseline the patch group is registered with.</p>
     #[serde(rename = "BaselineIdentity")]
@@ -5913,7 +5922,7 @@ pub struct PatchSource {
 
 /// <p>Information about the approval status of a patch.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PatchStatus {
     /// <p>The date the patch was approved (or will be approved if the status is PENDING_APPROVAL).</p>
     #[serde(rename = "ApprovalDate")]
@@ -5931,7 +5940,7 @@ pub struct PatchStatus {
 
 /// <p>An aggregate of step execution statuses displayed in the AWS Console for a multi-Region and multi-account Automation execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProgressCounters {
     /// <p>The total number of steps that the system cancelled in all specified AWS Regions and accounts for the current Automation execution.</p>
     #[serde(rename = "CancelledSteps")]
@@ -5979,7 +5988,7 @@ pub struct PutComplianceItemsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutComplianceItemsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -5993,7 +6002,7 @@ pub struct PutInventoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutInventoryResult {
     /// <p>Information about the request.</p>
     #[serde(rename = "Message")]
@@ -6030,7 +6039,7 @@ pub struct PutParameterRequest {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>Parameter Store offers a standard tier and an advanced tier for parameters. Standard parameters have a value limit of 4 KB and can't be configured to use parameter policies. You can create a maximum of 10,000 standard parameters per account and per Region. Standard parameters are offered at no additional cost.</p> <p>Advanced parameters have a value limit of 8 KB and can be configured to use parameter policies. You can create a maximum of 100,000 advanced parameters per account and per Region. Advanced parameters incur a charge.</p> <p>If you don't specify a parameter tier when you create a new parameter, the parameter defaults to using the standard tier. You can change a standard parameter to an advanced parameter at any time. But you can't revert an advanced parameter to a standard parameter. Reverting an advanced parameter to a standard parameter would result in data loss because the system would truncate the size of the parameter from 8 KB to 4 KB. Reverting would also remove any policies attached to the parameter. Lastly, advanced parameters use a different form of encryption than standard parameters.</p> <p>If you no longer need an advanced parameter, or if you no longer want to incur charges for an advanced parameter, you must delete it and recreate it as a new standard parameter. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-advanced-parameters.html">About Advanced Parameters</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The parameter tier to assign to a parameter.</p> <p>Parameter Store offers a standard tier and an advanced tier for parameters. Standard parameters have a content size limit of 4 KB and can't be configured to use parameter policies. You can create a maximum of 10,000 standard parameters for each Region in an AWS account. Standard parameters are offered at no additional cost. </p> <p>Advanced parameters have a content size limit of 8 KB and can be configured to use parameter policies. You can create a maximum of 100,000 advanced parameters for each Region in an AWS account. Advanced parameters incur a charge. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-advanced-parameters.html">About Advanced Parameters</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>You can change a standard parameter to an advanced parameter any time. But you can't revert an advanced parameter to a standard parameter. Reverting an advanced parameter to a standard parameter would result in data loss because the system would truncate the size of the parameter from 8 KB to 4 KB. Reverting would also remove any policies attached to the parameter. Lastly, advanced parameters use a different form of encryption than standard parameters. </p> <p>If you no longer need an advanced parameter, or if you no longer want to incur charges for an advanced parameter, you must delete it and recreate it as a new standard parameter. </p> <p> <b>Using the Default Tier Configuration</b> </p> <p>In <code>PutParameter</code> requests, you can specify the tier to create the parameter in. Whenever you specify a tier in the request, Parameter Store creates or updates the parameter according to that request. However, if you do not specify a tier in a request, Parameter Store assigns the tier based on the current Parameter Store default tier configuration.</p> <p>The default tier when you begin using Parameter Store is the standard-parameter tier. If you use the advanced-parameter tier, you can specify one of the following as the default:</p> <ul> <li> <p> <b>Advanced</b>: With this option, Parameter Store evaluates all requests as advanced parameters. </p> </li> <li> <p> <b>Intelligent-Tiering</b>: With this option, Parameter Store evaluates each request to determine if the parameter is standard or advanced. </p> <p>If the request doesn't include any options that require an advanced parameter, the parameter is created in the standard-parameter tier. If one or more options requiring an advanced parameter are included in the request, Parameter Store create a parameter in the advanced-parameter tier.</p> <p>This approach helps control your parameter-related costs by always creating standard parameters unless an advanced parameter is necessary. </p> </li> </ul> <p>Options that require an advanced parameter include the following:</p> <ul> <li> <p>The content size of the parameter is more than 4 KB.</p> </li> <li> <p>The parameter uses a parameter policy.</p> </li> <li> <p>More than 10,000 parameters already exist in your AWS account in the current Region.</p> </li> </ul> <p>For more information about configuring the default tier option, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/ps-default-tier.html">Specifying a Default Parameter Tier</a> in the AWS Systems Manager User Guide.</p>
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tier: Option<String>,
@@ -6043,7 +6052,7 @@ pub struct PutParameterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutParameterResult {
     /// <p>The new version number of a parameter. If you edit a parameter value, Parameter Store automatically creates a new version and assigns this new version a unique ID. You can reference a parameter version ID in API actions or in Systems Manager documents (SSM documents). By default, if you don't specify a specific version, the system returns the latest parameter value when a parameter is called.</p>
     #[serde(rename = "Version")]
@@ -6059,7 +6068,7 @@ pub struct RegisterDefaultPatchBaselineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterDefaultPatchBaselineResult {
     /// <p>The ID of the default patch baseline.</p>
     #[serde(rename = "BaselineId")]
@@ -6078,7 +6087,7 @@ pub struct RegisterPatchBaselineForPatchGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterPatchBaselineForPatchGroupResult {
     /// <p>The ID of the patch baseline the patch group was registered with.</p>
     #[serde(rename = "BaselineId")]
@@ -6111,7 +6120,7 @@ pub struct RegisterTargetWithMaintenanceWindowRequest {
     /// <p>The type of target being registered with the maintenance window.</p>
     #[serde(rename = "ResourceType")]
     pub resource_type: String,
-    /// <p>The targets to register with the maintenance window. In other words, the instances to run commands on when the maintenance window runs.</p> <p>You can specify targets using either instance IDs or tags that have been applied to instances.</p> <p> <b>Example 1</b>: Specify instance IDs</p> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> <p> <b>Example 2</b>: Use tag key-pairs applied to instances</p> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> <p> <b>Example 3</b>: Use tag-keys applied to instances</p> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> <p>For more information about these examples formats, including the best use case for each one, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/mw-cli-tutorial-targets-examples.html">Examples: Register Targets with a Maintenance Window</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The targets to register with the maintenance window. In other words, the instances to run commands on when the maintenance window runs.</p> <p>You can specify targets using instance IDs, resource group names, or tags that have been applied to instances.</p> <p> <b>Example 1</b>: Specify instance IDs</p> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> <p> <b>Example 2</b>: Use tag key-pairs applied to instances</p> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> <p> <b>Example 3</b>: Use tag-keys applied to instances</p> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> <p> <b>Example 4</b>: Use resource group names</p> <p> <code>Key=resource-groups:Name,Values=<i>resource-group-name</i> </code> </p> <p> <b>Example 5</b>: Use filters for resource group types</p> <p> <code>Key=resource-groups:ResourceTypeFilters,Values=<i>resource-type-1</i>,<i>resource-type-2</i> </code> </p> <note> <p>For <code>Key=resource-groups:ResourceTypeFilters</code>, specify resource types in the following format</p> <p> <code>Key=resource-groups:ResourceTypeFilters,Values=<i>AWS::EC2::INSTANCE</i>,<i>AWS::EC2::VPC</i> </code> </p> </note> <p>For more information about these examples formats, including the best use case for each one, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/mw-cli-tutorial-targets-examples.html">Examples: Register Targets with a Maintenance Window</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
     /// <p>The ID of the maintenance window the target should be registered with.</p>
@@ -6120,7 +6129,7 @@ pub struct RegisterTargetWithMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterTargetWithMaintenanceWindowResult {
     /// <p>The ID of the target definition in this maintenance window.</p>
     #[serde(rename = "WindowTargetId")]
@@ -6160,7 +6169,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    /// <p>The targets (either instances or maintenance window targets).</p> <p>Specify instances using the following format: </p> <p> <code>Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;</code> </p> <p>Specify maintenance window targets using the following format:</p> <p> <code>Key=&lt;WindowTargetIds&gt;,Values=&lt;window-target-id-1&gt;,&lt;window-target-id-2&gt;</code> </p>
+    /// <p>The targets (either instances or maintenance window targets).</p> <p>Specify instances using the following format: </p> <p> <code>Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;</code> </p> <p>Specify maintenance window targets using the following format:</p> <p> <code>Key=WindowTargetIds;,Values=&lt;window-target-id-1&gt;,&lt;window-target-id-2&gt;</code> </p>
     #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
     /// <p>The ARN of the task to run.</p>
@@ -6184,7 +6193,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterTaskWithMaintenanceWindowResult {
     /// <p>The ID of the task in the maintenance window.</p>
     #[serde(rename = "WindowTaskId")]
@@ -6192,7 +6201,7 @@ pub struct RegisterTaskWithMaintenanceWindowResult {
     pub window_task_id: Option<String>,
 }
 
-/// <p>An OpsItems that shares something in common with the current OpsItems. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>
+/// <p>An OpsItems that shares something in common with the current OpsItem. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RelatedOpsItem {
     /// <p>The ID of an OpsItem related to the current OpsItem.</p>
@@ -6202,10 +6211,10 @@ pub struct RelatedOpsItem {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveTagsFromResourceRequest {
-    /// <p><p>The resource ID for which you want to remove tags. Use the ID of the resource. Here are some examples:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
+    /// <p><p>The ID of the resource from which you want to remove tags. For example:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. Specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p><p>The type of resource of which you want to remove a tag.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
+    /// <p><p>The type of resource from which you want to remove a tag.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. Specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceType")]
     pub resource_type: String,
     /// <p>Tag keys that you want to remove from the specified resource.</p>
@@ -6214,7 +6223,7 @@ pub struct RemoveTagsFromResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsFromResourceResult {}
 
 /// <p>The request body of the ResetServiceSetting API action.</p>
@@ -6227,7 +6236,7 @@ pub struct ResetServiceSettingRequest {
 
 /// <p>The result body of the ResetServiceSetting API action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResetServiceSettingResult {
     /// <p>The current, effective service setting after calling the ResetServiceSetting API action.</p>
     #[serde(rename = "ServiceSetting")]
@@ -6237,7 +6246,7 @@ pub struct ResetServiceSettingResult {
 
 /// <p>Information about targets that resolved during the Automation execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResolvedTargets {
     /// <p>A list of parameter values sent to targets that resolved during the Automation execution.</p>
     #[serde(rename = "ParameterValues")]
@@ -6251,7 +6260,7 @@ pub struct ResolvedTargets {
 
 /// <p>Compliance summary information for a specific resource. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceComplianceSummaryItem {
     /// <p>The compliance type.</p>
     #[serde(rename = "ComplianceType")]
@@ -6289,7 +6298,7 @@ pub struct ResourceComplianceSummaryItem {
 
 /// <p>Information about a Resource Data Sync configuration, including its current status and last successful sync.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceDataSyncItem {
     /// <p>The status reported by the last sync.</p>
     #[serde(rename = "LastStatus")]
@@ -6359,13 +6368,13 @@ pub struct ResumeSessionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResumeSessionResponse {
     /// <p>The ID of the session.</p>
     #[serde(rename = "SessionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session_id: Option<String>,
-    /// <p>A URL back to SSM Agent on the instance that the Session Manager client uses to send commands and receive output from the instance. Format: <code>wss://ssm-messages.<b>region</b>.amazonaws.com/v1/data-channel/<b>session-id</b>?stream=(input|output)</code>.</p> <p> <b>region</b> represents the Region identifier for an AWS Region supported by AWS Systems Manager, such as <code>us-east-2</code> for the US East (Ohio) Region. For a list of supported <b>region</b> values, see the <b>Region</b> column in the <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#ssm_region">AWS Systems Manager table of regions and endpoints</a> in the <i>AWS General Reference</i>.</p> <p> <b>session-id</b> represents the ID of a Session Manager session, such as <code>1a2b3c4dEXAMPLE</code>.</p>
+    /// <p>A URL back to SSM Agent on the instance that the Session Manager client uses to send commands and receive output from the instance. Format: <code>wss://ssmmessages.<b>region</b>.amazonaws.com/v1/data-channel/<b>session-id</b>?stream=(input|output)</code>.</p> <p> <b>region</b> represents the Region identifier for an AWS Region supported by AWS Systems Manager, such as <code>us-east-2</code> for the US East (Ohio) Region. For a list of supported <b>region</b> values, see the <b>Region</b> column in the <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#ssm_region">AWS Systems Manager table of regions and endpoints</a> in the <i>AWS General Reference</i>.</p> <p> <b>session-id</b> represents the ID of a Session Manager session, such as <code>1a2b3c4dEXAMPLE</code>.</p>
     #[serde(rename = "StreamUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_url: Option<String>,
@@ -6394,7 +6403,7 @@ pub struct S3OutputLocation {
 
 /// <p>A URL for the Amazon S3 bucket where you want to store the results of this request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct S3OutputUrl {
     /// <p>A URL for an Amazon S3 bucket where you want to store the results of this request.</p>
     #[serde(rename = "OutputUrl")]
@@ -6404,7 +6413,7 @@ pub struct S3OutputUrl {
 
 /// <p>Information about a scheduled execution for a maintenance window.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ScheduledWindowExecution {
     /// <p>The time, in ISO-8601 Extended format, that the maintenance window is scheduled to be run.</p>
     #[serde(rename = "ExecutionTime")]
@@ -6435,7 +6444,7 @@ pub struct SendAutomationSignalRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendAutomationSignalResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -6510,7 +6519,7 @@ pub struct SendCommandRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendCommandResult {
     /// <p>The request as it was received by Systems Manager. Also provides the command ID which can be used future references to this request.</p>
     #[serde(rename = "Command")]
@@ -6520,7 +6529,7 @@ pub struct SendCommandResult {
 
 /// <p>The service setting data structure.</p> <p> <code>ServiceSetting</code> is an account-level setting for an AWS service. This setting defines how a user interacts with or uses a service or a feature of a service. For example, if an AWS service charges money to the account based on feature or service usage, then the AWS service team might create a default setting of "false". This means the user can't use this feature unless they change the setting to "true" and intentionally opt in for a paid feature.</p> <p>Services map a <code>SettingId</code> object to a setting value. AWS services teams define the default value for a <code>SettingId</code>. You can't create a new <code>SettingId</code>, but you can overwrite the default value if you have the <code>ssm:UpdateServiceSetting</code> permission for the setting. Use the <a>UpdateServiceSetting</a> API action to change the default setting. Or, use the <a>ResetServiceSetting</a> to change the value back to the original value defined by the AWS service team.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceSetting {
     /// <p>The ARN of the service setting.</p>
     #[serde(rename = "ARN")]
@@ -6550,7 +6559,7 @@ pub struct ServiceSetting {
 
 /// <p>Information about a Session Manager connection to an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Session {
     /// <p>Reserved for future use.</p>
     #[serde(rename = "Details")]
@@ -6603,7 +6612,7 @@ pub struct SessionFilter {
 
 /// <p>Reserved for future use.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SessionManagerOutputUrl {
     /// <p>Reserved for future use.</p>
     #[serde(rename = "CloudWatchOutputUrl")]
@@ -6617,7 +6626,7 @@ pub struct SessionManagerOutputUrl {
 
 /// <p>The number of managed instances found for each patch severity level defined in the request filter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SeveritySummary {
     /// <p>The total number of resources or compliance items that have a severity level of critical. Critical severity is determined by the organization that published the compliance items.</p>
     #[serde(rename = "CriticalCount")]
@@ -6653,7 +6662,7 @@ pub struct StartAssociationsOnceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAssociationsOnceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -6704,7 +6713,7 @@ pub struct StartAutomationExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAutomationExecutionResult {
     /// <p>The unique ID of a newly scheduled automation execution.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -6728,13 +6737,13 @@ pub struct StartSessionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSessionResponse {
     /// <p>The ID of the session.</p>
     #[serde(rename = "SessionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session_id: Option<String>,
-    /// <p>A URL back to SSM Agent on the instance that the Session Manager client uses to send commands and receive output from the instance. Format: <code>wss://ssm-messages.<b>region</b>.amazonaws.com/v1/data-channel/<b>session-id</b>?stream=(input|output)</code> </p> <p> <b>region</b> represents the Region identifier for an AWS Region supported by AWS Systems Manager, such as <code>us-east-2</code> for the US East (Ohio) Region. For a list of supported <b>region</b> values, see the <b>Region</b> column in the <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#ssm_region">AWS Systems Manager table of regions and endpoints</a> in the <i>AWS General Reference</i>.</p> <p> <b>session-id</b> represents the ID of a Session Manager session, such as <code>1a2b3c4dEXAMPLE</code>.</p>
+    /// <p>A URL back to SSM Agent on the instance that the Session Manager client uses to send commands and receive output from the instance. Format: <code>wss://ssmmessages.<b>region</b>.amazonaws.com/v1/data-channel/<b>session-id</b>?stream=(input|output)</code> </p> <p> <b>region</b> represents the Region identifier for an AWS Region supported by AWS Systems Manager, such as <code>us-east-2</code> for the US East (Ohio) Region. For a list of supported <b>region</b> values, see the <b>Region</b> column in the <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#ssm_region">AWS Systems Manager table of regions and endpoints</a> in the <i>AWS General Reference</i>.</p> <p> <b>session-id</b> represents the ID of a Session Manager session, such as <code>1a2b3c4dEXAMPLE</code>.</p>
     #[serde(rename = "StreamUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_url: Option<String>,
@@ -6746,7 +6755,7 @@ pub struct StartSessionResponse {
 
 /// <p>Detailed information about an the execution state of an Automation step.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StepExecution {
     /// <p>The action this step performs. The action determines the behavior of the step.</p>
     #[serde(rename = "Action")]
@@ -6861,7 +6870,7 @@ pub struct StopAutomationExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopAutomationExecutionResult {}
 
 /// <p>Metadata that you assign to your AWS resources. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. In Systems Manager, you can apply tags to documents, managed instances, maintenance windows, Parameter Store parameters, and patch baselines.</p>
@@ -6875,14 +6884,14 @@ pub struct Tag {
     pub value: String,
 }
 
-/// <p><p>An array of search criteria that targets instances using a Key,Value combination that you specify. <code>Targets</code> is required if you don&#39;t provide one or more instance IDs in the call.</p> <p/></p>
+/// <p>An array of search criteria that targets instances using a Key,Value combination that you specify. </p> <p>Supported formats include the following.</p> <ul> <li> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> </li> <li> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> </li> <li> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:Name,Values=<i>resource-group-name</i> </code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:ResourceTypeFilters,Values=<i>resource-type-1</i>,<i>resource-type-2</i> </code> </p> </li> </ul> <p>For example:</p> <ul> <li> <p> <code>Key=InstanceIds,Values=i-02573cafcfEXAMPLE,i-0471e04240EXAMPLE,i-07782c72faEXAMPLE</code> </p> </li> <li> <p> <code>Key=tag:CostCenter,Values=CostCenter1,CostCenter2,CostCenter3</code> </p> </li> <li> <p> <code>Key=tag-key,Values=Name,Instance-Type,CostCenter</code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:Name,Values=ProductionResourceGroup</code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:ResourceTypeFilters,Values=<i>AWS::EC2::INSTANCE</i>,<i>AWS::EC2::VPC</i> </code> </p> </li> </ul> <p>For information about how to send commands that target instances using <code>Key,Value</code> parameters, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html#send-commands-targeting">Using Targets and Rate Controls to Send Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Target {
-    /// <p>User-defined criteria for sending commands that target instances that meet the criteria. <code>Key</code> can be <code>tag:&lt;Amazon EC2 tag&gt;</code> or <code>InstanceIds</code>. For more information about how to send commands that target instances using <code>Key,Value</code> parameters, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html#send-commands-targeting">Using Targets and Rate Controls to Send Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>User-defined criteria for sending commands that target instances that meet the criteria.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>User-defined criteria that maps to <code>Key</code>. For example, if you specified <code>tag:ServerRole</code>, you could specify <code>value:WebServer</code> to run a command on instances that include Amazon EC2 tags of <code>ServerRole,WebServer</code>. For more information about how to send commands that target instances using <code>Key,Value</code> parameters, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Using Targets and Rate Controls to Send Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>User-defined criteria that maps to <code>Key</code>. For example, if you specified <code>tag:ServerRole</code>, you could specify <code>value:WebServer</code> to run a command on instances that include Amazon EC2 tags of <code>ServerRole,WebServer</code>. </p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
@@ -6921,7 +6930,7 @@ pub struct TerminateSessionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminateSessionResponse {
     /// <p>The ID of the session that has been terminated.</p>
     #[serde(rename = "SessionId")]
@@ -6985,7 +6994,7 @@ pub struct UpdateAssociationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAssociationResult {
     /// <p>The description of the association that was updated.</p>
     #[serde(rename = "AssociationDescription")]
@@ -7007,7 +7016,7 @@ pub struct UpdateAssociationStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAssociationStatusResult {
     /// <p>Information about the association.</p>
     #[serde(rename = "AssociationDescription")]
@@ -7026,7 +7035,7 @@ pub struct UpdateDocumentDefaultVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDocumentDefaultVersionResult {
     /// <p>The description of a custom document that you want to set as the default version.</p>
     #[serde(rename = "Description")]
@@ -7047,7 +7056,7 @@ pub struct UpdateDocumentRequest {
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_format: Option<String>,
-    /// <p>The version of the document that you want to update.</p>
+    /// <p>(Required) The version of the document that you want to update. </p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
@@ -7065,7 +7074,7 @@ pub struct UpdateDocumentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDocumentResult {
     /// <p>A description of the document that was updated.</p>
     #[serde(rename = "DocumentDescription")]
@@ -7125,7 +7134,7 @@ pub struct UpdateMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMaintenanceWindowResult {
     /// <p>Whether targets must be registered with the maintenance window before tasks can be defined for those targets.</p>
     #[serde(rename = "AllowUnassociatedTargets")]
@@ -7204,7 +7213,7 @@ pub struct UpdateMaintenanceWindowTargetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMaintenanceWindowTargetResult {
     /// <p>The updated description.</p>
     #[serde(rename = "Description")]
@@ -7292,7 +7301,7 @@ pub struct UpdateMaintenanceWindowTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMaintenanceWindowTaskResult {
     /// <p>The updated task description.</p>
     #[serde(rename = "Description")]
@@ -7360,7 +7369,7 @@ pub struct UpdateManagedInstanceRoleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateManagedInstanceRoleResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -7373,7 +7382,7 @@ pub struct UpdateOpsItemRequest {
     #[serde(rename = "Notifications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notifications: Option<Vec<OpsItemNotification>>,
-    /// <p>Add new keys or edit existing key-value pairs of the OperationalData map in the OpsItem object.</p> <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <p>This custom data is searchable, but with restrictions. For the <code>Searchable operational data</code> feature, all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. For the <code>Private operational data</code> feature, the data is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p>
+    /// <p>Add new keys or edit existing key-value pairs of the OperationalData map in the OpsItem object.</p> <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <important> <p>Operational data keys <i>can't</i> begin with the following: amazon, aws, amzn, ssm, /amazon, /aws, /amzn, /ssm.</p> </important> <p>You can choose to make the data searchable by other users in the account or you can restrict search access. Searchable data means that all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. Operational data that is not searchable is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p> <p>Use the <code>/aws/resources</code> key in OperationalData to specify a related resource in the request. Use the <code>/aws/automations</code> key in OperationalData to associate an Automation runbook with the OpsItem. To view AWS CLI example commands that use these keys, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-creating-OpsItems.html#OpsCenter-manually-create-OpsItems">Creating OpsItems Manually</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "OperationalData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operational_data: Option<::std::collections::HashMap<String, OpsItemDataValue>>,
@@ -7392,7 +7401,7 @@ pub struct UpdateOpsItemRequest {
     #[serde(rename = "RelatedOpsItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub related_ops_items: Option<Vec<RelatedOpsItem>>,
-    /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-working-with-OpsItems-editing-details.html">Editing OpsItem Details</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-working-with-OpsItems-editing-details.html">Editing OpsItem Details</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -7403,7 +7412,7 @@ pub struct UpdateOpsItemRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateOpsItemResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -7458,7 +7467,7 @@ pub struct UpdatePatchBaselineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePatchBaselineResult {
     /// <p>A set of rules used to include patches in the baseline.</p>
     #[serde(rename = "ApprovalRules")]
@@ -7531,7 +7540,7 @@ pub struct UpdateServiceSettingRequest {
 
 /// <p>The result body of the UpdateServiceSetting API action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServiceSettingResult {}
 
 /// Errors returned by AddTagsToResource
@@ -7543,7 +7552,7 @@ pub enum AddTagsToResourceError {
     InvalidResourceId(String),
     /// <p>The resource type is not valid. For example, if you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
     InvalidResourceType(String),
-    /// <p>The Targets parameter includes too many tags. Remove one or more tags and try the command again.</p>
+    /// <p>The <code>Targets</code> parameter includes too many tags. Remove one or more tags and try the command again.</p>
     TooManyTagsError(String),
     /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
     TooManyUpdates(String),
@@ -7604,7 +7613,7 @@ pub enum CancelCommandError {
     InternalServerError(String),
 
     InvalidCommandId(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
 }
 
@@ -7739,7 +7748,7 @@ pub enum CreateAssociationError {
     InvalidDocument(String),
     /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The output location is not valid or does not exist.</p>
     InvalidOutputLocation(String),
@@ -7844,7 +7853,7 @@ pub enum CreateAssociationBatchError {
     InvalidDocument(String),
     /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The output location is not valid or does not exist.</p>
     InvalidOutputLocation(String),
@@ -7951,7 +7960,7 @@ impl Error for CreateAssociationBatchError {
 pub enum CreateDocumentError {
     /// <p>The specified document already exists.</p>
     DocumentAlreadyExists(String),
-    /// <p>You can have at most 200 active Systems Manager documents.</p>
+    /// <p>You can have at most 500 active Systems Manager documents.</p>
     DocumentLimitExceeded(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -8079,7 +8088,7 @@ pub enum CreateOpsItemError {
     OpsItemAlreadyExists(String),
     /// <p>A specified parameter argument isn't valid. Verify the available arguments and try again.</p>
     OpsItemInvalidParameter(String),
-    /// <p>The request caused OpsItems to exceed one or more limits. For information about OpsItem limits, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-learn-more.html#OpsItems-learn-more-limits">What are the resource limits for OpsItems?</a>.</p>
+    /// <p>The request caused OpsItems to exceed one or more limits. For information about OpsItem limits, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-learn-more.html#OpsCenter-learn-more-limits">What are the resource limits for OpsCenter?</a>.</p>
     OpsItemLimitExceeded(String),
 }
 
@@ -8297,7 +8306,7 @@ pub enum DeleteAssociationError {
     InternalServerError(String),
     /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
     TooManyUpdates(String),
@@ -8661,7 +8670,7 @@ impl Error for DeleteResourceDataSyncError {
 pub enum DeregisterManagedInstanceError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
 }
 
@@ -8902,7 +8911,7 @@ pub enum DescribeAssociationError {
     InvalidAssociationVersion(String),
     /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
 }
 
@@ -9346,7 +9355,7 @@ impl Error for DescribeDocumentPermissionError {
 pub enum DescribeEffectiveInstanceAssociationsError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -9464,7 +9473,7 @@ impl Error for DescribeEffectivePatchesForPatchBaselineError {
 pub enum DescribeInstanceAssociationsStatusError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -9519,7 +9528,7 @@ pub enum DescribeInstanceInformationError {
     InternalServerError(String),
     /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified filter value is not valid.</p>
     InvalidInstanceInformationFilterValue(String),
@@ -9690,7 +9699,7 @@ pub enum DescribeInstancePatchesError {
     InternalServerError(String),
     /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -10482,7 +10491,7 @@ pub enum GetCommandInvocationError {
     InternalServerError(String),
 
     InvalidCommandId(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The plugin name is not valid.</p>
     InvalidPluginName(String),
@@ -11670,7 +11679,7 @@ pub enum ListCommandInvocationsError {
     InvalidCommandId(String),
     /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -11737,7 +11746,7 @@ pub enum ListCommandsError {
     InvalidCommandId(String),
     /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -12004,7 +12013,7 @@ pub enum ListInventoryEntriesError {
     InternalServerError(String),
     /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -12212,7 +12221,7 @@ impl Error for ListTagsForResourceError {
 /// Errors returned by ModifyDocumentPermission
 #[derive(Debug, PartialEq)]
 pub enum ModifyDocumentPermissionError {
-    /// <p>You can have at most 200 active Systems Manager documents.</p>
+    /// <p>You can have at most 500 active Systems Manager documents.</p>
     DocumentLimitExceeded(String),
     /// <p>The document cannot be shared with more AWS user accounts. You can share a document with a maximum of 20 accounts. You can publicly share up to five documents. If you need to increase this limit, contact AWS Support.</p>
     DocumentPermissionLimit(String),
@@ -12366,7 +12375,7 @@ pub enum PutInventoryError {
     CustomSchemaCountLimitExceeded(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>You specified invalid keys or values in the <code>Context</code> attribute for <code>InventoryItem</code>. Verify the keys and values, and try again.</p>
     InvalidInventoryItemContext(String),
@@ -12785,7 +12794,7 @@ impl Error for RegisterTargetWithMaintenanceWindowError {
 pub enum RegisterTaskWithMaintenanceWindowError {
     /// <p>Error returned when the ID specified for a resource, such as a maintenance window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
-    /// <p>You attempted to register a LAMBDA or STEP_FUNCTION task in a region where the corresponding service is not available. </p>
+    /// <p>You attempted to register a LAMBDA or STEP_FUNCTIONS task in a region where the corresponding service is not available. </p>
     FeatureNotAvailable(String),
     /// <p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
     IdempotentParameterMismatch(String),
@@ -13068,7 +13077,7 @@ pub enum SendCommandError {
     InvalidDocument(String),
     /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>One or more configuration items is not valid. Verify that a valid Amazon Resource Name (ARN) was provided for an Amazon SNS topic.</p>
     InvalidNotificationConfig(String),
@@ -13537,7 +13546,7 @@ pub enum UpdateAssociationStatusError {
     InternalServerError(String),
     /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// <p>The updated status is the same as the current status.</p>
     StatusUnchanged(String),
@@ -13905,7 +13914,7 @@ impl Error for UpdateMaintenanceWindowTaskError {
 pub enum UpdateManagedInstanceRoleError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
 }
 
@@ -13952,7 +13961,7 @@ pub enum UpdateOpsItemError {
     OpsItemAlreadyExists(String),
     /// <p>A specified parameter argument isn't valid. Verify the available arguments and try again.</p>
     OpsItemInvalidParameter(String),
-    /// <p>The request caused OpsItems to exceed one or more limits. For information about OpsItem limits, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-learn-more.html#OpsItems-learn-more-limits">What are the resource limits for OpsItems?</a>.</p>
+    /// <p>The request caused OpsItems to exceed one or more limits. For information about OpsItem limits, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-learn-more.html#OpsCenter-learn-more-limits">What are the resource limits for OpsCenter?</a>.</p>
     OpsItemLimitExceeded(String),
     /// <p>The specified OpsItem ID doesn't exist. Verify the ID and try again.</p>
     OpsItemNotFound(String),
@@ -14146,7 +14155,7 @@ pub trait Ssm {
         input: CreateMaintenanceWindowRequest,
     ) -> Result<CreateMaintenanceWindowResult, RusotoError<CreateMaintenanceWindowError>>;
 
-    /// <p>Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     async fn create_ops_item(
         &self,
         input: CreateOpsItemRequest,
@@ -14200,7 +14209,7 @@ pub trait Ssm {
         input: DeleteParameterRequest,
     ) -> Result<DeleteParameterResult, RusotoError<DeleteParameterError>>;
 
-    /// <p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>
+    /// <p>Delete a list of parameters.</p>
     async fn delete_parameters(
         &self,
         input: DeleteParametersRequest,
@@ -14251,7 +14260,7 @@ pub trait Ssm {
         RusotoError<DeregisterTaskFromMaintenanceWindowError>,
     >;
 
-    /// <p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>
+    /// <p>Describes details about the activation, such as the date and time the activation was created, its expiration date, the IAM role assigned to the instances in the activation, and the number of instances registered by using this activation.</p>
     async fn describe_activations(
         &self,
         input: DescribeActivationsRequest,
@@ -14293,7 +14302,7 @@ pub trait Ssm {
         RusotoError<DescribeAutomationStepExecutionsError>,
     >;
 
-    /// <p>Lists all patches that could possibly be included in a patch baseline.</p>
+    /// <p>Lists all patches eligible to be included in a patch baseline.</p>
     async fn describe_available_patches(
         &self,
         input: DescribeAvailablePatchesRequest,
@@ -14440,7 +14449,7 @@ pub trait Ssm {
         RusotoError<DescribeMaintenanceWindowsForTargetError>,
     >;
 
-    /// <p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     async fn describe_ops_items(
         &self,
         input: DescribeOpsItemsRequest,
@@ -14539,7 +14548,7 @@ pub trait Ssm {
         input: GetMaintenanceWindowRequest,
     ) -> Result<GetMaintenanceWindowResult, RusotoError<GetMaintenanceWindowError>>;
 
-    /// <p>Retrieves details about a specific task run as part of a maintenance window execution.</p>
+    /// <p>Retrieves details about a specific a maintenance window execution.</p>
     async fn get_maintenance_window_execution(
         &self,
         input: GetMaintenanceWindowExecutionRequest,
@@ -14554,7 +14563,7 @@ pub trait Ssm {
         RusotoError<GetMaintenanceWindowExecutionTaskError>,
     >;
 
-    /// <p>Retrieves a task invocation. A task invocation is a specific task running on a specific target. maintenance windows report status for all invocations. </p>
+    /// <p>Retrieves information about a specific task running on a specific target.</p>
     async fn get_maintenance_window_execution_task_invocation(
         &self,
         input: GetMaintenanceWindowExecutionTaskInvocationRequest,
@@ -14569,7 +14578,7 @@ pub trait Ssm {
         input: GetMaintenanceWindowTaskRequest,
     ) -> Result<GetMaintenanceWindowTaskResult, RusotoError<GetMaintenanceWindowTaskError>>;
 
-    /// <p>Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     async fn get_ops_item(
         &self,
         input: GetOpsItemRequest,
@@ -14728,7 +14737,7 @@ pub trait Ssm {
         input: PutParameterRequest,
     ) -> Result<PutParameterResult, RusotoError<PutParameterError>>;
 
-    /// <p>Defines the default patch baseline.</p>
+    /// <p>Defines the default patch baseline for the relevant operating system.</p> <p>To reset the AWS predefined patch baseline as the default, specify the full patch baseline ARN as the baseline ID value. For example, for CentOS, specify <code>arn:aws:ssm:us-east-2:733109147000:patchbaseline/pb-0574b43a65ea646ed</code> instead of <code>pb-0574b43a65ea646ed</code>.</p>
     async fn register_default_patch_baseline(
         &self,
         input: RegisterDefaultPatchBaselineRequest,
@@ -14761,7 +14770,7 @@ pub trait Ssm {
         RusotoError<RegisterTaskWithMaintenanceWindowError>,
     >;
 
-    /// <p>Removes all tags from the specified resource.</p>
+    /// <p>Removes tag keys from the specified resource.</p>
     async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceRequest,
@@ -14833,7 +14842,7 @@ pub trait Ssm {
         input: UpdateAssociationStatusRequest,
     ) -> Result<UpdateAssociationStatusResult, RusotoError<UpdateAssociationStatusError>>;
 
-    /// <p>The document you want to update.</p>
+    /// <p>Updates one or more values for an SSM document.</p>
     async fn update_document(
         &self,
         input: UpdateDocumentRequest,
@@ -14851,7 +14860,7 @@ pub trait Ssm {
         input: UpdateMaintenanceWindowRequest,
     ) -> Result<UpdateMaintenanceWindowResult, RusotoError<UpdateMaintenanceWindowError>>;
 
-    /// <p>Modifies the target of an existing maintenance window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>
+    /// <p><p>Modifies the target of an existing maintenance window. You can change the following:</p> <ul> <li> <p>Name</p> </li> <li> <p>Description</p> </li> <li> <p>Owner</p> </li> <li> <p>IDs for an ID target</p> </li> <li> <p>Tags for a Tag target</p> </li> <li> <p>From any supported tag type to another. The three supported tag types are ID target, Tag target, and resource group. For more information, see <a>Target</a>.</p> </li> </ul> <note> <p>If a parameter is null, then the corresponding field is not modified.</p> </note></p>
     async fn update_maintenance_window_target(
         &self,
         input: UpdateMaintenanceWindowTargetRequest,
@@ -14863,13 +14872,13 @@ pub trait Ssm {
         input: UpdateMaintenanceWindowTaskRequest,
     ) -> Result<UpdateMaintenanceWindowTaskResult, RusotoError<UpdateMaintenanceWindowTaskError>>;
 
-    /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>
+    /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role for the managed instance.</p>
     async fn update_managed_instance_role(
         &self,
         input: UpdateManagedInstanceRoleRequest,
     ) -> Result<UpdateManagedInstanceRoleResult, RusotoError<UpdateManagedInstanceRoleError>>;
 
-    /// <p>Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     async fn update_ops_item(
         &self,
         input: UpdateOpsItemRequest,
@@ -14899,10 +14908,7 @@ impl SsmClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> SsmClient {
-        SsmClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -14914,10 +14920,14 @@ impl SsmClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        SsmClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> SsmClient {
+        SsmClient { client, region }
     }
 }
 
@@ -15147,7 +15157,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     async fn create_ops_item(
         &self,
         input: CreateOpsItemRequest,
@@ -15393,7 +15403,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>
+    /// <p>Delete a list of parameters.</p>
     async fn delete_parameters(
         &self,
         input: DeleteParametersRequest,
@@ -15612,7 +15622,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>
+    /// <p>Describes details about the activation, such as the date and time the activation was created, its expiration date, the IAM role assigned to the instances in the activation, and the number of instances registered by using this activation.</p>
     async fn describe_activations(
         &self,
         input: DescribeActivationsRequest,
@@ -15795,7 +15805,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Lists all patches that could possibly be included in a patch baseline.</p>
+    /// <p>Lists all patches eligible to be included in a patch baseline.</p>
     async fn describe_available_patches(
         &self,
         input: DescribeAvailablePatchesRequest,
@@ -16405,7 +16415,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     async fn describe_ops_items(
         &self,
         input: DescribeOpsItemsRequest,
@@ -16859,7 +16869,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Retrieves details about a specific task run as part of a maintenance window execution.</p>
+    /// <p>Retrieves details about a specific a maintenance window execution.</p>
     async fn get_maintenance_window_execution(
         &self,
         input: GetMaintenanceWindowExecutionRequest,
@@ -16924,7 +16934,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Retrieves a task invocation. A task invocation is a specific task running on a specific target. maintenance windows report status for all invocations. </p>
+    /// <p>Retrieves information about a specific task running on a specific target.</p>
     async fn get_maintenance_window_execution_task_invocation(
         &self,
         input: GetMaintenanceWindowExecutionTaskInvocationRequest,
@@ -16986,7 +16996,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     async fn get_ops_item(
         &self,
         input: GetOpsItemRequest,
@@ -17709,7 +17719,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Defines the default patch baseline.</p>
+    /// <p>Defines the default patch baseline for the relevant operating system.</p> <p>To reset the AWS predefined patch baseline as the default, specify the full patch baseline ARN as the baseline ID value. For example, for CentOS, specify <code>arn:aws:ssm:us-east-2:733109147000:patchbaseline/pb-0574b43a65ea646ed</code> instead of <code>pb-0574b43a65ea646ed</code>.</p>
     async fn register_default_patch_baseline(
         &self,
         input: RegisterDefaultPatchBaselineRequest,
@@ -17846,7 +17856,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Removes all tags from the specified resource.</p>
+    /// <p>Removes tag keys from the specified resource.</p>
     async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceRequest,
@@ -18178,7 +18188,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>The document you want to update.</p>
+    /// <p>Updates one or more values for an SSM document.</p>
     async fn update_document(
         &self,
         input: UpdateDocumentRequest,
@@ -18262,7 +18272,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Modifies the target of an existing maintenance window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>
+    /// <p><p>Modifies the target of an existing maintenance window. You can change the following:</p> <ul> <li> <p>Name</p> </li> <li> <p>Description</p> </li> <li> <p>Owner</p> </li> <li> <p>IDs for an ID target</p> </li> <li> <p>Tags for a Tag target</p> </li> <li> <p>From any supported tag type to another. The three supported tag types are ID target, Tag target, and resource group. For more information, see <a>Target</a>.</p> </li> </ul> <note> <p>If a parameter is null, then the corresponding field is not modified.</p> </note></p>
     async fn update_maintenance_window_target(
         &self,
         input: UpdateMaintenanceWindowTargetRequest,
@@ -18320,7 +18330,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>
+    /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role for the managed instance.</p>
     async fn update_managed_instance_role(
         &self,
         input: UpdateManagedInstanceRoleRequest,
@@ -18348,7 +18358,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems-getting-started.html">Getting Started with OpsItems</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use the Systems Manager OpsItems capability to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsItems.html">AWS Systems Manager OpsItems</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     async fn update_ops_item(
         &self,
         input: UpdateOpsItemRequest,

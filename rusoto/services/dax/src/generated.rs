@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -26,7 +27,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Contains all of the attributes of a specific DAX cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Cluster {
     /// <p>The number of nodes in the cluster that are active (i.e., capable of serving requests).</p>
     #[serde(rename = "ActiveNodes")]
@@ -151,7 +152,7 @@ pub struct CreateClusterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateClusterResponse {
     /// <p>A description of the DAX cluster that you have created.</p>
     #[serde(rename = "Cluster")]
@@ -171,7 +172,7 @@ pub struct CreateParameterGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateParameterGroupResponse {
     /// <p>Represents the output of a <i>CreateParameterGroup</i> action.</p>
     #[serde(rename = "ParameterGroup")]
@@ -194,7 +195,7 @@ pub struct CreateSubnetGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSubnetGroupResponse {
     /// <p>Represents the output of a <i>CreateSubnetGroup</i> operation.</p>
     #[serde(rename = "SubnetGroup")]
@@ -221,7 +222,7 @@ pub struct DecreaseReplicationFactorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DecreaseReplicationFactorResponse {
     /// <p>A description of the DAX cluster, after you have decreased its replication factor.</p>
     #[serde(rename = "Cluster")]
@@ -237,7 +238,7 @@ pub struct DeleteClusterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteClusterResponse {
     /// <p>A description of the DAX cluster that is being deleted.</p>
     #[serde(rename = "Cluster")]
@@ -253,7 +254,7 @@ pub struct DeleteParameterGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteParameterGroupResponse {
     /// <p>A user-specified message for this action (i.e., a reason for deleting the parameter group).</p>
     #[serde(rename = "DeletionMessage")]
@@ -269,7 +270,7 @@ pub struct DeleteSubnetGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSubnetGroupResponse {
     /// <p>A user-specified message for this action (i.e., a reason for deleting the subnet group).</p>
     #[serde(rename = "DeletionMessage")]
@@ -294,7 +295,7 @@ pub struct DescribeClustersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClustersResponse {
     /// <p>The descriptions of your DAX clusters, in response to a <i>DescribeClusters</i> request.</p>
     #[serde(rename = "Clusters")]
@@ -319,7 +320,7 @@ pub struct DescribeDefaultParametersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDefaultParametersResponse {
     /// <p>Provides an identifier to allow retrieval of paginated results.</p>
     #[serde(rename = "NextToken")]
@@ -364,7 +365,7 @@ pub struct DescribeEventsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventsResponse {
     /// <p>An array of events. Each element in the array represents one event.</p>
     #[serde(rename = "Events")]
@@ -393,7 +394,7 @@ pub struct DescribeParameterGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeParameterGroupsResponse {
     /// <p>Provides an identifier to allow retrieval of paginated results.</p>
     #[serde(rename = "NextToken")]
@@ -425,7 +426,7 @@ pub struct DescribeParametersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeParametersResponse {
     /// <p>Provides an identifier to allow retrieval of paginated results.</p>
     #[serde(rename = "NextToken")]
@@ -454,7 +455,7 @@ pub struct DescribeSubnetGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSubnetGroupsResponse {
     /// <p>Provides an identifier to allow retrieval of paginated results.</p>
     #[serde(rename = "NextToken")]
@@ -468,7 +469,7 @@ pub struct DescribeSubnetGroupsResponse {
 
 /// <p>Represents the information required for client programs to connect to the configuration endpoint for a DAX cluster, or to an individual node within the cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Endpoint {
     /// <p>The DNS hostname of the endpoint.</p>
     #[serde(rename = "Address")]
@@ -482,7 +483,7 @@ pub struct Endpoint {
 
 /// <p>Represents a single occurrence of something interesting within the system. Some examples of events are creating a DAX cluster, adding or removing a node, or rebooting a node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Event {
     /// <p>The date and time when the event occurred.</p>
     #[serde(rename = "Date")]
@@ -517,7 +518,7 @@ pub struct IncreaseReplicationFactorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IncreaseReplicationFactorResponse {
     /// <p>A description of the DAX cluster. with its new replication factor.</p>
     #[serde(rename = "Cluster")]
@@ -537,7 +538,7 @@ pub struct ListTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsResponse {
     /// <p>If this value is present, there are additional results to be displayed. To retrieve them, call <code>ListTags</code> again, with <code>NextToken</code> set to this value.</p>
     #[serde(rename = "NextToken")]
@@ -551,7 +552,7 @@ pub struct ListTagsResponse {
 
 /// <p>Represents an individual node within a DAX cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Node {
     /// <p>The Availability Zone (AZ) in which the node has been deployed.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -581,7 +582,7 @@ pub struct Node {
 
 /// <p>Represents a parameter value that is applicable to a particular node type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NodeTypeSpecificValue {
     /// <p>A node type to which the parameter value applies.</p>
     #[serde(rename = "NodeType")]
@@ -595,7 +596,7 @@ pub struct NodeTypeSpecificValue {
 
 /// <p>Describes a notification topic and its status. Notification topics are used for publishing DAX events to subscribers using Amazon Simple Notification Service (SNS).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NotificationConfiguration {
     /// <p>The Amazon Resource Name (ARN) that identifies the topic. </p>
     #[serde(rename = "TopicArn")]
@@ -609,7 +610,7 @@ pub struct NotificationConfiguration {
 
 /// <p>Describes an individual setting that controls some aspect of DAX behavior.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Parameter {
     /// <p>A range of values within which the parameter can be set.</p>
     #[serde(rename = "AllowedValues")]
@@ -655,7 +656,7 @@ pub struct Parameter {
 
 /// <p>A named set of parameters that are applied to all of the nodes in a DAX cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ParameterGroup {
     /// <p>A description of the parameter group.</p>
     #[serde(rename = "Description")]
@@ -669,7 +670,7 @@ pub struct ParameterGroup {
 
 /// <p>The status of a parameter group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ParameterGroupStatus {
     /// <p>The node IDs of one or more nodes to be rebooted.</p>
     #[serde(rename = "NodeIdsToReboot")]
@@ -709,7 +710,7 @@ pub struct RebootNodeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebootNodeResponse {
     /// <p>A description of the DAX cluster after a node has been rebooted.</p>
     #[serde(rename = "Cluster")]
@@ -719,7 +720,7 @@ pub struct RebootNodeResponse {
 
 /// <p>The description of the server-side encryption status on the specified DAX cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SSEDescription {
     /// <p><p>The current state of server-side encryption:</p> <ul> <li> <p> <code>ENABLING</code> - Server-side encryption is being enabled.</p> </li> <li> <p> <code>ENABLED</code> - Server-side encryption is enabled.</p> </li> <li> <p> <code>DISABLING</code> - Server-side encryption is being disabled.</p> </li> <li> <p> <code>DISABLED</code> - Server-side encryption is disabled.</p> </li> </ul></p>
     #[serde(rename = "Status")]
@@ -737,7 +738,7 @@ pub struct SSESpecification {
 
 /// <p>An individual VPC security group and its status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityGroupMembership {
     /// <p>The unique ID for this security group.</p>
     #[serde(rename = "SecurityGroupIdentifier")]
@@ -751,7 +752,7 @@ pub struct SecurityGroupMembership {
 
 /// <p>Represents the subnet associated with a DAX cluster. This parameter refers to subnets defined in Amazon Virtual Private Cloud (Amazon VPC) and used with DAX.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Subnet {
     /// <p>The Availability Zone (AZ) for subnet subnet.</p>
     #[serde(rename = "SubnetAvailabilityZone")]
@@ -765,7 +766,7 @@ pub struct Subnet {
 
 /// <p><p>Represents the output of one of the following actions:</p> <ul> <li> <p> <i>CreateSubnetGroup</i> </p> </li> <li> <p> <i>ModifySubnetGroup</i> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubnetGroup {
     /// <p>The description of the subnet group.</p>
     #[serde(rename = "Description")]
@@ -809,7 +810,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {
     /// <p>The list of tags that are associated with the DAX resource.</p>
     #[serde(rename = "Tags")]
@@ -828,7 +829,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {
     /// <p>The tag keys that have been removed from the cluster.</p>
     #[serde(rename = "Tags")]
@@ -868,7 +869,7 @@ pub struct UpdateClusterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateClusterResponse {
     /// <p>A description of the DAX cluster, after it has been modified.</p>
     #[serde(rename = "Cluster")]
@@ -887,7 +888,7 @@ pub struct UpdateParameterGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateParameterGroupResponse {
     /// <p>The parameter group that has been modified.</p>
     #[serde(rename = "ParameterGroup")]
@@ -911,7 +912,7 @@ pub struct UpdateSubnetGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSubnetGroupResponse {
     /// <p>The subnet group that has been modified.</p>
     #[serde(rename = "SubnetGroup")]
@@ -2507,10 +2508,7 @@ impl DynamodbAcceleratorClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> DynamodbAcceleratorClient {
-        DynamodbAcceleratorClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -2522,10 +2520,14 @@ impl DynamodbAcceleratorClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        DynamodbAcceleratorClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> DynamodbAcceleratorClient {
+        DynamodbAcceleratorClient { client, region }
     }
 }
 

@@ -1,5 +1,11 @@
 ## Maintainer Guidelines
 
+### General
+
+1. The `master` branch build should be green. If it's not, it should be a high priority to fix.
+2. Rusoto documentation should work and not be wrong or misleading. This includes https://rusoto.org and the crate docs on https://docs.rs. It doesn't have to be 100% up to date but it should work. `Skeptic` is used to help with this.
+3. Generally prefer fixing bugs over new features.
+
 ### Pull request review
 
 1. New service has integration test(s)

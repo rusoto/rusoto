@@ -319,7 +319,7 @@ impl<'a> Operation {
         &self
             .input
             .as_ref()
-            .expect(&format!("Operation input undefined for {}", self.name))
+            .unwrap_or_else(|| panic!("Operation input undefined for {}", self.name))
             .shape
     }
 

@@ -27,6 +27,11 @@ docs:
 unit_test:
 	cargo +$$RUST_VERSION test --all
 
+# Doctests can be very slow to compile and run. This option lets us skip those if needed.
+.PHONY: unit_test_no_doctests
+unit_test_no_doctests:
+	cargo +$$RUST_VERSION test --all --lib
+
 .PHONY: skeptical
 skeptical:
 	(cd skeptical && cargo +$$RUST_VERSION test)
@@ -39,9 +44,15 @@ integration_test:
 check_integration_test:
 	(cd integration_tests && cargo +$$RUST_VERSION check --tests --features all)
 
+.PHONY: rustls_unit_test_no_doctests
+rustls_unit_test_no_doctests:
+	(cd rusoto/core && cargo +$$RUST_VERSION test --no-default-features --features=rustls --lib)
+	(cd rusoto/services && ./rustls-unit-test-no-doctests.sh $$RUST_VERSION)
+
 .PHONY: rustls_unit_test
 rustls_unit_test:
-	cargo +$$RUST_VERSION test --all -v --no-default-features --features=rustls
+	(cd rusoto/core && cargo +$$RUST_VERSION test --no-default-features --features=rustls)
+	(cd rusoto/services && ./rustls-unit-test.sh $$RUST_VERSION)
 
 .PHONY: check_service_defintions
 check_service_defintions:
@@ -54,3 +65,7 @@ time_credentials:
 .PHONY: bench_s3
 bench_s3:
 	(cd rusoto/services/s3 && cargo +nightly bench)
+
+.PHONY: credential_integration_test
+credential_integration_test:
+	(cd rusoto/credential_service_mock && ./run-and-test.sh )

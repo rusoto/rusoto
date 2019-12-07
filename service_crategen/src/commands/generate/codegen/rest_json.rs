@@ -224,10 +224,9 @@ fn generate_payload(service: &Service<'_>, input_shape: Option<&Shape>) -> Optio
         }
     };
 
-    if declare_payload.is_some() {
-        Some(declare_payload.unwrap() + "request.set_payload(encoded);")
-    } else {
-        None
+    match declare_payload {
+        Some(value) => Some(value + "request.set_payload(encoded);"),
+        _ => None
     }
 }
 
@@ -353,9 +352,7 @@ fn generate_body_parser(operation: &Operation, service: &Service<'_>) -> String 
             // is the shape required?
             let payload_shape_required = match output_shape.required {
                 Some(ref s) => {
-                    // if there's any required shape present the body payload parser will handle it
-                    // This can't be converted to `s.is_empty()`. TODO: find out why.
-                    s.len() > 0
+                    !s.is_empty()
                 }
                 None => false,
             };
@@ -386,15 +383,16 @@ fn payload_body_parser(
     mutable_result: bool,
     payload_required: bool,
 ) -> String {
-    let response_body = match payload_required {
-        true => match payload_type {
+    let response_body = if payload_required {
+        match payload_type {
             ShapeType::Blob => "response.body",
             _ => "String::from_utf8_lossy(response.body.as_ref())",
-        },
-        false => match payload_type {
+        }
+    } else {
+        match payload_type {
             ShapeType::Blob => "Some(response.body)",
             _ => "Some(String::from_utf8_lossy(response.body.as_ref()).into_owned())",
-        },
+        }
     };
 
     format!(

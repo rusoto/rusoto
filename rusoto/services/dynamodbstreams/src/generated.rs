@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -26,7 +27,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Represents the data for an attribute. You can set one, and only one, of the elements.</p> <p>Each attribute in an item is a name-value pair. An attribute can be single-valued or multi-valued set. For example, a book item can have title and authors attributes. Each book has one title but can have many authors. The multi-valued attribute is a set; duplicate values are not allowed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttributeValue {
     /// <p>A Binary data type.</p>
     #[serde(rename = "B")]
@@ -98,7 +99,7 @@ pub struct DescribeStreamInput {
 
 /// <p>Represents the output of a <code>DescribeStream</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStreamOutput {
     /// <p>A complete description of the stream, including its creation date and time, the DynamoDB table associated with the stream, the shard IDs within the stream, and the beginning and ending sequence numbers of stream records within the shards.</p>
     #[serde(rename = "StreamDescription")]
@@ -120,7 +121,7 @@ pub struct GetRecordsInput {
 
 /// <p>Represents the output of a <code>GetRecords</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecordsOutput {
     /// <p>The next position in the shard from which to start sequentially reading stream records. If set to <code>null</code>, the shard has been closed and the requested iterator will not return any more data.</p>
     #[serde(rename = "NextShardIterator")]
@@ -152,7 +153,7 @@ pub struct GetShardIteratorInput {
 
 /// <p>Represents the output of a <code>GetShardIterator</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetShardIteratorOutput {
     /// <p>The position in the shard from which to start reading stream records sequentially. A shard iterator specifies this position using the sequence number of a stream record in a shard.</p>
     #[serde(rename = "ShardIterator")]
@@ -162,7 +163,7 @@ pub struct GetShardIteratorOutput {
 
 /// <p>Contains details about the type of identity that made the request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Identity {
     /// <p>A unique identifier for the entity that made the call. For Time To Live, the principalId is "dynamodb.amazonaws.com".</p>
     #[serde(rename = "PrincipalId")]
@@ -176,7 +177,7 @@ pub struct Identity {
 
 /// <p><p>Represents <i>a single element</i> of a key schema. A key schema specifies the attributes that make up the primary key of a table, or the key attributes of an index.</p> <p>A <code>KeySchemaElement</code> represents exactly one attribute of the primary key. For example, a simple primary key (partition key) would be represented by one <code>KeySchemaElement</code>. A composite primary key (partition key and sort key) would require one <code>KeySchemaElement</code> for the partition key, and another <code>KeySchemaElement</code> for the sort key.</p> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39;s usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KeySchemaElement {
     /// <p>The name of a key attribute.</p>
     #[serde(rename = "AttributeName")]
@@ -205,7 +206,7 @@ pub struct ListStreamsInput {
 
 /// <p>Represents the output of a <code>ListStreams</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStreamsOutput {
     /// <p>The stream ARN of the item where the operation stopped, inclusive of the previous result set. Use this value to start a new operation, excluding this value in the new request.</p> <p>If <code>LastEvaluatedStreamArn</code> is empty, then the "last page" of results has been processed and there is no more data to be retrieved.</p> <p>If <code>LastEvaluatedStreamArn</code> is not empty, it does not necessarily mean that there is more data in the result set. The only way to know when you have reached the end of the result set is when <code>LastEvaluatedStreamArn</code> is empty.</p>
     #[serde(rename = "LastEvaluatedStreamArn")]
@@ -219,7 +220,7 @@ pub struct ListStreamsOutput {
 
 /// <p>A description of a unique event within a stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Record {
     /// <p>The region in which the <code>GetRecords</code> request was received.</p>
     #[serde(rename = "awsRegion")]
@@ -253,7 +254,7 @@ pub struct Record {
 
 /// <p>The beginning and ending sequence numbers for the stream records contained within a shard.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SequenceNumberRange {
     /// <p>The last sequence number.</p>
     #[serde(rename = "EndingSequenceNumber")]
@@ -267,7 +268,7 @@ pub struct SequenceNumberRange {
 
 /// <p>A uniquely identified group of stream records within a stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Shard {
     /// <p>The shard ID of the current shard's parent.</p>
     #[serde(rename = "ParentShardId")]
@@ -285,7 +286,7 @@ pub struct Shard {
 
 /// <p>Represents all of the data describing a particular stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Stream {
     /// <p>The Amazon Resource Name (ARN) for the stream.</p>
     #[serde(rename = "StreamArn")]
@@ -303,7 +304,7 @@ pub struct Stream {
 
 /// <p>Represents all of the data describing a particular stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StreamDescription {
     /// <p>The date and time when the request to create this stream was issued.</p>
     #[serde(rename = "CreationRequestDateTime")]
@@ -345,7 +346,7 @@ pub struct StreamDescription {
 
 /// <p>A description of a single data modification that was performed on an item in a DynamoDB table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StreamRecord {
     /// <p>The approximate date and time when the stream record was created, in <a href="http://www.epochconverter.com/">UNIX epoch time</a> format.</p>
     #[serde(rename = "ApproximateCreationDateTime")]
@@ -598,10 +599,7 @@ impl DynamoDbStreamsClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> DynamoDbStreamsClient {
-        DynamoDbStreamsClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -613,10 +611,14 @@ impl DynamoDbStreamsClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        DynamoDbStreamsClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> DynamoDbStreamsClient {
+        DynamoDbStreamsClient { client, region }
     }
 }
 

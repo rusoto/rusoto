@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -285,7 +286,7 @@ impl CreatePlatformApplicationInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Attributes"),
+            &format!("{}{}.entry", prefix, "Attributes"),
             &obj.attributes,
         );
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
@@ -350,7 +351,7 @@ impl CreatePlatformEndpointInputSerializer {
         if let Some(ref field_value) = obj.attributes {
             MapStringToStringSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Attributes"),
+                &format!("{}{}.entry", prefix, "Attributes"),
                 field_value,
             );
         }
@@ -1270,7 +1271,7 @@ impl MapStringToStringSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "key"), &key);
-            params.put(&format!("{}.{}", prefix, "Value"), &value);
+            params.put(&format!("{}.{}", prefix, "value"), &value);
         }
     }
 }
@@ -1587,7 +1588,7 @@ impl SetEndpointAttributesInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Attributes"),
+            &format!("{}{}.entry", prefix, "Attributes"),
             &obj.attributes,
         );
         params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
@@ -1614,7 +1615,7 @@ impl SetPlatformApplicationAttributesInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Attributes"),
+            &format!("{}{}.entry", prefix, "Attributes"),
             &obj.attributes,
         );
         params.put(
@@ -1642,7 +1643,7 @@ impl SetSMSAttributesInputSerializer {
 
         MapStringToStringSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "attributes"),
+            &format!("{}{}.entry", prefix, "attributes"),
             &obj.attributes,
         );
     }
@@ -1911,7 +1912,7 @@ impl SubscriptionAttributesMapSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.entry.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "key"), &key);
-            params.put(&format!("{}.{}", prefix, "Value"), &value);
+            params.put(&format!("{}.{}", prefix, "value"), &value);
         }
     }
 }
@@ -2147,7 +2148,7 @@ impl TopicAttributesMapSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.entry.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "key"), &key);
-            params.put(&format!("{}.{}", prefix, "Value"), &value);
+            params.put(&format!("{}.{}", prefix, "value"), &value);
         }
     }
 }
@@ -5059,10 +5060,7 @@ impl SnsClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> SnsClient {
-        SnsClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -5074,10 +5072,14 @@ impl SnsClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        SnsClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> SnsClient {
+        SnsClient { client, region }
     }
 }
 

@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -26,7 +27,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Contains details about an activity that failed during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivityFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -40,7 +41,7 @@ pub struct ActivityFailedEventDetails {
 
 /// <p>Contains details about an activity.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivityListItem {
     /// <p>The Amazon Resource Name (ARN) that identifies the activity.</p>
     #[serde(rename = "activityArn")]
@@ -48,14 +49,14 @@ pub struct ActivityListItem {
     /// <p>The date the activity is created.</p>
     #[serde(rename = "creationDate")]
     pub creation_date: f64,
-    /// <p><p>The name of the activity.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the activity.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
 }
 
 /// <p>Contains details about an activity schedule failure that occurred during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivityScheduleFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -69,7 +70,7 @@ pub struct ActivityScheduleFailedEventDetails {
 
 /// <p>Contains details about an activity scheduled during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivityScheduledEventDetails {
     /// <p>The maximum allowed duration between two heartbeats for the activity task.</p>
     #[serde(rename = "heartbeatInSeconds")]
@@ -90,7 +91,7 @@ pub struct ActivityScheduledEventDetails {
 
 /// <p>Contains details about the start of an activity during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivityStartedEventDetails {
     /// <p>The name of the worker that the task is assigned to. These names are provided by the workers when calling <a>GetActivityTask</a>.</p>
     #[serde(rename = "workerName")]
@@ -100,7 +101,7 @@ pub struct ActivityStartedEventDetails {
 
 /// <p>Contains details about an activity that successfully terminated during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivitySucceededEventDetails {
     /// <p>The JSON data output by the activity task.</p>
     #[serde(rename = "output")]
@@ -110,7 +111,7 @@ pub struct ActivitySucceededEventDetails {
 
 /// <p>Contains details about an activity timeout that occurred during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivityTimedOutEventDetails {
     /// <p>A more detailed explanation of the cause of the timeout.</p>
     #[serde(rename = "cause")]
@@ -124,17 +125,17 @@ pub struct ActivityTimedOutEventDetails {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateActivityInput {
-    /// <p><p>The name of the activity to create. This name must be unique for your AWS account and region for 90 days. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the activity to create. This name must be unique for your AWS account and region for 90 days. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The list of tags to add to a resource.</p>
+    /// <p>The list of tags to add to a resource.</p> <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>, and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html">Controlling Access Using IAM Tags</a>.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateActivityOutput {
     /// <p>The Amazon Resource Name (ARN) that identifies the created activity.</p>
     #[serde(rename = "activityArn")]
@@ -149,20 +150,20 @@ pub struct CreateStateMachineInput {
     /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     pub definition: String,
-    /// <p><p>The name of the state machine. </p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the state machine. </p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The Amazon Resource Name (ARN) of the IAM role to use for this state machine.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
-    /// <p>Tags to be added when creating a state machine.</p>
+    /// <p>Tags to be added when creating a state machine.</p> <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>, and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html">Controlling Access Using IAM Tags</a>.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStateMachineOutput {
     /// <p>The date the state machine is created.</p>
     #[serde(rename = "creationDate")]
@@ -180,7 +181,7 @@ pub struct DeleteActivityInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteActivityOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -191,7 +192,7 @@ pub struct DeleteStateMachineInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteStateMachineOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -202,7 +203,7 @@ pub struct DescribeActivityInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeActivityOutput {
     /// <p>The Amazon Resource Name (ARN) that identifies the activity.</p>
     #[serde(rename = "activityArn")]
@@ -210,7 +211,7 @@ pub struct DescribeActivityOutput {
     /// <p>The date the activity is created.</p>
     #[serde(rename = "creationDate")]
     pub creation_date: f64,
-    /// <p><p>The name of the activity.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the activity.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
 }
@@ -223,7 +224,7 @@ pub struct DescribeExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeExecutionOutput {
     /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
     #[serde(rename = "executionArn")]
@@ -231,7 +232,7 @@ pub struct DescribeExecutionOutput {
     /// <p>The string that contains the JSON input data of the execution.</p>
     #[serde(rename = "input")]
     pub input: String,
-    /// <p><p>The name of the execution.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the execution.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -262,7 +263,7 @@ pub struct DescribeStateMachineForExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStateMachineForExecutionOutput {
     /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
@@ -289,7 +290,7 @@ pub struct DescribeStateMachineInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStateMachineOutput {
     /// <p>The date the state machine is created.</p>
     #[serde(rename = "creationDate")]
@@ -297,7 +298,7 @@ pub struct DescribeStateMachineOutput {
     /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     pub definition: String,
-    /// <p><p>The name of the state machine.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the state machine.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The Amazon Resource Name (ARN) of the IAM role used when creating this state machine. (The IAM role maintains security by granting Step Functions access to AWS resources.)</p>
@@ -314,7 +315,7 @@ pub struct DescribeStateMachineOutput {
 
 /// <p>Contains details about an abort of an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecutionAbortedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -328,7 +329,7 @@ pub struct ExecutionAbortedEventDetails {
 
 /// <p>Contains details about an execution failure event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecutionFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -342,12 +343,12 @@ pub struct ExecutionFailedEventDetails {
 
 /// <p>Contains details about an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecutionListItem {
     /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
     #[serde(rename = "executionArn")]
     pub execution_arn: String,
-    /// <p><p>The name of the execution.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the execution.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The date the execution started.</p>
@@ -367,7 +368,7 @@ pub struct ExecutionListItem {
 
 /// <p>Contains details about the start of the execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecutionStartedEventDetails {
     /// <p>The JSON data input to the execution.</p>
     #[serde(rename = "input")]
@@ -381,7 +382,7 @@ pub struct ExecutionStartedEventDetails {
 
 /// <p>Contains details about the successful termination of the execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecutionSucceededEventDetails {
     /// <p>The JSON data output by the execution.</p>
     #[serde(rename = "output")]
@@ -391,7 +392,7 @@ pub struct ExecutionSucceededEventDetails {
 
 /// <p>Contains details about the execution timeout that occurred during the execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecutionTimedOutEventDetails {
     /// <p>A more detailed explanation of the cause of the timeout.</p>
     #[serde(rename = "cause")]
@@ -415,7 +416,7 @@ pub struct GetActivityTaskInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetActivityTaskOutput {
     /// <p>The string that contains the JSON input data for the task.</p>
     #[serde(rename = "input")]
@@ -447,7 +448,7 @@ pub struct GetExecutionHistoryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetExecutionHistoryOutput {
     /// <p>The list of events that occurred in the execution.</p>
     #[serde(rename = "events")]
@@ -460,7 +461,7 @@ pub struct GetExecutionHistoryOutput {
 
 /// <p>Contains details about the events of an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HistoryEvent {
     #[serde(rename = "activityFailedEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -520,6 +521,26 @@ pub struct HistoryEvent {
     #[serde(rename = "lambdaFunctionTimedOutEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_function_timed_out_event_details: Option<LambdaFunctionTimedOutEventDetails>,
+    /// <p>Contains details about an iteration of a Map state that was aborted.</p>
+    #[serde(rename = "mapIterationAbortedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub map_iteration_aborted_event_details: Option<MapIterationEventDetails>,
+    /// <p>Contains details about an iteration of a Map state that failed.</p>
+    #[serde(rename = "mapIterationFailedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub map_iteration_failed_event_details: Option<MapIterationEventDetails>,
+    /// <p>Contains details about an iteration of a Map state that was started.</p>
+    #[serde(rename = "mapIterationStartedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub map_iteration_started_event_details: Option<MapIterationEventDetails>,
+    /// <p>Contains details about an iteration of a Map state that succeeded.</p>
+    #[serde(rename = "mapIterationSucceededEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub map_iteration_succeeded_event_details: Option<MapIterationEventDetails>,
+    /// <p>Contains details about Map state that was started.</p>
+    #[serde(rename = "mapStateStartedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub map_state_started_event_details: Option<MapStateStartedEventDetails>,
     /// <p>The id of the previous event.</p>
     #[serde(rename = "previousEventId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -572,7 +593,7 @@ pub struct HistoryEvent {
 
 /// <p>Contains details about a lambda function that failed during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LambdaFunctionFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -586,7 +607,7 @@ pub struct LambdaFunctionFailedEventDetails {
 
 /// <p>Contains details about a failed lambda function schedule event that occurred during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LambdaFunctionScheduleFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -600,7 +621,7 @@ pub struct LambdaFunctionScheduleFailedEventDetails {
 
 /// <p>Contains details about a lambda function scheduled during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LambdaFunctionScheduledEventDetails {
     /// <p>The JSON data input to the lambda function.</p>
     #[serde(rename = "input")]
@@ -617,7 +638,7 @@ pub struct LambdaFunctionScheduledEventDetails {
 
 /// <p>Contains details about a lambda function that failed to start during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LambdaFunctionStartFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -631,7 +652,7 @@ pub struct LambdaFunctionStartFailedEventDetails {
 
 /// <p>Contains details about a lambda function that successfully terminated during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LambdaFunctionSucceededEventDetails {
     /// <p>The JSON data output by the lambda function.</p>
     #[serde(rename = "output")]
@@ -641,7 +662,7 @@ pub struct LambdaFunctionSucceededEventDetails {
 
 /// <p>Contains details about a lambda function timeout that occurred during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LambdaFunctionTimedOutEventDetails {
     /// <p>A more detailed explanation of the cause of the timeout.</p>
     #[serde(rename = "cause")]
@@ -666,7 +687,7 @@ pub struct ListActivitiesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListActivitiesOutput {
     /// <p>The list of activities.</p>
     #[serde(rename = "activities")]
@@ -697,7 +718,7 @@ pub struct ListExecutionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListExecutionsOutput {
     /// <p>The list of matching executions.</p>
     #[serde(rename = "executions")]
@@ -721,7 +742,7 @@ pub struct ListStateMachinesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStateMachinesOutput {
     /// <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
     #[serde(rename = "nextToken")]
@@ -739,12 +760,36 @@ pub struct ListTagsForResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
     /// <p>An array of tags associated with the resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Contains details about an iteration of a Map state.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MapIterationEventDetails {
+    /// <p>The index of the array belonging to the Map state iteration.</p>
+    #[serde(rename = "index")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index: Option<i64>,
+    /// <p>The name of the iteration’s parent Map state.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>Details about a Map state that was started.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MapStateStartedEventDetails {
+    /// <p>The size of the array for Map state iterations.</p>
+    #[serde(rename = "length")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub length: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -757,24 +802,24 @@ pub struct SendTaskFailureInput {
     #[serde(rename = "error")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
-    /// <p>The token that represents this task. Task tokens are generated by the service when the tasks are assigned to a worker (see GetActivityTask::taskToken).</p>
+    /// <p>The token that represents this task. Task tokens are generated by Step Functions when tasks are assigned to a worker, or in the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/input-output-contextobject.html">context object</a> when a workflow enters a task state. See <a>GetActivityTaskOutput$taskToken</a>.</p>
     #[serde(rename = "taskToken")]
     pub task_token: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendTaskFailureOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SendTaskHeartbeatInput {
-    /// <p>The token that represents this task. Task tokens are generated by the service when the tasks are assigned to a worker (see <a>GetActivityTaskOutput$taskToken</a>).</p>
+    /// <p>The token that represents this task. Task tokens are generated by Step Functions when tasks are assigned to a worker, or in the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/input-output-contextobject.html">context object</a> when a workflow enters a task state. See <a>GetActivityTaskOutput$taskToken</a>.</p>
     #[serde(rename = "taskToken")]
     pub task_token: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendTaskHeartbeatOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -782,13 +827,13 @@ pub struct SendTaskSuccessInput {
     /// <p>The JSON output of the task.</p>
     #[serde(rename = "output")]
     pub output: String,
-    /// <p>The token that represents this task. Task tokens are generated by the service when the tasks are assigned to a worker (see <a>GetActivityTaskOutput$taskToken</a>).</p>
+    /// <p>The token that represents this task. Task tokens are generated by Step Functions when tasks are assigned to a worker, or in the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/input-output-contextobject.html">context object</a> when a workflow enters a task state. See <a>GetActivityTaskOutput$taskToken</a>.</p>
     #[serde(rename = "taskToken")]
     pub task_token: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendTaskSuccessOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -797,7 +842,7 @@ pub struct StartExecutionInput {
     #[serde(rename = "input")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
-    /// <p><p>The name of the execution. This name must be unique for your AWS account, region, and state machine for 90 days. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the execution. This name must be unique for your AWS account, region, and state machine for 90 days. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -807,7 +852,7 @@ pub struct StartExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartExecutionOutput {
     /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
     #[serde(rename = "executionArn")]
@@ -819,7 +864,7 @@ pub struct StartExecutionOutput {
 
 /// <p>Contains details about a state entered during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StateEnteredEventDetails {
     /// <p>The string that contains the JSON input data for the state.</p>
     #[serde(rename = "input")]
@@ -832,9 +877,9 @@ pub struct StateEnteredEventDetails {
 
 /// <p>Contains details about an exit from a state during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StateExitedEventDetails {
-    /// <p><p>The name of the state.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the state.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The JSON output data of the state.</p>
@@ -845,12 +890,12 @@ pub struct StateExitedEventDetails {
 
 /// <p>Contains details about the state machine.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StateMachineListItem {
     /// <p>The date the state machine is created.</p>
     #[serde(rename = "creationDate")]
     pub creation_date: f64,
-    /// <p><p>The name of the state machine.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the state machine.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The Amazon Resource Name (ARN) that identifies the state machine.</p>
@@ -874,14 +919,14 @@ pub struct StopExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopExecutionOutput {
     /// <p>The date the execution is stopped.</p>
     #[serde(rename = "stopDate")]
     pub stop_date: f64,
 }
 
-/// <p>Tags are key-value pairs that can be associated with Step Functions state machines and activities.</p>
+/// <p>Tags are key-value pairs that can be associated with Step Functions state machines and activities.</p> <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>, and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html">Controlling Access Using IAM Tags</a>.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The key of a tag.</p>
@@ -899,18 +944,18 @@ pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) for the Step Functions state machine or activity.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p>The list of tags to add to a resource.</p> <p>Tags may only contain unicode letters, digits, whitespace, or these symbols: <code>_ . : / = + - @</code>.</p>
+    /// <p>The list of tags to add to a resource.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     #[serde(rename = "tags")]
     pub tags: Vec<Tag>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
 
 /// <p>Contains details about a task failure event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -930,7 +975,7 @@ pub struct TaskFailedEventDetails {
 
 /// <p>Contains details about a task scheduled during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskScheduledEventDetails {
     /// <p>The JSON data passed to the resource referenced in a task state.</p>
     #[serde(rename = "parameters")]
@@ -952,7 +997,7 @@ pub struct TaskScheduledEventDetails {
 
 /// <p>Contains details about a task that failed to start during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskStartFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -972,7 +1017,7 @@ pub struct TaskStartFailedEventDetails {
 
 /// <p>Contains details about the start of a task during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskStartedEventDetails {
     /// <p>The service name of the resource in a task state.</p>
     #[serde(rename = "resource")]
@@ -984,7 +1029,7 @@ pub struct TaskStartedEventDetails {
 
 /// <p>Contains details about a task that failed to submit during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskSubmitFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -1004,7 +1049,7 @@ pub struct TaskSubmitFailedEventDetails {
 
 /// <p>Contains details about a task submitted to a resource .</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskSubmittedEventDetails {
     /// <p>The response from a resource when a task has started.</p>
     #[serde(rename = "output")]
@@ -1020,7 +1065,7 @@ pub struct TaskSubmittedEventDetails {
 
 /// <p>Contains details about the successful completion of a task state.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskSucceededEventDetails {
     /// <p>The full JSON response from a resource when a task has succeeded. This response becomes the output of the related task.</p>
     #[serde(rename = "output")]
@@ -1036,7 +1081,7 @@ pub struct TaskSucceededEventDetails {
 
 /// <p>Contains details about a resource timeout that occurred during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskTimedOutEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -1065,7 +1110,7 @@ pub struct UntagResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1084,7 +1129,7 @@ pub struct UpdateStateMachineInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateStateMachineOutput {
     /// <p>The date and time the state machine was updated.</p>
     #[serde(rename = "updateDate")]
@@ -1663,7 +1708,7 @@ impl Error for ListStateMachinesError {
 pub enum ListTagsForResourceError {
     /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
-    /// <p>Could not fine the referenced resource. Only state machine and activity ARNs are supported.</p>
+    /// <p>Could not find the referenced resource. Only state machine and activity ARNs are supported.</p>
     ResourceNotFound(String),
 }
 
@@ -1961,7 +2006,7 @@ impl Error for StopExecutionError {
 pub enum TagResourceError {
     /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
-    /// <p>Could not fine the referenced resource. Only state machine and activity ARNs are supported.</p>
+    /// <p>Could not find the referenced resource. Only state machine and activity ARNs are supported.</p>
     ResourceNotFound(String),
     /// <p>You've exceeded the number of tags allowed for a resource. See the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html"> Limits Topic</a> in the AWS Step Functions Developer Guide.</p>
     TooManyTags(String),
@@ -2004,7 +2049,7 @@ impl Error for TagResourceError {
 pub enum UntagResourceError {
     /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
-    /// <p>Could not fine the referenced resource. Only state machine and activity ARNs are supported.</p>
+    /// <p>Could not find the referenced resource. Only state machine and activity ARNs are supported.</p>
     ResourceNotFound(String),
 }
 
@@ -2106,13 +2151,13 @@ impl Error for UpdateStateMachineError {
 /// Trait representing the capabilities of the AWS SFN API. AWS SFN clients implement this trait.
 #[async_trait]
 pub trait StepFunctions {
-    /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateActivity</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateActivity</code>&#39;s idempotency check is based on the activity <code>name</code>. If a following request has different <code>tags</code> values, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>tags</code> will not be updated, even if they are different.</p> </note></p>
     async fn create_activity(
         &self,
         input: CreateActivityInput,
     ) -> Result<CreateActivityOutput, RusotoError<CreateActivityError>>;
 
-    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateStateMachine</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateStateMachine</code>&#39;s idempotency check is based on the state machine <code>name</code> and <code>definition</code>. If a following request has a different <code>roleArn</code> or <code>tags</code>, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>roleArn</code> and <code>tags</code> will not be updated, even if they are different.</p> </note></p>
     async fn create_state_machine(
         &self,
         input: CreateStateMachineInput,
@@ -2187,25 +2232,25 @@ pub trait StepFunctions {
         input: ListStateMachinesInput,
     ) -> Result<ListStateMachinesOutput, RusotoError<ListStateMachinesError>>;
 
-    /// <p>List tags for a given resource.</p>
+    /// <p>List tags for a given resource.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
 
-    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>
+    /// <p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report that the task identified by the <code>taskToken</code> failed.</p>
     async fn send_task_failure(
         &self,
         input: SendTaskFailureInput,
     ) -> Result<SendTaskFailureOutput, RusotoError<SendTaskFailureError>>;
 
-    /// <p><p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note></p>
+    /// <p><p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report to Step Functions that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition (<code>HeartbeatSeconds</code>). This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> entry for activities, or a <code>TaskTimedOut</code> entry for for tasks using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-sync">job run</a> or <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received. Use <code>HeartbeatSeconds</code> to configure the timeout interval for heartbeats.</p> </note></p>
     async fn send_task_heartbeat(
         &self,
         input: SendTaskHeartbeatInput,
     ) -> Result<SendTaskHeartbeatOutput, RusotoError<SendTaskHeartbeatError>>;
 
-    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>
+    /// <p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report that the task identified by the <code>taskToken</code> completed successfully.</p>
     async fn send_task_success(
         &self,
         input: SendTaskSuccessInput,
@@ -2223,7 +2268,7 @@ pub trait StepFunctions {
         input: StopExecutionInput,
     ) -> Result<StopExecutionOutput, RusotoError<StopExecutionError>>;
 
-    /// <p>Add a tag to a Step Functions resource.</p>
+    /// <p>Add a tag to a Step Functions resource.</p> <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>, and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html">Controlling Access Using IAM Tags</a>.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     async fn tag_resource(
         &self,
         input: TagResourceInput,
@@ -2253,10 +2298,7 @@ impl StepFunctionsClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> StepFunctionsClient {
-        StepFunctionsClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -2268,16 +2310,20 @@ impl StepFunctionsClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        StepFunctionsClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> StepFunctionsClient {
+        StepFunctionsClient { client, region }
     }
 }
 
 #[async_trait]
 impl StepFunctions for StepFunctionsClient {
-    /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateActivity</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateActivity</code>&#39;s idempotency check is based on the activity <code>name</code>. If a following request has different <code>tags</code> values, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>tags</code> will not be updated, even if they are different.</p> </note></p>
     async fn create_activity(
         &self,
         input: CreateActivityInput,
@@ -2304,7 +2350,7 @@ impl StepFunctions for StepFunctionsClient {
         }
     }
 
-    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateStateMachine</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateStateMachine</code>&#39;s idempotency check is based on the state machine <code>name</code> and <code>definition</code>. If a following request has a different <code>roleArn</code> or <code>tags</code>, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>roleArn</code> and <code>tags</code> will not be updated, even if they are different.</p> </note></p>
     async fn create_state_machine(
         &self,
         input: CreateStateMachineInput,
@@ -2641,7 +2687,7 @@ impl StepFunctions for StepFunctionsClient {
         }
     }
 
-    /// <p>List tags for a given resource.</p>
+    /// <p>List tags for a given resource.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
@@ -2669,7 +2715,7 @@ impl StepFunctions for StepFunctionsClient {
         }
     }
 
-    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>
+    /// <p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report that the task identified by the <code>taskToken</code> failed.</p>
     async fn send_task_failure(
         &self,
         input: SendTaskFailureInput,
@@ -2696,7 +2742,7 @@ impl StepFunctions for StepFunctionsClient {
         }
     }
 
-    /// <p><p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note></p>
+    /// <p><p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report to Step Functions that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition (<code>HeartbeatSeconds</code>). This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> entry for activities, or a <code>TaskTimedOut</code> entry for for tasks using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-sync">job run</a> or <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received. Use <code>HeartbeatSeconds</code> to configure the timeout interval for heartbeats.</p> </note></p>
     async fn send_task_heartbeat(
         &self,
         input: SendTaskHeartbeatInput,
@@ -2723,7 +2769,7 @@ impl StepFunctions for StepFunctionsClient {
         }
     }
 
-    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>
+    /// <p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report that the task identified by the <code>taskToken</code> completed successfully.</p>
     async fn send_task_success(
         &self,
         input: SendTaskSuccessInput,
@@ -2804,7 +2850,7 @@ impl StepFunctions for StepFunctionsClient {
         }
     }
 
-    /// <p>Add a tag to a Step Functions resource.</p>
+    /// <p>Add a tag to a Step Functions resource.</p> <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>, and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html">Controlling Access Using IAM Tags</a>.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     async fn tag_resource(
         &self,
         input: TagResourceInput,

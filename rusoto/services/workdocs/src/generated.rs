@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -51,7 +52,7 @@ pub struct ActivateUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivateUserResponse {
     /// <p>The user information.</p>
     #[serde(rename = "User")]
@@ -61,7 +62,7 @@ pub struct ActivateUserResponse {
 
 /// <p>Describes the activity information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Activity {
     /// <p>Metadata of the commenting activity. This is an optional field and is filled for commenting activities.</p>
     #[serde(rename = "CommentMetadata")]
@@ -120,7 +121,7 @@ pub struct AddResourcePermissionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddResourcePermissionsResponse {
     /// <p>The share results.</p>
     #[serde(rename = "ShareResults")]
@@ -130,7 +131,7 @@ pub struct AddResourcePermissionsResponse {
 
 /// <p>Describes a comment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Comment {
     /// <p>The ID of the comment.</p>
     #[serde(rename = "CommentId")]
@@ -171,7 +172,7 @@ pub struct Comment {
 
 /// <p>Describes the metadata of a comment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CommentMetadata {
     /// <p>The ID of the comment.</p>
     #[serde(rename = "CommentId")]
@@ -229,7 +230,7 @@ pub struct CreateCommentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCommentResponse {
     /// <p>The comment that has been created.</p>
     #[serde(rename = "Comment")]
@@ -256,7 +257,7 @@ pub struct CreateCustomMetadataRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCustomMetadataResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -275,7 +276,7 @@ pub struct CreateFolderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFolderResponse {
     /// <p>The metadata of the folder.</p>
     #[serde(rename = "Metadata")]
@@ -298,7 +299,7 @@ pub struct CreateLabelsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLabelsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -318,7 +319,7 @@ pub struct CreateNotificationSubscriptionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNotificationSubscriptionResponse {
     /// <p>The subscription.</p>
     #[serde(rename = "Subscription")]
@@ -363,7 +364,7 @@ pub struct CreateUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {
     /// <p>The user information.</p>
     #[serde(rename = "User")]
@@ -423,7 +424,7 @@ pub struct DeleteCustomMetadataRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCustomMetadataResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -479,7 +480,7 @@ pub struct DeleteLabelsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLabelsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -548,7 +549,7 @@ pub struct DescribeActivitiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeActivitiesResponse {
     /// <p>The marker for the next set of results.</p>
     #[serde(rename = "Marker")]
@@ -583,7 +584,7 @@ pub struct DescribeCommentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCommentsResponse {
     /// <p>The list of comments for the specified document version.</p>
     #[serde(rename = "Comments")]
@@ -623,7 +624,7 @@ pub struct DescribeDocumentVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDocumentVersionsResponse {
     /// <p>The document versions.</p>
     #[serde(rename = "DocumentVersions")]
@@ -671,7 +672,7 @@ pub struct DescribeFolderContentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFolderContentsResponse {
     /// <p>The documents in the specified folder.</p>
     #[serde(rename = "Documents")]
@@ -711,7 +712,7 @@ pub struct DescribeGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGroupsResponse {
     /// <p>The list of groups.</p>
     #[serde(rename = "Groups")]
@@ -739,7 +740,7 @@ pub struct DescribeNotificationSubscriptionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNotificationSubscriptionsResponse {
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     #[serde(rename = "Marker")]
@@ -775,7 +776,7 @@ pub struct DescribeResourcePermissionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeResourcePermissionsResponse {
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     #[serde(rename = "Marker")]
@@ -803,7 +804,7 @@ pub struct DescribeRootFoldersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRootFoldersResponse {
     /// <p>The user's special folders.</p>
     #[serde(rename = "Folders")]
@@ -860,7 +861,7 @@ pub struct DescribeUsersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUsersResponse {
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     #[serde(rename = "Marker")]
@@ -874,7 +875,7 @@ pub struct DescribeUsersResponse {
 
 /// <p>Describes the document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentMetadata {
     /// <p>The time when the document was created.</p>
     #[serde(rename = "CreatedTimestamp")]
@@ -912,7 +913,7 @@ pub struct DocumentMetadata {
 
 /// <p>Describes a version of a document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentVersionMetadata {
     /// <p>The timestamp when the content of the document was originally created.</p>
     #[serde(rename = "ContentCreatedTimestamp")]
@@ -970,7 +971,7 @@ pub struct DocumentVersionMetadata {
 
 /// <p>Describes a folder.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FolderMetadata {
     /// <p>The time when the folder was created.</p>
     #[serde(rename = "CreatedTimestamp")]
@@ -1026,7 +1027,7 @@ pub struct GetCurrentUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCurrentUserResponse {
     /// <p>Metadata of the user.</p>
     #[serde(rename = "User")]
@@ -1058,7 +1059,7 @@ pub struct GetDocumentPathRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDocumentPathResponse {
     /// <p>The path information.</p>
     #[serde(rename = "Path")]
@@ -1082,7 +1083,7 @@ pub struct GetDocumentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDocumentResponse {
     /// <p>The custom metadata on the document.</p>
     #[serde(rename = "CustomMetadata")]
@@ -1117,7 +1118,7 @@ pub struct GetDocumentVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDocumentVersionResponse {
     /// <p>The custom metadata on the document version.</p>
     #[serde(rename = "CustomMetadata")]
@@ -1153,7 +1154,7 @@ pub struct GetFolderPathRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFolderPathResponse {
     /// <p>The path information.</p>
     #[serde(rename = "Path")]
@@ -1177,7 +1178,7 @@ pub struct GetFolderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFolderResponse {
     /// <p>The custom metadata on the folder.</p>
     #[serde(rename = "CustomMetadata")]
@@ -1214,7 +1215,7 @@ pub struct GetResourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourcesResponse {
     /// <p>The documents in the specified collection.</p>
     #[serde(rename = "Documents")]
@@ -1232,7 +1233,7 @@ pub struct GetResourcesResponse {
 
 /// <p>Describes the metadata of a user group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupMetadata {
     /// <p>The ID of the user group.</p>
     #[serde(rename = "Id")]
@@ -1280,7 +1281,7 @@ pub struct InitiateDocumentVersionUploadRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InitiateDocumentVersionUploadResponse {
     /// <p>The document metadata.</p>
     #[serde(rename = "Metadata")]
@@ -1307,7 +1308,7 @@ pub struct NotificationOptions {
 
 /// <p>Describes the users or user groups.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Participants {
     /// <p>The list of user groups.</p>
     #[serde(rename = "Groups")]
@@ -1321,7 +1322,7 @@ pub struct Participants {
 
 /// <p>Describes the permissions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PermissionInfo {
     /// <p>The role of the user.</p>
     #[serde(rename = "Role")]
@@ -1335,7 +1336,7 @@ pub struct PermissionInfo {
 
 /// <p>Describes a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Principal {
     /// <p>The ID of the resource.</p>
     #[serde(rename = "Id")]
@@ -1382,7 +1383,7 @@ pub struct RemoveResourcePermissionRequest {
 
 /// <p>Describes the metadata of a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceMetadata {
     /// <p>The ID of the resource.</p>
     #[serde(rename = "Id")]
@@ -1416,7 +1417,7 @@ pub struct ResourceMetadata {
 
 /// <p>Describes the path information of a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourcePath {
     /// <p>The components of the resource path.</p>
     #[serde(rename = "Components")]
@@ -1426,7 +1427,7 @@ pub struct ResourcePath {
 
 /// <p>Describes the resource path.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourcePathComponent {
     /// <p>The ID of the resource path.</p>
     #[serde(rename = "Id")]
@@ -1454,7 +1455,7 @@ pub struct SharePrincipal {
 
 /// <p>Describes the share results of a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ShareResult {
     /// <p>The ID of the invited user.</p>
     #[serde(rename = "InviteePrincipalId")]
@@ -1497,7 +1498,7 @@ pub struct StorageRuleType {
 
 /// <p>Describes a subscription.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Subscription {
     /// <p>The endpoint of the subscription.</p>
     #[serde(rename = "EndPoint")]
@@ -1617,7 +1618,7 @@ pub struct UpdateUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserResponse {
     /// <p>The user information.</p>
     #[serde(rename = "User")]
@@ -1627,7 +1628,7 @@ pub struct UpdateUserResponse {
 
 /// <p>Describes the upload.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UploadMetadata {
     /// <p>The signed headers.</p>
     #[serde(rename = "SignedHeaders")]
@@ -1641,7 +1642,7 @@ pub struct UploadMetadata {
 
 /// <p>Describes a user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct User {
     /// <p>The time when the user was created.</p>
     #[serde(rename = "CreatedTimestamp")]
@@ -1707,7 +1708,7 @@ pub struct User {
 
 /// <p>Describes the metadata of the user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserMetadata {
     /// <p>The email address of the user.</p>
     #[serde(rename = "EmailAddress")]
@@ -1733,7 +1734,7 @@ pub struct UserMetadata {
 
 /// <p>Describes the storage for a user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserStorageMetadata {
     /// <p>The storage for a user.</p>
     #[serde(rename = "StorageRule")]
@@ -4904,10 +4905,7 @@ impl WorkdocsClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> WorkdocsClient {
-        WorkdocsClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -4919,10 +4917,14 @@ impl WorkdocsClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        WorkdocsClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> WorkdocsClient {
+        WorkdocsClient { client, region }
     }
 }
 

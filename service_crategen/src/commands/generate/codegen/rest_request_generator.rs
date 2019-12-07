@@ -166,16 +166,18 @@ fn generate_static_param_strings(operation: &Operation) -> Vec<String> {
     // Sometimes the key has the query param already set, like "list-type=2"
     // These need to get parsed out of the URI and added to the params map
     // with the other "queryparam" members
-    if let Some(ref key) = maybe_params {
-        match key.find('=') {
-            Some(_) => {
-                let key_val_vec: Vec<&str> = key.split('=').collect();
-                static_params.push(format!(
-                    "params.put(\"{}\", \"{}\");",
-                    key_val_vec[0], key_val_vec[1]
-                ))
+    if let Some(ref params) = maybe_params {
+        for param in params.split('&') {
+            match param.find('=') {
+                Some(_) => {
+                    let key_val_vec: Vec<&str> = param.split('=').collect();
+                    static_params.push(format!(
+                        "params.put(\"{}\", \"{}\");",
+                        key_val_vec[0], key_val_vec[1]
+                    ))
+                }
+                None => static_params.push(format!("params.put_key(\"{}\");", param)),
             }
-            None => static_params.push(format!("params.put_key(\"{}\");", key)),
         }
     };
 
@@ -192,10 +194,8 @@ fn generate_snake_case_uri(request_uri: &str) -> String {
     // convert fooBar to foo_bar
     for caps in URI_ARGS_SNAKE_REGEX.captures_iter(request_uri) {
         let to_find = caps.get(0).expect("nothing captured").as_str();
-        // this silliness is because {fooBar} gets converted to {foo_bar_} and sometimes {_foo_bar}.
-        let replacement = Inflector::to_snake_case(caps.get(0).unwrap().as_str())
-            .replace("_}", "}")
-            .replace("{_", "{");
+        // Wrap with curly braces again:
+        let replacement = format!("{{{}}}", Inflector::to_snake_case(caps.get(0).unwrap().as_str()));
         snake = snake.replace(to_find, &replacement);
     }
 
@@ -340,4 +340,21 @@ mod tests {
         );
     }
 
+    #[test]
+    fn generate_static_param_strings_parses_mixed_params() {
+        let service_json = "{\
+            \"name\": \"Search\",
+            \"http\":{
+                \"method\":\"GET\",
+                \"requestUri\":\"/2013-01-01/suggest?format=sdk&pretty\"
+            }\
+        }";
+        let operation = serde_json::from_str(service_json).expect("failed to parse operation json");
+
+        let static_params = generate_static_param_strings(&operation);
+
+        assert_eq!(static_params.len(), 2);
+        assert_eq!(static_params.get(0), Some(&"params.put(\"format\", \"sdk\");".to_owned()));
+        assert_eq!(static_params.get(1), Some(&"params.put_key(\"pretty\");".to_owned()));
+    }
 }

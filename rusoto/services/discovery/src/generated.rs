@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -26,7 +27,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Information about agents or connectors that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation, and whether the agent/connector configuration was updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AgentConfigurationStatus {
     /// <p>The agent/connector ID.</p>
     #[serde(rename = "agentId")]
@@ -44,7 +45,7 @@ pub struct AgentConfigurationStatus {
 
 /// <p>Information about agents or connectors associated with the user’s AWS account. Information includes agent or connector IDs, IP addresses, media access control (MAC) addresses, agent or connector health, hostname where the agent or connector resides, and agent version for each agent.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AgentInfo {
     /// <p>The agent or connector ID.</p>
     #[serde(rename = "agentId")]
@@ -90,7 +91,7 @@ pub struct AgentInfo {
 
 /// <p>Network details about the host where the agent/connector resides.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AgentNetworkInfo {
     /// <p>The IP address for the host where the agent/connector resides.</p>
     #[serde(rename = "ipAddress")]
@@ -113,12 +114,12 @@ pub struct AssociateConfigurationItemsToApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateConfigurationItemsToApplicationResponse {}
 
 /// <p>Error messages returned for each import task that you deleted as a response for this command.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DiscoveryBatchDeleteImportDataError {
     /// <p>The type of error that occurred for a specific import task.</p>
     #[serde(rename = "errorCode")]
@@ -142,7 +143,7 @@ pub struct BatchDeleteImportDataRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteImportDataResponse {
     /// <p>Error messages returned for each import task that you deleted as a response for this command.</p>
     #[serde(rename = "errors")]
@@ -152,7 +153,7 @@ pub struct BatchDeleteImportDataResponse {
 
 /// <p>Tags for a configuration item. Tags are metadata that help you categorize IT assets.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationTag {
     /// <p>The configuration ID for the item to tag. You can specify a list of keys and values.</p>
     #[serde(rename = "configurationId")]
@@ -178,7 +179,7 @@ pub struct ConfigurationTag {
 
 /// <p>A list of continuous export descriptions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ContinuousExportDescription {
     /// <p>The type of data collector used to gather this data (currently only offered for AGENT).</p>
     #[serde(rename = "dataSource")]
@@ -226,7 +227,7 @@ pub struct CreateApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationResponse {
     /// <p>Configuration ID of an application to be created.</p>
     #[serde(rename = "configurationId")]
@@ -245,12 +246,12 @@ pub struct CreateTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTagsResponse {}
 
 /// <p>Inventory data for installed discovery agents.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CustomerAgentInfo {
     /// <p>Number of active discovery agents.</p>
     #[serde(rename = "activeAgents")]
@@ -277,7 +278,7 @@ pub struct CustomerAgentInfo {
 
 /// <p>Inventory data for installed discovery connectors.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CustomerConnectorInfo {
     /// <p>Number of active discovery connectors.</p>
     #[serde(rename = "activeConnectors")]
@@ -310,7 +311,7 @@ pub struct DeleteApplicationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -325,7 +326,7 @@ pub struct DeleteTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTagsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -349,7 +350,7 @@ pub struct DescribeAgentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAgentsResponse {
     /// <p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an agent/Connector ID. The output includes agent/Connector IDs, IP addresses, media access control (MAC) addresses, agent/Connector health, host name where the agent/Connector resides, and the version number of each agent/Connector.</p>
     #[serde(rename = "agentsInfo")]
@@ -369,7 +370,7 @@ pub struct DescribeConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationsResponse {
     /// <p>A key in the response map. The value is an array of data.</p>
     #[serde(rename = "configurations")]
@@ -394,7 +395,7 @@ pub struct DescribeContinuousExportsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeContinuousExportsResponse {
     /// <p>A list of continuous export descriptions.</p>
     #[serde(rename = "descriptions")]
@@ -423,7 +424,7 @@ pub struct DescribeExportConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeExportConfigurationsResponse {
     /// <p><p/></p>
     #[serde(rename = "exportsInfo")]
@@ -456,7 +457,7 @@ pub struct DescribeExportTasksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeExportTasksResponse {
     /// <p>Contains one or more sets of export request details. When the status of a request is <code>SUCCEEDED</code>, the response includes a URL for an Amazon S3 bucket where you can view the data in a CSV file.</p>
     #[serde(rename = "exportsInfo")]
@@ -485,7 +486,7 @@ pub struct DescribeImportTasksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeImportTasksResponse {
     /// <p>The token to request the next page of results.</p>
     #[serde(rename = "nextToken")]
@@ -514,7 +515,7 @@ pub struct DescribeTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTagsResponse {
     /// <p>The call returns a token. Use this token to get the next set of results.</p>
     #[serde(rename = "nextToken")]
@@ -537,11 +538,11 @@ pub struct DisassociateConfigurationItemsFromApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateConfigurationItemsFromApplicationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportConfigurationsResponse {
     /// <p>A unique identifier that you can use to query the export status.</p>
     #[serde(rename = "exportId")]
@@ -565,7 +566,7 @@ pub struct ExportFilter {
 
 /// <p>Information regarding the export status of discovered data. The value is an array of objects.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportInfo {
     /// <p>A URL for an Amazon S3 bucket where you can review the exported data. The URL is displayed only if the export succeeded.</p>
     #[serde(rename = "configurationsDownloadUrl")]
@@ -615,7 +616,7 @@ pub struct Filter {
 pub struct GetDiscoverySummaryRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDiscoverySummaryResponse {
     /// <p>Details about discovered agents, including agent status and health.</p>
     #[serde(rename = "agentSummary")]
@@ -645,7 +646,7 @@ pub struct GetDiscoverySummaryResponse {
 
 /// <p>An array of information related to the import task request that includes status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportTask {
     /// <p>The total number of application records in the import file that failed to be imported.</p>
     #[serde(rename = "applicationImportFailure")]
@@ -738,7 +739,7 @@ pub struct ListConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConfigurationsResponse {
     /// <p>Returns configuration details, including the configuration ID, attribute names, and attribute values.</p>
     #[serde(rename = "configurations")]
@@ -774,7 +775,7 @@ pub struct ListServerNeighborsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServerNeighborsResponse {
     /// <p>Count of distinct servers that are one hop away from the given server.</p>
     #[serde(rename = "knownDependencyCount")]
@@ -791,7 +792,7 @@ pub struct ListServerNeighborsResponse {
 
 /// <p>Details about neighboring servers.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NeighborConnectionDetail {
     /// <p>The number of open network connections with the neighboring server.</p>
     #[serde(rename = "connectionsCount")]
@@ -828,7 +829,7 @@ pub struct OrderByElement {
 pub struct StartContinuousExportRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartContinuousExportResponse {
     /// <p>The type of data collector used to gather this data (currently only offered for AGENT).</p>
     #[serde(rename = "dataSource")]
@@ -860,7 +861,7 @@ pub struct StartDataCollectionByAgentIdsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDataCollectionByAgentIdsResponse {
     /// <p>Information about agents or the connector that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation performed, and whether the agent/connector configuration was updated.</p>
     #[serde(rename = "agentsConfigurationStatus")]
@@ -889,7 +890,7 @@ pub struct StartExportTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartExportTaskResponse {
     /// <p>A unique identifier used to query the status of an export request.</p>
     #[serde(rename = "exportId")]
@@ -912,7 +913,7 @@ pub struct StartImportTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartImportTaskResponse {
     /// <p>An array of information related to the import task request including status information, times, IDs, the Amazon S3 Object URL for the import file, and more. </p>
     #[serde(rename = "task")]
@@ -928,7 +929,7 @@ pub struct StopContinuousExportRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopContinuousExportResponse {
     /// <p>Timestamp that represents when this continuous export started collecting data.</p>
     #[serde(rename = "startTime")]
@@ -948,7 +949,7 @@ pub struct StopDataCollectionByAgentIdsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopDataCollectionByAgentIdsResponse {
     /// <p>Information about the agents or connector that were instructed to stop collecting data. Information includes the agent/connector ID, a description of the operation performed, and whether the agent/connector configuration was updated.</p>
     #[serde(rename = "agentsConfigurationStatus")]
@@ -994,7 +995,7 @@ pub struct UpdateApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApplicationResponse {}
 
 /// Errors returned by AssociateConfigurationItemsToApplication
@@ -2713,10 +2714,7 @@ impl DiscoveryClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> DiscoveryClient {
-        DiscoveryClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -2728,10 +2726,14 @@ impl DiscoveryClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        DiscoveryClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> DiscoveryClient {
+        DiscoveryClient { client, region }
     }
 }
 

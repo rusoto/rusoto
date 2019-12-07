@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -44,7 +45,7 @@ pub struct DescribeJobExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJobExecutionResponse {
     /// <p>Contains data about a job execution.</p>
     #[serde(rename = "execution")]
@@ -60,7 +61,7 @@ pub struct GetPendingJobExecutionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPendingJobExecutionsResponse {
     /// <p>A list of JobExecutionSummary objects with status IN_PROGRESS.</p>
     #[serde(rename = "inProgressJobs")]
@@ -74,7 +75,7 @@ pub struct GetPendingJobExecutionsResponse {
 
 /// <p>Contains data about a job execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobExecution {
     /// <p>The estimated number of seconds that remain before the job execution status will be changed to <code>TIMED_OUT</code>.</p>
     #[serde(rename = "approximateSecondsBeforeTimedOut")]
@@ -124,7 +125,7 @@ pub struct JobExecution {
 
 /// <p>Contains data about the state of a job execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobExecutionState {
     /// <p>The status of the job execution. Can be one of: "QUEUED", "IN_PROGRESS", "FAILED", "SUCCESS", "CANCELED", "REJECTED", or "REMOVED".</p>
     #[serde(rename = "status")]
@@ -142,7 +143,7 @@ pub struct JobExecutionState {
 
 /// <p>Contains a subset of information about a job execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobExecutionSummary {
     /// <p>A number that identifies a particular job execution on a particular device.</p>
     #[serde(rename = "executionNumber")]
@@ -186,7 +187,7 @@ pub struct StartNextPendingJobExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartNextPendingJobExecutionResponse {
     /// <p>A JobExecution object.</p>
     #[serde(rename = "execution")]
@@ -232,7 +233,7 @@ pub struct UpdateJobExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateJobExecutionResponse {
     /// <p>A JobExecutionState object.</p>
     #[serde(rename = "executionState")]
@@ -555,10 +556,7 @@ impl IotJobsDataClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> IotJobsDataClient {
-        IotJobsDataClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -570,10 +568,14 @@ impl IotJobsDataClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        IotJobsDataClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> IotJobsDataClient {
+        IotJobsDataClient { client, region }
     }
 }
 

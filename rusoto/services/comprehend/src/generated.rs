@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -26,7 +27,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>The result of calling the operation. The operation returns one object for each document that is successfully processed by the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectDominantLanguageItemResult {
     /// <p>The zero-based index of the document in the input list.</p>
     #[serde(rename = "Index")]
@@ -46,7 +47,7 @@ pub struct BatchDetectDominantLanguageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectDominantLanguageResponse {
     /// <p>A list containing one object for each document that contained an error. The results are sorted in ascending order by the <code>Index</code> field and match the order of the documents in the input list. If there are no errors in the batch, the <code>ErrorList</code> is empty.</p>
     #[serde(rename = "ErrorList")]
@@ -58,7 +59,7 @@ pub struct BatchDetectDominantLanguageResponse {
 
 /// <p>The result of calling the operation. The operation returns one object for each document that is successfully processed by the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectEntitiesItemResult {
     /// <p>One or more <a>Entity</a> objects, one for each entity detected in the document.</p>
     #[serde(rename = "Entities")]
@@ -72,7 +73,7 @@ pub struct BatchDetectEntitiesItemResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDetectEntitiesRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer than 5,000 bytes of UTF-8 encoded characters.</p>
@@ -81,7 +82,7 @@ pub struct BatchDetectEntitiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectEntitiesResponse {
     /// <p>A list containing one object for each document that contained an error. The results are sorted in ascending order by the <code>Index</code> field and match the order of the documents in the input list. If there are no errors in the batch, the <code>ErrorList</code> is empty.</p>
     #[serde(rename = "ErrorList")]
@@ -93,7 +94,7 @@ pub struct BatchDetectEntitiesResponse {
 
 /// <p>The result of calling the operation. The operation returns one object for each document that is successfully processed by the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectKeyPhrasesItemResult {
     /// <p>The zero-based index of the document in the input list.</p>
     #[serde(rename = "Index")]
@@ -107,7 +108,7 @@ pub struct BatchDetectKeyPhrasesItemResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDetectKeyPhrasesRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -116,7 +117,7 @@ pub struct BatchDetectKeyPhrasesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectKeyPhrasesResponse {
     /// <p>A list containing one object for each document that contained an error. The results are sorted in ascending order by the <code>Index</code> field and match the order of the documents in the input list. If there are no errors in the batch, the <code>ErrorList</code> is empty.</p>
     #[serde(rename = "ErrorList")]
@@ -128,7 +129,7 @@ pub struct BatchDetectKeyPhrasesResponse {
 
 /// <p>The result of calling the operation. The operation returns one object for each document that is successfully processed by the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectSentimentItemResult {
     /// <p>The zero-based index of the document in the input list.</p>
     #[serde(rename = "Index")]
@@ -146,7 +147,7 @@ pub struct BatchDetectSentimentItemResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDetectSentimentRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -155,7 +156,7 @@ pub struct BatchDetectSentimentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectSentimentResponse {
     /// <p>A list containing one object for each document that contained an error. The results are sorted in ascending order by the <code>Index</code> field and match the order of the documents in the input list. If there are no errors in the batch, the <code>ErrorList</code> is empty.</p>
     #[serde(rename = "ErrorList")]
@@ -167,7 +168,7 @@ pub struct BatchDetectSentimentResponse {
 
 /// <p>The result of calling the operation. The operation returns one object that is successfully processed by the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectSyntaxItemResult {
     /// <p>The zero-based index of the document in the input list.</p>
     #[serde(rename = "Index")]
@@ -181,7 +182,7 @@ pub struct BatchDetectSyntaxItemResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDetectSyntaxRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -190,7 +191,7 @@ pub struct BatchDetectSyntaxRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectSyntaxResponse {
     /// <p>A list containing one object for each document that contained an error. The results are sorted in ascending order by the <code>Index</code> field and match the order of the documents in the input list. If there are no errors in the batch, the <code>ErrorList</code> is empty.</p>
     #[serde(rename = "ErrorList")]
@@ -202,7 +203,7 @@ pub struct BatchDetectSyntaxResponse {
 
 /// <p>Describes an error that occurred while processing a document in a batch. The operation returns on <code>BatchItemError</code> object for each document that contained an error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchItemError {
     /// <p>The numeric error code of the error.</p>
     #[serde(rename = "ErrorCode")]
@@ -220,7 +221,7 @@ pub struct BatchItemError {
 
 /// <p>Describes the result metrics for the test data associated with an documentation classifier.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClassifierEvaluationMetrics {
     /// <p>The fraction of the labels that were correct recognized. It is computed by dividing the number of labels in the test documents that were correctly recognized by the total number of labels in the test documents.</p>
     #[serde(rename = "Accuracy")]
@@ -242,7 +243,7 @@ pub struct ClassifierEvaluationMetrics {
 
 /// <p>Provides information about a document classifier.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClassifierMetadata {
     /// <p> Describes the result metrics for the test data associated with an documentation classifier.</p>
     #[serde(rename = "EvaluationMetrics")]
@@ -277,7 +278,7 @@ pub struct CreateDocumentClassifierRequest {
     /// <p>Specifies the format and location of the input data for the job.</p>
     #[serde(rename = "InputDataConfig")]
     pub input_data_config: DocumentClassifierInputDataConfig,
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Enables the addition of output results configuration parameters for custom classifier jobs.</p>
@@ -299,7 +300,7 @@ pub struct CreateDocumentClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDocumentClassifierResponse {
     /// <p>The Amazon Resource Name (ARN) that identifies the document classifier.</p>
     #[serde(rename = "DocumentClassifierArn")]
@@ -340,7 +341,7 @@ pub struct CreateEntityRecognizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEntityRecognizerResponse {
     /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer.</p>
     #[serde(rename = "EntityRecognizerArn")]
@@ -356,7 +357,7 @@ pub struct DeleteDocumentClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDocumentClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -367,7 +368,7 @@ pub struct DeleteEntityRecognizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEntityRecognizerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -378,7 +379,7 @@ pub struct DescribeDocumentClassificationJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDocumentClassificationJobResponse {
     /// <p>An object that describes the properties associated with the document classification job.</p>
     #[serde(rename = "DocumentClassificationJobProperties")]
@@ -394,7 +395,7 @@ pub struct DescribeDocumentClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDocumentClassifierResponse {
     /// <p>An object that contains the properties associated with a document classifier.</p>
     #[serde(rename = "DocumentClassifierProperties")]
@@ -410,7 +411,7 @@ pub struct DescribeDominantLanguageDetectionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDominantLanguageDetectionJobResponse {
     /// <p>An object that contains the properties associated with a dominant language detection job.</p>
     #[serde(rename = "DominantLanguageDetectionJobProperties")]
@@ -426,7 +427,7 @@ pub struct DescribeEntitiesDetectionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEntitiesDetectionJobResponse {
     /// <p>An object that contains the properties associated with an entities detection job.</p>
     #[serde(rename = "EntitiesDetectionJobProperties")]
@@ -442,7 +443,7 @@ pub struct DescribeEntityRecognizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEntityRecognizerResponse {
     /// <p>Describes information associated with an entity recognizer.</p>
     #[serde(rename = "EntityRecognizerProperties")]
@@ -458,7 +459,7 @@ pub struct DescribeKeyPhrasesDetectionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeKeyPhrasesDetectionJobResponse {
     /// <p>An object that contains the properties associated with a key phrases detection job. </p>
     #[serde(rename = "KeyPhrasesDetectionJobProperties")]
@@ -474,7 +475,7 @@ pub struct DescribeSentimentDetectionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSentimentDetectionJobResponse {
     /// <p>An object that contains the properties associated with a sentiment detection job.</p>
     #[serde(rename = "SentimentDetectionJobProperties")]
@@ -490,7 +491,7 @@ pub struct DescribeTopicsDetectionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTopicsDetectionJobResponse {
     /// <p>The list of properties for the requested job.</p>
     #[serde(rename = "TopicsDetectionJobProperties")]
@@ -506,7 +507,7 @@ pub struct DetectDominantLanguageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectDominantLanguageResponse {
     /// <p>The languages that Amazon Comprehend detected in the input text. For each language, the response returns the RFC 5646 language code and the level of confidence that Amazon Comprehend has in the accuracy of its inference. For more information about RFC 5646, see <a href="https://tools.ietf.org/html/rfc5646">Tags for Identifying Languages</a> on the <i>IETF Tools</i> web site.</p>
     #[serde(rename = "Languages")]
@@ -516,7 +517,7 @@ pub struct DetectDominantLanguageResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetectEntitiesRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -525,7 +526,7 @@ pub struct DetectEntitiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectEntitiesResponse {
     /// <p>A collection of entities identified in the input text. For each entity, the response provides the entity text, entity type, where the entity text begins and ends, and the level of confidence that Amazon Comprehend has in the detection. For a list of entity types, see <a>how-entities</a>. </p>
     #[serde(rename = "Entities")]
@@ -535,7 +536,7 @@ pub struct DetectEntitiesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetectKeyPhrasesRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -544,7 +545,7 @@ pub struct DetectKeyPhrasesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectKeyPhrasesResponse {
     /// <p>A collection of key phrases that Amazon Comprehend identified in the input text. For each key phrase, the response provides the text of the key phrase, where the key phrase begins and ends, and the level of confidence that Amazon Comprehend has in the accuracy of the detection. </p>
     #[serde(rename = "KeyPhrases")]
@@ -554,7 +555,7 @@ pub struct DetectKeyPhrasesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetectSentimentRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -563,7 +564,7 @@ pub struct DetectSentimentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectSentimentResponse {
     /// <p>The inferred sentiment that Amazon Comprehend has the highest level of confidence in.</p>
     #[serde(rename = "Sentiment")]
@@ -577,7 +578,7 @@ pub struct DetectSentimentResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetectSyntaxRequest {
-    /// <p>The language code of the input documents. You can specify English ("en") or Spanish ("es").</p>
+    /// <p>The language code of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt").</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 string. Each string must contain fewer that 5,000 bytes of UTF encoded characters.</p>
@@ -586,7 +587,7 @@ pub struct DetectSyntaxRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectSyntaxResponse {
     /// <p>A collection of syntax tokens describing the text. For each token, the response provides the text, the token type, where the text begins and ends, and the level of confidence that Amazon Comprehend has that the token is correct. For a list of token types, see <a>how-syntax</a>.</p>
     #[serde(rename = "SyntaxTokens")]
@@ -617,7 +618,7 @@ pub struct DocumentClassificationJobFilter {
 
 /// <p>Provides information about a document classification job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentClassificationJobProperties {
     /// <p>The Amazon Resource Name (ARN) of the AWS identity and Access Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>
     #[serde(rename = "DataAccessRoleArn")]
@@ -709,7 +710,7 @@ pub struct DocumentClassifierOutputDataConfig {
 
 /// <p>Provides information about a document classifier.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentClassifierProperties {
     /// <p>Information about the document classifier, including the number of documents used for training the classifier, the number of documents used for test the classifier, and an accuracy rating.</p>
     #[serde(rename = "ClassifierMetadata")]
@@ -771,7 +772,7 @@ pub struct DocumentClassifierProperties {
 
 /// <p>Returns the code for the dominant language in the input text and the level of confidence that Amazon Comprehend has in the accuracy of the detection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DominantLanguage {
     /// <p>The RFC 5646 language code for the dominant language. For more information about RFC 5646, see <a href="https://tools.ietf.org/html/rfc5646">Tags for Identifying Languages</a> on the <i>IETF Tools</i> web site.</p>
     #[serde(rename = "LanguageCode")]
@@ -806,7 +807,7 @@ pub struct DominantLanguageDetectionJobFilter {
 
 /// <p>Provides information about a dominant language detection job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DominantLanguageDetectionJobProperties {
     /// <p>The Amazon Resource Name (ARN) that gives Amazon Comprehend read access to your input data.</p>
     #[serde(rename = "DataAccessRoleArn")]
@@ -877,7 +878,7 @@ pub struct EntitiesDetectionJobFilter {
 
 /// <p>Provides information about an entities detection job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntitiesDetectionJobProperties {
     /// <p>The Amazon Resource Name (ARN) that gives Amazon Comprehend read access to your input data.</p>
     #[serde(rename = "DataAccessRoleArn")]
@@ -935,7 +936,7 @@ pub struct EntitiesDetectionJobProperties {
 
 /// <p>Provides information about an entity. </p> <p> </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Entity {
     /// <p>A character offset in the input text that shows where the entity begins (the first character is at position 0). The offset returns the position of each UTF-8 code point in the string. A <i>code point</i> is the abstract character from a particular graphical representation. For example, a multi-byte UTF-8 character maps to a single code point.</p>
     #[serde(rename = "BeginOffset")]
@@ -983,9 +984,9 @@ pub struct EntityRecognizerEntityList {
     pub s3_uri: String,
 }
 
-/// <p> Detailed information about the accuracy of an entity recognizer. </p>
+/// <p>Detailed information about the accuracy of an entity recognizer. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntityRecognizerEvaluationMetrics {
     /// <p>A measure of how accurate the recognizer results are for the test data. It is derived from the <code>Precision</code> and <code>Recall</code> values. The <code>F1Score</code> is the harmonic average of the two scores. The highest score is 1, and the worst score is 0. </p>
     #[serde(rename = "F1Score")]
@@ -1032,20 +1033,20 @@ pub struct EntityRecognizerInputDataConfig {
     #[serde(rename = "EntityList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_list: Option<EntityRecognizerEntityList>,
-    /// <p>The entity types in the input data for an entity recognizer.</p>
+    /// <p>The entity types in the input data for an entity recognizer. A maximum of 12 entity types can be used at one time to train an entity recognizer.</p>
     #[serde(rename = "EntityTypes")]
     pub entity_types: Vec<EntityTypesListItem>,
 }
 
 /// <p>Detailed information about an entity recognizer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntityRecognizerMetadata {
     /// <p>Entity types from the metadata of an entity recognizer.</p>
     #[serde(rename = "EntityTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_types: Option<Vec<EntityRecognizerMetadataEntityTypesListItem>>,
-    /// <p> Detailed information about the accuracy of an entity recognizer.</p>
+    /// <p>Detailed information about the accuracy of an entity recognizer.</p>
     #[serde(rename = "EvaluationMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_metrics: Option<EntityRecognizerEvaluationMetrics>,
@@ -1061,8 +1062,16 @@ pub struct EntityRecognizerMetadata {
 
 /// <p>Individual item from the list of entity types in the metadata of an entity recognizer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntityRecognizerMetadataEntityTypesListItem {
+    /// <p>Detailed information about the accuracy of the entity recognizer for a specific item on the list of entity types. </p>
+    #[serde(rename = "EvaluationMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evaluation_metrics: Option<EntityTypesEvaluationMetrics>,
+    /// <p>indicates the number of times the given entity name was seen in the training data. </p>
+    #[serde(rename = "NumberOfTrainMentions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_train_mentions: Option<i64>,
     /// <p>Type of entity from the list of entity types in the metadata of an entity recognizer. </p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1071,7 +1080,7 @@ pub struct EntityRecognizerMetadataEntityTypesListItem {
 
 /// <p>Describes information about an entity recognizer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntityRecognizerProperties {
     /// <p> The Amazon Resource Name (ARN) of the AWS Identity and Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>
     #[serde(rename = "DataAccessRoleArn")]
@@ -1127,6 +1136,24 @@ pub struct EntityRecognizerProperties {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// <p>Detailed information about the accuracy of an entity recognizer for a specific entity type. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EntityTypesEvaluationMetrics {
+    /// <p>A measure of how accurate the recognizer results are for for a specific entity type in the test data. It is derived from the <code>Precision</code> and <code>Recall</code> values. The <code>F1Score</code> is the harmonic average of the two scores. The highest score is 1, and the worst score is 0. </p>
+    #[serde(rename = "F1Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub f1_score: Option<f64>,
+    /// <p>A measure of the usefulness of the recognizer results for a specific entity type in the test data. High precision means that the recognizer returned substantially more relevant results than irrelevant ones. </p>
+    #[serde(rename = "Precision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub precision: Option<f64>,
+    /// <p>A measure of how complete the recognizer results are for a specific entity type in the test data. High recall means that the recognizer returned most of the relevant results.</p>
+    #[serde(rename = "Recall")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recall: Option<f64>,
+}
+
 /// <p>Information about an individual item on a list of entity types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EntityTypesListItem {
@@ -1149,7 +1176,7 @@ pub struct InputDataConfig {
 
 /// <p>Describes a key noun phrase.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KeyPhrase {
     /// <p>A character offset in the input text that shows where the key phrase begins (the first character is at position 0). The offset returns the position of each UTF-8 code point in the string. A <i>code point</i> is the abstract character from a particular graphical representation. For example, a multi-byte UTF-8 character maps to a single code point.</p>
     #[serde(rename = "BeginOffset")]
@@ -1192,7 +1219,7 @@ pub struct KeyPhrasesDetectionJobFilter {
 
 /// <p>Provides information about a key phrases detection job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KeyPhrasesDetectionJobProperties {
     /// <p>The Amazon Resource Name (ARN) that gives Amazon Comprehend read access to your input data.</p>
     #[serde(rename = "DataAccessRoleArn")]
@@ -1261,7 +1288,7 @@ pub struct ListDocumentClassificationJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDocumentClassificationJobsResponse {
     /// <p>A list containing the properties of each job returned.</p>
     #[serde(rename = "DocumentClassificationJobPropertiesList")]
@@ -1291,7 +1318,7 @@ pub struct ListDocumentClassifiersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDocumentClassifiersResponse {
     /// <p>A list containing the properties of each job returned.</p>
     #[serde(rename = "DocumentClassifierPropertiesList")]
@@ -1320,7 +1347,7 @@ pub struct ListDominantLanguageDetectionJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDominantLanguageDetectionJobsResponse {
     /// <p>A list containing the properties of each job that is returned.</p>
     #[serde(rename = "DominantLanguageDetectionJobPropertiesList")]
@@ -1350,7 +1377,7 @@ pub struct ListEntitiesDetectionJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEntitiesDetectionJobsResponse {
     /// <p>A list containing the properties of each job that is returned.</p>
     #[serde(rename = "EntitiesDetectionJobPropertiesList")]
@@ -1379,7 +1406,7 @@ pub struct ListEntityRecognizersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEntityRecognizersResponse {
     /// <p>The list of properties of an entity recognizer.</p>
     #[serde(rename = "EntityRecognizerPropertiesList")]
@@ -1408,7 +1435,7 @@ pub struct ListKeyPhrasesDetectionJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListKeyPhrasesDetectionJobsResponse {
     /// <p>A list containing the properties of each job that is returned.</p>
     #[serde(rename = "KeyPhrasesDetectionJobPropertiesList")]
@@ -1437,7 +1464,7 @@ pub struct ListSentimentDetectionJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSentimentDetectionJobsResponse {
     /// <p>Identifies the next page of results to return.</p>
     #[serde(rename = "NextToken")]
@@ -1457,7 +1484,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The Amazon Resource Name (ARN) of the given Amazon Comprehend resource you are querying.</p>
     #[serde(rename = "ResourceArn")]
@@ -1486,7 +1513,7 @@ pub struct ListTopicsDetectionJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTopicsDetectionJobsResponse {
     /// <p>Identifies the next page of results to return.</p>
     #[serde(rename = "NextToken")]
@@ -1512,7 +1539,7 @@ pub struct OutputDataConfig {
 
 /// <p>Identifies the part of speech represented by the token and gives the confidence that Amazon Comprehend has that the part of speech was correctly identified. For more information about the parts of speech that Amazon Comprehend can identify, see <a>how-syntax</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PartOfSpeechTag {
     /// <p>The confidence that Amazon Comprehend has that the part of speech was correctly identified.</p>
     #[serde(rename = "Score")]
@@ -1547,7 +1574,7 @@ pub struct SentimentDetectionJobFilter {
 
 /// <p>Provides information about a sentiment detection job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SentimentDetectionJobProperties {
     /// <p>The Amazon Resource Name (ARN) that gives Amazon Comprehend read access to your input data.</p>
     #[serde(rename = "DataAccessRoleArn")]
@@ -1601,7 +1628,7 @@ pub struct SentimentDetectionJobProperties {
 
 /// <p>Describes the level of confidence that Amazon Comprehend has in the accuracy of its detection of sentiments.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SentimentScore {
     /// <p>The level of confidence that Amazon Comprehend has in the accuracy of its detection of the <code>MIXED</code> sentiment.</p>
     #[serde(rename = "Mixed")]
@@ -1654,7 +1681,7 @@ pub struct StartDocumentClassificationJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDocumentClassificationJobResponse {
     /// <p>The identifier generated for the job. To get the status of the job, use this identifier with the operation.</p>
     #[serde(rename = "JobId")]
@@ -1696,7 +1723,7 @@ pub struct StartDominantLanguageDetectionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDominantLanguageDetectionJobResponse {
     /// <p>The identifier generated for the job. To get the status of a job, use this identifier with the operation.</p>
     #[serde(rename = "JobId")]
@@ -1745,7 +1772,7 @@ pub struct StartEntitiesDetectionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartEntitiesDetectionJobResponse {
     /// <p>The identifier generated for the job. To get the status of job, use this identifier with the operation.</p>
     #[serde(rename = "JobId")]
@@ -1773,7 +1800,7 @@ pub struct StartKeyPhrasesDetectionJobRequest {
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Specifies where to send the output files.</p>
@@ -1790,7 +1817,7 @@ pub struct StartKeyPhrasesDetectionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartKeyPhrasesDetectionJobResponse {
     /// <p>The identifier generated for the job. To get the status of a job, use this identifier with the operation.</p>
     #[serde(rename = "JobId")]
@@ -1818,7 +1845,7 @@ pub struct StartSentimentDetectionJobRequest {
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Specifies where to send the output files. </p>
@@ -1835,7 +1862,7 @@ pub struct StartSentimentDetectionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSentimentDetectionJobResponse {
     /// <p>The identifier generated for the job. To get the status of a job, use this identifier with the operation.</p>
     #[serde(rename = "JobId")]
@@ -1881,7 +1908,7 @@ pub struct StartTopicsDetectionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTopicsDetectionJobResponse {
     /// <p>The identifier generated for the job. To get the status of the job, use this identifier with the <code>DescribeTopicDetectionJob</code> operation.</p>
     #[serde(rename = "JobId")]
@@ -1901,7 +1928,7 @@ pub struct StopDominantLanguageDetectionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopDominantLanguageDetectionJobResponse {
     /// <p>The identifier of the dominant language detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -1921,7 +1948,7 @@ pub struct StopEntitiesDetectionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopEntitiesDetectionJobResponse {
     /// <p>The identifier of the entities detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -1941,7 +1968,7 @@ pub struct StopKeyPhrasesDetectionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopKeyPhrasesDetectionJobResponse {
     /// <p>The identifier of the key phrases detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -1961,7 +1988,7 @@ pub struct StopSentimentDetectionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopSentimentDetectionJobResponse {
     /// <p>The identifier of the sentiment detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -1981,7 +2008,7 @@ pub struct StopTrainingDocumentClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopTrainingDocumentClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1992,12 +2019,12 @@ pub struct StopTrainingEntityRecognizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopTrainingEntityRecognizerResponse {}
 
 /// <p>Represents a work in the input text that was recognized and assigned a part of speech. There is one syntax token record for each word in the source text.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SyntaxToken {
     /// <p>The zero-based offset from the beginning of the source text to the first character in the word.</p>
     #[serde(rename = "BeginOffset")]
@@ -2044,7 +2071,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Provides information for filtering topic detection jobs. For more information, see .</p>
@@ -2070,7 +2097,7 @@ pub struct TopicsDetectionJobFilter {
 
 /// <p>Provides information about a topic detection job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TopicsDetectionJobProperties {
     /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Management (IAM) role that grants Amazon Comprehend read access to your job data. </p>
     #[serde(rename = "DataAccessRoleArn")]
@@ -2133,7 +2160,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p> Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for the job. For For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
@@ -2219,7 +2246,7 @@ pub enum BatchDetectEntitiesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2282,7 +2309,7 @@ pub enum BatchDetectKeyPhrasesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2349,7 +2376,7 @@ pub enum BatchDetectSentimentError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2412,7 +2439,7 @@ pub enum BatchDetectSyntaxError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2481,7 +2508,7 @@ pub enum CreateDocumentClassifierError {
     TooManyRequests(String),
     /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
     TooManyTags(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2572,7 +2599,7 @@ pub enum CreateEntityRecognizerError {
     TooManyRequests(String),
     /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
     TooManyTags(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3340,7 +3367,7 @@ pub enum DetectEntitiesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3393,7 +3420,7 @@ pub enum DetectKeyPhrasesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3448,7 +3475,7 @@ pub enum DetectSentimentError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3501,7 +3528,7 @@ pub enum DetectSyntaxError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3548,7 +3575,7 @@ impl Error for DetectSyntaxError {
 pub enum ListDocumentClassificationJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3609,7 +3636,7 @@ impl Error for ListDocumentClassificationJobsError {
 pub enum ListDocumentClassifiersError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3668,7 +3695,7 @@ impl Error for ListDocumentClassifiersError {
 pub enum ListDominantLanguageDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3729,7 +3756,7 @@ impl Error for ListDominantLanguageDetectionJobsError {
 pub enum ListEntitiesDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3788,7 +3815,7 @@ impl Error for ListEntitiesDetectionJobsError {
 pub enum ListEntityRecognizersError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3845,7 +3872,7 @@ impl Error for ListEntityRecognizersError {
 pub enum ListKeyPhrasesDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3906,7 +3933,7 @@ impl Error for ListKeyPhrasesDetectionJobsError {
 pub enum ListSentimentDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -4014,7 +4041,7 @@ impl Error for ListTagsForResourceError {
 pub enum ListTopicsDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -5223,10 +5250,7 @@ impl ComprehendClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> ComprehendClient {
-        ComprehendClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -5238,10 +5262,14 @@ impl ComprehendClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        ComprehendClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ComprehendClient {
+        ComprehendClient { client, region }
     }
 }
 

@@ -1,1 +1,0 @@
-<CompleteMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Location>https://testbucket2.s3.amazonaws.com/foo.zip</Location><Bucket>testbucket2</Bucket><Key>foo.zip</Key><ETag>&quot;525a81fcbc4181997bd96e4096fa7304-1&quot;</ETag></CompleteMultipartUploadResult>

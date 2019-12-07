@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -42,7 +43,7 @@ pub struct AssociateDeviceWithPlacementRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateDeviceWithPlacementResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -60,7 +61,7 @@ pub struct CreatePlacementRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePlacementResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -83,7 +84,7 @@ pub struct CreateProjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -97,7 +98,7 @@ pub struct DeletePlacementRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePlacementResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -108,7 +109,7 @@ pub struct DeleteProjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProjectResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -122,7 +123,7 @@ pub struct DescribePlacementRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePlacementResponse {
     /// <p>An object describing the placement.</p>
     #[serde(rename = "placement")]
@@ -137,7 +138,7 @@ pub struct DescribeProjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProjectResponse {
     /// <p>An object describing the project.</p>
     #[serde(rename = "project")]
@@ -171,7 +172,7 @@ pub struct DisassociateDeviceFromPlacementRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateDeviceFromPlacementResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -185,7 +186,7 @@ pub struct GetDevicesInPlacementRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevicesInPlacementResponse {
     /// <p>An object containing the devices (zero or more) within the placement.</p>
     #[serde(rename = "devices")]
@@ -208,7 +209,7 @@ pub struct ListPlacementsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPlacementsResponse {
     /// <p>The token used to retrieve the next set of results - will be effectively empty if there are no further results.</p>
     #[serde(rename = "nextToken")]
@@ -232,7 +233,7 @@ pub struct ListProjectsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProjectsResponse {
     /// <p>The token used to retrieve the next set of results - will be effectively empty if there are no further results.</p>
     #[serde(rename = "nextToken")]
@@ -251,7 +252,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags (metadata key/value pairs) which you have assigned to the resource.</p>
     #[serde(rename = "tags")]
@@ -261,7 +262,7 @@ pub struct ListTagsForResourceResponse {
 
 /// <p>An object describing a project's placement.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PlacementDescription {
     /// <p>The user-defined attributes associated with the placement.</p>
     #[serde(rename = "attributes")]
@@ -282,7 +283,7 @@ pub struct PlacementDescription {
 
 /// <p>An object providing summary information for a particular placement.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PlacementSummary {
     /// <p>The date when the placement was originally created, in UNIX epoch time format.</p>
     #[serde(rename = "createdDate")]
@@ -313,7 +314,7 @@ pub struct PlacementTemplate {
 
 /// <p>An object providing detailed information for a particular project associated with an AWS account and region.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProjectDescription {
     /// <p>The ARN of the project.</p>
     #[serde(rename = "arn")]
@@ -344,7 +345,7 @@ pub struct ProjectDescription {
 
 /// <p>An object providing summary information for a particular project for an associated AWS account and region.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProjectSummary {
     /// <p>The ARN of the project.</p>
     #[serde(rename = "arn")]
@@ -376,7 +377,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -390,7 +391,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -408,7 +409,7 @@ pub struct UpdatePlacementRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePlacementResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -427,7 +428,7 @@ pub struct UpdateProjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProjectResponse {}
 
 /// Errors returned by AssociateDeviceWithPlacement
@@ -1328,10 +1329,7 @@ impl Iot1ClickProjectsClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> Iot1ClickProjectsClient {
-        Iot1ClickProjectsClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -1343,10 +1341,14 @@ impl Iot1ClickProjectsClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        Iot1ClickProjectsClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> Iot1ClickProjectsClient {
+        Iot1ClickProjectsClient { client, region }
     }
 }
 

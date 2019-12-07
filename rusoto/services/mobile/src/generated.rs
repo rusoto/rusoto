@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -26,7 +27,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 /// <p> The details of the bundle. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BundleDetails {
     #[serde(rename = "availablePlatforms")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -76,7 +77,7 @@ pub struct CreateProjectRequest {
 
 /// <p> Result structure used in response to a request to create a project. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectResult {
     /// <p> Detailed information about the created AWS Mobile Hub project. </p>
     #[serde(rename = "details")]
@@ -94,7 +95,7 @@ pub struct DeleteProjectRequest {
 
 /// <p> Result structure used in response to request to delete a project. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProjectResult {
     /// <p> Resources which were deleted. </p>
     #[serde(rename = "deletedResources")]
@@ -116,7 +117,7 @@ pub struct DescribeBundleRequest {
 
 /// <p> Result structure contains the details of the bundle. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBundleResult {
     /// <p> The details of the bundle. </p>
     #[serde(rename = "details")]
@@ -138,7 +139,7 @@ pub struct DescribeProjectRequest {
 
 /// <p> Result structure used for requests of project details. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProjectResult {
     #[serde(rename = "details")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -163,7 +164,7 @@ pub struct ExportBundleRequest {
 
 /// <p> Result structure which contains link to download custom-generated SDK and tool packages used to integrate mobile web or app clients with backed AWS resources. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportBundleResult {
     /// <p> URL which contains the custom-generated SDK and tool packages used to integrate the client mobile app or web app with the AWS resources created by the AWS Mobile Hub project. </p>
     #[serde(rename = "downloadUrl")]
@@ -181,7 +182,7 @@ pub struct ExportProjectRequest {
 
 /// <p> Result structure used for requests to export project configuration details. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportProjectResult {
     /// <p> URL which can be used to download the exported project configuation file(s). </p>
     #[serde(rename = "downloadUrl")]
@@ -212,7 +213,7 @@ pub struct ListBundlesRequest {
 
 /// <p> Result structure contains a list of all available bundles with details. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBundlesResult {
     /// <p> A list of bundles. </p>
     #[serde(rename = "bundleList")]
@@ -239,7 +240,7 @@ pub struct ListProjectsRequest {
 
 /// <p> Result structure used for requests to list projects in AWS Mobile Hub. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProjectsResult {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -251,7 +252,7 @@ pub struct ListProjectsResult {
 
 /// <p> Detailed information about an AWS Mobile Hub project. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProjectDetails {
     /// <p> Website URL for this project in the AWS Mobile Hub console. </p>
     #[serde(rename = "consoleUrl")]
@@ -284,7 +285,7 @@ pub struct ProjectDetails {
 
 /// <p> Summary information about an AWS Mobile Hub project. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProjectSummary {
     /// <p> Name of the project. </p>
     #[serde(rename = "name")]
@@ -298,7 +299,7 @@ pub struct ProjectSummary {
 
 /// <p> Information about an instance of an AWS resource associated with a project. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Resource {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -336,7 +337,7 @@ pub struct UpdateProjectRequest {
 
 /// <p> Result structure used for requests to updated project configuration. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProjectResult {
     /// <p> Detailed information about the updated AWS Mobile Hub project. </p>
     #[serde(rename = "details")]
@@ -980,10 +981,7 @@ impl MobileClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> MobileClient {
-        MobileClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -995,10 +993,14 @@ impl MobileClient {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        MobileClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MobileClient {
+        MobileClient { client, region }
     }
 }
 

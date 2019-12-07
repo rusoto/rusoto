@@ -9,6 +9,7 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
 use std::error::Error;
 use std::fmt;
@@ -55,7 +56,7 @@ pub struct CreateEnvironmentEC2Request {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEnvironmentEC2Result {
     /// <p>The ID of the environment that was created.</p>
     #[serde(rename = "environmentId")]
@@ -77,7 +78,7 @@ pub struct CreateEnvironmentMembershipRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEnvironmentMembershipResult {
     /// <p>Information about the environment member that was added.</p>
     #[serde(rename = "membership")]
@@ -96,7 +97,7 @@ pub struct DeleteEnvironmentMembershipRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEnvironmentMembershipResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -107,7 +108,7 @@ pub struct DeleteEnvironmentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEnvironmentResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -135,7 +136,7 @@ pub struct DescribeEnvironmentMembershipsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEnvironmentMembershipsResult {
     /// <p>Information about the environment members for the environment.</p>
     #[serde(rename = "memberships")]
@@ -155,7 +156,7 @@ pub struct DescribeEnvironmentStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEnvironmentStatusResult {
     /// <p>Any informational message about the status of the environment.</p>
     #[serde(rename = "message")]
@@ -175,7 +176,7 @@ pub struct DescribeEnvironmentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEnvironmentsResult {
     /// <p>Information about the environments that are returned.</p>
     #[serde(rename = "environments")]
@@ -185,7 +186,7 @@ pub struct DescribeEnvironmentsResult {
 
 /// <p>Information about an AWS Cloud9 development environment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Environment {
     /// <p>The Amazon Resource Name (ARN) of the environment.</p>
     #[serde(rename = "arn")]
@@ -219,7 +220,7 @@ pub struct Environment {
 
 /// <p>Information about the current creation or deletion lifecycle state of an AWS Cloud9 development environment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentLifecycle {
     /// <p>If the environment failed to delete, the Amazon Resource Name (ARN) of the related AWS resource.</p>
     #[serde(rename = "failureResource")]
@@ -237,7 +238,7 @@ pub struct EnvironmentLifecycle {
 
 /// <p>Information about an environment member for an AWS Cloud9 development environment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentMember {
     /// <p>The ID of the environment for the environment member.</p>
     #[serde(rename = "environmentId")]
@@ -274,7 +275,7 @@ pub struct ListEnvironmentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEnvironmentsResult {
     /// <p>The list of environment identifiers.</p>
     #[serde(rename = "environmentIds")]
@@ -300,7 +301,7 @@ pub struct UpdateEnvironmentMembershipRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEnvironmentMembershipResult {
     /// <p>Information about the environment member whose settings were changed.</p>
     #[serde(rename = "membership")]
@@ -324,7 +325,7 @@ pub struct UpdateEnvironmentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEnvironmentResult {}
 
 /// Errors returned by CreateEnvironmentEC2
@@ -1181,10 +1182,7 @@ impl Cloud9Client {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> Cloud9Client {
-        Cloud9Client {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -1196,10 +1194,14 @@ impl Cloud9Client {
         P: ProvideAwsCredentials + Send + Sync + 'static,
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
-        Cloud9Client {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> Cloud9Client {
+        Cloud9Client { client, region }
     }
 }
 

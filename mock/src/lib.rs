@@ -38,8 +38,8 @@ use std::time::Duration;
 
 use async_trait::async_trait;
 use futures::FutureExt;
-use http::{HeaderMap, header::HeaderName, HttpTryFrom, StatusCode};
-use rusoto_core::credential::{AwsCredentials, ProvideAwsCredentials};
+use http::{header::HeaderName, HeaderMap, HttpTryFrom, StatusCode};
+use rusoto_core::credential::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::{ByteStream, DispatchSignedRequest, HttpDispatchError};
@@ -51,7 +51,10 @@ pub struct MockCredentialsProvider;
 
 #[async_trait]
 impl ProvideAwsCredentials for MockCredentialsProvider {
-    async fn credentials(&self) -> Result<rusoto_core::credential::AwsCredentials, rusoto_core::credential::CredentialsError> {
+    async fn credentials(
+        &self,
+    ) -> Result<rusoto_core::credential::AwsCredentials, rusoto_core::credential::CredentialsError>
+    {
         Ok(AwsCredentials::new("mock_key", "mock_secret", None, None))
     }
 }
@@ -72,14 +75,14 @@ pub struct MockRequestDispatcher {
 }
 
 enum RequestOutcome {
-  Performed(StatusCode),
-  Failed(HttpDispatchError),
+    Performed(StatusCode),
+    Failed(HttpDispatchError),
 }
 
 impl Default for RequestOutcome {
-  fn default() -> RequestOutcome {
-    RequestOutcome::Performed(StatusCode::default())
-  }
+    fn default() -> RequestOutcome {
+        RequestOutcome::Performed(StatusCode::default())
+    }
 }
 
 impl MockRequestDispatcher {
@@ -94,10 +97,10 @@ impl MockRequestDispatcher {
 
     /// Mocks the service request failing with a communications error
     pub fn with_dispatch_error(error: HttpDispatchError) -> MockRequestDispatcher {
-      MockRequestDispatcher {
-          outcome: RequestOutcome::Failed(error),
-          ..MockRequestDispatcher::default()
-      }
+        MockRequestDispatcher {
+            outcome: RequestOutcome::Failed(error),
+            ..MockRequestDispatcher::default()
+        }
     }
 
     /// Mocks the service response body what would be
@@ -129,23 +132,29 @@ impl MockRequestDispatcher {
 
     /// Mocks a single service header that would be returned from AWS
     pub fn with_header(mut self, key: &str, value: &str) -> MockRequestDispatcher {
-        self.headers.insert(key.parse::<HeaderName>().unwrap(), value.into());
+        self.headers
+            .insert(key.parse::<HeaderName>().unwrap(), value.into());
         self
     }
 }
 
 impl DispatchSignedRequest for MockRequestDispatcher {
-    fn dispatch(&self, request: SignedRequest, _timeout: Option<Duration>) -> rusoto_core::request::DispatchSignedRequestFuture {
+    fn dispatch(
+        &self,
+        request: SignedRequest,
+        _timeout: Option<Duration>,
+    ) -> rusoto_core::request::DispatchSignedRequestFuture {
         if self.request_checker.is_some() {
             self.request_checker.as_ref().unwrap()(&request);
         }
         match self.outcome {
-          RequestOutcome::Performed(ref status) => futures::future::ready(Ok(HttpResponse {
-            status: *status,
-            body: ByteStream::from(self.body.clone()),
-            headers: self.headers.clone()
-          })).boxed(),
-          RequestOutcome::Failed(ref error) => futures::future::ready(Err(error.clone())).boxed(),
+            RequestOutcome::Performed(ref status) => futures::future::ready(Ok(HttpResponse {
+                status: *status,
+                body: ByteStream::from(self.body.clone()),
+                headers: self.headers.clone(),
+            }))
+            .boxed(),
+            RequestOutcome::Failed(ref error) => futures::future::ready(Err(error.clone())).boxed(),
         }
     }
 }
