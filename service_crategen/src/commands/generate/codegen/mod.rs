@@ -82,16 +82,7 @@ pub trait GenerateProtocol {
 }
 
 pub fn generate_source(service: &Service<'_>, writer: &mut FileWriter) -> IoResult {
-    // EC2 service protocol is similar to query but not the same.  Rusoto is able to generate Rust code
-    // from the service definition through the same QueryGenerator, but botocore uses a special class.
-    // See https://github.com/boto/botocore/blob/dff99fdf2666accf6b448aef7f03fe3d66dd38fa/botocore/serialize.py#L259-L266 .
-    match service.protocol() {
-        "json" => generate(writer, service, JsonGenerator, JsonErrorTypes),
-        "query" | "ec2" => generate(writer, service, QueryGenerator, XmlErrorTypes),
-        "rest-json" => generate(writer, service, RestJsonGenerator, RestJsonErrorTypes),
-        "rest-xml" => generate(writer, service, RestXmlGenerator, XmlErrorTypes),
-        protocol => panic!("Unknown protocol {}", protocol),
-    }
+    panic!("broken build please");
 }
 
 /// Translate a botocore field name to something rust-idiomatic and
