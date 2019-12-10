@@ -32,13 +32,14 @@
 //! }
 //! ```
 #![deny(missing_docs)]
+use std::convert::TryFrom;
 use std::fs::File;
 use std::io::Read;
 use std::time::Duration;
 
 use async_trait::async_trait;
 use futures::FutureExt;
-use http::{HeaderMap, header::HeaderName, HttpTryFrom, StatusCode};
+use http::{HeaderMap, header::HeaderName, StatusCode};
 use rusoto_core::credential::{AwsCredentials, ProvideAwsCredentials};
 use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;

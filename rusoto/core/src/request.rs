@@ -16,16 +16,14 @@ use std::time::Duration;
 use crate::tls::HttpsConnector;
 use bytes::{Bytes, BytesMut};
 use futures::{FutureExt, StreamExt};
-use http::{header::HeaderName, HeaderMap, StatusCode};
-use hyper::body::Body;
-use hyper::client::connect::Connect;
-use hyper::client::Builder as HyperBuilder;
 use hyper::client::HttpConnector;
-use hyper::header::HeaderValue;
-use hyper::Error as HyperError;
-use hyper::{Client as HyperClient, Method, Request as HyperRequest, Response as HyperResponse};
+use hyper::header::{HeaderName, HeaderValue};
+use hyper::{Error as HyperError, HeaderMap, Method, StatusCode};
+use hyper::{Body, Client as HyperClient, Request as HyperRequest, Response as HyperResponse};
+use hyper::client::{connect::Connection, Builder as HyperBuilder};
+use hyper::{service::Service, Uri};
 use lazy_static::lazy_static;
-use tokio::future::FutureExt as _;
+use tokio::{io::{AsyncRead, AsyncWrite}, time::timeout};
 
 use log::{*, Level::Debug};
 use crate::signature::SignedRequest;
@@ -124,7 +122,6 @@ impl HttpResponse {
         let body = hyper_response.into_body()
             .map(|try_chunk| {
                 try_chunk
-                    .map(|c| c.into_bytes())
                     .map_err(|e| {
                     IoError::new(io::ErrorKind::Other, format!("Error obtaining chunk: {}", e))
                 })
@@ -208,17 +205,17 @@ pub struct HttpClient<C = HttpsConnector<HttpConnector>> {
 impl HttpClient {
     /// Create a tls-enabled http client.
     pub fn new() -> Result<Self, TlsError> {
-        #[cfg(feature = "native-tls")]
-        let connector = match HttpsConnector::new() {
-            Ok(connector) => connector,
-            Err(tls_error) => {
-                return Err(TlsError {
-                    message: format!("Couldn't create NativeTlsClient: {}", tls_error),
-                })
-            }
-        };
+        // #[cfg(feature = "native-tls")]
+        // let connector = match HttpsConnector::new() {
+        //     Ok(connector) => connector,
+        //     Err(tls_error) => {
+        //         return Err(TlsError {
+        //             message: format!("Couldn't create NativeTlsClient: {}", tls_error),
+        //         })
+        //     }
+        // };
 
-        #[cfg(feature = "rustls")]
+        // #[cfg(feature = "rustls")]
         let connector = HttpsConnector::new();
 
         Ok(Self::from_connector(connector))
@@ -226,17 +223,17 @@ impl HttpClient {
 
     /// Create a tls-enabled http client.
     pub fn new_with_config(config: HttpConfig) -> Result<Self, TlsError> {
-        #[cfg(feature = "native-tls")]
-        let connector = match HttpsConnector::new() {
-            Ok(connector) => connector,
-            Err(tls_error) => {
-                return Err(TlsError {
-                    message: format!("Couldn't create NativeTlsClient: {}", tls_error),
-                })
-            }
-        };
+        // #[cfg(feature = "native-tls")]
+        // let connector = match HttpsConnector::new() {
+        //     Ok(connector) => connector,
+        //     Err(tls_error) => {
+        //         return Err(TlsError {
+        //             message: format!("Couldn't create NativeTlsClient: {}", tls_error),
+        //         })
+        //     }
+        // };
 
-        #[cfg(feature = "rustls")]
+        // #[cfg(feature = "rustls")]
         let connector = HttpsConnector::new();
 
         Ok(Self::from_connector_with_config(connector, config))
@@ -245,8 +242,10 @@ impl HttpClient {
 
 impl<C> HttpClient<C>
 where
-    C: Connect,
-    C::Future: 'static
+    C: Service<Uri> + Clone + Send + Sync + 'static,
+    C::Error: Into<Box<dyn Error + Send + Sync>>,
+    C::Future: Unpin + Send,
+    C::Response: AsyncRead + AsyncWrite + Connection + Unpin + Send + 'static,
 {
     /// Allows for a custom connector to be used with the HttpClient
     pub fn from_connector(connector: C) -> Self {
@@ -306,7 +305,10 @@ async fn http_client_dispatch<C>(
     timeout: Option<Duration>
 ) -> Result<HttpResponse, HttpDispatchError>
     where
-        C: Connect + 'static
+        C: Service<Uri> + Clone + Send + Sync + 'static,
+        C::Error: Into<Box<dyn Error + Send + Sync>>,
+        C::Future: Unpin + Send,
+        C::Response: AsyncRead + AsyncWrite + Connection + Unpin + Send + 'static,
 {
     let hyper_method = match request.method().as_ref() {
         "POST" => Method::POST,
@@ -379,9 +381,9 @@ async fn http_client_dispatch<C>(
         }
     }
 
-    let mut http_request_builder = HyperRequest::builder();
-    http_request_builder.method(hyper_method);
-    http_request_builder.uri(final_uri);
+    let http_request_builder = HyperRequest::builder()
+        .method(hyper_method)
+        .uri(final_uri);
 
     let try_http_request = if let Some(p) = request.payload {
         http_request_builder.body(p.into_body())
@@ -405,7 +407,7 @@ async fn http_client_dispatch<C>(
     let try_resp = match timeout {
         None => f.await,
         Some(duration) => {
-            match f.timeout(duration).await {
+            match self::timeout(duration, f).await {
                 Err(_e) => return Err(HttpDispatchError { message: "Timeout while dispatching request".to_owned() }),
                 Ok(try_req) => try_req,
             }
@@ -421,7 +423,10 @@ async fn http_client_dispatch<C>(
 
 impl<C> DispatchSignedRequest for HttpClient<C>
 where
-    C: Connect + 'static,
+    C: Service<Uri> + Clone + Send + Sync + 'static,
+    C::Error: Into<Box<dyn Error + Send + Sync>>,
+    C::Future: Unpin + Send,
+    C::Response: AsyncRead + AsyncWrite + Connection + Unpin + Send + 'static,
 {
     fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> DispatchSignedRequestFuture {
         http_client_dispatch::<C>(self.inner.clone(), request, timeout).boxed()

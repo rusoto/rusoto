@@ -1,6 +1,6 @@
 use std::error::Error;
 use std::fmt;
-use std::io;
+// use std::io;
 
 use crate::credential::CredentialsError;
 
@@ -25,6 +25,8 @@ pub enum RusotoError<E> {
     Unknown(BufferedHttpResponse),
     /// An error occurred when attempting to run a future as blocking
     Blocking,
+    /// An error occurred creating a runtime for blocking calls
+    BlockingRuntime(String),
 }
 
 /// Result carrying a generic `RusotoError`.
@@ -64,11 +66,11 @@ impl<E> From<SignAndDispatchError> for RusotoError<E> {
     }
 }
 
-impl<E> From<io::Error> for RusotoError<E> {
-    fn from(err: io::Error) -> Self {
-        RusotoError::HttpDispatch(HttpDispatchError::from(err))
-    }
-}
+// impl<E> From<io::Error> for RusotoError<E> {
+//     fn from(err: io::Error) -> Self {
+//         RusotoError::HttpDispatch(HttpDispatchError::from(err))
+//     }
+// }
 
 impl<E: Error + 'static> fmt::Display for RusotoError<E> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -86,6 +88,7 @@ impl<E: Error + 'static> Error for RusotoError<E> {
             RusotoError::ParseError(ref cause) => cause,
             RusotoError::Unknown(ref cause) => cause.body_as_str(),
             RusotoError::Blocking => "Failed to run blocking future",
+            RusotoError::BlockingRuntime(ref cause) => cause,
         }
     }
 

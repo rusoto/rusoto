@@ -1,11 +1,11 @@
 use std::fmt;
 use std::io;
 use std::pin::Pin;
-use std::task::Context;
+use std::task::{Context, Poll};
 
 use bytes::Bytes;
-use futures::{executor::block_on, future, stream, Poll, Stream, StreamExt};
-use tokio::{future::ok, io::AsyncRead};
+use futures::{executor::block_on, future::{self, ok}, stream, Stream, StreamExt};
+use tokio::{io::AsyncRead};
 
 /// Stream of bytes.
 pub struct ByteStream {

@@ -10,7 +10,7 @@ use dirs::home_dir;
 use lazy_static::lazy_static;
 use regex::Regex;
 use serde::Deserialize;
-use tokio::net::process::Command;
+use tokio::process::Command;
 
 use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
 

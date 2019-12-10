@@ -120,13 +120,13 @@ impl<'b> Service<'b> {
         );
         dependencies.insert(
             "bytes".to_owned(),
-            cargo::Dependency::Simple("0.4".into()),
+            cargo::Dependency::Simple("0.5".into()),
         );
         dependencies.insert(
-            "futures-preview".to_owned(),
+            "futures".to_owned(),
             cargo::Dependency::Extended{
                 path: None,
-                version: Some("0.3.0-alpha.19".to_owned()),
+                version: Some("0.3.1".to_owned()),
                 optional: None,
                 default_features: None,
                 features: None,
@@ -213,7 +213,7 @@ impl<'b> Service<'b> {
 
         dev_dependencies.insert(
             "tokio".to_owned(),
-            cargo::Dependency::Simple("0.2.0-alpha.6".to_owned()),
+            cargo::Dependency::Simple("0.2.2".to_owned()),
         );
 
         if let Some(ref custom_dev_dependencies) = self.config.custom_dev_dependencies {

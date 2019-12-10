@@ -27,12 +27,12 @@ rustc_version = "0.2.1"
 
 [dependencies]
 async-trait = "0.1"
-bytes = "0.4"
-futures-preview = "0.3.0-alpha.19"
-http = "0.1"
-hyper = { version = "0.13.0-alpha.4", features = ["unstable-stream"] }
-hyper-rustls = { version = "0.19.0-alpha.3", optional = true }
-hyper-tls = { version = "0.4.0-alpha.4", optional = true }
+bytes = "0.5"
+futures = "0.3.1"
+http = "0.2"
+hyper = "0.13.0"
+hyper-rustls = { git = "https://github.com/CryZe/hyper-rustls", branch = "hyper-0.13.0", optional = true }
+hyper-tls = { version = "0.4.0", optional = true }
 lazy_static = "1.4"
 log = "0.4"
 percent-encoding = "2.1"
@@ -41,7 +41,7 @@ base64 = "0.9"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 time = "0.1"
-tokio = "0.2.0-alpha.6"
+tokio = "0.2.2"
 xml-rs = "0.8"
 flate2 = {version = "1.0", optional = true}
 
@@ -62,6 +62,7 @@ env_logger = "0.7"
 rand = "0.7"
 serde_json = "1.0.1"
 serde_test = "1.0.1"
+tokio = { version = "0.2.2", features = ["macros"] }
 
 [features]
 default = ["native-tls"]

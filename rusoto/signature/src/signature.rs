@@ -12,7 +12,7 @@
 use std::borrow::Cow;
 use std::collections::btree_map::Entry;
 use std::collections::BTreeMap;
-use std::convert::TryInto;
+use std::convert::{TryFrom, TryInto};
 use std::fmt;
 use std::str;
 use std::time::Duration;
@@ -22,7 +22,7 @@ use bytes::Bytes;
 use hex;
 use hmac::{Hmac, Mac};
 use http::header::{HeaderMap, HeaderName, HeaderValue};
-use http::{HttpTryFrom, Method, Request};
+use http::{Method, Request};
 use hyper::Body;
 use log::{debug, log_enabled, Level::Debug};
 use md5;
@@ -573,9 +573,9 @@ impl TryInto<Request<Body>> for SignedRequest {
             }
         }
 
-        let mut builder = Request::builder();
-        builder.method(method);
-        builder.uri(final_uri);
+        let builder = Request::builder()
+            .method(method)
+            .uri(final_uri);
 
         let body = if let Some(payload) = self.payload {
             match payload {

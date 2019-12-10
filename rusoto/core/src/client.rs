@@ -7,8 +7,8 @@ use crate::request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpR
 use crate::signature::SignedRequest;
 
 use async_trait::async_trait;
+use tokio::time::timeout;
 use lazy_static::lazy_static;
-use tokio::future::FutureExt as _;
 
 lazy_static! {
     static ref SHARED_CLIENT: Mutex<Weak<ClientInner<DefaultCredentialsProvider, HttpClient>>> =
@@ -160,7 +160,7 @@ async fn sign_and_dispatch<P, D>(
             )
          })?.credentials();
     let credentials = if let Some(to) = timeout {
-        match f.timeout(to).await {
+        match self::timeout(to, f).await {
             Err(_e) => {
                 let err = CredentialsError {
                     message: "Timeout getting credentials".to_owned(),

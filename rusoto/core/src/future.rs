@@ -6,6 +6,7 @@ use super::error::{RusotoError, RusotoResult};
 
 use futures::FutureExt;
 use pin_project::pin_project;
+use tokio::runtime::Builder as RuntimeBuilder;
 
 /// Future that is returned from all rusoto service APIs.
 ///
@@ -167,7 +168,11 @@ impl<T, E> RusotoFuture<T, E> {
         T: Send + 'static,
         E: Send + From<std::io::Error> + 'static,
     {
-        let mut rt = tokio::runtime::current_thread::Runtime::new().map_err(|_| RusotoError::Blocking)?;
+        let mut rt = RuntimeBuilder::new()
+            .basic_scheduler()
+            .enable_all()
+            .build()
+            .map_err(|e| RusotoError::BlockingRuntime(e.to_string()))?;
         rt.block_on(self)
     }
 }
