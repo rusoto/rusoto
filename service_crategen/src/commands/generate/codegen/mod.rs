@@ -461,17 +461,17 @@ where
     }
 
     let attributes = format!("#[derive({})]", derived.join(","));
-    let test_attributes = if derived.iter().any(|&x| x == "Deserialize")
+    let mut test_attributes = String::new();
+    if derived.iter().any(|&x| x == "Deserialize")
         && !derived.iter().any(|&x| x == "Serialize")
     {
-        "\n#[cfg_attr(any(test, feature = \"serialize_structs\"), derive(Serialize))]"
+        test_attributes.push_str(&"\n#[cfg_attr(any(test, feature = \"serialize_structs\"), derive(Serialize))]");
     } else if deserialized && !derived.iter().any(|&x| x == "Serialize") {
-        "\n#[cfg_attr(feature = \"serialize_structs\", derive(Serialize))]"
-    } else if serialized && !derived.iter().any(|&x| x == "Deserialize") {
-        "\n#[cfg_attr(feature = \"deserialize_structs\", derive(Deserialize))]"
-    } else {
-        ""
-    };
+        test_attributes.push_str(&"\n#[cfg_attr(feature = \"serialize_structs\", derive(Serialize))]");
+    }
+    if serialized && !derived.iter().any(|&x| x == "Deserialize") {
+        test_attributes.push_str(&"\n#[cfg_attr(feature = \"deserialize_structs\", derive(Deserialize))]");
+    }
 
     if shape.members.is_none() || shape.members.as_ref().unwrap().is_empty() {
         format!(
