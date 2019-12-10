@@ -284,11 +284,11 @@ pub struct CreateConnectorDefinitionVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -374,11 +374,11 @@ pub struct CreateCoreDefinitionVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -498,11 +498,11 @@ pub struct CreateDeviceDefinitionVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -592,11 +592,11 @@ pub struct CreateFunctionDefinitionVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -725,11 +725,11 @@ pub struct CreateGroupVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -814,11 +814,11 @@ pub struct CreateLoggerDefinitionVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -903,11 +903,11 @@ pub struct CreateResourceDefinitionVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -945,6 +945,10 @@ pub struct CreateSoftwareUpdateJobResponse {
     #[serde(rename = "IotJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iot_job_id: Option<String>,
+    /// <p>The software version installed on the device or devices after the update.</p>
+    #[serde(rename = "PlatformSoftwareVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform_software_version: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1026,11 +1030,11 @@ pub struct CreateSubscriptionDefinitionVersionResponse {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -1958,11 +1962,11 @@ pub struct GetGroupVersionResponse {
     #[serde(rename = "Definition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub definition: Option<GroupVersion>,
-    /// <p>The ID of the group version.</p>
+    /// <p>The ID of the group that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID for the version of the group.</p>
+    /// <p>The ID of the group version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -3013,6 +3017,17 @@ pub struct ResourceDefinitionVersion {
     pub resources: Option<Vec<Resource>>,
 }
 
+/// <p>The owner setting for downloaded machine learning resources.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ResourceDownloadOwnerSetting {
+    /// <p>The group owner of the resource. This is the name of an existing Linux OS group on the system or a GID. The group&#39;s permissions are added to the Lambda process.</p>
+    #[serde(rename = "GroupOwner")]
+    pub group_owner: String,
+    /// <p>The permissions that the group owner has to the resource. Valid values are &#39;&#39;rw&#39;&#39; (read/write) or &#39;&#39;ro&#39;&#39; (read-only).</p>
+    #[serde(rename = "GroupPermission")]
+    pub group_permission: String,
+}
+
 /// <p>Attributes that define an Amazon S3 machine learning resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3MachineLearningModelResourceData {
@@ -3020,6 +3035,9 @@ pub struct S3MachineLearningModelResourceData {
     #[serde(rename = "DestinationPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_path: Option<String>,
+    #[serde(rename = "OwnerSetting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_setting: Option<ResourceDownloadOwnerSetting>,
     /// <p>The URI of the source model in an S3 bucket. The model package must be in tar.gz or .zip format.</p>
     #[serde(rename = "S3Uri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3033,6 +3051,9 @@ pub struct SageMakerMachineLearningModelResourceData {
     #[serde(rename = "DestinationPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_path: Option<String>,
+    #[serde(rename = "OwnerSetting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_setting: Option<ResourceDownloadOwnerSetting>,
     /// <p>The ARN of the Amazon SageMaker training job that represents the source model.</p>
     #[serde(rename = "SageMakerJobArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3326,11 +3347,11 @@ pub struct VersionInformation {
     #[serde(rename = "CreationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_timestamp: Option<String>,
-    /// <p>The ID of the version.</p>
+    /// <p>The ID of the parent definition that the version is associated with.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The unique ID of the version.</p>
+    /// <p>The ID of the version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -6953,7 +6974,7 @@ pub trait GreenGrass {
         input: StopBulkDeploymentRequest,
     ) -> RusotoFuture<StopBulkDeploymentResponse, StopBulkDeploymentError>;
 
-    /// <p>Add resource tags to a Greengrass Resource. Valid resources are Group, Connector, Core, Device, Function, Logger, Subscription, and Resource Defintions, and also BulkDeploymentIds.</p>
+    /// <p>Adds tags to a Greengrass resource. Valid resources are &#39;Group&#39;, &#39;ConnectorDefinition&#39;, &#39;CoreDefinition&#39;, &#39;DeviceDefinition&#39;, &#39;FunctionDefinition&#39;, &#39;LoggerDefinition&#39;, &#39;SubscriptionDefinition&#39;, &#39;ResourceDefinition&#39;, and &#39;BulkDeployment&#39;.</p>
     fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
 
     /// <p>Remove resource tags from a Greengrass Resource.</p>
@@ -9712,7 +9733,7 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 
-    /// <p>Add resource tags to a Greengrass Resource. Valid resources are Group, Connector, Core, Device, Function, Logger, Subscription, and Resource Defintions, and also BulkDeploymentIds.</p>
+    /// <p>Adds tags to a Greengrass resource. Valid resources are &#39;Group&#39;, &#39;ConnectorDefinition&#39;, &#39;CoreDefinition&#39;, &#39;DeviceDefinition&#39;, &#39;FunctionDefinition&#39;, &#39;LoggerDefinition&#39;, &#39;SubscriptionDefinition&#39;, &#39;ResourceDefinition&#39;, and &#39;BulkDeployment&#39;.</p>
     fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 

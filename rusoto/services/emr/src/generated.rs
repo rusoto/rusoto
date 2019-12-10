@@ -36,6 +36,10 @@ pub struct AddInstanceFleetInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddInstanceFleetOutput {
+    /// <p>The Amazon Resource Name of the cluster.</p>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
     /// <p>The unique identifier of the cluster.</p>
     #[serde(rename = "ClusterId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -61,6 +65,10 @@ pub struct AddInstanceGroupsInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddInstanceGroupsOutput {
+    /// <p>The Amazon Resource Name of the cluster.</p>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
     /// <p>Instance group IDs of the newly created instance groups.</p>
     #[serde(rename = "InstanceGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -254,12 +262,14 @@ pub struct CancelStepsInfo {
 pub struct CancelStepsInput {
     /// <p>The <code>ClusterID</code> for which specified steps will be canceled. Use <a>RunJobFlow</a> and <a>ListClusters</a> to get ClusterIDs. </p>
     #[serde(rename = "ClusterId")]
+    pub cluster_id: String,
+    /// <p>The option to choose for cancelling <code>RUNNING</code> steps. By default, the value is <code>SEND_INTERRUPT</code>.</p>
+    #[serde(rename = "StepCancellationOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cluster_id: Option<String>,
+    pub step_cancellation_option: Option<String>,
     /// <p>The list of <code>StepIDs</code> to cancel. Use <a>ListSteps</a> to get steps and their states for the specified cluster.</p>
     #[serde(rename = "StepIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub step_ids: Option<Vec<String>>,
+    pub step_ids: Vec<String>,
 }
 
 /// <p> The output for the <a>CancelSteps</a> operation. </p>
@@ -282,7 +292,7 @@ pub struct CloudWatchAlarmDefinition {
     #[serde(rename = "Dimensions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dimensions: Option<Vec<MetricDimension>>,
-    /// <p>The number of periods, expressed in seconds using <code>Period</code>, during which the alarm condition must exist before the alarm triggers automatic scaling activity. The default value is <code>1</code>.</p>
+    /// <p>The number of periods, in five-minute increments, during which the alarm condition must exist before the alarm triggers automatic scaling activity. The default value is <code>1</code>.</p>
     #[serde(rename = "EvaluationPeriods")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_periods: Option<i64>,
@@ -325,6 +335,10 @@ pub struct Cluster {
     #[serde(rename = "AutoTerminate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_terminate: Option<bool>,
+    /// <p>The Amazon Resource Name of the cluster.</p>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
     /// <p>Applies only to Amazon EMR releases 4.x and later. The list of Configurations supplied to the EMR cluster.</p>
     #[serde(rename = "Configurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -369,6 +383,10 @@ pub struct Cluster {
     #[serde(rename = "NormalizedInstanceHours")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub normalized_instance_hours: Option<i64>,
+    /// <p> The Amazon Resource Name (ARN) of the Outpost where the cluster is launched. </p>
+    #[serde(rename = "OutpostArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outpost_arn: Option<String>,
     /// <p>The Amazon EMR release label, which determines the version of open-source application packages installed on the cluster. Release labels are in the form <code>emr-x.x.x</code>, where x.x.x is an Amazon EMR release version such as <code>emr-5.14.0</code>. For more information about Amazon EMR release versions and included application versions and features, see <a href="https://docs.aws.amazon.com/emr/latest/ReleaseGuide/">https://docs.aws.amazon.com/emr/latest/ReleaseGuide/</a>. The release label applies only to Amazon EMR releases version 4.0 and later. Earlier versions use <code>AmiVersion</code>.</p>
     #[serde(rename = "ReleaseLabel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -401,6 +419,10 @@ pub struct Cluster {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<ClusterStatus>,
+    /// <p>Specifies the number of steps that can be executed concurrently.</p>
+    #[serde(rename = "StepConcurrencyLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_concurrency_level: Option<i64>,
     /// <p>A list of tags associated with a cluster.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -409,7 +431,7 @@ pub struct Cluster {
     #[serde(rename = "TerminationProtected")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub termination_protected: Option<bool>,
-    /// <p> <i>This member will be deprecated.</i> </p> <p>Indicates whether the cluster is visible to all IAM users of the AWS account associated with the cluster. If this value is set to <code>true</code>, all IAM users of that AWS account can view and manage the cluster if they have the proper policy permissions set. If this value is <code>false</code>, only the IAM user that created the cluster can view and manage it. This value can be changed using the <a>SetVisibleToAllUsers</a> action.</p>
+    /// <p>Indicates whether the cluster is visible to all IAM users of the AWS account associated with the cluster. The default value, <code>true</code>, indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. If this value is <code>false</code>, only the IAM user that created the cluster can perform actions. This value can be changed on a running cluster by using the <a>SetVisibleToAllUsers</a> action. You can override the default value of <code>true</code> when you create a cluster by using the <code>VisibleToAllUsers</code> parameter of the <code>RunJobFlow</code> action.</p>
     #[serde(rename = "VisibleToAllUsers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub visible_to_all_users: Option<bool>,
@@ -451,6 +473,10 @@ pub struct ClusterStatus {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClusterSummary {
+    /// <p>The Amazon Resource Name of the cluster.</p>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
     /// <p>The unique identifier for the cluster.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -463,6 +489,10 @@ pub struct ClusterSummary {
     #[serde(rename = "NormalizedInstanceHours")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub normalized_instance_hours: Option<i64>,
+    /// <p> The Amazon Resource Name (ARN) of the Outpost where the cluster is launched. </p>
+    #[serde(rename = "OutpostArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outpost_arn: Option<String>,
     /// <p>The details about the current status of the cluster.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1035,7 +1065,7 @@ pub struct InstanceGroup {
     #[serde(rename = "AutoScalingPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_policy: Option<AutoScalingPolicyDescription>,
-    /// <p>The maximum Spot price your are willing to pay for EC2 instances.</p> <p>An optional, nullable field that applies if the <code>MarketType</code> for the instance group is specified as <code>SPOT</code>. Specify the maximum spot price in USD. If the value is NULL and <code>SPOT</code> is specified, the maximum Spot price is set equal to the On-Demand price.</p>
+    /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
     #[serde(rename = "BidPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price: Option<String>,
@@ -1108,7 +1138,7 @@ pub struct InstanceGroupConfig {
     #[serde(rename = "AutoScalingPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_policy: Option<AutoScalingPolicy>,
-    /// <p>The maximum Spot price your are willing to pay for EC2 instances.</p> <p>An optional, nullable field that applies if the <code>MarketType</code> for the instance group is specified as <code>SPOT</code>. Specify the maximum spot price in USD. If the value is NULL and <code>SPOT</code> is specified, the maximum Spot price is set equal to the On-Demand price.</p>
+    /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
     #[serde(rename = "BidPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price: Option<String>,
@@ -1143,7 +1173,7 @@ pub struct InstanceGroupConfig {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceGroupDetail {
-    /// <p>The maximum Spot price your are willing to pay for EC2 instances.</p> <p>An optional, nullable field that applies if the <code>MarketType</code> for the instance group is specified as <code>SPOT</code>. Specified in USD. If the value is NULL and <code>SPOT</code> is specified, the maximum Spot price is set equal to the On-Demand price.</p>
+    /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
     #[serde(rename = "BidPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price: Option<String>,
@@ -1449,7 +1479,7 @@ pub struct JobFlowDetail {
     #[serde(rename = "SupportedProducts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_products: Option<Vec<String>>,
-    /// <p> <i>This member will be deprecated.</i> </p> <p>Specifies whether the cluster is visible to all IAM users of the AWS account associated with the cluster. If this value is set to <code>true</code>, all IAM users of that AWS account can view and (if they have the proper policy permissions set) manage the cluster. If it is set to <code>false</code>, only the IAM user that created the cluster can view and manage it. This value can be changed using the <a>SetVisibleToAllUsers</a> action.</p>
+    /// <p>Indicates whether the cluster is visible to all IAM users of the AWS account associated with the cluster. The default value, <code>true</code>, indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. If this value is <code>false</code>, only the IAM user that created the cluster can perform actions. This value can be changed on a running cluster by using the <a>SetVisibleToAllUsers</a> action. You can override the default value of <code>true</code> when you create a cluster by using the <code>VisibleToAllUsers</code> parameter of the <code>RunJobFlow</code> action.</p>
     #[serde(rename = "VisibleToAllUsers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub visible_to_all_users: Option<bool>,
@@ -1835,7 +1865,7 @@ pub struct ListStepsInput {
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    /// <p>The filter to limit the step list based on the identifier of the steps.</p>
+    /// <p>The filter to limit the step list based on the identifier of the steps. You can specify a maximum of ten Step IDs. The character constraint applies to the overall length of the array.</p>
     #[serde(rename = "StepIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step_ids: Option<Vec<String>>,
@@ -1870,6 +1900,26 @@ pub struct MetricDimension {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ModifyClusterInput {
+    /// <p>The unique identifier of the cluster.</p>
+    #[serde(rename = "ClusterId")]
+    pub cluster_id: String,
+    /// <p>The number of steps that can be executed concurrently. You can specify a maximum of 256 steps. </p>
+    #[serde(rename = "StepConcurrencyLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_concurrency_level: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ModifyClusterOutput {
+    /// <p>The number of steps that can be executed concurrently.</p>
+    #[serde(rename = "StepConcurrencyLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_concurrency_level: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1940,6 +1990,10 @@ pub struct PutAutoScalingPolicyOutput {
     #[serde(rename = "AutoScalingPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_policy: Option<AutoScalingPolicyDescription>,
+    /// <p>The Amazon Resource Name of the cluster.</p>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
     /// <p>Specifies the ID of a cluster. The instance group to which the automatic scaling policy is applied is within this cluster.</p>
     #[serde(rename = "ClusterId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2068,6 +2122,10 @@ pub struct RunJobFlowInput {
     #[serde(rename = "ServiceRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role: Option<String>,
+    /// <p>Specifies the number of steps that can be executed concurrently. The default value is <code>1</code>. The maximum value is <code>256</code>.</p>
+    #[serde(rename = "StepConcurrencyLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_concurrency_level: Option<i64>,
     /// <p>A list of steps to run.</p>
     #[serde(rename = "Steps")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2080,7 +2138,7 @@ pub struct RunJobFlowInput {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p> <i>This member will be deprecated.</i> </p> <p>Whether the cluster is visible to all IAM users of the AWS account associated with the cluster. If this value is set to <code>true</code>, all IAM users of that AWS account can view and (if they have the proper policy permissions set) manage the cluster. If it is set to <code>false</code>, only the IAM user that created the cluster can view and manage it.</p>
+    /// <p>A value of <code>true</code> indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. This is the default. A value of <code>false</code> indicates that only the IAM user who created the cluster can perform actions.</p>
     #[serde(rename = "VisibleToAllUsers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub visible_to_all_users: Option<bool>,
@@ -2090,6 +2148,10 @@ pub struct RunJobFlowInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RunJobFlowOutput {
+    /// <p>The Amazon Resource Name of the cluster.</p>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
     /// <p>An unique identifier for the job flow.</p>
     #[serde(rename = "JobFlowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2182,13 +2244,13 @@ pub struct SetTerminationProtectionInput {
     pub termination_protected: bool,
 }
 
-/// <p> <i>This member will be deprecated.</i> </p> <p>The input to the SetVisibleToAllUsers action.</p>
+/// <p>The input to the SetVisibleToAllUsers action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetVisibleToAllUsersInput {
-    /// <p>Identifiers of the job flows to receive the new visibility setting.</p>
+    /// <p>The unique identifier of the job flow (cluster).</p>
     #[serde(rename = "JobFlowIds")]
     pub job_flow_ids: Vec<String>,
-    /// <p> <i>This member will be deprecated.</i> </p> <p>Whether the specified clusters are visible to all IAM users of the AWS account associated with the cluster. If this value is set to True, all IAM users of that AWS account can view and, if they have the proper IAM policy permissions set, manage the clusters. If it is set to False, only the IAM user that created a cluster can view and manage it.</p>
+    /// <p>A value of <code>true</code> indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. This is the default. A value of <code>false</code> indicates that only the IAM user who created the cluster can perform actions.</p>
     #[serde(rename = "VisibleToAllUsers")]
     pub visible_to_all_users: bool,
 }
@@ -3200,6 +3262,45 @@ impl Error for ListStepsError {
         }
     }
 }
+/// Errors returned by ModifyCluster
+#[derive(Debug, PartialEq)]
+pub enum ModifyClusterError {
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    InternalServerError(String),
+    /// <p>This exception occurs when there is something wrong with user input.</p>
+    InvalidRequest(String),
+}
+
+impl ModifyClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(ModifyClusterError::InternalServerError(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ModifyClusterError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ModifyClusterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyClusterError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyClusterError::InternalServerError(ref cause) => cause,
+            ModifyClusterError::InvalidRequest(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ModifyInstanceFleet
 #[derive(Debug, PartialEq)]
 pub enum ModifyInstanceFleetError {
@@ -3652,8 +3753,14 @@ pub trait Emr {
         input: ListSecurityConfigurationsInput,
     ) -> RusotoFuture<ListSecurityConfigurationsOutput, ListSecurityConfigurationsError>;
 
-    /// <p>Provides a list of steps for the cluster in reverse order unless you specify stepIds with the request.</p>
+    /// <p>Provides a list of steps for the cluster in reverse order unless you specify <code>stepIds</code> with the request of filter by <code>StepStates</code>. You can specify a maximum of ten <code>stepIDs</code>.</p>
     fn list_steps(&self, input: ListStepsInput) -> RusotoFuture<ListStepsOutput, ListStepsError>;
+
+    /// <p>Modifies the number of steps that can be executed concurrently for the cluster specified using ClusterID.</p>
+    fn modify_cluster(
+        &self,
+        input: ModifyClusterInput,
+    ) -> RusotoFuture<ModifyClusterOutput, ModifyClusterError>;
 
     /// <p><p>Modifies the target On-Demand and target Spot capacities for the instance fleet with the specified InstanceFleetID within the cluster specified using ClusterID. The call either succeeds or fails atomically.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
     fn modify_instance_fleet(
@@ -3703,7 +3810,7 @@ pub trait Emr {
         input: SetTerminationProtectionInput,
     ) -> RusotoFuture<(), SetTerminationProtectionError>;
 
-    /// <p> <i>This member will be deprecated.</i> </p> <p>Sets whether all AWS Identity and Access Management (IAM) users under your account can access the specified clusters (job flows). This action works on running clusters. You can also set the visibility of a cluster when you launch it using the <code>VisibleToAllUsers</code> parameter of <a>RunJobFlow</a>. The SetVisibleToAllUsers action can be called only by an IAM user who created the cluster or the AWS account that owns the cluster.</p>
+    /// <p>Sets the <a>Cluster$VisibleToAllUsers</a> value, which determines whether the cluster is visible to all IAM users of the AWS account associated with the cluster. Only the IAM user who created the cluster or the AWS account root user can call this action. The default value, <code>true</code>, indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. If set to <code>false</code>, only the IAM user that created the cluster can perform actions. This action works on running clusters. You can override the default <code>true</code> setting when you create a cluster by using the <code>VisibleToAllUsers</code> parameter with <code>RunJobFlow</code>.</p>
     fn set_visible_to_all_users(
         &self,
         input: SetVisibleToAllUsersInput,
@@ -4279,7 +4386,7 @@ impl Emr for EmrClient {
         })
     }
 
-    /// <p>Provides a list of steps for the cluster in reverse order unless you specify stepIds with the request.</p>
+    /// <p>Provides a list of steps for the cluster in reverse order unless you specify <code>stepIds</code> with the request of filter by <code>StepStates</code>. You can specify a maximum of ten <code>stepIDs</code>.</p>
     fn list_steps(&self, input: ListStepsInput) -> RusotoFuture<ListStepsOutput, ListStepsError> {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
@@ -4299,6 +4406,35 @@ impl Emr for EmrClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(ListStepsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Modifies the number of steps that can be executed concurrently for the cluster specified using ClusterID.</p>
+    fn modify_cluster(
+        &self,
+        input: ModifyClusterInput,
+    ) -> RusotoFuture<ModifyClusterOutput, ModifyClusterError> {
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "ElasticMapReduce.ModifyCluster");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ModifyClusterOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ModifyClusterError::from_response(response))),
                 )
             }
         })
@@ -4521,7 +4657,7 @@ impl Emr for EmrClient {
         })
     }
 
-    /// <p> <i>This member will be deprecated.</i> </p> <p>Sets whether all AWS Identity and Access Management (IAM) users under your account can access the specified clusters (job flows). This action works on running clusters. You can also set the visibility of a cluster when you launch it using the <code>VisibleToAllUsers</code> parameter of <a>RunJobFlow</a>. The SetVisibleToAllUsers action can be called only by an IAM user who created the cluster or the AWS account that owns the cluster.</p>
+    /// <p>Sets the <a>Cluster$VisibleToAllUsers</a> value, which determines whether the cluster is visible to all IAM users of the AWS account associated with the cluster. Only the IAM user who created the cluster or the AWS account root user can call this action. The default value, <code>true</code>, indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. If set to <code>false</code>, only the IAM user that created the cluster can perform actions. This action works on running clusters. You can override the default <code>true</code> setting when you create a cluster by using the <code>VisibleToAllUsers</code> parameter with <code>RunJobFlow</code>.</p>
     fn set_visible_to_all_users(
         &self,
         input: SetVisibleToAllUsersInput,

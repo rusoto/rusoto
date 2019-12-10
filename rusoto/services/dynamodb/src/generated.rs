@@ -23,6 +23,24 @@ use std::fmt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
+/// <p>Contains details of a table archival operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ArchivalSummary {
+    /// <p>The Amazon Resource Name (ARN) of the backup the table was archived to, when applicable in the archival reason. If you wish to restore this backup to the same table name, you will need to delete the original table.</p>
+    #[serde(rename = "ArchivalBackupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archival_backup_arn: Option<String>,
+    /// <p>The date and time when table archival was initiated by DynamoDB, in UNIX epoch time format.</p>
+    #[serde(rename = "ArchivalDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archival_date_time: Option<f64>,
+    /// <p><p>The reason DynamoDB archived the table. Currently, the only possible value is:</p> <ul> <li> <p> <code>INACCESSIBLE<em>ENCRYPTION</em>CREDENTIALS</code> - The table was archived due to the table&#39;s AWS KMS key being inaccessible for more than seven days. An On-Demand backup was created at the archival time.</p> </li> </ul></p>
+    #[serde(rename = "ArchivalReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archival_reason: Option<String>,
+}
+
 /// <p>Represents an attribute for describing the key schema for the table and indexes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributeDefinition {
@@ -117,7 +135,7 @@ pub struct AutoScalingPolicyDescription {
         Option<AutoScalingTargetTrackingScalingPolicyConfigurationDescription>,
 }
 
-/// <p>Represents the autoscaling policy to be modified.</p>
+/// <p>Represents the auto scaling policy to be modified.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AutoScalingPolicyUpdate {
     /// <p>The name of the scaling policy.</p>
@@ -130,15 +148,15 @@ pub struct AutoScalingPolicyUpdate {
         AutoScalingTargetTrackingScalingPolicyConfigurationUpdate,
 }
 
-/// <p>Represents the autoscaling settings for a global table or global secondary index.</p>
+/// <p>Represents the auto scaling settings for a global table or global secondary index.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoScalingSettingsDescription {
-    /// <p>Disabled autoscaling for this global table or global secondary index.</p>
+    /// <p>Disabled auto scaling for this global table or global secondary index.</p>
     #[serde(rename = "AutoScalingDisabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_disabled: Option<bool>,
-    /// <p>Role ARN used for configuring autoScaling policy.</p>
+    /// <p>Role ARN used for configuring the auto scaling policy.</p>
     #[serde(rename = "AutoScalingRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_role_arn: Option<String>,
@@ -156,14 +174,14 @@ pub struct AutoScalingSettingsDescription {
     pub scaling_policies: Option<Vec<AutoScalingPolicyDescription>>,
 }
 
-/// <p>Represents the autoscaling settings to be modified for a global table or global secondary index.</p>
+/// <p>Represents the auto scaling settings to be modified for a global table or global secondary index.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AutoScalingSettingsUpdate {
-    /// <p>Disabled autoscaling for this global table or global secondary index.</p>
+    /// <p>Disabled auto scaling for this global table or global secondary index.</p>
     #[serde(rename = "AutoScalingDisabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_disabled: Option<bool>,
-    /// <p>Role ARN used for configuring autoscaling policy.</p>
+    /// <p>Role ARN used for configuring auto scaling policy.</p>
     #[serde(rename = "AutoScalingRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_role_arn: Option<String>,
@@ -189,7 +207,7 @@ pub struct AutoScalingTargetTrackingScalingPolicyConfigurationDescription {
     #[serde(rename = "DisableScaleIn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_scale_in: Option<bool>,
-    /// <p>The amount of time, in seconds, after a scale in activity completes before another scale in activity can start. The cooldown period is used to block subsequent scale in requests until it has expired. You should scale in conservatively to protect your application's availability. However, if another alarm triggers a scale out policy during the cooldown period after a scale-in, application autoscaling scales out your scalable target immediately. </p>
+    /// <p>The amount of time, in seconds, after a scale in activity completes before another scale in activity can start. The cooldown period is used to block subsequent scale in requests until it has expired. You should scale in conservatively to protect your application's availability. However, if another alarm triggers a scale out policy during the cooldown period after a scale-in, application auto scaling scales out your scalable target immediately. </p>
     #[serde(rename = "ScaleInCooldown")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scale_in_cooldown: Option<i64>,
@@ -209,7 +227,7 @@ pub struct AutoScalingTargetTrackingScalingPolicyConfigurationUpdate {
     #[serde(rename = "DisableScaleIn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_scale_in: Option<bool>,
-    /// <p>The amount of time, in seconds, after a scale in activity completes before another scale in activity can start. The cooldown period is used to block subsequent scale in requests until it has expired. You should scale in conservatively to protect your application's availability. However, if another alarm triggers a scale out policy during the cooldown period after a scale-in, application autoscaling scales out your scalable target immediately. </p>
+    /// <p>The amount of time, in seconds, after a scale in activity completes before another scale in activity can start. The cooldown period is used to block subsequent scale in requests until it has expired. You should scale in conservatively to protect your application's availability. However, if another alarm triggers a scale out policy during the cooldown period after a scale-in, application auto scaling scales out your scalable target immediately. </p>
     #[serde(rename = "ScaleInCooldown")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scale_in_cooldown: Option<i64>,
@@ -438,7 +456,7 @@ pub struct Condition {
     pub comparison_operator: String,
 }
 
-/// <p>Represents a request to perform a check that an item exists or to check the condition of specific attributes of the item..</p>
+/// <p>Represents a request to perform a check that an item exists or to check the condition of specific attributes of the item.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ConditionCheck {
     /// <p>A condition that must be satisfied in order for a conditional update to succeed.</p>
@@ -511,6 +529,24 @@ pub struct ContinuousBackupsDescription {
     pub point_in_time_recovery_description: Option<PointInTimeRecoveryDescription>,
 }
 
+/// <p>Represents a Contributor Insights summary entry..</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ContributorInsightsSummary {
+    /// <p>Describes the current status for contributor insights for the given table and index, if applicable.</p>
+    #[serde(rename = "ContributorInsightsStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contributor_insights_status: Option<String>,
+    /// <p>Name of the index associated with the summary, if any.</p>
+    #[serde(rename = "IndexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>Name of the table associated with the summary.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_name: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateBackupInput {
     /// <p>Specified name for the backup.</p>
@@ -570,7 +606,27 @@ pub struct CreateGlobalTableOutput {
 /// <p>Represents a replica to be added.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateReplicaAction {
-    /// <p>The region of the replica to be added.</p>
+    /// <p>The Region of the replica to be added.</p>
+    #[serde(rename = "RegionName")]
+    pub region_name: String,
+}
+
+/// <p>Represents a replica to be created.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateReplicationGroupMemberAction {
+    /// <p>Replica-specific global secondary index settings.</p>
+    #[serde(rename = "GlobalSecondaryIndexes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_secondary_indexes: Option<Vec<ReplicaGlobalSecondaryIndex>>,
+    /// <p>The AWS KMS customer master key (CMK) that should be used for AWS KMS encryption in the new replica. To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. Note that you should only provide this parameter if the key is different from the default DynamoDB KMS master key alias/aws/dynamodb.</p>
+    #[serde(rename = "KMSMasterKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_master_key_id: Option<String>,
+    /// <p>Replica-specific provisioned throughput. If not specified, uses the source table's provisioned throughput settings.</p>
+    #[serde(rename = "ProvisionedThroughputOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput_override: Option<ProvisionedThroughputOverride>,
+    /// <p>The Region where the new replica will be created.</p>
     #[serde(rename = "RegionName")]
     pub region_name: String,
 }
@@ -581,7 +637,7 @@ pub struct CreateTableInput {
     /// <p>An array of attributes that describe the key schema for the table and indexes.</p>
     #[serde(rename = "AttributeDefinitions")]
     pub attribute_definitions: Vec<AttributeDefinition>,
-    /// <p><p>Controls how you are charged for read and write throughput and how you manage capacity. This setting can be changed later.</p> <ul> <li> <p> <code>PROVISIONED</code> - Sets the billing mode to <code>PROVISIONED</code>. We recommend using <code>PROVISIONED</code> for predictable workloads.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - Sets the billing mode to <code>PAY<em>PER</em>REQUEST</code>. We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. </p> </li> </ul></p>
+    /// <p><p>Controls how you are charged for read and write throughput and how you manage capacity. This setting can be changed later.</p> <ul> <li> <p> <code>PROVISIONED</code> - We recommend using <code>PROVISIONED</code> for predictable workloads. <code>PROVISIONED</code> sets the billing mode to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.ProvisionedThroughput.Manual">Provisioned Mode</a>.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. <code>PAY<em>PER</em>REQUEST</code> sets the billing mode to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.OnDemand">On-Demand Mode</a>. </p> </li> </ul></p>
     #[serde(rename = "BillingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_mode: Option<String>,
@@ -741,7 +797,15 @@ pub struct DeleteItemOutput {
 /// <p>Represents a replica to be removed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteReplicaAction {
-    /// <p>The region of the replica to be removed.</p>
+    /// <p>The Region of the replica to be removed.</p>
+    #[serde(rename = "RegionName")]
+    pub region_name: String,
+}
+
+/// <p>Represents a replica to be deleted.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteReplicationGroupMemberAction {
+    /// <p>The Region where the replica exists.</p>
     #[serde(rename = "RegionName")]
     pub region_name: String,
 }
@@ -802,6 +866,46 @@ pub struct DescribeContinuousBackupsOutput {
     #[serde(rename = "ContinuousBackupsDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub continuous_backups_description: Option<ContinuousBackupsDescription>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeContributorInsightsInput {
+    /// <p>The name of the global secondary index to describe, if applicable.</p>
+    #[serde(rename = "IndexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>The name of the table to describe.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeContributorInsightsOutput {
+    /// <p>List of names of the associated Alpine rules.</p>
+    #[serde(rename = "ContributorInsightsRuleList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contributor_insights_rule_list: Option<Vec<String>>,
+    /// <p>Current Status contributor insights.</p>
+    #[serde(rename = "ContributorInsightsStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contributor_insights_status: Option<String>,
+    /// <p><p>Returns information about the last failure that encountered.</p> <p>The most common exceptions for a FAILED status are:</p> <ul> <li> <p>LimitExceededException - Per-account Amazon CloudWatch Contributor Insights rule limit reached. Please disable Contributor Insights for other tables/indexes OR disable Contributor Insights rules before retrying.</p> </li> <li> <p>AccessDeniedException - Amazon CloudWatch Contributor Insights rules cannot be modified due to insufficient permissions.</p> </li> <li> <p>AccessDeniedException - Failed to create service-linked role for Contributor Insights due to insufficient permissions.</p> </li> <li> <p>InternalServerError - Failed to create Amazon CloudWatch Contributor Insights rules. Please retry request.</p> </li> </ul></p>
+    #[serde(rename = "FailureException")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_exception: Option<FailureException>,
+    /// <p>The name of the global secondary index being described.</p>
+    #[serde(rename = "IndexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>Timestamp of the last time the status was changed.</p>
+    #[serde(rename = "LastUpdateDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_date_time: Option<f64>,
+    /// <p>The name of the table being described.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -896,6 +1000,22 @@ pub struct DescribeTableOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeTableReplicaAutoScalingInput {
+    /// <p>The name of the table.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeTableReplicaAutoScalingOutput {
+    /// <p>Represents the auto scaling properties of the table.</p>
+    #[serde(rename = "TableAutoScalingDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_auto_scaling_description: Option<TableAutoScalingDescription>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTimeToLiveInput {
     /// <p>The name of the table to be described.</p>
     #[serde(rename = "TableName")]
@@ -923,7 +1043,7 @@ pub struct Endpoint {
     pub cache_period_in_minutes: i64,
 }
 
-/// <p>Represents a condition to be compared with an attribute value. This condition can be used with <code>DeleteItem</code>, <code>PutItem</code> or <code>UpdateItem</code> operations; if the comparison evaluates to true, the operation succeeds; if not, the operation fails. You can use <code>ExpectedAttributeValue</code> in one of two different ways:</p> <ul> <li> <p>Use <code>AttributeValueList</code> to specify one or more values to compare against an attribute. Use <code>ComparisonOperator</code> to specify how you want to perform the comparison. If the comparison evaluates to true, then the conditional operation succeeds.</p> </li> <li> <p>Use <code>Value</code> to specify a value that DynamoDB will compare against an attribute. If the values match, then <code>ExpectedAttributeValue</code> evaluates to true and the conditional operation succeeds. Optionally, you can also set <code>Exists</code> to false, indicating that you <i>do not</i> expect to find the attribute value in the table. In this case, the conditional operation succeeds only if the comparison evaluates to false.</p> </li> </ul> <p> <code>Value</code> and <code>Exists</code> are incompatible with <code>AttributeValueList</code> and <code>ComparisonOperator</code>. Note that if you use both sets of parameters at once, DynamoDB will return a <code>ValidationException</code> exception.</p>
+/// <p>Represents a condition to be compared with an attribute value. This condition can be used with <code>DeleteItem</code>, <code>PutItem</code>, or <code>UpdateItem</code> operations; if the comparison evaluates to true, the operation succeeds; if not, the operation fails. You can use <code>ExpectedAttributeValue</code> in one of two different ways:</p> <ul> <li> <p>Use <code>AttributeValueList</code> to specify one or more values to compare against an attribute. Use <code>ComparisonOperator</code> to specify how you want to perform the comparison. If the comparison evaluates to true, then the conditional operation succeeds.</p> </li> <li> <p>Use <code>Value</code> to specify a value that DynamoDB will compare against an attribute. If the values match, then <code>ExpectedAttributeValue</code> evaluates to true and the conditional operation succeeds. Optionally, you can also set <code>Exists</code> to false, indicating that you <i>do not</i> expect to find the attribute value in the table. In this case, the conditional operation succeeds only if the comparison evaluates to false.</p> </li> </ul> <p> <code>Value</code> and <code>Exists</code> are incompatible with <code>AttributeValueList</code> and <code>ComparisonOperator</code>. Note that if you use both sets of parameters at once, DynamoDB will return a <code>ValidationException</code> exception.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ExpectedAttributeValue {
     /// <p>One or more values to evaluate against the supplied attribute. The number of values in the list depends on the <code>ComparisonOperator</code> being used.</p> <p>For type Number, value comparisons are numeric.</p> <p>String value comparisons for greater than, equals, or less than are based on ASCII character code values. For example, <code>a</code> is greater than <code>A</code>, and <code>a</code> is greater than <code>B</code>. For a list of code values, see <a href="http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters">http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters</a>.</p> <p>For Binary, DynamoDB treats each byte of the binary data as unsigned when it compares binary values.</p> <p>For information on specifying data types in JSON, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DataFormat.html">JSON Data Format</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
@@ -942,6 +1062,20 @@ pub struct ExpectedAttributeValue {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<AttributeValue>,
+}
+
+/// <p>Represents a failure a contributor insights operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FailureException {
+    /// <p>Description of the failure.</p>
+    #[serde(rename = "ExceptionDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exception_description: Option<String>,
+    /// <p>Exception name.</p>
+    #[serde(rename = "ExceptionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exception_name: Option<String>,
 }
 
 /// <p>Specifies an item and related attribute values to retrieve in a <code>TransactGetItem</code> object.</p>
@@ -1013,7 +1147,7 @@ pub struct GlobalSecondaryIndex {
     /// <p>The name of the global secondary index. The name must be unique among all other indexes on this table.</p>
     #[serde(rename = "IndexName")]
     pub index_name: String,
-    /// <p><p>The complete key schema for a global secondary index, which consists of one or more pairs of attribute names and key types:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39; usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
+    /// <p><p>The complete key schema for a global secondary index, which consists of one or more pairs of attribute names and key types:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39;s usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
     #[serde(rename = "KeySchema")]
     pub key_schema: Vec<KeySchemaElement>,
     /// <p>Represents attributes that are copied (projected) from the table into the global secondary index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. </p>
@@ -1025,11 +1159,23 @@ pub struct GlobalSecondaryIndex {
     pub provisioned_throughput: Option<ProvisionedThroughput>,
 }
 
+/// <p>Represents the auto scaling settings of a global secondary index for a global table that will be modified.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GlobalSecondaryIndexAutoScalingUpdate {
+    /// <p>The name of the global secondary index.</p>
+    #[serde(rename = "IndexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    #[serde(rename = "ProvisionedWriteCapacityAutoScalingUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_write_capacity_auto_scaling_update: Option<AutoScalingSettingsUpdate>,
+}
+
 /// <p>Represents the properties of a global secondary index.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GlobalSecondaryIndexDescription {
-    /// <p><p>Indicates whether the index is currently backfilling. <i>Backfilling</i> is the process of reading items from the table and determining whether they can be added to the index. (Not all items will qualify: For example, a partition key cannot have any duplicate values.) If an item can be added to the index, DynamoDB will do so. After all items have been processed, the backfilling operation is complete and <code>Backfilling</code> is false.</p> <note> <p>For indexes that were created during a <code>CreateTable</code> operation, the <code>Backfilling</code> attribute does not appear in the <code>DescribeTable</code> output.</p> </note></p>
+    /// <p><p>Indicates whether the index is currently backfilling. <i>Backfilling</i> is the process of reading items from the table and determining whether they can be added to the index. (Not all items will qualify: For example, a partition key cannot have any duplicate values.) If an item can be added to the index, DynamoDB will do so. After all items have been processed, the backfilling operation is complete and <code>Backfilling</code> is false.</p> <p>You can delete an index that is being created during the <code>Backfilling</code> phase when <code>IndexStatus</code> is set to CREATING and <code>Backfilling</code> is true. You can&#39;t delete the index that is being created when <code>IndexStatus</code> is set to CREATING and <code>Backfilling</code> is false. </p> <note> <p>For indexes that were created during a <code>CreateTable</code> operation, the <code>Backfilling</code> attribute does not appear in the <code>DescribeTable</code> output.</p> </note></p>
     #[serde(rename = "Backfilling")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backfilling: Option<bool>,
@@ -1053,7 +1199,7 @@ pub struct GlobalSecondaryIndexDescription {
     #[serde(rename = "ItemCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_count: Option<i64>,
-    /// <p><p>The complete key schema for a global secondary index, which consists of one or more pairs of attribute names and key types:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39; usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
+    /// <p><p>The complete key schema for a global secondary index, which consists of one or more pairs of attribute names and key types:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39;s usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
     #[serde(rename = "KeySchema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_schema: Option<Vec<KeySchemaElement>>,
@@ -1075,7 +1221,7 @@ pub struct GlobalSecondaryIndexInfo {
     #[serde(rename = "IndexName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index_name: Option<String>,
-    /// <p><p>The complete key schema for a global secondary index, which consists of one or more pairs of attribute names and key types:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39; usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
+    /// <p><p>The complete key schema for a global secondary index, which consists of one or more pairs of attribute names and key types:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39;s usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
     #[serde(rename = "KeySchema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_schema: Option<Vec<KeySchemaElement>>,
@@ -1114,7 +1260,7 @@ pub struct GlobalTable {
     #[serde(rename = "GlobalTableName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_table_name: Option<String>,
-    /// <p>The regions where the global table has replicas.</p>
+    /// <p>The Regions where the global table has replicas.</p>
     #[serde(rename = "ReplicationGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_group: Option<Vec<Replica>>,
@@ -1140,7 +1286,7 @@ pub struct GlobalTableDescription {
     #[serde(rename = "GlobalTableStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_table_status: Option<String>,
-    /// <p>The regions where the global table has replicas.</p>
+    /// <p>The Regions where the global table has replicas.</p>
     #[serde(rename = "ReplicationGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_group: Option<Vec<ReplicaDescription>>,
@@ -1152,7 +1298,7 @@ pub struct GlobalTableGlobalSecondaryIndexSettingsUpdate {
     /// <p>The name of the global secondary index. The name must be unique among all other indexes on this table.</p>
     #[serde(rename = "IndexName")]
     pub index_name: String,
-    /// <p>AutoScaling settings for managing a global secondary index's write capacity units.</p>
+    /// <p>Auto scaling settings for managing a global secondary index's write capacity units.</p>
     #[serde(rename = "ProvisionedWriteCapacityAutoScalingSettingsUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_write_capacity_auto_scaling_settings_update: Option<AutoScalingSettingsUpdate>,
@@ -1192,7 +1338,7 @@ pub struct KeySchemaElement {
     /// <p>The name of a key attribute.</p>
     #[serde(rename = "AttributeName")]
     pub attribute_name: String,
-    /// <p><p>The role that this key attribute will assume:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39; usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
+    /// <p><p>The role that this key attribute will assume:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39;s usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
     #[serde(rename = "KeyType")]
     pub key_type: String,
 }
@@ -1260,6 +1406,35 @@ pub struct ListBackupsOutput {
     #[serde(rename = "LastEvaluatedBackupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_evaluated_backup_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListContributorInsightsInput {
+    /// <p>Maximum number of results to return per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to for the desired page, if there is one.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The name of the table.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListContributorInsightsOutput {
+    /// <p>A list of ContributorInsightsSummary.</p>
+    #[serde(rename = "ContributorInsightsSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contributor_insights_summaries: Option<Vec<ContributorInsightsSummary>>,
+    /// <p>A token to go to the next page if there is one.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1348,7 +1523,7 @@ pub struct LocalSecondaryIndex {
     /// <p>The name of the local secondary index. The name must be unique among all other indexes on this table.</p>
     #[serde(rename = "IndexName")]
     pub index_name: String,
-    /// <p><p>The complete key schema for the local secondary index, consisting of one or more pairs of attribute names and key types:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39; usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
+    /// <p><p>The complete key schema for the local secondary index, consisting of one or more pairs of attribute names and key types:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39;s usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
     #[serde(rename = "KeySchema")]
     pub key_schema: Vec<KeySchemaElement>,
     /// <p>Represents attributes that are copied (projected) from the table into the local secondary index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. </p>
@@ -1376,7 +1551,7 @@ pub struct LocalSecondaryIndexDescription {
     #[serde(rename = "ItemCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_count: Option<i64>,
-    /// <p><p>The complete key schema for the local secondary index, consisting of one or more pairs of attribute names and key types:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39; usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
+    /// <p><p>The complete key schema for the local secondary index, consisting of one or more pairs of attribute names and key types:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39;s usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
     #[serde(rename = "KeySchema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_schema: Option<Vec<KeySchemaElement>>,
@@ -1394,7 +1569,7 @@ pub struct LocalSecondaryIndexInfo {
     #[serde(rename = "IndexName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index_name: Option<String>,
-    /// <p><p>The complete key schema for a local secondary index, which consists of one or more pairs of attribute names and key types:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39; usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
+    /// <p><p>The complete key schema for a local secondary index, which consists of one or more pairs of attribute names and key types:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39;s usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
     #[serde(rename = "KeySchema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_schema: Option<Vec<KeySchemaElement>>,
@@ -1408,7 +1583,7 @@ pub struct LocalSecondaryIndexInfo {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PointInTimeRecoveryDescription {
-    /// <p>Specifies the earliest point in time you can restore your table to. It You can restore your table to any point in time during the last 35 days. </p>
+    /// <p>Specifies the earliest point in time you can restore your table to. You can restore your table to any point in time during the last 35 days. </p>
     #[serde(rename = "EarliestRestorableDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub earliest_restorable_date_time: Option<f64>,
@@ -1437,7 +1612,7 @@ pub struct Projection {
     #[serde(rename = "NonKeyAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub non_key_attributes: Option<Vec<String>>,
-    /// <p><p>The set of attributes that are projected into the index:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - Only the specified table attributes are projected into the index. The list of projected attributes are in <code>NonKeyAttributes</code>.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul></p>
+    /// <p><p>The set of attributes that are projected into the index:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - Only the specified table attributes are projected into the index. The list of projected attributes is in <code>NonKeyAttributes</code>.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul></p>
     #[serde(rename = "ProjectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub projection_type: Option<String>,
@@ -1478,6 +1653,15 @@ pub struct ProvisionedThroughputDescription {
     #[serde(rename = "WriteCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub write_capacity_units: Option<i64>,
+}
+
+/// <p>Replica-specific provisioned throughput settings. If not specified, uses the source table's provisioned throughput settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProvisionedThroughputOverride {
+    /// <p>Replica-specific read capacity units. If not specified, uses the source table's read capacity settings.</p>
+    #[serde(rename = "ReadCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_capacity_units: Option<i64>,
 }
 
 /// <p>Represents a request to perform a <code>PutItem</code> operation.</p>
@@ -1570,7 +1754,7 @@ pub struct PutItemOutput {
 /// <p>Represents a request to perform a <code>PutItem</code> operation on an item.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PutRequest {
-    /// <p>A map of attribute name to attribute values, representing the primary key of an item to be processed by <code>PutItem</code>. All of the table's primary key attributes must be specified, and their data types must match those of the table's key schema. If any attributes are present in the item which are part of an index key schema for the table, their types must match the index key schema.</p>
+    /// <p>A map of attribute name to attribute values, representing the primary key of an item to be processed by <code>PutItem</code>. All of the table's primary key attributes must be specified, and their data types must match those of the table's key schema. If any attributes are present in the item that are part of an index key schema for the table, their types must match the index key schema.</p>
     #[serde(rename = "Item")]
     pub item: ::std::collections::HashMap<String, AttributeValue>,
 }
@@ -1675,20 +1859,144 @@ pub struct QueryOutput {
 /// <p>Represents the properties of a replica.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Replica {
-    /// <p>The region where the replica needs to be created.</p>
+    /// <p>The Region where the replica needs to be created.</p>
     #[serde(rename = "RegionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region_name: Option<String>,
+}
+
+/// <p>Represents the auto scaling settings of the replica.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ReplicaAutoScalingDescription {
+    /// <p>Replica-specific global secondary index auto scaling settings.</p>
+    #[serde(rename = "GlobalSecondaryIndexes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_secondary_indexes: Option<Vec<ReplicaGlobalSecondaryIndexAutoScalingDescription>>,
+    /// <p>The Region where the replica exists.</p>
+    #[serde(rename = "RegionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region_name: Option<String>,
+    #[serde(rename = "ReplicaProvisionedReadCapacityAutoScalingSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_provisioned_read_capacity_auto_scaling_settings:
+        Option<AutoScalingSettingsDescription>,
+    #[serde(rename = "ReplicaProvisionedWriteCapacityAutoScalingSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_provisioned_write_capacity_auto_scaling_settings:
+        Option<AutoScalingSettingsDescription>,
+    /// <p><p>The current state of the replica:</p> <ul> <li> <p> <code>CREATING</code> - The replica is being created.</p> </li> <li> <p> <code>UPDATING</code> - The replica is being updated.</p> </li> <li> <p> <code>DELETING</code> - The replica is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The replica is ready for use.</p> </li> </ul></p>
+    #[serde(rename = "ReplicaStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_status: Option<String>,
+}
+
+/// <p>Represents the auto scaling settings of a replica that will be modified.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ReplicaAutoScalingUpdate {
+    /// <p>The Region where the replica exists.</p>
+    #[serde(rename = "RegionName")]
+    pub region_name: String,
+    /// <p>Represents the auto scaling settings of global secondary indexes that will be modified.</p>
+    #[serde(rename = "ReplicaGlobalSecondaryIndexUpdates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_global_secondary_index_updates:
+        Option<Vec<ReplicaGlobalSecondaryIndexAutoScalingUpdate>>,
+    #[serde(rename = "ReplicaProvisionedReadCapacityAutoScalingUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_provisioned_read_capacity_auto_scaling_update: Option<AutoScalingSettingsUpdate>,
 }
 
 /// <p>Contains the details of the replica.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicaDescription {
-    /// <p>The name of the region.</p>
+    /// <p>Replica-specific global secondary index settings.</p>
+    #[serde(rename = "GlobalSecondaryIndexes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_secondary_indexes: Option<Vec<ReplicaGlobalSecondaryIndexDescription>>,
+    /// <p>The AWS KMS customer master key (CMK) of the replica that will be used for AWS KMS encryption.</p>
+    #[serde(rename = "KMSMasterKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_master_key_id: Option<String>,
+    /// <p>Replica-specific provisioned throughput. If not described, uses the source table's provisioned throughput settings.</p>
+    #[serde(rename = "ProvisionedThroughputOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput_override: Option<ProvisionedThroughputOverride>,
+    /// <p>The name of the Region.</p>
     #[serde(rename = "RegionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region_name: Option<String>,
+    /// <p><p>The current state of the replica:</p> <ul> <li> <p> <code>CREATING</code> - The replica is being created.</p> </li> <li> <p> <code>UPDATING</code> - The replica is being updated.</p> </li> <li> <p> <code>DELETING</code> - The replica is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The replica is ready for use.</p> </li> </ul></p>
+    #[serde(rename = "ReplicaStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_status: Option<String>,
+    /// <p>Detailed information about the replica status.</p>
+    #[serde(rename = "ReplicaStatusDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_status_description: Option<String>,
+    /// <p>Specifies the progress of a Create, Update, or Delete action on the replica as a percentage.</p>
+    #[serde(rename = "ReplicaStatusPercentProgress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_status_percent_progress: Option<String>,
+}
+
+/// <p>Represents the properties of a replica global secondary index.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ReplicaGlobalSecondaryIndex {
+    /// <p>The name of the global secondary index.</p>
+    #[serde(rename = "IndexName")]
+    pub index_name: String,
+    /// <p>Replica table GSI-specific provisioned throughput. If not specified, uses the source table GSI's read capacity settings.</p>
+    #[serde(rename = "ProvisionedThroughputOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput_override: Option<ProvisionedThroughputOverride>,
+}
+
+/// <p>Represents the auto scaling configuration for a replica global secondary index.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ReplicaGlobalSecondaryIndexAutoScalingDescription {
+    /// <p>The name of the global secondary index.</p>
+    #[serde(rename = "IndexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p><p>The current state of the replica global secondary index:</p> <ul> <li> <p> <code>CREATING</code> - The index is being created.</p> </li> <li> <p> <code>UPDATING</code> - The index is being updated.</p> </li> <li> <p> <code>DELETING</code> - The index is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The index is ready for use.</p> </li> </ul></p>
+    #[serde(rename = "IndexStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_status: Option<String>,
+    #[serde(rename = "ProvisionedReadCapacityAutoScalingSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_read_capacity_auto_scaling_settings: Option<AutoScalingSettingsDescription>,
+    #[serde(rename = "ProvisionedWriteCapacityAutoScalingSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_write_capacity_auto_scaling_settings: Option<AutoScalingSettingsDescription>,
+}
+
+/// <p>Represents the auto scaling settings of a global secondary index for a replica that will be modified.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ReplicaGlobalSecondaryIndexAutoScalingUpdate {
+    /// <p>The name of the global secondary index.</p>
+    #[serde(rename = "IndexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    #[serde(rename = "ProvisionedReadCapacityAutoScalingUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_read_capacity_auto_scaling_update: Option<AutoScalingSettingsUpdate>,
+}
+
+/// <p>Represents the properties of a replica global secondary index.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ReplicaGlobalSecondaryIndexDescription {
+    /// <p>The name of the global secondary index.</p>
+    #[serde(rename = "IndexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>If not described, uses the source table GSI's read capacity settings.</p>
+    #[serde(rename = "ProvisionedThroughputOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput_override: Option<ProvisionedThroughputOverride>,
 }
 
 /// <p>Represents the properties of a global secondary index.</p>
@@ -1702,7 +2010,7 @@ pub struct ReplicaGlobalSecondaryIndexSettingsDescription {
     #[serde(rename = "IndexStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index_status: Option<String>,
-    /// <p>Autoscaling settings for a global secondary index replica's read capacity units.</p>
+    /// <p>Auto scaling settings for a global secondary index replica's read capacity units.</p>
     #[serde(rename = "ProvisionedReadCapacityAutoScalingSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_read_capacity_auto_scaling_settings: Option<AutoScalingSettingsDescription>,
@@ -1710,7 +2018,7 @@ pub struct ReplicaGlobalSecondaryIndexSettingsDescription {
     #[serde(rename = "ProvisionedReadCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_read_capacity_units: Option<i64>,
-    /// <p>AutoScaling settings for a global secondary index replica's write capacity units.</p>
+    /// <p>Auto scaling settings for a global secondary index replica's write capacity units.</p>
     #[serde(rename = "ProvisionedWriteCapacityAutoScalingSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_write_capacity_auto_scaling_settings: Option<AutoScalingSettingsDescription>,
@@ -1726,7 +2034,7 @@ pub struct ReplicaGlobalSecondaryIndexSettingsUpdate {
     /// <p>The name of the global secondary index. The name must be unique among all other indexes on this table.</p>
     #[serde(rename = "IndexName")]
     pub index_name: String,
-    /// <p>Autoscaling settings for managing a global secondary index replica's read capacity units.</p>
+    /// <p>Auto scaling settings for managing a global secondary index replica's read capacity units.</p>
     #[serde(rename = "ProvisionedReadCapacityAutoScalingSettingsUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_read_capacity_auto_scaling_settings_update: Option<AutoScalingSettingsUpdate>,
@@ -1740,7 +2048,7 @@ pub struct ReplicaGlobalSecondaryIndexSettingsUpdate {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicaSettingsDescription {
-    /// <p>The region name of the replica.</p>
+    /// <p>The Region name of the replica.</p>
     #[serde(rename = "RegionName")]
     pub region_name: String,
     /// <p>The read/write capacity mode of the replica.</p>
@@ -1752,7 +2060,7 @@ pub struct ReplicaSettingsDescription {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_global_secondary_index_settings:
         Option<Vec<ReplicaGlobalSecondaryIndexSettingsDescription>>,
-    /// <p>Autoscaling settings for a global table replica's read capacity units.</p>
+    /// <p>Auto scaling settings for a global table replica's read capacity units.</p>
     #[serde(rename = "ReplicaProvisionedReadCapacityAutoScalingSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_provisioned_read_capacity_auto_scaling_settings:
@@ -1761,7 +2069,7 @@ pub struct ReplicaSettingsDescription {
     #[serde(rename = "ReplicaProvisionedReadCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_provisioned_read_capacity_units: Option<i64>,
-    /// <p>AutoScaling settings for a global table replica's write capacity units.</p>
+    /// <p>Auto scaling settings for a global table replica's write capacity units.</p>
     #[serde(rename = "ReplicaProvisionedWriteCapacityAutoScalingSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_provisioned_write_capacity_auto_scaling_settings:
@@ -1770,16 +2078,16 @@ pub struct ReplicaSettingsDescription {
     #[serde(rename = "ReplicaProvisionedWriteCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_provisioned_write_capacity_units: Option<i64>,
-    /// <p><p>The current state of the region:</p> <ul> <li> <p> <code>CREATING</code> - The region is being created.</p> </li> <li> <p> <code>UPDATING</code> - The region is being updated.</p> </li> <li> <p> <code>DELETING</code> - The region is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The region is ready for use.</p> </li> </ul></p>
+    /// <p><p>The current state of the Region:</p> <ul> <li> <p> <code>CREATING</code> - The Region is being created.</p> </li> <li> <p> <code>UPDATING</code> - The Region is being updated.</p> </li> <li> <p> <code>DELETING</code> - The Region is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The Region is ready for use.</p> </li> </ul></p>
     #[serde(rename = "ReplicaStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_status: Option<String>,
 }
 
-/// <p>Represents the settings for a global table in a region that will be modified.</p>
+/// <p>Represents the settings for a global table in a Region that will be modified.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ReplicaSettingsUpdate {
-    /// <p>The region of the replica to be added.</p>
+    /// <p>The Region of the replica to be added.</p>
     #[serde(rename = "RegionName")]
     pub region_name: String,
     /// <p>Represents the settings of a global secondary index for a global table that will be modified.</p>
@@ -1787,7 +2095,7 @@ pub struct ReplicaSettingsUpdate {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_global_secondary_index_settings_update:
         Option<Vec<ReplicaGlobalSecondaryIndexSettingsUpdate>>,
-    /// <p>Autoscaling settings for managing a global table replica's read capacity units.</p>
+    /// <p>Auto scaling settings for managing a global table replica's read capacity units.</p>
     #[serde(rename = "ReplicaProvisionedReadCapacityAutoScalingSettingsUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_provisioned_read_capacity_auto_scaling_settings_update:
@@ -1811,6 +2119,23 @@ pub struct ReplicaUpdate {
     pub delete: Option<DeleteReplicaAction>,
 }
 
+/// <p><p>Represents one of the following:</p> <ul> <li> <p>A new replica to be added to an existing regional table or global table. This request invokes the <code>CreateTableReplica</code> action in the destination Region.</p> </li> <li> <p>New parameters for an existing replica. This request invokes the <code>UpdateTable</code> action in the destination Region.</p> </li> <li> <p>An existing replica to be deleted. The request invokes the <code>DeleteTableReplica</code> action in the destination Region, deleting the replica and all if its items in the destination Region.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ReplicationGroupUpdate {
+    /// <p>The parameters required for creating a replica for the table.</p>
+    #[serde(rename = "Create")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create: Option<CreateReplicationGroupMemberAction>,
+    /// <p>The parameters required for deleting a replica for the table.</p>
+    #[serde(rename = "Delete")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete: Option<DeleteReplicationGroupMemberAction>,
+    /// <p>The parameters required for updating a replica for the table.</p>
+    #[serde(rename = "Update")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update: Option<UpdateReplicationGroupMemberAction>,
+}
+
 /// <p>Contains details for the restore.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1821,11 +2146,11 @@ pub struct RestoreSummary {
     /// <p>Indicates if a restore is in progress or not.</p>
     #[serde(rename = "RestoreInProgress")]
     pub restore_in_progress: bool,
-    /// <p>ARN of the backup from which the table was restored.</p>
+    /// <p>The Amazon Resource Name (ARN) of the backup from which the table was restored.</p>
     #[serde(rename = "SourceBackupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_backup_arn: Option<String>,
-    /// <p>ARN of the source table of the backup that is being restored.</p>
+    /// <p>The ARN of the source table of the backup that is being restored.</p>
     #[serde(rename = "SourceTableArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_table_arn: Option<String>,
@@ -1836,6 +2161,22 @@ pub struct RestoreTableFromBackupInput {
     /// <p>The Amazon Resource Name (ARN) associated with the backup.</p>
     #[serde(rename = "BackupArn")]
     pub backup_arn: String,
+    /// <p>The billing mode of the restored table.</p>
+    #[serde(rename = "BillingModeOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_mode_override: Option<String>,
+    /// <p>List of global secondary indexes for the restored table. The indexes provided should match existing secondary indexes. You can choose to exclude some or all of the indexes at the time of restore.</p>
+    #[serde(rename = "GlobalSecondaryIndexOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_secondary_index_override: Option<Vec<GlobalSecondaryIndex>>,
+    /// <p>List of local secondary indexes for the restored table. The indexes provided should match existing secondary indexes. You can choose to exclude some or all of the indexes at the time of restore.</p>
+    #[serde(rename = "LocalSecondaryIndexOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local_secondary_index_override: Option<Vec<LocalSecondaryIndex>>,
+    /// <p>Provisioned throughput settings for the restored table.</p>
+    #[serde(rename = "ProvisionedThroughputOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput_override: Option<ProvisionedThroughput>,
     /// <p>The name of the new table to which the backup must be restored.</p>
     #[serde(rename = "TargetTableName")]
     pub target_table_name: String,
@@ -1852,6 +2193,22 @@ pub struct RestoreTableFromBackupOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RestoreTableToPointInTimeInput {
+    /// <p>The billing mode of the restored table.</p>
+    #[serde(rename = "BillingModeOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_mode_override: Option<String>,
+    /// <p>List of global secondary indexes for the restored table. The indexes provided should match existing secondary indexes. You can choose to exclude some or all of the indexes at the time of restore.</p>
+    #[serde(rename = "GlobalSecondaryIndexOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_secondary_index_override: Option<Vec<GlobalSecondaryIndex>>,
+    /// <p>List of local secondary indexes for the restored table. The indexes provided should match existing secondary indexes. You can choose to exclude some or all of the indexes at the time of restore.</p>
+    #[serde(rename = "LocalSecondaryIndexOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local_secondary_index_override: Option<Vec<LocalSecondaryIndex>>,
+    /// <p>Provisioned throughput settings for the restored table.</p>
+    #[serde(rename = "ProvisionedThroughputOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput_override: Option<ProvisionedThroughput>,
     /// <p>Time in the past to restore the table to.</p>
     #[serde(rename = "RestoreDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1881,11 +2238,15 @@ pub struct RestoreTableToPointInTimeOutput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SSEDescription {
-    /// <p>The KMS customer master key (CMK) ARN used for the KMS encryption.</p>
+    /// <p>Indicates the time, in UNIX epoch date format, when DynamoDB detected that the table's AWS KMS key was inaccessible. This attribute will automatically be cleared when DynamoDB detects that the table's AWS KMS key is accessible again. DynamoDB will initiate the table archival process when table's AWS KMS key remains inaccessible for more than seven days from this date.</p>
+    #[serde(rename = "InaccessibleEncryptionDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inaccessible_encryption_date_time: Option<f64>,
+    /// <p>The AWS KMS customer master key (CMK) ARN used for the AWS KMS encryption.</p>
     #[serde(rename = "KMSMasterKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_master_key_arn: Option<String>,
-    /// <p><p>Server-side encryption type. The only supported value is:</p> <ul> <li> <p> <code>KMS</code> - Server-side encryption which uses AWS Key Management Service. Key is stored in your account and is managed by AWS KMS (KMS charges apply).</p> </li> </ul></p>
+    /// <p><p>Server-side encryption type. The only supported value is:</p> <ul> <li> <p> <code>KMS</code> - Server-side encryption that uses AWS Key Management Service. The key is stored in your account and is managed by AWS KMS (AWS KMS charges apply).</p> </li> </ul></p>
     #[serde(rename = "SSEType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sse_type: Option<String>,
@@ -1902,11 +2263,11 @@ pub struct SSESpecification {
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>The KMS Customer Master Key (CMK) which should be used for the KMS encryption. To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. Note that you should only provide this parameter if the key is different from the default DynamoDB Customer Master Key alias/aws/dynamodb.</p>
+    /// <p>The AWS KMS customer master key (CMK) that should be used for the AWS KMS encryption. To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. Note that you should only provide this parameter if the key is different from the default DynamoDB customer master key alias/aws/dynamodb.</p>
     #[serde(rename = "KMSMasterKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_master_key_id: Option<String>,
-    /// <p><p>Server-side encryption type. The only supported value is:</p> <ul> <li> <p> <code>KMS</code> - Server-side encryption which uses AWS Key Management Service. Key is stored in your account and is managed by AWS KMS (KMS charges apply).</p> </li> </ul></p>
+    /// <p><p>Server-side encryption type. The only supported value is:</p> <ul> <li> <p> <code>KMS</code> - Server-side encryption that uses AWS Key Management Service. The key is stored in your account and is managed by AWS KMS (AWS KMS charges apply).</p> </li> </ul></p>
     #[serde(rename = "SSEType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sse_type: Option<String>,
@@ -2013,7 +2374,7 @@ pub struct SourceTableDetails {
     #[serde(rename = "BillingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_mode: Option<String>,
-    /// <p>Number of items in the table. Please note this is an approximate value. </p>
+    /// <p>Number of items in the table. Note that this is an approximate value. </p>
     #[serde(rename = "ItemCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_count: Option<i64>,
@@ -2036,7 +2397,7 @@ pub struct SourceTableDetails {
     /// <p>The name of the table for which the backup was created. </p>
     #[serde(rename = "TableName")]
     pub table_name: String,
-    /// <p>Size of the table in bytes. Please note this is an approximate value.</p>
+    /// <p>Size of the table in bytes. Note that this is an approximate value.</p>
     #[serde(rename = "TableSizeBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_size_bytes: Option<i64>,
@@ -2046,7 +2407,7 @@ pub struct SourceTableDetails {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SourceTableFeatureDetails {
-    /// <p>Represents the GSI properties for the table when the backup was created. It includes the IndexName, KeySchema, Projection and ProvisionedThroughput for the GSIs on the table at the time of backup. </p>
+    /// <p>Represents the GSI properties for the table when the backup was created. It includes the IndexName, KeySchema, Projection, and ProvisionedThroughput for the GSIs on the table at the time of backup. </p>
     #[serde(rename = "GlobalSecondaryIndexes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_secondary_indexes: Option<Vec<GlobalSecondaryIndexInfo>>,
@@ -2073,18 +2434,39 @@ pub struct SourceTableFeatureDetails {
 pub struct StreamSpecification {
     /// <p>Indicates whether DynamoDB Streams is enabled (true) or disabled (false) on the table.</p>
     #[serde(rename = "StreamEnabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub stream_enabled: Option<bool>,
+    pub stream_enabled: bool,
     /// <p><p> When an item in the table is modified, <code>StreamViewType</code> determines what information is written to the stream for this table. Valid values for <code>StreamViewType</code> are:</p> <ul> <li> <p> <code>KEYS<em>ONLY</code> - Only the key attributes of the modified item are written to the stream.</p> </li> <li> <p> <code>NEW</em>IMAGE</code> - The entire item, as it appears after it was modified, is written to the stream.</p> </li> <li> <p> <code>OLD<em>IMAGE</code> - The entire item, as it appeared before it was modified, is written to the stream.</p> </li> <li> <p> <code>NEW</em>AND<em>OLD</em>IMAGES</code> - Both the new and the old item images of the item are written to the stream.</p> </li> </ul></p>
     #[serde(rename = "StreamViewType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_view_type: Option<String>,
 }
 
+/// <p>Represents the auto scaling configuration for a global table.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TableAutoScalingDescription {
+    /// <p>Represents replicas of the global table.</p>
+    #[serde(rename = "Replicas")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replicas: Option<Vec<ReplicaAutoScalingDescription>>,
+    /// <p>The name of the table.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_name: Option<String>,
+    /// <p><p>The current state of the table:</p> <ul> <li> <p> <code>CREATING</code> - The table is being created.</p> </li> <li> <p> <code>UPDATING</code> - The table is being updated.</p> </li> <li> <p> <code>DELETING</code> - The table is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The table is ready for use.</p> </li> </ul></p>
+    #[serde(rename = "TableStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_status: Option<String>,
+}
+
 /// <p>Represents the properties of a table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TableDescription {
+    /// <p>Contains information about the table archive.</p>
+    #[serde(rename = "ArchivalSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archival_summary: Option<ArchivalSummary>,
     /// <p><p>An array of <code>AttributeDefinition</code> objects. Each of these objects describes one attribute in the table and index key schema.</p> <p>Each <code>AttributeDefinition</code> object in this array is composed of:</p> <ul> <li> <p> <code>AttributeName</code> - The name of the attribute.</p> </li> <li> <p> <code>AttributeType</code> - The data type for the attribute.</p> </li> </ul></p>
     #[serde(rename = "AttributeDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2097,10 +2479,14 @@ pub struct TableDescription {
     #[serde(rename = "CreationDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date_time: Option<f64>,
-    /// <p>The global secondary indexes, if any, on the table. Each index is scoped to a given partition key value. Each element is composed of:</p> <ul> <li> <p> <code>Backfilling</code> - If true, then the index is currently in the backfilling phase. Backfilling occurs only when a new global secondary index is added to the table; it is the process by which DynamoDB populates the new index with data from the table. (This attribute does not appear for indexes that were created during a <code>CreateTable</code> operation.)</p> </li> <li> <p> <code>IndexName</code> - The name of the global secondary index.</p> </li> <li> <p> <code>IndexSizeBytes</code> - The total size of the global secondary index, in bytes. DynamoDB updates this value approximately every six hours. Recent changes might not be reflected in this value. </p> </li> <li> <p> <code>IndexStatus</code> - The current status of the global secondary index:</p> <ul> <li> <p> <code>CREATING</code> - The index is being created.</p> </li> <li> <p> <code>UPDATING</code> - The index is being updated.</p> </li> <li> <p> <code>DELETING</code> - The index is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The index is ready for use.</p> </li> </ul> </li> <li> <p> <code>ItemCount</code> - The number of items in the global secondary index. DynamoDB updates this value approximately every six hours. Recent changes might not be reflected in this value. </p> </li> <li> <p> <code>KeySchema</code> - Specifies the complete index key schema. The attribute names in the key schema must be between 1 and 255 characters (inclusive). The key schema must begin with the same partition key as the table.</p> </li> <li> <p> <code>Projection</code> - Specifies attributes that are copied (projected) from the table into the index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. Each attribute specification is composed of:</p> <ul> <li> <p> <code>ProjectionType</code> - One of the following:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - Only the specified table attributes are projected into the index. The list of projected attributes are in <code>NonKeyAttributes</code>.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul> </li> <li> <p> <code>NonKeyAttributes</code> - A list of one or more non-key attribute names that are projected into the secondary index. The total count of attributes provided in <code>NonKeyAttributes</code>, summed across all of the secondary indexes, must not exceed 20. If you project the same attribute into two different indexes, this counts as two distinct attributes when determining the total.</p> </li> </ul> </li> <li> <p> <code>ProvisionedThroughput</code> - The provisioned throughput settings for the global secondary index, consisting of read and write capacity units, along with data about increases and decreases. </p> </li> </ul> <p>If the table is in the <code>DELETING</code> state, no information about indexes will be returned.</p>
+    /// <p>The global secondary indexes, if any, on the table. Each index is scoped to a given partition key value. Each element is composed of:</p> <ul> <li> <p> <code>Backfilling</code> - If true, then the index is currently in the backfilling phase. Backfilling occurs only when a new global secondary index is added to the table. It is the process by which DynamoDB populates the new index with data from the table. (This attribute does not appear for indexes that were created during a <code>CreateTable</code> operation.) </p> <p> You can delete an index that is being created during the <code>Backfilling</code> phase when <code>IndexStatus</code> is set to CREATING and <code>Backfilling</code> is true. You can't delete the index that is being created when <code>IndexStatus</code> is set to CREATING and <code>Backfilling</code> is false. (This attribute does not appear for indexes that were created during a <code>CreateTable</code> operation.)</p> </li> <li> <p> <code>IndexName</code> - The name of the global secondary index.</p> </li> <li> <p> <code>IndexSizeBytes</code> - The total size of the global secondary index, in bytes. DynamoDB updates this value approximately every six hours. Recent changes might not be reflected in this value. </p> </li> <li> <p> <code>IndexStatus</code> - The current status of the global secondary index:</p> <ul> <li> <p> <code>CREATING</code> - The index is being created.</p> </li> <li> <p> <code>UPDATING</code> - The index is being updated.</p> </li> <li> <p> <code>DELETING</code> - The index is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The index is ready for use.</p> </li> </ul> </li> <li> <p> <code>ItemCount</code> - The number of items in the global secondary index. DynamoDB updates this value approximately every six hours. Recent changes might not be reflected in this value. </p> </li> <li> <p> <code>KeySchema</code> - Specifies the complete index key schema. The attribute names in the key schema must be between 1 and 255 characters (inclusive). The key schema must begin with the same partition key as the table.</p> </li> <li> <p> <code>Projection</code> - Specifies attributes that are copied (projected) from the table into the index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. Each attribute specification is composed of:</p> <ul> <li> <p> <code>ProjectionType</code> - One of the following:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - Only the specified table attributes are projected into the index. The list of projected attributes is in <code>NonKeyAttributes</code>.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul> </li> <li> <p> <code>NonKeyAttributes</code> - A list of one or more non-key attribute names that are projected into the secondary index. The total count of attributes provided in <code>NonKeyAttributes</code>, summed across all of the secondary indexes, must not exceed 20. If you project the same attribute into two different indexes, this counts as two distinct attributes when determining the total.</p> </li> </ul> </li> <li> <p> <code>ProvisionedThroughput</code> - The provisioned throughput settings for the global secondary index, consisting of read and write capacity units, along with data about increases and decreases. </p> </li> </ul> <p>If the table is in the <code>DELETING</code> state, no information about indexes will be returned.</p>
     #[serde(rename = "GlobalSecondaryIndexes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_secondary_indexes: Option<Vec<GlobalSecondaryIndexDescription>>,
+    /// <p>Represents the version of <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html">global tables</a> in use, if the table is replicated across AWS Regions.</p>
+    #[serde(rename = "GlobalTableVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_version: Option<String>,
     /// <p>The number of items in the specified table. DynamoDB updates this value approximately every six hours. Recent changes might not be reflected in this value.</p>
     #[serde(rename = "ItemCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2113,11 +2499,11 @@ pub struct TableDescription {
     #[serde(rename = "LatestStreamArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_stream_arn: Option<String>,
-    /// <p><p>A timestamp, in ISO 8601 format, for this stream.</p> <p>Note that <code>LatestStreamLabel</code> is not a unique identifier for the stream, because it is possible that a stream from another table might have the same timestamp. However, the combination of the following three elements is guaranteed to be unique:</p> <ul> <li> <p>the AWS customer ID.</p> </li> <li> <p>the table name.</p> </li> <li> <p>the <code>StreamLabel</code>.</p> </li> </ul></p>
+    /// <p><p>A timestamp, in ISO 8601 format, for this stream.</p> <p>Note that <code>LatestStreamLabel</code> is not a unique identifier for the stream, because it is possible that a stream from another table might have the same timestamp. However, the combination of the following three elements is guaranteed to be unique:</p> <ul> <li> <p>AWS customer ID</p> </li> <li> <p>Table name</p> </li> <li> <p> <code>StreamLabel</code> </p> </li> </ul></p>
     #[serde(rename = "LatestStreamLabel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_stream_label: Option<String>,
-    /// <p>Represents one or more local secondary indexes on the table. Each index is scoped to a given partition key value. Tables with one or more local secondary indexes are subject to an item collection size limit, where the amount of data within a given item collection cannot exceed 10 GB. Each element is composed of:</p> <ul> <li> <p> <code>IndexName</code> - The name of the local secondary index.</p> </li> <li> <p> <code>KeySchema</code> - Specifies the complete index key schema. The attribute names in the key schema must be between 1 and 255 characters (inclusive). The key schema must begin with the same partition key as the table.</p> </li> <li> <p> <code>Projection</code> - Specifies attributes that are copied (projected) from the table into the index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. Each attribute specification is composed of:</p> <ul> <li> <p> <code>ProjectionType</code> - One of the following:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - Only the specified table attributes are projected into the index. The list of projected attributes are in <code>NonKeyAttributes</code>.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul> </li> <li> <p> <code>NonKeyAttributes</code> - A list of one or more non-key attribute names that are projected into the secondary index. The total count of attributes provided in <code>NonKeyAttributes</code>, summed across all of the secondary indexes, must not exceed 20. If you project the same attribute into two different indexes, this counts as two distinct attributes when determining the total.</p> </li> </ul> </li> <li> <p> <code>IndexSizeBytes</code> - Represents the total size of the index, in bytes. DynamoDB updates this value approximately every six hours. Recent changes might not be reflected in this value.</p> </li> <li> <p> <code>ItemCount</code> - Represents the number of items in the index. DynamoDB updates this value approximately every six hours. Recent changes might not be reflected in this value.</p> </li> </ul> <p>If the table is in the <code>DELETING</code> state, no information about indexes will be returned.</p>
+    /// <p>Represents one or more local secondary indexes on the table. Each index is scoped to a given partition key value. Tables with one or more local secondary indexes are subject to an item collection size limit, where the amount of data within a given item collection cannot exceed 10 GB. Each element is composed of:</p> <ul> <li> <p> <code>IndexName</code> - The name of the local secondary index.</p> </li> <li> <p> <code>KeySchema</code> - Specifies the complete index key schema. The attribute names in the key schema must be between 1 and 255 characters (inclusive). The key schema must begin with the same partition key as the table.</p> </li> <li> <p> <code>Projection</code> - Specifies attributes that are copied (projected) from the table into the index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. Each attribute specification is composed of:</p> <ul> <li> <p> <code>ProjectionType</code> - One of the following:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - Only the specified table attributes are projected into the index. The list of projected attributes is in <code>NonKeyAttributes</code>.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul> </li> <li> <p> <code>NonKeyAttributes</code> - A list of one or more non-key attribute names that are projected into the secondary index. The total count of attributes provided in <code>NonKeyAttributes</code>, summed across all of the secondary indexes, must not exceed 20. If you project the same attribute into two different indexes, this counts as two distinct attributes when determining the total.</p> </li> </ul> </li> <li> <p> <code>IndexSizeBytes</code> - Represents the total size of the index, in bytes. DynamoDB updates this value approximately every six hours. Recent changes might not be reflected in this value.</p> </li> <li> <p> <code>ItemCount</code> - Represents the number of items in the index. DynamoDB updates this value approximately every six hours. Recent changes might not be reflected in this value.</p> </li> </ul> <p>If the table is in the <code>DELETING</code> state, no information about indexes will be returned.</p>
     #[serde(rename = "LocalSecondaryIndexes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub local_secondary_indexes: Option<Vec<LocalSecondaryIndexDescription>>,
@@ -2125,6 +2511,10 @@ pub struct TableDescription {
     #[serde(rename = "ProvisionedThroughput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_throughput: Option<ProvisionedThroughputDescription>,
+    /// <p>Represents replicas of the table.</p>
+    #[serde(rename = "Replicas")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replicas: Option<Vec<ReplicaDescription>>,
     /// <p>Contains details for the restore.</p>
     #[serde(rename = "RestoreSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2153,7 +2543,7 @@ pub struct TableDescription {
     #[serde(rename = "TableSizeBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_size_bytes: Option<i64>,
-    /// <p><p>The current state of the table:</p> <ul> <li> <p> <code>CREATING</code> - The table is being created.</p> </li> <li> <p> <code>UPDATING</code> - The table is being updated.</p> </li> <li> <p> <code>DELETING</code> - The table is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The table is ready for use.</p> </li> </ul></p>
+    /// <p><p>The current state of the table:</p> <ul> <li> <p> <code>CREATING</code> - The table is being created.</p> </li> <li> <p> <code>UPDATING</code> - The table is being updated.</p> </li> <li> <p> <code>DELETING</code> - The table is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The table is ready for use.</p> </li> <li> <p> <code>INACCESSIBLE<em>ENCRYPTION</em>CREDENTIALS</code> - The AWS KMS key used to encrypt the table in inaccessible. Table operations may fail due to failure to use the AWS KMS key. DynamoDB will initiate the table archival process when a table&#39;s AWS KMS key remains inaccessible for more than seven days. </p> </li> <li> <p> <code>ARCHIVING</code> - The table is being archived. Operations are not allowed until archival is complete. </p> </li> <li> <p> <code>ARCHIVED</code> - The table has been archived. See the ArchivalReason for more information. </p> </li> </ul></p>
     #[serde(rename = "TableStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_status: Option<String>,
@@ -2349,6 +2739,37 @@ pub struct UpdateContinuousBackupsOutput {
     pub continuous_backups_description: Option<ContinuousBackupsDescription>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateContributorInsightsInput {
+    /// <p>Represents the contributor insights action.</p>
+    #[serde(rename = "ContributorInsightsAction")]
+    pub contributor_insights_action: String,
+    /// <p>The global secondary index name, if applicable.</p>
+    #[serde(rename = "IndexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>The name of the table.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateContributorInsightsOutput {
+    /// <p>The status of contributor insights</p>
+    #[serde(rename = "ContributorInsightsStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contributor_insights_status: Option<String>,
+    /// <p>The name of the global secondary index, if applicable.</p>
+    #[serde(rename = "IndexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>The name of the table.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_name: Option<String>,
+}
+
 /// <p>Represents the new provisioned throughput settings to be applied to a global secondary index.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGlobalSecondaryIndexAction {
@@ -2381,7 +2802,7 @@ pub struct UpdateGlobalTableOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGlobalTableSettingsInput {
-    /// <p>The billing mode of the global table. If <code>GlobalTableBillingMode</code> is not specified, the global table defaults to <code>PROVISIONED</code> capacity billing mode.</p>
+    /// <p><p>The billing mode of the global table. If <code>GlobalTableBillingMode</code> is not specified, the global table defaults to <code>PROVISIONED</code> capacity billing mode.</p> <ul> <li> <p> <code>PROVISIONED</code> - We recommend using <code>PROVISIONED</code> for predictable workloads. <code>PROVISIONED</code> sets the billing mode to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.ProvisionedThroughput.Manual">Provisioned Mode</a>.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. <code>PAY<em>PER</em>REQUEST</code> sets the billing mode to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.OnDemand">On-Demand Mode</a>. </p> </li> </ul></p>
     #[serde(rename = "GlobalTableBillingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_table_billing_mode: Option<String>,
@@ -2489,6 +2910,26 @@ pub struct UpdateItemOutput {
     pub item_collection_metrics: Option<ItemCollectionMetrics>,
 }
 
+/// <p>Represents a replica to be modified.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateReplicationGroupMemberAction {
+    /// <p>Replica-specific global secondary index settings.</p>
+    #[serde(rename = "GlobalSecondaryIndexes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_secondary_indexes: Option<Vec<ReplicaGlobalSecondaryIndex>>,
+    /// <p>The AWS KMS customer master key (CMK) of the replica that should be used for AWS KMS encryption. To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. Note that you should only provide this parameter if the key is different from the default DynamoDB KMS master key alias/aws/dynamodb.</p>
+    #[serde(rename = "KMSMasterKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_master_key_id: Option<String>,
+    /// <p>Replica-specific provisioned throughput. If not specified, uses the source table's provisioned throughput settings.</p>
+    #[serde(rename = "ProvisionedThroughputOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput_override: Option<ProvisionedThroughputOverride>,
+    /// <p>The Region where the replica exists.</p>
+    #[serde(rename = "RegionName")]
+    pub region_name: String,
+}
+
 /// <p>Represents the input of an <code>UpdateTable</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateTableInput {
@@ -2496,11 +2937,11 @@ pub struct UpdateTableInput {
     #[serde(rename = "AttributeDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_definitions: Option<Vec<AttributeDefinition>>,
-    /// <p><p>Controls how you are charged for read and write throughput and how you manage capacity. When switching from pay-per-request to provisioned capacity, initial provisioned capacity values must be set. The initial provisioned capacity values are estimated based on the consumed read and write capacity of your table and global secondary indexes over the past 30 minutes.</p> <ul> <li> <p> <code>PROVISIONED</code> - Sets the billing mode to <code>PROVISIONED</code>. We recommend using <code>PROVISIONED</code> for predictable workloads.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - Sets the billing mode to <code>PAY<em>PER</em>REQUEST</code>. We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. </p> </li> </ul></p>
+    /// <p><p>Controls how you are charged for read and write throughput and how you manage capacity. When switching from pay-per-request to provisioned capacity, initial provisioned capacity values must be set. The initial provisioned capacity values are estimated based on the consumed read and write capacity of your table and global secondary indexes over the past 30 minutes.</p> <ul> <li> <p> <code>PROVISIONED</code> - We recommend using <code>PROVISIONED</code> for predictable workloads. <code>PROVISIONED</code> sets the billing mode to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.ProvisionedThroughput.Manual">Provisioned Mode</a>.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. <code>PAY<em>PER</em>REQUEST</code> sets the billing mode to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.OnDemand">On-Demand Mode</a>. </p> </li> </ul></p>
     #[serde(rename = "BillingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_mode: Option<String>,
-    /// <p>An array of one or more global secondary indexes for the table. For each index in the array, you can request one action:</p> <ul> <li> <p> <code>Create</code> - add a new global secondary index to the table.</p> </li> <li> <p> <code>Update</code> - modify the provisioned throughput settings of an existing global secondary index.</p> </li> <li> <p> <code>Delete</code> - remove a global secondary index from the table.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GSI.OnlineOps.html">Managing Global Secondary Indexes</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p>
+    /// <p>An array of one or more global secondary indexes for the table. For each index in the array, you can request one action:</p> <ul> <li> <p> <code>Create</code> - add a new global secondary index to the table.</p> </li> <li> <p> <code>Update</code> - modify the provisioned throughput settings of an existing global secondary index.</p> </li> <li> <p> <code>Delete</code> - remove a global secondary index from the table.</p> </li> </ul> <p>You can create or delete only one global secondary index per <code>UpdateTable</code> operation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GSI.OnlineOps.html">Managing Global Secondary Indexes</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p>
     #[serde(rename = "GlobalSecondaryIndexUpdates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_secondary_index_updates: Option<Vec<GlobalSecondaryIndexUpdate>>,
@@ -2508,6 +2949,10 @@ pub struct UpdateTableInput {
     #[serde(rename = "ProvisionedThroughput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_throughput: Option<ProvisionedThroughput>,
+    /// <p><p>A list of replica update actions (create, delete, or update) for the table.</p> <note> <p>This property only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html">Version 2019.11.21</a> of global tables.</p> </note></p>
+    #[serde(rename = "ReplicaUpdates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_updates: Option<Vec<ReplicationGroupUpdate>>,
     /// <p>The new server-side encryption settings for the specified table.</p>
     #[serde(rename = "SSESpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2531,6 +2976,33 @@ pub struct UpdateTableOutput {
     pub table_description: Option<TableDescription>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateTableReplicaAutoScalingInput {
+    /// <p>Represents the auto scaling settings of the global secondary indexes of the replica to be updated.</p>
+    #[serde(rename = "GlobalSecondaryIndexUpdates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_secondary_index_updates: Option<Vec<GlobalSecondaryIndexAutoScalingUpdate>>,
+    #[serde(rename = "ProvisionedWriteCapacityAutoScalingUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_write_capacity_auto_scaling_update: Option<AutoScalingSettingsUpdate>,
+    /// <p>Represents the auto scaling settings of replicas of the table that will be modified.</p>
+    #[serde(rename = "ReplicaUpdates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_updates: Option<Vec<ReplicaAutoScalingUpdate>>,
+    /// <p>The name of the global table to be updated.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateTableReplicaAutoScalingOutput {
+    /// <p>Returns information about the auto scaling settings of a table with replicas.</p>
+    #[serde(rename = "TableAutoScalingDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_auto_scaling_description: Option<TableAutoScalingDescription>,
+}
+
 /// <p>Represents the input of an <code>UpdateTimeToLive</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateTimeToLiveInput {
@@ -2551,7 +3023,7 @@ pub struct UpdateTimeToLiveOutput {
     pub time_to_live_specification: Option<TimeToLiveSpecification>,
 }
 
-/// <p>Represents an operation to perform - either <code>DeleteItem</code> or <code>PutItem</code>. You can only request one of these operations, not both, in a single <code>WriteRequest</code>. If you do need to perform both of these operations, you will need to provide two separate <code>WriteRequest</code> objects.</p>
+/// <p>Represents an operation to perform - either <code>DeleteItem</code> or <code>PutItem</code>. You can only request one of these operations, not both, in a single <code>WriteRequest</code>. If you do need to perform both of these operations, you need to provide two separate <code>WriteRequest</code> objects.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WriteRequest {
     /// <p>A request to perform a <code>DeleteItem</code> operation.</p>
@@ -3100,6 +3572,51 @@ impl Error for DescribeContinuousBackupsError {
         }
     }
 }
+/// Errors returned by DescribeContributorInsights
+#[derive(Debug, PartialEq)]
+pub enum DescribeContributorInsightsError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeContributorInsightsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeContributorInsightsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DescribeContributorInsightsError::InternalServerError(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeContributorInsightsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeContributorInsightsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeContributorInsightsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeContributorInsightsError::InternalServerError(ref cause) => cause,
+            DescribeContributorInsightsError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeEndpoints
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointsError {}
@@ -3285,6 +3802,51 @@ impl Error for DescribeTableError {
         }
     }
 }
+/// Errors returned by DescribeTableReplicaAutoScaling
+#[derive(Debug, PartialEq)]
+pub enum DescribeTableReplicaAutoScalingError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeTableReplicaAutoScalingError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeTableReplicaAutoScalingError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DescribeTableReplicaAutoScalingError::InternalServerError(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeTableReplicaAutoScalingError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeTableReplicaAutoScalingError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeTableReplicaAutoScalingError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeTableReplicaAutoScalingError::InternalServerError(ref cause) => cause,
+            DescribeTableReplicaAutoScalingError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeTimeToLive
 #[derive(Debug, PartialEq)]
 pub enum DescribeTimeToLiveError {
@@ -3409,6 +3971,49 @@ impl Error for ListBackupsError {
     fn description(&self) -> &str {
         match *self {
             ListBackupsError::InternalServerError(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListContributorInsights
+#[derive(Debug, PartialEq)]
+pub enum ListContributorInsightsError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
+    ResourceNotFound(String),
+}
+
+impl ListContributorInsightsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContributorInsightsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(ListContributorInsightsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListContributorInsightsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListContributorInsightsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListContributorInsightsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListContributorInsightsError::InternalServerError(ref cause) => cause,
+            ListContributorInsightsError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -3908,9 +4513,11 @@ pub enum TransactGetItemsError {
     InternalServerError(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
+    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// <p><p>The entire transaction request was canceled.</p> <p>DynamoDB cancels a <code>TransactWriteItems</code> request under the following circumstances:</p> <ul> <li> <p>A condition in one of the condition expressions is not met.</p> </li> <li> <p>A table in the <code>TransactWriteItems</code> request is in a different account or region.</p> </li> <li> <p>More than one action in the <code>TransactWriteItems</code> operation targets the same item.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>An item size becomes too large (larger than 400 KB), or a local secondary index (LSI) becomes too large, or a similar validation error occurs because of changes made by the transaction.</p> </li> <li> <p>The aggregate size of the items in the transaction exceeds 4 MBs.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul> <p>DynamoDB cancels a <code>TransactGetItems</code> request under the following circumstances:</p> <ul> <li> <p>There is an ongoing <code>TransactGetItems</code> operation that conflicts with a concurrent <code>PutItem</code>, <code>UpdateItem</code>, <code>DeleteItem</code> or <code>TransactWriteItems</code> request. In this case the <code>TransactGetItems</code> operation fails with a <code>TransactionCanceledException</code>.</p> </li> <li> <p>A table in the <code>TransactGetItems</code> request is in a different account or region.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>The aggregate size of the items in the transaction exceeds 4 MBs.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul> <note> <p>If using Java, DynamoDB lists the cancellation reasons on the <code>CancellationReasons</code> property. This property is not set for other languages. Transaction cancellation reasons are ordered in the order of requested items, if an item has no error it will have <code>NONE</code> code and <code>Null</code> message.</p> </note> <p>Cancellation reason codes and possible error messages:</p> <ul> <li> <p>No Errors:</p> <ul> <li> <p>Code: <code>NONE</code> </p> </li> <li> <p>Message: <code>null</code> </p> </li> </ul> </li> <li> <p>Conditional Check Failed:</p> <ul> <li> <p>Code: <code>ConditionalCheckFailed</code> </p> </li> <li> <p>Message: The conditional request failed. </p> </li> </ul> </li> <li> <p>Item Collection Size Limit Exceeded:</p> <ul> <li> <p>Code: <code>ItemCollectionSizeLimitExceeded</code> </p> </li> <li> <p>Message: Collection size exceeded.</p> </li> </ul> </li> <li> <p>Transaction Conflict:</p> <ul> <li> <p>Code: <code>TransactionConflict</code> </p> </li> <li> <p>Message: Transaction is ongoing for the item.</p> </li> </ul> </li> <li> <p>Provisioned Throughput Exceeded:</p> <ul> <li> <p>Code: <code>ProvisionedThroughputExceeded</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>The level of configured provisioned throughput for the table was exceeded. Consider increasing your provisioning level with the UpdateTable API.</p> <note> <p>This Message is received when provisioned throughput is exceeded is on a provisioned DynamoDB table.</p> </note> </li> <li> <p>The level of configured provisioned throughput for one or more global secondary indexes of the table was exceeded. Consider increasing your provisioning level for the under-provisioned global secondary indexes with the UpdateTable API.</p> <note> <p>This message is returned when provisioned throughput is exceeded is on a provisioned GSI.</p> </note> </li> </ul> </li> </ul> </li> <li> <p>Throttling Error:</p> <ul> <li> <p>Code: <code>ThrottlingError</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>Throughput exceeds the current capacity of your table or index. DynamoDB is automatically scaling your table or index so please try again shortly. If exceptions persist, check if you have a hot key: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html.</p> <note> <p>This message is returned when writes get throttled on an On-Demand table as DynamoDB is automatically scaling the table.</p> </note> </li> <li> <p>Throughput exceeds the current capacity for one or more global secondary indexes. DynamoDB is automatically scaling your index so please try again shortly.</p> <note> <p>This message is returned when when writes get throttled on an On-Demand GSI as DynamoDB is automatically scaling the GSI.</p> </note> </li> </ul> </li> </ul> </li> <li> <p>Validation Error:</p> <ul> <li> <p>Code: <code>ValidationError</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>One or more parameter values were invalid.</p> </li> <li> <p>The update expression attempted to update the secondary index key beyond allowed size limits.</p> </li> <li> <p>The update expression attempted to update the secondary index key to unsupported type.</p> </li> <li> <p>An operand in the update expression has an incorrect data type.</p> </li> <li> <p>Item size to update has exceeded the maximum allowed size.</p> </li> <li> <p>Number overflow. Attempting to store a number with magnitude larger than supported range.</p> </li> <li> <p>Type mismatch for attribute to update.</p> </li> <li> <p>Nesting Levels have exceeded supported limits.</p> </li> <li> <p>The document path provided in the update expression is invalid for update.</p> </li> <li> <p>The provided expression refers to an attribute that does not exist in the item.</p> </li> </ul> </li> </ul> </li> </ul></p>
+    /// <p><p>The entire transaction request was canceled.</p> <p>DynamoDB cancels a <code>TransactWriteItems</code> request under the following circumstances:</p> <ul> <li> <p>A condition in one of the condition expressions is not met.</p> </li> <li> <p>A table in the <code>TransactWriteItems</code> request is in a different account or region.</p> </li> <li> <p>More than one action in the <code>TransactWriteItems</code> operation targets the same item.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>An item size becomes too large (larger than 400 KB), or a local secondary index (LSI) becomes too large, or a similar validation error occurs because of changes made by the transaction.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul> <p>DynamoDB cancels a <code>TransactGetItems</code> request under the following circumstances:</p> <ul> <li> <p>There is an ongoing <code>TransactGetItems</code> operation that conflicts with a concurrent <code>PutItem</code>, <code>UpdateItem</code>, <code>DeleteItem</code> or <code>TransactWriteItems</code> request. In this case the <code>TransactGetItems</code> operation fails with a <code>TransactionCanceledException</code>.</p> </li> <li> <p>A table in the <code>TransactGetItems</code> request is in a different account or region.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul> <note> <p>If using Java, DynamoDB lists the cancellation reasons on the <code>CancellationReasons</code> property. This property is not set for other languages. Transaction cancellation reasons are ordered in the order of requested items, if an item has no error it will have <code>NONE</code> code and <code>Null</code> message.</p> </note> <p>Cancellation reason codes and possible error messages:</p> <ul> <li> <p>No Errors:</p> <ul> <li> <p>Code: <code>NONE</code> </p> </li> <li> <p>Message: <code>null</code> </p> </li> </ul> </li> <li> <p>Conditional Check Failed:</p> <ul> <li> <p>Code: <code>ConditionalCheckFailed</code> </p> </li> <li> <p>Message: The conditional request failed. </p> </li> </ul> </li> <li> <p>Item Collection Size Limit Exceeded:</p> <ul> <li> <p>Code: <code>ItemCollectionSizeLimitExceeded</code> </p> </li> <li> <p>Message: Collection size exceeded.</p> </li> </ul> </li> <li> <p>Transaction Conflict:</p> <ul> <li> <p>Code: <code>TransactionConflict</code> </p> </li> <li> <p>Message: Transaction is ongoing for the item.</p> </li> </ul> </li> <li> <p>Provisioned Throughput Exceeded:</p> <ul> <li> <p>Code: <code>ProvisionedThroughputExceeded</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>The level of configured provisioned throughput for the table was exceeded. Consider increasing your provisioning level with the UpdateTable API.</p> <note> <p>This Message is received when provisioned throughput is exceeded is on a provisioned DynamoDB table.</p> </note> </li> <li> <p>The level of configured provisioned throughput for one or more global secondary indexes of the table was exceeded. Consider increasing your provisioning level for the under-provisioned global secondary indexes with the UpdateTable API.</p> <note> <p>This message is returned when provisioned throughput is exceeded is on a provisioned GSI.</p> </note> </li> </ul> </li> </ul> </li> <li> <p>Throttling Error:</p> <ul> <li> <p>Code: <code>ThrottlingError</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>Throughput exceeds the current capacity of your table or index. DynamoDB is automatically scaling your table or index so please try again shortly. If exceptions persist, check if you have a hot key: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html.</p> <note> <p>This message is returned when writes get throttled on an On-Demand table as DynamoDB is automatically scaling the table.</p> </note> </li> <li> <p>Throughput exceeds the current capacity for one or more global secondary indexes. DynamoDB is automatically scaling your index so please try again shortly.</p> <note> <p>This message is returned when when writes get throttled on an On-Demand GSI as DynamoDB is automatically scaling the GSI.</p> </note> </li> </ul> </li> </ul> </li> <li> <p>Validation Error:</p> <ul> <li> <p>Code: <code>ValidationError</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>One or more parameter values were invalid.</p> </li> <li> <p>The update expression attempted to update the secondary index key beyond allowed size limits.</p> </li> <li> <p>The update expression attempted to update the secondary index key to unsupported type.</p> </li> <li> <p>An operand in the update expression has an incorrect data type.</p> </li> <li> <p>Item size to update has exceeded the maximum allowed size.</p> </li> <li> <p>Number overflow. Attempting to store a number with magnitude larger than supported range.</p> </li> <li> <p>Type mismatch for attribute to update.</p> </li> <li> <p>Nesting Levels have exceeded supported limits.</p> </li> <li> <p>The document path provided in the update expression is invalid for update.</p> </li> <li> <p>The provided expression refers to an attribute that does not exist in the item.</p> </li> </ul> </li> </ul> </li> </ul></p>
     TransactionCanceled(String),
 }
 
@@ -3927,6 +4534,11 @@ impl TransactGetItemsError {
                     return RusotoError::Service(
                         TransactGetItemsError::ProvisionedThroughputExceeded(err.msg),
                     )
+                }
+                "RequestLimitExceeded" => {
+                    return RusotoError::Service(TransactGetItemsError::RequestLimitExceeded(
+                        err.msg,
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TransactGetItemsError::ResourceNotFound(err.msg))
@@ -3953,6 +4565,7 @@ impl Error for TransactGetItemsError {
         match *self {
             TransactGetItemsError::InternalServerError(ref cause) => cause,
             TransactGetItemsError::ProvisionedThroughputExceeded(ref cause) => cause,
+            TransactGetItemsError::RequestLimitExceeded(ref cause) => cause,
             TransactGetItemsError::ResourceNotFound(ref cause) => cause,
             TransactGetItemsError::TransactionCanceled(ref cause) => cause,
         }
@@ -3967,9 +4580,11 @@ pub enum TransactWriteItemsError {
     InternalServerError(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
+    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="https://aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// <p><p>The entire transaction request was canceled.</p> <p>DynamoDB cancels a <code>TransactWriteItems</code> request under the following circumstances:</p> <ul> <li> <p>A condition in one of the condition expressions is not met.</p> </li> <li> <p>A table in the <code>TransactWriteItems</code> request is in a different account or region.</p> </li> <li> <p>More than one action in the <code>TransactWriteItems</code> operation targets the same item.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>An item size becomes too large (larger than 400 KB), or a local secondary index (LSI) becomes too large, or a similar validation error occurs because of changes made by the transaction.</p> </li> <li> <p>The aggregate size of the items in the transaction exceeds 4 MBs.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul> <p>DynamoDB cancels a <code>TransactGetItems</code> request under the following circumstances:</p> <ul> <li> <p>There is an ongoing <code>TransactGetItems</code> operation that conflicts with a concurrent <code>PutItem</code>, <code>UpdateItem</code>, <code>DeleteItem</code> or <code>TransactWriteItems</code> request. In this case the <code>TransactGetItems</code> operation fails with a <code>TransactionCanceledException</code>.</p> </li> <li> <p>A table in the <code>TransactGetItems</code> request is in a different account or region.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>The aggregate size of the items in the transaction exceeds 4 MBs.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul> <note> <p>If using Java, DynamoDB lists the cancellation reasons on the <code>CancellationReasons</code> property. This property is not set for other languages. Transaction cancellation reasons are ordered in the order of requested items, if an item has no error it will have <code>NONE</code> code and <code>Null</code> message.</p> </note> <p>Cancellation reason codes and possible error messages:</p> <ul> <li> <p>No Errors:</p> <ul> <li> <p>Code: <code>NONE</code> </p> </li> <li> <p>Message: <code>null</code> </p> </li> </ul> </li> <li> <p>Conditional Check Failed:</p> <ul> <li> <p>Code: <code>ConditionalCheckFailed</code> </p> </li> <li> <p>Message: The conditional request failed. </p> </li> </ul> </li> <li> <p>Item Collection Size Limit Exceeded:</p> <ul> <li> <p>Code: <code>ItemCollectionSizeLimitExceeded</code> </p> </li> <li> <p>Message: Collection size exceeded.</p> </li> </ul> </li> <li> <p>Transaction Conflict:</p> <ul> <li> <p>Code: <code>TransactionConflict</code> </p> </li> <li> <p>Message: Transaction is ongoing for the item.</p> </li> </ul> </li> <li> <p>Provisioned Throughput Exceeded:</p> <ul> <li> <p>Code: <code>ProvisionedThroughputExceeded</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>The level of configured provisioned throughput for the table was exceeded. Consider increasing your provisioning level with the UpdateTable API.</p> <note> <p>This Message is received when provisioned throughput is exceeded is on a provisioned DynamoDB table.</p> </note> </li> <li> <p>The level of configured provisioned throughput for one or more global secondary indexes of the table was exceeded. Consider increasing your provisioning level for the under-provisioned global secondary indexes with the UpdateTable API.</p> <note> <p>This message is returned when provisioned throughput is exceeded is on a provisioned GSI.</p> </note> </li> </ul> </li> </ul> </li> <li> <p>Throttling Error:</p> <ul> <li> <p>Code: <code>ThrottlingError</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>Throughput exceeds the current capacity of your table or index. DynamoDB is automatically scaling your table or index so please try again shortly. If exceptions persist, check if you have a hot key: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html.</p> <note> <p>This message is returned when writes get throttled on an On-Demand table as DynamoDB is automatically scaling the table.</p> </note> </li> <li> <p>Throughput exceeds the current capacity for one or more global secondary indexes. DynamoDB is automatically scaling your index so please try again shortly.</p> <note> <p>This message is returned when when writes get throttled on an On-Demand GSI as DynamoDB is automatically scaling the GSI.</p> </note> </li> </ul> </li> </ul> </li> <li> <p>Validation Error:</p> <ul> <li> <p>Code: <code>ValidationError</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>One or more parameter values were invalid.</p> </li> <li> <p>The update expression attempted to update the secondary index key beyond allowed size limits.</p> </li> <li> <p>The update expression attempted to update the secondary index key to unsupported type.</p> </li> <li> <p>An operand in the update expression has an incorrect data type.</p> </li> <li> <p>Item size to update has exceeded the maximum allowed size.</p> </li> <li> <p>Number overflow. Attempting to store a number with magnitude larger than supported range.</p> </li> <li> <p>Type mismatch for attribute to update.</p> </li> <li> <p>Nesting Levels have exceeded supported limits.</p> </li> <li> <p>The document path provided in the update expression is invalid for update.</p> </li> <li> <p>The provided expression refers to an attribute that does not exist in the item.</p> </li> </ul> </li> </ul> </li> </ul></p>
+    /// <p><p>The entire transaction request was canceled.</p> <p>DynamoDB cancels a <code>TransactWriteItems</code> request under the following circumstances:</p> <ul> <li> <p>A condition in one of the condition expressions is not met.</p> </li> <li> <p>A table in the <code>TransactWriteItems</code> request is in a different account or region.</p> </li> <li> <p>More than one action in the <code>TransactWriteItems</code> operation targets the same item.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>An item size becomes too large (larger than 400 KB), or a local secondary index (LSI) becomes too large, or a similar validation error occurs because of changes made by the transaction.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul> <p>DynamoDB cancels a <code>TransactGetItems</code> request under the following circumstances:</p> <ul> <li> <p>There is an ongoing <code>TransactGetItems</code> operation that conflicts with a concurrent <code>PutItem</code>, <code>UpdateItem</code>, <code>DeleteItem</code> or <code>TransactWriteItems</code> request. In this case the <code>TransactGetItems</code> operation fails with a <code>TransactionCanceledException</code>.</p> </li> <li> <p>A table in the <code>TransactGetItems</code> request is in a different account or region.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul> <note> <p>If using Java, DynamoDB lists the cancellation reasons on the <code>CancellationReasons</code> property. This property is not set for other languages. Transaction cancellation reasons are ordered in the order of requested items, if an item has no error it will have <code>NONE</code> code and <code>Null</code> message.</p> </note> <p>Cancellation reason codes and possible error messages:</p> <ul> <li> <p>No Errors:</p> <ul> <li> <p>Code: <code>NONE</code> </p> </li> <li> <p>Message: <code>null</code> </p> </li> </ul> </li> <li> <p>Conditional Check Failed:</p> <ul> <li> <p>Code: <code>ConditionalCheckFailed</code> </p> </li> <li> <p>Message: The conditional request failed. </p> </li> </ul> </li> <li> <p>Item Collection Size Limit Exceeded:</p> <ul> <li> <p>Code: <code>ItemCollectionSizeLimitExceeded</code> </p> </li> <li> <p>Message: Collection size exceeded.</p> </li> </ul> </li> <li> <p>Transaction Conflict:</p> <ul> <li> <p>Code: <code>TransactionConflict</code> </p> </li> <li> <p>Message: Transaction is ongoing for the item.</p> </li> </ul> </li> <li> <p>Provisioned Throughput Exceeded:</p> <ul> <li> <p>Code: <code>ProvisionedThroughputExceeded</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>The level of configured provisioned throughput for the table was exceeded. Consider increasing your provisioning level with the UpdateTable API.</p> <note> <p>This Message is received when provisioned throughput is exceeded is on a provisioned DynamoDB table.</p> </note> </li> <li> <p>The level of configured provisioned throughput for one or more global secondary indexes of the table was exceeded. Consider increasing your provisioning level for the under-provisioned global secondary indexes with the UpdateTable API.</p> <note> <p>This message is returned when provisioned throughput is exceeded is on a provisioned GSI.</p> </note> </li> </ul> </li> </ul> </li> <li> <p>Throttling Error:</p> <ul> <li> <p>Code: <code>ThrottlingError</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>Throughput exceeds the current capacity of your table or index. DynamoDB is automatically scaling your table or index so please try again shortly. If exceptions persist, check if you have a hot key: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html.</p> <note> <p>This message is returned when writes get throttled on an On-Demand table as DynamoDB is automatically scaling the table.</p> </note> </li> <li> <p>Throughput exceeds the current capacity for one or more global secondary indexes. DynamoDB is automatically scaling your index so please try again shortly.</p> <note> <p>This message is returned when when writes get throttled on an On-Demand GSI as DynamoDB is automatically scaling the GSI.</p> </note> </li> </ul> </li> </ul> </li> <li> <p>Validation Error:</p> <ul> <li> <p>Code: <code>ValidationError</code> </p> </li> <li> <p>Messages: </p> <ul> <li> <p>One or more parameter values were invalid.</p> </li> <li> <p>The update expression attempted to update the secondary index key beyond allowed size limits.</p> </li> <li> <p>The update expression attempted to update the secondary index key to unsupported type.</p> </li> <li> <p>An operand in the update expression has an incorrect data type.</p> </li> <li> <p>Item size to update has exceeded the maximum allowed size.</p> </li> <li> <p>Number overflow. Attempting to store a number with magnitude larger than supported range.</p> </li> <li> <p>Type mismatch for attribute to update.</p> </li> <li> <p>Nesting Levels have exceeded supported limits.</p> </li> <li> <p>The document path provided in the update expression is invalid for update.</p> </li> <li> <p>The provided expression refers to an attribute that does not exist in the item.</p> </li> </ul> </li> </ul> </li> </ul></p>
     TransactionCanceled(String),
     /// <p>The transaction with the given request token is already in progress.</p>
     TransactionInProgress(String),
@@ -3993,6 +4608,11 @@ impl TransactWriteItemsError {
                     return RusotoError::Service(
                         TransactWriteItemsError::ProvisionedThroughputExceeded(err.msg),
                     )
+                }
+                "RequestLimitExceeded" => {
+                    return RusotoError::Service(TransactWriteItemsError::RequestLimitExceeded(
+                        err.msg,
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TransactWriteItemsError::ResourceNotFound(err.msg))
@@ -4025,6 +4645,7 @@ impl Error for TransactWriteItemsError {
             TransactWriteItemsError::IdempotentParameterMismatch(ref cause) => cause,
             TransactWriteItemsError::InternalServerError(ref cause) => cause,
             TransactWriteItemsError::ProvisionedThroughputExceeded(ref cause) => cause,
+            TransactWriteItemsError::RequestLimitExceeded(ref cause) => cause,
             TransactWriteItemsError::ResourceNotFound(ref cause) => cause,
             TransactWriteItemsError::TransactionCanceled(ref cause) => cause,
             TransactWriteItemsError::TransactionInProgress(ref cause) => cause,
@@ -4130,6 +4751,49 @@ impl Error for UpdateContinuousBackupsError {
             UpdateContinuousBackupsError::ContinuousBackupsUnavailable(ref cause) => cause,
             UpdateContinuousBackupsError::InternalServerError(ref cause) => cause,
             UpdateContinuousBackupsError::TableNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateContributorInsights
+#[derive(Debug, PartialEq)]
+pub enum UpdateContributorInsightsError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateContributorInsightsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContributorInsightsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        UpdateContributorInsightsError::InternalServerError(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateContributorInsightsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateContributorInsightsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateContributorInsightsError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateContributorInsightsError::InternalServerError(ref cause) => cause,
+            UpdateContributorInsightsError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -4395,6 +5059,67 @@ impl Error for UpdateTableError {
         }
     }
 }
+/// Errors returned by UpdateTableReplicaAutoScaling
+#[derive(Debug, PartialEq)]
+pub enum UpdateTableReplicaAutoScalingError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 50 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>The only exception is when you are creating a table with one or more secondary indexes. You can have up to 25 such requests running at a time; however, if the table or index specifications are complex, DynamoDB might temporarily reduce the number of concurrent operations.</p> <p>There is a soft account limit of 256 tables.</p>
+    LimitExceeded(String),
+    /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
+    ResourceInUse(String),
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateTableReplicaAutoScalingError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateTableReplicaAutoScalingError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        UpdateTableReplicaAutoScalingError::InternalServerError(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateTableReplicaAutoScalingError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(UpdateTableReplicaAutoScalingError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateTableReplicaAutoScalingError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateTableReplicaAutoScalingError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateTableReplicaAutoScalingError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateTableReplicaAutoScalingError::InternalServerError(ref cause) => cause,
+            UpdateTableReplicaAutoScalingError::LimitExceeded(ref cause) => cause,
+            UpdateTableReplicaAutoScalingError::ResourceInUse(ref cause) => cause,
+            UpdateTableReplicaAutoScalingError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateTimeToLive
 #[derive(Debug, PartialEq)]
 pub enum UpdateTimeToLiveError {
@@ -4468,7 +5193,7 @@ pub trait DynamoDb {
         input: CreateBackupInput,
     ) -> RusotoFuture<CreateBackupOutput, CreateBackupError>;
 
-    /// <p><p>Creates a global table from an existing table. A global table creates a replication relationship between two or more DynamoDB tables with the same table name in the provided Regions. </p> <p>If you want to add a new replica table to a global table, each of the following conditions must be true:</p> <ul> <li> <p>The table must have the same primary key as all of the other replicas.</p> </li> <li> <p>The table must have the same name as all of the other replicas.</p> </li> <li> <p>The table must have DynamoDB Streams enabled, with the stream containing both the new and the old images of the item.</p> </li> <li> <p>None of the replica tables in the global table can contain any data.</p> </li> </ul> <p> If global secondary indexes are specified, then the following conditions must also be met: </p> <ul> <li> <p> The global secondary indexes must have the same name. </p> </li> <li> <p> The global secondary indexes must have the same hash key and sort key (if present). </p> </li> </ul> <important> <p> Write capacity settings should be set consistently across your replica tables and secondary indexes. DynamoDB strongly recommends enabling auto scaling to manage the write capacity settings for all of your global tables replicas and indexes. </p> <p> If you prefer to manage write capacity settings manually, you should provision equal replicated write capacity units to your replica tables. You should also provision equal replicated write capacity units to matching secondary indexes across your global table. </p> </important></p>
+    /// <p><p>Creates a global table from an existing table. A global table creates a replication relationship between two or more DynamoDB tables with the same table name in the provided Regions. </p> <note> <p>This method only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html">Version 2017.11.29</a> of global tables.</p> </note> <p>If you want to add a new replica table to a global table, each of the following conditions must be true:</p> <ul> <li> <p>The table must have the same primary key as all of the other replicas.</p> </li> <li> <p>The table must have the same name as all of the other replicas.</p> </li> <li> <p>The table must have DynamoDB Streams enabled, with the stream containing both the new and the old images of the item.</p> </li> <li> <p>None of the replica tables in the global table can contain any data.</p> </li> </ul> <p> If global secondary indexes are specified, then the following conditions must also be met: </p> <ul> <li> <p> The global secondary indexes must have the same name. </p> </li> <li> <p> The global secondary indexes must have the same hash key and sort key (if present). </p> </li> </ul> <important> <p> Write capacity settings should be set consistently across your replica tables and secondary indexes. DynamoDB strongly recommends enabling auto scaling to manage the write capacity settings for all of your global tables replicas and indexes. </p> <p> If you prefer to manage write capacity settings manually, you should provision equal replicated write capacity units to your replica tables. You should also provision equal replicated write capacity units to matching secondary indexes across your global table. </p> </important></p>
     fn create_global_table(
         &self,
         input: CreateGlobalTableInput,
@@ -4510,17 +5235,23 @@ pub trait DynamoDb {
         input: DescribeContinuousBackupsInput,
     ) -> RusotoFuture<DescribeContinuousBackupsOutput, DescribeContinuousBackupsError>;
 
+    /// <p>Returns information about contributor insights, for a given table or global secondary index.</p>
+    fn describe_contributor_insights(
+        &self,
+        input: DescribeContributorInsightsInput,
+    ) -> RusotoFuture<DescribeContributorInsightsOutput, DescribeContributorInsightsError>;
+
     /// <p>Returns the regional endpoint information.</p>
     fn describe_endpoints(&self)
         -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError>;
 
-    /// <p>Returns information about the specified global table.</p>
+    /// <p><p>Returns information about the specified global table.</p> <note> <p>This method only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html">Version 2017.11.29</a> of global tables.</p> </note></p>
     fn describe_global_table(
         &self,
         input: DescribeGlobalTableInput,
     ) -> RusotoFuture<DescribeGlobalTableOutput, DescribeGlobalTableError>;
 
-    /// <p>Describes Region-specific settings for a global table.</p>
+    /// <p><p>Describes Region-specific settings for a global table.</p> <note> <p>This method only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html">Version 2017.11.29</a> of global tables.</p> </note></p>
     fn describe_global_table_settings(
         &self,
         input: DescribeGlobalTableSettingsInput,
@@ -4534,6 +5265,12 @@ pub trait DynamoDb {
         &self,
         input: DescribeTableInput,
     ) -> RusotoFuture<DescribeTableOutput, DescribeTableError>;
+
+    /// <p><p>Describes auto scaling settings across replicas of the global table at once.</p> <note> <p>This method only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html">Version 2019.11.21</a> of global tables.</p> </note></p>
+    fn describe_table_replica_auto_scaling(
+        &self,
+        input: DescribeTableReplicaAutoScalingInput,
+    ) -> RusotoFuture<DescribeTableReplicaAutoScalingOutput, DescribeTableReplicaAutoScalingError>;
 
     /// <p>Gives a description of the Time to Live (TTL) status on the specified table. </p>
     fn describe_time_to_live(
@@ -4550,7 +5287,13 @@ pub trait DynamoDb {
         input: ListBackupsInput,
     ) -> RusotoFuture<ListBackupsOutput, ListBackupsError>;
 
-    /// <p>Lists all global tables that have a replica in the specified Region.</p>
+    /// <p>Returns a list of ContributorInsightsSummary for a table and all its global secondary indexes.</p>
+    fn list_contributor_insights(
+        &self,
+        input: ListContributorInsightsInput,
+    ) -> RusotoFuture<ListContributorInsightsOutput, ListContributorInsightsError>;
+
+    /// <p><p>Lists all global tables that have a replica in the specified Region.</p> <note> <p>This method only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html">Version 2017.11.29</a> of global tables.</p> </note></p>
     fn list_global_tables(
         &self,
         input: ListGlobalTablesInput,
@@ -4592,13 +5335,13 @@ pub trait DynamoDb {
     /// <p>Associate a set of tags with an Amazon DynamoDB resource. You can then activate these user-defined tags so that they appear on the Billing and Cost Management console for cost allocation tracking. You can call TagResource up to five times per second, per account. </p> <p>For an overview on tagging DynamoDB resources, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     fn tag_resource(&self, input: TagResourceInput) -> RusotoFuture<(), TagResourceError>;
 
-    /// <p><p> <code>TransactGetItems</code> is a synchronous operation that atomically retrieves multiple items from one or more tables (but not from indexes) in a single account and Region. A <code>TransactGetItems</code> call can contain up to 25 <code>TransactGetItem</code> objects, each of which contains a <code>Get</code> structure that specifies an item to retrieve from a table in the account and Region. A call to <code>TransactGetItems</code> cannot retrieve items from tables in more than one AWS account or Region. The aggregate size of the items in the transaction cannot exceed 4 MB.</p> <note> <p>All AWS Regions and AWS GovCloud (US) support up to 25 items per transaction with up to 4 MB of data, except the following AWS Regions: </p> <ul> <li> <p>China (Beijing)</p> </li> <li> <p>China (Ningxia)</p> </li> </ul> <p>The China (Beijing) and China (Ningxia) Regions support up to 10 items per transaction with up to 4 MB of data. </p> </note> <p>DynamoDB rejects the entire <code>TransactGetItems</code> request if any of the following is true:</p> <ul> <li> <p>A conflicting operation is in the process of updating an item to be read.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> <li> <p>The aggregate size of the items in the transaction cannot exceed 4 MB.</p> </li> </ul></p>
+    /// <p><p> <code>TransactGetItems</code> is a synchronous operation that atomically retrieves multiple items from one or more tables (but not from indexes) in a single account and Region. A <code>TransactGetItems</code> call can contain up to 25 <code>TransactGetItem</code> objects, each of which contains a <code>Get</code> structure that specifies an item to retrieve from a table in the account and Region. A call to <code>TransactGetItems</code> cannot retrieve items from tables in more than one AWS account or Region. The aggregate size of the items in the transaction cannot exceed 4 MB.</p> <p>DynamoDB rejects the entire <code>TransactGetItems</code> request if any of the following is true:</p> <ul> <li> <p>A conflicting operation is in the process of updating an item to be read.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> <li> <p>The aggregate size of the items in the transaction cannot exceed 4 MB.</p> </li> </ul></p>
     fn transact_get_items(
         &self,
         input: TransactGetItemsInput,
     ) -> RusotoFuture<TransactGetItemsOutput, TransactGetItemsError>;
 
-    /// <p><p> <code>TransactWriteItems</code> is a synchronous write operation that groups up to 25 action requests. These actions can target items in different tables, but not in different AWS accounts or Regions, and no two actions can target the same item. For example, you cannot both <code>ConditionCheck</code> and <code>Update</code> the same item. The aggregate size of the items in the transaction cannot exceed 4 MB.</p> <note> <p>All AWS Regions and AWS GovCloud (US) support up to 25 items per transaction with up to 4 MB of data, except the following AWS Regions: </p> <ul> <li> <p>China (Beijing)</p> </li> <li> <p>China (Ningxia)</p> </li> </ul> <p>The China (Beijing) and China (Ningxia) Regions support up to 10 items per transaction with up to 4 MB of data. </p> </note> <p>The actions are completed atomically so that either all of them succeed, or all of them fail. They are defined by the following objects:</p> <ul> <li> <p> <code>Put</code>  &#x97;   Initiates a <code>PutItem</code> operation to write a new item. This structure specifies the primary key of the item to be written, the name of the table to write it in, an optional condition expression that must be satisfied for the write to succeed, a list of the item&#39;s attributes, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>Update</code>  &#x97;   Initiates an <code>UpdateItem</code> operation to update an existing item. This structure specifies the primary key of the item to be updated, the name of the table where it resides, an optional condition expression that must be satisfied for the update to succeed, an expression that defines one or more attributes to be updated, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>Delete</code>  &#x97;   Initiates a <code>DeleteItem</code> operation to delete an existing item. This structure specifies the primary key of the item to be deleted, the name of the table where it resides, an optional condition expression that must be satisfied for the deletion to succeed, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>ConditionCheck</code>  &#x97;   Applies a condition to an item that is not being modified by the transaction. This structure specifies the primary key of the item to be checked, the name of the table where it resides, a condition expression that must be satisfied for the transaction to succeed, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> </ul> <p>DynamoDB rejects the entire <code>TransactWriteItems</code> request if any of the following is true:</p> <ul> <li> <p>A condition in one of the condition expressions is not met.</p> </li> <li> <p>An ongoing operation is in the process of updating the same item.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>An item size becomes too large (bigger than 400 KB), a local secondary index (LSI) becomes too large, or a similar validation error occurs because of changes made by the transaction.</p> </li> <li> <p>The aggregate size of the items in the transaction exceeds 4 MB.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul></p>
+    /// <p><p> <code>TransactWriteItems</code> is a synchronous write operation that groups up to 25 action requests. These actions can target items in different tables, but not in different AWS accounts or Regions, and no two actions can target the same item. For example, you cannot both <code>ConditionCheck</code> and <code>Update</code> the same item. The aggregate size of the items in the transaction cannot exceed 4 MB.</p> <p>The actions are completed atomically so that either all of them succeed, or all of them fail. They are defined by the following objects:</p> <ul> <li> <p> <code>Put</code>  &#x97;   Initiates a <code>PutItem</code> operation to write a new item. This structure specifies the primary key of the item to be written, the name of the table to write it in, an optional condition expression that must be satisfied for the write to succeed, a list of the item&#39;s attributes, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>Update</code>  &#x97;   Initiates an <code>UpdateItem</code> operation to update an existing item. This structure specifies the primary key of the item to be updated, the name of the table where it resides, an optional condition expression that must be satisfied for the update to succeed, an expression that defines one or more attributes to be updated, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>Delete</code>  &#x97;   Initiates a <code>DeleteItem</code> operation to delete an existing item. This structure specifies the primary key of the item to be deleted, the name of the table where it resides, an optional condition expression that must be satisfied for the deletion to succeed, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>ConditionCheck</code>  &#x97;   Applies a condition to an item that is not being modified by the transaction. This structure specifies the primary key of the item to be checked, the name of the table where it resides, a condition expression that must be satisfied for the transaction to succeed, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> </ul> <p>DynamoDB rejects the entire <code>TransactWriteItems</code> request if any of the following is true:</p> <ul> <li> <p>A condition in one of the condition expressions is not met.</p> </li> <li> <p>An ongoing operation is in the process of updating the same item.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>An item size becomes too large (bigger than 400 KB), a local secondary index (LSI) becomes too large, or a similar validation error occurs because of changes made by the transaction.</p> </li> <li> <p>The aggregate size of the items in the transaction exceeds 4 MB.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul></p>
     fn transact_write_items(
         &self,
         input: TransactWriteItemsInput,
@@ -4612,6 +5355,12 @@ pub trait DynamoDb {
         &self,
         input: UpdateContinuousBackupsInput,
     ) -> RusotoFuture<UpdateContinuousBackupsOutput, UpdateContinuousBackupsError>;
+
+    /// <p>Updates the status for contributor insights for a specific table or index.</p>
+    fn update_contributor_insights(
+        &self,
+        input: UpdateContributorInsightsInput,
+    ) -> RusotoFuture<UpdateContributorInsightsOutput, UpdateContributorInsightsError>;
 
     /// <p><p>Adds or removes replicas in the specified global table. The global table must already exist to be able to use this operation. Any replica to be added must be empty, have the same name as the global table, have the same key schema, have DynamoDB Streams enabled, and have the same provisioned and maximum write capacity units.</p> <note> <p>Although you can use <code>UpdateGlobalTable</code> to add replicas and remove replicas in a single request, for simplicity we recommend that you issue separate requests for adding or removing replicas.</p> </note> <p> If global secondary indexes are specified, then the following conditions must also be met: </p> <ul> <li> <p> The global secondary indexes must have the same name. </p> </li> <li> <p> The global secondary indexes must have the same hash key and sort key (if present). </p> </li> <li> <p> The global secondary indexes must have the same provisioned and maximum write capacity units. </p> </li> </ul></p>
     fn update_global_table(
@@ -4636,6 +5385,12 @@ pub trait DynamoDb {
         &self,
         input: UpdateTableInput,
     ) -> RusotoFuture<UpdateTableOutput, UpdateTableError>;
+
+    /// <p><p>Updates auto scaling settings on your global tables at once.</p> <note> <p>This method only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html">Version 2019.11.21</a> of global tables.</p> </note></p>
+    fn update_table_replica_auto_scaling(
+        &self,
+        input: UpdateTableReplicaAutoScalingInput,
+    ) -> RusotoFuture<UpdateTableReplicaAutoScalingOutput, UpdateTableReplicaAutoScalingError>;
 
     /// <p>The <code>UpdateTimeToLive</code> method enables or disables Time to Live (TTL) for the specified table. A successful <code>UpdateTimeToLive</code> call returns the current <code>TimeToLiveSpecification</code>. It can take up to one hour for the change to fully process. Any additional <code>UpdateTimeToLive</code> calls for the same table during this one hour duration result in a <code>ValidationException</code>. </p> <p>TTL compares the current time in epoch time format to the time stored in the TTL attribute of an item. If the epoch time value stored in the attribute is less than the current time, the item is marked as expired and subsequently deleted.</p> <note> <p> The epoch time format is the number of seconds elapsed since 12:00:00 AM January 1, 1970 UTC. </p> </note> <p>DynamoDB deletes expired items on a best-effort basis to ensure availability of throughput for other data operations. </p> <important> <p>DynamoDB typically deletes expired items within two days of expiration. The exact duration within which an item gets deleted after expiration is specific to the nature of the workload. Items that have expired and not been deleted will still show up in reads, queries, and scans.</p> </important> <p>As items are deleted, they are removed from any local secondary index and global secondary index immediately in the same eventually consistent way as a standard delete operation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html">Time To Live</a> in the Amazon DynamoDB Developer Guide. </p>
     fn update_time_to_live(
@@ -4776,7 +5531,7 @@ impl DynamoDb for DynamoDbClient {
         })
     }
 
-    /// <p><p>Creates a global table from an existing table. A global table creates a replication relationship between two or more DynamoDB tables with the same table name in the provided Regions. </p> <p>If you want to add a new replica table to a global table, each of the following conditions must be true:</p> <ul> <li> <p>The table must have the same primary key as all of the other replicas.</p> </li> <li> <p>The table must have the same name as all of the other replicas.</p> </li> <li> <p>The table must have DynamoDB Streams enabled, with the stream containing both the new and the old images of the item.</p> </li> <li> <p>None of the replica tables in the global table can contain any data.</p> </li> </ul> <p> If global secondary indexes are specified, then the following conditions must also be met: </p> <ul> <li> <p> The global secondary indexes must have the same name. </p> </li> <li> <p> The global secondary indexes must have the same hash key and sort key (if present). </p> </li> </ul> <important> <p> Write capacity settings should be set consistently across your replica tables and secondary indexes. DynamoDB strongly recommends enabling auto scaling to manage the write capacity settings for all of your global tables replicas and indexes. </p> <p> If you prefer to manage write capacity settings manually, you should provision equal replicated write capacity units to your replica tables. You should also provision equal replicated write capacity units to matching secondary indexes across your global table. </p> </important></p>
+    /// <p><p>Creates a global table from an existing table. A global table creates a replication relationship between two or more DynamoDB tables with the same table name in the provided Regions. </p> <note> <p>This method only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html">Version 2017.11.29</a> of global tables.</p> </note> <p>If you want to add a new replica table to a global table, each of the following conditions must be true:</p> <ul> <li> <p>The table must have the same primary key as all of the other replicas.</p> </li> <li> <p>The table must have the same name as all of the other replicas.</p> </li> <li> <p>The table must have DynamoDB Streams enabled, with the stream containing both the new and the old images of the item.</p> </li> <li> <p>None of the replica tables in the global table can contain any data.</p> </li> </ul> <p> If global secondary indexes are specified, then the following conditions must also be met: </p> <ul> <li> <p> The global secondary indexes must have the same name. </p> </li> <li> <p> The global secondary indexes must have the same hash key and sort key (if present). </p> </li> </ul> <important> <p> Write capacity settings should be set consistently across your replica tables and secondary indexes. DynamoDB strongly recommends enabling auto scaling to manage the write capacity settings for all of your global tables replicas and indexes. </p> <p> If you prefer to manage write capacity settings manually, you should provision equal replicated write capacity units to your replica tables. You should also provision equal replicated write capacity units to matching secondary indexes across your global table. </p> </important></p>
     fn create_global_table(
         &self,
         input: CreateGlobalTableInput,
@@ -4979,6 +5734,35 @@ impl DynamoDb for DynamoDbClient {
         })
     }
 
+    /// <p>Returns information about contributor insights, for a given table or global secondary index.</p>
+    fn describe_contributor_insights(
+        &self,
+        input: DescribeContributorInsightsInput,
+    ) -> RusotoFuture<DescribeContributorInsightsOutput, DescribeContributorInsightsError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DynamoDB_20120810.DescribeContributorInsights",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeContributorInsightsOutput, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeContributorInsightsError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Returns the regional endpoint information.</p>
     fn describe_endpoints(
         &self,
@@ -5006,7 +5790,7 @@ impl DynamoDb for DynamoDbClient {
         })
     }
 
-    /// <p>Returns information about the specified global table.</p>
+    /// <p><p>Returns information about the specified global table.</p> <note> <p>This method only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html">Version 2017.11.29</a> of global tables.</p> </note></p>
     fn describe_global_table(
         &self,
         input: DescribeGlobalTableInput,
@@ -5034,7 +5818,7 @@ impl DynamoDb for DynamoDbClient {
         })
     }
 
-    /// <p>Describes Region-specific settings for a global table.</p>
+    /// <p><p>Describes Region-specific settings for a global table.</p> <note> <p>This method only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html">Version 2017.11.29</a> of global tables.</p> </note></p>
     fn describe_global_table_settings(
         &self,
         input: DescribeGlobalTableSettingsInput,
@@ -5113,6 +5897,38 @@ impl DynamoDb for DynamoDbClient {
                         .from_err()
                         .and_then(|response| Err(DescribeTableError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p><p>Describes auto scaling settings across replicas of the global table at once.</p> <note> <p>This method only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html">Version 2019.11.21</a> of global tables.</p> </note></p>
+    fn describe_table_replica_auto_scaling(
+        &self,
+        input: DescribeTableReplicaAutoScalingInput,
+    ) -> RusotoFuture<DescribeTableReplicaAutoScalingOutput, DescribeTableReplicaAutoScalingError>
+    {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DynamoDB_20120810.DescribeTableReplicaAutoScaling",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeTableReplicaAutoScalingOutput, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeTableReplicaAutoScalingError::from_response(
+                        response,
+                    ))
+                }))
             }
         })
     }
@@ -5200,7 +6016,33 @@ impl DynamoDb for DynamoDbClient {
         })
     }
 
-    /// <p>Lists all global tables that have a replica in the specified Region.</p>
+    /// <p>Returns a list of ContributorInsightsSummary for a table and all its global secondary indexes.</p>
+    fn list_contributor_insights(
+        &self,
+        input: ListContributorInsightsInput,
+    ) -> RusotoFuture<ListContributorInsightsOutput, ListContributorInsightsError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "DynamoDB_20120810.ListContributorInsights");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListContributorInsightsOutput, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListContributorInsightsError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p><p>Lists all global tables that have a replica in the specified Region.</p> <note> <p>This method only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html">Version 2017.11.29</a> of global tables.</p> </note></p>
     fn list_global_tables(
         &self,
         input: ListGlobalTablesInput,
@@ -5442,7 +6284,7 @@ impl DynamoDb for DynamoDbClient {
         })
     }
 
-    /// <p><p> <code>TransactGetItems</code> is a synchronous operation that atomically retrieves multiple items from one or more tables (but not from indexes) in a single account and Region. A <code>TransactGetItems</code> call can contain up to 25 <code>TransactGetItem</code> objects, each of which contains a <code>Get</code> structure that specifies an item to retrieve from a table in the account and Region. A call to <code>TransactGetItems</code> cannot retrieve items from tables in more than one AWS account or Region. The aggregate size of the items in the transaction cannot exceed 4 MB.</p> <note> <p>All AWS Regions and AWS GovCloud (US) support up to 25 items per transaction with up to 4 MB of data, except the following AWS Regions: </p> <ul> <li> <p>China (Beijing)</p> </li> <li> <p>China (Ningxia)</p> </li> </ul> <p>The China (Beijing) and China (Ningxia) Regions support up to 10 items per transaction with up to 4 MB of data. </p> </note> <p>DynamoDB rejects the entire <code>TransactGetItems</code> request if any of the following is true:</p> <ul> <li> <p>A conflicting operation is in the process of updating an item to be read.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> <li> <p>The aggregate size of the items in the transaction cannot exceed 4 MB.</p> </li> </ul></p>
+    /// <p><p> <code>TransactGetItems</code> is a synchronous operation that atomically retrieves multiple items from one or more tables (but not from indexes) in a single account and Region. A <code>TransactGetItems</code> call can contain up to 25 <code>TransactGetItem</code> objects, each of which contains a <code>Get</code> structure that specifies an item to retrieve from a table in the account and Region. A call to <code>TransactGetItems</code> cannot retrieve items from tables in more than one AWS account or Region. The aggregate size of the items in the transaction cannot exceed 4 MB.</p> <p>DynamoDB rejects the entire <code>TransactGetItems</code> request if any of the following is true:</p> <ul> <li> <p>A conflicting operation is in the process of updating an item to be read.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> <li> <p>The aggregate size of the items in the transaction cannot exceed 4 MB.</p> </li> </ul></p>
     fn transact_get_items(
         &self,
         input: TransactGetItemsInput,
@@ -5471,7 +6313,7 @@ impl DynamoDb for DynamoDbClient {
         })
     }
 
-    /// <p><p> <code>TransactWriteItems</code> is a synchronous write operation that groups up to 25 action requests. These actions can target items in different tables, but not in different AWS accounts or Regions, and no two actions can target the same item. For example, you cannot both <code>ConditionCheck</code> and <code>Update</code> the same item. The aggregate size of the items in the transaction cannot exceed 4 MB.</p> <note> <p>All AWS Regions and AWS GovCloud (US) support up to 25 items per transaction with up to 4 MB of data, except the following AWS Regions: </p> <ul> <li> <p>China (Beijing)</p> </li> <li> <p>China (Ningxia)</p> </li> </ul> <p>The China (Beijing) and China (Ningxia) Regions support up to 10 items per transaction with up to 4 MB of data. </p> </note> <p>The actions are completed atomically so that either all of them succeed, or all of them fail. They are defined by the following objects:</p> <ul> <li> <p> <code>Put</code>  &#x97;   Initiates a <code>PutItem</code> operation to write a new item. This structure specifies the primary key of the item to be written, the name of the table to write it in, an optional condition expression that must be satisfied for the write to succeed, a list of the item&#39;s attributes, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>Update</code>  &#x97;   Initiates an <code>UpdateItem</code> operation to update an existing item. This structure specifies the primary key of the item to be updated, the name of the table where it resides, an optional condition expression that must be satisfied for the update to succeed, an expression that defines one or more attributes to be updated, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>Delete</code>  &#x97;   Initiates a <code>DeleteItem</code> operation to delete an existing item. This structure specifies the primary key of the item to be deleted, the name of the table where it resides, an optional condition expression that must be satisfied for the deletion to succeed, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>ConditionCheck</code>  &#x97;   Applies a condition to an item that is not being modified by the transaction. This structure specifies the primary key of the item to be checked, the name of the table where it resides, a condition expression that must be satisfied for the transaction to succeed, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> </ul> <p>DynamoDB rejects the entire <code>TransactWriteItems</code> request if any of the following is true:</p> <ul> <li> <p>A condition in one of the condition expressions is not met.</p> </li> <li> <p>An ongoing operation is in the process of updating the same item.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>An item size becomes too large (bigger than 400 KB), a local secondary index (LSI) becomes too large, or a similar validation error occurs because of changes made by the transaction.</p> </li> <li> <p>The aggregate size of the items in the transaction exceeds 4 MB.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul></p>
+    /// <p><p> <code>TransactWriteItems</code> is a synchronous write operation that groups up to 25 action requests. These actions can target items in different tables, but not in different AWS accounts or Regions, and no two actions can target the same item. For example, you cannot both <code>ConditionCheck</code> and <code>Update</code> the same item. The aggregate size of the items in the transaction cannot exceed 4 MB.</p> <p>The actions are completed atomically so that either all of them succeed, or all of them fail. They are defined by the following objects:</p> <ul> <li> <p> <code>Put</code>  &#x97;   Initiates a <code>PutItem</code> operation to write a new item. This structure specifies the primary key of the item to be written, the name of the table to write it in, an optional condition expression that must be satisfied for the write to succeed, a list of the item&#39;s attributes, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>Update</code>  &#x97;   Initiates an <code>UpdateItem</code> operation to update an existing item. This structure specifies the primary key of the item to be updated, the name of the table where it resides, an optional condition expression that must be satisfied for the update to succeed, an expression that defines one or more attributes to be updated, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>Delete</code>  &#x97;   Initiates a <code>DeleteItem</code> operation to delete an existing item. This structure specifies the primary key of the item to be deleted, the name of the table where it resides, an optional condition expression that must be satisfied for the deletion to succeed, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>ConditionCheck</code>  &#x97;   Applies a condition to an item that is not being modified by the transaction. This structure specifies the primary key of the item to be checked, the name of the table where it resides, a condition expression that must be satisfied for the transaction to succeed, and a field indicating whether to retrieve the item&#39;s attributes if the condition is not met.</p> </li> </ul> <p>DynamoDB rejects the entire <code>TransactWriteItems</code> request if any of the following is true:</p> <ul> <li> <p>A condition in one of the condition expressions is not met.</p> </li> <li> <p>An ongoing operation is in the process of updating the same item.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>An item size becomes too large (bigger than 400 KB), a local secondary index (LSI) becomes too large, or a similar validation error occurs because of changes made by the transaction.</p> </li> <li> <p>The aggregate size of the items in the transaction exceeds 4 MB.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul></p>
     fn transact_write_items(
         &self,
         input: TransactWriteItemsInput,
@@ -5544,6 +6386,35 @@ impl DynamoDb for DynamoDbClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateContinuousBackupsError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates the status for contributor insights for a specific table or index.</p>
+    fn update_contributor_insights(
+        &self,
+        input: UpdateContributorInsightsInput,
+    ) -> RusotoFuture<UpdateContributorInsightsOutput, UpdateContributorInsightsError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DynamoDB_20120810.UpdateContributorInsights",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateContributorInsightsOutput, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateContributorInsightsError::from_response(response))
                 }))
             }
         })
@@ -5661,6 +6532,35 @@ impl DynamoDb for DynamoDbClient {
                         .from_err()
                         .and_then(|response| Err(UpdateTableError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p><p>Updates auto scaling settings on your global tables at once.</p> <note> <p>This method only applies to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html">Version 2019.11.21</a> of global tables.</p> </note></p>
+    fn update_table_replica_auto_scaling(
+        &self,
+        input: UpdateTableReplicaAutoScalingInput,
+    ) -> RusotoFuture<UpdateTableReplicaAutoScalingOutput, UpdateTableReplicaAutoScalingError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DynamoDB_20120810.UpdateTableReplicaAutoScaling",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateTableReplicaAutoScalingOutput, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateTableReplicaAutoScalingError::from_response(response))
+                }))
             }
         })
     }

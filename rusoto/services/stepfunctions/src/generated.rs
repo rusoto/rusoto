@@ -121,6 +121,15 @@ pub struct ActivityTimedOutEventDetails {
     pub error: Option<String>,
 }
 
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CloudWatchLogsLogGroup {
+    /// <p>The ARN of the the CloudWatch log group to which you want your logs emitted to. The ARN must end with <code>:*</code> </p>
+    #[serde(rename = "logGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group_arn: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateActivityInput {
     /// <p><p>The name of the activity to create. This name must be unique for your AWS account and region for 90 days. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
@@ -148,6 +157,10 @@ pub struct CreateStateMachineInput {
     /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     pub definition: String,
+    /// <p>Defines what execution history events are logged and where they are logged.</p>
+    #[serde(rename = "loggingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging_configuration: Option<LoggingConfiguration>,
     /// <p><p>The name of the state machine. </p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
@@ -158,6 +171,10 @@ pub struct CreateStateMachineInput {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+    /// <p>Determines whether a Standard or Express state machine is created. If not set, Standard is created.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -296,6 +313,10 @@ pub struct DescribeStateMachineOutput {
     /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     pub definition: String,
+    /// <p><p/></p>
+    #[serde(rename = "loggingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging_configuration: Option<LoggingConfiguration>,
     /// <p><p>The name of the state machine.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
@@ -309,6 +330,9 @@ pub struct DescribeStateMachineOutput {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "type")]
+    pub type_: String,
 }
 
 /// <p>Contains details about an abort of an execution.</p>
@@ -766,6 +790,32 @@ pub struct ListTagsForResourceOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LogDestination {
+    /// <p>An object describing a CloudWatch log group. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html">AWS::Logs::LogGroup</a> in the AWS CloudFormation User Guide.</p>
+    #[serde(rename = "cloudWatchLogsLogGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_logs_log_group: Option<CloudWatchLogsLogGroup>,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LoggingConfiguration {
+    /// <p>An object that describes where your execution history events will be logged. Limited to size 1. Required, if your log level is not set to <code>OFF</code>.</p>
+    #[serde(rename = "destinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destinations: Option<Vec<LogDestination>>,
+    /// <p>Determines whether execution history data is included in your log. When set to <code>FALSE</code>, data is excluded.</p>
+    #[serde(rename = "includeExecutionData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_execution_data: Option<bool>,
+    /// <p>Defines which category of execution history events are logged.</p>
+    #[serde(rename = "level")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub level: Option<String>,
+}
+
 /// <p>Contains details about an iteration of a Map state.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -899,6 +949,9 @@ pub struct StateMachineListItem {
     /// <p>The Amazon Resource Name (ARN) that identifies the state machine.</p>
     #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
+    /// <p><p/></p>
+    #[serde(rename = "type")]
+    pub type_: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1117,6 +1170,10 @@ pub struct UpdateStateMachineInput {
     #[serde(rename = "definition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub definition: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "loggingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging_configuration: Option<LoggingConfiguration>,
     /// <p>The Amazon Resource Name (ARN) of the IAM role of the state machine.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1188,6 +1245,8 @@ pub enum CreateStateMachineError {
     InvalidArn(String),
     /// <p>The provided Amazon States Language definition is invalid.</p>
     InvalidDefinition(String),
+    /// <p><p/></p>
+    InvalidLoggingConfiguration(String),
     /// <p>The provided name is invalid.</p>
     InvalidName(String),
     /// <p>A state machine with the same name but a different definition or role ARN already exists.</p>
@@ -1196,6 +1255,8 @@ pub enum CreateStateMachineError {
     StateMachineDeleting(String),
     /// <p>The maximum number of state machines has been reached. Existing state machines must be deleted before a new state machine can be created.</p>
     StateMachineLimitExceeded(String),
+    /// <p><p/></p>
+    StateMachineTypeNotSupported(String),
     /// <p>You've exceeded the number of tags allowed for a resource. See the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html"> Limits Topic</a> in the AWS Step Functions Developer Guide.</p>
     TooManyTags(String),
 }
@@ -1211,6 +1272,11 @@ impl CreateStateMachineError {
                     return RusotoError::Service(CreateStateMachineError::InvalidDefinition(
                         err.msg,
                     ))
+                }
+                "InvalidLoggingConfiguration" => {
+                    return RusotoError::Service(
+                        CreateStateMachineError::InvalidLoggingConfiguration(err.msg),
+                    )
                 }
                 "InvalidName" => {
                     return RusotoError::Service(CreateStateMachineError::InvalidName(err.msg))
@@ -1228,6 +1294,11 @@ impl CreateStateMachineError {
                 "StateMachineLimitExceeded" => {
                     return RusotoError::Service(
                         CreateStateMachineError::StateMachineLimitExceeded(err.msg),
+                    )
+                }
+                "StateMachineTypeNotSupported" => {
+                    return RusotoError::Service(
+                        CreateStateMachineError::StateMachineTypeNotSupported(err.msg),
                     )
                 }
                 "TooManyTags" => {
@@ -1250,10 +1321,12 @@ impl Error for CreateStateMachineError {
         match *self {
             CreateStateMachineError::InvalidArn(ref cause) => cause,
             CreateStateMachineError::InvalidDefinition(ref cause) => cause,
+            CreateStateMachineError::InvalidLoggingConfiguration(ref cause) => cause,
             CreateStateMachineError::InvalidName(ref cause) => cause,
             CreateStateMachineError::StateMachineAlreadyExists(ref cause) => cause,
             CreateStateMachineError::StateMachineDeleting(ref cause) => cause,
             CreateStateMachineError::StateMachineLimitExceeded(ref cause) => cause,
+            CreateStateMachineError::StateMachineTypeNotSupported(ref cause) => cause,
             CreateStateMachineError::TooManyTags(ref cause) => cause,
         }
     }
@@ -1630,6 +1703,8 @@ pub enum ListExecutionsError {
     InvalidToken(String),
     /// <p>The specified state machine does not exist.</p>
     StateMachineDoesNotExist(String),
+    /// <p><p/></p>
+    StateMachineTypeNotSupported(String),
 }
 
 impl ListExecutionsError {
@@ -1644,6 +1719,11 @@ impl ListExecutionsError {
                 }
                 "StateMachineDoesNotExist" => {
                     return RusotoError::Service(ListExecutionsError::StateMachineDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "StateMachineTypeNotSupported" => {
+                    return RusotoError::Service(ListExecutionsError::StateMachineTypeNotSupported(
                         err.msg,
                     ))
                 }
@@ -1665,6 +1745,7 @@ impl Error for ListExecutionsError {
             ListExecutionsError::InvalidArn(ref cause) => cause,
             ListExecutionsError::InvalidToken(ref cause) => cause,
             ListExecutionsError::StateMachineDoesNotExist(ref cause) => cause,
+            ListExecutionsError::StateMachineTypeNotSupported(ref cause) => cause,
         }
     }
 }
@@ -2088,6 +2169,8 @@ pub enum UpdateStateMachineError {
     InvalidArn(String),
     /// <p>The provided Amazon States Language definition is invalid.</p>
     InvalidDefinition(String),
+    /// <p><p/></p>
+    InvalidLoggingConfiguration(String),
     /// <p>Request is missing a required parameter. This error occurs if both <code>definition</code> and <code>roleArn</code> are not specified.</p>
     MissingRequiredParameter(String),
     /// <p>The specified state machine is being deleted.</p>
@@ -2107,6 +2190,11 @@ impl UpdateStateMachineError {
                     return RusotoError::Service(UpdateStateMachineError::InvalidDefinition(
                         err.msg,
                     ))
+                }
+                "InvalidLoggingConfiguration" => {
+                    return RusotoError::Service(
+                        UpdateStateMachineError::InvalidLoggingConfiguration(err.msg),
+                    )
                 }
                 "MissingRequiredParameter" => {
                     return RusotoError::Service(UpdateStateMachineError::MissingRequiredParameter(
@@ -2140,6 +2228,7 @@ impl Error for UpdateStateMachineError {
         match *self {
             UpdateStateMachineError::InvalidArn(ref cause) => cause,
             UpdateStateMachineError::InvalidDefinition(ref cause) => cause,
+            UpdateStateMachineError::InvalidLoggingConfiguration(ref cause) => cause,
             UpdateStateMachineError::MissingRequiredParameter(ref cause) => cause,
             UpdateStateMachineError::StateMachineDeleting(ref cause) => cause,
             UpdateStateMachineError::StateMachineDoesNotExist(ref cause) => cause,

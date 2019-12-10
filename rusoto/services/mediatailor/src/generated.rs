@@ -105,6 +105,10 @@ pub struct GetPlaybackConfigurationResponse {
     #[serde(rename = "HlsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_configuration: Option<HlsConfiguration>,
+    /// <p>The configuration for pre-roll ad insertion.</p>
+    #[serde(rename = "LivePreRollConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub live_pre_roll_configuration: Option<LivePreRollConfiguration>,
     /// <p>The identifier for the playback configuration.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -195,6 +199,19 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>The configuration for pre-roll ad insertion.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LivePreRollConfiguration {
+    /// <p>The URL for the ad decision server (ADS) for pre-roll ads. This includes the specification of static parameters and placeholders for dynamic parameters. AWS Elemental MediaTailor substitutes player-specific and session-specific parameters as needed when calling the ADS. Alternately, for testing, you can provide a static VAST URL. The maximum length is 25,000 characters.</p>
+    #[serde(rename = "AdDecisionServerUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_decision_server_url: Option<String>,
+    /// <p>The maximum allowed duration for the pre-roll ad avail. AWS Elemental MediaTailor won&#39;t play pre-roll ads to exceed this duration, regardless of the total duration of ads that the ADS returns.</p>
+    #[serde(rename = "MaxDurationSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_duration_seconds: Option<i64>,
+}
+
 /// <p>The AWSMediaTailor configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -263,6 +280,10 @@ pub struct PutPlaybackConfigurationRequest {
     #[serde(rename = "DashConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dash_configuration: Option<DashConfigurationForPut>,
+    /// <p>The configuration for pre-roll ad insertion.</p>
+    #[serde(rename = "LivePreRollConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub live_pre_roll_configuration: Option<LivePreRollConfiguration>,
     /// <p>The identifier for the playback configuration.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -304,6 +325,10 @@ pub struct PutPlaybackConfigurationResponse {
     #[serde(rename = "HlsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_configuration: Option<HlsConfiguration>,
+    /// <p>The configuration for pre-roll ad insertion.</p>
+    #[serde(rename = "LivePreRollConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub live_pre_roll_configuration: Option<LivePreRollConfiguration>,
     /// <p>The identifier for the playback configuration.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]

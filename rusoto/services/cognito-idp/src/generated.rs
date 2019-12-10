@@ -23,6 +23,15 @@ use std::fmt;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
+/// <p>The data type for <code>AccountRecoverySetting</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AccountRecoverySettingType {
+    /// <p>The list of <code>RecoveryOptionTypes</code>.</p>
+    #[serde(rename = "RecoveryMechanisms")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recovery_mechanisms: Option<Vec<RecoveryOptionType>>,
+}
+
 /// <p>Account takeover action type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AccountTakeoverActionType {
@@ -95,6 +104,10 @@ pub struct AdminAddUserToGroupRequest {
 /// <p>Represents the request to confirm user registration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AdminConfirmSignUpRequest {
+    /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>If your user pool configuration includes triggers, the AdminConfirmSignUp API action invokes the AWS Lambda function that is specified for the <i>post confirmation</i> trigger. When Amazon Cognito invokes this function, it passes a JSON payload, which the function receives as input. In this payload, the <code>clientMetadata</code> attribute provides the data that you assigned to the ClientMetadata parameter in your AdminConfirmSignUp request. In your function code in AWS Lambda, you can process the ClientMetadata value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>The user pool ID for which you want to confirm user registration.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
@@ -115,7 +128,7 @@ pub struct AdminCreateUserConfigType {
     #[serde(rename = "AllowAdminCreateUserOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_admin_create_user_only: Option<bool>,
-    /// <p>The message template to be used for the welcome message to new users.</p> <p>See also <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pool-settings-message-customizations.html#cognito-user-pool-settings-user-invitation-message-customization">Customizing User Invitation Messages</a>.</p>
+    /// <p>The message template to be used for the welcome message to new users.</p> <p>See also <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pool-settings-message-customizations.html#cognito-user-pool-settings-user-invitation-message-customization">Customizing User Invitation Messages</a>.</p>
     #[serde(rename = "InviteMessageTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invite_message_template: Option<MessageTemplateType>,
@@ -128,6 +141,10 @@ pub struct AdminCreateUserConfigType {
 /// <p>Represents the request to create a user in the specified user pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AdminCreateUserRequest {
+    /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the AdminCreateUser API action, Amazon Cognito invokes the function that is assigned to the <i>pre sign-up</i> trigger. When Amazon Cognito invokes this function, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your AdminCreateUser request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>Specify <code>"EMAIL"</code> if email will be used to send the welcome message. Specify <code>"SMS"</code> if the phone number will be used. The default value is <code>"SMS"</code>. More than one value can be specified.</p>
     #[serde(rename = "DesiredDeliveryMediums")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -302,7 +319,7 @@ pub struct AdminGetUserResponse {
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>Specifies the options for MFA (e.g., email or phone number).</p>
+    /// <p> <i>This response parameter is no longer supported.</i> It provides information only about SMS MFA configurations. It doesn't provide information about TOTP software token MFA configurations. To look up information about either type of MFA configuration, use the <a>AdminGetUserResponse$UserMFASettingList</a> response instead.</p>
     #[serde(rename = "MFAOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_options: Option<Vec<MFAOptionType>>,
@@ -322,7 +339,7 @@ pub struct AdminGetUserResponse {
     #[serde(rename = "UserLastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_last_modified_date: Option<f64>,
-    /// <p>The list of the user's MFA settings.</p>
+    /// <p>The MFA options that are enabled for the user. The possible values in this list are <code>SMS_MFA</code> and <code>SOFTWARE_TOKEN_MFA</code>.</p>
     #[serde(rename = "UserMFASettingList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_mfa_setting_list: Option<Vec<String>>,
@@ -342,7 +359,7 @@ pub struct AdminInitiateAuthRequest {
     #[serde(rename = "AnalyticsMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_metadata: Option<AnalyticsMetadataType>,
-    /// <p><p>The authentication flow for this call to execute. The API action will depend on this value. For example:</p> <ul> <li> <p> <code>REFRESH<em>TOKEN</em>AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER<em>SRP</em>AUTH</code> will take in <code>USERNAME</code> and <code>SRP<em>A</code> and return the SRP variables to be used for next challenge execution.</p> </li> <li> <p> <code>USER</em>PASSWORD<em>AUTH</code> will take in <code>USERNAME</code> and <code>PASSWORD</code> and return the next challenge or tokens.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER</em>SRP<em>AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH</em>TOKEN<em>AUTH</code>/<code>REFRESH</em>TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM<em>AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: Non-SRP authentication flow; you can pass in the USERNAME and PASSWORD directly if the flow is enabled for calling the app client.</p> </li> <li> <p> <code>USER<em>PASSWORD</em>AUTH</code>: Non-SRP authentication flow; USERNAME and PASSWORD are passed directly. If a user migration Lambda trigger is set, this flow will invoke the user migration Lambda if the USERNAME is not found in the user pool. </p> </li> </ul></p>
+    /// <p><p>The authentication flow for this call to execute. The API action will depend on this value. For example:</p> <ul> <li> <p> <code>REFRESH<em>TOKEN</em>AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER<em>SRP</em>AUTH</code> will take in <code>USERNAME</code> and <code>SRP<em>A</code> and return the SRP variables to be used for next challenge execution.</p> </li> <li> <p> <code>USER</em>PASSWORD<em>AUTH</code> will take in <code>USERNAME</code> and <code>PASSWORD</code> and return the next challenge or tokens.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER</em>SRP<em>AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH</em>TOKEN<em>AUTH</code>/<code>REFRESH</em>TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM<em>AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: Non-SRP authentication flow; you can pass in the USERNAME and PASSWORD directly if the flow is enabled for calling the app client.</p> </li> <li> <p> <code>USER<em>PASSWORD</em>AUTH</code>: Non-SRP authentication flow; USERNAME and PASSWORD are passed directly. If a user migration Lambda trigger is set, this flow will invoke the user migration Lambda if the USERNAME is not found in the user pool. </p> </li> <li> <p> <code>ADMIN<em>USER</em>PASSWORD<em>AUTH</code>: Admin-based user password authentication. This replaces the <code>ADMIN</em>NO<em>SRP</em>AUTH</code> authentication flow. In this flow, Cognito receives the password in the request instead of using the SRP process to verify passwords.</p> </li> </ul></p>
     #[serde(rename = "AuthFlow")]
     pub auth_flow: String,
     /// <p><p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SRP<em>A</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>REFRESH</em>TOKEN<em>AUTH/REFRESH</em>TOKEN</code>: <code>REFRESH<em>TOKEN</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (if app client is configured with client secret), <code>PASSWORD</code> (required), <code>DEVICE</em>KEY</code> </p> </li> <li> <p>For <code>CUSTOM<em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET</em>HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul></p>
@@ -352,7 +369,7 @@ pub struct AdminInitiateAuthRequest {
     /// <p>The app client ID.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
-    /// <p>This is a random key-value pair map which can contain any key and will be passed to your PreAuthentication Lambda trigger as-is. It can be used to implement additional validations around authentication.</p>
+    /// <p><p>A map of custom key-value pairs that you can provide as input for certain custom workflows that this action triggers.</p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the AdminInitiateAuth API action, Amazon Cognito invokes the AWS Lambda functions that are specified for various triggers. The ClientMetadata value is passed as input to the functions for only the following triggers:</p> <ul> <li> <p>Pre signup</p> </li> <li> <p>Pre authentication</p> </li> <li> <p>User migration</p> </li> </ul> <p>When Amazon Cognito invokes the functions for these triggers, it passes a JSON payload, which the function receives as input. This payload contains a <code>validationData</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your AdminInitiateAuth request. In your function code in AWS Lambda, you can process the <code>validationData</code> value to enhance your workflow for your specific needs.</p> <p>When you use the AdminInitiateAuth API action, Amazon Cognito also invokes the functions for the following triggers, but it does not provide the ClientMetadata value as input:</p> <ul> <li> <p>Post authentication</p> </li> <li> <p>Custom message</p> </li> <li> <p>Pre token generation</p> </li> <li> <p>Create auth challenge</p> </li> <li> <p>Define auth challenge</p> </li> <li> <p>Verify auth challenge</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
     #[serde(rename = "ClientMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_metadata: Option<::std::collections::HashMap<String, String>>,
@@ -515,6 +532,10 @@ pub struct AdminRemoveUserFromGroupRequest {
 /// <p>Represents the request to reset a user's password as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AdminResetUserPasswordRequest {
+    /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the AdminResetUserPassword API action, Amazon Cognito invokes the function that is assigned to the <i>custom message</i> trigger. When Amazon Cognito invokes this function, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your AdminResetUserPassword request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>The user pool ID for the user pool where you want to reset the user's password.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
@@ -545,6 +566,10 @@ pub struct AdminRespondToAuthChallengeRequest {
     /// <p>The app client ID.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
+    /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the AdminRespondToAuthChallenge API action, Amazon Cognito invokes any functions that are assigned to the following triggers: <i>pre sign-up</i>, <i>custom message</i>, <i>post authentication</i>, <i>user migration</i>, <i>pre token generation</i>, <i>define auth challenge</i>, <i>create auth challenge</i>, and <i>verify auth challenge response</i>. When Amazon Cognito invokes any of these functions, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your AdminRespondToAuthChallenge request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
     #[serde(rename = "ContextData")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -604,13 +629,17 @@ pub struct AdminSetUserMFAPreferenceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AdminSetUserPasswordRequest {
+    /// <p>The password for the user.</p>
     #[serde(rename = "Password")]
     pub password: String,
+    /// <p> <code>True</code> if the password is permanent, <code>False</code> if it is temporary.</p>
     #[serde(rename = "Permanent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub permanent: Option<bool>,
+    /// <p>The user pool ID for the user pool where you want to set the user's password.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
+    /// <p>The user name of the user whose password you wish to set.</p>
     #[serde(rename = "Username")]
     pub username: String,
 }
@@ -619,16 +648,16 @@ pub struct AdminSetUserPasswordRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminSetUserPasswordResponse {}
 
-/// <p>Represents the request to set user settings as an administrator.</p>
+/// <p>You can use this parameter to set an MFA configuration that uses the SMS delivery medium.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AdminSetUserSettingsRequest {
-    /// <p>Specifies the options for MFA (e.g., email or phone number).</p>
+    /// <p>You can use this parameter only to set an SMS configuration that uses SMS for delivery.</p>
     #[serde(rename = "MFAOptions")]
     pub mfa_options: Vec<MFAOptionType>,
-    /// <p>The user pool ID for the user pool where you want to set the user's settings, such as MFA options.</p>
+    /// <p>The ID of the user pool that contains the user that you are setting options for.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    /// <p>The user name of the user for whom you wish to set user settings.</p>
+    /// <p>The user name of the user that you are setting options for.</p>
     #[serde(rename = "Username")]
     pub username: String,
 }
@@ -684,6 +713,10 @@ pub struct AdminUpdateDeviceStatusResponse {}
 /// <p>Represents the request to update the user's attributes as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AdminUpdateUserAttributesRequest {
+    /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the AdminUpdateUserAttributes API action, Amazon Cognito invokes the function that is assigned to the <i>custom message</i> trigger. When Amazon Cognito invokes this function, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your AdminUpdateUserAttributes request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>An array of name-value pairs representing user attributes.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>
     #[serde(rename = "UserAttributes")]
     pub user_attributes: Vec<AttributeType>,
@@ -958,6 +991,10 @@ pub struct ConfirmForgotPasswordRequest {
     /// <p>The app client ID of the app associated with the user pool.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
+    /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the ConfirmForgotPassword API action, Amazon Cognito invokes the function that is assigned to the <i>post confirmation</i> trigger. When Amazon Cognito invokes this function, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your ConfirmForgotPassword request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>The confirmation code sent by a user's request to retrieve a forgotten password. For more information, see </p>
     #[serde(rename = "ConfirmationCode")]
     pub confirmation_code: String,
@@ -992,6 +1029,10 @@ pub struct ConfirmSignUpRequest {
     /// <p>The ID of the app client associated with the user pool.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
+    /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the ConfirmSignUp API action, Amazon Cognito invokes the function that is assigned to the <i>post confirmation</i> trigger. When Amazon Cognito invokes this function, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your ConfirmSignUp request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>The confirmation code sent by a user's request to confirm registration.</p>
     #[serde(rename = "ConfirmationCode")]
     pub confirmation_code: String,
@@ -1161,7 +1202,7 @@ pub struct CreateUserPoolClientRequest {
     #[serde(rename = "AllowedOAuthFlowsUserPoolClient")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows_user_pool_client: Option<bool>,
-    /// <p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>"phone"</code>, <code>"email"</code>, <code>"openid"</code>, and <code>"Cognito"</code>.</p>
+    /// <p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>"phone"</code>, <code>"email"</code>, <code>"openid"</code>, and <code>"Cognito"</code>. In addition to these values, custom scopes created in Resource Servers are also supported.</p>
     #[serde(rename = "AllowedOAuthScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_scopes: Option<Vec<String>>,
@@ -1180,7 +1221,7 @@ pub struct CreateUserPoolClientRequest {
     #[serde(rename = "DefaultRedirectURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
-    /// <p>The explicit authentication flows.</p>
+    /// <p><p>The authentication flows that are supported by the user pool clients. Flow names without the <code>ALLOW<em></code> prefix are deprecated in favor of new names with the <code>ALLOW</em></code> prefix. Note that values with <code>ALLOW<em></code> prefix cannot be used along with values without <code>ALLOW</em></code> prefix.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ALLOW<em>ADMIN</em>USER<em>PASSWORD</em>AUTH</code>: Enable admin based user password authentication flow <code>ADMIN<em>USER</em>PASSWORD<em>AUTH</code>. This setting replaces the <code>ADMIN</em>NO<em>SRP</em>AUTH</code> setting. With this authentication flow, Cognito receives the password in the request instead of using the SRP (Secure Remote Password protocol) protocol to verify passwords.</p> </li> <li> <p> <code>ALLOW<em>CUSTOM</em>AUTH</code>: Enable Lambda trigger based authentication.</p> </li> <li> <p> <code>ALLOW<em>USER</em>PASSWORD<em>AUTH</code>: Enable user password-based authentication. In this flow, Cognito receives the password in the request instead of using the SRP protocol to verify passwords.</p> </li> <li> <p> <code>ALLOW</em>USER<em>SRP</em>AUTH</code>: Enable SRP based authentication.</p> </li> <li> <p> <code>ALLOW<em>REFRESH</em>TOKEN_AUTH</code>: Enable authflow to refresh tokens.</p> </li> </ul></p>
     #[serde(rename = "ExplicitAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub explicit_auth_flows: Option<Vec<String>>,
@@ -1192,6 +1233,10 @@ pub struct CreateUserPoolClientRequest {
     #[serde(rename = "LogoutURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logout_ur_ls: Option<Vec<String>>,
+    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <p>This setting affects the behavior of following APIs:</p> <ul> <li> <p> <a>AdminInitiateAuth</a> </p> </li> <li> <p> <a>AdminRespondToAuthChallenge</a> </p> </li> <li> <p> <a>InitiateAuth</a> </p> </li> <li> <p> <a>RespondToAuthChallenge</a> </p> </li> <li> <p> <a>ForgotPassword</a> </p> </li> <li> <p> <a>ConfirmForgotPassword</a> </p> </li> <li> <p> <a>ConfirmSignUp</a> </p> </li> <li> <p> <a>ResendConfirmationCode</a> </p> </li> </ul> <note> <p>After January 1st 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
+    #[serde(rename = "PreventUserExistenceErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prevent_user_existence_errors: Option<String>,
     /// <p>The read attributes.</p>
     #[serde(rename = "ReadAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1249,6 +1294,10 @@ pub struct CreateUserPoolDomainResponse {
 /// <p>Represents the request to create a user pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateUserPoolRequest {
+    /// <p><p>Use this setting to define which verified available method a user can use to recover their password when they call <code>ForgotPassword</code>. It allows you to define a preferred method when a user has more than one method available. With this setting, SMS does not qualify for a valid password recovery mechanism if the user also has SMS MFA enabled. In the absence of this setting, Cognito uses the legacy behavior to determine the recovery method where SMS is preferred over email.</p> <note> <p>Starting February 1, 2020, the value of <code>AccountRecoverySetting</code> will default to <code>verified<em>email</code> first and <code>verified</em>phone_number</code> as the second option for newly created user pools if no value is provided.</p> </note></p>
+    #[serde(rename = "AccountRecoverySetting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_recovery_setting: Option<AccountRecoverySettingType>,
     /// <p>The configuration for <code>AdminCreateUser</code> requests.</p>
     #[serde(rename = "AdminCreateUserConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1655,10 +1704,18 @@ pub struct DomainDescriptionType {
 /// <p>The email configuration type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EmailConfigurationType {
+    /// <p><p>The set of configuration rules that can be applied to emails sent using Amazon SES. A configuration set is applied to an email by including a reference to the configuration set in the headers of the email. Once applied, all of the rules in that configuration set are applied to the email. Configuration sets can be used to apply the following types of rules to emails: </p> <ul> <li> <p>Event publishing – Amazon SES can track the number of send, delivery, open, click, bounce, and complaint events for each email sent. Use event publishing to send information about these events to other AWS services such as SNS and CloudWatch.</p> </li> <li> <p>IP pool management – When leasing dedicated IP addresses with Amazon SES, you can create groups of IP addresses, called dedicated IP pools. You can then associate the dedicated IP pools with configuration sets.</p> </li> </ul></p>
+    #[serde(rename = "ConfigurationSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_set: Option<String>,
     /// <p><p>Specifies whether Amazon Cognito emails your users by using its built-in email functionality or your Amazon SES email configuration. Specify one of the following values:</p> <dl> <dt>COGNITO_DEFAULT</dt> <dd> <p>When Amazon Cognito emails your users, it uses its built-in email functionality. When you use the default option, Amazon Cognito allows only a limited number of emails each day for your user pool. For typical production environments, the default email limit is below the required delivery volume. To achieve a higher delivery volume, specify DEVELOPER to use your Amazon SES email configuration.</p> <p>To look up the email delivery limit for the default option, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/limits.html">Limits in Amazon Cognito</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <p>The default FROM address is no-reply@verificationemail.com. To customize the FROM address, provide the ARN of an Amazon SES verified email address for the <code>SourceArn</code> parameter.</p> </dd> <dt>DEVELOPER</dt> <dd> <p>When Amazon Cognito emails your users, it uses your Amazon SES configuration. Amazon Cognito calls Amazon SES on your behalf to send email from your verified email address. When you use this option, the email delivery limits are the same limits that apply to your Amazon SES verified email address in your AWS account.</p> <p>If you use this option, you must provide the ARN of an Amazon SES verified email address for the <code>SourceArn</code> parameter.</p> <p>Before Amazon Cognito can email your users, it requires additional permissions to call Amazon SES on your behalf. When you update your user pool with this option, Amazon Cognito creates a <i>service-linked role</i>, which is a type of IAM role, in your AWS account. This role contains the permissions that allow Amazon Cognito to access Amazon SES and send email messages with your address. For more information about the service-linked role that Amazon Cognito creates, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon Cognito</a> in the <i>Amazon Cognito Developer Guide</i>.</p> </dd> </dl></p>
     #[serde(rename = "EmailSendingAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email_sending_account: Option<String>,
+    /// <p>Identifies either the sender’s email address or the sender’s name with their email address. For example, <code>testuser@example.com</code> or <code>Test User &lt;testuser@example.com&gt;</code>. This address will appear before the body of the email.</p>
+    #[serde(rename = "From")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from: Option<String>,
     /// <p>The destination to which the receiver of the email should reply to.</p>
     #[serde(rename = "ReplyToEmailAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1747,6 +1804,10 @@ pub struct ForgotPasswordRequest {
     /// <p>The ID of the client associated with the user pool.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
+    /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the ForgotPassword API action, Amazon Cognito invokes any functions that are assigned to the following triggers: <i>pre sign-up</i>, <i>custom message</i>, and <i>user migration</i>. When Amazon Cognito invokes any of these functions, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your ForgotPassword request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>
     #[serde(rename = "SecretHash")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1896,6 +1957,10 @@ pub struct GetUserAttributeVerificationCodeRequest {
     /// <p>The attribute name returned by the server response to get the user attribute verification code.</p>
     #[serde(rename = "AttributeName")]
     pub attribute_name: String,
+    /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the GetUserAttributeVerificationCode API action, Amazon Cognito invokes the function that is assigned to the <i>custom message</i> trigger. When Amazon Cognito invokes this function, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your GetUserAttributeVerificationCode request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_metadata: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>The verification code response returned by the server response to get the user attribute verification code.</p>
@@ -1918,7 +1983,7 @@ pub struct GetUserPoolMfaConfigRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserPoolMfaConfigResponse {
-    /// <p>The multi-factor (MFA) configuration.</p>
+    /// <p><p>The multi-factor (MFA) configuration. Valid values include:</p> <ul> <li> <p> <code>OFF</code> MFA will not be used for any users.</p> </li> <li> <p> <code>ON</code> MFA is required for all users to sign in.</p> </li> <li> <p> <code>OPTIONAL</code> MFA will be required only for individual users who have an MFA factor enabled.</p> </li> </ul></p>
     #[serde(rename = "MfaConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_configuration: Option<String>,
@@ -1944,7 +2009,7 @@ pub struct GetUserRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserResponse {
-    /// <p>Specifies the options for MFA (e.g., email or phone number).</p>
+    /// <p> <i>This response parameter is no longer supported.</i> It provides information only about SMS MFA configurations. It doesn't provide information about TOTP software token MFA configurations. To look up information about either type of MFA configuration, use the use the <a>GetUserResponse$UserMFASettingList</a> response instead.</p>
     #[serde(rename = "MFAOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_options: Option<Vec<MFAOptionType>>,
@@ -1955,7 +2020,7 @@ pub struct GetUserResponse {
     /// <p>An array of name-value pairs representing user attributes.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>
     #[serde(rename = "UserAttributes")]
     pub user_attributes: Vec<AttributeType>,
-    /// <p>The list of the user's MFA settings.</p>
+    /// <p>The MFA options that are enabled for the user. The possible values in this list are <code>SMS_MFA</code> and <code>SOFTWARE_TOKEN_MFA</code>.</p>
     #[serde(rename = "UserMFASettingList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_mfa_setting_list: Option<Vec<String>>,
@@ -2069,7 +2134,7 @@ pub struct InitiateAuthRequest {
     #[serde(rename = "AnalyticsMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_metadata: Option<AnalyticsMetadataType>,
-    /// <p>The authentication flow for this call to execute. The API action will depend on this value. For example: </p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> <li> <p> <code>USER_PASSWORD_AUTH</code> will take in <code>USERNAME</code> and <code>PASSWORD</code> and return the next challenge or tokens.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>USER_PASSWORD_AUTH</code>: Non-SRP authentication flow; USERNAME and PASSWORD are passed directly. If a user migration Lambda trigger is set, this flow will invoke the user migration Lambda if the USERNAME is not found in the user pool. </p> </li> </ul> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
+    /// <p>The authentication flow for this call to execute. The API action will depend on this value. For example: </p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> <li> <p> <code>USER_PASSWORD_AUTH</code> will take in <code>USERNAME</code> and <code>PASSWORD</code> and return the next challenge or tokens.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>USER_PASSWORD_AUTH</code>: Non-SRP authentication flow; USERNAME and PASSWORD are passed directly. If a user migration Lambda trigger is set, this flow will invoke the user migration Lambda if the USERNAME is not found in the user pool. </p> </li> <li> <p> <code>ADMIN_USER_PASSWORD_AUTH</code>: Admin-based user password authentication. This replaces the <code>ADMIN_NO_SRP_AUTH</code> authentication flow. In this flow, Cognito receives the password in the request instead of using the SRP process to verify passwords.</p> </li> </ul> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
     #[serde(rename = "AuthFlow")]
     pub auth_flow: String,
     /// <p><p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SRP<em>A</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>REFRESH</em>TOKEN<em>AUTH/REFRESH</em>TOKEN</code>: <code>REFRESH<em>TOKEN</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>CUSTOM</em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (if app client is configured with client secret), <code>DEVICE</em>KEY</code> </p> </li> </ul></p>
@@ -2079,7 +2144,7 @@ pub struct InitiateAuthRequest {
     /// <p>The app client ID.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
-    /// <p>This is a random key-value pair map which can contain any key and will be passed to your PreAuthentication Lambda trigger as-is. It can be used to implement additional validations around authentication.</p>
+    /// <p><p>A map of custom key-value pairs that you can provide as input for certain custom workflows that this action triggers.</p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the InitiateAuth API action, Amazon Cognito invokes the AWS Lambda functions that are specified for various triggers. The ClientMetadata value is passed as input to the functions for only the following triggers:</p> <ul> <li> <p>Pre signup</p> </li> <li> <p>Pre authentication</p> </li> <li> <p>User migration</p> </li> </ul> <p>When Amazon Cognito invokes the functions for these triggers, it passes a JSON payload, which the function receives as input. This payload contains a <code>validationData</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your InitiateAuth request. In your function code in AWS Lambda, you can process the <code>validationData</code> value to enhance your workflow for your specific needs.</p> <p>When you use the InitiateAuth API action, Amazon Cognito also invokes the functions for the following triggers, but it does not provide the ClientMetadata value as input:</p> <ul> <li> <p>Post authentication</p> </li> <li> <p>Custom message</p> </li> <li> <p>Pre token generation</p> </li> <li> <p>Create auth challenge</p> </li> <li> <p>Define auth challenge</p> </li> <li> <p>Verify auth challenge</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
     #[serde(rename = "ClientMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_metadata: Option<::std::collections::HashMap<String, String>>,
@@ -2407,7 +2472,7 @@ pub struct ListUsersRequest {
     #[serde(rename = "AttributesToGet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes_to_get: Option<Vec<String>>,
-    /// <p>A filter string of the form "<i>AttributeName</i> <i>Filter-Type</i> "<i>AttributeValue</i>"". Quotation marks within the filter string must be escaped using the backslash (\) character. For example, "<code>family_name</code> = \"Reddy\"".</p> <ul> <li> <p> <i>AttributeName</i>: The name of the attribute to search for. You can only search for one attribute at a time.</p> </li> <li> <p> <i>Filter-Type</i>: For an exact match, use =, for example, "<code>given_name</code> = \"Jon\"". For a prefix ("starts with") match, use ^=, for example, "<code>given_name</code> ^= \"Jon\"". </p> </li> <li> <p> <i>AttributeValue</i>: The attribute value that must be matched for each user.</p> </li> </ul> <p>If the filter string is empty, <code>ListUsers</code> returns all users in the user pool.</p> <p>You can only search for the following standard attributes:</p> <ul> <li> <p> <code>username</code> (case-sensitive)</p> </li> <li> <p> <code>email</code> </p> </li> <li> <p> <code>phone_number</code> </p> </li> <li> <p> <code>name</code> </p> </li> <li> <p> <code>given_name</code> </p> </li> <li> <p> <code>family_name</code> </p> </li> <li> <p> <code>preferred_username</code> </p> </li> <li> <p> <code>cognito:user_status</code> (called <b>Status</b> in the Console) (case-insensitive)</p> </li> <li> <p> <code>status (called <b>Enabled</b> in the Console) (case-sensitive)</code> </p> </li> <li> <p> <code>sub</code> </p> </li> </ul> <p>Custom attributes are not searchable.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-using-listusers-api">Searching for Users Using the ListUsers API</a> and <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-listusers-api-examples">Examples of Using the ListUsers API</a> in the <i>Amazon Cognito Developer Guide</i>.</p>
+    /// <p>A filter string of the form "<i>AttributeName</i> <i>Filter-Type</i> "<i>AttributeValue</i>"". Quotation marks within the filter string must be escaped using the backslash (\) character. For example, "<code>family_name</code> = \"Reddy\"".</p> <ul> <li> <p> <i>AttributeName</i>: The name of the attribute to search for. You can only search for one attribute at a time.</p> </li> <li> <p> <i>Filter-Type</i>: For an exact match, use =, for example, "<code>given_name</code> = \"Jon\"". For a prefix ("starts with") match, use ^=, for example, "<code>given_name</code> ^= \"Jon\"". </p> </li> <li> <p> <i>AttributeValue</i>: The attribute value that must be matched for each user.</p> </li> </ul> <p>If the filter string is empty, <code>ListUsers</code> returns all users in the user pool.</p> <p>You can only search for the following standard attributes:</p> <ul> <li> <p> <code>username</code> (case-sensitive)</p> </li> <li> <p> <code>email</code> </p> </li> <li> <p> <code>phone_number</code> </p> </li> <li> <p> <code>name</code> </p> </li> <li> <p> <code>given_name</code> </p> </li> <li> <p> <code>family_name</code> </p> </li> <li> <p> <code>preferred_username</code> </p> </li> <li> <p> <code>cognito:user_status</code> (called <b>Status</b> in the Console) (case-insensitive)</p> </li> <li> <p> <code>status (called <b>Enabled</b> in the Console) (case-sensitive)</code> </p> </li> <li> <p> <code>sub</code> </p> </li> </ul> <p>Custom attributes are not searchable.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-using-listusers-api">Searching for Users Using the ListUsers API</a> and <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-listusers-api-examples">Examples of Using the ListUsers API</a> in the <i>Amazon Cognito Developer Guide</i>.</p>
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<String>,
@@ -2438,14 +2503,14 @@ pub struct ListUsersResponse {
     pub users: Option<Vec<UserType>>,
 }
 
-/// <p>Specifies the different settings for multi-factor authentication (MFA).</p>
+/// <p> <i>This data type is no longer supported.</i> You can use it only for SMS MFA configurations. You can't use it for TOTP software token MFA configurations.</p> <p>To set either type of MFA configuration, use the <a>AdminSetUserMFAPreference</a> or <a>SetUserMFAPreference</a> actions.</p> <p>To look up information about either type of MFA configuration, use the <a>AdminGetUserResponse$UserMFASettingList</a> or <a>GetUserResponse$UserMFASettingList</a> responses.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MFAOptionType {
-    /// <p>The attribute name of the MFA option type.</p>
+    /// <p>The attribute name of the MFA option type. The only valid value is <code>phone_number</code>.</p>
     #[serde(rename = "AttributeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_name: Option<String>,
-    /// <p>The delivery medium (email message or SMS message) to send the MFA code.</p>
+    /// <p>The delivery medium to send the MFA code. You can use this parameter to set only the <code>SMS</code> delivery medium value.</p>
     #[serde(rename = "DeliveryMedium")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_medium: Option<String>,
@@ -2562,6 +2627,7 @@ pub struct PasswordPolicyType {
     #[serde(rename = "RequireUppercase")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub require_uppercase: Option<bool>,
+    /// <p><p>In the password policy you have set, refers to the number of days a temporary password is valid. If the user does not sign-in during this time, their password will need to be reset by an administrator.</p> <note> <p>When you set <code>TemporaryPasswordValidityDays</code> for a user pool, you will no longer be able to set the deprecated <code>UnusedAccountValidityDays</code> value for that user pool.</p> </note></p>
     #[serde(rename = "TemporaryPasswordValidityDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temporary_password_validity_days: Option<i64>,
@@ -2606,6 +2672,17 @@ pub struct ProviderUserIdentifierType {
     pub provider_name: Option<String>,
 }
 
+/// <p>A map containing a priority as a key, and recovery method name as a value.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RecoveryOptionType {
+    /// <p>Specifies the recovery method for a user.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A positive integer specifying priority of a method with 1 being the highest priority.</p>
+    #[serde(rename = "Priority")]
+    pub priority: i64,
+}
+
 /// <p>Represents the request to resend the confirmation code.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ResendConfirmationCodeRequest {
@@ -2616,6 +2693,10 @@ pub struct ResendConfirmationCodeRequest {
     /// <p>The ID of the client associated with the user pool.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
+    /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the ResendConfirmationCode API action, Amazon Cognito invokes the function that is assigned to the <i>custom message</i> trigger. When Amazon Cognito invokes this function, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your ResendConfirmationCode request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>
     #[serde(rename = "SecretHash")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2682,13 +2763,17 @@ pub struct RespondToAuthChallengeRequest {
     /// <p>The challenge name. For more information, see .</p> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
     #[serde(rename = "ChallengeName")]
     pub challenge_name: String,
-    /// <p><p>The challenge responses. These are inputs corresponding to the value of <code>ChallengeName</code>, for example:</p> <ul> <li> <p> <code>SMS<em>MFA</code>: <code>SMS</em>MFA<em>CODE</code>, <code>USERNAME</code>, <code>SECRET</em>HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>PASSWORD<em>VERIFIER</code>: <code>PASSWORD</em>CLAIM<em>SIGNATURE</code>, <code>PASSWORD</em>CLAIM<em>SECRET</em>BLOCK</code>, <code>TIMESTAMP</code>, <code>USERNAME</code>, <code>SECRET<em>HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>NEW</em>PASSWORD<em>REQUIRED</code>: <code>NEW</em>PASSWORD</code>, any other required attributes, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> </ul></p>
+    /// <p><p>The challenge responses. These are inputs corresponding to the value of <code>ChallengeName</code>, for example:</p> <note> <p> <code>SECRET<em>HASH</code> (if app client is configured with client secret) applies to all inputs below (including <code>SOFTWARE</em>TOKEN<em>MFA</code>).</p> </note> <ul> <li> <p> <code>SMS</em>MFA</code>: <code>SMS<em>MFA</em>CODE</code>, <code>USERNAME</code>.</p> </li> <li> <p> <code>PASSWORD<em>VERIFIER</code>: <code>PASSWORD</em>CLAIM<em>SIGNATURE</code>, <code>PASSWORD</em>CLAIM<em>SECRET</em>BLOCK</code>, <code>TIMESTAMP</code>, <code>USERNAME</code>.</p> </li> <li> <p> <code>NEW<em>PASSWORD</em>REQUIRED</code>: <code>NEW<em>PASSWORD</code>, any other required attributes, <code>USERNAME</code>. </p> </li> <li> <p> <code>SOFTWARE</em>TOKEN<em>MFA</code>: <code>USERNAME</code> and <code>SOFTWARE</em>TOKEN<em>MFA</em>CODE</code> are required attributes.</p> </li> <li> <p> <code>DEVICE<em>SRP</em>AUTH</code> requires <code>USERNAME</code>, <code>DEVICE<em>KEY</code>, <code>SRP</em>A</code> (and <code>SECRET<em>HASH</code>).</p> </li> <li> <p> <code>DEVICE</em>PASSWORD<em>VERIFIER</code> requires everything that <code>PASSWORD</em>VERIFIER</code> requires plus <code>DEVICE_KEY</code>.</p> </li> </ul></p>
     #[serde(rename = "ChallengeResponses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_responses: Option<::std::collections::HashMap<String, String>>,
     /// <p>The app client ID.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
+    /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the RespondToAuthChallenge API action, Amazon Cognito invokes any functions that are assigned to the following triggers: <i>post authentication</i>, <i>pre token generation</i>, <i>define auth challenge</i>, <i>create auth challenge</i>, and <i>verify auth challenge</i>. When Amazon Cognito invokes any of these functions, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your RespondToAuthChallenge request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>The session which should be passed both ways in challenge-response calls to the service. If <code>InitiateAuth</code> or <code>RespondToAuthChallenge</code> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
     #[serde(rename = "Session")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2765,14 +2850,14 @@ pub struct RiskExceptionConfigurationType {
     pub skipped_ip_range_list: Option<Vec<String>>,
 }
 
-/// <p>The SMS multi-factor authentication (MFA) settings type.</p>
+/// <p>The type used for enabling SMS MFA at the user level.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SMSMfaSettingsType {
     /// <p>Specifies whether SMS text message MFA is enabled.</p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>The preferred MFA method.</p>
+    /// <p>Specifies whether SMS is the preferred MFA method.</p>
     #[serde(rename = "PreferredMfa")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_mfa: Option<bool>,
@@ -2877,7 +2962,7 @@ pub struct SetUICustomizationResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetUserMFAPreferenceRequest {
-    /// <p>The access token.</p>
+    /// <p>The access token for the user.</p>
     #[serde(rename = "AccessToken")]
     pub access_token: String,
     /// <p>The SMS text message multi-factor authentication (MFA) settings.</p>
@@ -2896,7 +2981,7 @@ pub struct SetUserMFAPreferenceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetUserPoolMfaConfigRequest {
-    /// <p>The MFA configuration.</p>
+    /// <p><p>The MFA configuration. Valid values include:</p> <ul> <li> <p> <code>OFF</code> MFA will not be used for any users.</p> </li> <li> <p> <code>ON</code> MFA is required for all users to sign in.</p> </li> <li> <p> <code>OPTIONAL</code> MFA will be required only for individual users who have an MFA factor enabled.</p> </li> </ul></p>
     #[serde(rename = "MfaConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_configuration: Option<String>,
@@ -2916,7 +3001,7 @@ pub struct SetUserPoolMfaConfigRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetUserPoolMfaConfigResponse {
-    /// <p>The MFA configuration.</p>
+    /// <p><p>The MFA configuration. Valid values include:</p> <ul> <li> <p> <code>OFF</code> MFA will not be used for any users.</p> </li> <li> <p> <code>ON</code> MFA is required for all users to sign in.</p> </li> <li> <p> <code>OPTIONAL</code> MFA will be required only for individual users who have an MFA factor enabled.</p> </li> </ul></p>
     #[serde(rename = "MfaConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_configuration: Option<String>,
@@ -2936,7 +3021,7 @@ pub struct SetUserSettingsRequest {
     /// <p>The access token for the set user settings request.</p>
     #[serde(rename = "AccessToken")]
     pub access_token: String,
-    /// <p>Specifies the options for MFA (e.g., email or phone number).</p>
+    /// <p>You can use this parameter only to set an SMS configuration that uses SMS for delivery.</p>
     #[serde(rename = "MFAOptions")]
     pub mfa_options: Vec<MFAOptionType>,
 }
@@ -2956,6 +3041,10 @@ pub struct SignUpRequest {
     /// <p>The ID of the client associated with the user pool.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
+    /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the SignUp API action, Amazon Cognito invokes any functions that are assigned to the following triggers: <i>pre sign-up</i>, <i>custom message</i>, and <i>post confirmation</i>. When Amazon Cognito invokes any of these functions, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your SignUp request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>The password of the user you wish to register.</p>
     #[serde(rename = "Password")]
     pub password: String,
@@ -2996,14 +3085,14 @@ pub struct SignUpResponse {
     pub user_sub: String,
 }
 
-/// <p>The SMS configuration type.</p>
+/// <p>The SMS configuration type that includes the settings the Cognito User Pool needs to call for the Amazon SNS service to send an SMS message from your AWS account. The Cognito User Pool makes the request to the Amazon SNS Service by using an AWS IAM role that you provide for your AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SmsConfigurationType {
-    /// <p>The external ID.</p>
+    /// <p>The external ID is a value that we recommend you use to add security to your IAM role which is used to call Amazon SNS to send SMS messages for your user pool. If you provide an <code>ExternalId</code>, the Cognito User Pool will include it when attempting to assume your IAM role, so that you can set your roles trust policy to require the <code>ExternalID</code>. If you use the Cognito Management Console to create a role for SMS MFA, Cognito will create a role with the required permissions and a trust policy that demonstrates use of the <code>ExternalId</code>.</p>
     #[serde(rename = "ExternalId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_id: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) caller.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) caller. This is the ARN of the IAM role in your AWS account which Cognito will use to send SMS messages.</p>
     #[serde(rename = "SnsCallerArn")]
     pub sns_caller_arn: String,
 }
@@ -3011,7 +3100,7 @@ pub struct SmsConfigurationType {
 /// <p>The SMS text message multi-factor authentication (MFA) configuration type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SmsMfaConfigType {
-    /// <p>The SMS authentication message.</p>
+    /// <p>The SMS authentication message that will be sent to users with the code they need to sign in. The message must contain the ‘{####}’ placeholder, which will be replaced with the code. If the message is not included, and default message will be used.</p>
     #[serde(rename = "SmsAuthenticationMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_authentication_message: Option<String>,
@@ -3037,7 +3126,7 @@ pub struct SoftwareTokenMfaSettingsType {
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>The preferred MFA method.</p>
+    /// <p>Specifies whether software token MFA is the preferred MFA method.</p>
     #[serde(rename = "PreferredMfa")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_mfa: Option<bool>,
@@ -3105,8 +3194,7 @@ pub struct TagResourceRequest {
     pub resource_arn: String,
     /// <p>The tags to assign to the user pool.</p>
     #[serde(rename = "Tags")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tags: Option<::std::collections::HashMap<String, String>>,
+    pub tags: ::std::collections::HashMap<String, String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3154,8 +3242,7 @@ pub struct UntagResourceRequest {
     pub resource_arn: String,
     /// <p>The keys of the tags to remove from the user pool.</p>
     #[serde(rename = "TagKeys")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tag_keys: Option<Vec<String>>,
+    pub tag_keys: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3297,6 +3384,10 @@ pub struct UpdateUserAttributesRequest {
     /// <p>The access token for the request to update user attributes.</p>
     #[serde(rename = "AccessToken")]
     pub access_token: String,
+    /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the UpdateUserAttributes API action, Amazon Cognito invokes the function that is assigned to the <i>custom message</i> trigger. When Amazon Cognito invokes this function, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your UpdateUserAttributes request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
+    #[serde(rename = "ClientMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>An array of name-value pairs representing user attributes.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>
     #[serde(rename = "UserAttributes")]
     pub user_attributes: Vec<AttributeType>,
@@ -3323,7 +3414,7 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename = "AllowedOAuthFlowsUserPoolClient")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows_user_pool_client: Option<bool>,
-    /// <p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>"phone"</code>, <code>"email"</code>, <code>"openid"</code>, and <code>"Cognito"</code>.</p>
+    /// <p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>"phone"</code>, <code>"email"</code>, <code>"openid"</code>, and <code>"Cognito"</code>. In addition to these values, custom scopes created in Resource Servers are also supported.</p>
     #[serde(rename = "AllowedOAuthScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_scopes: Option<Vec<String>>,
@@ -3346,7 +3437,7 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename = "DefaultRedirectURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
-    /// <p>Explicit authentication flows.</p>
+    /// <p><p>The authentication flows that are supported by the user pool clients. Flow names without the <code>ALLOW<em></code> prefix are deprecated in favor of new names with the <code>ALLOW</em></code> prefix. Note that values with <code>ALLOW<em></code> prefix cannot be used along with values without <code>ALLOW</em></code> prefix.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ALLOW<em>ADMIN</em>USER<em>PASSWORD</em>AUTH</code>: Enable admin based user password authentication flow <code>ADMIN<em>USER</em>PASSWORD<em>AUTH</code>. This setting replaces the <code>ADMIN</em>NO<em>SRP</em>AUTH</code> setting. With this authentication flow, Cognito receives the password in the request instead of using the SRP (Secure Remote Password protocol) protocol to verify passwords.</p> </li> <li> <p> <code>ALLOW<em>CUSTOM</em>AUTH</code>: Enable Lambda trigger based authentication.</p> </li> <li> <p> <code>ALLOW<em>USER</em>PASSWORD<em>AUTH</code>: Enable user password-based authentication. In this flow, Cognito receives the password in the request instead of using the SRP protocol to verify passwords.</p> </li> <li> <p> <code>ALLOW</em>USER<em>SRP</em>AUTH</code>: Enable SRP based authentication.</p> </li> <li> <p> <code>ALLOW<em>REFRESH</em>TOKEN_AUTH</code>: Enable authflow to refresh tokens.</p> </li> </ul></p>
     #[serde(rename = "ExplicitAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub explicit_auth_flows: Option<Vec<String>>,
@@ -3354,6 +3445,10 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename = "LogoutURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logout_ur_ls: Option<Vec<String>>,
+    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <p>This setting affects the behavior of following APIs:</p> <ul> <li> <p> <a>AdminInitiateAuth</a> </p> </li> <li> <p> <a>AdminRespondToAuthChallenge</a> </p> </li> <li> <p> <a>InitiateAuth</a> </p> </li> <li> <p> <a>RespondToAuthChallenge</a> </p> </li> <li> <p> <a>ForgotPassword</a> </p> </li> <li> <p> <a>ConfirmForgotPassword</a> </p> </li> <li> <p> <a>ConfirmSignUp</a> </p> </li> <li> <p> <a>ResendConfirmationCode</a> </p> </li> </ul> <note> <p>After January 1st 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
+    #[serde(rename = "PreventUserExistenceErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prevent_user_existence_errors: Option<String>,
     /// <p>The read-only attributes of the user pool.</p>
     #[serde(rename = "ReadAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3412,6 +3507,10 @@ pub struct UpdateUserPoolDomainResponse {
 /// <p>Represents the request to update the user pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateUserPoolRequest {
+    /// <p>Use this setting to define which verified available method a user can use to recover their password when they call <code>ForgotPassword</code>. It allows you to define a preferred method when a user has more than one method available. With this setting, SMS does not qualify for a valid password recovery mechanism if the user also has SMS MFA enabled. In the absence of this setting, Cognito uses the legacy behavior to determine the recovery method where SMS is preferred over email.</p>
+    #[serde(rename = "AccountRecoverySetting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_recovery_setting: Option<AccountRecoverySettingType>,
     /// <p>The configuration for <code>AdminCreateUser</code> requests.</p>
     #[serde(rename = "AdminCreateUserConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3587,7 +3686,7 @@ pub struct UserPoolClientType {
     #[serde(rename = "AllowedOAuthFlowsUserPoolClient")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows_user_pool_client: Option<bool>,
-    /// <p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>"phone"</code>, <code>"email"</code>, <code>"openid"</code>, and <code>"Cognito"</code>.</p>
+    /// <p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>"phone"</code>, <code>"email"</code>, <code>"openid"</code>, and <code>"Cognito"</code>. In addition to these values, custom scopes created in Resource Servers are also supported.</p>
     #[serde(rename = "AllowedOAuthScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_scopes: Option<Vec<String>>,
@@ -3619,7 +3718,7 @@ pub struct UserPoolClientType {
     #[serde(rename = "DefaultRedirectURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
-    /// <p>The explicit authentication flows.</p>
+    /// <p><p>The authentication flows that are supported by the user pool clients. Flow names without the <code>ALLOW<em></code> prefix are deprecated in favor of new names with the <code>ALLOW</em></code> prefix. Note that values with <code>ALLOW<em></code> prefix cannot be used along with values without <code>ALLOW</em></code> prefix.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ALLOW<em>ADMIN</em>USER<em>PASSWORD</em>AUTH</code>: Enable admin based user password authentication flow <code>ADMIN<em>USER</em>PASSWORD<em>AUTH</code>. This setting replaces the <code>ADMIN</em>NO<em>SRP</em>AUTH</code> setting. With this authentication flow, Cognito receives the password in the request instead of using the SRP (Secure Remote Password protocol) protocol to verify passwords.</p> </li> <li> <p> <code>ALLOW<em>CUSTOM</em>AUTH</code>: Enable Lambda trigger based authentication.</p> </li> <li> <p> <code>ALLOW<em>USER</em>PASSWORD<em>AUTH</code>: Enable user password-based authentication. In this flow, Cognito receives the password in the request instead of using the SRP protocol to verify passwords.</p> </li> <li> <p> <code>ALLOW</em>USER<em>SRP</em>AUTH</code>: Enable SRP based authentication.</p> </li> <li> <p> <code>ALLOW<em>REFRESH</em>TOKEN_AUTH</code>: Enable authflow to refresh tokens.</p> </li> </ul></p>
     #[serde(rename = "ExplicitAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub explicit_auth_flows: Option<Vec<String>>,
@@ -3631,6 +3730,10 @@ pub struct UserPoolClientType {
     #[serde(rename = "LogoutURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logout_ur_ls: Option<Vec<String>>,
+    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <p>This setting affects the behavior of following APIs:</p> <ul> <li> <p> <a>AdminInitiateAuth</a> </p> </li> <li> <p> <a>AdminRespondToAuthChallenge</a> </p> </li> <li> <p> <a>InitiateAuth</a> </p> </li> <li> <p> <a>RespondToAuthChallenge</a> </p> </li> <li> <p> <a>ForgotPassword</a> </p> </li> <li> <p> <a>ConfirmForgotPassword</a> </p> </li> <li> <p> <a>ConfirmSignUp</a> </p> </li> <li> <p> <a>ResendConfirmationCode</a> </p> </li> </ul> <note> <p>After January 1st 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
+    #[serde(rename = "PreventUserExistenceErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prevent_user_existence_errors: Option<String>,
     /// <p>The Read-only attributes.</p>
     #[serde(rename = "ReadAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3696,6 +3799,10 @@ pub struct UserPoolPolicyType {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserPoolType {
+    /// <p>Use this setting to define which verified available method a user can use to recover their password when they call <code>ForgotPassword</code>. It allows you to define a preferred method when a user has more than one method available. With this setting, SMS does not qualify for a valid password recovery mechanism if the user also has SMS MFA enabled. In the absence of this setting, Cognito uses the legacy behavior to determine the recovery method where SMS is preferred over email.</p>
+    #[serde(rename = "AccountRecoverySetting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_recovery_setting: Option<AccountRecoverySettingType>,
     /// <p>The configuration for <code>AdminCreateUser</code> requests.</p>
     #[serde(rename = "AdminCreateUserConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8771,6 +8878,8 @@ impl Error for GetIdentityProviderByIdentifierError {
 pub enum GetSigningCertificateError {
     /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
     /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
 }
@@ -8781,6 +8890,11 @@ impl GetSigningCertificateError {
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetSigningCertificateError::InternalError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(GetSigningCertificateError::InvalidParameter(
+                        err.msg,
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetSigningCertificateError::ResourceNotFound(
@@ -8803,6 +8917,7 @@ impl Error for GetSigningCertificateError {
     fn description(&self) -> &str {
         match *self {
             GetSigningCertificateError::InternalError(ref cause) => cause,
+            GetSigningCertificateError::InvalidParameter(ref cause) => cause,
             GetSigningCertificateError::ResourceNotFound(ref cause) => cause,
         }
     }
@@ -9243,6 +9358,10 @@ pub enum InitiateAuthError {
     InvalidLambdaResponse(String),
     /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    InvalidSmsRoleAccessPolicy(String),
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    InvalidSmsRoleTrustRelationship(String),
     /// <p>This exception is thrown when the user pool configuration is invalid.</p>
     InvalidUserPoolConfiguration(String),
     /// <p>This exception is thrown when a user is not authorized.</p>
@@ -9275,6 +9394,16 @@ impl InitiateAuthError {
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(InitiateAuthError::InvalidParameter(err.msg))
+                }
+                "InvalidSmsRoleAccessPolicyException" => {
+                    return RusotoError::Service(InitiateAuthError::InvalidSmsRoleAccessPolicy(
+                        err.msg,
+                    ))
+                }
+                "InvalidSmsRoleTrustRelationshipException" => {
+                    return RusotoError::Service(
+                        InitiateAuthError::InvalidSmsRoleTrustRelationship(err.msg),
+                    )
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(InitiateAuthError::InvalidUserPoolConfiguration(
@@ -9323,6 +9452,8 @@ impl Error for InitiateAuthError {
             InitiateAuthError::InternalError(ref cause) => cause,
             InitiateAuthError::InvalidLambdaResponse(ref cause) => cause,
             InitiateAuthError::InvalidParameter(ref cause) => cause,
+            InitiateAuthError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
+            InitiateAuthError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
             InitiateAuthError::InvalidUserPoolConfiguration(ref cause) => cause,
             InitiateAuthError::NotAuthorized(ref cause) => cause,
             InitiateAuthError::PasswordResetRequired(ref cause) => cause,
@@ -11982,13 +12113,13 @@ pub trait CognitoIdentityProvider {
         input: AddCustomAttributesRequest,
     ) -> RusotoFuture<AddCustomAttributesResponse, AddCustomAttributesError>;
 
-    /// <p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>
+    /// <p>Adds the specified user to the specified group.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_add_user_to_group(
         &self,
         input: AdminAddUserToGroupRequest,
     ) -> RusotoFuture<(), AdminAddUserToGroupError>;
 
-    /// <p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>
+    /// <p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_confirm_sign_up(
         &self,
         input: AdminConfirmSignUpRequest,
@@ -12000,13 +12131,13 @@ pub trait CognitoIdentityProvider {
         input: AdminCreateUserRequest,
     ) -> RusotoFuture<AdminCreateUserResponse, AdminCreateUserError>;
 
-    /// <p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    /// <p>Deletes a user as an administrator. Works on any user.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_delete_user(
         &self,
         input: AdminDeleteUserRequest,
     ) -> RusotoFuture<(), AdminDeleteUserError>;
 
-    /// <p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    /// <p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_delete_user_attributes(
         &self,
         input: AdminDeleteUserAttributesRequest,
@@ -12018,37 +12149,37 @@ pub trait CognitoIdentityProvider {
         input: AdminDisableProviderForUserRequest,
     ) -> RusotoFuture<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError>;
 
-    /// <p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    /// <p>Disables the specified user.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_disable_user(
         &self,
         input: AdminDisableUserRequest,
     ) -> RusotoFuture<AdminDisableUserResponse, AdminDisableUserError>;
 
-    /// <p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    /// <p>Enables the specified user as an administrator. Works on any user.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_enable_user(
         &self,
         input: AdminEnableUserRequest,
     ) -> RusotoFuture<AdminEnableUserResponse, AdminEnableUserError>;
 
-    /// <p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>
+    /// <p>Forgets the device, as an administrator.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_forget_device(
         &self,
         input: AdminForgetDeviceRequest,
     ) -> RusotoFuture<(), AdminForgetDeviceError>;
 
-    /// <p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>
+    /// <p>Gets the device, as an administrator.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_get_device(
         &self,
         input: AdminGetDeviceRequest,
     ) -> RusotoFuture<AdminGetDeviceResponse, AdminGetDeviceError>;
 
-    /// <p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    /// <p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_get_user(
         &self,
         input: AdminGetUserRequest,
     ) -> RusotoFuture<AdminGetUserResponse, AdminGetUserError>;
 
-    /// <p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>
+    /// <p>Initiates the authentication flow, as an administrator.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_initiate_auth(
         &self,
         input: AdminInitiateAuthRequest,
@@ -12060,13 +12191,13 @@ pub trait CognitoIdentityProvider {
         input: AdminLinkProviderForUserRequest,
     ) -> RusotoFuture<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError>;
 
-    /// <p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>
+    /// <p>Lists devices, as an administrator.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_list_devices(
         &self,
         input: AdminListDevicesRequest,
     ) -> RusotoFuture<AdminListDevicesResponse, AdminListDevicesError>;
 
-    /// <p>Lists the groups that the user belongs to.</p> <p>Requires developer credentials.</p>
+    /// <p>Lists the groups that the user belongs to.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_list_groups_for_user(
         &self,
         input: AdminListGroupsForUserRequest,
@@ -12078,36 +12209,37 @@ pub trait CognitoIdentityProvider {
         input: AdminListUserAuthEventsRequest,
     ) -> RusotoFuture<AdminListUserAuthEventsResponse, AdminListUserAuthEventsError>;
 
-    /// <p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>
+    /// <p>Removes the specified user from the specified group.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_remove_user_from_group(
         &self,
         input: AdminRemoveUserFromGroupRequest,
     ) -> RusotoFuture<(), AdminRemoveUserFromGroupError>;
 
-    /// <p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>
+    /// <p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_reset_user_password(
         &self,
         input: AdminResetUserPasswordRequest,
     ) -> RusotoFuture<AdminResetUserPasswordResponse, AdminResetUserPasswordError>;
 
-    /// <p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>
+    /// <p>Responds to an authentication challenge, as an administrator.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_respond_to_auth_challenge(
         &self,
         input: AdminRespondToAuthChallengeRequest,
     ) -> RusotoFuture<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError>;
 
-    /// <p>Sets the user's multi-factor authentication (MFA) preference.</p>
+    /// <p>Sets the user's multi-factor authentication (MFA) preference, including which MFA options are enabled and if any are preferred. Only one factor can be set as preferred. The preferred MFA factor will be used to authenticate a user if multiple factors are enabled. If multiple options are enabled and no preference is set, a challenge to choose an MFA option will be returned during sign in.</p>
     fn admin_set_user_mfa_preference(
         &self,
         input: AdminSetUserMFAPreferenceRequest,
     ) -> RusotoFuture<AdminSetUserMFAPreferenceResponse, AdminSetUserMFAPreferenceError>;
 
+    /// <p>Sets the specified user's password in a user pool as an administrator. Works on any user. </p> <p>The password can be temporary or permanent. If it is temporary, the user status will be placed into the <code>FORCE_CHANGE_PASSWORD</code> state. When the user next tries to sign in, the InitiateAuth/AdminInitiateAuth response will contain the <code>NEW_PASSWORD_REQUIRED</code> challenge. If the user does not sign in before it expires, the user will not be able to sign in and their password will need to be reset by an administrator. </p> <p>Once the user has set a new password, or the password is permanent, the user status will be set to <code>Confirmed</code>.</p>
     fn admin_set_user_password(
         &self,
         input: AdminSetUserPasswordRequest,
     ) -> RusotoFuture<AdminSetUserPasswordResponse, AdminSetUserPasswordError>;
 
-    /// <p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>
+    /// <p> <i>This action is no longer supported.</i> You can use it to configure only SMS MFA. You can't use it to configure TOTP software token MFA. To configure either type of MFA, use the <a>AdminSetUserMFAPreference</a> action instead.</p>
     fn admin_set_user_settings(
         &self,
         input: AdminSetUserSettingsRequest,
@@ -12119,19 +12251,19 @@ pub trait CognitoIdentityProvider {
         input: AdminUpdateAuthEventFeedbackRequest,
     ) -> RusotoFuture<AdminUpdateAuthEventFeedbackResponse, AdminUpdateAuthEventFeedbackError>;
 
-    /// <p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>
+    /// <p>Updates the device status as an administrator.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_update_device_status(
         &self,
         input: AdminUpdateDeviceStatusRequest,
     ) -> RusotoFuture<AdminUpdateDeviceStatusResponse, AdminUpdateDeviceStatusError>;
 
-    /// <p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Requires developer credentials.</p>
+    /// <p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_update_user_attributes(
         &self,
         input: AdminUpdateUserAttributesRequest,
     ) -> RusotoFuture<AdminUpdateUserAttributesResponse, AdminUpdateUserAttributesError>;
 
-    /// <p>Signs out users from all devices, as an administrator.</p> <p>Requires developer credentials.</p>
+    /// <p>Signs out users from all devices, as an administrator. It also invalidates all refresh tokens issued to a user. The user's current access and Id tokens remain valid until their expiry. Access and Id tokens expire one hour after they are issued.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_user_global_sign_out(
         &self,
         input: AdminUserGlobalSignOutRequest,
@@ -12167,7 +12299,7 @@ pub trait CognitoIdentityProvider {
         input: ConfirmSignUpRequest,
     ) -> RusotoFuture<ConfirmSignUpResponse, ConfirmSignUpError>;
 
-    /// <p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>
+    /// <p>Creates a new group in the specified user pool.</p> <p>Calling this action requires developer credentials.</p>
     fn create_group(
         &self,
         input: CreateGroupRequest,
@@ -12209,7 +12341,7 @@ pub trait CognitoIdentityProvider {
         input: CreateUserPoolDomainRequest,
     ) -> RusotoFuture<CreateUserPoolDomainResponse, CreateUserPoolDomainError>;
 
-    /// <p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>
+    /// <p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Calling this action requires developer credentials.</p>
     fn delete_group(&self, input: DeleteGroupRequest) -> RusotoFuture<(), DeleteGroupError>;
 
     /// <p>Deletes an identity provider for a user pool.</p>
@@ -12314,7 +12446,7 @@ pub trait CognitoIdentityProvider {
         input: GetDeviceRequest,
     ) -> RusotoFuture<GetDeviceResponse, GetDeviceError>;
 
-    /// <p>Gets a group.</p> <p>Requires developer credentials.</p>
+    /// <p>Gets a group.</p> <p>Calling this action requires developer credentials.</p>
     fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError>;
 
     /// <p>Gets the specified identity provider.</p>
@@ -12350,7 +12482,7 @@ pub trait CognitoIdentityProvider {
         input: GetUserPoolMfaConfigRequest,
     ) -> RusotoFuture<GetUserPoolMfaConfigResponse, GetUserPoolMfaConfigError>;
 
-    /// <p>Signs out users from all devices.</p>
+    /// <p>Signs out users from all devices. It also invalidates all refresh tokens issued to a user. The user's current access and Id tokens remain valid until their expiry. Access and Id tokens expire one hour after they are issued.</p>
     fn global_sign_out(
         &self,
         input: GlobalSignOutRequest,
@@ -12368,7 +12500,7 @@ pub trait CognitoIdentityProvider {
         input: ListDevicesRequest,
     ) -> RusotoFuture<ListDevicesResponse, ListDevicesError>;
 
-    /// <p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>
+    /// <p>Lists the groups associated with a user pool.</p> <p>Calling this action requires developer credentials.</p>
     fn list_groups(
         &self,
         input: ListGroupsRequest,
@@ -12416,7 +12548,7 @@ pub trait CognitoIdentityProvider {
         input: ListUsersRequest,
     ) -> RusotoFuture<ListUsersResponse, ListUsersError>;
 
-    /// <p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>
+    /// <p>Lists the users in the specified group.</p> <p>Calling this action requires developer credentials.</p>
     fn list_users_in_group(
         &self,
         input: ListUsersInGroupRequest,
@@ -12446,19 +12578,19 @@ pub trait CognitoIdentityProvider {
         input: SetUICustomizationRequest,
     ) -> RusotoFuture<SetUICustomizationResponse, SetUICustomizationError>;
 
-    /// <p>Set the user's multi-factor authentication (MFA) method preference.</p>
+    /// <p>Set the user's multi-factor authentication (MFA) method preference, including which MFA factors are enabled and if any are preferred. Only one factor can be set as preferred. The preferred MFA factor will be used to authenticate a user if multiple factors are enabled. If multiple options are enabled and no preference is set, a challenge to choose an MFA option will be returned during sign in.</p>
     fn set_user_mfa_preference(
         &self,
         input: SetUserMFAPreferenceRequest,
     ) -> RusotoFuture<SetUserMFAPreferenceResponse, SetUserMFAPreferenceError>;
 
-    /// <p>Set the user pool MFA configuration.</p>
+    /// <p>Set the user pool multi-factor authentication (MFA) configuration.</p>
     fn set_user_pool_mfa_config(
         &self,
         input: SetUserPoolMfaConfigRequest,
     ) -> RusotoFuture<SetUserPoolMfaConfigResponse, SetUserPoolMfaConfigError>;
 
-    /// <p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>
+    /// <p> <i>This action is no longer supported.</i> You can use it to configure only SMS MFA. You can't use it to configure TOTP software token MFA. To configure either type of MFA, use the <a>SetUserMFAPreference</a> action instead.</p>
     fn set_user_settings(
         &self,
         input: SetUserSettingsRequest,
@@ -12503,7 +12635,7 @@ pub trait CognitoIdentityProvider {
         input: UpdateDeviceStatusRequest,
     ) -> RusotoFuture<UpdateDeviceStatusResponse, UpdateDeviceStatusError>;
 
-    /// <p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>
+    /// <p><p>Updates the specified group with the specified attributes.</p> <p>Calling this action requires developer credentials.</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
     fn update_group(
         &self,
         input: UpdateGroupRequest,
@@ -12515,7 +12647,7 @@ pub trait CognitoIdentityProvider {
         input: UpdateIdentityProviderRequest,
     ) -> RusotoFuture<UpdateIdentityProviderResponse, UpdateIdentityProviderError>;
 
-    /// <p>Updates the name and scopes of resource server. All other fields are read-only.</p>
+    /// <p><p>Updates the name and scopes of resource server. All other fields are read-only.</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
     fn update_resource_server(
         &self,
         input: UpdateResourceServerRequest,
@@ -12527,13 +12659,13 @@ pub trait CognitoIdentityProvider {
         input: UpdateUserAttributesRequest,
     ) -> RusotoFuture<UpdateUserAttributesResponse, UpdateUserAttributesError>;
 
-    /// <p>Updates the specified user pool with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool settings with .</p>
+    /// <p><p>Updates the specified user pool with the specified attributes. You can get a list of the current user pool settings with .</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
     fn update_user_pool(
         &self,
         input: UpdateUserPoolRequest,
     ) -> RusotoFuture<UpdateUserPoolResponse, UpdateUserPoolError>;
 
-    /// <p>Updates the specified user pool app client with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool app client settings with .</p>
+    /// <p><p>Updates the specified user pool app client with the specified attributes. You can get a list of the current user pool app client settings with .</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
     fn update_user_pool_client(
         &self,
         input: UpdateUserPoolClientRequest,
@@ -12637,7 +12769,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>
+    /// <p>Adds the specified user to the specified group.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_add_user_to_group(
         &self,
         input: AdminAddUserToGroupRequest,
@@ -12665,7 +12797,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>
+    /// <p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_confirm_sign_up(
         &self,
         input: AdminConfirmSignUpRequest,
@@ -12729,7 +12861,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    /// <p>Deletes a user as an administrator. Works on any user.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_delete_user(
         &self,
         input: AdminDeleteUserRequest,
@@ -12758,7 +12890,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    /// <p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_delete_user_attributes(
         &self,
         input: AdminDeleteUserAttributesRequest,
@@ -12816,7 +12948,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    /// <p>Disables the specified user.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_disable_user(
         &self,
         input: AdminDisableUserRequest,
@@ -12848,7 +12980,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    /// <p>Enables the specified user as an administrator. Works on any user.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_enable_user(
         &self,
         input: AdminEnableUserRequest,
@@ -12880,7 +13012,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>
+    /// <p>Forgets the device, as an administrator.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_forget_device(
         &self,
         input: AdminForgetDeviceRequest,
@@ -12909,7 +13041,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>
+    /// <p>Gets the device, as an administrator.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_get_device(
         &self,
         input: AdminGetDeviceRequest,
@@ -12941,7 +13073,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    /// <p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_get_user(
         &self,
         input: AdminGetUserRequest,
@@ -12973,7 +13105,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>
+    /// <p>Initiates the authentication flow, as an administrator.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_initiate_auth(
         &self,
         input: AdminInitiateAuthRequest,
@@ -13034,7 +13166,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>
+    /// <p>Lists devices, as an administrator.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_list_devices(
         &self,
         input: AdminListDevicesRequest,
@@ -13066,7 +13198,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Lists the groups that the user belongs to.</p> <p>Requires developer credentials.</p>
+    /// <p>Lists the groups that the user belongs to.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_list_groups_for_user(
         &self,
         input: AdminListGroupsForUserRequest,
@@ -13126,7 +13258,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>
+    /// <p>Removes the specified user from the specified group.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_remove_user_from_group(
         &self,
         input: AdminRemoveUserFromGroupRequest,
@@ -13152,7 +13284,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>
+    /// <p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_reset_user_password(
         &self,
         input: AdminResetUserPasswordRequest,
@@ -13183,7 +13315,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>
+    /// <p>Responds to an authentication challenge, as an administrator.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_respond_to_auth_challenge(
         &self,
         input: AdminRespondToAuthChallengeRequest,
@@ -13212,7 +13344,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Sets the user's multi-factor authentication (MFA) preference.</p>
+    /// <p>Sets the user's multi-factor authentication (MFA) preference, including which MFA options are enabled and if any are preferred. Only one factor can be set as preferred. The preferred MFA factor will be used to authenticate a user if multiple factors are enabled. If multiple options are enabled and no preference is set, a challenge to choose an MFA option will be returned during sign in.</p>
     fn admin_set_user_mfa_preference(
         &self,
         input: AdminSetUserMFAPreferenceRequest,
@@ -13241,6 +13373,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
+    /// <p>Sets the specified user's password in a user pool as an administrator. Works on any user. </p> <p>The password can be temporary or permanent. If it is temporary, the user status will be placed into the <code>FORCE_CHANGE_PASSWORD</code> state. When the user next tries to sign in, the InitiateAuth/AdminInitiateAuth response will contain the <code>NEW_PASSWORD_REQUIRED</code> challenge. If the user does not sign in before it expires, the user will not be able to sign in and their password will need to be reset by an administrator. </p> <p>Once the user has set a new password, or the password is permanent, the user status will be set to <code>Confirmed</code>.</p>
     fn admin_set_user_password(
         &self,
         input: AdminSetUserPasswordRequest,
@@ -13271,7 +13404,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>
+    /// <p> <i>This action is no longer supported.</i> You can use it to configure only SMS MFA. You can't use it to configure TOTP software token MFA. To configure either type of MFA, use the <a>AdminSetUserMFAPreference</a> action instead.</p>
     fn admin_set_user_settings(
         &self,
         input: AdminSetUserSettingsRequest,
@@ -13331,7 +13464,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>
+    /// <p>Updates the device status as an administrator.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_update_device_status(
         &self,
         input: AdminUpdateDeviceStatusRequest,
@@ -13360,7 +13493,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Requires developer credentials.</p>
+    /// <p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_update_user_attributes(
         &self,
         input: AdminUpdateUserAttributesRequest,
@@ -13389,7 +13522,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Signs out users from all devices, as an administrator.</p> <p>Requires developer credentials.</p>
+    /// <p>Signs out users from all devices, as an administrator. It also invalidates all refresh tokens issued to a user. The user's current access and Id tokens remain valid until their expiry. Access and Id tokens expire one hour after they are issued.</p> <p>Calling this action requires developer credentials.</p>
     fn admin_user_global_sign_out(
         &self,
         input: AdminUserGlobalSignOutRequest,
@@ -13578,7 +13711,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>
+    /// <p>Creates a new group in the specified user pool.</p> <p>Calling this action requires developer credentials.</p>
     fn create_group(
         &self,
         input: CreateGroupRequest,
@@ -13797,7 +13930,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>
+    /// <p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Calling this action requires developer credentials.</p>
     fn delete_group(&self, input: DeleteGroupRequest) -> RusotoFuture<(), DeleteGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
@@ -14360,7 +14493,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Gets a group.</p> <p>Requires developer credentials.</p>
+    /// <p>Gets a group.</p> <p>Calling this action requires developer credentials.</p>
     fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError> {
         let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
 
@@ -14569,7 +14702,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Signs out users from all devices.</p>
+    /// <p>Signs out users from all devices. It also invalidates all refresh tokens issued to a user. The user's current access and Id tokens remain valid until their expiry. Access and Id tokens expire one hour after they are issued.</p>
     fn global_sign_out(
         &self,
         input: GlobalSignOutRequest,
@@ -14665,7 +14798,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>
+    /// <p>Lists the groups associated with a user pool.</p> <p>Calling this action requires developer credentials.</p>
     fn list_groups(
         &self,
         input: ListGroupsRequest,
@@ -14917,7 +15050,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>
+    /// <p>Lists the users in the specified group.</p> <p>Calling this action requires developer credentials.</p>
     fn list_users_in_group(
         &self,
         input: ListUsersInGroupRequest,
@@ -15074,7 +15207,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Set the user's multi-factor authentication (MFA) method preference.</p>
+    /// <p>Set the user's multi-factor authentication (MFA) method preference, including which MFA factors are enabled and if any are preferred. Only one factor can be set as preferred. The preferred MFA factor will be used to authenticate a user if multiple factors are enabled. If multiple options are enabled and no preference is set, a challenge to choose an MFA option will be returned during sign in.</p>
     fn set_user_mfa_preference(
         &self,
         input: SetUserMFAPreferenceRequest,
@@ -15105,7 +15238,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Set the user pool MFA configuration.</p>
+    /// <p>Set the user pool multi-factor authentication (MFA) configuration.</p>
     fn set_user_pool_mfa_config(
         &self,
         input: SetUserPoolMfaConfigRequest,
@@ -15136,7 +15269,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>
+    /// <p> <i>This action is no longer supported.</i> You can use it to configure only SMS MFA. You can't use it to configure TOTP software token MFA. To configure either type of MFA, use the <a>SetUserMFAPreference</a> action instead.</p>
     fn set_user_settings(
         &self,
         input: SetUserSettingsRequest,
@@ -15382,7 +15515,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>
+    /// <p><p>Updates the specified group with the specified attributes.</p> <p>Calling this action requires developer credentials.</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
     fn update_group(
         &self,
         input: UpdateGroupRequest,
@@ -15445,7 +15578,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Updates the name and scopes of resource server. All other fields are read-only.</p>
+    /// <p><p>Updates the name and scopes of resource server. All other fields are read-only.</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
     fn update_resource_server(
         &self,
         input: UpdateResourceServerRequest,
@@ -15507,7 +15640,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Updates the specified user pool with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool settings with .</p>
+    /// <p><p>Updates the specified user pool with the specified attributes. You can get a list of the current user pool settings with .</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
     fn update_user_pool(
         &self,
         input: UpdateUserPoolRequest,
@@ -15539,7 +15672,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Updates the specified user pool app client with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool app client settings with .</p>
+    /// <p><p>Updates the specified user pool app client with the specified attributes. You can get a list of the current user pool app client settings with .</p> <important> <p>If you don&#39;t provide a value for an attribute, it will be set to the default value.</p> </important></p>
     fn update_user_pool_client(
         &self,
         input: UpdateUserPoolClientRequest,

@@ -102,6 +102,18 @@ pub struct App {
     pub update_time: f64,
 }
 
+/// <p> Structure for artifact. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Artifact {
+    /// <p> File name for the artifact. </p>
+    #[serde(rename = "artifactFileName")]
+    pub artifact_file_name: String,
+    /// <p> Unique Id for a artifact. </p>
+    #[serde(rename = "artifactId")]
+    pub artifact_id: String,
+}
+
 /// <p> Structure with auto branch creation config. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AutoBranchCreationConfig {
@@ -121,6 +133,10 @@ pub struct AutoBranchCreationConfig {
     #[serde(rename = "enableBasicAuth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_basic_auth: Option<bool>,
+    /// <p> Enables Pull Request Preview for auto created branch. </p>
+    #[serde(rename = "enablePullRequestPreview")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_pull_request_preview: Option<bool>,
     /// <p> Environment Variables for the auto created branch. </p>
     #[serde(rename = "environmentVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -129,10 +145,40 @@ pub struct AutoBranchCreationConfig {
     #[serde(rename = "framework")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framework: Option<String>,
+    /// <p> The Amplify Environment name for the pull request. </p>
+    #[serde(rename = "pullRequestEnvironmentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_environment_name: Option<String>,
     /// <p> Stage for the auto created branch. </p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage: Option<String>,
+}
+
+/// <p> Backend environment for an Amplify App. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BackendEnvironment {
+    /// <p> Arn for a backend environment, part of an Amplify App. </p>
+    #[serde(rename = "backendEnvironmentArn")]
+    pub backend_environment_arn: String,
+    /// <p> Creation date and time for a backend environment, part of an Amplify App. </p>
+    #[serde(rename = "createTime")]
+    pub create_time: f64,
+    /// <p> Name of deployment artifacts. </p>
+    #[serde(rename = "deploymentArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_artifacts: Option<String>,
+    /// <p> Name for a backend environment, part of an Amplify App. </p>
+    #[serde(rename = "environmentName")]
+    pub environment_name: String,
+    /// <p> CloudFormation stack name of backend environment. </p>
+    #[serde(rename = "stackName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_name: Option<String>,
+    /// <p> Last updated date and time for a backend environment, part of an Amplify App. </p>
+    #[serde(rename = "updateTime")]
+    pub update_time: f64,
 }
 
 /// <p> Branch for an Amplify App, which maps to a 3rd party repository branch. </p>
@@ -146,6 +192,10 @@ pub struct Branch {
     #[serde(rename = "associatedResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub associated_resources: Option<Vec<String>>,
+    /// <p> ARN for a Backend Environment, part of an Amplify App. </p>
+    #[serde(rename = "backendEnvironmentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backend_environment_arn: Option<String>,
     /// <p> Basic Authorization credentials for a branch, part of an Amplify App. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -169,6 +219,10 @@ pub struct Branch {
     /// <p> Description for a branch, part of an Amplify App. </p>
     #[serde(rename = "description")]
     pub description: String,
+    /// <p> The destination branch if the branch is a pull request branch. </p>
+    #[serde(rename = "destinationBranch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_branch: Option<String>,
     /// <p> Display name for a branch, will use as the default domain prefix. </p>
     #[serde(rename = "displayName")]
     pub display_name: String,
@@ -181,12 +235,23 @@ pub struct Branch {
     /// <p> Enables notifications for a branch, part of an Amplify App. </p>
     #[serde(rename = "enableNotification")]
     pub enable_notification: bool,
+    /// <p> Enables Pull Request Preview for this branch. </p>
+    #[serde(rename = "enablePullRequestPreview")]
+    pub enable_pull_request_preview: bool,
     /// <p> Environment Variables specific to a branch, part of an Amplify App. </p>
     #[serde(rename = "environmentVariables")]
     pub environment_variables: ::std::collections::HashMap<String, String>,
     /// <p> Framework for a branch, part of an Amplify App. </p>
     #[serde(rename = "framework")]
     pub framework: String,
+    /// <p> The Amplify Environment name for the pull request. </p>
+    #[serde(rename = "pullRequestEnvironmentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_environment_name: Option<String>,
+    /// <p> The source branch if the branch is a pull request branch. </p>
+    #[serde(rename = "sourceBranch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_branch: Option<String>,
     /// <p> Stage for a branch, part of an Amplify App. </p>
     #[serde(rename = "stage")]
     pub stage: String,
@@ -288,12 +353,44 @@ pub struct CreateAppResult {
     pub app: App,
 }
 
+/// <p> Request structure for a backend environment create request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateBackendEnvironmentRequest {
+    /// <p> Unique Id for an Amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name of deployment artifacts. </p>
+    #[serde(rename = "deploymentArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_artifacts: Option<String>,
+    /// <p> Name for the backend environment. </p>
+    #[serde(rename = "environmentName")]
+    pub environment_name: String,
+    /// <p> CloudFormation stack name of backend environment. </p>
+    #[serde(rename = "stackName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_name: Option<String>,
+}
+
+/// <p> Result structure for create backend environment. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateBackendEnvironmentResult {
+    /// <p> Backend environment structure for an amplify App. </p>
+    #[serde(rename = "backendEnvironment")]
+    pub backend_environment: BackendEnvironment,
+}
+
 /// <p> Request structure for a branch create request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateBranchRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
+    /// <p> ARN for a Backend Environment, part of an Amplify App. </p>
+    #[serde(rename = "backendEnvironmentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backend_environment_arn: Option<String>,
     /// <p> Basic Authorization credentials for the branch. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -325,6 +422,10 @@ pub struct CreateBranchRequest {
     #[serde(rename = "enableNotification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_notification: Option<bool>,
+    /// <p> Enables Pull Request Preview for this branch. </p>
+    #[serde(rename = "enablePullRequestPreview")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_pull_request_preview: Option<bool>,
     /// <p> Environment Variables for the branch. </p>
     #[serde(rename = "environmentVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -333,6 +434,10 @@ pub struct CreateBranchRequest {
     #[serde(rename = "framework")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framework: Option<String>,
+    /// <p> The Amplify Environment name for the pull request. </p>
+    #[serde(rename = "pullRequestEnvironmentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_environment_name: Option<String>,
     /// <p> Stage for the branch. </p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -396,7 +501,7 @@ pub struct CreateDomainAssociationRequest {
     /// <p> Domain name for the Domain Association. </p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
-    /// <p> Enables automated creation of Subdomains for branches. </p>
+    /// <p> Enables automated creation of Subdomains for branches. (Currently not supported) </p>
     #[serde(rename = "enableAutoSubDomain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_auto_sub_domain: Option<bool>,
@@ -471,6 +576,26 @@ pub struct DeleteAppRequest {
 pub struct DeleteAppResult {
     #[serde(rename = "app")]
     pub app: App,
+}
+
+/// <p> Request structure for delete backend environment request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteBackendEnvironmentRequest {
+    /// <p> Unique Id of an Amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name of a backend environment of an Amplify App. </p>
+    #[serde(rename = "environmentName")]
+    pub environment_name: String,
+}
+
+/// <p> Result structure of a delete backend environment result. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteBackendEnvironmentResult {
+    /// <p> Backend environment structure for an Amplify App. </p>
+    #[serde(rename = "backendEnvironment")]
+    pub backend_environment: BackendEnvironment,
 }
 
 /// <p> Request structure for delete branch request. </p>
@@ -567,7 +692,7 @@ pub struct DomainAssociation {
     /// <p> Status fo the Domain Association. </p>
     #[serde(rename = "domainStatus")]
     pub domain_status: String,
-    /// <p> Enables automated creation of Subdomains for branches. </p>
+    /// <p> Enables automated creation of Subdomains for branches. (Currently not supported) </p>
     #[serde(rename = "enableAutoSubDomain")]
     pub enable_auto_sub_domain: bool,
     /// <p> Reason for the current status of the Domain Association. </p>
@@ -576,6 +701,35 @@ pub struct DomainAssociation {
     /// <p> Subdomains for the Domain Association. </p>
     #[serde(rename = "subDomains")]
     pub sub_domains: Vec<SubDomain>,
+}
+
+/// <p> Request structure for the generate access logs request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GenerateAccessLogsRequest {
+    /// <p> Unique Id for an Amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name of the domain. </p>
+    #[serde(rename = "domainName")]
+    pub domain_name: String,
+    /// <p> The time at which the logs should end, inclusive. </p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p> The time at which the logs should start, inclusive. </p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+}
+
+/// <p> Result structure for the generate access logs request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GenerateAccessLogsResult {
+    /// <p> Pre-signed URL for the requested access logs. </p>
+    #[serde(rename = "logUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_url: Option<String>,
 }
 
 /// <p> Request structure for get App request. </p>
@@ -593,7 +747,47 @@ pub struct GetAppResult {
     pub app: App,
 }
 
-/// <p> Result structure for get branch request. </p>
+/// <p> Request structure for the get artifact request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetArtifactUrlRequest {
+    /// <p> Unique Id for a artifact. </p>
+    #[serde(rename = "artifactId")]
+    pub artifact_id: String,
+}
+
+/// <p> Result structure for the get artifact request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetArtifactUrlResult {
+    /// <p> Unique Id for a artifact. </p>
+    #[serde(rename = "artifactId")]
+    pub artifact_id: String,
+    /// <p> Presigned url for the artifact. </p>
+    #[serde(rename = "artifactUrl")]
+    pub artifact_url: String,
+}
+
+/// <p> Request structure for get backend environment request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetBackendEnvironmentRequest {
+    /// <p> Unique Id for an Amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name for the backend environment. </p>
+    #[serde(rename = "environmentName")]
+    pub environment_name: String,
+}
+
+/// <p> Result structure for get backend environment result. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetBackendEnvironmentResult {
+    /// <p> Backend environment structure for an an Amplify App. </p>
+    #[serde(rename = "backendEnvironment")]
+    pub backend_environment: BackendEnvironment,
+}
+
+/// <p> Request structure for get branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetBranchRequest {
     /// <p> Unique Id for an Amplify App. </p>
@@ -736,6 +930,74 @@ pub struct ListAppsResult {
     #[serde(rename = "apps")]
     pub apps: Vec<App>,
     /// <p> Pagination token. Set to null to start listing Apps from start. If non-null pagination token is returned in a result, then pass its value in here to list more projects. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p> Request structure for the list artifacts request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListArtifactsRequest {
+    /// <p> Unique Id for an Amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name for a branch, part of an Amplify App. </p>
+    #[serde(rename = "branchName")]
+    pub branch_name: String,
+    /// <p> Unique Id for an Job. </p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+    /// <p> Maximum number of records to list in a single response. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> Pagination token. Set to null to start listing artifacts from start. If non-null pagination token is returned in a result, then pass its value in here to list more artifacts. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p> Result structure for the list artifacts request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListArtifactsResult {
+    /// <p> List of artifacts. </p>
+    #[serde(rename = "artifacts")]
+    pub artifacts: Vec<Artifact>,
+    /// <p> Pagination token. If non-null pagination token is returned in a result, then pass its value in another request to fetch more entries. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p> Request structure for list backend environments request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListBackendEnvironmentsRequest {
+    /// <p> Unique Id for an amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name of the backend environment </p>
+    #[serde(rename = "environmentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment_name: Option<String>,
+    /// <p> Maximum number of records to list in a single response. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> Pagination token. Set to null to start listing backen environments from start. If a non-null pagination token is returned in a result, then pass its value in here to list more backend environments. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p> Result structure for list backend environments result. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListBackendEnvironmentsResult {
+    /// <p> List of backend environments for an Amplify App. </p>
+    #[serde(rename = "backendEnvironments")]
+    pub backend_environments: Vec<BackendEnvironment>,
+    /// <p> Pagination token. If non-null pagination token is returned in a result, then pass its value in another request to fetch more entries. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1007,6 +1269,14 @@ pub struct Step {
     /// <p> Name of the execution step. </p>
     #[serde(rename = "stepName")]
     pub step_name: String,
+    /// <p> URL to the test artifact for the execution step. </p>
+    #[serde(rename = "testArtifactsUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub test_artifacts_url: Option<String>,
+    /// <p> URL to the test config for the execution step. </p>
+    #[serde(rename = "testConfigUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub test_config_url: Option<String>,
 }
 
 /// <p> Request structure for stop job request. </p>
@@ -1093,10 +1363,14 @@ pub struct UntagResourceResponse {}
 /// <p> Request structure for update App request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAppRequest {
+    /// <p> Personal Access token for 3rd party source control system for an Amplify App, used to create webhook and read-only deploy key. Token is not stored. </p>
+    #[serde(rename = "accessToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_token: Option<String>,
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Automated branch creation config for the Amplify App. </p>
+    /// <p> Automated branch creation branchConfig for the Amplify App. </p>
     #[serde(rename = "autoBranchCreationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_branch_creation_config: Option<AutoBranchCreationConfig>,
@@ -1144,10 +1418,18 @@ pub struct UpdateAppRequest {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p> OAuth token for 3rd party source control system for an Amplify App, used to create webhook and read-only deploy key. OAuth token is not stored. </p>
+    #[serde(rename = "oauthToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub oauth_token: Option<String>,
     /// <p> Platform for an Amplify App. </p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
+    /// <p> Repository for an Amplify App </p>
+    #[serde(rename = "repository")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository: Option<String>,
 }
 
 /// <p> Result structure for an Amplify App update request. </p>
@@ -1165,6 +1447,10 @@ pub struct UpdateBranchRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
+    /// <p> ARN for a Backend Environment, part of an Amplify App. </p>
+    #[serde(rename = "backendEnvironmentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backend_environment_arn: Option<String>,
     /// <p> Basic Authorization credentials for the branch. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1196,6 +1482,10 @@ pub struct UpdateBranchRequest {
     #[serde(rename = "enableNotification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_notification: Option<bool>,
+    /// <p> Enables Pull Request Preview for this branch. </p>
+    #[serde(rename = "enablePullRequestPreview")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_pull_request_preview: Option<bool>,
     /// <p> Environment Variables for the branch. </p>
     #[serde(rename = "environmentVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1204,6 +1494,10 @@ pub struct UpdateBranchRequest {
     #[serde(rename = "framework")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framework: Option<String>,
+    /// <p> The Amplify Environment name for the pull request. </p>
+    #[serde(rename = "pullRequestEnvironmentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_environment_name: Option<String>,
     /// <p> Stage for the branch. </p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1232,7 +1526,7 @@ pub struct UpdateDomainAssociationRequest {
     /// <p> Name of the domain. </p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
-    /// <p> Enables automated creation of Subdomains for branches. </p>
+    /// <p> Enables automated creation of Subdomains for branches. (Currently not supported) </p>
     #[serde(rename = "enableAutoSubDomain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_auto_sub_domain: Option<bool>,
@@ -1356,6 +1650,69 @@ impl Error for CreateAppError {
             CreateAppError::InternalFailure(ref cause) => cause,
             CreateAppError::LimitExceeded(ref cause) => cause,
             CreateAppError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateBackendEnvironment
+#[derive(Debug, PartialEq)]
+pub enum CreateBackendEnvironmentError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    LimitExceeded(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl CreateBackendEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBackendEnvironmentError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateBackendEnvironmentError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateBackendEnvironmentError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateBackendEnvironmentError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateBackendEnvironmentError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(CreateBackendEnvironmentError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateBackendEnvironmentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateBackendEnvironmentError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateBackendEnvironmentError::BadRequest(ref cause) => cause,
+            CreateBackendEnvironmentError::InternalFailure(ref cause) => cause,
+            CreateBackendEnvironmentError::LimitExceeded(ref cause) => cause,
+            CreateBackendEnvironmentError::NotFound(ref cause) => cause,
+            CreateBackendEnvironmentError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -1668,6 +2025,69 @@ impl Error for DeleteAppError {
         }
     }
 }
+/// Errors returned by DeleteBackendEnvironment
+#[derive(Debug, PartialEq)]
+pub enum DeleteBackendEnvironmentError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    DependentServiceFailure(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl DeleteBackendEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBackendEnvironmentError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteBackendEnvironmentError::BadRequest(err.msg))
+                }
+                "DependentServiceFailureException" => {
+                    return RusotoError::Service(
+                        DeleteBackendEnvironmentError::DependentServiceFailure(err.msg),
+                    )
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteBackendEnvironmentError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteBackendEnvironmentError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DeleteBackendEnvironmentError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteBackendEnvironmentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteBackendEnvironmentError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteBackendEnvironmentError::BadRequest(ref cause) => cause,
+            DeleteBackendEnvironmentError::DependentServiceFailure(ref cause) => cause,
+            DeleteBackendEnvironmentError::InternalFailure(ref cause) => cause,
+            DeleteBackendEnvironmentError::NotFound(ref cause) => cause,
+            DeleteBackendEnvironmentError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteBranch
 #[derive(Debug, PartialEq)]
 pub enum DeleteBranchError {
@@ -1904,6 +2324,57 @@ impl Error for DeleteWebhookError {
         }
     }
 }
+/// Errors returned by GenerateAccessLogs
+#[derive(Debug, PartialEq)]
+pub enum GenerateAccessLogsError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl GenerateAccessLogsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateAccessLogsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GenerateAccessLogsError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(GenerateAccessLogsError::InternalFailure(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GenerateAccessLogsError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GenerateAccessLogsError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GenerateAccessLogsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GenerateAccessLogsError {
+    fn description(&self) -> &str {
+        match *self {
+            GenerateAccessLogsError::BadRequest(ref cause) => cause,
+            GenerateAccessLogsError::InternalFailure(ref cause) => cause,
+            GenerateAccessLogsError::NotFound(ref cause) => cause,
+            GenerateAccessLogsError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetApp
 #[derive(Debug, PartialEq)]
 pub enum GetAppError {
@@ -1950,6 +2421,116 @@ impl Error for GetAppError {
             GetAppError::InternalFailure(ref cause) => cause,
             GetAppError::NotFound(ref cause) => cause,
             GetAppError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetArtifactUrl
+#[derive(Debug, PartialEq)]
+pub enum GetArtifactUrlError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    LimitExceeded(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl GetArtifactUrlError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetArtifactUrlError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetArtifactUrlError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(GetArtifactUrlError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(GetArtifactUrlError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetArtifactUrlError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GetArtifactUrlError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetArtifactUrlError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetArtifactUrlError {
+    fn description(&self) -> &str {
+        match *self {
+            GetArtifactUrlError::BadRequest(ref cause) => cause,
+            GetArtifactUrlError::InternalFailure(ref cause) => cause,
+            GetArtifactUrlError::LimitExceeded(ref cause) => cause,
+            GetArtifactUrlError::NotFound(ref cause) => cause,
+            GetArtifactUrlError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetBackendEnvironment
+#[derive(Debug, PartialEq)]
+pub enum GetBackendEnvironmentError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl GetBackendEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBackendEnvironmentError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetBackendEnvironmentError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(GetBackendEnvironmentError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetBackendEnvironmentError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GetBackendEnvironmentError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetBackendEnvironmentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetBackendEnvironmentError {
+    fn description(&self) -> &str {
+        match *self {
+            GetBackendEnvironmentError::BadRequest(ref cause) => cause,
+            GetBackendEnvironmentError::InternalFailure(ref cause) => cause,
+            GetBackendEnvironmentError::NotFound(ref cause) => cause,
+            GetBackendEnvironmentError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -2211,6 +2792,106 @@ impl Error for ListAppsError {
             ListAppsError::BadRequest(ref cause) => cause,
             ListAppsError::InternalFailure(ref cause) => cause,
             ListAppsError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListArtifacts
+#[derive(Debug, PartialEq)]
+pub enum ListArtifactsError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    LimitExceeded(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl ListArtifactsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListArtifactsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListArtifactsError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListArtifactsError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListArtifactsError::LimitExceeded(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ListArtifactsError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListArtifactsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListArtifactsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListArtifactsError::BadRequest(ref cause) => cause,
+            ListArtifactsError::InternalFailure(ref cause) => cause,
+            ListArtifactsError::LimitExceeded(ref cause) => cause,
+            ListArtifactsError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListBackendEnvironments
+#[derive(Debug, PartialEq)]
+pub enum ListBackendEnvironmentsError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl ListBackendEnvironmentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBackendEnvironmentsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListBackendEnvironmentsError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListBackendEnvironmentsError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ListBackendEnvironmentsError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListBackendEnvironmentsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListBackendEnvironmentsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListBackendEnvironmentsError::BadRequest(ref cause) => cause,
+            ListBackendEnvironmentsError::InternalFailure(ref cause) => cause,
+            ListBackendEnvironmentsError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -2953,6 +3634,12 @@ pub trait Amplify {
     /// <p> Creates a new Amplify App. </p>
     fn create_app(&self, input: CreateAppRequest) -> RusotoFuture<CreateAppResult, CreateAppError>;
 
+    /// <p> Creates a new backend environment for an Amplify App. </p>
+    fn create_backend_environment(
+        &self,
+        input: CreateBackendEnvironmentRequest,
+    ) -> RusotoFuture<CreateBackendEnvironmentResult, CreateBackendEnvironmentError>;
+
     /// <p> Creates a new Branch for an Amplify App. </p>
     fn create_branch(
         &self,
@@ -2980,6 +3667,12 @@ pub trait Amplify {
     /// <p> Delete an existing Amplify App by appId. </p>
     fn delete_app(&self, input: DeleteAppRequest) -> RusotoFuture<DeleteAppResult, DeleteAppError>;
 
+    /// <p> Delete backend environment for an Amplify App. </p>
+    fn delete_backend_environment(
+        &self,
+        input: DeleteBackendEnvironmentRequest,
+    ) -> RusotoFuture<DeleteBackendEnvironmentResult, DeleteBackendEnvironmentError>;
+
     /// <p> Deletes a branch for an Amplify App. </p>
     fn delete_branch(
         &self,
@@ -3001,8 +3694,26 @@ pub trait Amplify {
         input: DeleteWebhookRequest,
     ) -> RusotoFuture<DeleteWebhookResult, DeleteWebhookError>;
 
+    /// <p> Retrieve website access logs for a specific time range via a pre-signed URL. </p>
+    fn generate_access_logs(
+        &self,
+        input: GenerateAccessLogsRequest,
+    ) -> RusotoFuture<GenerateAccessLogsResult, GenerateAccessLogsError>;
+
     /// <p> Retrieves an existing Amplify App by appId. </p>
     fn get_app(&self, input: GetAppRequest) -> RusotoFuture<GetAppResult, GetAppError>;
+
+    /// <p> Retrieves artifact info that corresponds to a artifactId. </p>
+    fn get_artifact_url(
+        &self,
+        input: GetArtifactUrlRequest,
+    ) -> RusotoFuture<GetArtifactUrlResult, GetArtifactUrlError>;
+
+    /// <p> Retrieves a backend environment for an Amplify App. </p>
+    fn get_backend_environment(
+        &self,
+        input: GetBackendEnvironmentRequest,
+    ) -> RusotoFuture<GetBackendEnvironmentResult, GetBackendEnvironmentError>;
 
     /// <p> Retrieves a branch for an Amplify App. </p>
     fn get_branch(&self, input: GetBranchRequest) -> RusotoFuture<GetBranchResult, GetBranchError>;
@@ -3024,6 +3735,18 @@ pub trait Amplify {
 
     /// <p> Lists existing Amplify Apps. </p>
     fn list_apps(&self, input: ListAppsRequest) -> RusotoFuture<ListAppsResult, ListAppsError>;
+
+    /// <p> List artifacts with an app, a branch, a job and an artifact type. </p>
+    fn list_artifacts(
+        &self,
+        input: ListArtifactsRequest,
+    ) -> RusotoFuture<ListArtifactsResult, ListArtifactsError>;
+
+    /// <p> Lists backend environments for an Amplify App. </p>
+    fn list_backend_environments(
+        &self,
+        input: ListBackendEnvironmentsRequest,
+    ) -> RusotoFuture<ListBackendEnvironmentsResult, ListBackendEnvironmentsError>;
 
     /// <p> Lists branches for an Amplify App. </p>
     fn list_branches(
@@ -3168,6 +3891,35 @@ impl Amplify for AmplifyClient {
                         .from_err()
                         .and_then(|response| Err(CreateAppError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p> Creates a new backend environment for an Amplify App. </p>
+    fn create_backend_environment(
+        &self,
+        input: CreateBackendEnvironmentRequest,
+    ) -> RusotoFuture<CreateBackendEnvironmentResult, CreateBackendEnvironmentError> {
+        let request_uri = format!("/apps/{app_id}/backendenvironments", app_id = input.app_id);
+
+        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateBackendEnvironmentResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateBackendEnvironmentError::from_response(response))
+                }))
             }
         })
     }
@@ -3327,6 +4079,36 @@ impl Amplify for AmplifyClient {
         })
     }
 
+    /// <p> Delete backend environment for an Amplify App. </p>
+    fn delete_backend_environment(
+        &self,
+        input: DeleteBackendEnvironmentRequest,
+    ) -> RusotoFuture<DeleteBackendEnvironmentResult, DeleteBackendEnvironmentError> {
+        let request_uri = format!(
+            "/apps/{app_id}/backendenvironments/{environment_name}",
+            app_id = input.app_id,
+            environment_name = input.environment_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteBackendEnvironmentResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteBackendEnvironmentError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p> Deletes a branch for an Amplify App. </p>
     fn delete_branch(
         &self,
@@ -3450,6 +4232,38 @@ impl Amplify for AmplifyClient {
         })
     }
 
+    /// <p> Retrieve website access logs for a specific time range via a pre-signed URL. </p>
+    fn generate_access_logs(
+        &self,
+        input: GenerateAccessLogsRequest,
+    ) -> RusotoFuture<GenerateAccessLogsResult, GenerateAccessLogsError> {
+        let request_uri = format!("/apps/{app_id}/accesslogs", app_id = input.app_id);
+
+        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GenerateAccessLogsResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GenerateAccessLogsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p> Retrieves an existing Amplify App by appId. </p>
     fn get_app(&self, input: GetAppRequest) -> RusotoFuture<GetAppResult, GetAppError> {
         let request_uri = format!("/apps/{app_id}", app_id = input.app_id);
@@ -3471,6 +4285,67 @@ impl Amplify for AmplifyClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(GetAppError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p> Retrieves artifact info that corresponds to a artifactId. </p>
+    fn get_artifact_url(
+        &self,
+        input: GetArtifactUrlRequest,
+    ) -> RusotoFuture<GetArtifactUrlResult, GetArtifactUrlError> {
+        let request_uri = format!("/artifacts/{artifact_id}", artifact_id = input.artifact_id);
+
+        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetArtifactUrlResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetArtifactUrlError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p> Retrieves a backend environment for an Amplify App. </p>
+    fn get_backend_environment(
+        &self,
+        input: GetBackendEnvironmentRequest,
+    ) -> RusotoFuture<GetBackendEnvironmentResult, GetBackendEnvironmentError> {
+        let request_uri = format!(
+            "/apps/{app_id}/backendenvironments/{environment_name}",
+            app_id = input.app_id,
+            environment_name = input.environment_name
+        );
+
+        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetBackendEnvironmentResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetBackendEnvironmentError::from_response(response))
+                    }),
                 )
             }
         })
@@ -3629,6 +4504,87 @@ impl Amplify for AmplifyClient {
                         .from_err()
                         .and_then(|response| Err(ListAppsError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p> List artifacts with an app, a branch, a job and an artifact type. </p>
+    fn list_artifacts(
+        &self,
+        input: ListArtifactsRequest,
+    ) -> RusotoFuture<ListArtifactsResult, ListArtifactsError> {
+        let request_uri = format!(
+            "/apps/{app_id}/branches/{branch_name}/jobs/{job_id}/artifacts",
+            app_id = input.app_id,
+            branch_name = input.branch_name,
+            job_id = input.job_id
+        );
+
+        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListArtifactsResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListArtifactsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p> Lists backend environments for an Amplify App. </p>
+    fn list_backend_environments(
+        &self,
+        input: ListBackendEnvironmentsRequest,
+    ) -> RusotoFuture<ListBackendEnvironmentsResult, ListBackendEnvironmentsError> {
+        let request_uri = format!("/apps/{app_id}/backendenvironments", app_id = input.app_id);
+
+        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListBackendEnvironmentsResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListBackendEnvironmentsError::from_response(response))
+                }))
             }
         })
     }
