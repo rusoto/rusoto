@@ -228,26 +228,6 @@ jobs:
       displayName: 'Run unit tests with rustls'
       continueOnError: true
 
-- job: 'crate_gen_linux'
-  displayName: 'Crate generation on Linux'
-  pool:
-    vmImage: 'Ubuntu-16.04'
-
-  steps:
-    - checkout: self
-      fetchDepth: 5
-    - script: |
-        set -e
-        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
-        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-      displayName: 'Install Rust'
-    - script: rustup component add --toolchain stable rustfmt
-      displayName: 'Install rustfmt'
-    - script: git submodule update --init --recursive
-      displayName: 'Fetch botocore sources'
-    - script: make generate
-      displayName: 'Generate crates from botocore'
-
 - job: 'crate_gen_osx'
   displayName: 'Crate generation on OSX'
   pool:
