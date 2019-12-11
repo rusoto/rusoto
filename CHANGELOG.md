@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 (Please put changes here)
+- Add features `serialize_structs` and `deserialize_structs`
 
 ## [0.42.0] - 2019-11-18
 
