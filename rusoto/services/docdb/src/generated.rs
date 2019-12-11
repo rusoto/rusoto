@@ -11,12 +11,11 @@
 // =================================================================
 #![allow(warnings)]
 
-use futures::future;
-use futures::Future;
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 use std::error::Error;
 use std::fmt;
 
@@ -8839,264 +8838,271 @@ impl Error for StopDBClusterError {
     }
 }
 /// Trait representing the capabilities of the Amazon DocDB API. Amazon DocDB clients implement this trait.
+#[async_trait]
 pub trait Docdb {
     /// <p>Adds metadata tags to an Amazon DocumentDB resource. You can use these tags with cost allocation reporting to track costs that are associated with Amazon DocumentDB resources. or in a <code>Condition</code> statement in an AWS Identity and Access Management (IAM) policy for Amazon DocumentDB.</p>
-    fn add_tags_to_resource(
+    async fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<(), AddTagsToResourceError>;
+    ) -> Result<(), RusotoError<AddTagsToResourceError>>;
 
     /// <p>Applies a pending maintenance action to a resource (for example, to a DB instance).</p>
-    fn apply_pending_maintenance_action(
+    async fn apply_pending_maintenance_action(
         &self,
         input: ApplyPendingMaintenanceActionMessage,
-    ) -> RusotoFuture<ApplyPendingMaintenanceActionResult, ApplyPendingMaintenanceActionError>;
+    ) -> Result<ApplyPendingMaintenanceActionResult, RusotoError<ApplyPendingMaintenanceActionError>>;
 
     /// <p>Copies the specified DB cluster parameter group.</p>
-    fn copy_db_cluster_parameter_group(
+    async fn copy_db_cluster_parameter_group(
         &self,
         input: CopyDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<CopyDBClusterParameterGroupResult, CopyDBClusterParameterGroupError>;
+    ) -> Result<CopyDBClusterParameterGroupResult, RusotoError<CopyDBClusterParameterGroupError>>;
 
     /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>To cancel the copy operation after it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in the <i>copying</i> status.</p>
-    fn copy_db_cluster_snapshot(
+    async fn copy_db_cluster_snapshot(
         &self,
         input: CopyDBClusterSnapshotMessage,
-    ) -> RusotoFuture<CopyDBClusterSnapshotResult, CopyDBClusterSnapshotError>;
+    ) -> Result<CopyDBClusterSnapshotResult, RusotoError<CopyDBClusterSnapshotError>>;
 
     /// <p>Creates a new Amazon DocumentDB DB cluster.</p>
-    fn create_db_cluster(
+    async fn create_db_cluster(
         &self,
         input: CreateDBClusterMessage,
-    ) -> RusotoFuture<CreateDBClusterResult, CreateDBClusterError>;
+    ) -> Result<CreateDBClusterResult, RusotoError<CreateDBClusterError>>;
 
     /// <p><p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p>A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after you create it. After you create a DB cluster parameter group, you must associate it with your DB cluster. For the new DB cluster parameter group and associated settings to take effect, you must then reboot the DB instances in the DB cluster without failover.</p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon DocumentDB to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This step is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter.</p> </important></p>
-    fn create_db_cluster_parameter_group(
+    async fn create_db_cluster_parameter_group(
         &self,
         input: CreateDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<CreateDBClusterParameterGroupResult, CreateDBClusterParameterGroupError>;
+    ) -> Result<CreateDBClusterParameterGroupResult, RusotoError<CreateDBClusterParameterGroupError>>;
 
     /// <p>Creates a snapshot of a DB cluster. </p>
-    fn create_db_cluster_snapshot(
+    async fn create_db_cluster_snapshot(
         &self,
         input: CreateDBClusterSnapshotMessage,
-    ) -> RusotoFuture<CreateDBClusterSnapshotResult, CreateDBClusterSnapshotError>;
+    ) -> Result<CreateDBClusterSnapshotResult, RusotoError<CreateDBClusterSnapshotError>>;
 
     /// <p>Creates a new DB instance.</p>
-    fn create_db_instance(
+    async fn create_db_instance(
         &self,
         input: CreateDBInstanceMessage,
-    ) -> RusotoFuture<CreateDBInstanceResult, CreateDBInstanceError>;
+    ) -> Result<CreateDBInstanceResult, RusotoError<CreateDBInstanceError>>;
 
     /// <p>Creates a new DB subnet group. DB subnet groups must contain at least one subnet in at least two Availability Zones in the AWS Region.</p>
-    fn create_db_subnet_group(
+    async fn create_db_subnet_group(
         &self,
         input: CreateDBSubnetGroupMessage,
-    ) -> RusotoFuture<CreateDBSubnetGroupResult, CreateDBSubnetGroupError>;
+    ) -> Result<CreateDBSubnetGroupResult, RusotoError<CreateDBSubnetGroupError>>;
 
     /// <p><p>Deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can&#39;t be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p/></p>
-    fn delete_db_cluster(
+    async fn delete_db_cluster(
         &self,
         input: DeleteDBClusterMessage,
-    ) -> RusotoFuture<DeleteDBClusterResult, DeleteDBClusterError>;
+    ) -> Result<DeleteDBClusterResult, RusotoError<DeleteDBClusterError>>;
 
     /// <p>Deletes a specified DB cluster parameter group. The DB cluster parameter group to be deleted can't be associated with any DB clusters.</p>
-    fn delete_db_cluster_parameter_group(
+    async fn delete_db_cluster_parameter_group(
         &self,
         input: DeleteDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBClusterParameterGroupError>;
+    ) -> Result<(), RusotoError<DeleteDBClusterParameterGroupError>>;
 
     /// <p><p>Deletes a DB cluster snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB cluster snapshot must be in the <code>available</code> state to be deleted.</p> </note></p>
-    fn delete_db_cluster_snapshot(
+    async fn delete_db_cluster_snapshot(
         &self,
         input: DeleteDBClusterSnapshotMessage,
-    ) -> RusotoFuture<DeleteDBClusterSnapshotResult, DeleteDBClusterSnapshotError>;
+    ) -> Result<DeleteDBClusterSnapshotResult, RusotoError<DeleteDBClusterSnapshotError>>;
 
     /// <p>Deletes a previously provisioned DB instance. </p>
-    fn delete_db_instance(
+    async fn delete_db_instance(
         &self,
         input: DeleteDBInstanceMessage,
-    ) -> RusotoFuture<DeleteDBInstanceResult, DeleteDBInstanceError>;
+    ) -> Result<DeleteDBInstanceResult, RusotoError<DeleteDBInstanceError>>;
 
     /// <p><p>Deletes a DB subnet group.</p> <note> <p>The specified database subnet group must not be associated with any DB instances.</p> </note></p>
-    fn delete_db_subnet_group(
+    async fn delete_db_subnet_group(
         &self,
         input: DeleteDBSubnetGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBSubnetGroupError>;
+    ) -> Result<(), RusotoError<DeleteDBSubnetGroupError>>;
 
     /// <p>Returns a list of certificate authority (CA) certificates provided by Amazon RDS for this AWS account.</p>
-    fn describe_certificates(
+    async fn describe_certificates(
         &self,
         input: DescribeCertificatesMessage,
-    ) -> RusotoFuture<CertificateMessage, DescribeCertificatesError>;
+    ) -> Result<CertificateMessage, RusotoError<DescribeCertificatesError>>;
 
     /// <p>Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list contains only the description of the specified DB cluster parameter group. </p>
-    fn describe_db_cluster_parameter_groups(
+    async fn describe_db_cluster_parameter_groups(
         &self,
         input: DescribeDBClusterParameterGroupsMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupsMessage, DescribeDBClusterParameterGroupsError>;
+    ) -> Result<DBClusterParameterGroupsMessage, RusotoError<DescribeDBClusterParameterGroupsError>>;
 
     /// <p>Returns the detailed parameter list for a particular DB cluster parameter group.</p>
-    fn describe_db_cluster_parameters(
+    async fn describe_db_cluster_parameters(
         &self,
         input: DescribeDBClusterParametersMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupDetails, DescribeDBClusterParametersError>;
+    ) -> Result<DBClusterParameterGroupDetails, RusotoError<DescribeDBClusterParametersError>>;
 
     /// <p>Returns a list of DB cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When you share snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB cluster snapshot is public and can be copied or restored by all AWS accounts.</p>
-    fn describe_db_cluster_snapshot_attributes(
+    async fn describe_db_cluster_snapshot_attributes(
         &self,
         input: DescribeDBClusterSnapshotAttributesMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeDBClusterSnapshotAttributesResult,
-        DescribeDBClusterSnapshotAttributesError,
+        RusotoError<DescribeDBClusterSnapshotAttributesError>,
     >;
 
     /// <p>Returns information about DB cluster snapshots. This API operation supports pagination.</p>
-    fn describe_db_cluster_snapshots(
+    async fn describe_db_cluster_snapshots(
         &self,
         input: DescribeDBClusterSnapshotsMessage,
-    ) -> RusotoFuture<DBClusterSnapshotMessage, DescribeDBClusterSnapshotsError>;
+    ) -> Result<DBClusterSnapshotMessage, RusotoError<DescribeDBClusterSnapshotsError>>;
 
     /// <p>Returns information about provisioned Amazon DocumentDB DB clusters. This API operation supports pagination.</p>
-    fn describe_db_clusters(
+    async fn describe_db_clusters(
         &self,
         input: DescribeDBClustersMessage,
-    ) -> RusotoFuture<DBClusterMessage, DescribeDBClustersError>;
+    ) -> Result<DBClusterMessage, RusotoError<DescribeDBClustersError>>;
 
     /// <p>Returns a list of the available DB engines.</p>
-    fn describe_db_engine_versions(
+    async fn describe_db_engine_versions(
         &self,
         input: DescribeDBEngineVersionsMessage,
-    ) -> RusotoFuture<DBEngineVersionMessage, DescribeDBEngineVersionsError>;
+    ) -> Result<DBEngineVersionMessage, RusotoError<DescribeDBEngineVersionsError>>;
 
     /// <p>Returns information about provisioned Amazon DocumentDB instances. This API supports pagination.</p>
-    fn describe_db_instances(
+    async fn describe_db_instances(
         &self,
         input: DescribeDBInstancesMessage,
-    ) -> RusotoFuture<DBInstanceMessage, DescribeDBInstancesError>;
+    ) -> Result<DBInstanceMessage, RusotoError<DescribeDBInstancesError>>;
 
     /// <p>Returns a list of <code>DBSubnetGroup</code> descriptions. If a <code>DBSubnetGroupName</code> is specified, the list will contain only the descriptions of the specified <code>DBSubnetGroup</code>.</p>
-    fn describe_db_subnet_groups(
+    async fn describe_db_subnet_groups(
         &self,
         input: DescribeDBSubnetGroupsMessage,
-    ) -> RusotoFuture<DBSubnetGroupMessage, DescribeDBSubnetGroupsError>;
+    ) -> Result<DBSubnetGroupMessage, RusotoError<DescribeDBSubnetGroupsError>>;
 
     /// <p>Returns the default engine and system parameter information for the cluster database engine.</p>
-    fn describe_engine_default_cluster_parameters(
+    async fn describe_engine_default_cluster_parameters(
         &self,
         input: DescribeEngineDefaultClusterParametersMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeEngineDefaultClusterParametersResult,
-        DescribeEngineDefaultClusterParametersError,
+        RusotoError<DescribeEngineDefaultClusterParametersError>,
     >;
 
     /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. </p>
-    fn describe_event_categories(
+    async fn describe_event_categories(
         &self,
         input: DescribeEventCategoriesMessage,
-    ) -> RusotoFuture<EventCategoriesMessage, DescribeEventCategoriesError>;
+    ) -> Result<EventCategoriesMessage, RusotoError<DescribeEventCategoriesError>>;
 
     /// <p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. You can obtain events specific to a particular DB instance, DB security group, DB snapshot, or DB parameter group by providing the name as a parameter. By default, the events of the past hour are returned.</p>
-    fn describe_events(
+    async fn describe_events(
         &self,
         input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventsMessage, DescribeEventsError>;
+    ) -> Result<EventsMessage, RusotoError<DescribeEventsError>>;
 
     /// <p>Returns a list of orderable DB instance options for the specified engine.</p>
-    fn describe_orderable_db_instance_options(
+    async fn describe_orderable_db_instance_options(
         &self,
         input: DescribeOrderableDBInstanceOptionsMessage,
-    ) -> RusotoFuture<OrderableDBInstanceOptionsMessage, DescribeOrderableDBInstanceOptionsError>;
+    ) -> Result<
+        OrderableDBInstanceOptionsMessage,
+        RusotoError<DescribeOrderableDBInstanceOptionsError>,
+    >;
 
     /// <p>Returns a list of resources (for example, DB instances) that have at least one pending maintenance action.</p>
-    fn describe_pending_maintenance_actions(
+    async fn describe_pending_maintenance_actions(
         &self,
         input: DescribePendingMaintenanceActionsMessage,
-    ) -> RusotoFuture<PendingMaintenanceActionsMessage, DescribePendingMaintenanceActionsError>;
+    ) -> Result<PendingMaintenanceActionsMessage, RusotoError<DescribePendingMaintenanceActionsError>>;
 
     /// <p>Forces a failover for a DB cluster.</p> <p>A failover for a DB cluster promotes one of the Amazon DocumentDB replicas (read-only instances) in the DB cluster to be the primary instance (the cluster writer).</p> <p>If the primary instance fails, Amazon DocumentDB automatically fails over to an Amazon DocumentDB replica, if one exists. You can force a failover when you want to simulate a failure of a primary instance for testing.</p>
-    fn failover_db_cluster(
+    async fn failover_db_cluster(
         &self,
         input: FailoverDBClusterMessage,
-    ) -> RusotoFuture<FailoverDBClusterResult, FailoverDBClusterError>;
+    ) -> Result<FailoverDBClusterResult, RusotoError<FailoverDBClusterError>>;
 
     /// <p>Lists all tags on an Amazon DocumentDB resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<TagListMessage, ListTagsForResourceError>;
+    ) -> Result<TagListMessage, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Modifies a setting for an Amazon DocumentDB DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. </p>
-    fn modify_db_cluster(
+    async fn modify_db_cluster(
         &self,
         input: ModifyDBClusterMessage,
-    ) -> RusotoFuture<ModifyDBClusterResult, ModifyDBClusterError>;
+    ) -> Result<ModifyDBClusterResult, RusotoError<ModifyDBClusterError>>;
 
     /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot or maintenance window before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon DocumentDB to fully complete the create action before the parameter group is used as the default for a new DB cluster. This step is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter.</p> </important></p>
-    fn modify_db_cluster_parameter_group(
+    async fn modify_db_cluster_parameter_group(
         &self,
         input: ModifyDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ModifyDBClusterParameterGroupError>;
+    ) -> Result<DBClusterParameterGroupNameMessage, RusotoError<ModifyDBClusterParameterGroupError>>;
 
     /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code>, and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don't want available to all AWS accounts. If a manual DB cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p>
-    fn modify_db_cluster_snapshot_attribute(
+    async fn modify_db_cluster_snapshot_attribute(
         &self,
         input: ModifyDBClusterSnapshotAttributeMessage,
-    ) -> RusotoFuture<ModifyDBClusterSnapshotAttributeResult, ModifyDBClusterSnapshotAttributeError>;
+    ) -> Result<
+        ModifyDBClusterSnapshotAttributeResult,
+        RusotoError<ModifyDBClusterSnapshotAttributeError>,
+    >;
 
     /// <p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request.</p>
-    fn modify_db_instance(
+    async fn modify_db_instance(
         &self,
         input: ModifyDBInstanceMessage,
-    ) -> RusotoFuture<ModifyDBInstanceResult, ModifyDBInstanceError>;
+    ) -> Result<ModifyDBInstanceResult, RusotoError<ModifyDBInstanceError>>;
 
     /// <p>Modifies an existing DB subnet group. DB subnet groups must contain at least one subnet in at least two Availability Zones in the AWS Region.</p>
-    fn modify_db_subnet_group(
+    async fn modify_db_subnet_group(
         &self,
         input: ModifyDBSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyDBSubnetGroupResult, ModifyDBSubnetGroupError>;
+    ) -> Result<ModifyDBSubnetGroupResult, RusotoError<ModifyDBSubnetGroupError>>;
 
     /// <p>You might need to reboot your DB instance, usually for maintenance reasons. For example, if you make certain changes, or if you change the DB cluster parameter group that is associated with the DB instance, you must reboot the instance for the changes to take effect. </p> <p>Rebooting a DB instance restarts the database engine service. Rebooting a DB instance results in a momentary outage, during which the DB instance status is set to <i>rebooting</i>. </p>
-    fn reboot_db_instance(
+    async fn reboot_db_instance(
         &self,
         input: RebootDBInstanceMessage,
-    ) -> RusotoFuture<RebootDBInstanceResult, RebootDBInstanceError>;
+    ) -> Result<RebootDBInstanceResult, RusotoError<RebootDBInstanceError>>;
 
     /// <p>Removes metadata tags from an Amazon DocumentDB resource.</p>
-    fn remove_tags_from_resource(
+    async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<(), RemoveTagsFromResourceError>;
+    ) -> Result<(), RusotoError<RemoveTagsFromResourceError>>;
 
     /// <p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters, submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When you reset the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance reboot.</p>
-    fn reset_db_cluster_parameter_group(
+    async fn reset_db_cluster_parameter_group(
         &self,
         input: ResetDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ResetDBClusterParameterGroupError>;
+    ) -> Result<DBClusterParameterGroupNameMessage, RusotoError<ResetDBClusterParameterGroupError>>;
 
     /// <p>Creates a new DB cluster from a DB snapshot or DB cluster snapshot.</p> <p>If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.</p> <p>If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.</p>
-    fn restore_db_cluster_from_snapshot(
+    async fn restore_db_cluster_from_snapshot(
         &self,
         input: RestoreDBClusterFromSnapshotMessage,
-    ) -> RusotoFuture<RestoreDBClusterFromSnapshotResult, RestoreDBClusterFromSnapshotError>;
+    ) -> Result<RestoreDBClusterFromSnapshotResult, RusotoError<RestoreDBClusterFromSnapshotError>>;
 
     /// <p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p>
-    fn restore_db_cluster_to_point_in_time(
+    async fn restore_db_cluster_to_point_in_time(
         &self,
         input: RestoreDBClusterToPointInTimeMessage,
-    ) -> RusotoFuture<RestoreDBClusterToPointInTimeResult, RestoreDBClusterToPointInTimeError>;
+    ) -> Result<RestoreDBClusterToPointInTimeResult, RusotoError<RestoreDBClusterToPointInTimeError>>;
 
     /// <p>Restarts the stopped cluster that is specified by <code>DBClusterIdentifier</code>. For more information, see <a href="https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-stop-start.html">Stopping and Starting an Amazon DocumentDB Cluster</a>.</p>
-    fn start_db_cluster(
+    async fn start_db_cluster(
         &self,
         input: StartDBClusterMessage,
-    ) -> RusotoFuture<StartDBClusterResult, StartDBClusterError>;
+    ) -> Result<StartDBClusterResult, RusotoError<StartDBClusterError>>;
 
     /// <p>Stops the running cluster that is specified by <code>DBClusterIdentifier</code>. The cluster must be in the <i>available</i> state. For more information, see <a href="https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-stop-start.html">Stopping and Starting an Amazon DocumentDB Cluster</a>.</p>
-    fn stop_db_cluster(
+    async fn stop_db_cluster(
         &self,
         input: StopDBClusterMessage,
-    ) -> RusotoFuture<StopDBClusterResult, StopDBClusterError>;
+    ) -> Result<StopDBClusterResult, RusotoError<StopDBClusterError>>;
 }
 /// A client for the Amazon DocDB API.
 #[derive(Clone)]
@@ -9120,9 +9126,7 @@ impl DocdbClient {
     ) -> DocdbClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         Self::new_with_client(
             Client::new_with(credentials_provider, request_dispatcher),
@@ -9143,12 +9147,13 @@ impl fmt::Debug for DocdbClient {
     }
 }
 
+#[async_trait]
 impl Docdb for DocdbClient {
     /// <p>Adds metadata tags to an Amazon DocumentDB resource. You can use these tags with cost allocation reporting to track costs that are associated with Amazon DocumentDB resources. or in a <code>Condition</code> statement in an AWS Identity and Access Management (IAM) policy for Amazon DocumentDB.</p>
-    fn add_tags_to_resource(
+    async fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<(), AddTagsToResourceError> {
+    ) -> Result<(), RusotoError<AddTagsToResourceError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9158,25 +9163,25 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddTagsToResourceError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AddTagsToResourceError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Applies a pending maintenance action to a resource (for example, to a DB instance).</p>
-    fn apply_pending_maintenance_action(
+    async fn apply_pending_maintenance_action(
         &self,
         input: ApplyPendingMaintenanceActionMessage,
-    ) -> RusotoFuture<ApplyPendingMaintenanceActionResult, ApplyPendingMaintenanceActionError> {
+    ) -> Result<ApplyPendingMaintenanceActionResult, RusotoError<ApplyPendingMaintenanceActionError>>
+    {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9186,45 +9191,47 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ApplyPendingMaintenanceActionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ApplyPendingMaintenanceActionError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ApplyPendingMaintenanceActionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplyPendingMaintenanceActionResultDeserializer::deserialize(
-                        "ApplyPendingMaintenanceActionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ApplyPendingMaintenanceActionResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ApplyPendingMaintenanceActionResultDeserializer::deserialize(
+                "ApplyPendingMaintenanceActionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Copies the specified DB cluster parameter group.</p>
-    fn copy_db_cluster_parameter_group(
+    async fn copy_db_cluster_parameter_group(
         &self,
         input: CopyDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<CopyDBClusterParameterGroupResult, CopyDBClusterParameterGroupError> {
+    ) -> Result<CopyDBClusterParameterGroupResult, RusotoError<CopyDBClusterParameterGroupError>>
+    {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9234,45 +9241,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CopyDBClusterParameterGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CopyDBClusterParameterGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CopyDBClusterParameterGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyDBClusterParameterGroupResultDeserializer::deserialize(
-                        "CopyDBClusterParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CopyDBClusterParameterGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CopyDBClusterParameterGroupResultDeserializer::deserialize(
+                "CopyDBClusterParameterGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>To cancel the copy operation after it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in the <i>copying</i> status.</p>
-    fn copy_db_cluster_snapshot(
+    async fn copy_db_cluster_snapshot(
         &self,
         input: CopyDBClusterSnapshotMessage,
-    ) -> RusotoFuture<CopyDBClusterSnapshotResult, CopyDBClusterSnapshotError> {
+    ) -> Result<CopyDBClusterSnapshotResult, RusotoError<CopyDBClusterSnapshotError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9282,45 +9290,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CopyDBClusterSnapshotError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CopyDBClusterSnapshotError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CopyDBClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyDBClusterSnapshotResultDeserializer::deserialize(
-                        "CopyDBClusterSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CopyDBClusterSnapshotResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CopyDBClusterSnapshotResultDeserializer::deserialize(
+                "CopyDBClusterSnapshotResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a new Amazon DocumentDB DB cluster.</p>
-    fn create_db_cluster(
+    async fn create_db_cluster(
         &self,
         input: CreateDBClusterMessage,
-    ) -> RusotoFuture<CreateDBClusterResult, CreateDBClusterError> {
+    ) -> Result<CreateDBClusterResult, RusotoError<CreateDBClusterError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9330,48 +9339,47 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateDBClusterError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateDBClusterError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateDBClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBClusterResultDeserializer::deserialize(
-                        "CreateDBClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateDBClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateDBClusterResultDeserializer::deserialize(
+                "CreateDBClusterResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p>A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after you create it. After you create a DB cluster parameter group, you must associate it with your DB cluster. For the new DB cluster parameter group and associated settings to take effect, you must then reboot the DB instances in the DB cluster without failover.</p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon DocumentDB to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This step is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter.</p> </important></p>
-    fn create_db_cluster_parameter_group(
+    async fn create_db_cluster_parameter_group(
         &self,
         input: CreateDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<CreateDBClusterParameterGroupResult, CreateDBClusterParameterGroupError> {
+    ) -> Result<CreateDBClusterParameterGroupResult, RusotoError<CreateDBClusterParameterGroupError>>
+    {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9381,45 +9389,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDBClusterParameterGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateDBClusterParameterGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateDBClusterParameterGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBClusterParameterGroupResultDeserializer::deserialize(
-                        "CreateDBClusterParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateDBClusterParameterGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateDBClusterParameterGroupResultDeserializer::deserialize(
+                "CreateDBClusterParameterGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a snapshot of a DB cluster. </p>
-    fn create_db_cluster_snapshot(
+    async fn create_db_cluster_snapshot(
         &self,
         input: CreateDBClusterSnapshotMessage,
-    ) -> RusotoFuture<CreateDBClusterSnapshotResult, CreateDBClusterSnapshotError> {
+    ) -> Result<CreateDBClusterSnapshotResult, RusotoError<CreateDBClusterSnapshotError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9429,45 +9438,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDBClusterSnapshotError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateDBClusterSnapshotError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateDBClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBClusterSnapshotResultDeserializer::deserialize(
-                        "CreateDBClusterSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateDBClusterSnapshotResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateDBClusterSnapshotResultDeserializer::deserialize(
+                "CreateDBClusterSnapshotResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a new DB instance.</p>
-    fn create_db_instance(
+    async fn create_db_instance(
         &self,
         input: CreateDBInstanceMessage,
-    ) -> RusotoFuture<CreateDBInstanceResult, CreateDBInstanceError> {
+    ) -> Result<CreateDBInstanceResult, RusotoError<CreateDBInstanceError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9477,48 +9487,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateDBInstanceError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateDBInstanceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateDBInstanceResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBInstanceResultDeserializer::deserialize(
-                        "CreateDBInstanceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateDBInstanceResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateDBInstanceResultDeserializer::deserialize(
+                "CreateDBInstanceResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a new DB subnet group. DB subnet groups must contain at least one subnet in at least two Availability Zones in the AWS Region.</p>
-    fn create_db_subnet_group(
+    async fn create_db_subnet_group(
         &self,
         input: CreateDBSubnetGroupMessage,
-    ) -> RusotoFuture<CreateDBSubnetGroupResult, CreateDBSubnetGroupError> {
+    ) -> Result<CreateDBSubnetGroupResult, RusotoError<CreateDBSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9528,47 +9536,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateDBSubnetGroupError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateDBSubnetGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateDBSubnetGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBSubnetGroupResultDeserializer::deserialize(
-                        "CreateDBSubnetGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateDBSubnetGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateDBSubnetGroupResultDeserializer::deserialize(
+                "CreateDBSubnetGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can&#39;t be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p/></p>
-    fn delete_db_cluster(
+    async fn delete_db_cluster(
         &self,
         input: DeleteDBClusterMessage,
-    ) -> RusotoFuture<DeleteDBClusterResult, DeleteDBClusterError> {
+    ) -> Result<DeleteDBClusterResult, RusotoError<DeleteDBClusterError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9578,48 +9585,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteDBClusterError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteDBClusterError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DeleteDBClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBClusterResultDeserializer::deserialize(
-                        "DeleteDBClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteDBClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteDBClusterResultDeserializer::deserialize(
+                "DeleteDBClusterResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes a specified DB cluster parameter group. The DB cluster parameter group to be deleted can't be associated with any DB clusters.</p>
-    fn delete_db_cluster_parameter_group(
+    async fn delete_db_cluster_parameter_group(
         &self,
         input: DeleteDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBClusterParameterGroupError> {
+    ) -> Result<(), RusotoError<DeleteDBClusterParameterGroupError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9629,22 +9634,24 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDBClusterParameterGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteDBClusterParameterGroupError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p><p>Deletes a DB cluster snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB cluster snapshot must be in the <code>available</code> state to be deleted.</p> </note></p>
-    fn delete_db_cluster_snapshot(
+    async fn delete_db_cluster_snapshot(
         &self,
         input: DeleteDBClusterSnapshotMessage,
-    ) -> RusotoFuture<DeleteDBClusterSnapshotResult, DeleteDBClusterSnapshotError> {
+    ) -> Result<DeleteDBClusterSnapshotResult, RusotoError<DeleteDBClusterSnapshotError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9654,45 +9661,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDBClusterSnapshotError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteDBClusterSnapshotError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DeleteDBClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBClusterSnapshotResultDeserializer::deserialize(
-                        "DeleteDBClusterSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteDBClusterSnapshotResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteDBClusterSnapshotResultDeserializer::deserialize(
+                "DeleteDBClusterSnapshotResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes a previously provisioned DB instance. </p>
-    fn delete_db_instance(
+    async fn delete_db_instance(
         &self,
         input: DeleteDBInstanceMessage,
-    ) -> RusotoFuture<DeleteDBInstanceResult, DeleteDBInstanceError> {
+    ) -> Result<DeleteDBInstanceResult, RusotoError<DeleteDBInstanceError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9702,48 +9710,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteDBInstanceError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteDBInstanceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DeleteDBInstanceResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBInstanceResultDeserializer::deserialize(
-                        "DeleteDBInstanceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteDBInstanceResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteDBInstanceResultDeserializer::deserialize(
+                "DeleteDBInstanceResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Deletes a DB subnet group.</p> <note> <p>The specified database subnet group must not be associated with any DB instances.</p> </note></p>
-    fn delete_db_subnet_group(
+    async fn delete_db_subnet_group(
         &self,
         input: DeleteDBSubnetGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBSubnetGroupError> {
+    ) -> Result<(), RusotoError<DeleteDBSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9753,24 +9759,24 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteDBSubnetGroupError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteDBSubnetGroupError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Returns a list of certificate authority (CA) certificates provided by Amazon RDS for this AWS account.</p>
-    fn describe_certificates(
+    async fn describe_certificates(
         &self,
         input: DescribeCertificatesMessage,
-    ) -> RusotoFuture<CertificateMessage, DescribeCertificatesError> {
+    ) -> Result<CertificateMessage, RusotoError<DescribeCertificatesError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9780,47 +9786,47 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeCertificatesError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeCertificatesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CertificateMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CertificateMessageDeserializer::deserialize(
-                        "DescribeCertificatesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CertificateMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CertificateMessageDeserializer::deserialize(
+                "DescribeCertificatesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list contains only the description of the specified DB cluster parameter group. </p>
-    fn describe_db_cluster_parameter_groups(
+    async fn describe_db_cluster_parameter_groups(
         &self,
         input: DescribeDBClusterParameterGroupsMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupsMessage, DescribeDBClusterParameterGroupsError> {
+    ) -> Result<DBClusterParameterGroupsMessage, RusotoError<DescribeDBClusterParameterGroupsError>>
+    {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9830,47 +9836,48 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDBClusterParameterGroupsError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeDBClusterParameterGroupsError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterParameterGroupsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupsMessageDeserializer::deserialize(
-                        "DescribeDBClusterParameterGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DBClusterParameterGroupsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DBClusterParameterGroupsMessageDeserializer::deserialize(
+                "DescribeDBClusterParameterGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the detailed parameter list for a particular DB cluster parameter group.</p>
-    fn describe_db_cluster_parameters(
+    async fn describe_db_cluster_parameters(
         &self,
         input: DescribeDBClusterParametersMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupDetails, DescribeDBClusterParametersError> {
+    ) -> Result<DBClusterParameterGroupDetails, RusotoError<DescribeDBClusterParametersError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9880,47 +9887,48 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDBClusterParametersError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeDBClusterParametersError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterParameterGroupDetails::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupDetailsDeserializer::deserialize(
-                        "DescribeDBClusterParametersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DBClusterParameterGroupDetails::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DBClusterParameterGroupDetailsDeserializer::deserialize(
+                "DescribeDBClusterParametersResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of DB cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When you share snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB cluster snapshot is public and can be copied or restored by all AWS accounts.</p>
-    fn describe_db_cluster_snapshot_attributes(
+    async fn describe_db_cluster_snapshot_attributes(
         &self,
         input: DescribeDBClusterSnapshotAttributesMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeDBClusterSnapshotAttributesResult,
-        DescribeDBClusterSnapshotAttributesError,
+        RusotoError<DescribeDBClusterSnapshotAttributesError>,
     > {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -9931,47 +9939,48 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDBClusterSnapshotAttributesError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeDBClusterSnapshotAttributesError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeDBClusterSnapshotAttributesResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeDBClusterSnapshotAttributesResultDeserializer::deserialize(
-                        "DescribeDBClusterSnapshotAttributesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeDBClusterSnapshotAttributesResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeDBClusterSnapshotAttributesResultDeserializer::deserialize(
+                "DescribeDBClusterSnapshotAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns information about DB cluster snapshots. This API operation supports pagination.</p>
-    fn describe_db_cluster_snapshots(
+    async fn describe_db_cluster_snapshots(
         &self,
         input: DescribeDBClusterSnapshotsMessage,
-    ) -> RusotoFuture<DBClusterSnapshotMessage, DescribeDBClusterSnapshotsError> {
+    ) -> Result<DBClusterSnapshotMessage, RusotoError<DescribeDBClusterSnapshotsError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -9981,45 +9990,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDBClusterSnapshotsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeDBClusterSnapshotsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterSnapshotMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterSnapshotMessageDeserializer::deserialize(
-                        "DescribeDBClusterSnapshotsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DBClusterSnapshotMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DBClusterSnapshotMessageDeserializer::deserialize(
+                "DescribeDBClusterSnapshotsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns information about provisioned Amazon DocumentDB DB clusters. This API operation supports pagination.</p>
-    fn describe_db_clusters(
+    async fn describe_db_clusters(
         &self,
         input: DescribeDBClustersMessage,
-    ) -> RusotoFuture<DBClusterMessage, DescribeDBClustersError> {
+    ) -> Result<DBClusterMessage, RusotoError<DescribeDBClustersError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10029,48 +10039,44 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeDBClustersError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeDBClustersError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterMessageDeserializer::deserialize(
-                        "DescribeDBClustersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DBClusterMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                DBClusterMessageDeserializer::deserialize("DescribeDBClustersResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of the available DB engines.</p>
-    fn describe_db_engine_versions(
+    async fn describe_db_engine_versions(
         &self,
         input: DescribeDBEngineVersionsMessage,
-    ) -> RusotoFuture<DBEngineVersionMessage, DescribeDBEngineVersionsError> {
+    ) -> Result<DBEngineVersionMessage, RusotoError<DescribeDBEngineVersionsError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10080,45 +10086,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDBEngineVersionsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeDBEngineVersionsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DBEngineVersionMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBEngineVersionMessageDeserializer::deserialize(
-                        "DescribeDBEngineVersionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DBEngineVersionMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DBEngineVersionMessageDeserializer::deserialize(
+                "DescribeDBEngineVersionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns information about provisioned Amazon DocumentDB instances. This API supports pagination.</p>
-    fn describe_db_instances(
+    async fn describe_db_instances(
         &self,
         input: DescribeDBInstancesMessage,
-    ) -> RusotoFuture<DBInstanceMessage, DescribeDBInstancesError> {
+    ) -> Result<DBInstanceMessage, RusotoError<DescribeDBInstancesError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10128,47 +10135,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeDBInstancesError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeDBInstancesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DBInstanceMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBInstanceMessageDeserializer::deserialize(
-                        "DescribeDBInstancesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DBInstanceMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DBInstanceMessageDeserializer::deserialize(
+                "DescribeDBInstancesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of <code>DBSubnetGroup</code> descriptions. If a <code>DBSubnetGroupName</code> is specified, the list will contain only the descriptions of the specified <code>DBSubnetGroup</code>.</p>
-    fn describe_db_subnet_groups(
+    async fn describe_db_subnet_groups(
         &self,
         input: DescribeDBSubnetGroupsMessage,
-    ) -> RusotoFuture<DBSubnetGroupMessage, DescribeDBSubnetGroupsError> {
+    ) -> Result<DBSubnetGroupMessage, RusotoError<DescribeDBSubnetGroupsError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10178,47 +10184,48 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDBSubnetGroupsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeDBSubnetGroupsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DBSubnetGroupMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBSubnetGroupMessageDeserializer::deserialize(
-                        "DescribeDBSubnetGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DBSubnetGroupMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DBSubnetGroupMessageDeserializer::deserialize(
+                "DescribeDBSubnetGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the default engine and system parameter information for the cluster database engine.</p>
-    fn describe_engine_default_cluster_parameters(
+    async fn describe_engine_default_cluster_parameters(
         &self,
         input: DescribeEngineDefaultClusterParametersMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeEngineDefaultClusterParametersResult,
-        DescribeEngineDefaultClusterParametersError,
+        RusotoError<DescribeEngineDefaultClusterParametersError>,
     > {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -10229,47 +10236,48 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEngineDefaultClusterParametersError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeEngineDefaultClusterParametersError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeEngineDefaultClusterParametersResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeEngineDefaultClusterParametersResultDeserializer::deserialize(
-                        "DescribeEngineDefaultClusterParametersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeEngineDefaultClusterParametersResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeEngineDefaultClusterParametersResultDeserializer::deserialize(
+                "DescribeEngineDefaultClusterParametersResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. </p>
-    fn describe_event_categories(
+    async fn describe_event_categories(
         &self,
         input: DescribeEventCategoriesMessage,
-    ) -> RusotoFuture<EventCategoriesMessage, DescribeEventCategoriesError> {
+    ) -> Result<EventCategoriesMessage, RusotoError<DescribeEventCategoriesError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10279,45 +10287,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventCategoriesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeEventCategoriesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = EventCategoriesMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = EventCategoriesMessageDeserializer::deserialize(
-                        "DescribeEventCategoriesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = EventCategoriesMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = EventCategoriesMessageDeserializer::deserialize(
+                "DescribeEventCategoriesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. You can obtain events specific to a particular DB instance, DB security group, DB snapshot, or DB parameter group by providing the name as a parameter. By default, the events of the past hour are returned.</p>
-    fn describe_events(
+    async fn describe_events(
         &self,
         input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventsMessage, DescribeEventsError> {
+    ) -> Result<EventsMessage, RusotoError<DescribeEventsError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10327,47 +10336,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeEventsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeEventsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = EventsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack)?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = EventsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of orderable DB instance options for the specified engine.</p>
-    fn describe_orderable_db_instance_options(
+    async fn describe_orderable_db_instance_options(
         &self,
         input: DescribeOrderableDBInstanceOptionsMessage,
-    ) -> RusotoFuture<OrderableDBInstanceOptionsMessage, DescribeOrderableDBInstanceOptionsError>
-    {
+    ) -> Result<
+        OrderableDBInstanceOptionsMessage,
+        RusotoError<DescribeOrderableDBInstanceOptionsError>,
+    > {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10377,47 +10385,48 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeOrderableDBInstanceOptionsError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeOrderableDBInstanceOptionsError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = OrderableDBInstanceOptionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = OrderableDBInstanceOptionsMessageDeserializer::deserialize(
-                        "DescribeOrderableDBInstanceOptionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = OrderableDBInstanceOptionsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = OrderableDBInstanceOptionsMessageDeserializer::deserialize(
+                "DescribeOrderableDBInstanceOptionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of resources (for example, DB instances) that have at least one pending maintenance action.</p>
-    fn describe_pending_maintenance_actions(
+    async fn describe_pending_maintenance_actions(
         &self,
         input: DescribePendingMaintenanceActionsMessage,
-    ) -> RusotoFuture<PendingMaintenanceActionsMessage, DescribePendingMaintenanceActionsError>
+    ) -> Result<PendingMaintenanceActionsMessage, RusotoError<DescribePendingMaintenanceActionsError>>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -10428,47 +10437,48 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribePendingMaintenanceActionsError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribePendingMaintenanceActionsError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = PendingMaintenanceActionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = PendingMaintenanceActionsMessageDeserializer::deserialize(
-                        "DescribePendingMaintenanceActionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = PendingMaintenanceActionsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = PendingMaintenanceActionsMessageDeserializer::deserialize(
+                "DescribePendingMaintenanceActionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Forces a failover for a DB cluster.</p> <p>A failover for a DB cluster promotes one of the Amazon DocumentDB replicas (read-only instances) in the DB cluster to be the primary instance (the cluster writer).</p> <p>If the primary instance fails, Amazon DocumentDB automatically fails over to an Amazon DocumentDB replica, if one exists. You can force a failover when you want to simulate a failure of a primary instance for testing.</p>
-    fn failover_db_cluster(
+    async fn failover_db_cluster(
         &self,
         input: FailoverDBClusterMessage,
-    ) -> RusotoFuture<FailoverDBClusterResult, FailoverDBClusterError> {
+    ) -> Result<FailoverDBClusterResult, RusotoError<FailoverDBClusterError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10478,48 +10488,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(FailoverDBClusterError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(FailoverDBClusterError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = FailoverDBClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = FailoverDBClusterResultDeserializer::deserialize(
-                        "FailoverDBClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = FailoverDBClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = FailoverDBClusterResultDeserializer::deserialize(
+                "FailoverDBClusterResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists all tags on an Amazon DocumentDB resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<TagListMessage, ListTagsForResourceError> {
+    ) -> Result<TagListMessage, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10529,47 +10537,44 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListTagsForResourceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = TagListMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = TagListMessageDeserializer::deserialize(
-                        "ListTagsForResourceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = TagListMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                TagListMessageDeserializer::deserialize("ListTagsForResourceResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies a setting for an Amazon DocumentDB DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. </p>
-    fn modify_db_cluster(
+    async fn modify_db_cluster(
         &self,
         input: ModifyDBClusterMessage,
-    ) -> RusotoFuture<ModifyDBClusterResult, ModifyDBClusterError> {
+    ) -> Result<ModifyDBClusterResult, RusotoError<ModifyDBClusterError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10579,48 +10584,47 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyDBClusterError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyDBClusterError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ModifyDBClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBClusterResultDeserializer::deserialize(
-                        "ModifyDBClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyDBClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyDBClusterResultDeserializer::deserialize(
+                "ModifyDBClusterResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot or maintenance window before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon DocumentDB to fully complete the create action before the parameter group is used as the default for a new DB cluster. This step is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter.</p> </important></p>
-    fn modify_db_cluster_parameter_group(
+    async fn modify_db_cluster_parameter_group(
         &self,
         input: ModifyDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ModifyDBClusterParameterGroupError> {
+    ) -> Result<DBClusterParameterGroupNameMessage, RusotoError<ModifyDBClusterParameterGroupError>>
+    {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10630,46 +10634,49 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyDBClusterParameterGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyDBClusterParameterGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterParameterGroupNameMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
-                        "ModifyDBClusterParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DBClusterParameterGroupNameMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
+                "ModifyDBClusterParameterGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code>, and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don't want available to all AWS accounts. If a manual DB cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p>
-    fn modify_db_cluster_snapshot_attribute(
+    async fn modify_db_cluster_snapshot_attribute(
         &self,
         input: ModifyDBClusterSnapshotAttributeMessage,
-    ) -> RusotoFuture<ModifyDBClusterSnapshotAttributeResult, ModifyDBClusterSnapshotAttributeError>
-    {
+    ) -> Result<
+        ModifyDBClusterSnapshotAttributeResult,
+        RusotoError<ModifyDBClusterSnapshotAttributeError>,
+    > {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10679,47 +10686,48 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyDBClusterSnapshotAttributeError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyDBClusterSnapshotAttributeError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ModifyDBClusterSnapshotAttributeResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBClusterSnapshotAttributeResultDeserializer::deserialize(
-                        "ModifyDBClusterSnapshotAttributeResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyDBClusterSnapshotAttributeResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyDBClusterSnapshotAttributeResultDeserializer::deserialize(
+                "ModifyDBClusterSnapshotAttributeResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request.</p>
-    fn modify_db_instance(
+    async fn modify_db_instance(
         &self,
         input: ModifyDBInstanceMessage,
-    ) -> RusotoFuture<ModifyDBInstanceResult, ModifyDBInstanceError> {
+    ) -> Result<ModifyDBInstanceResult, RusotoError<ModifyDBInstanceError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10729,48 +10737,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyDBInstanceError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyDBInstanceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ModifyDBInstanceResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBInstanceResultDeserializer::deserialize(
-                        "ModifyDBInstanceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyDBInstanceResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyDBInstanceResultDeserializer::deserialize(
+                "ModifyDBInstanceResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies an existing DB subnet group. DB subnet groups must contain at least one subnet in at least two Availability Zones in the AWS Region.</p>
-    fn modify_db_subnet_group(
+    async fn modify_db_subnet_group(
         &self,
         input: ModifyDBSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyDBSubnetGroupResult, ModifyDBSubnetGroupError> {
+    ) -> Result<ModifyDBSubnetGroupResult, RusotoError<ModifyDBSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10780,47 +10786,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ModifyDBSubnetGroupError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyDBSubnetGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ModifyDBSubnetGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBSubnetGroupResultDeserializer::deserialize(
-                        "ModifyDBSubnetGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyDBSubnetGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyDBSubnetGroupResultDeserializer::deserialize(
+                "ModifyDBSubnetGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>You might need to reboot your DB instance, usually for maintenance reasons. For example, if you make certain changes, or if you change the DB cluster parameter group that is associated with the DB instance, you must reboot the instance for the changes to take effect. </p> <p>Rebooting a DB instance restarts the database engine service. Rebooting a DB instance results in a momentary outage, during which the DB instance status is set to <i>rebooting</i>. </p>
-    fn reboot_db_instance(
+    async fn reboot_db_instance(
         &self,
         input: RebootDBInstanceMessage,
-    ) -> RusotoFuture<RebootDBInstanceResult, RebootDBInstanceError> {
+    ) -> Result<RebootDBInstanceResult, RusotoError<RebootDBInstanceError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10830,48 +10835,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RebootDBInstanceError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RebootDBInstanceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = RebootDBInstanceResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RebootDBInstanceResultDeserializer::deserialize(
-                        "RebootDBInstanceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = RebootDBInstanceResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = RebootDBInstanceResultDeserializer::deserialize(
+                "RebootDBInstanceResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Removes metadata tags from an Amazon DocumentDB resource.</p>
-    fn remove_tags_from_resource(
+    async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<(), RemoveTagsFromResourceError> {
+    ) -> Result<(), RusotoError<RemoveTagsFromResourceError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10881,22 +10884,25 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveTagsFromResourceError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RemoveTagsFromResourceError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters, submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When you reset the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance reboot.</p>
-    fn reset_db_cluster_parameter_group(
+    async fn reset_db_cluster_parameter_group(
         &self,
         input: ResetDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ResetDBClusterParameterGroupError> {
+    ) -> Result<DBClusterParameterGroupNameMessage, RusotoError<ResetDBClusterParameterGroupError>>
+    {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10906,45 +10912,47 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResetDBClusterParameterGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ResetDBClusterParameterGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterParameterGroupNameMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
-                        "ResetDBClusterParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DBClusterParameterGroupNameMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
+                "ResetDBClusterParameterGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a new DB cluster from a DB snapshot or DB cluster snapshot.</p> <p>If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.</p> <p>If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.</p>
-    fn restore_db_cluster_from_snapshot(
+    async fn restore_db_cluster_from_snapshot(
         &self,
         input: RestoreDBClusterFromSnapshotMessage,
-    ) -> RusotoFuture<RestoreDBClusterFromSnapshotResult, RestoreDBClusterFromSnapshotError> {
+    ) -> Result<RestoreDBClusterFromSnapshotResult, RusotoError<RestoreDBClusterFromSnapshotError>>
+    {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -10954,45 +10962,47 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreDBClusterFromSnapshotError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RestoreDBClusterFromSnapshotError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = RestoreDBClusterFromSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBClusterFromSnapshotResultDeserializer::deserialize(
-                        "RestoreDBClusterFromSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = RestoreDBClusterFromSnapshotResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = RestoreDBClusterFromSnapshotResultDeserializer::deserialize(
+                "RestoreDBClusterFromSnapshotResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p>
-    fn restore_db_cluster_to_point_in_time(
+    async fn restore_db_cluster_to_point_in_time(
         &self,
         input: RestoreDBClusterToPointInTimeMessage,
-    ) -> RusotoFuture<RestoreDBClusterToPointInTimeResult, RestoreDBClusterToPointInTimeError> {
+    ) -> Result<RestoreDBClusterToPointInTimeResult, RusotoError<RestoreDBClusterToPointInTimeError>>
+    {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -11002,45 +11012,46 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreDBClusterToPointInTimeError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RestoreDBClusterToPointInTimeError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = RestoreDBClusterToPointInTimeResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBClusterToPointInTimeResultDeserializer::deserialize(
-                        "RestoreDBClusterToPointInTimeResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = RestoreDBClusterToPointInTimeResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = RestoreDBClusterToPointInTimeResultDeserializer::deserialize(
+                "RestoreDBClusterToPointInTimeResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Restarts the stopped cluster that is specified by <code>DBClusterIdentifier</code>. For more information, see <a href="https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-stop-start.html">Stopping and Starting an Amazon DocumentDB Cluster</a>.</p>
-    fn start_db_cluster(
+    async fn start_db_cluster(
         &self,
         input: StartDBClusterMessage,
-    ) -> RusotoFuture<StartDBClusterResult, StartDBClusterError> {
+    ) -> Result<StartDBClusterResult, RusotoError<StartDBClusterError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -11050,48 +11061,44 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StartDBClusterError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(StartDBClusterError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = StartDBClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = StartDBClusterResultDeserializer::deserialize(
-                        "StartDBClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = StartDBClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                StartDBClusterResultDeserializer::deserialize("StartDBClusterResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Stops the running cluster that is specified by <code>DBClusterIdentifier</code>. The cluster must be in the <i>available</i> state. For more information, see <a href="https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-stop-start.html">Stopping and Starting an Amazon DocumentDB Cluster</a>.</p>
-    fn stop_db_cluster(
+    async fn stop_db_cluster(
         &self,
         input: StopDBClusterMessage,
-    ) -> RusotoFuture<StopDBClusterResult, StopDBClusterError> {
+    ) -> Result<StopDBClusterResult, RusotoError<StopDBClusterError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
 
@@ -11101,40 +11108,36 @@ impl Docdb for DocdbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StopDBClusterError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(StopDBClusterError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = StopDBClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = StopDBClusterResultDeserializer::deserialize(
-                        "StopDBClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = StopDBClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                StopDBClusterResultDeserializer::deserialize("StopDBClusterResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 }

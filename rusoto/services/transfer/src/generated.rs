@@ -11,17 +11,17 @@
 // =================================================================
 #![allow(warnings)]
 
-use futures::future;
-use futures::Future;
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 use std::error::Error;
 use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateServerRequest {
@@ -1645,96 +1645,115 @@ impl Error for UpdateUserError {
     }
 }
 /// Trait representing the capabilities of the AWS Transfer API. AWS Transfer clients implement this trait.
+#[async_trait]
 pub trait Transfer {
     /// <p>Instantiates an autoscaling virtual server based on Secure File Transfer Protocol (SFTP) in AWS. When you make updates to your server or when you work with users, use the service-generated <code>ServerId</code> property that is assigned to the newly created server.</p>
-    fn create_server(
+    async fn create_server(
         &self,
         input: CreateServerRequest,
-    ) -> RusotoFuture<CreateServerResponse, CreateServerError>;
+    ) -> Result<CreateServerResponse, RusotoError<CreateServerError>>;
 
     /// <p>Creates a user and associates them with an existing Secure File Transfer Protocol (SFTP) server. You can only create and associate users with SFTP servers that have the <code>IdentityProviderType</code> set to <code>SERVICE_MANAGED</code>. Using parameters for <code>CreateUser</code>, you can specify the user name, set the home directory, store the user's public key, and assign the user's AWS Identity and Access Management (IAM) role. You can also optionally add a scope-down policy, and assign metadata with tags that can be used to group and search for users.</p>
-    fn create_user(
+    async fn create_user(
         &self,
         input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResponse, CreateUserError>;
+    ) -> Result<CreateUserResponse, RusotoError<CreateUserError>>;
 
     /// <p>Deletes the Secure File Transfer Protocol (SFTP) server that you specify.</p> <p>No response returns from this operation.</p>
-    fn delete_server(&self, input: DeleteServerRequest) -> RusotoFuture<(), DeleteServerError>;
+    async fn delete_server(
+        &self,
+        input: DeleteServerRequest,
+    ) -> Result<(), RusotoError<DeleteServerError>>;
 
     /// <p>Deletes a user's Secure Shell (SSH) public key.</p> <p>No response is returned from this operation.</p>
-    fn delete_ssh_public_key(
+    async fn delete_ssh_public_key(
         &self,
         input: DeleteSshPublicKeyRequest,
-    ) -> RusotoFuture<(), DeleteSshPublicKeyError>;
+    ) -> Result<(), RusotoError<DeleteSshPublicKeyError>>;
 
     /// <p><p>Deletes the user belonging to the server you specify.</p> <p>No response returns from this operation.</p> <note> <p>When you delete a user from a server, the user&#39;s information is lost.</p> </note></p>
-    fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError>;
+    async fn delete_user(
+        &self,
+        input: DeleteUserRequest,
+    ) -> Result<(), RusotoError<DeleteUserError>>;
 
     /// <p>Describes the server that you specify by passing the <code>ServerId</code> parameter.</p> <p>The response contains a description of the server's properties.</p>
-    fn describe_server(
+    async fn describe_server(
         &self,
         input: DescribeServerRequest,
-    ) -> RusotoFuture<DescribeServerResponse, DescribeServerError>;
+    ) -> Result<DescribeServerResponse, RusotoError<DescribeServerError>>;
 
     /// <p>Describes the user assigned to a specific server, as identified by its <code>ServerId</code> property.</p> <p>The response from this call returns the properties of the user associated with the <code>ServerId</code> value that was specified.</p>
-    fn describe_user(
+    async fn describe_user(
         &self,
         input: DescribeUserRequest,
-    ) -> RusotoFuture<DescribeUserResponse, DescribeUserError>;
+    ) -> Result<DescribeUserResponse, RusotoError<DescribeUserError>>;
 
     /// <p>Adds a Secure Shell (SSH) public key to a user account identified by a <code>UserName</code> value assigned to a specific server, identified by <code>ServerId</code>.</p> <p>The response returns the <code>UserName</code> value, the <code>ServerId</code> value, and the name of the <code>SshPublicKeyId</code>.</p>
-    fn import_ssh_public_key(
+    async fn import_ssh_public_key(
         &self,
         input: ImportSshPublicKeyRequest,
-    ) -> RusotoFuture<ImportSshPublicKeyResponse, ImportSshPublicKeyError>;
+    ) -> Result<ImportSshPublicKeyResponse, RusotoError<ImportSshPublicKeyError>>;
 
     /// <p>Lists the Secure File Transfer Protocol (SFTP) servers that are associated with your AWS account.</p>
-    fn list_servers(
+    async fn list_servers(
         &self,
         input: ListServersRequest,
-    ) -> RusotoFuture<ListServersResponse, ListServersError>;
+    ) -> Result<ListServersResponse, RusotoError<ListServersError>>;
 
     /// <p>Lists all of the tags associated with the Amazon Resource Number (ARN) you specify. The resource can be a user, server, or role.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Lists the users for the server that you specify by passing the <code>ServerId</code> parameter.</p>
-    fn list_users(
+    async fn list_users(
         &self,
         input: ListUsersRequest,
-    ) -> RusotoFuture<ListUsersResponse, ListUsersError>;
+    ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
 
     /// <p>Changes the state of a Secure File Transfer Protocol (SFTP) server from <code>OFFLINE</code> to <code>ONLINE</code>. It has no impact on an SFTP server that is already <code>ONLINE</code>. An <code>ONLINE</code> server can accept and process file transfer jobs.</p> <p>The state of <code>STARTING</code> indicates that the server is in an intermediate state, either not fully able to respond, or not fully online. The values of <code>START_FAILED</code> can indicate an error condition. </p> <p>No response is returned from this call.</p>
-    fn start_server(&self, input: StartServerRequest) -> RusotoFuture<(), StartServerError>;
+    async fn start_server(
+        &self,
+        input: StartServerRequest,
+    ) -> Result<(), RusotoError<StartServerError>>;
 
     /// <p>Changes the state of an SFTP server from <code>ONLINE</code> to <code>OFFLINE</code>. An <code>OFFLINE</code> server cannot accept and process file transfer jobs. Information tied to your server such as server and user properties are not affected by stopping your server. Stopping a server will not reduce or impact your Secure File Transfer Protocol (SFTP) endpoint billing.</p> <p>The state of <code>STOPPING</code> indicates that the server is in an intermediate state, either not fully able to respond, or not fully offline. The values of <code>STOP_FAILED</code> can indicate an error condition.</p> <p>No response is returned from this call.</p>
-    fn stop_server(&self, input: StopServerRequest) -> RusotoFuture<(), StopServerError>;
+    async fn stop_server(
+        &self,
+        input: StopServerRequest,
+    ) -> Result<(), RusotoError<StopServerError>>;
 
     /// <p>Attaches a key-value pair to a resource, as identified by its Amazon Resource Name (ARN). Resources are users, servers, roles, and other entities.</p> <p>There is no response returned from this call.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>>;
 
     /// <p>If the <code>IdentityProviderType</code> of the server is <code>API_Gateway</code>, tests whether your API Gateway is set up successfully. We highly recommend that you call this operation to test your authentication method as soon as you create your server. By doing so, you can troubleshoot issues with the API Gateway integration to ensure that your users can successfully use the service.</p>
-    fn test_identity_provider(
+    async fn test_identity_provider(
         &self,
         input: TestIdentityProviderRequest,
-    ) -> RusotoFuture<TestIdentityProviderResponse, TestIdentityProviderError>;
+    ) -> Result<TestIdentityProviderResponse, RusotoError<TestIdentityProviderError>>;
 
     /// <p>Detaches a key-value pair from a resource, as identified by its Amazon Resource Name (ARN). Resources are users, servers, roles, and other entities.</p> <p>No response is returned from this call.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>>;
 
     /// <p>Updates the server properties after that server has been created.</p> <p>The <code>UpdateServer</code> call returns the <code>ServerId</code> of the Secure File Transfer Protocol (SFTP) server you updated.</p>
-    fn update_server(
+    async fn update_server(
         &self,
         input: UpdateServerRequest,
-    ) -> RusotoFuture<UpdateServerResponse, UpdateServerError>;
+    ) -> Result<UpdateServerResponse, RusotoError<UpdateServerError>>;
 
     /// <p>Assigns new properties to a user. Parameters you pass modify any or all of the following: the home directory, role, and policy for the <code>UserName</code> and <code>ServerId</code> you specify.</p> <p>The response returns the <code>ServerId</code> and the <code>UserName</code> for the updated user.</p>
-    fn update_user(
+    async fn update_user(
         &self,
         input: UpdateUserRequest,
-    ) -> RusotoFuture<UpdateUserResponse, UpdateUserError>;
+    ) -> Result<UpdateUserResponse, RusotoError<UpdateUserError>>;
 }
 /// A client for the AWS Transfer API.
 #[derive(Clone)]
@@ -1758,9 +1777,7 @@ impl TransferClient {
     ) -> TransferClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         Self::new_with_client(
             Client::new_with(credentials_provider, request_dispatcher),
@@ -1781,12 +1798,13 @@ impl fmt::Debug for TransferClient {
     }
 }
 
+#[async_trait]
 impl Transfer for TransferClient {
     /// <p>Instantiates an autoscaling virtual server based on Secure File Transfer Protocol (SFTP) in AWS. When you make updates to your server or when you work with users, use the service-generated <code>ServerId</code> property that is assigned to the newly created server.</p>
-    fn create_server(
+    async fn create_server(
         &self,
         input: CreateServerRequest,
-    ) -> RusotoFuture<CreateServerResponse, CreateServerError> {
+    ) -> Result<CreateServerResponse, RusotoError<CreateServerError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1794,28 +1812,26 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateServerResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateServerError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateServerResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateServerError::from_response(response))
+        }
     }
 
     /// <p>Creates a user and associates them with an existing Secure File Transfer Protocol (SFTP) server. You can only create and associate users with SFTP servers that have the <code>IdentityProviderType</code> set to <code>SERVICE_MANAGED</code>. Using parameters for <code>CreateUser</code>, you can specify the user name, set the home directory, store the user's public key, and assign the user's AWS Identity and Access Management (IAM) role. You can also optionally add a scope-down policy, and assign metadata with tags that can be used to group and search for users.</p>
-    fn create_user(
+    async fn create_user(
         &self,
         input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
+    ) -> Result<CreateUserResponse, RusotoError<CreateUserError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1823,25 +1839,26 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateUserResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateUserError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateUserResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateUserError::from_response(response))
+        }
     }
 
     /// <p>Deletes the Secure File Transfer Protocol (SFTP) server that you specify.</p> <p>No response returns from this operation.</p>
-    fn delete_server(&self, input: DeleteServerRequest) -> RusotoFuture<(), DeleteServerError> {
+    async fn delete_server(
+        &self,
+        input: DeleteServerRequest,
+    ) -> Result<(), RusotoError<DeleteServerError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1849,25 +1866,25 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteServerError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteServerError::from_response(response))
+        }
     }
 
     /// <p>Deletes a user's Secure Shell (SSH) public key.</p> <p>No response is returned from this operation.</p>
-    fn delete_ssh_public_key(
+    async fn delete_ssh_public_key(
         &self,
         input: DeleteSshPublicKeyRequest,
-    ) -> RusotoFuture<(), DeleteSshPublicKeyError> {
+    ) -> Result<(), RusotoError<DeleteSshPublicKeyError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1875,22 +1892,25 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteSshPublicKeyError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSshPublicKeyError::from_response(response))
+        }
     }
 
     /// <p><p>Deletes the user belonging to the server you specify.</p> <p>No response returns from this operation.</p> <note> <p>When you delete a user from a server, the user&#39;s information is lost.</p> </note></p>
-    fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError> {
+    async fn delete_user(
+        &self,
+        input: DeleteUserRequest,
+    ) -> Result<(), RusotoError<DeleteUserError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1898,25 +1918,25 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteUserError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteUserError::from_response(response))
+        }
     }
 
     /// <p>Describes the server that you specify by passing the <code>ServerId</code> parameter.</p> <p>The response contains a description of the server's properties.</p>
-    fn describe_server(
+    async fn describe_server(
         &self,
         input: DescribeServerRequest,
-    ) -> RusotoFuture<DescribeServerResponse, DescribeServerError> {
+    ) -> Result<DescribeServerResponse, RusotoError<DescribeServerError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1924,28 +1944,26 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeServerResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeServerError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeServerResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeServerError::from_response(response))
+        }
     }
 
     /// <p>Describes the user assigned to a specific server, as identified by its <code>ServerId</code> property.</p> <p>The response from this call returns the properties of the user associated with the <code>ServerId</code> value that was specified.</p>
-    fn describe_user(
+    async fn describe_user(
         &self,
         input: DescribeUserRequest,
-    ) -> RusotoFuture<DescribeUserResponse, DescribeUserError> {
+    ) -> Result<DescribeUserResponse, RusotoError<DescribeUserError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1953,28 +1971,26 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeUserResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeUserError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeUserResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeUserError::from_response(response))
+        }
     }
 
     /// <p>Adds a Secure Shell (SSH) public key to a user account identified by a <code>UserName</code> value assigned to a specific server, identified by <code>ServerId</code>.</p> <p>The response returns the <code>UserName</code> value, the <code>ServerId</code> value, and the name of the <code>SshPublicKeyId</code>.</p>
-    fn import_ssh_public_key(
+    async fn import_ssh_public_key(
         &self,
         input: ImportSshPublicKeyRequest,
-    ) -> RusotoFuture<ImportSshPublicKeyResponse, ImportSshPublicKeyError> {
+    ) -> Result<ImportSshPublicKeyResponse, RusotoError<ImportSshPublicKeyError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1982,28 +1998,27 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ImportSshPublicKeyResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ImportSshPublicKeyError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ImportSshPublicKeyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ImportSshPublicKeyError::from_response(response))
+        }
     }
 
     /// <p>Lists the Secure File Transfer Protocol (SFTP) servers that are associated with your AWS account.</p>
-    fn list_servers(
+    async fn list_servers(
         &self,
         input: ListServersRequest,
-    ) -> RusotoFuture<ListServersResponse, ListServersError> {
+    ) -> Result<ListServersResponse, RusotoError<ListServersError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2011,28 +2026,26 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListServersResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListServersError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListServersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListServersError::from_response(response))
+        }
     }
 
     /// <p>Lists all of the tags associated with the Amazon Resource Number (ARN) you specify. The resource can be a user, server, or role.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2040,27 +2053,27 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p>Lists the users for the server that you specify by passing the <code>ServerId</code> parameter.</p>
-    fn list_users(
+    async fn list_users(
         &self,
         input: ListUsersRequest,
-    ) -> RusotoFuture<ListUsersResponse, ListUsersError> {
+    ) -> Result<ListUsersResponse, RusotoError<ListUsersError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2068,25 +2081,26 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListUsersResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListUsersError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListUsersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListUsersError::from_response(response))
+        }
     }
 
     /// <p>Changes the state of a Secure File Transfer Protocol (SFTP) server from <code>OFFLINE</code> to <code>ONLINE</code>. It has no impact on an SFTP server that is already <code>ONLINE</code>. An <code>ONLINE</code> server can accept and process file transfer jobs.</p> <p>The state of <code>STARTING</code> indicates that the server is in an intermediate state, either not fully able to respond, or not fully online. The values of <code>START_FAILED</code> can indicate an error condition. </p> <p>No response is returned from this call.</p>
-    fn start_server(&self, input: StartServerRequest) -> RusotoFuture<(), StartServerError> {
+    async fn start_server(
+        &self,
+        input: StartServerRequest,
+    ) -> Result<(), RusotoError<StartServerError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2094,22 +2108,25 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StartServerError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartServerError::from_response(response))
+        }
     }
 
     /// <p>Changes the state of an SFTP server from <code>ONLINE</code> to <code>OFFLINE</code>. An <code>OFFLINE</code> server cannot accept and process file transfer jobs. Information tied to your server such as server and user properties are not affected by stopping your server. Stopping a server will not reduce or impact your Secure File Transfer Protocol (SFTP) endpoint billing.</p> <p>The state of <code>STOPPING</code> indicates that the server is in an intermediate state, either not fully able to respond, or not fully offline. The values of <code>STOP_FAILED</code> can indicate an error condition.</p> <p>No response is returned from this call.</p>
-    fn stop_server(&self, input: StopServerRequest) -> RusotoFuture<(), StopServerError> {
+    async fn stop_server(
+        &self,
+        input: StopServerRequest,
+    ) -> Result<(), RusotoError<StopServerError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2117,22 +2134,25 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StopServerError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopServerError::from_response(response))
+        }
     }
 
     /// <p>Attaches a key-value pair to a resource, as identified by its Amazon Resource Name (ARN). Resources are users, servers, roles, and other entities.</p> <p>There is no response returned from this call.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2140,25 +2160,25 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TagResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p>If the <code>IdentityProviderType</code> of the server is <code>API_Gateway</code>, tests whether your API Gateway is set up successfully. We highly recommend that you call this operation to test your authentication method as soon as you create your server. By doing so, you can troubleshoot issues with the API Gateway integration to ensure that your users can successfully use the service.</p>
-    fn test_identity_provider(
+    async fn test_identity_provider(
         &self,
         input: TestIdentityProviderRequest,
-    ) -> RusotoFuture<TestIdentityProviderResponse, TestIdentityProviderError> {
+    ) -> Result<TestIdentityProviderResponse, RusotoError<TestIdentityProviderError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2166,24 +2186,27 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TestIdentityProviderResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(TestIdentityProviderError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<TestIdentityProviderResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TestIdentityProviderError::from_response(response))
+        }
     }
 
     /// <p>Detaches a key-value pair from a resource, as identified by its Amazon Resource Name (ARN). Resources are users, servers, roles, and other entities.</p> <p>No response is returned from this call.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2191,25 +2214,25 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UntagResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <p>Updates the server properties after that server has been created.</p> <p>The <code>UpdateServer</code> call returns the <code>ServerId</code> of the Secure File Transfer Protocol (SFTP) server you updated.</p>
-    fn update_server(
+    async fn update_server(
         &self,
         input: UpdateServerRequest,
-    ) -> RusotoFuture<UpdateServerResponse, UpdateServerError> {
+    ) -> Result<UpdateServerResponse, RusotoError<UpdateServerError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2217,28 +2240,26 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateServerResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateServerError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateServerResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateServerError::from_response(response))
+        }
     }
 
     /// <p>Assigns new properties to a user. Parameters you pass modify any or all of the following: the home directory, role, and policy for the <code>UserName</code> and <code>ServerId</code> you specify.</p> <p>The response returns the <code>ServerId</code> and the <code>UserName</code> for the updated user.</p>
-    fn update_user(
+    async fn update_user(
         &self,
         input: UpdateUserRequest,
-    ) -> RusotoFuture<UpdateUserResponse, UpdateUserError> {
+    ) -> Result<UpdateUserResponse, RusotoError<UpdateUserError>> {
         let mut request = SignedRequest::new("POST", "transfer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2246,20 +2267,18 @@ impl Transfer for TransferClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateUserResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateUserError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateUserResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateUserError::from_response(response))
+        }
     }
 }

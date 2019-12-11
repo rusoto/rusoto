@@ -11,17 +11,17 @@
 // =================================================================
 #![allow(warnings)]
 
-use futures::future;
-use futures::Future;
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 use std::error::Error;
 use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the Amazon S3 bucket used to store artifact for the pipeline in AWS CodePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3565,219 +3565,226 @@ impl Error for UpdatePipelineError {
     }
 }
 /// Trait representing the capabilities of the CodePipeline API. CodePipeline clients implement this trait.
+#[async_trait]
 pub trait CodePipeline {
     /// <p>Returns information about a specified job and whether that job has been received by the job worker. Used for custom actions only.</p>
-    fn acknowledge_job(
+    async fn acknowledge_job(
         &self,
         input: AcknowledgeJobInput,
-    ) -> RusotoFuture<AcknowledgeJobOutput, AcknowledgeJobError>;
+    ) -> Result<AcknowledgeJobOutput, RusotoError<AcknowledgeJobError>>;
 
     /// <p>Confirms a job worker has received the specified job. Used for partner actions only.</p>
-    fn acknowledge_third_party_job(
+    async fn acknowledge_third_party_job(
         &self,
         input: AcknowledgeThirdPartyJobInput,
-    ) -> RusotoFuture<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError>;
+    ) -> Result<AcknowledgeThirdPartyJobOutput, RusotoError<AcknowledgeThirdPartyJobError>>;
 
     /// <p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>
-    fn create_custom_action_type(
+    async fn create_custom_action_type(
         &self,
         input: CreateCustomActionTypeInput,
-    ) -> RusotoFuture<CreateCustomActionTypeOutput, CreateCustomActionTypeError>;
+    ) -> Result<CreateCustomActionTypeOutput, RusotoError<CreateCustomActionTypeError>>;
 
     /// <p><p>Creates a pipeline.</p> <note> <p>In the pipeline structure, you must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
-    fn create_pipeline(
+    async fn create_pipeline(
         &self,
         input: CreatePipelineInput,
-    ) -> RusotoFuture<CreatePipelineOutput, CreatePipelineError>;
+    ) -> Result<CreatePipelineOutput, RusotoError<CreatePipelineError>>;
 
     /// <p><p>Marks a custom action as deleted. <code>PollForJobs</code> for the custom action fails after the action is marked for deletion. Used for custom actions only.</p> <important> <p>To re-create a custom action after it has been deleted you must use a string in the version field that has never been used before. This string can be an incremented version number, for example. To restore a deleted custom action, use a JSON file that is identical to the deleted action, including the original string in the version field.</p> </important></p>
-    fn delete_custom_action_type(
+    async fn delete_custom_action_type(
         &self,
         input: DeleteCustomActionTypeInput,
-    ) -> RusotoFuture<(), DeleteCustomActionTypeError>;
+    ) -> Result<(), RusotoError<DeleteCustomActionTypeError>>;
 
     /// <p>Deletes the specified pipeline.</p>
-    fn delete_pipeline(&self, input: DeletePipelineInput) -> RusotoFuture<(), DeletePipelineError>;
+    async fn delete_pipeline(
+        &self,
+        input: DeletePipelineInput,
+    ) -> Result<(), RusotoError<DeletePipelineError>>;
 
     /// <p>Deletes a previously created webhook by name. Deleting the webhook stops AWS CodePipeline from starting a pipeline every time an external event occurs. The API returns successfully when trying to delete a webhook that is already deleted. If a deleted webhook is re-created by calling PutWebhook with the same name, it will have a different URL.</p>
-    fn delete_webhook(
+    async fn delete_webhook(
         &self,
         input: DeleteWebhookInput,
-    ) -> RusotoFuture<DeleteWebhookOutput, DeleteWebhookError>;
+    ) -> Result<DeleteWebhookOutput, RusotoError<DeleteWebhookError>>;
 
     /// <p>Removes the connection between the webhook that was created by CodePipeline and the external tool with events to be detected. Currently supported only for webhooks that target an action type of GitHub.</p>
-    fn deregister_webhook_with_third_party(
+    async fn deregister_webhook_with_third_party(
         &self,
         input: DeregisterWebhookWithThirdPartyInput,
-    ) -> RusotoFuture<DeregisterWebhookWithThirdPartyOutput, DeregisterWebhookWithThirdPartyError>;
+    ) -> Result<
+        DeregisterWebhookWithThirdPartyOutput,
+        RusotoError<DeregisterWebhookWithThirdPartyError>,
+    >;
 
     /// <p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>
-    fn disable_stage_transition(
+    async fn disable_stage_transition(
         &self,
         input: DisableStageTransitionInput,
-    ) -> RusotoFuture<(), DisableStageTransitionError>;
+    ) -> Result<(), RusotoError<DisableStageTransitionError>>;
 
     /// <p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>
-    fn enable_stage_transition(
+    async fn enable_stage_transition(
         &self,
         input: EnableStageTransitionInput,
-    ) -> RusotoFuture<(), EnableStageTransitionError>;
+    ) -> Result<(), RusotoError<EnableStageTransitionError>>;
 
     /// <p><p>Returns information about a job. Used for custom actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
-    fn get_job_details(
+    async fn get_job_details(
         &self,
         input: GetJobDetailsInput,
-    ) -> RusotoFuture<GetJobDetailsOutput, GetJobDetailsError>;
+    ) -> Result<GetJobDetailsOutput, RusotoError<GetJobDetailsError>>;
 
     /// <p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>
-    fn get_pipeline(
+    async fn get_pipeline(
         &self,
         input: GetPipelineInput,
-    ) -> RusotoFuture<GetPipelineOutput, GetPipelineError>;
+    ) -> Result<GetPipelineOutput, RusotoError<GetPipelineError>>;
 
     /// <p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>
-    fn get_pipeline_execution(
+    async fn get_pipeline_execution(
         &self,
         input: GetPipelineExecutionInput,
-    ) -> RusotoFuture<GetPipelineExecutionOutput, GetPipelineExecutionError>;
+    ) -> Result<GetPipelineExecutionOutput, RusotoError<GetPipelineExecutionError>>;
 
     /// <p><p>Returns information about the state of a pipeline, including the stages and actions.</p> <note> <p>Values returned in the <code>revisionId</code> and <code>revisionUrl</code> fields indicate the source revision information, such as the commit ID, for the current state.</p> </note></p>
-    fn get_pipeline_state(
+    async fn get_pipeline_state(
         &self,
         input: GetPipelineStateInput,
-    ) -> RusotoFuture<GetPipelineStateOutput, GetPipelineStateError>;
+    ) -> Result<GetPipelineStateOutput, RusotoError<GetPipelineStateError>>;
 
     /// <p><p>Requests the details of a job for a third party action. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
-    fn get_third_party_job_details(
+    async fn get_third_party_job_details(
         &self,
         input: GetThirdPartyJobDetailsInput,
-    ) -> RusotoFuture<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError>;
+    ) -> Result<GetThirdPartyJobDetailsOutput, RusotoError<GetThirdPartyJobDetailsError>>;
 
     /// <p>Lists the action executions that have occurred in a pipeline.</p>
-    fn list_action_executions(
+    async fn list_action_executions(
         &self,
         input: ListActionExecutionsInput,
-    ) -> RusotoFuture<ListActionExecutionsOutput, ListActionExecutionsError>;
+    ) -> Result<ListActionExecutionsOutput, RusotoError<ListActionExecutionsError>>;
 
     /// <p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>
-    fn list_action_types(
+    async fn list_action_types(
         &self,
         input: ListActionTypesInput,
-    ) -> RusotoFuture<ListActionTypesOutput, ListActionTypesError>;
+    ) -> Result<ListActionTypesOutput, RusotoError<ListActionTypesError>>;
 
     /// <p>Gets a summary of the most recent executions for a pipeline.</p>
-    fn list_pipeline_executions(
+    async fn list_pipeline_executions(
         &self,
         input: ListPipelineExecutionsInput,
-    ) -> RusotoFuture<ListPipelineExecutionsOutput, ListPipelineExecutionsError>;
+    ) -> Result<ListPipelineExecutionsOutput, RusotoError<ListPipelineExecutionsError>>;
 
     /// <p>Gets a summary of all of the pipelines associated with your account.</p>
-    fn list_pipelines(
+    async fn list_pipelines(
         &self,
         input: ListPipelinesInput,
-    ) -> RusotoFuture<ListPipelinesOutput, ListPipelinesError>;
+    ) -> Result<ListPipelinesOutput, RusotoError<ListPipelinesError>>;
 
     /// <p>Gets the set of key-value pairs (metadata) that are used to manage the resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Gets a listing of all the webhooks in this AWS Region for this account. The output lists all webhooks and includes the webhook URL and ARN and the configuration for each webhook.</p>
-    fn list_webhooks(
+    async fn list_webhooks(
         &self,
         input: ListWebhooksInput,
-    ) -> RusotoFuture<ListWebhooksOutput, ListWebhooksError>;
+    ) -> Result<ListWebhooksOutput, RusotoError<ListWebhooksError>>;
 
     /// <p><p>Returns information about any jobs for AWS CodePipeline to act on. <code>PollForJobs</code> is valid only for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
-    fn poll_for_jobs(
+    async fn poll_for_jobs(
         &self,
         input: PollForJobsInput,
-    ) -> RusotoFuture<PollForJobsOutput, PollForJobsError>;
+    ) -> Result<PollForJobsOutput, RusotoError<PollForJobsError>>;
 
     /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
-    fn poll_for_third_party_jobs(
+    async fn poll_for_third_party_jobs(
         &self,
         input: PollForThirdPartyJobsInput,
-    ) -> RusotoFuture<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError>;
+    ) -> Result<PollForThirdPartyJobsOutput, RusotoError<PollForThirdPartyJobsError>>;
 
     /// <p>Provides information to AWS CodePipeline about new revisions to a source.</p>
-    fn put_action_revision(
+    async fn put_action_revision(
         &self,
         input: PutActionRevisionInput,
-    ) -> RusotoFuture<PutActionRevisionOutput, PutActionRevisionError>;
+    ) -> Result<PutActionRevisionOutput, RusotoError<PutActionRevisionError>>;
 
     /// <p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>
-    fn put_approval_result(
+    async fn put_approval_result(
         &self,
         input: PutApprovalResultInput,
-    ) -> RusotoFuture<PutApprovalResultOutput, PutApprovalResultError>;
+    ) -> Result<PutApprovalResultOutput, RusotoError<PutApprovalResultError>>;
 
     /// <p>Represents the failure of a job as returned to the pipeline by a job worker. Used for custom actions only.</p>
-    fn put_job_failure_result(
+    async fn put_job_failure_result(
         &self,
         input: PutJobFailureResultInput,
-    ) -> RusotoFuture<(), PutJobFailureResultError>;
+    ) -> Result<(), RusotoError<PutJobFailureResultError>>;
 
     /// <p>Represents the success of a job as returned to the pipeline by a job worker. Used for custom actions only.</p>
-    fn put_job_success_result(
+    async fn put_job_success_result(
         &self,
         input: PutJobSuccessResultInput,
-    ) -> RusotoFuture<(), PutJobSuccessResultError>;
+    ) -> Result<(), RusotoError<PutJobSuccessResultError>>;
 
     /// <p>Represents the failure of a third party job as returned to the pipeline by a job worker. Used for partner actions only.</p>
-    fn put_third_party_job_failure_result(
+    async fn put_third_party_job_failure_result(
         &self,
         input: PutThirdPartyJobFailureResultInput,
-    ) -> RusotoFuture<(), PutThirdPartyJobFailureResultError>;
+    ) -> Result<(), RusotoError<PutThirdPartyJobFailureResultError>>;
 
     /// <p>Represents the success of a third party job as returned to the pipeline by a job worker. Used for partner actions only.</p>
-    fn put_third_party_job_success_result(
+    async fn put_third_party_job_success_result(
         &self,
         input: PutThirdPartyJobSuccessResultInput,
-    ) -> RusotoFuture<(), PutThirdPartyJobSuccessResultError>;
+    ) -> Result<(), RusotoError<PutThirdPartyJobSuccessResultError>>;
 
     /// <p>Defines a webhook and returns a unique webhook URL generated by CodePipeline. This URL can be supplied to third party source hosting providers to call every time there's a code change. When CodePipeline receives a POST request on this URL, the pipeline defined in the webhook is started as long as the POST request satisfied the authentication and filtering requirements supplied when defining the webhook. RegisterWebhookWithThirdParty and DeregisterWebhookWithThirdParty APIs can be used to automatically configure supported third parties to call the generated webhook URL.</p>
-    fn put_webhook(
+    async fn put_webhook(
         &self,
         input: PutWebhookInput,
-    ) -> RusotoFuture<PutWebhookOutput, PutWebhookError>;
+    ) -> Result<PutWebhookOutput, RusotoError<PutWebhookError>>;
 
     /// <p>Configures a connection between the webhook that was created and the external tool with events to be detected.</p>
-    fn register_webhook_with_third_party(
+    async fn register_webhook_with_third_party(
         &self,
         input: RegisterWebhookWithThirdPartyInput,
-    ) -> RusotoFuture<RegisterWebhookWithThirdPartyOutput, RegisterWebhookWithThirdPartyError>;
+    ) -> Result<RegisterWebhookWithThirdPartyOutput, RusotoError<RegisterWebhookWithThirdPartyError>>;
 
     /// <p>Resumes the pipeline execution by retrying the last failed actions in a stage. You can retry a stage immediately if any of the actions in the stage fail. When you retry, all actions that are still in progress continue working, and failed actions are triggered again.</p>
-    fn retry_stage_execution(
+    async fn retry_stage_execution(
         &self,
         input: RetryStageExecutionInput,
-    ) -> RusotoFuture<RetryStageExecutionOutput, RetryStageExecutionError>;
+    ) -> Result<RetryStageExecutionOutput, RusotoError<RetryStageExecutionError>>;
 
     /// <p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>
-    fn start_pipeline_execution(
+    async fn start_pipeline_execution(
         &self,
         input: StartPipelineExecutionInput,
-    ) -> RusotoFuture<StartPipelineExecutionOutput, StartPipelineExecutionError>;
+    ) -> Result<StartPipelineExecutionOutput, RusotoError<StartPipelineExecutionError>>;
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource. </p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceOutput, TagResourceError>;
+    ) -> Result<TagResourceOutput, RusotoError<TagResourceError>>;
 
     /// <p>Removes tags from an AWS resource.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError>;
+    ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>>;
 
     /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure and <code>UpdatePipeline</code> to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
-    fn update_pipeline(
+    async fn update_pipeline(
         &self,
         input: UpdatePipelineInput,
-    ) -> RusotoFuture<UpdatePipelineOutput, UpdatePipelineError>;
+    ) -> Result<UpdatePipelineOutput, RusotoError<UpdatePipelineError>>;
 }
 /// A client for the CodePipeline API.
 #[derive(Clone)]
@@ -3801,9 +3808,7 @@ impl CodePipelineClient {
     ) -> CodePipelineClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         Self::new_with_client(
             Client::new_with(credentials_provider, request_dispatcher),
@@ -3824,12 +3829,13 @@ impl fmt::Debug for CodePipelineClient {
     }
 }
 
+#[async_trait]
 impl CodePipeline for CodePipelineClient {
     /// <p>Returns information about a specified job and whether that job has been received by the job worker. Used for custom actions only.</p>
-    fn acknowledge_job(
+    async fn acknowledge_job(
         &self,
         input: AcknowledgeJobInput,
-    ) -> RusotoFuture<AcknowledgeJobOutput, AcknowledgeJobError> {
+    ) -> Result<AcknowledgeJobOutput, RusotoError<AcknowledgeJobError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3837,28 +3843,26 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AcknowledgeJobOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AcknowledgeJobError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<AcknowledgeJobOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AcknowledgeJobError::from_response(response))
+        }
     }
 
     /// <p>Confirms a job worker has received the specified job. Used for partner actions only.</p>
-    fn acknowledge_third_party_job(
+    async fn acknowledge_third_party_job(
         &self,
         input: AcknowledgeThirdPartyJobInput,
-    ) -> RusotoFuture<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError> {
+    ) -> Result<AcknowledgeThirdPartyJobOutput, RusotoError<AcknowledgeThirdPartyJobError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3869,25 +3873,27 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AcknowledgeThirdPartyJobOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AcknowledgeThirdPartyJobError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AcknowledgeThirdPartyJobOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AcknowledgeThirdPartyJobError::from_response(response))
+        }
     }
 
     /// <p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>
-    fn create_custom_action_type(
+    async fn create_custom_action_type(
         &self,
         input: CreateCustomActionTypeInput,
-    ) -> RusotoFuture<CreateCustomActionTypeOutput, CreateCustomActionTypeError> {
+    ) -> Result<CreateCustomActionTypeOutput, RusotoError<CreateCustomActionTypeError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3898,27 +3904,27 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateCustomActionTypeOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateCustomActionTypeError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateCustomActionTypeOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateCustomActionTypeError::from_response(response))
+        }
     }
 
     /// <p><p>Creates a pipeline.</p> <note> <p>In the pipeline structure, you must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
-    fn create_pipeline(
+    async fn create_pipeline(
         &self,
         input: CreatePipelineInput,
-    ) -> RusotoFuture<CreatePipelineOutput, CreatePipelineError> {
+    ) -> Result<CreatePipelineOutput, RusotoError<CreatePipelineError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3926,28 +3932,26 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreatePipelineOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreatePipelineError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreatePipelineOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreatePipelineError::from_response(response))
+        }
     }
 
     /// <p><p>Marks a custom action as deleted. <code>PollForJobs</code> for the custom action fails after the action is marked for deletion. Used for custom actions only.</p> <important> <p>To re-create a custom action after it has been deleted you must use a string in the version field that has never been used before. This string can be an incremented version number, for example. To restore a deleted custom action, use a JSON file that is identical to the deleted action, including the original string in the version field.</p> </important></p>
-    fn delete_custom_action_type(
+    async fn delete_custom_action_type(
         &self,
         input: DeleteCustomActionTypeInput,
-    ) -> RusotoFuture<(), DeleteCustomActionTypeError> {
+    ) -> Result<(), RusotoError<DeleteCustomActionTypeError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3958,21 +3962,25 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteCustomActionTypeError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteCustomActionTypeError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified pipeline.</p>
-    fn delete_pipeline(&self, input: DeletePipelineInput) -> RusotoFuture<(), DeletePipelineError> {
+    async fn delete_pipeline(
+        &self,
+        input: DeletePipelineInput,
+    ) -> Result<(), RusotoError<DeletePipelineError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3980,25 +3988,25 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeletePipelineError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeletePipelineError::from_response(response))
+        }
     }
 
     /// <p>Deletes a previously created webhook by name. Deleting the webhook stops AWS CodePipeline from starting a pipeline every time an external event occurs. The API returns successfully when trying to delete a webhook that is already deleted. If a deleted webhook is re-created by calling PutWebhook with the same name, it will have a different URL.</p>
-    fn delete_webhook(
+    async fn delete_webhook(
         &self,
         input: DeleteWebhookInput,
-    ) -> RusotoFuture<DeleteWebhookOutput, DeleteWebhookError> {
+    ) -> Result<DeleteWebhookOutput, RusotoError<DeleteWebhookError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4006,29 +4014,29 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteWebhookOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteWebhookError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteWebhookOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteWebhookError::from_response(response))
+        }
     }
 
     /// <p>Removes the connection between the webhook that was created by CodePipeline and the external tool with events to be detected. Currently supported only for webhooks that target an action type of GitHub.</p>
-    fn deregister_webhook_with_third_party(
+    async fn deregister_webhook_with_third_party(
         &self,
         input: DeregisterWebhookWithThirdPartyInput,
-    ) -> RusotoFuture<DeregisterWebhookWithThirdPartyOutput, DeregisterWebhookWithThirdPartyError>
-    {
+    ) -> Result<
+        DeregisterWebhookWithThirdPartyOutput,
+        RusotoError<DeregisterWebhookWithThirdPartyError>,
+    > {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4039,27 +4047,29 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeregisterWebhookWithThirdPartyOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeregisterWebhookWithThirdPartyError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeregisterWebhookWithThirdPartyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeregisterWebhookWithThirdPartyError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>
-    fn disable_stage_transition(
+    async fn disable_stage_transition(
         &self,
         input: DisableStageTransitionInput,
-    ) -> RusotoFuture<(), DisableStageTransitionError> {
+    ) -> Result<(), RusotoError<DisableStageTransitionError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4070,24 +4080,25 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DisableStageTransitionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisableStageTransitionError::from_response(response))
+        }
     }
 
     /// <p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>
-    fn enable_stage_transition(
+    async fn enable_stage_transition(
         &self,
         input: EnableStageTransitionInput,
-    ) -> RusotoFuture<(), EnableStageTransitionError> {
+    ) -> Result<(), RusotoError<EnableStageTransitionError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4098,24 +4109,25 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(EnableStageTransitionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(EnableStageTransitionError::from_response(response))
+        }
     }
 
     /// <p><p>Returns information about a job. Used for custom actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
-    fn get_job_details(
+    async fn get_job_details(
         &self,
         input: GetJobDetailsInput,
-    ) -> RusotoFuture<GetJobDetailsOutput, GetJobDetailsError> {
+    ) -> Result<GetJobDetailsOutput, RusotoError<GetJobDetailsError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4123,28 +4135,26 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetJobDetailsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetJobDetailsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetJobDetailsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetJobDetailsError::from_response(response))
+        }
     }
 
     /// <p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>
-    fn get_pipeline(
+    async fn get_pipeline(
         &self,
         input: GetPipelineInput,
-    ) -> RusotoFuture<GetPipelineOutput, GetPipelineError> {
+    ) -> Result<GetPipelineOutput, RusotoError<GetPipelineError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4152,28 +4162,26 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPipelineOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetPipelineError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetPipelineOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetPipelineError::from_response(response))
+        }
     }
 
     /// <p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>
-    fn get_pipeline_execution(
+    async fn get_pipeline_execution(
         &self,
         input: GetPipelineExecutionInput,
-    ) -> RusotoFuture<GetPipelineExecutionOutput, GetPipelineExecutionError> {
+    ) -> Result<GetPipelineExecutionOutput, RusotoError<GetPipelineExecutionError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4181,27 +4189,27 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPipelineExecutionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetPipelineExecutionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetPipelineExecutionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetPipelineExecutionError::from_response(response))
+        }
     }
 
     /// <p><p>Returns information about the state of a pipeline, including the stages and actions.</p> <note> <p>Values returned in the <code>revisionId</code> and <code>revisionUrl</code> fields indicate the source revision information, such as the commit ID, for the current state.</p> </note></p>
-    fn get_pipeline_state(
+    async fn get_pipeline_state(
         &self,
         input: GetPipelineStateInput,
-    ) -> RusotoFuture<GetPipelineStateOutput, GetPipelineStateError> {
+    ) -> Result<GetPipelineStateOutput, RusotoError<GetPipelineStateError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4209,28 +4217,26 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPipelineStateOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetPipelineStateError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetPipelineStateOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetPipelineStateError::from_response(response))
+        }
     }
 
     /// <p><p>Requests the details of a job for a third party action. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
-    fn get_third_party_job_details(
+    async fn get_third_party_job_details(
         &self,
         input: GetThirdPartyJobDetailsInput,
-    ) -> RusotoFuture<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError> {
+    ) -> Result<GetThirdPartyJobDetailsOutput, RusotoError<GetThirdPartyJobDetailsError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4241,25 +4247,27 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetThirdPartyJobDetailsOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetThirdPartyJobDetailsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetThirdPartyJobDetailsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetThirdPartyJobDetailsError::from_response(response))
+        }
     }
 
     /// <p>Lists the action executions that have occurred in a pipeline.</p>
-    fn list_action_executions(
+    async fn list_action_executions(
         &self,
         input: ListActionExecutionsInput,
-    ) -> RusotoFuture<ListActionExecutionsOutput, ListActionExecutionsError> {
+    ) -> Result<ListActionExecutionsOutput, RusotoError<ListActionExecutionsError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4267,27 +4275,27 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListActionExecutionsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListActionExecutionsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListActionExecutionsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListActionExecutionsError::from_response(response))
+        }
     }
 
     /// <p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>
-    fn list_action_types(
+    async fn list_action_types(
         &self,
         input: ListActionTypesInput,
-    ) -> RusotoFuture<ListActionTypesOutput, ListActionTypesError> {
+    ) -> Result<ListActionTypesOutput, RusotoError<ListActionTypesError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4295,28 +4303,26 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListActionTypesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListActionTypesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListActionTypesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListActionTypesError::from_response(response))
+        }
     }
 
     /// <p>Gets a summary of the most recent executions for a pipeline.</p>
-    fn list_pipeline_executions(
+    async fn list_pipeline_executions(
         &self,
         input: ListPipelineExecutionsInput,
-    ) -> RusotoFuture<ListPipelineExecutionsOutput, ListPipelineExecutionsError> {
+    ) -> Result<ListPipelineExecutionsOutput, RusotoError<ListPipelineExecutionsError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4327,27 +4333,27 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPipelineExecutionsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListPipelineExecutionsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPipelineExecutionsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPipelineExecutionsError::from_response(response))
+        }
     }
 
     /// <p>Gets a summary of all of the pipelines associated with your account.</p>
-    fn list_pipelines(
+    async fn list_pipelines(
         &self,
         input: ListPipelinesInput,
-    ) -> RusotoFuture<ListPipelinesOutput, ListPipelinesError> {
+    ) -> Result<ListPipelinesOutput, RusotoError<ListPipelinesError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4355,28 +4361,26 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPipelinesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListPipelinesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListPipelinesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPipelinesError::from_response(response))
+        }
     }
 
     /// <p>Gets the set of key-value pairs (metadata) that are used to manage the resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4384,27 +4388,27 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p>Gets a listing of all the webhooks in this AWS Region for this account. The output lists all webhooks and includes the webhook URL and ARN and the configuration for each webhook.</p>
-    fn list_webhooks(
+    async fn list_webhooks(
         &self,
         input: ListWebhooksInput,
-    ) -> RusotoFuture<ListWebhooksOutput, ListWebhooksError> {
+    ) -> Result<ListWebhooksOutput, RusotoError<ListWebhooksError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4412,28 +4416,26 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListWebhooksOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListWebhooksError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListWebhooksOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListWebhooksError::from_response(response))
+        }
     }
 
     /// <p><p>Returns information about any jobs for AWS CodePipeline to act on. <code>PollForJobs</code> is valid only for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
-    fn poll_for_jobs(
+    async fn poll_for_jobs(
         &self,
         input: PollForJobsInput,
-    ) -> RusotoFuture<PollForJobsOutput, PollForJobsError> {
+    ) -> Result<PollForJobsOutput, RusotoError<PollForJobsError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4441,28 +4443,26 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PollForJobsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PollForJobsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<PollForJobsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PollForJobsError::from_response(response))
+        }
     }
 
     /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
-    fn poll_for_third_party_jobs(
+    async fn poll_for_third_party_jobs(
         &self,
         input: PollForThirdPartyJobsInput,
-    ) -> RusotoFuture<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError> {
+    ) -> Result<PollForThirdPartyJobsOutput, RusotoError<PollForThirdPartyJobsError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4473,27 +4473,27 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PollForThirdPartyJobsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PollForThirdPartyJobsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PollForThirdPartyJobsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PollForThirdPartyJobsError::from_response(response))
+        }
     }
 
     /// <p>Provides information to AWS CodePipeline about new revisions to a source.</p>
-    fn put_action_revision(
+    async fn put_action_revision(
         &self,
         input: PutActionRevisionInput,
-    ) -> RusotoFuture<PutActionRevisionOutput, PutActionRevisionError> {
+    ) -> Result<PutActionRevisionOutput, RusotoError<PutActionRevisionError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4501,28 +4501,26 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutActionRevisionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutActionRevisionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<PutActionRevisionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutActionRevisionError::from_response(response))
+        }
     }
 
     /// <p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>
-    fn put_approval_result(
+    async fn put_approval_result(
         &self,
         input: PutApprovalResultInput,
-    ) -> RusotoFuture<PutApprovalResultOutput, PutApprovalResultError> {
+    ) -> Result<PutApprovalResultOutput, RusotoError<PutApprovalResultError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4530,28 +4528,26 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutApprovalResultOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutApprovalResultError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<PutApprovalResultOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutApprovalResultError::from_response(response))
+        }
     }
 
     /// <p>Represents the failure of a job as returned to the pipeline by a job worker. Used for custom actions only.</p>
-    fn put_job_failure_result(
+    async fn put_job_failure_result(
         &self,
         input: PutJobFailureResultInput,
-    ) -> RusotoFuture<(), PutJobFailureResultError> {
+    ) -> Result<(), RusotoError<PutJobFailureResultError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4559,24 +4555,25 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutJobFailureResultError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutJobFailureResultError::from_response(response))
+        }
     }
 
     /// <p>Represents the success of a job as returned to the pipeline by a job worker. Used for custom actions only.</p>
-    fn put_job_success_result(
+    async fn put_job_success_result(
         &self,
         input: PutJobSuccessResultInput,
-    ) -> RusotoFuture<(), PutJobSuccessResultError> {
+    ) -> Result<(), RusotoError<PutJobSuccessResultError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4584,24 +4581,25 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutJobSuccessResultError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutJobSuccessResultError::from_response(response))
+        }
     }
 
     /// <p>Represents the failure of a third party job as returned to the pipeline by a job worker. Used for partner actions only.</p>
-    fn put_third_party_job_failure_result(
+    async fn put_third_party_job_failure_result(
         &self,
         input: PutThirdPartyJobFailureResultInput,
-    ) -> RusotoFuture<(), PutThirdPartyJobFailureResultError> {
+    ) -> Result<(), RusotoError<PutThirdPartyJobFailureResultError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4612,22 +4610,25 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutThirdPartyJobFailureResultError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutThirdPartyJobFailureResultError::from_response(response))
+        }
     }
 
     /// <p>Represents the success of a third party job as returned to the pipeline by a job worker. Used for partner actions only.</p>
-    fn put_third_party_job_success_result(
+    async fn put_third_party_job_success_result(
         &self,
         input: PutThirdPartyJobSuccessResultInput,
-    ) -> RusotoFuture<(), PutThirdPartyJobSuccessResultError> {
+    ) -> Result<(), RusotoError<PutThirdPartyJobSuccessResultError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4638,22 +4639,25 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutThirdPartyJobSuccessResultError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutThirdPartyJobSuccessResultError::from_response(response))
+        }
     }
 
     /// <p>Defines a webhook and returns a unique webhook URL generated by CodePipeline. This URL can be supplied to third party source hosting providers to call every time there's a code change. When CodePipeline receives a POST request on this URL, the pipeline defined in the webhook is started as long as the POST request satisfied the authentication and filtering requirements supplied when defining the webhook. RegisterWebhookWithThirdParty and DeregisterWebhookWithThirdParty APIs can be used to automatically configure supported third parties to call the generated webhook URL.</p>
-    fn put_webhook(
+    async fn put_webhook(
         &self,
         input: PutWebhookInput,
-    ) -> RusotoFuture<PutWebhookOutput, PutWebhookError> {
+    ) -> Result<PutWebhookOutput, RusotoError<PutWebhookError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4661,28 +4665,27 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutWebhookOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutWebhookError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<PutWebhookOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutWebhookError::from_response(response))
+        }
     }
 
     /// <p>Configures a connection between the webhook that was created and the external tool with events to be detected.</p>
-    fn register_webhook_with_third_party(
+    async fn register_webhook_with_third_party(
         &self,
         input: RegisterWebhookWithThirdPartyInput,
-    ) -> RusotoFuture<RegisterWebhookWithThirdPartyOutput, RegisterWebhookWithThirdPartyError> {
+    ) -> Result<RegisterWebhookWithThirdPartyOutput, RusotoError<RegisterWebhookWithThirdPartyError>>
+    {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4693,25 +4696,27 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterWebhookWithThirdPartyOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RegisterWebhookWithThirdPartyError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RegisterWebhookWithThirdPartyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterWebhookWithThirdPartyError::from_response(response))
+        }
     }
 
     /// <p>Resumes the pipeline execution by retrying the last failed actions in a stage. You can retry a stage immediately if any of the actions in the stage fail. When you retry, all actions that are still in progress continue working, and failed actions are triggered again.</p>
-    fn retry_stage_execution(
+    async fn retry_stage_execution(
         &self,
         input: RetryStageExecutionInput,
-    ) -> RusotoFuture<RetryStageExecutionOutput, RetryStageExecutionError> {
+    ) -> Result<RetryStageExecutionOutput, RusotoError<RetryStageExecutionError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4719,27 +4724,27 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RetryStageExecutionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RetryStageExecutionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RetryStageExecutionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RetryStageExecutionError::from_response(response))
+        }
     }
 
     /// <p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>
-    fn start_pipeline_execution(
+    async fn start_pipeline_execution(
         &self,
         input: StartPipelineExecutionInput,
-    ) -> RusotoFuture<StartPipelineExecutionOutput, StartPipelineExecutionError> {
+    ) -> Result<StartPipelineExecutionOutput, RusotoError<StartPipelineExecutionError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4750,27 +4755,27 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartPipelineExecutionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StartPipelineExecutionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartPipelineExecutionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartPipelineExecutionError::from_response(response))
+        }
     }
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource. </p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceOutput, TagResourceError> {
+    ) -> Result<TagResourceOutput, RusotoError<TagResourceError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4778,28 +4783,26 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourceOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TagResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p>Removes tags from an AWS resource.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError> {
+    ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4807,28 +4810,26 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourceOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UntagResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure and <code>UpdatePipeline</code> to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
-    fn update_pipeline(
+    async fn update_pipeline(
         &self,
         input: UpdatePipelineInput,
-    ) -> RusotoFuture<UpdatePipelineOutput, UpdatePipelineError> {
+    ) -> Result<UpdatePipelineOutput, RusotoError<UpdatePipelineError>> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4836,20 +4837,18 @@ impl CodePipeline for CodePipelineClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdatePipelineOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdatePipelineError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdatePipelineOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdatePipelineError::from_response(response))
+        }
     }
 }

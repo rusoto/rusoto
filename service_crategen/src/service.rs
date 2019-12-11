@@ -115,12 +115,22 @@ impl<'b> Service<'b> {
         let mut dependencies = BTreeMap::new();
 
         dependencies.insert(
-            "bytes".to_owned(),
-            cargo::Dependency::Simple("0.4.12".into()),
+            "async-trait".to_owned(),
+            cargo::Dependency::Simple("0.1".into()),
         );
         dependencies.insert(
-            "futures".to_owned(),
-            cargo::Dependency::Simple("0.1.16".into()),
+            "bytes".to_owned(),
+            cargo::Dependency::Simple("0.4".into()),
+        );
+        dependencies.insert(
+            "futures-preview".to_owned(),
+            cargo::Dependency::Extended{
+                path: None,
+                version: Some("0.3.0-alpha.19".to_owned()),
+                optional: None,
+                default_features: None,
+                features: None,
+            },
         );
         dependencies.insert(
             "rusoto_core".to_owned(),
@@ -137,11 +147,13 @@ impl<'b> Service<'b> {
             "json" => {
                 dependencies.insert(
                     "serde".to_owned(),
-                    cargo::Dependency::Simple("1.0.2".into()),
-                );
-                dependencies.insert(
-                    "serde_derive".to_owned(),
-                    cargo::Dependency::Simple("1.0.2".into()),
+                    cargo::Dependency::Extended {
+                        version: Some("1.0".into()),
+                        path: None,
+                        optional: None,
+                        default_features: None,
+                        features: Some(vec!["derive".into()]),
+                    },
                 );
                 dependencies.insert(
                     "serde_json".to_owned(),
@@ -197,6 +209,11 @@ impl<'b> Service<'b> {
                 default_features: Some(false),
                 features: None,
             },
+        );
+
+        dev_dependencies.insert(
+            "tokio".to_owned(),
+            cargo::Dependency::Simple("0.2.0-alpha.6".to_owned()),
         );
 
         if let Some(ref custom_dev_dependencies) = self.config.custom_dev_dependencies {

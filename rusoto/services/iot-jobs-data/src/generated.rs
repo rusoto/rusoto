@@ -11,18 +11,18 @@
 // =================================================================
 #![allow(warnings)]
 
-use futures::future;
-use futures::Future;
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 use std::error::Error;
 use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeJobExecutionRequest {
@@ -516,30 +516,31 @@ impl Error for UpdateJobExecutionError {
     }
 }
 /// Trait representing the capabilities of the AWS IoT Jobs Data Plane API. AWS IoT Jobs Data Plane clients implement this trait.
+#[async_trait]
 pub trait IotJobsData {
     /// <p>Gets details of a job execution.</p>
-    fn describe_job_execution(
+    async fn describe_job_execution(
         &self,
         input: DescribeJobExecutionRequest,
-    ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError>;
+    ) -> Result<DescribeJobExecutionResponse, RusotoError<DescribeJobExecutionError>>;
 
     /// <p>Gets the list of all jobs for a thing that are not in a terminal status.</p>
-    fn get_pending_job_executions(
+    async fn get_pending_job_executions(
         &self,
         input: GetPendingJobExecutionsRequest,
-    ) -> RusotoFuture<GetPendingJobExecutionsResponse, GetPendingJobExecutionsError>;
+    ) -> Result<GetPendingJobExecutionsResponse, RusotoError<GetPendingJobExecutionsError>>;
 
     /// <p>Gets and starts the next pending (status IN_PROGRESS or QUEUED) job execution for a thing.</p>
-    fn start_next_pending_job_execution(
+    async fn start_next_pending_job_execution(
         &self,
         input: StartNextPendingJobExecutionRequest,
-    ) -> RusotoFuture<StartNextPendingJobExecutionResponse, StartNextPendingJobExecutionError>;
+    ) -> Result<StartNextPendingJobExecutionResponse, RusotoError<StartNextPendingJobExecutionError>>;
 
     /// <p>Updates the status of a job execution.</p>
-    fn update_job_execution(
+    async fn update_job_execution(
         &self,
         input: UpdateJobExecutionRequest,
-    ) -> RusotoFuture<UpdateJobExecutionResponse, UpdateJobExecutionError>;
+    ) -> Result<UpdateJobExecutionResponse, RusotoError<UpdateJobExecutionError>>;
 }
 /// A client for the AWS IoT Jobs Data Plane API.
 #[derive(Clone)]
@@ -563,9 +564,7 @@ impl IotJobsDataClient {
     ) -> IotJobsDataClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         Self::new_with_client(
             Client::new_with(credentials_provider, request_dispatcher),
@@ -586,12 +585,13 @@ impl fmt::Debug for IotJobsDataClient {
     }
 }
 
+#[async_trait]
 impl IotJobsData for IotJobsDataClient {
     /// <p>Gets details of a job execution.</p>
-    fn describe_job_execution(
+    async fn describe_job_execution(
         &self,
         input: DescribeJobExecutionRequest,
-    ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError> {
+    ) -> Result<DescribeJobExecutionResponse, RusotoError<DescribeJobExecutionError>> {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}",
             job_id = input.job_id,
@@ -612,29 +612,28 @@ impl IotJobsData for IotJobsDataClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeJobExecutionResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeJobExecutionResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeJobExecutionError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeJobExecutionError::from_response(response))
+        }
     }
 
     /// <p>Gets the list of all jobs for a thing that are not in a terminal status.</p>
-    fn get_pending_job_executions(
+    async fn get_pending_job_executions(
         &self,
         input: GetPendingJobExecutionsRequest,
-    ) -> RusotoFuture<GetPendingJobExecutionsResponse, GetPendingJobExecutionsError> {
+    ) -> Result<GetPendingJobExecutionsResponse, RusotoError<GetPendingJobExecutionsError>> {
         let request_uri = format!("/things/{thing_name}/jobs", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("GET", "iot-jobs-data", &self.region, &request_uri);
@@ -642,27 +641,29 @@ impl IotJobsData for IotJobsDataClient {
 
         request.set_endpoint_prefix("data.jobs.iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPendingJobExecutionsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetPendingJobExecutionsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetPendingJobExecutionsError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetPendingJobExecutionsError::from_response(response))
+        }
     }
 
     /// <p>Gets and starts the next pending (status IN_PROGRESS or QUEUED) job execution for a thing.</p>
-    fn start_next_pending_job_execution(
+    async fn start_next_pending_job_execution(
         &self,
         input: StartNextPendingJobExecutionRequest,
-    ) -> RusotoFuture<StartNextPendingJobExecutionResponse, StartNextPendingJobExecutionError> {
+    ) -> Result<StartNextPendingJobExecutionResponse, RusotoError<StartNextPendingJobExecutionError>>
+    {
         let request_uri = format!(
             "/things/{thing_name}/jobs/$next",
             thing_name = input.thing_name
@@ -675,27 +676,28 @@ impl IotJobsData for IotJobsDataClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartNextPendingJobExecutionResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartNextPendingJobExecutionResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartNextPendingJobExecutionError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(StartNextPendingJobExecutionError::from_response(response))
+        }
     }
 
     /// <p>Updates the status of a job execution.</p>
-    fn update_job_execution(
+    async fn update_job_execution(
         &self,
         input: UpdateJobExecutionRequest,
-    ) -> RusotoFuture<UpdateJobExecutionResponse, UpdateJobExecutionError> {
+    ) -> Result<UpdateJobExecutionResponse, RusotoError<UpdateJobExecutionError>> {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}",
             job_id = input.job_id,
@@ -709,22 +711,20 @@ impl IotJobsData for IotJobsDataClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateJobExecutionResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateJobExecutionResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateJobExecutionError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateJobExecutionError::from_response(response))
+        }
     }
 }

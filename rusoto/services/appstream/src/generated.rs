@@ -11,17 +11,17 @@
 // =================================================================
 #![allow(warnings)]
 
-use futures::future;
-use futures::Future;
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 use std::error::Error;
 use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Describes an interface VPC endpoint (interface endpoint) that lets you create a private connection between the virtual private cloud (VPC) that you specify and AppStream 2.0. When you specify an interface endpoint for a stack, users of the stack can connect to AppStream 2.0 only through that endpoint. When you specify an interface endpoint for an image builder, administrators can connect to the image builder only through that endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -4167,283 +4167,293 @@ impl Error for UpdateStackError {
     }
 }
 /// Trait representing the capabilities of the Amazon AppStream API. Amazon AppStream clients implement this trait.
+#[async_trait]
 pub trait AppStream {
     /// <p>Associates the specified fleet with the specified stack.</p>
-    fn associate_fleet(
+    async fn associate_fleet(
         &self,
         input: AssociateFleetRequest,
-    ) -> RusotoFuture<AssociateFleetResult, AssociateFleetError>;
+    ) -> Result<AssociateFleetResult, RusotoError<AssociateFleetError>>;
 
     /// <p>Associates the specified users with the specified stacks. Users in a user pool cannot be assigned to stacks with fleets that are joined to an Active Directory domain.</p>
-    fn batch_associate_user_stack(
+    async fn batch_associate_user_stack(
         &self,
         input: BatchAssociateUserStackRequest,
-    ) -> RusotoFuture<BatchAssociateUserStackResult, BatchAssociateUserStackError>;
+    ) -> Result<BatchAssociateUserStackResult, RusotoError<BatchAssociateUserStackError>>;
 
     /// <p>Disassociates the specified users from the specified stacks.</p>
-    fn batch_disassociate_user_stack(
+    async fn batch_disassociate_user_stack(
         &self,
         input: BatchDisassociateUserStackRequest,
-    ) -> RusotoFuture<BatchDisassociateUserStackResult, BatchDisassociateUserStackError>;
+    ) -> Result<BatchDisassociateUserStackResult, RusotoError<BatchDisassociateUserStackError>>;
 
     /// <p>Copies the image within the same region or to a new region within the same AWS account. Note that any tags you added to the image will not be copied.</p>
-    fn copy_image(
+    async fn copy_image(
         &self,
         input: CopyImageRequest,
-    ) -> RusotoFuture<CopyImageResponse, CopyImageError>;
+    ) -> Result<CopyImageResponse, RusotoError<CopyImageError>>;
 
     /// <p>Creates a Directory Config object in AppStream 2.0. This object includes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
-    fn create_directory_config(
+    async fn create_directory_config(
         &self,
         input: CreateDirectoryConfigRequest,
-    ) -> RusotoFuture<CreateDirectoryConfigResult, CreateDirectoryConfigError>;
+    ) -> Result<CreateDirectoryConfigResult, RusotoError<CreateDirectoryConfigError>>;
 
     /// <p>Creates a fleet. A fleet consists of streaming instances that run a specified image.</p>
-    fn create_fleet(
+    async fn create_fleet(
         &self,
         input: CreateFleetRequest,
-    ) -> RusotoFuture<CreateFleetResult, CreateFleetError>;
+    ) -> Result<CreateFleetResult, RusotoError<CreateFleetError>>;
 
     /// <p>Creates an image builder. An image builder is a virtual machine that is used to create an image.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
-    fn create_image_builder(
+    async fn create_image_builder(
         &self,
         input: CreateImageBuilderRequest,
-    ) -> RusotoFuture<CreateImageBuilderResult, CreateImageBuilderError>;
+    ) -> Result<CreateImageBuilderResult, RusotoError<CreateImageBuilderError>>;
 
     /// <p>Creates a URL to start an image builder streaming session.</p>
-    fn create_image_builder_streaming_url(
+    async fn create_image_builder_streaming_url(
         &self,
         input: CreateImageBuilderStreamingURLRequest,
-    ) -> RusotoFuture<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError>;
+    ) -> Result<
+        CreateImageBuilderStreamingURLResult,
+        RusotoError<CreateImageBuilderStreamingURLError>,
+    >;
 
     /// <p>Creates a stack to start streaming applications to users. A stack consists of an associated fleet, user access policies, and storage configurations. </p>
-    fn create_stack(
+    async fn create_stack(
         &self,
         input: CreateStackRequest,
-    ) -> RusotoFuture<CreateStackResult, CreateStackError>;
+    ) -> Result<CreateStackResult, RusotoError<CreateStackError>>;
 
     /// <p>Creates a temporary URL to start an AppStream 2.0 streaming session for the specified user. A streaming URL enables application streaming to be tested without user setup. </p>
-    fn create_streaming_url(
+    async fn create_streaming_url(
         &self,
         input: CreateStreamingURLRequest,
-    ) -> RusotoFuture<CreateStreamingURLResult, CreateStreamingURLError>;
+    ) -> Result<CreateStreamingURLResult, RusotoError<CreateStreamingURLError>>;
 
     /// <p>Creates a usage report subscription. Usage reports are generated daily.</p>
-    fn create_usage_report_subscription(
+    async fn create_usage_report_subscription(
         &self,
-    ) -> RusotoFuture<CreateUsageReportSubscriptionResult, CreateUsageReportSubscriptionError>;
+    ) -> Result<CreateUsageReportSubscriptionResult, RusotoError<CreateUsageReportSubscriptionError>>;
 
     /// <p>Creates a new user in the user pool.</p>
-    fn create_user(
+    async fn create_user(
         &self,
         input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResult, CreateUserError>;
+    ) -> Result<CreateUserResult, RusotoError<CreateUserError>>;
 
     /// <p>Deletes the specified Directory Config object from AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
-    fn delete_directory_config(
+    async fn delete_directory_config(
         &self,
         input: DeleteDirectoryConfigRequest,
-    ) -> RusotoFuture<DeleteDirectoryConfigResult, DeleteDirectoryConfigError>;
+    ) -> Result<DeleteDirectoryConfigResult, RusotoError<DeleteDirectoryConfigError>>;
 
     /// <p>Deletes the specified fleet.</p>
-    fn delete_fleet(
+    async fn delete_fleet(
         &self,
         input: DeleteFleetRequest,
-    ) -> RusotoFuture<DeleteFleetResult, DeleteFleetError>;
+    ) -> Result<DeleteFleetResult, RusotoError<DeleteFleetError>>;
 
     /// <p>Deletes the specified image. You cannot delete an image when it is in use. After you delete an image, you cannot provision new capacity using the image.</p>
-    fn delete_image(
+    async fn delete_image(
         &self,
         input: DeleteImageRequest,
-    ) -> RusotoFuture<DeleteImageResult, DeleteImageError>;
+    ) -> Result<DeleteImageResult, RusotoError<DeleteImageError>>;
 
     /// <p>Deletes the specified image builder and releases the capacity.</p>
-    fn delete_image_builder(
+    async fn delete_image_builder(
         &self,
         input: DeleteImageBuilderRequest,
-    ) -> RusotoFuture<DeleteImageBuilderResult, DeleteImageBuilderError>;
+    ) -> Result<DeleteImageBuilderResult, RusotoError<DeleteImageBuilderError>>;
 
     /// <p>Deletes permissions for the specified private image. After you delete permissions for an image, AWS accounts to which you previously granted these permissions can no longer use the image.</p>
-    fn delete_image_permissions(
+    async fn delete_image_permissions(
         &self,
         input: DeleteImagePermissionsRequest,
-    ) -> RusotoFuture<DeleteImagePermissionsResult, DeleteImagePermissionsError>;
+    ) -> Result<DeleteImagePermissionsResult, RusotoError<DeleteImagePermissionsError>>;
 
     /// <p>Deletes the specified stack. After the stack is deleted, the application streaming environment provided by the stack is no longer available to users. Also, any reservations made for application streaming sessions for the stack are released.</p>
-    fn delete_stack(
+    async fn delete_stack(
         &self,
         input: DeleteStackRequest,
-    ) -> RusotoFuture<DeleteStackResult, DeleteStackError>;
+    ) -> Result<DeleteStackResult, RusotoError<DeleteStackError>>;
 
     /// <p>Disables usage report generation.</p>
-    fn delete_usage_report_subscription(
+    async fn delete_usage_report_subscription(
         &self,
-    ) -> RusotoFuture<DeleteUsageReportSubscriptionResult, DeleteUsageReportSubscriptionError>;
+    ) -> Result<DeleteUsageReportSubscriptionResult, RusotoError<DeleteUsageReportSubscriptionError>>;
 
     /// <p>Deletes a user from the user pool.</p>
-    fn delete_user(
+    async fn delete_user(
         &self,
         input: DeleteUserRequest,
-    ) -> RusotoFuture<DeleteUserResult, DeleteUserError>;
+    ) -> Result<DeleteUserResult, RusotoError<DeleteUserError>>;
 
     /// <p>Retrieves a list that describes one or more specified Directory Config objects for AppStream 2.0, if the names for these objects are provided. Otherwise, all Directory Config objects in the account are described. These objects include the configuration information required to join fleets and image builders to Microsoft Active Directory domains. </p> <p>Although the response syntax in this topic includes the account password, this password is not returned in the actual response.</p>
-    fn describe_directory_configs(
+    async fn describe_directory_configs(
         &self,
         input: DescribeDirectoryConfigsRequest,
-    ) -> RusotoFuture<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError>;
+    ) -> Result<DescribeDirectoryConfigsResult, RusotoError<DescribeDirectoryConfigsError>>;
 
     /// <p>Retrieves a list that describes one or more specified fleets, if the fleet names are provided. Otherwise, all fleets in the account are described.</p>
-    fn describe_fleets(
+    async fn describe_fleets(
         &self,
         input: DescribeFleetsRequest,
-    ) -> RusotoFuture<DescribeFleetsResult, DescribeFleetsError>;
+    ) -> Result<DescribeFleetsResult, RusotoError<DescribeFleetsError>>;
 
     /// <p>Retrieves a list that describes one or more specified image builders, if the image builder names are provided. Otherwise, all image builders in the account are described.</p>
-    fn describe_image_builders(
+    async fn describe_image_builders(
         &self,
         input: DescribeImageBuildersRequest,
-    ) -> RusotoFuture<DescribeImageBuildersResult, DescribeImageBuildersError>;
+    ) -> Result<DescribeImageBuildersResult, RusotoError<DescribeImageBuildersError>>;
 
     /// <p>Retrieves a list that describes the permissions for shared AWS account IDs on a private image that you own. </p>
-    fn describe_image_permissions(
+    async fn describe_image_permissions(
         &self,
         input: DescribeImagePermissionsRequest,
-    ) -> RusotoFuture<DescribeImagePermissionsResult, DescribeImagePermissionsError>;
+    ) -> Result<DescribeImagePermissionsResult, RusotoError<DescribeImagePermissionsError>>;
 
     /// <p>Retrieves a list that describes one or more specified images, if the image names or image ARNs are provided. Otherwise, all images in the account are described.</p>
-    fn describe_images(
+    async fn describe_images(
         &self,
         input: DescribeImagesRequest,
-    ) -> RusotoFuture<DescribeImagesResult, DescribeImagesError>;
+    ) -> Result<DescribeImagesResult, RusotoError<DescribeImagesError>>;
 
     /// <p>Retrieves a list that describes the streaming sessions for a specified stack and fleet. If a UserId is provided for the stack and fleet, only streaming sessions for that user are described. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
-    fn describe_sessions(
+    async fn describe_sessions(
         &self,
         input: DescribeSessionsRequest,
-    ) -> RusotoFuture<DescribeSessionsResult, DescribeSessionsError>;
+    ) -> Result<DescribeSessionsResult, RusotoError<DescribeSessionsError>>;
 
     /// <p>Retrieves a list that describes one or more specified stacks, if the stack names are provided. Otherwise, all stacks in the account are described.</p>
-    fn describe_stacks(
+    async fn describe_stacks(
         &self,
         input: DescribeStacksRequest,
-    ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError>;
+    ) -> Result<DescribeStacksResult, RusotoError<DescribeStacksError>>;
 
     /// <p>Retrieves a list that describes one or more usage report subscriptions.</p>
-    fn describe_usage_report_subscriptions(
+    async fn describe_usage_report_subscriptions(
         &self,
         input: DescribeUsageReportSubscriptionsRequest,
-    ) -> RusotoFuture<DescribeUsageReportSubscriptionsResult, DescribeUsageReportSubscriptionsError>;
+    ) -> Result<
+        DescribeUsageReportSubscriptionsResult,
+        RusotoError<DescribeUsageReportSubscriptionsError>,
+    >;
 
     /// <p><p>Retrieves a list that describes the UserStackAssociation objects. You must specify either or both of the following:</p> <ul> <li> <p>The stack name</p> </li> <li> <p>The user name (email address of the user associated with the stack) and the authentication type for the user</p> </li> </ul></p>
-    fn describe_user_stack_associations(
+    async fn describe_user_stack_associations(
         &self,
         input: DescribeUserStackAssociationsRequest,
-    ) -> RusotoFuture<DescribeUserStackAssociationsResult, DescribeUserStackAssociationsError>;
+    ) -> Result<DescribeUserStackAssociationsResult, RusotoError<DescribeUserStackAssociationsError>>;
 
     /// <p>Retrieves a list that describes one or more specified users in the user pool.</p>
-    fn describe_users(
+    async fn describe_users(
         &self,
         input: DescribeUsersRequest,
-    ) -> RusotoFuture<DescribeUsersResult, DescribeUsersError>;
+    ) -> Result<DescribeUsersResult, RusotoError<DescribeUsersError>>;
 
     /// <p>Disables the specified user in the user pool. Users can't sign in to AppStream 2.0 until they are re-enabled. This action does not delete the user. </p>
-    fn disable_user(
+    async fn disable_user(
         &self,
         input: DisableUserRequest,
-    ) -> RusotoFuture<DisableUserResult, DisableUserError>;
+    ) -> Result<DisableUserResult, RusotoError<DisableUserError>>;
 
     /// <p>Disassociates the specified fleet from the specified stack.</p>
-    fn disassociate_fleet(
+    async fn disassociate_fleet(
         &self,
         input: DisassociateFleetRequest,
-    ) -> RusotoFuture<DisassociateFleetResult, DisassociateFleetError>;
+    ) -> Result<DisassociateFleetResult, RusotoError<DisassociateFleetError>>;
 
     /// <p>Enables a user in the user pool. After being enabled, users can sign in to AppStream 2.0 and open applications from the stacks to which they are assigned.</p>
-    fn enable_user(
+    async fn enable_user(
         &self,
         input: EnableUserRequest,
-    ) -> RusotoFuture<EnableUserResult, EnableUserError>;
+    ) -> Result<EnableUserResult, RusotoError<EnableUserError>>;
 
     /// <p>Immediately stops the specified streaming session.</p>
-    fn expire_session(
+    async fn expire_session(
         &self,
         input: ExpireSessionRequest,
-    ) -> RusotoFuture<ExpireSessionResult, ExpireSessionError>;
+    ) -> Result<ExpireSessionResult, RusotoError<ExpireSessionError>>;
 
     /// <p>Retrieves the name of the fleet that is associated with the specified stack.</p>
-    fn list_associated_fleets(
+    async fn list_associated_fleets(
         &self,
         input: ListAssociatedFleetsRequest,
-    ) -> RusotoFuture<ListAssociatedFleetsResult, ListAssociatedFleetsError>;
+    ) -> Result<ListAssociatedFleetsResult, RusotoError<ListAssociatedFleetsError>>;
 
     /// <p>Retrieves the name of the stack with which the specified fleet is associated.</p>
-    fn list_associated_stacks(
+    async fn list_associated_stacks(
         &self,
         input: ListAssociatedStacksRequest,
-    ) -> RusotoFuture<ListAssociatedStacksResult, ListAssociatedStacksError>;
+    ) -> Result<ListAssociatedStacksResult, RusotoError<ListAssociatedStacksError>>;
 
     /// <p>Retrieves a list of all tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Starts the specified fleet.</p>
-    fn start_fleet(
+    async fn start_fleet(
         &self,
         input: StartFleetRequest,
-    ) -> RusotoFuture<StartFleetResult, StartFleetError>;
+    ) -> Result<StartFleetResult, RusotoError<StartFleetError>>;
 
     /// <p>Starts the specified image builder.</p>
-    fn start_image_builder(
+    async fn start_image_builder(
         &self,
         input: StartImageBuilderRequest,
-    ) -> RusotoFuture<StartImageBuilderResult, StartImageBuilderError>;
+    ) -> Result<StartImageBuilderResult, RusotoError<StartImageBuilderError>>;
 
     /// <p>Stops the specified fleet.</p>
-    fn stop_fleet(&self, input: StopFleetRequest) -> RusotoFuture<StopFleetResult, StopFleetError>;
+    async fn stop_fleet(
+        &self,
+        input: StopFleetRequest,
+    ) -> Result<StopFleetResult, RusotoError<StopFleetError>>;
 
     /// <p>Stops the specified image builder.</p>
-    fn stop_image_builder(
+    async fn stop_image_builder(
         &self,
         input: StopImageBuilderRequest,
-    ) -> RusotoFuture<StopImageBuilderResult, StopImageBuilderError>;
+    ) -> Result<StopImageBuilderResult, RusotoError<StopImageBuilderError>>;
 
     /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
     /// <p>Disassociates one or more specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Updates the specified Directory Config object in AppStream 2.0. This object includes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
-    fn update_directory_config(
+    async fn update_directory_config(
         &self,
         input: UpdateDirectoryConfigRequest,
-    ) -> RusotoFuture<UpdateDirectoryConfigResult, UpdateDirectoryConfigError>;
+    ) -> Result<UpdateDirectoryConfigResult, RusotoError<UpdateDirectoryConfigError>>;
 
     /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code>, <code>ComputeCapacity</code>, <code>ImageARN</code>, <code>ImageName</code>, <code>IdleDisconnectTimeoutInSeconds</code>, and <code>DisconnectTimeoutInSeconds</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
-    fn update_fleet(
+    async fn update_fleet(
         &self,
         input: UpdateFleetRequest,
-    ) -> RusotoFuture<UpdateFleetResult, UpdateFleetError>;
+    ) -> Result<UpdateFleetResult, RusotoError<UpdateFleetError>>;
 
     /// <p>Adds or updates permissions for the specified private image. </p>
-    fn update_image_permissions(
+    async fn update_image_permissions(
         &self,
         input: UpdateImagePermissionsRequest,
-    ) -> RusotoFuture<UpdateImagePermissionsResult, UpdateImagePermissionsError>;
+    ) -> Result<UpdateImagePermissionsResult, RusotoError<UpdateImagePermissionsError>>;
 
     /// <p>Updates the specified fields for the specified stack.</p>
-    fn update_stack(
+    async fn update_stack(
         &self,
         input: UpdateStackRequest,
-    ) -> RusotoFuture<UpdateStackResult, UpdateStackError>;
+    ) -> Result<UpdateStackResult, RusotoError<UpdateStackError>>;
 }
 /// A client for the Amazon AppStream API.
 #[derive(Clone)]
@@ -4467,9 +4477,7 @@ impl AppStreamClient {
     ) -> AppStreamClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         Self::new_with_client(
             Client::new_with(credentials_provider, request_dispatcher),
@@ -4490,12 +4498,13 @@ impl fmt::Debug for AppStreamClient {
     }
 }
 
+#[async_trait]
 impl AppStream for AppStreamClient {
     /// <p>Associates the specified fleet with the specified stack.</p>
-    fn associate_fleet(
+    async fn associate_fleet(
         &self,
         input: AssociateFleetRequest,
-    ) -> RusotoFuture<AssociateFleetResult, AssociateFleetError> {
+    ) -> Result<AssociateFleetResult, RusotoError<AssociateFleetError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4503,28 +4512,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateFleetResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AssociateFleetError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<AssociateFleetResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateFleetError::from_response(response))
+        }
     }
 
     /// <p>Associates the specified users with the specified stacks. Users in a user pool cannot be assigned to stacks with fleets that are joined to an Active Directory domain.</p>
-    fn batch_associate_user_stack(
+    async fn batch_associate_user_stack(
         &self,
         input: BatchAssociateUserStackRequest,
-    ) -> RusotoFuture<BatchAssociateUserStackResult, BatchAssociateUserStackError> {
+    ) -> Result<BatchAssociateUserStackResult, RusotoError<BatchAssociateUserStackError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4535,25 +4542,28 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchAssociateUserStackResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchAssociateUserStackError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchAssociateUserStackResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchAssociateUserStackError::from_response(response))
+        }
     }
 
     /// <p>Disassociates the specified users from the specified stacks.</p>
-    fn batch_disassociate_user_stack(
+    async fn batch_disassociate_user_stack(
         &self,
         input: BatchDisassociateUserStackRequest,
-    ) -> RusotoFuture<BatchDisassociateUserStackResult, BatchDisassociateUserStackError> {
+    ) -> Result<BatchDisassociateUserStackResult, RusotoError<BatchDisassociateUserStackError>>
+    {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4564,25 +4574,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchDisassociateUserStackResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchDisassociateUserStackError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchDisassociateUserStackResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchDisassociateUserStackError::from_response(response))
+        }
     }
 
     /// <p>Copies the image within the same region or to a new region within the same AWS account. Note that any tags you added to the image will not be copied.</p>
-    fn copy_image(
+    async fn copy_image(
         &self,
         input: CopyImageRequest,
-    ) -> RusotoFuture<CopyImageResponse, CopyImageError> {
+    ) -> Result<CopyImageResponse, RusotoError<CopyImageError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4590,28 +4602,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CopyImageResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CopyImageError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CopyImageResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CopyImageError::from_response(response))
+        }
     }
 
     /// <p>Creates a Directory Config object in AppStream 2.0. This object includes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
-    fn create_directory_config(
+    async fn create_directory_config(
         &self,
         input: CreateDirectoryConfigRequest,
-    ) -> RusotoFuture<CreateDirectoryConfigResult, CreateDirectoryConfigError> {
+    ) -> Result<CreateDirectoryConfigResult, RusotoError<CreateDirectoryConfigError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4622,27 +4632,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDirectoryConfigResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateDirectoryConfigError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDirectoryConfigResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDirectoryConfigError::from_response(response))
+        }
     }
 
     /// <p>Creates a fleet. A fleet consists of streaming instances that run a specified image.</p>
-    fn create_fleet(
+    async fn create_fleet(
         &self,
         input: CreateFleetRequest,
-    ) -> RusotoFuture<CreateFleetResult, CreateFleetError> {
+    ) -> Result<CreateFleetResult, RusotoError<CreateFleetError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4650,28 +4660,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateFleetResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateFleetError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateFleetResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateFleetError::from_response(response))
+        }
     }
 
     /// <p>Creates an image builder. An image builder is a virtual machine that is used to create an image.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
-    fn create_image_builder(
+    async fn create_image_builder(
         &self,
         input: CreateImageBuilderRequest,
-    ) -> RusotoFuture<CreateImageBuilderResult, CreateImageBuilderError> {
+    ) -> Result<CreateImageBuilderResult, RusotoError<CreateImageBuilderError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4679,29 +4687,30 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateImageBuilderResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateImageBuilderError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateImageBuilderResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateImageBuilderError::from_response(response))
+        }
     }
 
     /// <p>Creates a URL to start an image builder streaming session.</p>
-    fn create_image_builder_streaming_url(
+    async fn create_image_builder_streaming_url(
         &self,
         input: CreateImageBuilderStreamingURLRequest,
-    ) -> RusotoFuture<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError>
-    {
+    ) -> Result<
+        CreateImageBuilderStreamingURLResult,
+        RusotoError<CreateImageBuilderStreamingURLError>,
+    > {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4712,25 +4721,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateImageBuilderStreamingURLResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateImageBuilderStreamingURLError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateImageBuilderStreamingURLResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateImageBuilderStreamingURLError::from_response(response))
+        }
     }
 
     /// <p>Creates a stack to start streaming applications to users. A stack consists of an associated fleet, user access policies, and storage configurations. </p>
-    fn create_stack(
+    async fn create_stack(
         &self,
         input: CreateStackRequest,
-    ) -> RusotoFuture<CreateStackResult, CreateStackError> {
+    ) -> Result<CreateStackResult, RusotoError<CreateStackError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4738,28 +4749,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateStackResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateStackError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateStackResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateStackError::from_response(response))
+        }
     }
 
     /// <p>Creates a temporary URL to start an AppStream 2.0 streaming session for the specified user. A streaming URL enables application streaming to be tested without user setup. </p>
-    fn create_streaming_url(
+    async fn create_streaming_url(
         &self,
         input: CreateStreamingURLRequest,
-    ) -> RusotoFuture<CreateStreamingURLResult, CreateStreamingURLError> {
+    ) -> Result<CreateStreamingURLResult, RusotoError<CreateStreamingURLError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4767,27 +4776,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateStreamingURLResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateStreamingURLError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateStreamingURLResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateStreamingURLError::from_response(response))
+        }
     }
 
     /// <p>Creates a usage report subscription. Usage reports are generated daily.</p>
-    fn create_usage_report_subscription(
+    async fn create_usage_report_subscription(
         &self,
-    ) -> RusotoFuture<CreateUsageReportSubscriptionResult, CreateUsageReportSubscriptionError> {
+    ) -> Result<CreateUsageReportSubscriptionResult, RusotoError<CreateUsageReportSubscriptionError>>
+    {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4797,25 +4806,27 @@ impl AppStream for AppStreamClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateUsageReportSubscriptionResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateUsageReportSubscriptionError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateUsageReportSubscriptionResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateUsageReportSubscriptionError::from_response(response))
+        }
     }
 
     /// <p>Creates a new user in the user pool.</p>
-    fn create_user(
+    async fn create_user(
         &self,
         input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResult, CreateUserError> {
+    ) -> Result<CreateUserResult, RusotoError<CreateUserError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4823,28 +4834,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateUserResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateUserError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateUserResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateUserError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified Directory Config object from AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
-    fn delete_directory_config(
+    async fn delete_directory_config(
         &self,
         input: DeleteDirectoryConfigRequest,
-    ) -> RusotoFuture<DeleteDirectoryConfigResult, DeleteDirectoryConfigError> {
+    ) -> Result<DeleteDirectoryConfigResult, RusotoError<DeleteDirectoryConfigError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4855,27 +4864,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDirectoryConfigResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteDirectoryConfigError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteDirectoryConfigResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDirectoryConfigError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified fleet.</p>
-    fn delete_fleet(
+    async fn delete_fleet(
         &self,
         input: DeleteFleetRequest,
-    ) -> RusotoFuture<DeleteFleetResult, DeleteFleetError> {
+    ) -> Result<DeleteFleetResult, RusotoError<DeleteFleetError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4883,28 +4892,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteFleetResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteFleetError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteFleetResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteFleetError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified image. You cannot delete an image when it is in use. After you delete an image, you cannot provision new capacity using the image.</p>
-    fn delete_image(
+    async fn delete_image(
         &self,
         input: DeleteImageRequest,
-    ) -> RusotoFuture<DeleteImageResult, DeleteImageError> {
+    ) -> Result<DeleteImageResult, RusotoError<DeleteImageError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4912,28 +4919,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteImageResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteImageError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteImageResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteImageError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified image builder and releases the capacity.</p>
-    fn delete_image_builder(
+    async fn delete_image_builder(
         &self,
         input: DeleteImageBuilderRequest,
-    ) -> RusotoFuture<DeleteImageBuilderResult, DeleteImageBuilderError> {
+    ) -> Result<DeleteImageBuilderResult, RusotoError<DeleteImageBuilderError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4941,28 +4946,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteImageBuilderResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteImageBuilderError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteImageBuilderResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteImageBuilderError::from_response(response))
+        }
     }
 
     /// <p>Deletes permissions for the specified private image. After you delete permissions for an image, AWS accounts to which you previously granted these permissions can no longer use the image.</p>
-    fn delete_image_permissions(
+    async fn delete_image_permissions(
         &self,
         input: DeleteImagePermissionsRequest,
-    ) -> RusotoFuture<DeleteImagePermissionsResult, DeleteImagePermissionsError> {
+    ) -> Result<DeleteImagePermissionsResult, RusotoError<DeleteImagePermissionsError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4973,27 +4977,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteImagePermissionsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteImagePermissionsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteImagePermissionsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteImagePermissionsError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified stack. After the stack is deleted, the application streaming environment provided by the stack is no longer available to users. Also, any reservations made for application streaming sessions for the stack are released.</p>
-    fn delete_stack(
+    async fn delete_stack(
         &self,
         input: DeleteStackRequest,
-    ) -> RusotoFuture<DeleteStackResult, DeleteStackError> {
+    ) -> Result<DeleteStackResult, RusotoError<DeleteStackError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5001,27 +5005,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteStackResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteStackError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteStackResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteStackError::from_response(response))
+        }
     }
 
     /// <p>Disables usage report generation.</p>
-    fn delete_usage_report_subscription(
+    async fn delete_usage_report_subscription(
         &self,
-    ) -> RusotoFuture<DeleteUsageReportSubscriptionResult, DeleteUsageReportSubscriptionError> {
+    ) -> Result<DeleteUsageReportSubscriptionResult, RusotoError<DeleteUsageReportSubscriptionError>>
+    {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5031,25 +5034,27 @@ impl AppStream for AppStreamClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteUsageReportSubscriptionResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteUsageReportSubscriptionError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteUsageReportSubscriptionResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteUsageReportSubscriptionError::from_response(response))
+        }
     }
 
     /// <p>Deletes a user from the user pool.</p>
-    fn delete_user(
+    async fn delete_user(
         &self,
         input: DeleteUserRequest,
-    ) -> RusotoFuture<DeleteUserResult, DeleteUserError> {
+    ) -> Result<DeleteUserResult, RusotoError<DeleteUserError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5057,28 +5062,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteUserResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteUserError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteUserResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteUserError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list that describes one or more specified Directory Config objects for AppStream 2.0, if the names for these objects are provided. Otherwise, all Directory Config objects in the account are described. These objects include the configuration information required to join fleets and image builders to Microsoft Active Directory domains. </p> <p>Although the response syntax in this topic includes the account password, this password is not returned in the actual response.</p>
-    fn describe_directory_configs(
+    async fn describe_directory_configs(
         &self,
         input: DescribeDirectoryConfigsRequest,
-    ) -> RusotoFuture<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError> {
+    ) -> Result<DescribeDirectoryConfigsResult, RusotoError<DescribeDirectoryConfigsError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5089,25 +5092,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDirectoryConfigsResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDirectoryConfigsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDirectoryConfigsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDirectoryConfigsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list that describes one or more specified fleets, if the fleet names are provided. Otherwise, all fleets in the account are described.</p>
-    fn describe_fleets(
+    async fn describe_fleets(
         &self,
         input: DescribeFleetsRequest,
-    ) -> RusotoFuture<DescribeFleetsResult, DescribeFleetsError> {
+    ) -> Result<DescribeFleetsResult, RusotoError<DescribeFleetsError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5115,28 +5120,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeFleetsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeFleetsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeFleetsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeFleetsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list that describes one or more specified image builders, if the image builder names are provided. Otherwise, all image builders in the account are described.</p>
-    fn describe_image_builders(
+    async fn describe_image_builders(
         &self,
         input: DescribeImageBuildersRequest,
-    ) -> RusotoFuture<DescribeImageBuildersResult, DescribeImageBuildersError> {
+    ) -> Result<DescribeImageBuildersResult, RusotoError<DescribeImageBuildersError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5147,27 +5150,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeImageBuildersResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeImageBuildersError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeImageBuildersResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeImageBuildersError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list that describes the permissions for shared AWS account IDs on a private image that you own. </p>
-    fn describe_image_permissions(
+    async fn describe_image_permissions(
         &self,
         input: DescribeImagePermissionsRequest,
-    ) -> RusotoFuture<DescribeImagePermissionsResult, DescribeImagePermissionsError> {
+    ) -> Result<DescribeImagePermissionsResult, RusotoError<DescribeImagePermissionsError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5178,25 +5181,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeImagePermissionsResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeImagePermissionsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeImagePermissionsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeImagePermissionsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list that describes one or more specified images, if the image names or image ARNs are provided. Otherwise, all images in the account are described.</p>
-    fn describe_images(
+    async fn describe_images(
         &self,
         input: DescribeImagesRequest,
-    ) -> RusotoFuture<DescribeImagesResult, DescribeImagesError> {
+    ) -> Result<DescribeImagesResult, RusotoError<DescribeImagesError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5204,28 +5209,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeImagesResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeImagesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeImagesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeImagesError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list that describes the streaming sessions for a specified stack and fleet. If a UserId is provided for the stack and fleet, only streaming sessions for that user are described. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
-    fn describe_sessions(
+    async fn describe_sessions(
         &self,
         input: DescribeSessionsRequest,
-    ) -> RusotoFuture<DescribeSessionsResult, DescribeSessionsError> {
+    ) -> Result<DescribeSessionsResult, RusotoError<DescribeSessionsError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5233,28 +5236,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeSessionsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeSessionsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeSessionsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeSessionsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list that describes one or more specified stacks, if the stack names are provided. Otherwise, all stacks in the account are described.</p>
-    fn describe_stacks(
+    async fn describe_stacks(
         &self,
         input: DescribeStacksRequest,
-    ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError> {
+    ) -> Result<DescribeStacksResult, RusotoError<DescribeStacksError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5262,29 +5263,29 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeStacksResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeStacksError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeStacksResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeStacksError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list that describes one or more usage report subscriptions.</p>
-    fn describe_usage_report_subscriptions(
+    async fn describe_usage_report_subscriptions(
         &self,
         input: DescribeUsageReportSubscriptionsRequest,
-    ) -> RusotoFuture<DescribeUsageReportSubscriptionsResult, DescribeUsageReportSubscriptionsError>
-    {
+    ) -> Result<
+        DescribeUsageReportSubscriptionsResult,
+        RusotoError<DescribeUsageReportSubscriptionsError>,
+    > {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5295,27 +5296,30 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeUsageReportSubscriptionsResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeUsageReportSubscriptionsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeUsageReportSubscriptionsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeUsageReportSubscriptionsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p><p>Retrieves a list that describes the UserStackAssociation objects. You must specify either or both of the following:</p> <ul> <li> <p>The stack name</p> </li> <li> <p>The user name (email address of the user associated with the stack) and the authentication type for the user</p> </li> </ul></p>
-    fn describe_user_stack_associations(
+    async fn describe_user_stack_associations(
         &self,
         input: DescribeUserStackAssociationsRequest,
-    ) -> RusotoFuture<DescribeUserStackAssociationsResult, DescribeUserStackAssociationsError> {
+    ) -> Result<DescribeUserStackAssociationsResult, RusotoError<DescribeUserStackAssociationsError>>
+    {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5326,25 +5330,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeUserStackAssociationsResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeUserStackAssociationsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeUserStackAssociationsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeUserStackAssociationsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list that describes one or more specified users in the user pool.</p>
-    fn describe_users(
+    async fn describe_users(
         &self,
         input: DescribeUsersRequest,
-    ) -> RusotoFuture<DescribeUsersResult, DescribeUsersError> {
+    ) -> Result<DescribeUsersResult, RusotoError<DescribeUsersError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5352,28 +5358,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeUsersResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeUsersError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeUsersResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeUsersError::from_response(response))
+        }
     }
 
     /// <p>Disables the specified user in the user pool. Users can't sign in to AppStream 2.0 until they are re-enabled. This action does not delete the user. </p>
-    fn disable_user(
+    async fn disable_user(
         &self,
         input: DisableUserRequest,
-    ) -> RusotoFuture<DisableUserResult, DisableUserError> {
+    ) -> Result<DisableUserResult, RusotoError<DisableUserError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5381,28 +5385,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisableUserResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DisableUserError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DisableUserResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisableUserError::from_response(response))
+        }
     }
 
     /// <p>Disassociates the specified fleet from the specified stack.</p>
-    fn disassociate_fleet(
+    async fn disassociate_fleet(
         &self,
         input: DisassociateFleetRequest,
-    ) -> RusotoFuture<DisassociateFleetResult, DisassociateFleetError> {
+    ) -> Result<DisassociateFleetResult, RusotoError<DisassociateFleetError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5410,28 +5412,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateFleetResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DisassociateFleetError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DisassociateFleetResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateFleetError::from_response(response))
+        }
     }
 
     /// <p>Enables a user in the user pool. After being enabled, users can sign in to AppStream 2.0 and open applications from the stacks to which they are assigned.</p>
-    fn enable_user(
+    async fn enable_user(
         &self,
         input: EnableUserRequest,
-    ) -> RusotoFuture<EnableUserResult, EnableUserError> {
+    ) -> Result<EnableUserResult, RusotoError<EnableUserError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5439,28 +5439,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<EnableUserResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(EnableUserError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<EnableUserResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(EnableUserError::from_response(response))
+        }
     }
 
     /// <p>Immediately stops the specified streaming session.</p>
-    fn expire_session(
+    async fn expire_session(
         &self,
         input: ExpireSessionRequest,
-    ) -> RusotoFuture<ExpireSessionResult, ExpireSessionError> {
+    ) -> Result<ExpireSessionResult, RusotoError<ExpireSessionError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5468,28 +5466,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ExpireSessionResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ExpireSessionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ExpireSessionResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ExpireSessionError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the name of the fleet that is associated with the specified stack.</p>
-    fn list_associated_fleets(
+    async fn list_associated_fleets(
         &self,
         input: ListAssociatedFleetsRequest,
-    ) -> RusotoFuture<ListAssociatedFleetsResult, ListAssociatedFleetsError> {
+    ) -> Result<ListAssociatedFleetsResult, RusotoError<ListAssociatedFleetsError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5500,27 +5496,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAssociatedFleetsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListAssociatedFleetsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAssociatedFleetsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAssociatedFleetsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the name of the stack with which the specified fleet is associated.</p>
-    fn list_associated_stacks(
+    async fn list_associated_stacks(
         &self,
         input: ListAssociatedStacksRequest,
-    ) -> RusotoFuture<ListAssociatedStacksResult, ListAssociatedStacksError> {
+    ) -> Result<ListAssociatedStacksResult, RusotoError<ListAssociatedStacksError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5531,27 +5527,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAssociatedStacksResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListAssociatedStacksError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAssociatedStacksResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAssociatedStacksError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of all tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5562,27 +5558,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p>Starts the specified fleet.</p>
-    fn start_fleet(
+    async fn start_fleet(
         &self,
         input: StartFleetRequest,
-    ) -> RusotoFuture<StartFleetResult, StartFleetError> {
+    ) -> Result<StartFleetResult, RusotoError<StartFleetError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5590,28 +5586,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartFleetResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StartFleetError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StartFleetResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartFleetError::from_response(response))
+        }
     }
 
     /// <p>Starts the specified image builder.</p>
-    fn start_image_builder(
+    async fn start_image_builder(
         &self,
         input: StartImageBuilderRequest,
-    ) -> RusotoFuture<StartImageBuilderResult, StartImageBuilderError> {
+    ) -> Result<StartImageBuilderResult, RusotoError<StartImageBuilderError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5619,25 +5613,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartImageBuilderResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StartImageBuilderError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StartImageBuilderResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartImageBuilderError::from_response(response))
+        }
     }
 
     /// <p>Stops the specified fleet.</p>
-    fn stop_fleet(&self, input: StopFleetRequest) -> RusotoFuture<StopFleetResult, StopFleetError> {
+    async fn stop_fleet(
+        &self,
+        input: StopFleetRequest,
+    ) -> Result<StopFleetResult, RusotoError<StopFleetError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5645,27 +5640,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<StopFleetResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StopFleetError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StopFleetResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopFleetError::from_response(response))
+        }
     }
 
     /// <p>Stops the specified image builder.</p>
-    fn stop_image_builder(
+    async fn stop_image_builder(
         &self,
         input: StopImageBuilderRequest,
-    ) -> RusotoFuture<StopImageBuilderResult, StopImageBuilderError> {
+    ) -> Result<StopImageBuilderResult, RusotoError<StopImageBuilderError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5673,28 +5667,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopImageBuilderResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StopImageBuilderError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StopImageBuilderResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopImageBuilderError::from_response(response))
+        }
     }
 
     /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5702,28 +5694,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TagResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p>Disassociates one or more specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5731,28 +5721,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UntagResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <p>Updates the specified Directory Config object in AppStream 2.0. This object includes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
-    fn update_directory_config(
+    async fn update_directory_config(
         &self,
         input: UpdateDirectoryConfigRequest,
-    ) -> RusotoFuture<UpdateDirectoryConfigResult, UpdateDirectoryConfigError> {
+    ) -> Result<UpdateDirectoryConfigResult, RusotoError<UpdateDirectoryConfigError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5763,27 +5751,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateDirectoryConfigResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateDirectoryConfigError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateDirectoryConfigResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDirectoryConfigError::from_response(response))
+        }
     }
 
     /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code>, <code>ComputeCapacity</code>, <code>ImageARN</code>, <code>ImageName</code>, <code>IdleDisconnectTimeoutInSeconds</code>, and <code>DisconnectTimeoutInSeconds</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
-    fn update_fleet(
+    async fn update_fleet(
         &self,
         input: UpdateFleetRequest,
-    ) -> RusotoFuture<UpdateFleetResult, UpdateFleetError> {
+    ) -> Result<UpdateFleetResult, RusotoError<UpdateFleetError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5791,28 +5779,26 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateFleetResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateFleetError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateFleetResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateFleetError::from_response(response))
+        }
     }
 
     /// <p>Adds or updates permissions for the specified private image. </p>
-    fn update_image_permissions(
+    async fn update_image_permissions(
         &self,
         input: UpdateImagePermissionsRequest,
-    ) -> RusotoFuture<UpdateImagePermissionsResult, UpdateImagePermissionsError> {
+    ) -> Result<UpdateImagePermissionsResult, RusotoError<UpdateImagePermissionsError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5823,27 +5809,27 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateImagePermissionsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateImagePermissionsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateImagePermissionsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateImagePermissionsError::from_response(response))
+        }
     }
 
     /// <p>Updates the specified fields for the specified stack.</p>
-    fn update_stack(
+    async fn update_stack(
         &self,
         input: UpdateStackRequest,
-    ) -> RusotoFuture<UpdateStackResult, UpdateStackError> {
+    ) -> Result<UpdateStackResult, RusotoError<UpdateStackError>> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5851,20 +5837,18 @@ impl AppStream for AppStreamClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateStackResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateStackError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateStackResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateStackError::from_response(response))
+        }
     }
 }

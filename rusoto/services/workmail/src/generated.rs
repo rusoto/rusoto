@@ -11,17 +11,17 @@
 // =================================================================
 #![allow(warnings)]
 
-use futures::future;
-use futures::Future;
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 use std::error::Error;
 use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateDelegateToResourceRequest {
@@ -3199,204 +3199,208 @@ impl Error for UpdateResourceError {
     }
 }
 /// Trait representing the capabilities of the Amazon WorkMail API. Amazon WorkMail clients implement this trait.
+#[async_trait]
 pub trait Workmail {
     /// <p>Adds a member (user or group) to the resource's set of delegates.</p>
-    fn associate_delegate_to_resource(
+    async fn associate_delegate_to_resource(
         &self,
         input: AssociateDelegateToResourceRequest,
-    ) -> RusotoFuture<AssociateDelegateToResourceResponse, AssociateDelegateToResourceError>;
+    ) -> Result<AssociateDelegateToResourceResponse, RusotoError<AssociateDelegateToResourceError>>;
 
     /// <p>Adds a member (user or group) to the group's set.</p>
-    fn associate_member_to_group(
+    async fn associate_member_to_group(
         &self,
         input: AssociateMemberToGroupRequest,
-    ) -> RusotoFuture<AssociateMemberToGroupResponse, AssociateMemberToGroupError>;
+    ) -> Result<AssociateMemberToGroupResponse, RusotoError<AssociateMemberToGroupError>>;
 
     /// <p>Adds an alias to the set of a given member (user or group) of Amazon WorkMail.</p>
-    fn create_alias(
+    async fn create_alias(
         &self,
         input: CreateAliasRequest,
-    ) -> RusotoFuture<CreateAliasResponse, CreateAliasError>;
+    ) -> Result<CreateAliasResponse, RusotoError<CreateAliasError>>;
 
     /// <p>Creates a group that can be used in Amazon WorkMail by calling the <a>RegisterToWorkMail</a> operation.</p>
-    fn create_group(
+    async fn create_group(
         &self,
         input: CreateGroupRequest,
-    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError>;
+    ) -> Result<CreateGroupResponse, RusotoError<CreateGroupError>>;
 
     /// <p>Creates a new Amazon WorkMail resource. </p>
-    fn create_resource(
+    async fn create_resource(
         &self,
         input: CreateResourceRequest,
-    ) -> RusotoFuture<CreateResourceResponse, CreateResourceError>;
+    ) -> Result<CreateResourceResponse, RusotoError<CreateResourceError>>;
 
     /// <p>Creates a user who can be used in Amazon WorkMail by calling the <a>RegisterToWorkMail</a> operation.</p>
-    fn create_user(
+    async fn create_user(
         &self,
         input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResponse, CreateUserError>;
+    ) -> Result<CreateUserResponse, RusotoError<CreateUserError>>;
 
     /// <p>Remove one or more specified aliases from a set of aliases for a given user.</p>
-    fn delete_alias(
+    async fn delete_alias(
         &self,
         input: DeleteAliasRequest,
-    ) -> RusotoFuture<DeleteAliasResponse, DeleteAliasError>;
+    ) -> Result<DeleteAliasResponse, RusotoError<DeleteAliasError>>;
 
     /// <p>Deletes a group from Amazon WorkMail.</p>
-    fn delete_group(
+    async fn delete_group(
         &self,
         input: DeleteGroupRequest,
-    ) -> RusotoFuture<DeleteGroupResponse, DeleteGroupError>;
+    ) -> Result<DeleteGroupResponse, RusotoError<DeleteGroupError>>;
 
     /// <p>Deletes permissions granted to a member (user or group).</p>
-    fn delete_mailbox_permissions(
+    async fn delete_mailbox_permissions(
         &self,
         input: DeleteMailboxPermissionsRequest,
-    ) -> RusotoFuture<DeleteMailboxPermissionsResponse, DeleteMailboxPermissionsError>;
+    ) -> Result<DeleteMailboxPermissionsResponse, RusotoError<DeleteMailboxPermissionsError>>;
 
     /// <p>Deletes the specified resource. </p>
-    fn delete_resource(
+    async fn delete_resource(
         &self,
         input: DeleteResourceRequest,
-    ) -> RusotoFuture<DeleteResourceResponse, DeleteResourceError>;
+    ) -> Result<DeleteResourceResponse, RusotoError<DeleteResourceError>>;
 
     /// <p>Deletes a user from Amazon WorkMail and all subsequent systems. Before you can delete a user, the user state must be <code>DISABLED</code>. Use the <a>DescribeUser</a> action to confirm the user state.</p> <p>Deleting a user is permanent and cannot be undone. WorkMail archives user mailboxes for 30 days before they are permanently removed.</p>
-    fn delete_user(
+    async fn delete_user(
         &self,
         input: DeleteUserRequest,
-    ) -> RusotoFuture<DeleteUserResponse, DeleteUserError>;
+    ) -> Result<DeleteUserResponse, RusotoError<DeleteUserError>>;
 
     /// <p>Mark a user, group, or resource as no longer used in Amazon WorkMail. This action disassociates the mailbox and schedules it for clean-up. WorkMail keeps mailboxes for 30 days before they are permanently removed. The functionality in the console is <i>Disable</i>.</p>
-    fn deregister_from_work_mail(
+    async fn deregister_from_work_mail(
         &self,
         input: DeregisterFromWorkMailRequest,
-    ) -> RusotoFuture<DeregisterFromWorkMailResponse, DeregisterFromWorkMailError>;
+    ) -> Result<DeregisterFromWorkMailResponse, RusotoError<DeregisterFromWorkMailError>>;
 
     /// <p>Returns the data available for the group.</p>
-    fn describe_group(
+    async fn describe_group(
         &self,
         input: DescribeGroupRequest,
-    ) -> RusotoFuture<DescribeGroupResponse, DescribeGroupError>;
+    ) -> Result<DescribeGroupResponse, RusotoError<DescribeGroupError>>;
 
     /// <p>Provides more information regarding a given organization based on its identifier.</p>
-    fn describe_organization(
+    async fn describe_organization(
         &self,
         input: DescribeOrganizationRequest,
-    ) -> RusotoFuture<DescribeOrganizationResponse, DescribeOrganizationError>;
+    ) -> Result<DescribeOrganizationResponse, RusotoError<DescribeOrganizationError>>;
 
     /// <p>Returns the data available for the resource.</p>
-    fn describe_resource(
+    async fn describe_resource(
         &self,
         input: DescribeResourceRequest,
-    ) -> RusotoFuture<DescribeResourceResponse, DescribeResourceError>;
+    ) -> Result<DescribeResourceResponse, RusotoError<DescribeResourceError>>;
 
     /// <p>Provides information regarding the user.</p>
-    fn describe_user(
+    async fn describe_user(
         &self,
         input: DescribeUserRequest,
-    ) -> RusotoFuture<DescribeUserResponse, DescribeUserError>;
+    ) -> Result<DescribeUserResponse, RusotoError<DescribeUserError>>;
 
     /// <p>Removes a member from the resource's set of delegates.</p>
-    fn disassociate_delegate_from_resource(
+    async fn disassociate_delegate_from_resource(
         &self,
         input: DisassociateDelegateFromResourceRequest,
-    ) -> RusotoFuture<DisassociateDelegateFromResourceResponse, DisassociateDelegateFromResourceError>;
+    ) -> Result<
+        DisassociateDelegateFromResourceResponse,
+        RusotoError<DisassociateDelegateFromResourceError>,
+    >;
 
     /// <p>Removes a member from a group.</p>
-    fn disassociate_member_from_group(
+    async fn disassociate_member_from_group(
         &self,
         input: DisassociateMemberFromGroupRequest,
-    ) -> RusotoFuture<DisassociateMemberFromGroupResponse, DisassociateMemberFromGroupError>;
+    ) -> Result<DisassociateMemberFromGroupResponse, RusotoError<DisassociateMemberFromGroupError>>;
 
     /// <p>Requests a user's mailbox details for a specified organization and user.</p>
-    fn get_mailbox_details(
+    async fn get_mailbox_details(
         &self,
         input: GetMailboxDetailsRequest,
-    ) -> RusotoFuture<GetMailboxDetailsResponse, GetMailboxDetailsError>;
+    ) -> Result<GetMailboxDetailsResponse, RusotoError<GetMailboxDetailsError>>;
 
     /// <p>Creates a paginated call to list the aliases associated with a given entity.</p>
-    fn list_aliases(
+    async fn list_aliases(
         &self,
         input: ListAliasesRequest,
-    ) -> RusotoFuture<ListAliasesResponse, ListAliasesError>;
+    ) -> Result<ListAliasesResponse, RusotoError<ListAliasesError>>;
 
     /// <p>Returns an overview of the members of a group. Users and groups can be members of a group.</p>
-    fn list_group_members(
+    async fn list_group_members(
         &self,
         input: ListGroupMembersRequest,
-    ) -> RusotoFuture<ListGroupMembersResponse, ListGroupMembersError>;
+    ) -> Result<ListGroupMembersResponse, RusotoError<ListGroupMembersError>>;
 
     /// <p>Returns summaries of the organization's groups.</p>
-    fn list_groups(
+    async fn list_groups(
         &self,
         input: ListGroupsRequest,
-    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError>;
+    ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>>;
 
     /// <p>Lists the mailbox permissions associated with a user, group, or resource mailbox.</p>
-    fn list_mailbox_permissions(
+    async fn list_mailbox_permissions(
         &self,
         input: ListMailboxPermissionsRequest,
-    ) -> RusotoFuture<ListMailboxPermissionsResponse, ListMailboxPermissionsError>;
+    ) -> Result<ListMailboxPermissionsResponse, RusotoError<ListMailboxPermissionsError>>;
 
     /// <p>Returns summaries of the customer's non-deleted organizations.</p>
-    fn list_organizations(
+    async fn list_organizations(
         &self,
         input: ListOrganizationsRequest,
-    ) -> RusotoFuture<ListOrganizationsResponse, ListOrganizationsError>;
+    ) -> Result<ListOrganizationsResponse, RusotoError<ListOrganizationsError>>;
 
     /// <p>Lists the delegates associated with a resource. Users and groups can be resource delegates and answer requests on behalf of the resource.</p>
-    fn list_resource_delegates(
+    async fn list_resource_delegates(
         &self,
         input: ListResourceDelegatesRequest,
-    ) -> RusotoFuture<ListResourceDelegatesResponse, ListResourceDelegatesError>;
+    ) -> Result<ListResourceDelegatesResponse, RusotoError<ListResourceDelegatesError>>;
 
     /// <p>Returns summaries of the organization's resources.</p>
-    fn list_resources(
+    async fn list_resources(
         &self,
         input: ListResourcesRequest,
-    ) -> RusotoFuture<ListResourcesResponse, ListResourcesError>;
+    ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>>;
 
     /// <p>Returns summaries of the organization's users.</p>
-    fn list_users(
+    async fn list_users(
         &self,
         input: ListUsersRequest,
-    ) -> RusotoFuture<ListUsersResponse, ListUsersError>;
+    ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
 
     /// <p>Sets permissions for a user, group, or resource. This replaces any pre-existing permissions.</p>
-    fn put_mailbox_permissions(
+    async fn put_mailbox_permissions(
         &self,
         input: PutMailboxPermissionsRequest,
-    ) -> RusotoFuture<PutMailboxPermissionsResponse, PutMailboxPermissionsError>;
+    ) -> Result<PutMailboxPermissionsResponse, RusotoError<PutMailboxPermissionsError>>;
 
     /// <p>Registers an existing and disabled user, group, or resource for Amazon WorkMail use by associating a mailbox and calendaring capabilities. It performs no change if the user, group, or resource is enabled and fails if the user, group, or resource is deleted. This operation results in the accumulation of costs. For more information, see <a href="https://aws.amazon.com//workmail/pricing">Pricing</a>. The equivalent console functionality for this operation is <i>Enable</i>. </p> <p>Users can either be created by calling the <a>CreateUser</a> API operation or they can be synchronized from your directory. For more information, see <a>DeregisterFromWorkMail</a>.</p>
-    fn register_to_work_mail(
+    async fn register_to_work_mail(
         &self,
         input: RegisterToWorkMailRequest,
-    ) -> RusotoFuture<RegisterToWorkMailResponse, RegisterToWorkMailError>;
+    ) -> Result<RegisterToWorkMailResponse, RusotoError<RegisterToWorkMailError>>;
 
     /// <p>Allows the administrator to reset the password for a user.</p>
-    fn reset_password(
+    async fn reset_password(
         &self,
         input: ResetPasswordRequest,
-    ) -> RusotoFuture<ResetPasswordResponse, ResetPasswordError>;
+    ) -> Result<ResetPasswordResponse, RusotoError<ResetPasswordError>>;
 
     /// <p>Updates a user's current mailbox quota for a specified organization and user.</p>
-    fn update_mailbox_quota(
+    async fn update_mailbox_quota(
         &self,
         input: UpdateMailboxQuotaRequest,
-    ) -> RusotoFuture<UpdateMailboxQuotaResponse, UpdateMailboxQuotaError>;
+    ) -> Result<UpdateMailboxQuotaResponse, RusotoError<UpdateMailboxQuotaError>>;
 
     /// <p>Updates the primary email for a user, group, or resource. The current email is moved into the list of aliases (or swapped between an existing alias and the current primary email), and the email provided in the input is promoted as the primary.</p>
-    fn update_primary_email_address(
+    async fn update_primary_email_address(
         &self,
         input: UpdatePrimaryEmailAddressRequest,
-    ) -> RusotoFuture<UpdatePrimaryEmailAddressResponse, UpdatePrimaryEmailAddressError>;
+    ) -> Result<UpdatePrimaryEmailAddressResponse, RusotoError<UpdatePrimaryEmailAddressError>>;
 
     /// <p>Updates data for the resource. To have the latest information, it must be preceded by a <a>DescribeResource</a> call. The dataset in the request should be the one expected when performing another <code>DescribeResource</code> call.</p>
-    fn update_resource(
+    async fn update_resource(
         &self,
         input: UpdateResourceRequest,
-    ) -> RusotoFuture<UpdateResourceResponse, UpdateResourceError>;
+    ) -> Result<UpdateResourceResponse, RusotoError<UpdateResourceError>>;
 }
 /// A client for the Amazon WorkMail API.
 #[derive(Clone)]
@@ -3420,9 +3424,7 @@ impl WorkmailClient {
     ) -> WorkmailClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         Self::new_with_client(
             Client::new_with(credentials_provider, request_dispatcher),
@@ -3443,12 +3445,14 @@ impl fmt::Debug for WorkmailClient {
     }
 }
 
+#[async_trait]
 impl Workmail for WorkmailClient {
     /// <p>Adds a member (user or group) to the resource's set of delegates.</p>
-    fn associate_delegate_to_resource(
+    async fn associate_delegate_to_resource(
         &self,
         input: AssociateDelegateToResourceRequest,
-    ) -> RusotoFuture<AssociateDelegateToResourceResponse, AssociateDelegateToResourceError> {
+    ) -> Result<AssociateDelegateToResourceResponse, RusotoError<AssociateDelegateToResourceError>>
+    {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3459,25 +3463,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateDelegateToResourceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateDelegateToResourceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateDelegateToResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateDelegateToResourceError::from_response(response))
+        }
     }
 
     /// <p>Adds a member (user or group) to the group's set.</p>
-    fn associate_member_to_group(
+    async fn associate_member_to_group(
         &self,
         input: AssociateMemberToGroupRequest,
-    ) -> RusotoFuture<AssociateMemberToGroupResponse, AssociateMemberToGroupError> {
+    ) -> Result<AssociateMemberToGroupResponse, RusotoError<AssociateMemberToGroupError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3485,27 +3491,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateMemberToGroupResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(AssociateMemberToGroupError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateMemberToGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateMemberToGroupError::from_response(response))
+        }
     }
 
     /// <p>Adds an alias to the set of a given member (user or group) of Amazon WorkMail.</p>
-    fn create_alias(
+    async fn create_alias(
         &self,
         input: CreateAliasRequest,
-    ) -> RusotoFuture<CreateAliasResponse, CreateAliasError> {
+    ) -> Result<CreateAliasResponse, RusotoError<CreateAliasError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3513,28 +3519,26 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateAliasResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateAliasError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateAliasResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAliasError::from_response(response))
+        }
     }
 
     /// <p>Creates a group that can be used in Amazon WorkMail by calling the <a>RegisterToWorkMail</a> operation.</p>
-    fn create_group(
+    async fn create_group(
         &self,
         input: CreateGroupRequest,
-    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError> {
+    ) -> Result<CreateGroupResponse, RusotoError<CreateGroupError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3542,28 +3546,26 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateGroupResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateGroupError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateGroupError::from_response(response))
+        }
     }
 
     /// <p>Creates a new Amazon WorkMail resource. </p>
-    fn create_resource(
+    async fn create_resource(
         &self,
         input: CreateResourceRequest,
-    ) -> RusotoFuture<CreateResourceResponse, CreateResourceError> {
+    ) -> Result<CreateResourceResponse, RusotoError<CreateResourceError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3571,28 +3573,26 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateResourceError::from_response(response))
+        }
     }
 
     /// <p>Creates a user who can be used in Amazon WorkMail by calling the <a>RegisterToWorkMail</a> operation.</p>
-    fn create_user(
+    async fn create_user(
         &self,
         input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
+    ) -> Result<CreateUserResponse, RusotoError<CreateUserError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3600,28 +3600,26 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateUserResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateUserError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateUserResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateUserError::from_response(response))
+        }
     }
 
     /// <p>Remove one or more specified aliases from a set of aliases for a given user.</p>
-    fn delete_alias(
+    async fn delete_alias(
         &self,
         input: DeleteAliasRequest,
-    ) -> RusotoFuture<DeleteAliasResponse, DeleteAliasError> {
+    ) -> Result<DeleteAliasResponse, RusotoError<DeleteAliasError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3629,28 +3627,26 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteAliasResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteAliasError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteAliasResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAliasError::from_response(response))
+        }
     }
 
     /// <p>Deletes a group from Amazon WorkMail.</p>
-    fn delete_group(
+    async fn delete_group(
         &self,
         input: DeleteGroupRequest,
-    ) -> RusotoFuture<DeleteGroupResponse, DeleteGroupError> {
+    ) -> Result<DeleteGroupResponse, RusotoError<DeleteGroupError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3658,28 +3654,26 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteGroupResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteGroupError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes permissions granted to a member (user or group).</p>
-    fn delete_mailbox_permissions(
+    async fn delete_mailbox_permissions(
         &self,
         input: DeleteMailboxPermissionsRequest,
-    ) -> RusotoFuture<DeleteMailboxPermissionsResponse, DeleteMailboxPermissionsError> {
+    ) -> Result<DeleteMailboxPermissionsResponse, RusotoError<DeleteMailboxPermissionsError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3687,25 +3681,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteMailboxPermissionsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteMailboxPermissionsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteMailboxPermissionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteMailboxPermissionsError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified resource. </p>
-    fn delete_resource(
+    async fn delete_resource(
         &self,
         input: DeleteResourceRequest,
-    ) -> RusotoFuture<DeleteResourceResponse, DeleteResourceError> {
+    ) -> Result<DeleteResourceResponse, RusotoError<DeleteResourceError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3713,28 +3709,26 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteResourceError::from_response(response))
+        }
     }
 
     /// <p>Deletes a user from Amazon WorkMail and all subsequent systems. Before you can delete a user, the user state must be <code>DISABLED</code>. Use the <a>DescribeUser</a> action to confirm the user state.</p> <p>Deleting a user is permanent and cannot be undone. WorkMail archives user mailboxes for 30 days before they are permanently removed.</p>
-    fn delete_user(
+    async fn delete_user(
         &self,
         input: DeleteUserRequest,
-    ) -> RusotoFuture<DeleteUserResponse, DeleteUserError> {
+    ) -> Result<DeleteUserResponse, RusotoError<DeleteUserError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3742,28 +3736,26 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteUserResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteUserError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteUserResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteUserError::from_response(response))
+        }
     }
 
     /// <p>Mark a user, group, or resource as no longer used in Amazon WorkMail. This action disassociates the mailbox and schedules it for clean-up. WorkMail keeps mailboxes for 30 days before they are permanently removed. The functionality in the console is <i>Disable</i>.</p>
-    fn deregister_from_work_mail(
+    async fn deregister_from_work_mail(
         &self,
         input: DeregisterFromWorkMailRequest,
-    ) -> RusotoFuture<DeregisterFromWorkMailResponse, DeregisterFromWorkMailError> {
+    ) -> Result<DeregisterFromWorkMailResponse, RusotoError<DeregisterFromWorkMailError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3771,27 +3763,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeregisterFromWorkMailResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeregisterFromWorkMailError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeregisterFromWorkMailResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeregisterFromWorkMailError::from_response(response))
+        }
     }
 
     /// <p>Returns the data available for the group.</p>
-    fn describe_group(
+    async fn describe_group(
         &self,
         input: DescribeGroupRequest,
-    ) -> RusotoFuture<DescribeGroupResponse, DescribeGroupError> {
+    ) -> Result<DescribeGroupResponse, RusotoError<DescribeGroupError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3799,28 +3791,26 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeGroupResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeGroupError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeGroupError::from_response(response))
+        }
     }
 
     /// <p>Provides more information regarding a given organization based on its identifier.</p>
-    fn describe_organization(
+    async fn describe_organization(
         &self,
         input: DescribeOrganizationRequest,
-    ) -> RusotoFuture<DescribeOrganizationResponse, DescribeOrganizationError> {
+    ) -> Result<DescribeOrganizationResponse, RusotoError<DescribeOrganizationError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3828,27 +3818,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeOrganizationResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeOrganizationError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeOrganizationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeOrganizationError::from_response(response))
+        }
     }
 
     /// <p>Returns the data available for the resource.</p>
-    fn describe_resource(
+    async fn describe_resource(
         &self,
         input: DescribeResourceRequest,
-    ) -> RusotoFuture<DescribeResourceResponse, DescribeResourceError> {
+    ) -> Result<DescribeResourceResponse, RusotoError<DescribeResourceError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3856,28 +3846,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeResourceError::from_response(response))
+        }
     }
 
     /// <p>Provides information regarding the user.</p>
-    fn describe_user(
+    async fn describe_user(
         &self,
         input: DescribeUserRequest,
-    ) -> RusotoFuture<DescribeUserResponse, DescribeUserError> {
+    ) -> Result<DescribeUserResponse, RusotoError<DescribeUserError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3885,29 +3874,29 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeUserResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeUserError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeUserResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeUserError::from_response(response))
+        }
     }
 
     /// <p>Removes a member from the resource's set of delegates.</p>
-    fn disassociate_delegate_from_resource(
+    async fn disassociate_delegate_from_resource(
         &self,
         input: DisassociateDelegateFromResourceRequest,
-    ) -> RusotoFuture<DisassociateDelegateFromResourceResponse, DisassociateDelegateFromResourceError>
-    {
+    ) -> Result<
+        DisassociateDelegateFromResourceResponse,
+        RusotoError<DisassociateDelegateFromResourceError>,
+    > {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3918,27 +3907,30 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateDelegateFromResourceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateDelegateFromResourceError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateDelegateFromResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateDelegateFromResourceError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Removes a member from a group.</p>
-    fn disassociate_member_from_group(
+    async fn disassociate_member_from_group(
         &self,
         input: DisassociateMemberFromGroupRequest,
-    ) -> RusotoFuture<DisassociateMemberFromGroupResponse, DisassociateMemberFromGroupError> {
+    ) -> Result<DisassociateMemberFromGroupResponse, RusotoError<DisassociateMemberFromGroupError>>
+    {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3949,25 +3941,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateMemberFromGroupResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateMemberFromGroupError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateMemberFromGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateMemberFromGroupError::from_response(response))
+        }
     }
 
     /// <p>Requests a user's mailbox details for a specified organization and user.</p>
-    fn get_mailbox_details(
+    async fn get_mailbox_details(
         &self,
         input: GetMailboxDetailsRequest,
-    ) -> RusotoFuture<GetMailboxDetailsResponse, GetMailboxDetailsError> {
+    ) -> Result<GetMailboxDetailsResponse, RusotoError<GetMailboxDetailsError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3975,28 +3969,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetMailboxDetailsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetMailboxDetailsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetMailboxDetailsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetMailboxDetailsError::from_response(response))
+        }
     }
 
     /// <p>Creates a paginated call to list the aliases associated with a given entity.</p>
-    fn list_aliases(
+    async fn list_aliases(
         &self,
         input: ListAliasesRequest,
-    ) -> RusotoFuture<ListAliasesResponse, ListAliasesError> {
+    ) -> Result<ListAliasesResponse, RusotoError<ListAliasesError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4004,28 +3997,26 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAliasesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListAliasesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListAliasesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAliasesError::from_response(response))
+        }
     }
 
     /// <p>Returns an overview of the members of a group. Users and groups can be members of a group.</p>
-    fn list_group_members(
+    async fn list_group_members(
         &self,
         input: ListGroupMembersRequest,
-    ) -> RusotoFuture<ListGroupMembersResponse, ListGroupMembersError> {
+    ) -> Result<ListGroupMembersResponse, RusotoError<ListGroupMembersError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4033,28 +4024,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListGroupMembersResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListGroupMembersError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListGroupMembersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListGroupMembersError::from_response(response))
+        }
     }
 
     /// <p>Returns summaries of the organization's groups.</p>
-    fn list_groups(
+    async fn list_groups(
         &self,
         input: ListGroupsRequest,
-    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError> {
+    ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4062,28 +4052,26 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListGroupsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListGroupsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListGroupsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListGroupsError::from_response(response))
+        }
     }
 
     /// <p>Lists the mailbox permissions associated with a user, group, or resource mailbox.</p>
-    fn list_mailbox_permissions(
+    async fn list_mailbox_permissions(
         &self,
         input: ListMailboxPermissionsRequest,
-    ) -> RusotoFuture<ListMailboxPermissionsResponse, ListMailboxPermissionsError> {
+    ) -> Result<ListMailboxPermissionsResponse, RusotoError<ListMailboxPermissionsError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4091,27 +4079,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListMailboxPermissionsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListMailboxPermissionsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListMailboxPermissionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListMailboxPermissionsError::from_response(response))
+        }
     }
 
     /// <p>Returns summaries of the customer's non-deleted organizations.</p>
-    fn list_organizations(
+    async fn list_organizations(
         &self,
         input: ListOrganizationsRequest,
-    ) -> RusotoFuture<ListOrganizationsResponse, ListOrganizationsError> {
+    ) -> Result<ListOrganizationsResponse, RusotoError<ListOrganizationsError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4119,28 +4107,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListOrganizationsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListOrganizationsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListOrganizationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListOrganizationsError::from_response(response))
+        }
     }
 
     /// <p>Lists the delegates associated with a resource. Users and groups can be resource delegates and answer requests on behalf of the resource.</p>
-    fn list_resource_delegates(
+    async fn list_resource_delegates(
         &self,
         input: ListResourceDelegatesRequest,
-    ) -> RusotoFuture<ListResourceDelegatesResponse, ListResourceDelegatesError> {
+    ) -> Result<ListResourceDelegatesResponse, RusotoError<ListResourceDelegatesError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4148,27 +4135,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListResourceDelegatesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListResourceDelegatesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListResourceDelegatesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListResourceDelegatesError::from_response(response))
+        }
     }
 
     /// <p>Returns summaries of the organization's resources.</p>
-    fn list_resources(
+    async fn list_resources(
         &self,
         input: ListResourcesRequest,
-    ) -> RusotoFuture<ListResourcesResponse, ListResourcesError> {
+    ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4176,28 +4163,26 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListResourcesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListResourcesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListResourcesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListResourcesError::from_response(response))
+        }
     }
 
     /// <p>Returns summaries of the organization's users.</p>
-    fn list_users(
+    async fn list_users(
         &self,
         input: ListUsersRequest,
-    ) -> RusotoFuture<ListUsersResponse, ListUsersError> {
+    ) -> Result<ListUsersResponse, RusotoError<ListUsersError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4205,28 +4190,26 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListUsersResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListUsersError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListUsersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListUsersError::from_response(response))
+        }
     }
 
     /// <p>Sets permissions for a user, group, or resource. This replaces any pre-existing permissions.</p>
-    fn put_mailbox_permissions(
+    async fn put_mailbox_permissions(
         &self,
         input: PutMailboxPermissionsRequest,
-    ) -> RusotoFuture<PutMailboxPermissionsResponse, PutMailboxPermissionsError> {
+    ) -> Result<PutMailboxPermissionsResponse, RusotoError<PutMailboxPermissionsError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4234,27 +4217,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutMailboxPermissionsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutMailboxPermissionsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutMailboxPermissionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutMailboxPermissionsError::from_response(response))
+        }
     }
 
     /// <p>Registers an existing and disabled user, group, or resource for Amazon WorkMail use by associating a mailbox and calendaring capabilities. It performs no change if the user, group, or resource is enabled and fails if the user, group, or resource is deleted. This operation results in the accumulation of costs. For more information, see <a href="https://aws.amazon.com//workmail/pricing">Pricing</a>. The equivalent console functionality for this operation is <i>Enable</i>. </p> <p>Users can either be created by calling the <a>CreateUser</a> API operation or they can be synchronized from your directory. For more information, see <a>DeregisterFromWorkMail</a>.</p>
-    fn register_to_work_mail(
+    async fn register_to_work_mail(
         &self,
         input: RegisterToWorkMailRequest,
-    ) -> RusotoFuture<RegisterToWorkMailResponse, RegisterToWorkMailError> {
+    ) -> Result<RegisterToWorkMailResponse, RusotoError<RegisterToWorkMailError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4262,28 +4245,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterToWorkMailResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RegisterToWorkMailError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RegisterToWorkMailResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterToWorkMailError::from_response(response))
+        }
     }
 
     /// <p>Allows the administrator to reset the password for a user.</p>
-    fn reset_password(
+    async fn reset_password(
         &self,
         input: ResetPasswordRequest,
-    ) -> RusotoFuture<ResetPasswordResponse, ResetPasswordError> {
+    ) -> Result<ResetPasswordResponse, RusotoError<ResetPasswordError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4291,28 +4273,26 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ResetPasswordResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ResetPasswordError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ResetPasswordResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ResetPasswordError::from_response(response))
+        }
     }
 
     /// <p>Updates a user's current mailbox quota for a specified organization and user.</p>
-    fn update_mailbox_quota(
+    async fn update_mailbox_quota(
         &self,
         input: UpdateMailboxQuotaRequest,
-    ) -> RusotoFuture<UpdateMailboxQuotaResponse, UpdateMailboxQuotaError> {
+    ) -> Result<UpdateMailboxQuotaResponse, RusotoError<UpdateMailboxQuotaError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4320,28 +4300,28 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateMailboxQuotaResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateMailboxQuotaError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateMailboxQuotaResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateMailboxQuotaError::from_response(response))
+        }
     }
 
     /// <p>Updates the primary email for a user, group, or resource. The current email is moved into the list of aliases (or swapped between an existing alias and the current primary email), and the email provided in the input is promoted as the primary.</p>
-    fn update_primary_email_address(
+    async fn update_primary_email_address(
         &self,
         input: UpdatePrimaryEmailAddressRequest,
-    ) -> RusotoFuture<UpdatePrimaryEmailAddressResponse, UpdatePrimaryEmailAddressError> {
+    ) -> Result<UpdatePrimaryEmailAddressResponse, RusotoError<UpdatePrimaryEmailAddressError>>
+    {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4349,25 +4329,27 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdatePrimaryEmailAddressResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdatePrimaryEmailAddressError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdatePrimaryEmailAddressResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdatePrimaryEmailAddressError::from_response(response))
+        }
     }
 
     /// <p>Updates data for the resource. To have the latest information, it must be preceded by a <a>DescribeResource</a> call. The dataset in the request should be the one expected when performing another <code>DescribeResource</code> call.</p>
-    fn update_resource(
+    async fn update_resource(
         &self,
         input: UpdateResourceRequest,
-    ) -> RusotoFuture<UpdateResourceResponse, UpdateResourceError> {
+    ) -> Result<UpdateResourceResponse, RusotoError<UpdateResourceError>> {
         let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4375,20 +4357,18 @@ impl Workmail for WorkmailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateResourceError::from_response(response))
+        }
     }
 }

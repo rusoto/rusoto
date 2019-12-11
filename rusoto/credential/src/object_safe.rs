@@ -1,6 +1,6 @@
 use super::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
-use futures::Future;
-use std::rc::Rc;
+use async_trait::async_trait;
+use futures::future::TryFutureExt;
 use std::sync::Arc;
 
 /// Object safe trait pendant to `ProvideAwsCredentials` trait allowing better composition
@@ -12,17 +12,18 @@ use std::sync::Arc;
 /// combining multiple `AwsCredentialsProvider`s using the `or` method.
 ///
 /// ```rust
-/// # use rusoto_credential::*;  
+/// # use rusoto_credential::*;
 /// # use std::rc::Rc;
 /// # use futures::future::Future;
 /// let provider = (Box::new(EnvironmentProvider::default()) as Box<dyn AwsCredentialsProvider>).or(Box::new(ContainerProvider::default()));
 /// # let _ = provider.credentials().wait();
 /// # let _ = provider.fetch_credentials().wait();
 /// ```
-pub trait AwsCredentialsProvider {
+#[async_trait]
+pub trait AwsCredentialsProvider: Send + Sync + 'static {
     /// Produce a new `AwsCredentials` future.
-    fn fetch_credentials(&self)
-        -> Box<dyn Future<Item = AwsCredentials, Error = CredentialsError>>;
+    async fn fetch_credentials(&self)
+        -> Result<AwsCredentials, CredentialsError>;
 }
 
 /// API to chain providers
@@ -32,7 +33,7 @@ pub trait WithFallback {
     /// # Example
     ///
     /// ```rust
-    /// # use rusoto_credential::*;  
+    /// # use rusoto_credential::*;
     /// # use std::rc::Rc;
     /// # use futures::future::Future;
     /// let env: Box<dyn AwsCredentialsProvider> = Box::new(EnvironmentProvider::default());
@@ -44,17 +45,11 @@ pub trait WithFallback {
     fn or(self, fallback: Self) -> Self;
 }
 
-impl WithFallback for Rc<dyn AwsCredentialsProvider> {
-    fn or(self, fallback: Self) -> Self {
-        Rc::new(AwsCredentialProviderChain::new(self, fallback))
-    }
-}
-
 impl WithFallback for Arc<dyn AwsCredentialsProvider> {
     fn or(self, fallback: Self) -> Self {
         Arc::new(AwsCredentialProviderChain::new(
-            Rc::new(self),
-            Rc::new(fallback),
+            Arc::new(self),
+            Arc::new(fallback),
         ))
     }
 }
@@ -68,94 +63,80 @@ impl WithFallback for Box<dyn AwsCredentialsProvider> {
     }
 }
 
-impl<P, F> AwsCredentialsProvider for P
+#[async_trait]
+impl<P> AwsCredentialsProvider for P
 where
-    P: ProvideAwsCredentials<Future = F> + 'static,
-    F: Future<Item = AwsCredentials, Error = CredentialsError> + 'static,
+    P: ProvideAwsCredentials + Send + Sync + 'static,
 {
-    fn fetch_credentials(
+    async fn fetch_credentials(
         &self,
-    ) -> Box<dyn Future<Item = AwsCredentials, Error = CredentialsError>> {
-        Box::new(P::credentials(&self))
+    ) -> Result<AwsCredentials, CredentialsError> {
+        P::credentials(&self).await
     }
 }
 
 /// Provider chain
 #[derive(Clone)]
 pub struct AwsCredentialProviderChain {
-    primary: Rc<dyn AwsCredentialsProvider>,
-    fallback: Rc<dyn AwsCredentialsProvider>,
+    primary: Arc<dyn AwsCredentialsProvider>,
+    fallback: Arc<dyn AwsCredentialsProvider>,
 }
 
 impl AwsCredentialProviderChain {
     /// Create new provider chain
     pub fn new(
-        primary: Rc<dyn AwsCredentialsProvider>,
-        fallback: Rc<dyn AwsCredentialsProvider>,
+        primary: Arc<dyn AwsCredentialsProvider>,
+        fallback: Arc<dyn AwsCredentialsProvider>,
     ) -> Self {
         Self { primary, fallback }
     }
 
     /// Add provider to the end of the provider chain.
-    pub fn push<P, F>(self, fallback: P) -> Self
+    pub fn push<P>(self, fallback: P) -> Self
     where
-        P: ProvideAwsCredentials<Future = F> + Clone + 'static,
-        F: Future<Item = AwsCredentials, Error = CredentialsError> + 'static,
+        P: ProvideAwsCredentials + Clone + Send + Sync + 'static,
     {
         Self {
-            primary: Rc::new(self),
-            fallback: Rc::new(fallback),
+            primary: Arc::new(self),
+            fallback: Arc::new(fallback),
         }
     }
 }
 
-impl AwsCredentialsProvider for AwsCredentialProviderChain {
-    fn fetch_credentials(
+#[async_trait]
+impl ProvideAwsCredentials for AwsCredentialProviderChain {
+    async fn credentials(
         &self,
-    ) -> Box<dyn Future<Item = AwsCredentials, Error = CredentialsError>> {
+    ) -> Result<AwsCredentials, CredentialsError> {
         let fb = self.fallback.clone();
-        Box::new(
-            self.primary
-                .fetch_credentials()
-                .or_else(move |_| fb.fetch_credentials()),
-        )
+        self.primary
+            .fetch_credentials()
+            .or_else(move |_| async move { fb.fetch_credentials().await })
+            .await
     }
 }
 
-/// Allow going from trait object to trait.
-impl ProvideAwsCredentials for Rc<dyn AwsCredentialsProvider> {
-    type Future = Box<dyn Future<Item = AwsCredentials, Error = CredentialsError>>;
-
-    fn credentials(&self) -> Self::Future {
-        // as_ref() is important as otherwise this would lead to a stack overflow, calling
-        self.as_ref().fetch_credentials()
-    }
-}
-
+#[async_trait]
 impl ProvideAwsCredentials for Arc<dyn AwsCredentialsProvider> {
-    type Future = Box<dyn Future<Item = AwsCredentials, Error = CredentialsError>>;
-
-    fn credentials(&self) -> Self::Future {
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
         // as_ref() is important as otherwise this would lead to a stack overflow, calling
-        self.as_ref().fetch_credentials()
+        self.as_ref().fetch_credentials().await
     }
 }
 
+#[async_trait]
 impl ProvideAwsCredentials for Box<dyn AwsCredentialsProvider> {
-    type Future = Box<dyn Future<Item = AwsCredentials, Error = CredentialsError>>;
-
-    fn credentials(&self) -> Self::Future {
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
         // as_ref() is important as otherwise this would lead to a stack overflow, calling
-        self.as_ref().fetch_credentials()
+        self.as_ref().fetch_credentials().await
     }
 }
 
+#[async_trait]
 impl ProvideAwsCredentials for &dyn AwsCredentialsProvider {
-    type Future = Box<dyn Future<Item = AwsCredentials, Error = CredentialsError>>;
-
-    fn credentials(&self) -> Self::Future {
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
         // as_ref() is important as otherwise this would lead to a stack overflow, calling
-        (*self).fetch_credentials()
+        (*self).fetch_credentials().await
     }
 }
 

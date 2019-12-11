@@ -11,17 +11,17 @@
 // =================================================================
 #![allow(warnings)]
 
-use futures::future;
-use futures::Future;
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 use std::error::Error;
 use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Information that shows whether a resource is compliant with the effective tag policy, including details on any noncompliant tag keys.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -757,53 +757,54 @@ impl Error for UntagResourcesError {
     }
 }
 /// Trait representing the capabilities of the AWS Resource Groups Tagging API API. AWS Resource Groups Tagging API clients implement this trait.
+#[async_trait]
 pub trait ResourceGroupsTaggingApi {
     /// <p>Describes the status of the <code>StartReportCreation</code> operation. </p> <p>You can call this operation only from the organization's master account and from the us-east-1 Region.</p>
-    fn describe_report_creation(
+    async fn describe_report_creation(
         &self,
-    ) -> RusotoFuture<DescribeReportCreationOutput, DescribeReportCreationError>;
+    ) -> Result<DescribeReportCreationOutput, RusotoError<DescribeReportCreationError>>;
 
     /// <p>Returns a table that shows counts of resources that are noncompliant with their tag policies.</p> <p>For more information on tag policies, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html">Tag Policies</a> in the <i>AWS Organizations User Guide.</i> </p> <p>You can call this operation only from the organization's master account and from the us-east-1 Region.</p>
-    fn get_compliance_summary(
+    async fn get_compliance_summary(
         &self,
         input: GetComplianceSummaryInput,
-    ) -> RusotoFuture<GetComplianceSummaryOutput, GetComplianceSummaryError>;
+    ) -> Result<GetComplianceSummaryOutput, RusotoError<GetComplianceSummaryError>>;
 
     /// <p><p>Returns all the tagged or previously tagged resources that are located in the specified Region for the AWS account.</p> <p>Depending on what information you want returned, you can also specify the following:</p> <ul> <li> <p> <i>Filters</i> that specify what tags and resource types you want returned. The response includes all tags that are associated with the requested resources.</p> </li> <li> <p>Information about compliance with the account&#39;s effective tag policy. For more information on tag policies, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html">Tag Policies</a> in the <i>AWS Organizations User Guide.</i> </p> </li> </ul> <note> <p>You can check the <code>PaginationToken</code> response parameter to determine if a query is complete. Queries occasionally return fewer results on a page than allowed. The <code>PaginationToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display. </p> </note></p>
-    fn get_resources(
+    async fn get_resources(
         &self,
         input: GetResourcesInput,
-    ) -> RusotoFuture<GetResourcesOutput, GetResourcesError>;
+    ) -> Result<GetResourcesOutput, RusotoError<GetResourcesError>>;
 
     /// <p>Returns all tag keys in the specified Region for the AWS account.</p>
-    fn get_tag_keys(
+    async fn get_tag_keys(
         &self,
         input: GetTagKeysInput,
-    ) -> RusotoFuture<GetTagKeysOutput, GetTagKeysError>;
+    ) -> Result<GetTagKeysOutput, RusotoError<GetTagKeysError>>;
 
     /// <p>Returns all tag values for the specified key in the specified Region for the AWS account.</p>
-    fn get_tag_values(
+    async fn get_tag_values(
         &self,
         input: GetTagValuesInput,
-    ) -> RusotoFuture<GetTagValuesOutput, GetTagValuesError>;
+    ) -> Result<GetTagValuesOutput, RusotoError<GetTagValuesError>>;
 
     /// <p>Generates a report that lists all tagged resources in accounts across your organization and tells whether each resource is compliant with the effective tag policy. Compliance data is refreshed daily. </p> <p>The generated report is saved to the following location:</p> <p> <code>s3://example-bucket/AwsTagPolicies/o-exampleorgid/YYYY-MM-ddTHH:mm:ssZ/report.csv</code> </p> <p>You can call this operation only from the organization's master account and from the us-east-1 Region.</p>
-    fn start_report_creation(
+    async fn start_report_creation(
         &self,
         input: StartReportCreationInput,
-    ) -> RusotoFuture<StartReportCreationOutput, StartReportCreationError>;
+    ) -> Result<StartReportCreationOutput, RusotoError<StartReportCreationError>>;
 
     /// <p><p>Applies one or more tags to the specified resources. Note the following:</p> <ul> <li> <p>Not all resources can have tags. For a list of services that support tagging, see <a href="http://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/Welcome.html">this list</a>.</p> </li> <li> <p>Each resource can have up to 50 tags. For other limits, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions">Tag Naming and Usage Conventions</a> in the <i>AWS General Reference.</i> </p> </li> <li> <p>You can only tag resources that are located in the specified Region for the AWS account.</p> </li> <li> <p>To add tags to a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for adding tags. For more information, see <a href="http://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/Welcome.html">this list</a>.</p> </li> </ul></p>
-    fn tag_resources(
+    async fn tag_resources(
         &self,
         input: TagResourcesInput,
-    ) -> RusotoFuture<TagResourcesOutput, TagResourcesError>;
+    ) -> Result<TagResourcesOutput, RusotoError<TagResourcesError>>;
 
     /// <p><p>Removes the specified tags from the specified resources. When you specify a tag key, the action removes both that key and its associated value. The operation succeeds even if you attempt to remove tags from a resource that were already removed. Note the following:</p> <ul> <li> <p>To remove tags from a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for removing tags. For more information, see <a href="http://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/Welcome.html">this list</a>.</p> </li> <li> <p>You can only tag resources that are located in the specified Region for the AWS account.</p> </li> </ul></p>
-    fn untag_resources(
+    async fn untag_resources(
         &self,
         input: UntagResourcesInput,
-    ) -> RusotoFuture<UntagResourcesOutput, UntagResourcesError>;
+    ) -> Result<UntagResourcesOutput, RusotoError<UntagResourcesError>>;
 }
 /// A client for the AWS Resource Groups Tagging API API.
 #[derive(Clone)]
@@ -827,9 +828,7 @@ impl ResourceGroupsTaggingApiClient {
     ) -> ResourceGroupsTaggingApiClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         Self::new_with_client(
             Client::new_with(credentials_provider, request_dispatcher),
@@ -853,11 +852,12 @@ impl fmt::Debug for ResourceGroupsTaggingApiClient {
     }
 }
 
+#[async_trait]
 impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
     /// <p>Describes the status of the <code>StartReportCreation</code> operation. </p> <p>You can call this operation only from the organization's master account and from the us-east-1 Region.</p>
-    fn describe_report_creation(
+    async fn describe_report_creation(
         &self,
-    ) -> RusotoFuture<DescribeReportCreationOutput, DescribeReportCreationError> {
+    ) -> Result<DescribeReportCreationOutput, RusotoError<DescribeReportCreationError>> {
         let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -867,27 +867,27 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeReportCreationOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeReportCreationError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeReportCreationOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeReportCreationError::from_response(response))
+        }
     }
 
     /// <p>Returns a table that shows counts of resources that are noncompliant with their tag policies.</p> <p>For more information on tag policies, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html">Tag Policies</a> in the <i>AWS Organizations User Guide.</i> </p> <p>You can call this operation only from the organization's master account and from the us-east-1 Region.</p>
-    fn get_compliance_summary(
+    async fn get_compliance_summary(
         &self,
         input: GetComplianceSummaryInput,
-    ) -> RusotoFuture<GetComplianceSummaryOutput, GetComplianceSummaryError> {
+    ) -> Result<GetComplianceSummaryOutput, RusotoError<GetComplianceSummaryError>> {
         let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -898,27 +898,27 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetComplianceSummaryOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetComplianceSummaryError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetComplianceSummaryOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetComplianceSummaryError::from_response(response))
+        }
     }
 
     /// <p><p>Returns all the tagged or previously tagged resources that are located in the specified Region for the AWS account.</p> <p>Depending on what information you want returned, you can also specify the following:</p> <ul> <li> <p> <i>Filters</i> that specify what tags and resource types you want returned. The response includes all tags that are associated with the requested resources.</p> </li> <li> <p>Information about compliance with the account&#39;s effective tag policy. For more information on tag policies, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html">Tag Policies</a> in the <i>AWS Organizations User Guide.</i> </p> </li> </ul> <note> <p>You can check the <code>PaginationToken</code> response parameter to determine if a query is complete. Queries occasionally return fewer results on a page than allowed. The <code>PaginationToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display. </p> </note></p>
-    fn get_resources(
+    async fn get_resources(
         &self,
         input: GetResourcesInput,
-    ) -> RusotoFuture<GetResourcesOutput, GetResourcesError> {
+    ) -> Result<GetResourcesOutput, RusotoError<GetResourcesError>> {
         let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -929,28 +929,26 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetResourcesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetResourcesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetResourcesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetResourcesError::from_response(response))
+        }
     }
 
     /// <p>Returns all tag keys in the specified Region for the AWS account.</p>
-    fn get_tag_keys(
+    async fn get_tag_keys(
         &self,
         input: GetTagKeysInput,
-    ) -> RusotoFuture<GetTagKeysOutput, GetTagKeysError> {
+    ) -> Result<GetTagKeysOutput, RusotoError<GetTagKeysError>> {
         let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -961,28 +959,26 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetTagKeysOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetTagKeysError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetTagKeysOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTagKeysError::from_response(response))
+        }
     }
 
     /// <p>Returns all tag values for the specified key in the specified Region for the AWS account.</p>
-    fn get_tag_values(
+    async fn get_tag_values(
         &self,
         input: GetTagValuesInput,
-    ) -> RusotoFuture<GetTagValuesOutput, GetTagValuesError> {
+    ) -> Result<GetTagValuesOutput, RusotoError<GetTagValuesError>> {
         let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -993,28 +989,26 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetTagValuesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetTagValuesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetTagValuesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTagValuesError::from_response(response))
+        }
     }
 
     /// <p>Generates a report that lists all tagged resources in accounts across your organization and tells whether each resource is compliant with the effective tag policy. Compliance data is refreshed daily. </p> <p>The generated report is saved to the following location:</p> <p> <code>s3://example-bucket/AwsTagPolicies/o-exampleorgid/YYYY-MM-ddTHH:mm:ssZ/report.csv</code> </p> <p>You can call this operation only from the organization's master account and from the us-east-1 Region.</p>
-    fn start_report_creation(
+    async fn start_report_creation(
         &self,
         input: StartReportCreationInput,
-    ) -> RusotoFuture<StartReportCreationOutput, StartReportCreationError> {
+    ) -> Result<StartReportCreationOutput, RusotoError<StartReportCreationError>> {
         let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1025,27 +1019,27 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartReportCreationOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StartReportCreationError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartReportCreationOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartReportCreationError::from_response(response))
+        }
     }
 
     /// <p><p>Applies one or more tags to the specified resources. Note the following:</p> <ul> <li> <p>Not all resources can have tags. For a list of services that support tagging, see <a href="http://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/Welcome.html">this list</a>.</p> </li> <li> <p>Each resource can have up to 50 tags. For other limits, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions">Tag Naming and Usage Conventions</a> in the <i>AWS General Reference.</i> </p> </li> <li> <p>You can only tag resources that are located in the specified Region for the AWS account.</p> </li> <li> <p>To add tags to a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for adding tags. For more information, see <a href="http://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/Welcome.html">this list</a>.</p> </li> </ul></p>
-    fn tag_resources(
+    async fn tag_resources(
         &self,
         input: TagResourcesInput,
-    ) -> RusotoFuture<TagResourcesOutput, TagResourcesError> {
+    ) -> Result<TagResourcesOutput, RusotoError<TagResourcesError>> {
         let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1056,28 +1050,26 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourcesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TagResourcesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourcesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourcesError::from_response(response))
+        }
     }
 
     /// <p><p>Removes the specified tags from the specified resources. When you specify a tag key, the action removes both that key and its associated value. The operation succeeds even if you attempt to remove tags from a resource that were already removed. Note the following:</p> <ul> <li> <p>To remove tags from a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for removing tags. For more information, see <a href="http://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/Welcome.html">this list</a>.</p> </li> <li> <p>You can only tag resources that are located in the specified Region for the AWS account.</p> </li> </ul></p>
-    fn untag_resources(
+    async fn untag_resources(
         &self,
         input: UntagResourcesInput,
-    ) -> RusotoFuture<UntagResourcesOutput, UntagResourcesError> {
+    ) -> Result<UntagResourcesOutput, RusotoError<UntagResourcesError>> {
         let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1088,20 +1080,18 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourcesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UntagResourcesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourcesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourcesError::from_response(response))
+        }
     }
 }

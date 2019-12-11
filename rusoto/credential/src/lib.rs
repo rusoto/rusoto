@@ -7,24 +7,11 @@
 
 //! Types for loading and managing AWS access credentials for API requests.
 
-extern crate chrono;
-extern crate dirs;
-#[macro_use]
-extern crate futures;
-extern crate hyper;
-extern crate regex;
-extern crate serde_json;
-#[macro_use]
-extern crate serde_derive;
-extern crate shlex;
-extern crate tokio_process;
-extern crate tokio_timer;
-
-pub use crate::container::{ContainerProvider, ContainerProviderFuture};
-pub use crate::environment::{EnvironmentProvider, EnvironmentProviderFuture};
-pub use crate::instance_metadata::{InstanceMetadataProvider, InstanceMetadataProviderFuture};
+pub use crate::container::ContainerProvider;
+pub use crate::environment::EnvironmentProvider;
+pub use crate::instance_metadata::InstanceMetadataProvider;
 pub use crate::object_safe::{AwsCredentialProviderChain, AwsCredentialsProvider, WithFallback};
-pub use crate::profile::{ProfileProvider, ProfileProviderFuture};
+pub use crate::profile::ProfileProvider;
 pub use crate::secrets::Secret;
 pub use crate::static_provider::StaticProvider;
 pub use crate::variable::Variable;
@@ -38,24 +25,24 @@ mod profile;
 mod request;
 mod secrets;
 mod static_provider;
+#[cfg(test)]
 pub(crate) mod test_utils;
 mod variable;
 
+use async_trait::async_trait;
 use std::collections::BTreeMap;
 use std::env::{var as env_var, VarError};
 use std::error::Error;
 use std::fmt;
 use std::io::Error as IoError;
-use std::ops::Deref;
-use std::rc::Rc;
 use std::string::FromUtf8Error;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use std::time::Duration;
 
 use chrono::{DateTime, Duration as ChronoDuration, ParseError, Utc};
-use futures::future::{err, Either, Shared, SharedItem};
-use futures::{Async, Future, Poll};
 use hyper::Error as HyperError;
+use serde::Deserialize;
+use tokio::sync::Mutex;
 
 /// Representation of anonymity
 pub trait Anonymous {
@@ -258,32 +245,24 @@ impl From<FromUtf8Error> for CredentialsError {
 }
 
 /// A trait for types that produce `AwsCredentials`.
+#[async_trait]
 pub trait ProvideAwsCredentials {
-    /// The future response value.
-    type Future: Future<Item = AwsCredentials, Error = CredentialsError> + 'static;
-
     /// Produce a new `AwsCredentials` future.
-    fn credentials(&self) -> Self::Future;
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError>;
 }
 
-impl<P: ProvideAwsCredentials> ProvideAwsCredentials for Box<P> {
-    type Future = P::Future;
-    fn credentials(&self) -> Self::Future {
-        P::credentials(&*self)
+#[async_trait]
+impl<P: ProvideAwsCredentials + Send + Sync> ProvideAwsCredentials for Box<P> {
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        P::credentials(&*self).await
     }
 }
 
-impl<P: ProvideAwsCredentials> ProvideAwsCredentials for Rc<P> {
-    type Future = P::Future;
-    fn credentials(&self) -> Self::Future {
-        P::credentials(&*self)
-    }
-}
 
-impl<P: ProvideAwsCredentials> ProvideAwsCredentials for Arc<P> {
-    type Future = P::Future;
-    fn credentials(&self) -> Self::Future {
-        P::credentials(&*self)
+#[async_trait]
+impl<P: ProvideAwsCredentials + Send + Sync> ProvideAwsCredentials for Arc<P> {
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        P::credentials(self).await
     }
 }
 
@@ -296,7 +275,7 @@ impl<P: ProvideAwsCredentials> ProvideAwsCredentials for Arc<P> {
 #[derive(Debug)]
 pub struct AutoRefreshingProvider<P: ProvideAwsCredentials + 'static> {
     credentials_provider: P,
-    shared_future: Mutex<Shared<P::Future>>,
+    current_credentials: Mutex<Option<Result<AwsCredentials, CredentialsError>>>,
 }
 
 impl<P: ProvideAwsCredentials + 'static> AutoRefreshingProvider<P> {
@@ -308,10 +287,9 @@ impl<P: ProvideAwsCredentials + 'static> AutoRefreshingProvider<P> {
 
     /// Create a new `AutoRefreshingProvider` around the provided base provider.
     pub fn from(provider: P) -> Self {
-        let future = provider.credentials();
         AutoRefreshingProvider {
             credentials_provider: provider,
-            shared_future: Mutex::new(future.shared()),
+            current_credentials: Mutex::new(None),
         }
     }
 
@@ -335,78 +313,28 @@ impl<P: Clone + ProvideAwsCredentials + 'static> Clone for AutoRefreshingProvide
     }
 }
 
-enum AutoRefreshingFutureInner<P: ProvideAwsCredentials + 'static> {
-    Cached(SharedItem<AwsCredentials>),
-    NotCached(Shared<P::Future>),
-}
-
-impl<P: ProvideAwsCredentials + 'static> AutoRefreshingFutureInner<P> {
-    fn from_shared_future(future: &mut Shared<P::Future>, provider: &P) -> Self {
-        match future.peek() {
-            // no result from the future yet, let's keep using it
-            None => AutoRefreshingFutureInner::NotCached(future.clone()),
-            // successful result from the future, use it if not expired
-            Some(Ok(ref creds)) if !creds.credentials_are_expired() => {
-                AutoRefreshingFutureInner::Cached(creds.clone())
+#[async_trait]
+impl<P: ProvideAwsCredentials + Send + Sync + 'static> ProvideAwsCredentials for AutoRefreshingProvider<P> {
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        loop {
+            let mut guard = self.current_credentials.lock().await;
+            match guard.as_ref() {
+                // no result from the future yet, let's keep using it
+                None => {
+                    let res = self.credentials_provider.credentials().await;
+                    *guard = Some(res);
+                },
+                Some(Err(e)) => {
+                    return Err(e.clone())
+                }
+                Some(Ok(creds)) => {
+                    if creds.credentials_are_expired(){
+                        *guard = None;
+                    } else {
+                        return Ok(creds.clone());
+                    };
+                }
             }
-            Some(_) => {
-                // else launch a new future
-                *future = provider.credentials().shared();
-                AutoRefreshingFutureInner::NotCached(future.clone())
-            }
-        }
-    }
-}
-
-impl<P: ProvideAwsCredentials + 'static> Clone for AutoRefreshingFutureInner<P> {
-    fn clone(&self) -> Self {
-        match *self {
-            AutoRefreshingFutureInner::Cached(ref shared_item) => {
-                AutoRefreshingFutureInner::Cached(shared_item.clone())
-            }
-            AutoRefreshingFutureInner::NotCached(ref shared_future) => {
-                AutoRefreshingFutureInner::NotCached(shared_future.clone())
-            }
-        }
-    }
-}
-
-/// Future returned from `AutoRefreshingProvider`.
-pub struct AutoRefreshingProviderFuture<P: ProvideAwsCredentials + 'static> {
-    inner: AutoRefreshingFutureInner<P>,
-}
-
-impl<P: ProvideAwsCredentials + 'static> Future for AutoRefreshingProviderFuture<P> {
-    type Item = AwsCredentials;
-    type Error = CredentialsError;
-
-    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        match self.inner {
-            AutoRefreshingFutureInner::Cached(ref creds) => Ok(Async::Ready(creds.deref().clone())),
-            AutoRefreshingFutureInner::NotCached(ref mut future) => match future.poll() {
-                Err(err) => Err(CredentialsError {
-                    message: err.message.to_owned(),
-                }),
-                Ok(Async::NotReady) => Ok(Async::NotReady),
-                Ok(Async::Ready(item)) => Ok(Async::Ready(item.deref().clone())),
-            },
-        }
-    }
-}
-
-impl<P: ProvideAwsCredentials + 'static> ProvideAwsCredentials for AutoRefreshingProvider<P> {
-    type Future = AutoRefreshingProviderFuture<P>;
-
-    fn credentials(&self) -> Self::Future {
-        let mut shared_future = self
-            .shared_future
-            .lock()
-            .expect("Failed to lock the cached credentials Mutex");
-        AutoRefreshingProviderFuture {
-            inner: AutoRefreshingFutureInner::from_shared_future(
-                &mut shared_future,
-                &self.credentials_provider,
-            ),
         }
     }
 }
@@ -439,24 +367,10 @@ impl DefaultCredentialsProvider {
     }
 }
 
+#[async_trait]
 impl ProvideAwsCredentials for DefaultCredentialsProvider {
-    type Future = DefaultCredentialsProviderFuture;
-
-    fn credentials(&self) -> Self::Future {
-        let inner = self.0.credentials();
-        DefaultCredentialsProviderFuture(inner)
-    }
-}
-
-/// Future returned from `DefaultCredentialsProvider`.
-pub struct DefaultCredentialsProviderFuture(AutoRefreshingProviderFuture<ChainProvider>);
-
-impl Future for DefaultCredentialsProviderFuture {
-    type Item = AwsCredentials;
-    type Error = CredentialsError;
-
-    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        self.0.poll()
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        self.0.credentials().await
     }
 }
 
@@ -519,44 +433,30 @@ impl ChainProvider {
     }
 }
 
-/// Future returned from `ChainProvider`.
-pub struct ChainProviderFuture {
-    inner: Box<dyn Future<Item = AwsCredentials, Error = CredentialsError> + Send>,
-}
-
-impl Future for ChainProviderFuture {
-    type Item = AwsCredentials;
-    type Error = CredentialsError;
-
-    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        self.inner.poll()
+async fn chain_provider_credentials(provider: ChainProvider) -> Result<AwsCredentials, CredentialsError> {
+    if let Ok(creds) = provider.environment_provider.credentials().await {
+        return Ok(creds);
     }
+    if let Some(ref profile_provider) = provider.profile_provider {
+        if let Ok(creds) = profile_provider.credentials().await {
+            return Ok(creds);
+        }
+    }
+    if let Ok(creds) = provider.container_provider.credentials().await {
+        return Ok(creds);
+    }
+    if let Ok(creds) = provider.instance_metadata_provider.credentials().await {
+        return Ok(creds);
+    }
+    Err(CredentialsError::new(
+        "Couldn't find AWS credentials in environment, credentials file, or IAM role.",
+    ))
 }
 
+#[async_trait]
 impl ProvideAwsCredentials for ChainProvider {
-    type Future = ChainProviderFuture;
-
-    fn credentials(&self) -> Self::Future {
-        let profile_provider = self.profile_provider.clone();
-        let instance_metadata_provider = self.instance_metadata_provider.clone();
-        let container_provider = self.container_provider.clone();
-        let future = self
-            .environment_provider
-            .credentials()
-            .or_else(move |_| match profile_provider {
-                Some(ref provider) => Either::A(provider.credentials()),
-                None => Either::B(err(CredentialsError::new(""))),
-            })
-            .or_else(move |_| container_provider.credentials())
-            .or_else(move |_| instance_metadata_provider.credentials())
-            .or_else(|_| {
-                Err(CredentialsError::new(
-                    "Couldn't find AWS credentials in environment, credentials file, or IAM role.",
-                ))
-            });
-        ChainProviderFuture {
-            inner: Box::new(future),
-        }
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        chain_provider_credentials(self.clone()).await
     }
 }
 
@@ -609,14 +509,6 @@ fn parse_credentials_from_aws_service(response: &str) -> Result<AwsCredentials, 
 }
 
 #[cfg(test)]
-#[macro_use]
-extern crate lazy_static;
-
-#[cfg(test)]
-#[macro_use]
-extern crate quickcheck;
-
-#[cfg(test)]
 mod tests {
 
     use std::fs::{self, File};
@@ -624,7 +516,7 @@ mod tests {
     use std::path::Path;
 
     use crate::test_utils::{is_secret_hidden_behind_asterisks, lock_env, SECRET};
-    use futures::Future;
+    use quickcheck::quickcheck;
 
     use super::*;
 
@@ -647,23 +539,15 @@ mod tests {
         is_send_and_sync::<DefaultCredentialsProvider>();
     }
 
-    #[test]
-    fn provider_futures_are_send() {
-        fn is_send<T: Send>() {}
-
-        is_send::<ChainProviderFuture>();
-        is_send::<AutoRefreshingProviderFuture<ChainProvider>>();
-    }
-
-    #[test]
-    fn profile_provider_finds_right_credentials_in_file() {
+    #[tokio::test]
+    async fn profile_provider_finds_right_credentials_in_file() {
         let _guard = lock_env();
         let profile_provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "foo",
         );
 
-        let credentials = profile_provider.credentials().wait().expect(
+        let credentials = profile_provider.credentials().await.expect(
             "Failed to get credentials from profile provider using tests/sample-data/multiple_profile_credentials",
         );
 

@@ -1,14 +1,14 @@
 use crate::{
-    AssumeRoleWithWebIdentityError, AssumeRoleWithWebIdentityRequest,
-    AssumeRoleWithWebIdentityResponse, Sts, StsClient,
+    AssumeRoleWithWebIdentityRequest, Sts, StsClient,
+    custom::credential::NewAwsCredsForStsCreds,
 };
-use futures::{Async, Future, Poll};
+use async_trait::async_trait;
 use rusoto_core::credential::{
     AwsCredentials, CredentialsError, ProvideAwsCredentials, Secret, Variable,
 };
 use rusoto_core::request::HttpClient;
-use rusoto_core::{Client, Region, RusotoFuture};
-use std::error::Error;
+use rusoto_core::{Client, Region};
+use std::{error::Error, pin::Pin};
 
 const AWS_WEB_IDENTITY_TOKEN_FILE: &str = "AWS_WEB_IDENTITY_TOKEN_FILE";
 
@@ -97,70 +97,37 @@ impl WebIdentityProvider {
     }
 }
 
+#[async_trait]
 impl ProvideAwsCredentials for WebIdentityProvider {
-    type Future = WebIdentityProviderFuture;
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        let token = self.load_token()?;
+        let role = self.role_arn.resolve()?;
+        let session = self.role_session_name.resolve()?;
+        let mut sts = HttpClient::new()
+            .map_err(|e| CredentialsError::new(e.description()))
+            .map(|c| {
+                StsClient::new_with_client(
+                    Client::new_not_signing(c),
+                    Region::default(),
+                )
+            })?;
+        let mut req = AssumeRoleWithWebIdentityRequest::default();
+        req.role_arn = role.clone();
+        req.web_identity_token = token.as_ref().to_string();
+        req.role_session_name = session.clone();
 
-    fn credentials(&self) -> Self::Future {
-        WebIdentityProviderFuture {
-            state: WebIdentityProviderFutureState::LoadBearerToken(
-                self.load_token(),
-                self.role_arn.resolve(),
-                self.role_session_name.resolve(),
-            ),
-        }
-    }
-}
-
-enum WebIdentityProviderFutureState {
-    LoadBearerToken(
-        Result<Secret, CredentialsError>,
-        Result<String, CredentialsError>,
-        Result<String, CredentialsError>,
-    ),
-    ExchangeToken(RusotoFuture<AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError>),
-}
-
-/// Provides AWS credentials from environment variables as a Future.
-pub struct WebIdentityProviderFuture {
-    state: WebIdentityProviderFutureState,
-}
-
-impl Future for WebIdentityProviderFuture {
-    type Item = AwsCredentials;
-    type Error = CredentialsError;
-
-    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        use crate::custom::credential::NewAwsCredsForStsCreds;
-        use WebIdentityProviderFutureState::*;
-        match &mut self.state {
-            LoadBearerToken(Err(e), _, _) => Err(e.clone()),
-            LoadBearerToken(_, Err(e), _) => Err(e.clone()),
-            LoadBearerToken(_, _, Err(e)) => Err(e.clone()),
-            LoadBearerToken(Ok(token), Ok(role), Ok(session)) => match HttpClient::new() {
-                Err(e) => Err(CredentialsError::new(e.description().to_string())),
-                Ok(c) => {
-                    let client = Client::new_not_signing(c);
-                    let sts = StsClient::new_with_client(client, Region::default());
-                    let mut req = AssumeRoleWithWebIdentityRequest::default();
-                    req.role_arn = role.clone();
-                    req.web_identity_token = token.as_ref().to_string();
-                    req.role_session_name = session.clone();
-                    self.state = ExchangeToken(sts.assume_role_with_web_identity(req));
-                    self.poll()
-                }
-            },
-            ExchangeToken(ref mut future) => match future.poll() {
-                Ok(Async::Ready(r)) => match r.credentials {
-                    Some(c) => AwsCredentials::new_for_credentials(c).map(|c| Async::Ready(c)),
-                    None => Err(CredentialsError::new(format!(
-                        "No credentials found in AssumeRoleWithWebIdentityResponse: {:?}",
-                        r
-                    ))),
-                },
-                Ok(Async::NotReady) => Ok(Async::NotReady),
-                Err(e) => Err(CredentialsError::new(e.to_string())),
-            },
-        }
+        let r = Pin::new(&mut sts)
+            .assume_role_with_web_identity(req)
+            .await
+            .map_err(|e| CredentialsError::new(e))?;
+        let c = match r.credentials {
+            Some(c) => c,
+            None => return Err(CredentialsError::new(format!(
+                "No credentials found in AssumeRoleWithWebIdentityResponse: {:?}",
+                r
+            ))),
+        };
+        AwsCredentials::new_for_credentials(c).map(|c| c)
     }
 }
 

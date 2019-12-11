@@ -135,12 +135,11 @@ where
 
         use std::error::Error;
         use std::fmt;
-        use futures::future;
-        use futures::Future;
+        use async_trait::async_trait;
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
         use rusoto_core::region;
         use rusoto_core::credential::ProvideAwsCredentials;
-        use rusoto_core::{{Client, RusotoFuture, RusotoError}};
+        use rusoto_core::{{Client, RusotoError}};
     "
     )?;
 
@@ -165,6 +164,7 @@ where
     // See https://github.com/rusoto/rusoto/issues/519
     writeln!(writer,
              "/// Trait representing the capabilities of the {service_name} API. {service_name} clients implement this trait.
+        #[async_trait]
         pub trait {trait_name} {{
         ",
              trait_name = service.service_type_name(),
@@ -192,9 +192,7 @@ where
 
             pub fn new_with<P, D>(request_dispatcher: D, credentials_provider: P, region: region::Region) -> {type_name}
                 where P: ProvideAwsCredentials + Send + Sync + 'static,
-                      P::Future: Send,
                       D: DispatchSignedRequest + Send + Sync + 'static,
-                      D::Future: Send
             {{
                 Self::new_with_client(Client::new_with(credentials_provider, request_dispatcher), region)
             }}
@@ -216,6 +214,7 @@ where
             }}
         }}
 
+        #[async_trait]
         impl {trait_name} for {type_name} {{
         ",
         service_name = service.name(),
@@ -339,6 +338,9 @@ fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
 
         // Chime has a CreateAttendeeError, avoid collision with our error enum
         "CreateAttendeeError" => "ChimeCreateAttendeeError".to_owned(),
+
+        // Security Hub has a conveniently named "Result" type
+        "Result" => "AccountProcessingResult".to_owned(),
 
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,

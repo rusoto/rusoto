@@ -5,6 +5,8 @@ use std::ffi::OsString;
 use std::fmt::Debug;
 use std::sync::{Mutex, MutexGuard};
 
+use lazy_static::lazy_static;
+
 pub const SECRET: &str = &"TtnuieannGt2rGuie2t8Tt7urarg5nauedRndrur";
 
 pub fn is_secret_hidden_behind_asterisks<D>(obj: &D) -> bool

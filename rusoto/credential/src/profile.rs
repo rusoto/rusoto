@@ -4,14 +4,13 @@ use std::collections::HashMap;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
-use std::process::Command;
 
+use async_trait::async_trait;
 use dirs::home_dir;
-use futures::future::{result, FutureResult};
-use futures::{Future, Poll};
 use lazy_static::lazy_static;
 use regex::Regex;
-use tokio_process::{CommandExt, OutputAsync};
+use serde::Deserialize;
+use tokio::net::process::Command;
 
 use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
@@ -190,43 +189,10 @@ impl ProfileProvider {
     }
 }
 
-/// Provides AWS credentials from a profile in a credentials file as a Future.
-pub struct ProfileProviderFuture {
-    inner: ProfileProviderFutureInner,
-}
-
-enum ProfileProviderFutureInner {
-    Result(FutureResult<AwsCredentials, CredentialsError>),
-    Future(OutputAsync),
-}
-
-impl Future for ProfileProviderFuture {
-    type Item = AwsCredentials;
-    type Error = CredentialsError;
-
-    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        match self.inner {
-            ProfileProviderFutureInner::Result(ref mut result) => result.poll(),
-            ProfileProviderFutureInner::Future(ref mut future) => {
-                let output = try_ready!(future.poll());
-                if !output.status.success() {
-                    return Err(CredentialsError::new(format!(
-                        "Credential process failed with {}: {}",
-                        output.status,
-                        String::from_utf8_lossy(&output.stderr)
-                    )));
-                }
-                Ok(parse_credential_process_output(&output.stdout)?.into())
-            }
-        }
-    }
-}
-
+#[async_trait]
 impl ProvideAwsCredentials for ProfileProvider {
-    type Future = ProfileProviderFuture;
-
-    fn credentials(&self) -> Self::Future {
-        let inner = match ProfileProvider::default_config_location().map(|location| {
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        match ProfileProvider::default_config_location().map(|location| {
             parse_config_file(&location).and_then(|config| {
                 config
                     .get(&self.profile)
@@ -236,25 +202,30 @@ impl ProvideAwsCredentials for ProfileProvider {
         }) {
             Ok(Some(ref command)) if !self.is_secure() => {
                 // credential_process is set, create the future
-                match parse_command_str(&command) {
-                    Ok(mut command) => ProfileProviderFutureInner::Future(command.output_async()),
-                    Err(err) => ProfileProviderFutureInner::Result(result(Err(err))),
+                let mut command = parse_command_str(&command)?;
+                let output = command.output().await.map_err(|e| {
+                    CredentialsError::new(format!("Credential process failed: {:?}", e))
+                })?;
+                if output.status.success() {
+                    parse_credential_process_output(&output.stdout)
+                } else {
+                    Err(CredentialsError::new(format!(
+                        "Credential process failed with {}: {}",
+                        output.status,
+                        String::from_utf8_lossy(&output.stderr)
+                    )))
                 }
             }
             Ok(Some(_)) | Ok(None) => {
                 // credential_process is not set, parse the credentials file
-                ProfileProviderFutureInner::Result(result(
-                    parse_credentials_file(self.file_path()).and_then(|mut profiles| {
-                        profiles
-                            .remove(self.profile())
-                            .ok_or_else(|| CredentialsError::new("profile not found"))
-                    }),
-                ))
+                parse_credentials_file(self.file_path()).and_then(|mut profiles| {
+                    profiles
+                        .remove(self.profile())
+                        .ok_or_else(|| CredentialsError::new("profile not found"))
+                })
             }
-            Err(err) => ProfileProviderFutureInner::Result(result(Err(err))),
-        };
-
-        ProfileProviderFuture { inner }
+            Err(err) => Err(err),
+        }
     }
 }
 
@@ -500,14 +471,14 @@ mod tests {
         assert_eq!(default_profile.aws_secret_access_key(), "bar");
     }
 
-    #[test]
-    fn profile_provider_happy_path() {
+    #[tokio::test]
+    async fn profile_provider_happy_path() {
         let _guard = lock_env();
         let provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "foo",
         );
-        let result = provider.credentials().wait();
+        let result = provider.credentials().await;
 
         assert!(result.is_ok());
 
@@ -528,8 +499,8 @@ mod tests {
         env::remove_var(AWS_SHARED_CREDENTIALS_FILE);
     }
 
-    #[test]
-    fn profile_provider_profile_name_via_environment_variable() {
+    #[tokio::test]
+    async fn profile_provider_profile_name_via_environment_variable() {
         let _guard = lock_env();
         let credentials_path = "tests/sample-data/multiple_profile_credentials";
         env::set_var(AWS_SHARED_CREDENTIALS_FILE, credentials_path);
@@ -538,20 +509,20 @@ mod tests {
         assert!(result.is_ok());
         let provider = result.unwrap();
         assert_eq!(provider.file_path().to_str().unwrap(), credentials_path);
-        let creds = provider.credentials().wait();
+        let creds = provider.credentials().await;
         assert_eq!(creds.unwrap().aws_access_key_id(), "bar_access_key");
         env::remove_var(AWS_SHARED_CREDENTIALS_FILE);
         env::remove_var(AWS_PROFILE);
     }
 
-    #[test]
-    fn profile_provider_bad_profile() {
+    #[tokio::test]
+    async fn profile_provider_bad_profile() {
         let _guard = lock_env();
         let provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "not_a_profile",
         );
-        let result = provider.credentials().wait();
+        let result = provider.credentials().await;
 
         assert!(result.is_err());
         assert_eq!(
@@ -560,15 +531,15 @@ mod tests {
         );
     }
 
-    #[test]
-    fn profile_provider_credential_process() {
+    #[tokio::test]
+    async fn profile_provider_credential_process() {
         let _guard = lock_env();
         env::set_var(
             AWS_CONFIG_FILE,
             "tests/sample-data/credential_process_config",
         );
         let provider = ProfileProvider::new().unwrap();
-        let result = provider.credentials().wait();
+        let result = provider.credentials().await;
 
         assert!(result.is_ok());
 
@@ -584,8 +555,8 @@ mod tests {
         env::remove_var(AWS_CONFIG_FILE);
     }
 
-    #[test]
-    fn profile_provider_credential_process_foo() {
+    #[tokio::test]
+    async fn profile_provider_credential_process_foo() {
         let _guard = lock_env();
         env::set_var(
             AWS_CONFIG_FILE,
@@ -593,7 +564,7 @@ mod tests {
         );
         let mut provider = ProfileProvider::new().unwrap();
         provider.set_profile("foo");
-        let result = provider.credentials().wait();
+        let result = provider.credentials().await;
 
         assert!(result.is_ok());
 

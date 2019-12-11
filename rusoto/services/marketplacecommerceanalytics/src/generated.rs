@@ -11,17 +11,17 @@
 // =================================================================
 #![allow(warnings)]
 
-use futures::future;
-use futures::Future;
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 use std::error::Error;
 use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Container for the parameters to the GenerateDataSet operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -170,18 +170,19 @@ impl Error for StartSupportDataExportError {
     }
 }
 /// Trait representing the capabilities of the AWS Marketplace Commerce Analytics API. AWS Marketplace Commerce Analytics clients implement this trait.
+#[async_trait]
 pub trait MarketplaceCommerceAnalytics {
     /// <p>Given a data set type and data set publication date, asynchronously publishes the requested data set to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data<em>set</em>type}_YYYY-MM-DD.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy.</p>
-    fn generate_data_set(
+    async fn generate_data_set(
         &self,
         input: GenerateDataSetRequest,
-    ) -> RusotoFuture<GenerateDataSetResult, GenerateDataSetError>;
+    ) -> Result<GenerateDataSetResult, RusotoError<GenerateDataSetError>>;
 
     /// <p>Given a data set type and a from date, asynchronously publishes the requested customer support data to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data<em>set</em>type}_YYYY-MM-DD&#39;T&#39;HH-mm-ss&#39;Z&#39;.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy.</p>
-    fn start_support_data_export(
+    async fn start_support_data_export(
         &self,
         input: StartSupportDataExportRequest,
-    ) -> RusotoFuture<StartSupportDataExportResult, StartSupportDataExportError>;
+    ) -> Result<StartSupportDataExportResult, RusotoError<StartSupportDataExportError>>;
 }
 /// A client for the AWS Marketplace Commerce Analytics API.
 #[derive(Clone)]
@@ -205,9 +206,7 @@ impl MarketplaceCommerceAnalyticsClient {
     ) -> MarketplaceCommerceAnalyticsClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         Self::new_with_client(
             Client::new_with(credentials_provider, request_dispatcher),
@@ -231,12 +230,13 @@ impl fmt::Debug for MarketplaceCommerceAnalyticsClient {
     }
 }
 
+#[async_trait]
 impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
     /// <p>Given a data set type and data set publication date, asynchronously publishes the requested data set to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data<em>set</em>type}_YYYY-MM-DD.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy.</p>
-    fn generate_data_set(
+    async fn generate_data_set(
         &self,
         input: GenerateDataSetRequest,
-    ) -> RusotoFuture<GenerateDataSetResult, GenerateDataSetError> {
+    ) -> Result<GenerateDataSetResult, RusotoError<GenerateDataSetError>> {
         let mut request =
             SignedRequest::new("POST", "marketplacecommerceanalytics", &self.region, "/");
 
@@ -248,28 +248,26 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GenerateDataSetResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GenerateDataSetError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GenerateDataSetResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GenerateDataSetError::from_response(response))
+        }
     }
 
     /// <p>Given a data set type and a from date, asynchronously publishes the requested customer support data to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data<em>set</em>type}_YYYY-MM-DD&#39;T&#39;HH-mm-ss&#39;Z&#39;.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy.</p>
-    fn start_support_data_export(
+    async fn start_support_data_export(
         &self,
         input: StartSupportDataExportRequest,
-    ) -> RusotoFuture<StartSupportDataExportResult, StartSupportDataExportError> {
+    ) -> Result<StartSupportDataExportResult, RusotoError<StartSupportDataExportError>> {
         let mut request =
             SignedRequest::new("POST", "marketplacecommerceanalytics", &self.region, "/");
 
@@ -281,19 +279,19 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartSupportDataExportResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StartSupportDataExportError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartSupportDataExportResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartSupportDataExportError::from_response(response))
+        }
     }
 }

@@ -24,17 +24,15 @@
 //! list the names of all tables in a database.
 //!
 //! ```rust,no_run
-//! extern crate rusoto_core;
-//! extern crate rusoto_dynamodb;
-//! 
 //! use rusoto_core::Region;
 //! use rusoto_dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput};
 //! 
-//! fn main() {
+//! #[tokio::main]
+//! async fn main() {
 //!     let client = DynamoDbClient::new(Region::UsEast1);
 //!     let list_tables_input: ListTablesInput = Default::default();
 //! 
-//!     match client.list_tables(list_tables_input).sync() {
+//!     match client.list_tables(list_tables_input).await {
 //!         Ok(output) => match output.table_names {
 //!             Some(table_name_list) => {
 //!                 println!("Tables in database:");
@@ -52,17 +50,10 @@
 //! }
 //! ```
 
-extern crate bytes;
-extern crate futures;
-extern crate rusoto_core;
-extern crate serde;
-#[macro_use]
-extern crate serde_derive;
-extern crate serde_json;
 
 mod generated;
 mod custom;
 
-pub use crate::generated::*;
-pub use crate::custom::*;
+pub use generated::*;
+pub use custom::*;
             

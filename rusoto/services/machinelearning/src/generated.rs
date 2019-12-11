@@ -11,17 +11,17 @@
 // =================================================================
 #![allow(warnings)]
 
-use futures::future;
-use futures::Future;
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 use std::error::Error;
 use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsInput {
@@ -2923,168 +2923,175 @@ impl Error for UpdateMLModelError {
     }
 }
 /// Trait representing the capabilities of the Amazon Machine Learning API. Amazon Machine Learning clients implement this trait.
+#[async_trait]
 pub trait MachineLearning {
     /// <p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
+    async fn add_tags(
+        &self,
+        input: AddTagsInput,
+    ) -> Result<AddTagsOutput, RusotoError<AddTagsError>>;
 
     /// <p>Generates predictions for a group of observations. The observations to process exist in one or more data files referenced by a <code>DataSource</code>. This operation creates a new <code>BatchPrediction</code>, and uses an <code>MLModel</code> and the data files referenced by the <code>DataSource</code> as information sources. </p> <p><code>CreateBatchPrediction</code> is an asynchronous operation. In response to <code>CreateBatchPrediction</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>BatchPrediction</code> status to <code>PENDING</code>. After the <code>BatchPrediction</code> completes, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can poll for status updates by using the <a>GetBatchPrediction</a> operation and checking the <code>Status</code> parameter of the result. After the <code>COMPLETED</code> status appears, the results are available in the location specified by the <code>OutputUri</code> parameter.</p>
-    fn create_batch_prediction(
+    async fn create_batch_prediction(
         &self,
         input: CreateBatchPredictionInput,
-    ) -> RusotoFuture<CreateBatchPredictionOutput, CreateBatchPredictionError>;
+    ) -> Result<CreateBatchPredictionOutput, RusotoError<CreateBatchPredictionError>>;
 
     /// <p>Creates a <code>DataSource</code> object from an <a href="http://aws.amazon.com/rds/"> Amazon Relational Database Service</a> (Amazon RDS). A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRDS</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRDS</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used only to perform <code>&gt;CreateMLModel</code>&gt;, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML cannot accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p>
-    fn create_data_source_from_rds(
+    async fn create_data_source_from_rds(
         &self,
         input: CreateDataSourceFromRDSInput,
-    ) -> RusotoFuture<CreateDataSourceFromRDSOutput, CreateDataSourceFromRDSError>;
+    ) -> Result<CreateDataSourceFromRDSOutput, RusotoError<CreateDataSourceFromRDSError>>;
 
     /// <p><p>Creates a <code>DataSource</code> from a database hosted on an Amazon Redshift cluster. A <code>DataSource</code> references data that can be used to perform either <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRedshift</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRedshift</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in <code>COMPLETED</code> or <code>PENDING</code> states can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can&#39;t accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observations should be contained in the database hosted on an Amazon Redshift cluster and should be specified by a <code>SelectSqlQuery</code> query. Amazon ML executes an <code>Unload</code> command in Amazon Redshift to transfer the result set of the <code>SelectSqlQuery</code> query to <code>S3StagingLocation</code>.</p> <p>After the <code>DataSource</code> has been created, it&#39;s ready for use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also requires a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p> &lt;?oxy<em>insert</em>start author=&quot;laurama&quot; timestamp=&quot;20160406T153842-0700&quot;&gt;<p>You can&#39;t change an existing datasource, but you can copy and modify the settings from an existing Amazon Redshift datasource to create a new datasource. To do so, call <code>GetDataSource</code> for an existing datasource and copy the values to a <code>CreateDataSource</code> call. Change the settings that you want to change and make sure that all required fields have the appropriate values.</p> &lt;?oxy<em>insert</em>end&gt;</p>
-    fn create_data_source_from_redshift(
+    async fn create_data_source_from_redshift(
         &self,
         input: CreateDataSourceFromRedshiftInput,
-    ) -> RusotoFuture<CreateDataSourceFromRedshiftOutput, CreateDataSourceFromRedshiftError>;
+    ) -> Result<CreateDataSourceFromRedshiftOutput, RusotoError<CreateDataSourceFromRedshiftError>>;
 
     /// <p>Creates a <code>DataSource</code> object. A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromS3</code> is an asynchronous operation. In response to <code>CreateDataSourceFromS3</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> has been created and is ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code> or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can't accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observation data used in a <code>DataSource</code> should be ready to use; that is, it should have a consistent structure, and missing data values should be kept to a minimum. The observation data must reside in one or more .csv files in an Amazon Simple Storage Service (Amazon S3) location, along with a schema that describes the data items by name and type. The same schema must be used for all of the data files referenced by the <code>DataSource</code>. </p> <p>After the <code>DataSource</code> has been created, it's ready to use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also needs a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p>
-    fn create_data_source_from_s3(
+    async fn create_data_source_from_s3(
         &self,
         input: CreateDataSourceFromS3Input,
-    ) -> RusotoFuture<CreateDataSourceFromS3Output, CreateDataSourceFromS3Error>;
+    ) -> Result<CreateDataSourceFromS3Output, RusotoError<CreateDataSourceFromS3Error>>;
 
     /// <p>Creates a new <code>Evaluation</code> of an <code>MLModel</code>. An <code>MLModel</code> is evaluated on a set of observations associated to a <code>DataSource</code>. Like a <code>DataSource</code> for an <code>MLModel</code>, the <code>DataSource</code> for an <code>Evaluation</code> contains values for the <code>Target Variable</code>. The <code>Evaluation</code> compares the predicted result for each observation to the actual outcome and provides a summary so that you know how effective the <code>MLModel</code> functions on the test data. Evaluation generates a relevant performance metric, such as BinaryAUC, RegressionRMSE or MulticlassAvgFScore based on the corresponding <code>MLModelType</code>: <code>BINARY</code>, <code>REGRESSION</code> or <code>MULTICLASS</code>. </p> <p><code>CreateEvaluation</code> is an asynchronous operation. In response to <code>CreateEvaluation</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the evaluation status to <code>PENDING</code>. After the <code>Evaluation</code> is created and ready for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetEvaluation</code> operation to check progress of the evaluation during the creation operation.</p>
-    fn create_evaluation(
+    async fn create_evaluation(
         &self,
         input: CreateEvaluationInput,
-    ) -> RusotoFuture<CreateEvaluationOutput, CreateEvaluationError>;
+    ) -> Result<CreateEvaluationOutput, RusotoError<CreateEvaluationError>>;
 
     /// <p>Creates a new <code>MLModel</code> using the <code>DataSource</code> and the recipe as information sources. </p> <p>An <code>MLModel</code> is nearly immutable. Users can update only the <code>MLModelName</code> and the <code>ScoreThreshold</code> in an <code>MLModel</code> without creating a new <code>MLModel</code>. </p> <p><code>CreateMLModel</code> is an asynchronous operation. In response to <code>CreateMLModel</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>MLModel</code> status to <code>PENDING</code>. After the <code>MLModel</code> has been created and ready is for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetMLModel</code> operation to check the progress of the <code>MLModel</code> during the creation operation.</p> <p> <code>CreateMLModel</code> requires a <code>DataSource</code> with computed statistics, which can be created by setting <code>ComputeStatistics</code> to <code>true</code> in <code>CreateDataSourceFromRDS</code>, <code>CreateDataSourceFromS3</code>, or <code>CreateDataSourceFromRedshift</code> operations. </p>
-    fn create_ml_model(
+    async fn create_ml_model(
         &self,
         input: CreateMLModelInput,
-    ) -> RusotoFuture<CreateMLModelOutput, CreateMLModelError>;
+    ) -> Result<CreateMLModelOutput, RusotoError<CreateMLModelError>>;
 
     /// <p>Creates a real-time endpoint for the <code>MLModel</code>. The endpoint contains the URI of the <code>MLModel</code>; that is, the location to send real-time prediction requests for the specified <code>MLModel</code>.</p>
-    fn create_realtime_endpoint(
+    async fn create_realtime_endpoint(
         &self,
         input: CreateRealtimeEndpointInput,
-    ) -> RusotoFuture<CreateRealtimeEndpointOutput, CreateRealtimeEndpointError>;
+    ) -> Result<CreateRealtimeEndpointOutput, RusotoError<CreateRealtimeEndpointError>>;
 
     /// <p>Assigns the DELETED status to a <code>BatchPrediction</code>, rendering it unusable.</p> <p>After using the <code>DeleteBatchPrediction</code> operation, you can use the <a>GetBatchPrediction</a> operation to verify that the status of the <code>BatchPrediction</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteBatchPrediction</code> operation is irreversible.</p>
-    fn delete_batch_prediction(
+    async fn delete_batch_prediction(
         &self,
         input: DeleteBatchPredictionInput,
-    ) -> RusotoFuture<DeleteBatchPredictionOutput, DeleteBatchPredictionError>;
+    ) -> Result<DeleteBatchPredictionOutput, RusotoError<DeleteBatchPredictionError>>;
 
     /// <p>Assigns the DELETED status to a <code>DataSource</code>, rendering it unusable.</p> <p>After using the <code>DeleteDataSource</code> operation, you can use the <a>GetDataSource</a> operation to verify that the status of the <code>DataSource</code> changed to DELETED.</p> <p><b>Caution:</b> The results of the <code>DeleteDataSource</code> operation are irreversible.</p>
-    fn delete_data_source(
+    async fn delete_data_source(
         &self,
         input: DeleteDataSourceInput,
-    ) -> RusotoFuture<DeleteDataSourceOutput, DeleteDataSourceError>;
+    ) -> Result<DeleteDataSourceOutput, RusotoError<DeleteDataSourceError>>;
 
     /// <p><p>Assigns the <code>DELETED</code> status to an <code>Evaluation</code>, rendering it unusable.</p> <p>After invoking the <code>DeleteEvaluation</code> operation, you can use the <code>GetEvaluation</code> operation to verify that the status of the <code>Evaluation</code> changed to <code>DELETED</code>.</p> <caution><title>Caution</title> <p>The results of the <code>DeleteEvaluation</code> operation are irreversible.</p></caution></p>
-    fn delete_evaluation(
+    async fn delete_evaluation(
         &self,
         input: DeleteEvaluationInput,
-    ) -> RusotoFuture<DeleteEvaluationOutput, DeleteEvaluationError>;
+    ) -> Result<DeleteEvaluationOutput, RusotoError<DeleteEvaluationError>>;
 
     /// <p>Assigns the <code>DELETED</code> status to an <code>MLModel</code>, rendering it unusable.</p> <p>After using the <code>DeleteMLModel</code> operation, you can use the <code>GetMLModel</code> operation to verify that the status of the <code>MLModel</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteMLModel</code> operation is irreversible.</p>
-    fn delete_ml_model(
+    async fn delete_ml_model(
         &self,
         input: DeleteMLModelInput,
-    ) -> RusotoFuture<DeleteMLModelOutput, DeleteMLModelError>;
+    ) -> Result<DeleteMLModelOutput, RusotoError<DeleteMLModelError>>;
 
     /// <p>Deletes a real time endpoint of an <code>MLModel</code>.</p>
-    fn delete_realtime_endpoint(
+    async fn delete_realtime_endpoint(
         &self,
         input: DeleteRealtimeEndpointInput,
-    ) -> RusotoFuture<DeleteRealtimeEndpointOutput, DeleteRealtimeEndpointError>;
+    ) -> Result<DeleteRealtimeEndpointOutput, RusotoError<DeleteRealtimeEndpointError>>;
 
     /// <p>Deletes the specified tags associated with an ML object. After this operation is complete, you can't recover deleted tags.</p> <p>If you specify a tag that doesn't exist, Amazon ML ignores it.</p>
-    fn delete_tags(
+    async fn delete_tags(
         &self,
         input: DeleteTagsInput,
-    ) -> RusotoFuture<DeleteTagsOutput, DeleteTagsError>;
+    ) -> Result<DeleteTagsOutput, RusotoError<DeleteTagsError>>;
 
     /// <p>Returns a list of <code>BatchPrediction</code> operations that match the search criteria in the request.</p>
-    fn describe_batch_predictions(
+    async fn describe_batch_predictions(
         &self,
         input: DescribeBatchPredictionsInput,
-    ) -> RusotoFuture<DescribeBatchPredictionsOutput, DescribeBatchPredictionsError>;
+    ) -> Result<DescribeBatchPredictionsOutput, RusotoError<DescribeBatchPredictionsError>>;
 
     /// <p>Returns a list of <code>DataSource</code> that match the search criteria in the request.</p>
-    fn describe_data_sources(
+    async fn describe_data_sources(
         &self,
         input: DescribeDataSourcesInput,
-    ) -> RusotoFuture<DescribeDataSourcesOutput, DescribeDataSourcesError>;
+    ) -> Result<DescribeDataSourcesOutput, RusotoError<DescribeDataSourcesError>>;
 
     /// <p>Returns a list of <code>DescribeEvaluations</code> that match the search criteria in the request.</p>
-    fn describe_evaluations(
+    async fn describe_evaluations(
         &self,
         input: DescribeEvaluationsInput,
-    ) -> RusotoFuture<DescribeEvaluationsOutput, DescribeEvaluationsError>;
+    ) -> Result<DescribeEvaluationsOutput, RusotoError<DescribeEvaluationsError>>;
 
     /// <p>Returns a list of <code>MLModel</code> that match the search criteria in the request.</p>
-    fn describe_ml_models(
+    async fn describe_ml_models(
         &self,
         input: DescribeMLModelsInput,
-    ) -> RusotoFuture<DescribeMLModelsOutput, DescribeMLModelsError>;
+    ) -> Result<DescribeMLModelsOutput, RusotoError<DescribeMLModelsError>>;
 
     /// <p>Describes one or more of the tags for your Amazon ML object.</p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsInput,
-    ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError>;
+    ) -> Result<DescribeTagsOutput, RusotoError<DescribeTagsError>>;
 
     /// <p>Returns a <code>BatchPrediction</code> that includes detailed metadata, status, and data file information for a <code>Batch Prediction</code> request.</p>
-    fn get_batch_prediction(
+    async fn get_batch_prediction(
         &self,
         input: GetBatchPredictionInput,
-    ) -> RusotoFuture<GetBatchPredictionOutput, GetBatchPredictionError>;
+    ) -> Result<GetBatchPredictionOutput, RusotoError<GetBatchPredictionError>>;
 
     /// <p>Returns a <code>DataSource</code> that includes metadata and data file information, as well as the current status of the <code>DataSource</code>.</p> <p><code>GetDataSource</code> provides results in normal or verbose format. The verbose format adds the schema description and the list of files pointed to by the DataSource to the normal format.</p>
-    fn get_data_source(
+    async fn get_data_source(
         &self,
         input: GetDataSourceInput,
-    ) -> RusotoFuture<GetDataSourceOutput, GetDataSourceError>;
+    ) -> Result<GetDataSourceOutput, RusotoError<GetDataSourceError>>;
 
     /// <p>Returns an <code>Evaluation</code> that includes metadata as well as the current status of the <code>Evaluation</code>.</p>
-    fn get_evaluation(
+    async fn get_evaluation(
         &self,
         input: GetEvaluationInput,
-    ) -> RusotoFuture<GetEvaluationOutput, GetEvaluationError>;
+    ) -> Result<GetEvaluationOutput, RusotoError<GetEvaluationError>>;
 
     /// <p>Returns an <code>MLModel</code> that includes detailed metadata, data source information, and the current status of the <code>MLModel</code>.</p> <p><code>GetMLModel</code> provides results in normal or verbose format. </p>
-    fn get_ml_model(
+    async fn get_ml_model(
         &self,
         input: GetMLModelInput,
-    ) -> RusotoFuture<GetMLModelOutput, GetMLModelError>;
+    ) -> Result<GetMLModelOutput, RusotoError<GetMLModelError>>;
 
     /// <p><p>Generates a prediction for the observation using the specified <code>ML Model</code>.</p> <note><title>Note</title> <p>Not all response parameters will be populated. Whether a response parameter is populated depends on the type of model requested.</p></note></p>
-    fn predict(&self, input: PredictInput) -> RusotoFuture<PredictOutput, PredictError>;
+    async fn predict(
+        &self,
+        input: PredictInput,
+    ) -> Result<PredictOutput, RusotoError<PredictError>>;
 
     /// <p>Updates the <code>BatchPredictionName</code> of a <code>BatchPrediction</code>.</p> <p>You can use the <code>GetBatchPrediction</code> operation to view the contents of the updated data element.</p>
-    fn update_batch_prediction(
+    async fn update_batch_prediction(
         &self,
         input: UpdateBatchPredictionInput,
-    ) -> RusotoFuture<UpdateBatchPredictionOutput, UpdateBatchPredictionError>;
+    ) -> Result<UpdateBatchPredictionOutput, RusotoError<UpdateBatchPredictionError>>;
 
     /// <p>Updates the <code>DataSourceName</code> of a <code>DataSource</code>.</p> <p>You can use the <code>GetDataSource</code> operation to view the contents of the updated data element.</p>
-    fn update_data_source(
+    async fn update_data_source(
         &self,
         input: UpdateDataSourceInput,
-    ) -> RusotoFuture<UpdateDataSourceOutput, UpdateDataSourceError>;
+    ) -> Result<UpdateDataSourceOutput, RusotoError<UpdateDataSourceError>>;
 
     /// <p>Updates the <code>EvaluationName</code> of an <code>Evaluation</code>.</p> <p>You can use the <code>GetEvaluation</code> operation to view the contents of the updated data element.</p>
-    fn update_evaluation(
+    async fn update_evaluation(
         &self,
         input: UpdateEvaluationInput,
-    ) -> RusotoFuture<UpdateEvaluationOutput, UpdateEvaluationError>;
+    ) -> Result<UpdateEvaluationOutput, RusotoError<UpdateEvaluationError>>;
 
     /// <p>Updates the <code>MLModelName</code> and the <code>ScoreThreshold</code> of an <code>MLModel</code>.</p> <p>You can use the <code>GetMLModel</code> operation to view the contents of the updated data element.</p>
-    fn update_ml_model(
+    async fn update_ml_model(
         &self,
         input: UpdateMLModelInput,
-    ) -> RusotoFuture<UpdateMLModelOutput, UpdateMLModelError>;
+    ) -> Result<UpdateMLModelOutput, RusotoError<UpdateMLModelError>>;
 }
 /// A client for the Amazon Machine Learning API.
 #[derive(Clone)]
@@ -3108,9 +3115,7 @@ impl MachineLearningClient {
     ) -> MachineLearningClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         Self::new_with_client(
             Client::new_with(credentials_provider, request_dispatcher),
@@ -3131,9 +3136,13 @@ impl fmt::Debug for MachineLearningClient {
     }
 }
 
+#[async_trait]
 impl MachineLearning for MachineLearningClient {
     /// <p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
+    async fn add_tags(
+        &self,
+        input: AddTagsInput,
+    ) -> Result<AddTagsOutput, RusotoError<AddTagsError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3141,27 +3150,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<AddTagsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddTagsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<AddTagsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AddTagsError::from_response(response))
+        }
     }
 
     /// <p>Generates predictions for a group of observations. The observations to process exist in one or more data files referenced by a <code>DataSource</code>. This operation creates a new <code>BatchPrediction</code>, and uses an <code>MLModel</code> and the data files referenced by the <code>DataSource</code> as information sources. </p> <p><code>CreateBatchPrediction</code> is an asynchronous operation. In response to <code>CreateBatchPrediction</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>BatchPrediction</code> status to <code>PENDING</code>. After the <code>BatchPrediction</code> completes, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can poll for status updates by using the <a>GetBatchPrediction</a> operation and checking the <code>Status</code> parameter of the result. After the <code>COMPLETED</code> status appears, the results are available in the location specified by the <code>OutputUri</code> parameter.</p>
-    fn create_batch_prediction(
+    async fn create_batch_prediction(
         &self,
         input: CreateBatchPredictionInput,
-    ) -> RusotoFuture<CreateBatchPredictionOutput, CreateBatchPredictionError> {
+    ) -> Result<CreateBatchPredictionOutput, RusotoError<CreateBatchPredictionError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3169,27 +3177,27 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateBatchPredictionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateBatchPredictionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateBatchPredictionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateBatchPredictionError::from_response(response))
+        }
     }
 
     /// <p>Creates a <code>DataSource</code> object from an <a href="http://aws.amazon.com/rds/"> Amazon Relational Database Service</a> (Amazon RDS). A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRDS</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRDS</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used only to perform <code>&gt;CreateMLModel</code>&gt;, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML cannot accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p>
-    fn create_data_source_from_rds(
+    async fn create_data_source_from_rds(
         &self,
         input: CreateDataSourceFromRDSInput,
-    ) -> RusotoFuture<CreateDataSourceFromRDSOutput, CreateDataSourceFromRDSError> {
+    ) -> Result<CreateDataSourceFromRDSOutput, RusotoError<CreateDataSourceFromRDSError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3197,25 +3205,28 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDataSourceFromRDSOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDataSourceFromRDSError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDataSourceFromRDSOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDataSourceFromRDSError::from_response(response))
+        }
     }
 
     /// <p><p>Creates a <code>DataSource</code> from a database hosted on an Amazon Redshift cluster. A <code>DataSource</code> references data that can be used to perform either <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRedshift</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRedshift</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in <code>COMPLETED</code> or <code>PENDING</code> states can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can&#39;t accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observations should be contained in the database hosted on an Amazon Redshift cluster and should be specified by a <code>SelectSqlQuery</code> query. Amazon ML executes an <code>Unload</code> command in Amazon Redshift to transfer the result set of the <code>SelectSqlQuery</code> query to <code>S3StagingLocation</code>.</p> <p>After the <code>DataSource</code> has been created, it&#39;s ready for use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also requires a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p> &lt;?oxy<em>insert</em>start author=&quot;laurama&quot; timestamp=&quot;20160406T153842-0700&quot;&gt;<p>You can&#39;t change an existing datasource, but you can copy and modify the settings from an existing Amazon Redshift datasource to create a new datasource. To do so, call <code>GetDataSource</code> for an existing datasource and copy the values to a <code>CreateDataSource</code> call. Change the settings that you want to change and make sure that all required fields have the appropriate values.</p> &lt;?oxy<em>insert</em>end&gt;</p>
-    fn create_data_source_from_redshift(
+    async fn create_data_source_from_redshift(
         &self,
         input: CreateDataSourceFromRedshiftInput,
-    ) -> RusotoFuture<CreateDataSourceFromRedshiftOutput, CreateDataSourceFromRedshiftError> {
+    ) -> Result<CreateDataSourceFromRedshiftOutput, RusotoError<CreateDataSourceFromRedshiftError>>
+    {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3226,25 +3237,27 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDataSourceFromRedshiftOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDataSourceFromRedshiftError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDataSourceFromRedshiftOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDataSourceFromRedshiftError::from_response(response))
+        }
     }
 
     /// <p>Creates a <code>DataSource</code> object. A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromS3</code> is an asynchronous operation. In response to <code>CreateDataSourceFromS3</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> has been created and is ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code> or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can't accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observation data used in a <code>DataSource</code> should be ready to use; that is, it should have a consistent structure, and missing data values should be kept to a minimum. The observation data must reside in one or more .csv files in an Amazon Simple Storage Service (Amazon S3) location, along with a schema that describes the data items by name and type. The same schema must be used for all of the data files referenced by the <code>DataSource</code>. </p> <p>After the <code>DataSource</code> has been created, it's ready to use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also needs a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p>
-    fn create_data_source_from_s3(
+    async fn create_data_source_from_s3(
         &self,
         input: CreateDataSourceFromS3Input,
-    ) -> RusotoFuture<CreateDataSourceFromS3Output, CreateDataSourceFromS3Error> {
+    ) -> Result<CreateDataSourceFromS3Output, RusotoError<CreateDataSourceFromS3Error>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3252,27 +3265,27 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDataSourceFromS3Output, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateDataSourceFromS3Error::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDataSourceFromS3Output, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDataSourceFromS3Error::from_response(response))
+        }
     }
 
     /// <p>Creates a new <code>Evaluation</code> of an <code>MLModel</code>. An <code>MLModel</code> is evaluated on a set of observations associated to a <code>DataSource</code>. Like a <code>DataSource</code> for an <code>MLModel</code>, the <code>DataSource</code> for an <code>Evaluation</code> contains values for the <code>Target Variable</code>. The <code>Evaluation</code> compares the predicted result for each observation to the actual outcome and provides a summary so that you know how effective the <code>MLModel</code> functions on the test data. Evaluation generates a relevant performance metric, such as BinaryAUC, RegressionRMSE or MulticlassAvgFScore based on the corresponding <code>MLModelType</code>: <code>BINARY</code>, <code>REGRESSION</code> or <code>MULTICLASS</code>. </p> <p><code>CreateEvaluation</code> is an asynchronous operation. In response to <code>CreateEvaluation</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the evaluation status to <code>PENDING</code>. After the <code>Evaluation</code> is created and ready for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetEvaluation</code> operation to check progress of the evaluation during the creation operation.</p>
-    fn create_evaluation(
+    async fn create_evaluation(
         &self,
         input: CreateEvaluationInput,
-    ) -> RusotoFuture<CreateEvaluationOutput, CreateEvaluationError> {
+    ) -> Result<CreateEvaluationOutput, RusotoError<CreateEvaluationError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3280,28 +3293,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateEvaluationOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateEvaluationError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateEvaluationOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateEvaluationError::from_response(response))
+        }
     }
 
     /// <p>Creates a new <code>MLModel</code> using the <code>DataSource</code> and the recipe as information sources. </p> <p>An <code>MLModel</code> is nearly immutable. Users can update only the <code>MLModelName</code> and the <code>ScoreThreshold</code> in an <code>MLModel</code> without creating a new <code>MLModel</code>. </p> <p><code>CreateMLModel</code> is an asynchronous operation. In response to <code>CreateMLModel</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>MLModel</code> status to <code>PENDING</code>. After the <code>MLModel</code> has been created and ready is for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetMLModel</code> operation to check the progress of the <code>MLModel</code> during the creation operation.</p> <p> <code>CreateMLModel</code> requires a <code>DataSource</code> with computed statistics, which can be created by setting <code>ComputeStatistics</code> to <code>true</code> in <code>CreateDataSourceFromRDS</code>, <code>CreateDataSourceFromS3</code>, or <code>CreateDataSourceFromRedshift</code> operations. </p>
-    fn create_ml_model(
+    async fn create_ml_model(
         &self,
         input: CreateMLModelInput,
-    ) -> RusotoFuture<CreateMLModelOutput, CreateMLModelError> {
+    ) -> Result<CreateMLModelOutput, RusotoError<CreateMLModelError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3309,28 +3320,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateMLModelOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateMLModelError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateMLModelOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateMLModelError::from_response(response))
+        }
     }
 
     /// <p>Creates a real-time endpoint for the <code>MLModel</code>. The endpoint contains the URI of the <code>MLModel</code>; that is, the location to send real-time prediction requests for the specified <code>MLModel</code>.</p>
-    fn create_realtime_endpoint(
+    async fn create_realtime_endpoint(
         &self,
         input: CreateRealtimeEndpointInput,
-    ) -> RusotoFuture<CreateRealtimeEndpointOutput, CreateRealtimeEndpointError> {
+    ) -> Result<CreateRealtimeEndpointOutput, RusotoError<CreateRealtimeEndpointError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3338,27 +3347,27 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateRealtimeEndpointOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateRealtimeEndpointError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateRealtimeEndpointOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateRealtimeEndpointError::from_response(response))
+        }
     }
 
     /// <p>Assigns the DELETED status to a <code>BatchPrediction</code>, rendering it unusable.</p> <p>After using the <code>DeleteBatchPrediction</code> operation, you can use the <a>GetBatchPrediction</a> operation to verify that the status of the <code>BatchPrediction</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteBatchPrediction</code> operation is irreversible.</p>
-    fn delete_batch_prediction(
+    async fn delete_batch_prediction(
         &self,
         input: DeleteBatchPredictionInput,
-    ) -> RusotoFuture<DeleteBatchPredictionOutput, DeleteBatchPredictionError> {
+    ) -> Result<DeleteBatchPredictionOutput, RusotoError<DeleteBatchPredictionError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3366,27 +3375,27 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteBatchPredictionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteBatchPredictionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteBatchPredictionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteBatchPredictionError::from_response(response))
+        }
     }
 
     /// <p>Assigns the DELETED status to a <code>DataSource</code>, rendering it unusable.</p> <p>After using the <code>DeleteDataSource</code> operation, you can use the <a>GetDataSource</a> operation to verify that the status of the <code>DataSource</code> changed to DELETED.</p> <p><b>Caution:</b> The results of the <code>DeleteDataSource</code> operation are irreversible.</p>
-    fn delete_data_source(
+    async fn delete_data_source(
         &self,
         input: DeleteDataSourceInput,
-    ) -> RusotoFuture<DeleteDataSourceOutput, DeleteDataSourceError> {
+    ) -> Result<DeleteDataSourceOutput, RusotoError<DeleteDataSourceError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3394,28 +3403,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDataSourceOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteDataSourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDataSourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDataSourceError::from_response(response))
+        }
     }
 
     /// <p><p>Assigns the <code>DELETED</code> status to an <code>Evaluation</code>, rendering it unusable.</p> <p>After invoking the <code>DeleteEvaluation</code> operation, you can use the <code>GetEvaluation</code> operation to verify that the status of the <code>Evaluation</code> changed to <code>DELETED</code>.</p> <caution><title>Caution</title> <p>The results of the <code>DeleteEvaluation</code> operation are irreversible.</p></caution></p>
-    fn delete_evaluation(
+    async fn delete_evaluation(
         &self,
         input: DeleteEvaluationInput,
-    ) -> RusotoFuture<DeleteEvaluationOutput, DeleteEvaluationError> {
+    ) -> Result<DeleteEvaluationOutput, RusotoError<DeleteEvaluationError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3423,28 +3430,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteEvaluationOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteEvaluationError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteEvaluationOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteEvaluationError::from_response(response))
+        }
     }
 
     /// <p>Assigns the <code>DELETED</code> status to an <code>MLModel</code>, rendering it unusable.</p> <p>After using the <code>DeleteMLModel</code> operation, you can use the <code>GetMLModel</code> operation to verify that the status of the <code>MLModel</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteMLModel</code> operation is irreversible.</p>
-    fn delete_ml_model(
+    async fn delete_ml_model(
         &self,
         input: DeleteMLModelInput,
-    ) -> RusotoFuture<DeleteMLModelOutput, DeleteMLModelError> {
+    ) -> Result<DeleteMLModelOutput, RusotoError<DeleteMLModelError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3452,28 +3457,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteMLModelOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteMLModelError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteMLModelOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteMLModelError::from_response(response))
+        }
     }
 
     /// <p>Deletes a real time endpoint of an <code>MLModel</code>.</p>
-    fn delete_realtime_endpoint(
+    async fn delete_realtime_endpoint(
         &self,
         input: DeleteRealtimeEndpointInput,
-    ) -> RusotoFuture<DeleteRealtimeEndpointOutput, DeleteRealtimeEndpointError> {
+    ) -> Result<DeleteRealtimeEndpointOutput, RusotoError<DeleteRealtimeEndpointError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3481,27 +3484,27 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteRealtimeEndpointOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteRealtimeEndpointError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteRealtimeEndpointOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRealtimeEndpointError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified tags associated with an ML object. After this operation is complete, you can't recover deleted tags.</p> <p>If you specify a tag that doesn't exist, Amazon ML ignores it.</p>
-    fn delete_tags(
+    async fn delete_tags(
         &self,
         input: DeleteTagsInput,
-    ) -> RusotoFuture<DeleteTagsOutput, DeleteTagsError> {
+    ) -> Result<DeleteTagsOutput, RusotoError<DeleteTagsError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3509,28 +3512,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteTagsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteTagsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTagsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTagsError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of <code>BatchPrediction</code> operations that match the search criteria in the request.</p>
-    fn describe_batch_predictions(
+    async fn describe_batch_predictions(
         &self,
         input: DescribeBatchPredictionsInput,
-    ) -> RusotoFuture<DescribeBatchPredictionsOutput, DescribeBatchPredictionsError> {
+    ) -> Result<DescribeBatchPredictionsOutput, RusotoError<DescribeBatchPredictionsError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3538,25 +3539,27 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeBatchPredictionsOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeBatchPredictionsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeBatchPredictionsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeBatchPredictionsError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of <code>DataSource</code> that match the search criteria in the request.</p>
-    fn describe_data_sources(
+    async fn describe_data_sources(
         &self,
         input: DescribeDataSourcesInput,
-    ) -> RusotoFuture<DescribeDataSourcesOutput, DescribeDataSourcesError> {
+    ) -> Result<DescribeDataSourcesOutput, RusotoError<DescribeDataSourcesError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3564,27 +3567,27 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDataSourcesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeDataSourcesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDataSourcesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDataSourcesError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of <code>DescribeEvaluations</code> that match the search criteria in the request.</p>
-    fn describe_evaluations(
+    async fn describe_evaluations(
         &self,
         input: DescribeEvaluationsInput,
-    ) -> RusotoFuture<DescribeEvaluationsOutput, DescribeEvaluationsError> {
+    ) -> Result<DescribeEvaluationsOutput, RusotoError<DescribeEvaluationsError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3592,27 +3595,27 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEvaluationsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeEvaluationsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEvaluationsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEvaluationsError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of <code>MLModel</code> that match the search criteria in the request.</p>
-    fn describe_ml_models(
+    async fn describe_ml_models(
         &self,
         input: DescribeMLModelsInput,
-    ) -> RusotoFuture<DescribeMLModelsOutput, DescribeMLModelsError> {
+    ) -> Result<DescribeMLModelsOutput, RusotoError<DescribeMLModelsError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3620,28 +3623,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeMLModelsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeMLModelsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeMLModelsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeMLModelsError::from_response(response))
+        }
     }
 
     /// <p>Describes one or more of the tags for your Amazon ML object.</p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsInput,
-    ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError> {
+    ) -> Result<DescribeTagsOutput, RusotoError<DescribeTagsError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3649,28 +3650,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTagsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTagsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTagsError::from_response(response))
+        }
     }
 
     /// <p>Returns a <code>BatchPrediction</code> that includes detailed metadata, status, and data file information for a <code>Batch Prediction</code> request.</p>
-    fn get_batch_prediction(
+    async fn get_batch_prediction(
         &self,
         input: GetBatchPredictionInput,
-    ) -> RusotoFuture<GetBatchPredictionOutput, GetBatchPredictionError> {
+    ) -> Result<GetBatchPredictionOutput, RusotoError<GetBatchPredictionError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3678,28 +3677,27 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetBatchPredictionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetBatchPredictionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetBatchPredictionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetBatchPredictionError::from_response(response))
+        }
     }
 
     /// <p>Returns a <code>DataSource</code> that includes metadata and data file information, as well as the current status of the <code>DataSource</code>.</p> <p><code>GetDataSource</code> provides results in normal or verbose format. The verbose format adds the schema description and the list of files pointed to by the DataSource to the normal format.</p>
-    fn get_data_source(
+    async fn get_data_source(
         &self,
         input: GetDataSourceInput,
-    ) -> RusotoFuture<GetDataSourceOutput, GetDataSourceError> {
+    ) -> Result<GetDataSourceOutput, RusotoError<GetDataSourceError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3707,28 +3705,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDataSourceOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetDataSourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetDataSourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDataSourceError::from_response(response))
+        }
     }
 
     /// <p>Returns an <code>Evaluation</code> that includes metadata as well as the current status of the <code>Evaluation</code>.</p>
-    fn get_evaluation(
+    async fn get_evaluation(
         &self,
         input: GetEvaluationInput,
-    ) -> RusotoFuture<GetEvaluationOutput, GetEvaluationError> {
+    ) -> Result<GetEvaluationOutput, RusotoError<GetEvaluationError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3736,28 +3732,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetEvaluationOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetEvaluationError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetEvaluationOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetEvaluationError::from_response(response))
+        }
     }
 
     /// <p>Returns an <code>MLModel</code> that includes detailed metadata, data source information, and the current status of the <code>MLModel</code>.</p> <p><code>GetMLModel</code> provides results in normal or verbose format. </p>
-    fn get_ml_model(
+    async fn get_ml_model(
         &self,
         input: GetMLModelInput,
-    ) -> RusotoFuture<GetMLModelOutput, GetMLModelError> {
+    ) -> Result<GetMLModelOutput, RusotoError<GetMLModelError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3765,25 +3759,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetMLModelOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetMLModelError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetMLModelOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetMLModelError::from_response(response))
+        }
     }
 
     /// <p><p>Generates a prediction for the observation using the specified <code>ML Model</code>.</p> <note><title>Note</title> <p>Not all response parameters will be populated. Whether a response parameter is populated depends on the type of model requested.</p></note></p>
-    fn predict(&self, input: PredictInput) -> RusotoFuture<PredictOutput, PredictError> {
+    async fn predict(
+        &self,
+        input: PredictInput,
+    ) -> Result<PredictOutput, RusotoError<PredictError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3791,27 +3786,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<PredictOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PredictError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<PredictOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PredictError::from_response(response))
+        }
     }
 
     /// <p>Updates the <code>BatchPredictionName</code> of a <code>BatchPrediction</code>.</p> <p>You can use the <code>GetBatchPrediction</code> operation to view the contents of the updated data element.</p>
-    fn update_batch_prediction(
+    async fn update_batch_prediction(
         &self,
         input: UpdateBatchPredictionInput,
-    ) -> RusotoFuture<UpdateBatchPredictionOutput, UpdateBatchPredictionError> {
+    ) -> Result<UpdateBatchPredictionOutput, RusotoError<UpdateBatchPredictionError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3819,27 +3813,27 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateBatchPredictionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateBatchPredictionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateBatchPredictionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateBatchPredictionError::from_response(response))
+        }
     }
 
     /// <p>Updates the <code>DataSourceName</code> of a <code>DataSource</code>.</p> <p>You can use the <code>GetDataSource</code> operation to view the contents of the updated data element.</p>
-    fn update_data_source(
+    async fn update_data_source(
         &self,
         input: UpdateDataSourceInput,
-    ) -> RusotoFuture<UpdateDataSourceOutput, UpdateDataSourceError> {
+    ) -> Result<UpdateDataSourceOutput, RusotoError<UpdateDataSourceError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3847,28 +3841,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateDataSourceOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateDataSourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateDataSourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDataSourceError::from_response(response))
+        }
     }
 
     /// <p>Updates the <code>EvaluationName</code> of an <code>Evaluation</code>.</p> <p>You can use the <code>GetEvaluation</code> operation to view the contents of the updated data element.</p>
-    fn update_evaluation(
+    async fn update_evaluation(
         &self,
         input: UpdateEvaluationInput,
-    ) -> RusotoFuture<UpdateEvaluationOutput, UpdateEvaluationError> {
+    ) -> Result<UpdateEvaluationOutput, RusotoError<UpdateEvaluationError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3876,28 +3868,26 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateEvaluationOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateEvaluationError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateEvaluationOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateEvaluationError::from_response(response))
+        }
     }
 
     /// <p>Updates the <code>MLModelName</code> and the <code>ScoreThreshold</code> of an <code>MLModel</code>.</p> <p>You can use the <code>GetMLModel</code> operation to view the contents of the updated data element.</p>
-    fn update_ml_model(
+    async fn update_ml_model(
         &self,
         input: UpdateMLModelInput,
-    ) -> RusotoFuture<UpdateMLModelOutput, UpdateMLModelError> {
+    ) -> Result<UpdateMLModelOutput, RusotoError<UpdateMLModelError>> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3905,20 +3895,18 @@ impl MachineLearning for MachineLearningClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateMLModelOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateMLModelError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateMLModelOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateMLModelError::from_response(response))
+        }
     }
 }

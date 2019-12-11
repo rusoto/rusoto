@@ -11,17 +11,17 @@
 // =================================================================
 #![allow(warnings)]
 
-use futures::future;
-use futures::Future;
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 use std::error::Error;
 use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>The custom terminology applied to the input text by Amazon Translate for the translated text response. This is optional in the response and will only be present if you specified terminology input in the request. Currently, only one terminology can be applied per TranslateText request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -534,36 +534,37 @@ impl Error for TranslateTextError {
     }
 }
 /// Trait representing the capabilities of the Amazon Translate API. Amazon Translate clients implement this trait.
+#[async_trait]
 pub trait Translate {
     /// <p>A synchronous action that deletes a custom terminology.</p>
-    fn delete_terminology(
+    async fn delete_terminology(
         &self,
         input: DeleteTerminologyRequest,
-    ) -> RusotoFuture<(), DeleteTerminologyError>;
+    ) -> Result<(), RusotoError<DeleteTerminologyError>>;
 
     /// <p>Retrieves a custom terminology.</p>
-    fn get_terminology(
+    async fn get_terminology(
         &self,
         input: GetTerminologyRequest,
-    ) -> RusotoFuture<GetTerminologyResponse, GetTerminologyError>;
+    ) -> Result<GetTerminologyResponse, RusotoError<GetTerminologyError>>;
 
     /// <p>Creates or updates a custom terminology, depending on whether or not one already exists for the given terminology name. Importing a terminology with the same name as an existing one will merge the terminologies based on the chosen merge strategy. Currently, the only supported merge strategy is OVERWRITE, and so the imported terminology will overwrite an existing terminology of the same name.</p> <p>If you import a terminology that overwrites an existing one, the new terminology take up to 10 minutes to fully propagate and be available for use in a translation due to cache policies with the DataPlane service that performs the translations.</p>
-    fn import_terminology(
+    async fn import_terminology(
         &self,
         input: ImportTerminologyRequest,
-    ) -> RusotoFuture<ImportTerminologyResponse, ImportTerminologyError>;
+    ) -> Result<ImportTerminologyResponse, RusotoError<ImportTerminologyError>>;
 
     /// <p>Provides a list of custom terminologies associated with your account.</p>
-    fn list_terminologies(
+    async fn list_terminologies(
         &self,
         input: ListTerminologiesRequest,
-    ) -> RusotoFuture<ListTerminologiesResponse, ListTerminologiesError>;
+    ) -> Result<ListTerminologiesResponse, RusotoError<ListTerminologiesError>>;
 
     /// <p>Translates input text from the source language to the target language. It is not necessary to use English (en) as either the source or the target language but not all language combinations are supported by Amazon Translate. For more information, see <a href="http://docs.aws.amazon.com/translate/latest/dg/pairs.html">Supported Language Pairs</a>.</p> <ul> <li> <p>Arabic (ar)</p> </li> <li> <p>Chinese (Simplified) (zh)</p> </li> <li> <p>Chinese (Traditional) (zh-TW)</p> </li> <li> <p>Czech (cs)</p> </li> <li> <p>Danish (da)</p> </li> <li> <p>Dutch (nl)</p> </li> <li> <p>English (en)</p> </li> <li> <p>Finnish (fi)</p> </li> <li> <p>French (fr)</p> </li> <li> <p>German (de)</p> </li> <li> <p>Hebrew (he)</p> </li> <li> <p>Indonesian (id)</p> </li> <li> <p>Italian (it)</p> </li> <li> <p>Japanese (ja)</p> </li> <li> <p>Korean (ko)</p> </li> <li> <p>Polish (pl)</p> </li> <li> <p>Portuguese (pt)</p> </li> <li> <p>Russian (ru)</p> </li> <li> <p>Spanish (es)</p> </li> <li> <p>Swedish (sv)</p> </li> <li> <p>Turkish (tr)</p> </li> </ul> <p>To have Amazon Translate determine the source language of your text, you can specify <code>auto</code> in the <code>SourceLanguageCode</code> field. If you specify <code>auto</code>, Amazon Translate will call Amazon Comprehend to determine the source language.</p>
-    fn translate_text(
+    async fn translate_text(
         &self,
         input: TranslateTextRequest,
-    ) -> RusotoFuture<TranslateTextResponse, TranslateTextError>;
+    ) -> Result<TranslateTextResponse, RusotoError<TranslateTextError>>;
 }
 /// A client for the Amazon Translate API.
 #[derive(Clone)]
@@ -587,9 +588,7 @@ impl TranslateClient {
     ) -> TranslateClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         Self::new_with_client(
             Client::new_with(credentials_provider, request_dispatcher),
@@ -610,12 +609,13 @@ impl fmt::Debug for TranslateClient {
     }
 }
 
+#[async_trait]
 impl Translate for TranslateClient {
     /// <p>A synchronous action that deletes a custom terminology.</p>
-    fn delete_terminology(
+    async fn delete_terminology(
         &self,
         input: DeleteTerminologyRequest,
-    ) -> RusotoFuture<(), DeleteTerminologyError> {
+    ) -> Result<(), RusotoError<DeleteTerminologyError>> {
         let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -626,25 +626,25 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteTerminologyError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTerminologyError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a custom terminology.</p>
-    fn get_terminology(
+    async fn get_terminology(
         &self,
         input: GetTerminologyRequest,
-    ) -> RusotoFuture<GetTerminologyResponse, GetTerminologyError> {
+    ) -> Result<GetTerminologyResponse, RusotoError<GetTerminologyError>> {
         let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -655,28 +655,26 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetTerminologyResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetTerminologyError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetTerminologyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTerminologyError::from_response(response))
+        }
     }
 
     /// <p>Creates or updates a custom terminology, depending on whether or not one already exists for the given terminology name. Importing a terminology with the same name as an existing one will merge the terminologies based on the chosen merge strategy. Currently, the only supported merge strategy is OVERWRITE, and so the imported terminology will overwrite an existing terminology of the same name.</p> <p>If you import a terminology that overwrites an existing one, the new terminology take up to 10 minutes to fully propagate and be available for use in a translation due to cache policies with the DataPlane service that performs the translations.</p>
-    fn import_terminology(
+    async fn import_terminology(
         &self,
         input: ImportTerminologyRequest,
-    ) -> RusotoFuture<ImportTerminologyResponse, ImportTerminologyError> {
+    ) -> Result<ImportTerminologyResponse, RusotoError<ImportTerminologyError>> {
         let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -687,28 +685,27 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ImportTerminologyResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ImportTerminologyError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ImportTerminologyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ImportTerminologyError::from_response(response))
+        }
     }
 
     /// <p>Provides a list of custom terminologies associated with your account.</p>
-    fn list_terminologies(
+    async fn list_terminologies(
         &self,
         input: ListTerminologiesRequest,
-    ) -> RusotoFuture<ListTerminologiesResponse, ListTerminologiesError> {
+    ) -> Result<ListTerminologiesResponse, RusotoError<ListTerminologiesError>> {
         let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -719,28 +716,27 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTerminologiesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListTerminologiesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTerminologiesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTerminologiesError::from_response(response))
+        }
     }
 
     /// <p>Translates input text from the source language to the target language. It is not necessary to use English (en) as either the source or the target language but not all language combinations are supported by Amazon Translate. For more information, see <a href="http://docs.aws.amazon.com/translate/latest/dg/pairs.html">Supported Language Pairs</a>.</p> <ul> <li> <p>Arabic (ar)</p> </li> <li> <p>Chinese (Simplified) (zh)</p> </li> <li> <p>Chinese (Traditional) (zh-TW)</p> </li> <li> <p>Czech (cs)</p> </li> <li> <p>Danish (da)</p> </li> <li> <p>Dutch (nl)</p> </li> <li> <p>English (en)</p> </li> <li> <p>Finnish (fi)</p> </li> <li> <p>French (fr)</p> </li> <li> <p>German (de)</p> </li> <li> <p>Hebrew (he)</p> </li> <li> <p>Indonesian (id)</p> </li> <li> <p>Italian (it)</p> </li> <li> <p>Japanese (ja)</p> </li> <li> <p>Korean (ko)</p> </li> <li> <p>Polish (pl)</p> </li> <li> <p>Portuguese (pt)</p> </li> <li> <p>Russian (ru)</p> </li> <li> <p>Spanish (es)</p> </li> <li> <p>Swedish (sv)</p> </li> <li> <p>Turkish (tr)</p> </li> </ul> <p>To have Amazon Translate determine the source language of your text, you can specify <code>auto</code> in the <code>SourceLanguageCode</code> field. If you specify <code>auto</code>, Amazon Translate will call Amazon Comprehend to determine the source language.</p>
-    fn translate_text(
+    async fn translate_text(
         &self,
         input: TranslateTextRequest,
-    ) -> RusotoFuture<TranslateTextResponse, TranslateTextError> {
+    ) -> Result<TranslateTextResponse, RusotoError<TranslateTextError>> {
         let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -751,20 +747,18 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TranslateTextResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TranslateTextError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TranslateTextResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TranslateTextError::from_response(response))
+        }
     }
 }

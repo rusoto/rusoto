@@ -11,17 +11,17 @@
 // =================================================================
 #![allow(warnings)]
 
-use futures::future;
-use futures::Future;
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 use std::error::Error;
 use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>The values of a given attribute, such as <code>Throughput Optimized HDD</code> or <code>Provisioned IOPS</code> for the <code>Amazon EC2</code> <code>volumeType</code> attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -342,24 +342,25 @@ impl Error for GetProductsError {
     }
 }
 /// Trait representing the capabilities of the AWS Pricing API. AWS Pricing clients implement this trait.
+#[async_trait]
 pub trait Pricing {
     /// <p>Returns the metadata for one service or a list of the metadata for all services. Use this without a service code to get the service codes for all services. Use it with a service code, such as <code>AmazonEC2</code>, to get information specific to that service, such as the attribute names available for that service. For example, some of the attribute names available for EC2 are <code>volumeType</code>, <code>maxIopsVolume</code>, <code>operation</code>, <code>locationType</code>, and <code>instanceCapacity10xlarge</code>.</p>
-    fn describe_services(
+    async fn describe_services(
         &self,
         input: DescribeServicesRequest,
-    ) -> RusotoFuture<DescribeServicesResponse, DescribeServicesError>;
+    ) -> Result<DescribeServicesResponse, RusotoError<DescribeServicesError>>;
 
     /// <p>Returns a list of attribute values. Attibutes are similar to the details in a Price List API offer file. For a list of available attributes, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/reading-an-offer.html#pps-defs">Offer File Definitions</a> in the <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-what-is.html">AWS Billing and Cost Management User Guide</a>.</p>
-    fn get_attribute_values(
+    async fn get_attribute_values(
         &self,
         input: GetAttributeValuesRequest,
-    ) -> RusotoFuture<GetAttributeValuesResponse, GetAttributeValuesError>;
+    ) -> Result<GetAttributeValuesResponse, RusotoError<GetAttributeValuesError>>;
 
     /// <p>Returns a list of all products that match the filter criteria.</p>
-    fn get_products(
+    async fn get_products(
         &self,
         input: GetProductsRequest,
-    ) -> RusotoFuture<GetProductsResponse, GetProductsError>;
+    ) -> Result<GetProductsResponse, RusotoError<GetProductsError>>;
 }
 /// A client for the AWS Pricing API.
 #[derive(Clone)]
@@ -383,9 +384,7 @@ impl PricingClient {
     ) -> PricingClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         Self::new_with_client(
             Client::new_with(credentials_provider, request_dispatcher),
@@ -406,12 +405,13 @@ impl fmt::Debug for PricingClient {
     }
 }
 
+#[async_trait]
 impl Pricing for PricingClient {
     /// <p>Returns the metadata for one service or a list of the metadata for all services. Use this without a service code to get the service codes for all services. Use it with a service code, such as <code>AmazonEC2</code>, to get information specific to that service, such as the attribute names available for that service. For example, some of the attribute names available for EC2 are <code>volumeType</code>, <code>maxIopsVolume</code>, <code>operation</code>, <code>locationType</code>, and <code>instanceCapacity10xlarge</code>.</p>
-    fn describe_services(
+    async fn describe_services(
         &self,
         input: DescribeServicesRequest,
-    ) -> RusotoFuture<DescribeServicesResponse, DescribeServicesError> {
+    ) -> Result<DescribeServicesResponse, RusotoError<DescribeServicesError>> {
         let mut request = SignedRequest::new("POST", "pricing", &self.region, "/");
         request.set_endpoint_prefix("api.pricing".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -419,28 +419,27 @@ impl Pricing for PricingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeServicesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeServicesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeServicesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeServicesError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of attribute values. Attibutes are similar to the details in a Price List API offer file. For a list of available attributes, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/reading-an-offer.html#pps-defs">Offer File Definitions</a> in the <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-what-is.html">AWS Billing and Cost Management User Guide</a>.</p>
-    fn get_attribute_values(
+    async fn get_attribute_values(
         &self,
         input: GetAttributeValuesRequest,
-    ) -> RusotoFuture<GetAttributeValuesResponse, GetAttributeValuesError> {
+    ) -> Result<GetAttributeValuesResponse, RusotoError<GetAttributeValuesError>> {
         let mut request = SignedRequest::new("POST", "pricing", &self.region, "/");
         request.set_endpoint_prefix("api.pricing".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -448,28 +447,27 @@ impl Pricing for PricingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetAttributeValuesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetAttributeValuesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAttributeValuesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAttributeValuesError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of all products that match the filter criteria.</p>
-    fn get_products(
+    async fn get_products(
         &self,
         input: GetProductsRequest,
-    ) -> RusotoFuture<GetProductsResponse, GetProductsError> {
+    ) -> Result<GetProductsResponse, RusotoError<GetProductsError>> {
         let mut request = SignedRequest::new("POST", "pricing", &self.region, "/");
         request.set_endpoint_prefix("api.pricing".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -477,20 +475,18 @@ impl Pricing for PricingClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetProductsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetProductsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetProductsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetProductsError::from_response(response))
+        }
     }
 }

@@ -1,11 +1,11 @@
 use crate::WebIdentityProvider;
-use futures::{Future, Poll};
+use async_trait::async_trait;
 use rusoto_core::credential::{
-    AutoRefreshingProvider, AutoRefreshingProviderFuture, AwsCredentialProviderChain,
+    AutoRefreshingProvider, AwsCredentialProviderChain,
     AwsCredentials, AwsCredentialsProvider, ContainerProvider, CredentialsError,
     EnvironmentProvider, InstanceMetadataProvider, ProfileProvider, ProvideAwsCredentials,
 };
-use std::rc::Rc;
+use std::sync::Arc;
 use std::time::Duration;
 
 /// Default credential provider.
@@ -22,13 +22,13 @@ use std::time::Duration;
 ///
 /// [credential_process]: https://docs.aws.amazon.com/cli/latest/topic/config-vars.html#sourcing-credentials-from-external-processes
 #[derive(Clone)]
-pub struct DefaultCredentialsProvider(AutoRefreshingProvider<Rc<dyn AwsCredentialsProvider>>);
+pub struct DefaultCredentialsProvider(Arc<dyn AwsCredentialsProvider>);
 
 impl DefaultCredentialsProvider {
     pub fn new(profile_provider: Option<ProfileProvider>, timeout: Option<Duration>) -> Self {
         let provider = AwsCredentialProviderChain::new(
-            Rc::new(EnvironmentProvider::default()),
-            Rc::new(WebIdentityProvider::from_k8s_env()),
+            Arc::new(EnvironmentProvider::default()),
+            Arc::new(WebIdentityProvider::from_k8s_env()),
         );
         let provider = match profile_provider {
             Some(p) => provider.push(p),
@@ -41,7 +41,7 @@ impl DefaultCredentialsProvider {
             instance_provider.set_timeout(t);
         });
         let provider = provider.push(container_provider).push(instance_provider);
-        Self(AutoRefreshingProvider::from(Rc::new(provider)))
+        Self(Arc::new(AutoRefreshingProvider::from(provider)))
     }
 
     /// Creates a potentially insecure default credential provider chain.
@@ -98,26 +98,10 @@ impl Default for DefaultCredentialsProvider {
     }
 }
 
+#[async_trait]
 impl ProvideAwsCredentials for DefaultCredentialsProvider {
-    type Future = DefaultCredentialsProviderFuture;
-
-    fn credentials(&self) -> Self::Future {
-        let inner = self.0.credentials();
-        DefaultCredentialsProviderFuture(inner)
-    }
-}
-
-/// Future returned from `DefaultCredentialsProvider`.
-pub struct DefaultCredentialsProviderFuture(
-    AutoRefreshingProviderFuture<Rc<dyn AwsCredentialsProvider>>,
-);
-
-impl Future for DefaultCredentialsProviderFuture {
-    type Item = AwsCredentials;
-    type Error = CredentialsError;
-
-    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        self.0.poll()
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        self.0.credentials().await
     }
 }
 
@@ -125,10 +109,9 @@ impl Future for DefaultCredentialsProviderFuture {
 mod tests {
     use super::*;
 
-    #[test]
-    fn api() {
+    #[tokio::test]
+    async fn api() {
         let provider = DefaultCredentialsProvider::default();
-        let future = provider.credentials();
-        let _result = future.wait();
+        provider.credentials().await;
     }
 }

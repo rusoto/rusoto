@@ -11,17 +11,17 @@
 // =================================================================
 #![allow(warnings)]
 
-use futures::future;
-use futures::Future;
+use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{Client, RusotoError};
 use std::error::Error;
 use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>An entitlement represents capacity in a product owned by the customer. For example, a customer might own some number of users or seats in an SaaS application or some amount of data capacity in a multi-tenant database.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -153,12 +153,13 @@ impl Error for GetEntitlementsError {
     }
 }
 /// Trait representing the capabilities of the AWS Marketplace Entitlement Service API. AWS Marketplace Entitlement Service clients implement this trait.
+#[async_trait]
 pub trait MarketplaceEntitlement {
     /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>
-    fn get_entitlements(
+    async fn get_entitlements(
         &self,
         input: GetEntitlementsRequest,
-    ) -> RusotoFuture<GetEntitlementsResult, GetEntitlementsError>;
+    ) -> Result<GetEntitlementsResult, RusotoError<GetEntitlementsError>>;
 }
 /// A client for the AWS Marketplace Entitlement Service API.
 #[derive(Clone)]
@@ -182,9 +183,7 @@ impl MarketplaceEntitlementClient {
     ) -> MarketplaceEntitlementClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         Self::new_with_client(
             Client::new_with(credentials_provider, request_dispatcher),
@@ -205,12 +204,13 @@ impl fmt::Debug for MarketplaceEntitlementClient {
     }
 }
 
+#[async_trait]
 impl MarketplaceEntitlement for MarketplaceEntitlementClient {
     /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>
-    fn get_entitlements(
+    async fn get_entitlements(
         &self,
         input: GetEntitlementsRequest,
-    ) -> RusotoFuture<GetEntitlementsResult, GetEntitlementsError> {
+    ) -> Result<GetEntitlementsResult, RusotoError<GetEntitlementsError>> {
         let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
         request.set_endpoint_prefix("entitlement.marketplace".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -218,20 +218,18 @@ impl MarketplaceEntitlement for MarketplaceEntitlementClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetEntitlementsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetEntitlementsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetEntitlementsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetEntitlementsError::from_response(response))
+        }
     }
 }

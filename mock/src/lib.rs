@@ -32,20 +32,14 @@
 //! }
 //! ```
 #![deny(missing_docs)]
-extern crate chrono;
-extern crate futures;
-extern crate http;
-extern crate rusoto_core;
-extern crate serde;
-extern crate serde_json;
-
 use std::fs::File;
 use std::io::Read;
 use std::time::Duration;
 
-use futures::future::{err, ok, FutureResult};
-use http::{header::HeaderName, HeaderMap, HttpTryFrom, StatusCode};
-use rusoto_core::credential::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
+use async_trait::async_trait;
+use futures::FutureExt;
+use http::{HeaderMap, header::HeaderName, HttpTryFrom, StatusCode};
+use rusoto_core::credential::{AwsCredentials, ProvideAwsCredentials};
 use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::{ByteStream, DispatchSignedRequest, HttpDispatchError};
@@ -55,11 +49,10 @@ use serde::Serialize;
 /// successfully
 pub struct MockCredentialsProvider;
 
+#[async_trait]
 impl ProvideAwsCredentials for MockCredentialsProvider {
-    type Future = FutureResult<AwsCredentials, CredentialsError>;
-
-    fn credentials(&self) -> Self::Future {
-        ok(AwsCredentials::new("mock_key", "mock_secret", None, None))
+    async fn credentials(&self) -> Result<rusoto_core::credential::AwsCredentials, rusoto_core::credential::CredentialsError> {
+        Ok(AwsCredentials::new("mock_key", "mock_secret", None, None))
     }
 }
 
@@ -143,19 +136,17 @@ impl MockRequestDispatcher {
 }
 
 impl DispatchSignedRequest for MockRequestDispatcher {
-    type Future = FutureResult<HttpResponse, HttpDispatchError>;
-
-    fn dispatch(&self, request: SignedRequest, _timeout: Option<Duration>) -> Self::Future {
+    fn dispatch(&self, request: SignedRequest, _timeout: Option<Duration>) -> rusoto_core::request::DispatchSignedRequestFuture {
         if self.request_checker.is_some() {
             self.request_checker.as_ref().unwrap()(&request);
         }
         match self.outcome {
-            RequestOutcome::Performed(ref status) => ok(HttpResponse {
-                status: *status,
-                body: ByteStream::from(self.body.clone()),
-                headers: self.headers.clone(),
-            }),
-            RequestOutcome::Failed(ref error) => err(error.clone()),
+          RequestOutcome::Performed(ref status) => futures::future::ready(Ok(HttpResponse {
+            status: *status,
+            body: ByteStream::from(self.body.clone()),
+            headers: self.headers.clone()
+          })).boxed(),
+          RequestOutcome::Failed(ref error) => futures::future::ready(Err(error.clone())).boxed(),
         }
     }
 }
