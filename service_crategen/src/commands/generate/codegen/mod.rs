@@ -441,9 +441,11 @@ where
 {
     let mut derived = vec!["Default", "Debug"];
 
+    let mut not_streaming = false;
     // Streaming is implemented with Box<Stream<...>>, so we can't derive Clone nor PartialEq.
     // This affects both the streaming struct itself, and structs which contain it.
     if !streaming && streaming_members(shape).next().is_none() {
+        not_streaming = true;
         derived.push("Clone");
         derived.push("PartialEq");
     }
@@ -469,7 +471,7 @@ where
     } else if deserialized && !derived.iter().any(|&x| x == "Serialize") {
         test_attributes.push_str(&"\n#[cfg_attr(feature = \"serialize_structs\", derive(Serialize))]");
     }
-    if serialized && !derived.iter().any(|&x| x == "Deserialize") {
+    if serialized && !derived.iter().any(|&x| x == "Deserialize") && not_streaming {
         test_attributes.push_str(&"\n#[cfg_attr(feature = \"deserialize_structs\", derive(Deserialize))]");
     }
 
