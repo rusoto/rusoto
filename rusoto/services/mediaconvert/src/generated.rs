@@ -145,6 +145,7 @@ pub struct AncillarySourceSettings {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateCertificateRequest {
     /// <p>The ARN of the ACM certificate that you want to associate with your MediaConvert resource.</p>
     #[serde(rename = "Arn")]
@@ -407,6 +408,7 @@ pub struct BurninDestinationSettings {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobRequest {
     /// <p>The Job ID of the job to be cancelled.</p>
     #[serde(rename = "Id")]
@@ -716,6 +718,7 @@ pub struct ContainerSettings {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
     /// <p>Accelerated transcoding can significantly speed up jobs with long, visually complex content. Outputs that use this feature incur pro-tier pricing. For information about feature limitations, see the AWS Elemental MediaConvert User Guide.</p>
     #[serde(rename = "AccelerationSettings")]
@@ -771,6 +774,7 @@ pub struct CreateJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobTemplateRequest {
     /// <p>Accelerated transcoding can significantly speed up jobs with long, visually complex content. Outputs that use this feature incur pro-tier pricing. For information about feature limitations, see the AWS Elemental MediaConvert User Guide.</p>
     #[serde(rename = "AccelerationSettings")]
@@ -818,6 +822,7 @@ pub struct CreateJobTemplateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePresetRequest {
     /// <p>Optional. A category for the preset you are creating.</p>
     #[serde(rename = "Category")]
@@ -849,6 +854,7 @@ pub struct CreatePresetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateQueueRequest {
     /// <p>Optional. A description of the queue that you are creating.</p>
     #[serde(rename = "Description")]
@@ -962,6 +968,7 @@ pub struct Deinterlacer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobTemplateRequest {
     /// <p>The name of the job template to be deleted.</p>
     #[serde(rename = "Name")]
@@ -973,6 +980,7 @@ pub struct DeleteJobTemplateRequest {
 pub struct DeleteJobTemplateResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePresetRequest {
     /// <p>The name of the preset to be deleted.</p>
     #[serde(rename = "Name")]
@@ -984,6 +992,7 @@ pub struct DeletePresetRequest {
 pub struct DeletePresetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteQueueRequest {
     /// <p>The name of the queue that you want to delete.</p>
     #[serde(rename = "Name")]
@@ -996,6 +1005,7 @@ pub struct DeleteQueueResponse {}
 
 /// <p>DescribeEndpointsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointsRequest {
     /// <p>Optional. Max number of endpoints, up to twenty, that will be returned at one time.</p>
     #[serde(rename = "MaxResults")]
@@ -1034,6 +1044,7 @@ pub struct DestinationSettings {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateCertificateRequest {
     /// <p>The ARN of the ACM certificate that you want to disassociate from your MediaConvert resource.</p>
     #[serde(rename = "Arn")]
@@ -1475,6 +1486,7 @@ pub struct FrameCaptureSettings {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRequest {
     /// <p>the job ID of the job.</p>
     #[serde(rename = "Id")]
@@ -1491,6 +1503,7 @@ pub struct GetJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobTemplateRequest {
     /// <p>The name of the job template.</p>
     #[serde(rename = "Name")]
@@ -1507,6 +1520,7 @@ pub struct GetJobTemplateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPresetRequest {
     /// <p>The name of the preset.</p>
     #[serde(rename = "Name")]
@@ -1523,6 +1537,7 @@ pub struct GetPresetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueueRequest {
     /// <p>The name of the queue that you want information about.</p>
     #[serde(rename = "Name")]
@@ -2612,6 +2627,7 @@ pub struct JobTemplateSettings {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobTemplatesRequest {
     /// <p>Optionally, specify a job template category to limit responses to only job templates from that category.</p>
     #[serde(rename = "Category")]
@@ -2649,6 +2665,7 @@ pub struct ListJobTemplatesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
     /// <p>Optional. Number of jobs, up to twenty, that will be returned at one time.</p>
     #[serde(rename = "MaxResults")]
@@ -2686,6 +2703,7 @@ pub struct ListJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPresetsRequest {
     /// <p>Optionally, specify a preset category to limit responses to only presets from that category.</p>
     #[serde(rename = "Category")]
@@ -2723,6 +2741,7 @@ pub struct ListPresetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQueuesRequest {
     /// <p>Optional. When you request a list of queues, you can choose to list them alphabetically by NAME or chronologically by CREATION_DATE. If you don&#39;t specify, the service will list them by creation date.</p>
     #[serde(rename = "ListBy")]
@@ -2756,6 +2775,7 @@ pub struct ListQueuesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to list tags for. To get the ARN, send a GET request with the resource name.</p>
     #[serde(rename = "Arn")]
@@ -3718,6 +3738,7 @@ pub struct ReservationPlan {
 
 /// <p>Details about the pricing plan for your reserved queue. Required for reserved queues and not applicable to on-demand queues.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReservationPlanSettings {
     /// <p>The length of the term of your reserved queue pricing plan commitment.</p>
     #[serde(rename = "Commitment")]
@@ -3844,6 +3865,7 @@ pub struct StaticKeyProvider {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to tag. To get the ARN, send a GET request with the resource name.</p>
     #[serde(rename = "Arn")]
@@ -3963,6 +3985,7 @@ pub struct TtmlDestinationSettings {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to remove tags from. To get the ARN, send a GET request with the resource name.</p>
     #[serde(rename = "Arn")]
@@ -3978,6 +4001,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobTemplateRequest {
     /// <p>Accelerated transcoding can significantly speed up jobs with long, visually complex content. Outputs that use this feature incur pro-tier pricing. For information about feature limitations, see the AWS Elemental MediaConvert User Guide.</p>
     #[serde(rename = "AccelerationSettings")]
@@ -4022,6 +4046,7 @@ pub struct UpdateJobTemplateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePresetRequest {
     /// <p>The new category for the preset, if you are changing it.</p>
     #[serde(rename = "Category")]
@@ -4050,6 +4075,7 @@ pub struct UpdatePresetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateQueueRequest {
     /// <p>The new description for the queue, if you are changing it.</p>
     #[serde(rename = "Description")]

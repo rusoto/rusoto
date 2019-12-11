@@ -34,6 +34,7 @@ pub struct AttributeValue {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServicesRequest {
     /// <p>The format version that you want the response to be in.</p> <p>Valid values are: <code>aws_v1</code> </p>
     #[serde(rename = "FormatVersion")]
@@ -72,6 +73,7 @@ pub struct DescribeServicesResponse {
 
 /// <p>The constraints that you want all returned products to match.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>The product metadata field that you want to filter on. You can filter by just the service code to see all products for a specific service, filter by just the attribute name to see a specific attribute for multiple services, or use both a service code and an attribute name to retrieve only products that match both fields.</p> <p>Valid values include: <code>ServiceCode</code>, and all attribute names</p> <p>For example, you can filter by the <code>AmazonEC2</code> service code and the <code>volumeType</code> attribute name to get the prices for only Amazon EC2 volumes.</p>
     #[serde(rename = "Field")]
@@ -85,6 +87,7 @@ pub struct Filter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAttributeValuesRequest {
     /// <p>The name of the attribute that you want to retrieve the values for, such as <code>volumeType</code>.</p>
     #[serde(rename = "AttributeName")]
@@ -116,6 +119,7 @@ pub struct GetAttributeValuesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProductsRequest {
     /// <p>The list of filters that limit the returned products. only products that match all filters are returned.</p>
     #[serde(rename = "Filters")]

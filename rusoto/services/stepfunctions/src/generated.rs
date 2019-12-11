@@ -122,6 +122,7 @@ pub struct ActivityTimedOutEventDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateActivityInput {
     /// <p><p>The name of the activity to create. This name must be unique for your AWS account and region for 90 days. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
@@ -144,6 +145,7 @@ pub struct CreateActivityOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStateMachineInput {
     /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
@@ -172,6 +174,7 @@ pub struct CreateStateMachineOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteActivityInput {
     /// <p>The Amazon Resource Name (ARN) of the activity to delete.</p>
     #[serde(rename = "activityArn")]
@@ -183,6 +186,7 @@ pub struct DeleteActivityInput {
 pub struct DeleteActivityOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStateMachineInput {
     /// <p>The Amazon Resource Name (ARN) of the state machine to delete.</p>
     #[serde(rename = "stateMachineArn")]
@@ -194,6 +198,7 @@ pub struct DeleteStateMachineInput {
 pub struct DeleteStateMachineOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeActivityInput {
     /// <p>The Amazon Resource Name (ARN) of the activity to describe.</p>
     #[serde(rename = "activityArn")]
@@ -215,6 +220,7 @@ pub struct DescribeActivityOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExecutionInput {
     /// <p>The Amazon Resource Name (ARN) of the execution to describe.</p>
     #[serde(rename = "executionArn")]
@@ -254,6 +260,7 @@ pub struct DescribeExecutionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStateMachineForExecutionInput {
     /// <p>The Amazon Resource Name (ARN) of the execution you want state machine information for.</p>
     #[serde(rename = "executionArn")]
@@ -281,6 +288,7 @@ pub struct DescribeStateMachineForExecutionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStateMachineInput {
     /// <p>The Amazon Resource Name (ARN) of the state machine to describe.</p>
     #[serde(rename = "stateMachineArn")]
@@ -403,6 +411,7 @@ pub struct ExecutionTimedOutEventDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetActivityTaskInput {
     /// <p>The Amazon Resource Name (ARN) of the activity to retrieve tasks from (assigned when you create the task using <a>CreateActivity</a>.)</p>
     #[serde(rename = "activityArn")]
@@ -427,6 +436,7 @@ pub struct GetActivityTaskOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExecutionHistoryInput {
     /// <p>The Amazon Resource Name (ARN) of the execution.</p>
     #[serde(rename = "executionArn")]
@@ -673,6 +683,7 @@ pub struct LambdaFunctionTimedOutEventDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActivitiesInput {
     /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
     #[serde(rename = "maxResults")]
@@ -697,6 +708,7 @@ pub struct ListActivitiesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListExecutionsInput {
     /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
     #[serde(rename = "maxResults")]
@@ -728,6 +740,7 @@ pub struct ListExecutionsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStateMachinesInput {
     /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
     #[serde(rename = "maxResults")]
@@ -751,6 +764,7 @@ pub struct ListStateMachinesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>The Amazon Resource Name (ARN) for the Step Functions state machine or activity.</p>
     #[serde(rename = "resourceArn")]
@@ -791,6 +805,7 @@ pub struct MapStateStartedEventDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendTaskFailureInput {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -810,6 +825,7 @@ pub struct SendTaskFailureInput {
 pub struct SendTaskFailureOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendTaskHeartbeatInput {
     /// <p>The token that represents this task. Task tokens are generated by Step Functions when tasks are assigned to a worker, or in the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/input-output-contextobject.html">context object</a> when a workflow enters a task state. See <a>GetActivityTaskOutput$taskToken</a>.</p>
     #[serde(rename = "taskToken")]
@@ -821,6 +837,7 @@ pub struct SendTaskHeartbeatInput {
 pub struct SendTaskHeartbeatOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendTaskSuccessInput {
     /// <p>The JSON output of the task.</p>
     #[serde(rename = "output")]
@@ -835,6 +852,7 @@ pub struct SendTaskSuccessInput {
 pub struct SendTaskSuccessOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartExecutionInput {
     /// <p><p>The string that contains the JSON input data for the execution, for example:</p> <p> <code>&quot;input&quot;: &quot;{&quot;first_name&quot; : &quot;test&quot;}&quot;</code> </p> <note> <p>If you don&#39;t include any JSON input data, you still must include the two braces, for example: <code>&quot;input&quot;: &quot;{}&quot;</code> </p> </note></p>
     #[serde(rename = "input")]
@@ -902,6 +920,7 @@ pub struct StateMachineListItem {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopExecutionInput {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -938,6 +957,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) for the Step Functions state machine or activity.</p>
     #[serde(rename = "resourceArn")]
@@ -1098,6 +1118,7 @@ pub struct TaskTimedOutEventDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p>The Amazon Resource Name (ARN) for the Step Functions state machine or activity.</p>
     #[serde(rename = "resourceArn")]
@@ -1112,6 +1133,7 @@ pub struct UntagResourceInput {
 pub struct UntagResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStateMachineInput {
     /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]

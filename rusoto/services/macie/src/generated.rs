@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateMemberAccountRequest {
     /// <p>The ID of the AWS account that you want to associate with Amazon Macie as a member account.</p>
     #[serde(rename = "memberAccountId")]
@@ -31,6 +32,7 @@ pub struct AssociateMemberAccountRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateS3ResourcesRequest {
     /// <p>The ID of the Amazon Macie member account whose resources you want to associate with Macie. </p>
     #[serde(rename = "memberAccountId")]
@@ -63,6 +65,7 @@ pub struct ClassificationType {
 
 /// <p>The classification type that Amazon Macie applies to the associated S3 resources. At least one of the classification types (oneTime or continuous) must be specified. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClassificationTypeUpdate {
     /// <p>A continuous classification of the objects that are added to a specified S3 bucket. Amazon Macie begins performing continuous classification after a bucket is successfully associated with Amazon Macie. </p>
     #[serde(rename = "continuous")]
@@ -75,6 +78,7 @@ pub struct ClassificationTypeUpdate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateMemberAccountRequest {
     /// <p>The ID of the member account that you want to remove from Amazon Macie.</p>
     #[serde(rename = "memberAccountId")]
@@ -82,6 +86,7 @@ pub struct DisassociateMemberAccountRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateS3ResourcesRequest {
     /// <p>The S3 resources (buckets or prefixes) that you want to remove from being monitored and classified by Amazon Macie. </p>
     #[serde(rename = "associatedS3Resources")]
@@ -120,6 +125,7 @@ pub struct FailedS3Resource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMemberAccountsRequest {
     /// <p>Use this parameter to indicate the maximum number of items that you want in the response. The default value is 250. </p>
     #[serde(rename = "maxResults")]
@@ -145,6 +151,7 @@ pub struct ListMemberAccountsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListS3ResourcesRequest {
     /// <p>Use this parameter to indicate the maximum number of items that you want in the response. The default value is 250. </p>
     #[serde(rename = "maxResults")]
@@ -212,6 +219,7 @@ pub struct S3ResourceClassification {
 
 /// <p>The S3 resources whose classification types you want to update. This data type is used as a request parameter in the UpdateS3Resources action. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3ResourceClassificationUpdate {
     /// <p>The name of the S3 bucket whose classification types you want to update.</p>
     #[serde(rename = "bucketName")]
@@ -226,6 +234,7 @@ pub struct S3ResourceClassificationUpdate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateS3ResourcesRequest {
     /// <p>The AWS ID of the Amazon Macie member account whose S3 resources' classification types you want to update. </p>
     #[serde(rename = "memberAccountId")]

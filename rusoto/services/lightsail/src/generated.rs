@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocateStaticIpRequest {
     /// <p>The name of the static IP address.</p>
     #[serde(rename = "staticIpName")]
@@ -40,6 +41,7 @@ pub struct AllocateStaticIpResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachDiskRequest {
     /// <p>The unique Lightsail disk name (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
@@ -62,6 +64,7 @@ pub struct AttachDiskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachInstancesToLoadBalancerRequest {
     /// <p>An array of strings representing the instance name(s) you want to attach to your load balancer.</p> <p>An instance must be <code>running</code> before you can attach it to your load balancer.</p> <p>There are no additional limits on the number of instances you can attach to your load balancer, aside from the limit of Lightsail instances you can create in your account (20).</p>
     #[serde(rename = "instanceNames")]
@@ -81,6 +84,7 @@ pub struct AttachInstancesToLoadBalancerResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachLoadBalancerTlsCertificateRequest {
     /// <p>The name of your SSL/TLS certificate.</p>
     #[serde(rename = "certificateName")]
@@ -100,6 +104,7 @@ pub struct AttachLoadBalancerTlsCertificateResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachStaticIpRequest {
     /// <p>The instance name to which you want to attach the static IP address.</p>
     #[serde(rename = "instanceName")]
@@ -237,6 +242,7 @@ pub struct Bundle {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloseInstancePublicPortsRequest {
     /// <p>The name of the instance on which you're attempting to close the public ports.</p>
     #[serde(rename = "instanceName")]
@@ -312,6 +318,7 @@ pub struct CloudFormationStackRecordSourceInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopySnapshotRequest {
     /// <p>The AWS Region where the source snapshot is located.</p>
     #[serde(rename = "sourceRegion")]
@@ -334,6 +341,7 @@ pub struct CopySnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFormationStackRequest {
     /// <p>An array of parameters that will be used to create the new Amazon EC2 instance. You can only pass one instance entry at a time in this array. You will get an invalid parameter error if you pass more than one instance entry in this array.</p>
     #[serde(rename = "instances")]
@@ -350,6 +358,7 @@ pub struct CreateCloudFormationStackResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiskFromSnapshotRequest {
     /// <p>The Availability Zone where you want to create the disk (e.g., <code>us-east-2a</code>). Choose the same Availability Zone as the Lightsail instance where you want to create the disk.</p> <p>Use the GetRegions operation to list the Availability Zones where Lightsail is currently available.</p>
     #[serde(rename = "availabilityZone")]
@@ -379,6 +388,7 @@ pub struct CreateDiskFromSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiskRequest {
     /// <p>The Availability Zone where you want to create the disk (e.g., <code>us-east-2a</code>). Choose the same Availability Zone as the Lightsail instance where you want to create the disk.</p> <p>Use the GetRegions operation to list the Availability Zones where Lightsail is currently available.</p>
     #[serde(rename = "availabilityZone")]
@@ -405,6 +415,7 @@ pub struct CreateDiskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiskSnapshotRequest {
     /// <p><p>The unique name of the source disk (e.g., <code>Disk-Virginia-1</code>).</p> <note> <p>This parameter cannot be defined together with the <code>instance name</code> parameter. The <code>disk name</code> and <code>instance name</code> parameters are mutually exclusive.</p> </note></p>
     #[serde(rename = "diskName")]
@@ -433,6 +444,7 @@ pub struct CreateDiskSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainEntryRequest {
     /// <p>An array of key-value pairs containing information about the domain entry request.</p>
     #[serde(rename = "domainEntry")]
@@ -452,6 +464,7 @@ pub struct CreateDomainEntryResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainRequest {
     /// <p><p>The domain name to manage (e.g., <code>example.com</code>).</p> <note> <p>You cannot register a new domain name using Lightsail. You must register a domain name using Amazon Route 53 or another domain name registrar. If you have already registered your domain, you can enter its name in this parameter to manage the DNS records for that domain.</p> </note></p>
     #[serde(rename = "domainName")]
@@ -472,6 +485,7 @@ pub struct CreateDomainResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstanceSnapshotRequest {
     /// <p>The Lightsail instance on which to base your snapshot.</p>
     #[serde(rename = "instanceName")]
@@ -495,6 +509,7 @@ pub struct CreateInstanceSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstancesFromSnapshotRequest {
     /// <p>An object containing information about one or more disk mappings.</p>
     #[serde(rename = "attachedDiskMapping")]
@@ -536,6 +551,7 @@ pub struct CreateInstancesFromSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstancesRequest {
     /// <p>The Availability Zone in which to create your instance. Use the following format: <code>us-east-2a</code> (case sensitive). You can get a list of Availability Zones by using the <a href="http://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_GetRegions.html">get regions</a> operation. Be sure to add the <code>include Availability Zones</code> parameter to your request.</p>
     #[serde(rename = "availabilityZone")]
@@ -573,6 +589,7 @@ pub struct CreateInstancesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateKeyPairRequest {
     /// <p>The name for your new key pair.</p>
     #[serde(rename = "keyPairName")]
@@ -605,6 +622,7 @@ pub struct CreateKeyPairResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoadBalancerRequest {
     /// <p>The optional alternative domains and subdomains to use with your SSL/TLS certificate (e.g., <code>www.example.com</code>, <code>example.com</code>, <code>m.example.com</code>, <code>blog.example.com</code>).</p>
     #[serde(rename = "certificateAlternativeNames")]
@@ -644,6 +662,7 @@ pub struct CreateLoadBalancerResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoadBalancerTlsCertificateRequest {
     /// <p>An array of strings listing alternative domains and subdomains for your SSL/TLS certificate. Lightsail will de-dupe the names for you. You can have a maximum of 9 alternative names (in addition to the 1 primary domain). We do not support wildcards (e.g., <code>*.example.com</code>).</p>
     #[serde(rename = "certificateAlternativeNames")]
@@ -674,6 +693,7 @@ pub struct CreateLoadBalancerTlsCertificateResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRelationalDatabaseFromSnapshotRequest {
     /// <p>The Availability Zone in which to create your new database. Use the <code>us-east-2a</code> case-sensitive format.</p> <p>You can get a list of Availability Zones by using the <code>get regions</code> operation. Be sure to add the <code>include relational database Availability Zones</code> parameter to your request.</p>
     #[serde(rename = "availabilityZone")]
@@ -722,6 +742,7 @@ pub struct CreateRelationalDatabaseFromSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRelationalDatabaseRequest {
     /// <p>The Availability Zone in which to create your new database. Use the <code>us-east-2a</code> case-sensitive format.</p> <p>You can get a list of Availability Zones by using the <code>get regions</code> operation. Be sure to add the <code>include relational database Availability Zones</code> parameter to your request.</p>
     #[serde(rename = "availabilityZone")]
@@ -774,6 +795,7 @@ pub struct CreateRelationalDatabaseResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRelationalDatabaseSnapshotRequest {
     /// <p>The name of the database on which to base your new snapshot.</p>
     #[serde(rename = "relationalDatabaseName")]
@@ -797,6 +819,7 @@ pub struct CreateRelationalDatabaseSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDiskRequest {
     /// <p>The unique name of the disk you want to delete (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
@@ -813,6 +836,7 @@ pub struct DeleteDiskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDiskSnapshotRequest {
     /// <p>The name of the disk snapshot you want to delete (e.g., <code>my-disk-snapshot</code>).</p>
     #[serde(rename = "diskSnapshotName")]
@@ -829,6 +853,7 @@ pub struct DeleteDiskSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainEntryRequest {
     /// <p>An array of key-value pairs containing information about your domain entries.</p>
     #[serde(rename = "domainEntry")]
@@ -848,6 +873,7 @@ pub struct DeleteDomainEntryResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainRequest {
     /// <p>The specific domain name to delete.</p>
     #[serde(rename = "domainName")]
@@ -864,6 +890,7 @@ pub struct DeleteDomainResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceRequest {
     /// <p>The name of the instance to delete.</p>
     #[serde(rename = "instanceName")]
@@ -880,6 +907,7 @@ pub struct DeleteInstanceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceSnapshotRequest {
     /// <p>The name of the snapshot to delete.</p>
     #[serde(rename = "instanceSnapshotName")]
@@ -896,6 +924,7 @@ pub struct DeleteInstanceSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteKeyPairRequest {
     /// <p>The name of the key pair to delete.</p>
     #[serde(rename = "keyPairName")]
@@ -912,6 +941,7 @@ pub struct DeleteKeyPairResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteKnownHostKeysRequest {
     /// <p>The name of the instance for which you want to reset the host key or certificate.</p>
     #[serde(rename = "instanceName")]
@@ -928,6 +958,7 @@ pub struct DeleteKnownHostKeysResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoadBalancerRequest {
     /// <p>The name of the load balancer you want to delete.</p>
     #[serde(rename = "loadBalancerName")]
@@ -944,6 +975,7 @@ pub struct DeleteLoadBalancerResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoadBalancerTlsCertificateRequest {
     /// <p>The SSL/TLS certificate name.</p>
     #[serde(rename = "certificateName")]
@@ -967,6 +999,7 @@ pub struct DeleteLoadBalancerTlsCertificateResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRelationalDatabaseRequest {
     /// <p><p>The name of the database snapshot created if <code>skip final snapshot</code> is <code>false</code>, which is the default value for that parameter.</p> <note> <p>Specifying this parameter and also specifying the <code>skip final snapshot</code> parameter to <code>true</code> results in an error.</p> </note> <p>Constraints:</p> <ul> <li> <p>Must contain from 2 to 255 alphanumeric characters, or hyphens.</p> </li> <li> <p>The first and last character must be a letter or number.</p> </li> </ul></p>
     #[serde(rename = "finalRelationalDatabaseSnapshotName")]
@@ -991,6 +1024,7 @@ pub struct DeleteRelationalDatabaseResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRelationalDatabaseSnapshotRequest {
     /// <p>The name of the database snapshot that you are deleting.</p>
     #[serde(rename = "relationalDatabaseSnapshotName")]
@@ -1021,6 +1055,7 @@ pub struct DestinationInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachDiskRequest {
     /// <p>The unique name of the disk you want to detach from your instance (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
@@ -1037,6 +1072,7 @@ pub struct DetachDiskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachInstancesFromLoadBalancerRequest {
     /// <p>An array of strings containing the names of the instances you want to detach from the load balancer.</p>
     #[serde(rename = "instanceNames")]
@@ -1056,6 +1092,7 @@ pub struct DetachInstancesFromLoadBalancerResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachStaticIpRequest {
     /// <p>The name of the static IP to detach from the instance.</p>
     #[serde(rename = "staticIpName")]
@@ -1157,6 +1194,7 @@ pub struct DiskInfo {
 
 /// <p>Describes a block storage disk mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DiskMap {
     /// <p>The new disk name (e.g., <code>my-new-disk</code>).</p>
     #[serde(rename = "newDiskName")]
@@ -1304,6 +1342,7 @@ pub struct DomainEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DownloadDefaultKeyPairRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1396,6 +1435,7 @@ pub struct ExportSnapshotRecordSourceInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportSnapshotRequest {
     /// <p>The name of the instance or disk snapshot to be exported to Amazon EC2.</p>
     #[serde(rename = "sourceSnapshotName")]
@@ -1412,6 +1452,7 @@ pub struct ExportSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetActiveNamesRequest {
     /// <p>A token used for paginating results from your get active names request.</p>
     #[serde(rename = "pageToken")]
@@ -1433,6 +1474,7 @@ pub struct GetActiveNamesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBlueprintsRequest {
     /// <p>A Boolean value indicating whether to include inactive results in your request.</p>
     #[serde(rename = "includeInactive")]
@@ -1458,6 +1500,7 @@ pub struct GetBlueprintsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBundlesRequest {
     /// <p>A Boolean value that indicates whether to include inactive bundle results in your request.</p>
     #[serde(rename = "includeInactive")]
@@ -1483,6 +1526,7 @@ pub struct GetBundlesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFormationStackRecordsRequest {
     /// <p>A token used for advancing to a specific page of results for your <code>get cloud formation stack records</code> request.</p>
     #[serde(rename = "pageToken")]
@@ -1504,6 +1548,7 @@ pub struct GetCloudFormationStackRecordsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiskRequest {
     /// <p>The name of the disk (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
@@ -1520,6 +1565,7 @@ pub struct GetDiskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiskSnapshotRequest {
     /// <p>The name of the disk snapshot (e.g., <code>my-disk-snapshot</code>).</p>
     #[serde(rename = "diskSnapshotName")]
@@ -1536,6 +1582,7 @@ pub struct GetDiskSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiskSnapshotsRequest {
     /// <p>A token used for advancing to the next page of results from your GetDiskSnapshots request.</p>
     #[serde(rename = "pageToken")]
@@ -1557,6 +1604,7 @@ pub struct GetDiskSnapshotsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDisksRequest {
     /// <p>A token used for advancing to the next page of results from your GetDisks request.</p>
     #[serde(rename = "pageToken")]
@@ -1578,6 +1626,7 @@ pub struct GetDisksResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainRequest {
     /// <p>The domain name for which your want to return information about.</p>
     #[serde(rename = "domainName")]
@@ -1594,6 +1643,7 @@ pub struct GetDomainResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainsRequest {
     /// <p>A token used for advancing to the next page of results from your get domains request.</p>
     #[serde(rename = "pageToken")]
@@ -1615,6 +1665,7 @@ pub struct GetDomainsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExportSnapshotRecordsRequest {
     /// <p>A token used for advancing to a specific page of results for your <code>get export snapshot records</code> request.</p>
     #[serde(rename = "pageToken")]
@@ -1636,6 +1687,7 @@ pub struct GetExportSnapshotRecordsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceAccessDetailsRequest {
     /// <p>The name of the instance to access.</p>
     #[serde(rename = "instanceName")]
@@ -1656,6 +1708,7 @@ pub struct GetInstanceAccessDetailsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceMetricDataRequest {
     /// <p>The end time of the time period.</p>
     #[serde(rename = "endTime")]
@@ -1694,6 +1747,7 @@ pub struct GetInstanceMetricDataResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstancePortStatesRequest {
     /// <p>The name of the instance.</p>
     #[serde(rename = "instanceName")]
@@ -1710,6 +1764,7 @@ pub struct GetInstancePortStatesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceRequest {
     /// <p>The name of the instance.</p>
     #[serde(rename = "instanceName")]
@@ -1726,6 +1781,7 @@ pub struct GetInstanceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceSnapshotRequest {
     /// <p>The name of the snapshot for which you are requesting information.</p>
     #[serde(rename = "instanceSnapshotName")]
@@ -1742,6 +1798,7 @@ pub struct GetInstanceSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceSnapshotsRequest {
     /// <p>A token used for advancing to the next page of results from your get instance snapshots request.</p>
     #[serde(rename = "pageToken")]
@@ -1763,6 +1820,7 @@ pub struct GetInstanceSnapshotsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceStateRequest {
     /// <p>The name of the instance to get state information about.</p>
     #[serde(rename = "instanceName")]
@@ -1779,6 +1837,7 @@ pub struct GetInstanceStateResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstancesRequest {
     /// <p>A token used for advancing to the next page of results from your get instances request.</p>
     #[serde(rename = "pageToken")]
@@ -1800,6 +1859,7 @@ pub struct GetInstancesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetKeyPairRequest {
     /// <p>The name of the key pair for which you are requesting information.</p>
     #[serde(rename = "keyPairName")]
@@ -1816,6 +1876,7 @@ pub struct GetKeyPairResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetKeyPairsRequest {
     /// <p>A token used for advancing to the next page of results from your get key pairs request.</p>
     #[serde(rename = "pageToken")]
@@ -1837,6 +1898,7 @@ pub struct GetKeyPairsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoadBalancerMetricDataRequest {
     /// <p>The end time of the period.</p>
     #[serde(rename = "endTime")]
@@ -1875,6 +1937,7 @@ pub struct GetLoadBalancerMetricDataResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoadBalancerRequest {
     /// <p>The name of the load balancer.</p>
     #[serde(rename = "loadBalancerName")]
@@ -1891,6 +1954,7 @@ pub struct GetLoadBalancerResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoadBalancerTlsCertificatesRequest {
     /// <p>The name of the load balancer you associated with your SSL/TLS certificate.</p>
     #[serde(rename = "loadBalancerName")]
@@ -1907,6 +1971,7 @@ pub struct GetLoadBalancerTlsCertificatesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoadBalancersRequest {
     /// <p>A token used for paginating the results from your GetLoadBalancers request.</p>
     #[serde(rename = "pageToken")]
@@ -1928,6 +1993,7 @@ pub struct GetLoadBalancersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationRequest {
     /// <p>A GUID used to identify the operation.</p>
     #[serde(rename = "operationId")]
@@ -1944,6 +2010,7 @@ pub struct GetOperationResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationsForResourceRequest {
     /// <p>A token used for advancing to the next page of results from your get operations for resource request.</p>
     #[serde(rename = "pageToken")]
@@ -1968,6 +2035,7 @@ pub struct GetOperationsForResourceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationsRequest {
     /// <p>A token used for advancing to the next page of results from your get operations request.</p>
     #[serde(rename = "pageToken")]
@@ -1989,6 +2057,7 @@ pub struct GetOperationsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRegionsRequest {
     /// <p>A Boolean value indicating whether to also include Availability Zones in your get regions request. Availability Zones are indicated with a letter: e.g., <code>us-east-2a</code>.</p>
     #[serde(rename = "includeAvailabilityZones")]
@@ -2010,6 +2079,7 @@ pub struct GetRegionsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseBlueprintsRequest {
     /// <p>A token used for advancing to a specific page of results for your <code>get relational database blueprints</code> request.</p>
     #[serde(rename = "pageToken")]
@@ -2031,6 +2101,7 @@ pub struct GetRelationalDatabaseBlueprintsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseBundlesRequest {
     /// <p>A token used for advancing to a specific page of results for your <code>get relational database bundles</code> request.</p>
     #[serde(rename = "pageToken")]
@@ -2052,6 +2123,7 @@ pub struct GetRelationalDatabaseBundlesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseEventsRequest {
     /// <p>The number of minutes in the past from which to retrieve events. For example, to get all events from the past 2 hours, enter 120.</p> <p>Default: <code>60</code> </p> <p>The minimum is 1 and the maximum is 14 days (20160 minutes).</p>
     #[serde(rename = "durationInMinutes")]
@@ -2080,6 +2152,7 @@ pub struct GetRelationalDatabaseEventsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseLogEventsRequest {
     /// <p><p>The end of the time interval from which to get log events.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use an end time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the end time.</p> </li> </ul></p>
     #[serde(rename = "endTime")]
@@ -2123,6 +2196,7 @@ pub struct GetRelationalDatabaseLogEventsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseLogStreamsRequest {
     /// <p>The name of your database for which to get log streams.</p>
     #[serde(rename = "relationalDatabaseName")]
@@ -2139,6 +2213,7 @@ pub struct GetRelationalDatabaseLogStreamsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseMasterUserPasswordRequest {
     /// <p>The password version to return.</p> <p>Specifying <code>CURRENT</code> or <code>PREVIOUS</code> returns the current or previous passwords respectively. Specifying <code>PENDING</code> returns the newest version of the password that will rotate to <code>CURRENT</code>. After the <code>PENDING</code> password rotates to <code>CURRENT</code>, the <code>PENDING</code> password is no longer available.</p> <p>Default: <code>CURRENT</code> </p>
     #[serde(rename = "passwordVersion")]
@@ -2163,6 +2238,7 @@ pub struct GetRelationalDatabaseMasterUserPasswordResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseMetricDataRequest {
     /// <p><p>The end of the time interval from which to get metric data.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use an end time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the end time.</p> </li> </ul></p>
     #[serde(rename = "endTime")]
@@ -2201,6 +2277,7 @@ pub struct GetRelationalDatabaseMetricDataResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseParametersRequest {
     /// <p>A token used for advancing to a specific page of results for your <code>get relational database parameters</code> request.</p>
     #[serde(rename = "pageToken")]
@@ -2225,6 +2302,7 @@ pub struct GetRelationalDatabaseParametersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseRequest {
     /// <p>The name of the database that you are looking up.</p>
     #[serde(rename = "relationalDatabaseName")]
@@ -2241,6 +2319,7 @@ pub struct GetRelationalDatabaseResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseSnapshotRequest {
     /// <p>The name of the database snapshot for which to get information.</p>
     #[serde(rename = "relationalDatabaseSnapshotName")]
@@ -2257,6 +2336,7 @@ pub struct GetRelationalDatabaseSnapshotResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseSnapshotsRequest {
     /// <p>A token used for advancing to a specific page of results for your <code>get relational database snapshots</code> request.</p>
     #[serde(rename = "pageToken")]
@@ -2278,6 +2358,7 @@ pub struct GetRelationalDatabaseSnapshotsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabasesRequest {
     /// <p>A token used for advancing to a specific page of results for your <code>get relational database</code> request.</p>
     #[serde(rename = "pageToken")]
@@ -2299,6 +2380,7 @@ pub struct GetRelationalDatabasesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStaticIpRequest {
     /// <p>The name of the static IP in Lightsail.</p>
     #[serde(rename = "staticIpName")]
@@ -2315,6 +2397,7 @@ pub struct GetStaticIpResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStaticIpsRequest {
     /// <p>A token used for advancing to the next page of results from your get static IPs request.</p>
     #[serde(rename = "pageToken")]
@@ -2370,6 +2453,7 @@ pub struct HostKeyAttributes {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportKeyPairRequest {
     /// <p>The name of the key pair for which you want to import the public key.</p>
     #[serde(rename = "keyPairName")]
@@ -2518,6 +2602,7 @@ pub struct InstanceAccessDetails {
 
 /// <p>Describes the Amazon Elastic Compute Cloud instance and related resources to be created using the <code>create cloud formation stack</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceEntry {
     /// <p>The Availability Zone for the new Amazon EC2 instance.</p>
     #[serde(rename = "availabilityZone")]
@@ -2742,6 +2827,7 @@ pub struct InstanceState {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IsVpcPeeredRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3094,6 +3180,7 @@ pub struct MonthlyTransfer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OpenInstancePublicPortsRequest {
     /// <p>The name of the instance for which you want to open the public ports.</p>
     #[serde(rename = "instanceName")]
@@ -3181,6 +3268,7 @@ pub struct PasswordData {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PeerVpcRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3230,6 +3318,7 @@ pub struct PendingModifiedRelationalDatabaseValues {
 
 /// <p>Describes information about the ports on your virtual private server (or <i>instance</i>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PortInfo {
     /// <p>The first port in the range.</p>
     #[serde(rename = "fromPort")]
@@ -3246,6 +3335,7 @@ pub struct PortInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutInstancePublicPortsRequest {
     /// <p>The Lightsail instance name of the public port(s) you are setting.</p>
     #[serde(rename = "instanceName")]
@@ -3265,6 +3355,7 @@ pub struct PutInstancePublicPortsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootInstanceRequest {
     /// <p>The name of the instance to reboot.</p>
     #[serde(rename = "instanceName")]
@@ -3281,6 +3372,7 @@ pub struct RebootInstanceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootRelationalDatabaseRequest {
     /// <p>The name of your database to reboot.</p>
     #[serde(rename = "relationalDatabaseName")]
@@ -3662,6 +3754,7 @@ pub struct RelationalDatabaseSnapshot {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReleaseStaticIpRequest {
     /// <p>The name of the static IP to delete.</p>
     #[serde(rename = "staticIpName")]
@@ -3692,6 +3785,7 @@ pub struct ResourceLocation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartInstanceRequest {
     /// <p>The name of the instance (a virtual private server) to start.</p>
     #[serde(rename = "instanceName")]
@@ -3708,6 +3802,7 @@ pub struct StartInstanceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartRelationalDatabaseRequest {
     /// <p>The name of your database to start.</p>
     #[serde(rename = "relationalDatabaseName")]
@@ -3766,6 +3861,7 @@ pub struct StaticIp {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopInstanceRequest {
     /// <p><p>When set to <code>True</code>, forces a Lightsail instance that is stuck in a <code>stopping</code> state to stop.</p> <important> <p>Only use the <code>force</code> parameter if your instance is stuck in the <code>stopping</code> state. In any other state, your instance should stop normally without adding this parameter to your API request.</p> </important></p>
     #[serde(rename = "force")]
@@ -3786,6 +3882,7 @@ pub struct StopInstanceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRelationalDatabaseRequest {
     /// <p>The name of your database to stop.</p>
     #[serde(rename = "relationalDatabaseName")]
@@ -3819,6 +3916,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The name of the resource to which you are adding tags.</p>
     #[serde(rename = "resourceName")]
@@ -3838,6 +3936,7 @@ pub struct TagResourceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnpeerVpcRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3850,6 +3949,7 @@ pub struct UnpeerVpcResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The name of the resource from which you are removing a tag.</p>
     #[serde(rename = "resourceName")]
@@ -3869,6 +3969,7 @@ pub struct UntagResourceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainEntryRequest {
     /// <p>An array of key-value pairs containing information about the domain entry.</p>
     #[serde(rename = "domainEntry")]
@@ -3888,6 +3989,7 @@ pub struct UpdateDomainEntryResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLoadBalancerAttributeRequest {
     /// <p>The name of the attribute you want to update. Valid values are below.</p>
     #[serde(rename = "attributeName")]
@@ -3910,6 +4012,7 @@ pub struct UpdateLoadBalancerAttributeResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRelationalDatabaseParametersRequest {
     /// <p>The database parameters to update.</p>
     #[serde(rename = "parameters")]
@@ -3929,6 +4032,7 @@ pub struct UpdateRelationalDatabaseParametersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRelationalDatabaseRequest {
     /// <p>When <code>true</code>, applies changes immediately. When <code>false</code>, applies changes during the preferred maintenance window. Some changes may cause an outage.</p> <p>Default: <code>false</code> </p>
     #[serde(rename = "applyImmediately")]

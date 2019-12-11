@@ -109,6 +109,7 @@ pub struct AudioParameters {
 
 /// <p>The <code>CancelJobRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobRequest {
     /// <p>The identifier of the job that you want to cancel.</p> <p>To get a list of the jobs (including their <code>jobId</code>) that have a status of <code>Submitted</code>, use the <a>ListJobsByStatus</a> API action.</p>
     #[serde(rename = "Id")]
@@ -180,6 +181,7 @@ pub struct Clip {
 
 /// <p>The <code>CreateJobOutput</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobOutput {
     /// <p>Information about the album art that you want Elastic Transcoder to add to the file during transcoding. You can specify up to twenty album artworks for each output. Settings for each artwork must be defined in the job for the current output.</p>
     #[serde(rename = "AlbumArt")]
@@ -225,6 +227,7 @@ pub struct CreateJobOutput {
 
 /// <p>Information about the master playlist.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobPlaylist {
     /// <p>The format of the output playlist. Valid formats include <code>HLSv3</code>, <code>HLSv4</code>, and <code>Smooth</code>.</p>
     #[serde(rename = "Format")]
@@ -250,6 +253,7 @@ pub struct CreateJobPlaylist {
 
 /// <p>The <code>CreateJobRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
     /// <p>A section of the request body that provides information about the file that is being transcoded.</p>
     #[serde(rename = "Input")]
@@ -296,6 +300,7 @@ pub struct CreateJobResponse {
 
 /// <p>The <code>CreatePipelineRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePipelineRequest {
     /// <p>The AWS Key Management Service (AWS KMS) key that you want to use with this pipeline.</p> <p>If you use either <code>s3</code> or <code>s3-aws-kms</code> as your <code>Encryption:Mode</code>, you don't need to provide a key with your job because a default key, known as an AWS-KMS key, is created for you automatically. You need to provide an AWS-KMS key only if you want to use a non-default AWS-KMS key, or if you are using an <code>Encryption:Mode</code> of <code>aes-cbc-pkcs7</code>, <code>aes-ctr</code>, or <code>aes-gcm</code>.</p>
     #[serde(rename = "AwsKmsKeyArn")]
@@ -344,6 +349,7 @@ pub struct CreatePipelineResponse {
 
 /// <p>The <code>CreatePresetRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePresetRequest {
     /// <p>A section of the request body that specifies the audio parameters.</p>
     #[serde(rename = "Audio")]
@@ -385,6 +391,7 @@ pub struct CreatePresetResponse {
 
 /// <p>The <code>DeletePipelineRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePipelineRequest {
     /// <p>The identifier of the pipeline that you want to delete.</p>
     #[serde(rename = "Id")]
@@ -398,6 +405,7 @@ pub struct DeletePipelineResponse {}
 
 /// <p>The <code>DeletePresetRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePresetRequest {
     /// <p>The identifier of the preset for which you want to get detailed information.</p>
     #[serde(rename = "Id")]
@@ -714,6 +722,7 @@ pub struct JobWatermark {
 
 /// <p>The <code>ListJobsByPipelineRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsByPipelineRequest {
     /// <p> To list jobs in chronological order by the date and time that they were submitted, enter <code>true</code>. To list jobs in reverse chronological order, enter <code>false</code>. </p>
     #[serde(rename = "Ascending")]
@@ -744,6 +753,7 @@ pub struct ListJobsByPipelineResponse {
 
 /// <p>The <code>ListJobsByStatusRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsByStatusRequest {
     /// <p> To list jobs in chronological order by the date and time that they were submitted, enter <code>true</code>. To list jobs in reverse chronological order, enter <code>false</code>. </p>
     #[serde(rename = "Ascending")]
@@ -774,6 +784,7 @@ pub struct ListJobsByStatusResponse {
 
 /// <p>The <code>ListPipelineRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelinesRequest {
     /// <p>To list pipelines in chronological order by the date and time that they were created, enter <code>true</code>. To list pipelines in reverse chronological order, enter <code>false</code>.</p>
     #[serde(rename = "Ascending")]
@@ -801,6 +812,7 @@ pub struct ListPipelinesResponse {
 
 /// <p>The <code>ListPresetsRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPresetsRequest {
     /// <p>To list presets in chronological order by the date and time that they were created, enter <code>true</code>. To list presets in reverse chronological order, enter <code>false</code>.</p>
     #[serde(rename = "Ascending")]
@@ -1083,6 +1095,7 @@ pub struct PresetWatermark {
 
 /// <p>The <code>ReadJobRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReadJobRequest {
     /// <p>The identifier of the job for which you want to get detailed information.</p>
     #[serde(rename = "Id")]
@@ -1101,6 +1114,7 @@ pub struct ReadJobResponse {
 
 /// <p>The <code>ReadPipelineRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReadPipelineRequest {
     /// <p>The identifier of the pipeline to read.</p>
     #[serde(rename = "Id")]
@@ -1123,6 +1137,7 @@ pub struct ReadPipelineResponse {
 
 /// <p>The <code>ReadPresetRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReadPresetRequest {
     /// <p>The identifier of the preset for which you want to get detailed information.</p>
     #[serde(rename = "Id")]
@@ -1141,6 +1156,7 @@ pub struct ReadPresetResponse {
 
 /// <p> The <code>TestRoleRequest</code> structure. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestRoleRequest {
     /// <p>The Amazon S3 bucket that contains media files to be transcoded. The action attempts to read from this bucket.</p>
     #[serde(rename = "InputBucket")]
@@ -1240,6 +1256,7 @@ pub struct Timing {
 
 /// <p>The <code>UpdatePipelineNotificationsRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineNotificationsRequest {
     /// <p>The identifier of the pipeline for which you want to change notification settings.</p>
     #[serde(rename = "Id")]
@@ -1261,6 +1278,7 @@ pub struct UpdatePipelineNotificationsResponse {
 
 /// <p>The <code>UpdatePipelineRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineRequest {
     /// <p>The AWS Key Management Service (AWS KMS) key that you want to use with this pipeline.</p> <p>If you use either <code>s3</code> or <code>s3-aws-kms</code> as your <code>Encryption:Mode</code>, you don't need to provide a key with your job because a default key, known as an AWS-KMS key, is created for you automatically. You need to provide an AWS-KMS key only if you want to use a non-default AWS-KMS key, or if you are using an <code>Encryption:Mode</code> of <code>aes-cbc-pkcs7</code>, <code>aes-ctr</code>, or <code>aes-gcm</code>.</p>
     #[serde(rename = "AwsKmsKeyArn")]
@@ -1311,6 +1329,7 @@ pub struct UpdatePipelineResponse {
 
 /// <p>The <code>UpdatePipelineStatusRequest</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineStatusRequest {
     /// <p>The identifier of the pipeline to update.</p>
     #[serde(rename = "Id")]

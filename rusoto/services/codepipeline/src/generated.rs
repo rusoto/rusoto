@@ -40,6 +40,7 @@ pub struct AWSSessionCredentials {
 
 /// <p>Represents the input of an AcknowledgeJob action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcknowledgeJobInput {
     /// <p>The unique system-generated ID of the job for which you want to confirm receipt.</p>
     #[serde(rename = "jobId")]
@@ -61,6 +62,7 @@ pub struct AcknowledgeJobOutput {
 
 /// <p>Represents the input of an AcknowledgeThirdPartyJob action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcknowledgeThirdPartyJobInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
     #[serde(rename = "clientToken")]
@@ -261,6 +263,7 @@ pub struct ActionExecutionDetail {
 
 /// <p>Filter values for the action execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ActionExecutionFilter {
     /// <p>The pipeline execution ID used to filter action execution history.</p>
     #[serde(rename = "pipelineExecutionId")]
@@ -428,6 +431,7 @@ pub struct ActionTypeSettings {
 
 /// <p>Represents information about the result of an approval request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApprovalResult {
     /// <p>The response submitted by a reviewer assigned to an approval action request.</p>
     #[serde(rename = "status")]
@@ -552,6 +556,7 @@ pub struct BlockerDeclaration {
 
 /// <p>Represents the input of a CreateCustomActionType operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomActionTypeInput {
     /// <p><p>The category of the custom action, such as a build action or a test action.</p> <note> <p>Although <code>Source</code> and <code>Approval</code> are listed as valid values, they are not currently functional. These values are reserved for future use.</p> </note></p>
     #[serde(rename = "category")]
@@ -597,6 +602,7 @@ pub struct CreateCustomActionTypeOutput {
 
 /// <p>Represents the input of a <code>CreatePipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePipelineInput {
     /// <p>Represents the structure of actions and stages to be performed in the pipeline. </p>
     #[serde(rename = "pipeline")]
@@ -623,6 +629,7 @@ pub struct CreatePipelineOutput {
 
 /// <p>Represents information about a current revision.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CurrentRevision {
     /// <p>The change identifier for the current revision.</p>
     #[serde(rename = "changeIdentifier")]
@@ -642,6 +649,7 @@ pub struct CurrentRevision {
 
 /// <p>Represents the input of a <code>DeleteCustomActionType</code> operation. The custom action will be marked as deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomActionTypeInput {
     /// <p>The category of the custom action that you want to delete, such as source or deploy.</p>
     #[serde(rename = "category")]
@@ -656,6 +664,7 @@ pub struct DeleteCustomActionTypeInput {
 
 /// <p>Represents the input of a <code>DeletePipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePipelineInput {
     /// <p>The name of the pipeline to be deleted.</p>
     #[serde(rename = "name")]
@@ -663,6 +672,7 @@ pub struct DeletePipelineInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWebhookInput {
     /// <p>The name of the webhook you want to delete.</p>
     #[serde(rename = "name")]
@@ -674,6 +684,7 @@ pub struct DeleteWebhookInput {
 pub struct DeleteWebhookOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterWebhookWithThirdPartyInput {
     /// <p>The name of the webhook you want to deregister.</p>
     #[serde(rename = "webhookName")]
@@ -687,6 +698,7 @@ pub struct DeregisterWebhookWithThirdPartyOutput {}
 
 /// <p>Represents the input of a <code>DisableStageTransition</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableStageTransitionInput {
     /// <p>The name of the pipeline in which you want to disable the flow of artifacts from one stage to another.</p>
     #[serde(rename = "pipelineName")]
@@ -704,6 +716,7 @@ pub struct DisableStageTransitionInput {
 
 /// <p>Represents the input of an <code>EnableStageTransition</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableStageTransitionInput {
     /// <p>The name of the pipeline in which you want to enable the flow of artifacts from one stage to another.</p>
     #[serde(rename = "pipelineName")]
@@ -743,6 +756,7 @@ pub struct ErrorDetails {
 
 /// <p>The details of the actions taken and results produced on an artifact as it passes through stages in the pipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecutionDetails {
     /// <p>The system-generated unique ID of this action used to identify this job worker in any external systems, such as AWS CodeDeploy.</p>
     #[serde(rename = "externalExecutionId")]
@@ -774,6 +788,7 @@ pub struct ExecutionTrigger {
 
 /// <p>Represents information about failure details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FailureDetails {
     /// <p>The external ID of the run of the action that failed.</p>
     #[serde(rename = "externalExecutionId")]
@@ -789,6 +804,7 @@ pub struct FailureDetails {
 
 /// <p>Represents the input of a <code>GetJobDetails</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobDetailsInput {
     /// <p>The unique system-generated ID for the job.</p>
     #[serde(rename = "jobId")]
@@ -807,6 +823,7 @@ pub struct GetJobDetailsOutput {
 
 /// <p>Represents the input of a <code>GetPipelineExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPipelineExecutionInput {
     /// <p>The ID of the pipeline execution about which you want to get execution details.</p>
     #[serde(rename = "pipelineExecutionId")]
@@ -828,6 +845,7 @@ pub struct GetPipelineExecutionOutput {
 
 /// <p>Represents the input of a <code>GetPipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPipelineInput {
     /// <p>The name of the pipeline for which you want to get information. Pipeline names must be unique under an Amazon Web Services (AWS) user account.</p>
     #[serde(rename = "name")]
@@ -854,6 +872,7 @@ pub struct GetPipelineOutput {
 
 /// <p>Represents the input of a <code>GetPipelineState</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPipelineStateInput {
     /// <p>The name of the pipeline about which you want to get information.</p>
     #[serde(rename = "name")]
@@ -888,6 +907,7 @@ pub struct GetPipelineStateOutput {
 
 /// <p>Represents the input of a <code>GetThirdPartyJobDetails</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetThirdPartyJobDetailsInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
     #[serde(rename = "clientToken")]
@@ -994,6 +1014,7 @@ pub struct JobDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActionExecutionsInput {
     /// <p>Input information used to filter action execution history.</p>
     #[serde(rename = "filter")]
@@ -1027,6 +1048,7 @@ pub struct ListActionExecutionsOutput {
 
 /// <p>Represents the input of a <code>ListActionTypes</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActionTypesInput {
     /// <p>Filters the list of action types to those created by a specified entity.</p>
     #[serde(rename = "actionOwnerFilter")]
@@ -1053,6 +1075,7 @@ pub struct ListActionTypesOutput {
 
 /// <p>Represents the input of a <code>ListPipelineExecutions</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelineExecutionsInput {
     /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned nextToken value. Pipeline history is limited to the most recent 12 months, based on pipeline execution start times. Default value is 100.</p>
     #[serde(rename = "maxResults")]
@@ -1083,6 +1106,7 @@ pub struct ListPipelineExecutionsOutput {
 
 /// <p>Represents the input of a <code>ListPipelines</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelinesInput {
     /// <p>An identifier that was returned from the previous list pipelines call, which can be used to return the next set of pipelines in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1105,6 +1129,7 @@ pub struct ListPipelinesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "maxResults")]
@@ -1165,6 +1190,7 @@ pub struct ListWebhookItem {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebhooksInput {
     /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned nextToken value.</p>
     #[serde(rename = "MaxResults")]
@@ -1347,6 +1373,7 @@ pub struct PipelineSummary {
 
 /// <p>Represents the input of a <code>PollForJobs</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PollForJobsInput {
     /// <p>Represents information about an action type.</p>
     #[serde(rename = "actionTypeId")]
@@ -1373,6 +1400,7 @@ pub struct PollForJobsOutput {
 
 /// <p>Represents the input of a <code>PollForThirdPartyJobs</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PollForThirdPartyJobsInput {
     /// <p>Represents information about an action type.</p>
     #[serde(rename = "actionTypeId")]
@@ -1395,6 +1423,7 @@ pub struct PollForThirdPartyJobsOutput {
 
 /// <p>Represents the input of a <code>PutActionRevision</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutActionRevisionInput {
     /// <p>The name of the action that will process the revision.</p>
     #[serde(rename = "actionName")]
@@ -1426,6 +1455,7 @@ pub struct PutActionRevisionOutput {
 
 /// <p>Represents the input of a <code>PutApprovalResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutApprovalResultInput {
     /// <p>The name of the action for which approval is requested.</p>
     #[serde(rename = "actionName")]
@@ -1456,6 +1486,7 @@ pub struct PutApprovalResultOutput {
 
 /// <p>Represents the input of a <code>PutJobFailureResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutJobFailureResultInput {
     /// <p>The details about the failure of a job.</p>
     #[serde(rename = "failureDetails")]
@@ -1467,6 +1498,7 @@ pub struct PutJobFailureResultInput {
 
 /// <p>Represents the input of a <code>PutJobSuccessResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutJobSuccessResultInput {
     /// <p>A token generated by a job worker, such as an AWS CodeDeploy deployment ID, that a successful job provides to identify a custom action in progress. Future jobs will use this token in order to identify the running instance of the action. It can be reused to return additional information about the progress of the custom action. When the action is complete, no continuation token should be supplied.</p>
     #[serde(rename = "continuationToken")]
@@ -1487,6 +1519,7 @@ pub struct PutJobSuccessResultInput {
 
 /// <p>Represents the input of a <code>PutThirdPartyJobFailureResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutThirdPartyJobFailureResultInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
     #[serde(rename = "clientToken")]
@@ -1501,6 +1534,7 @@ pub struct PutThirdPartyJobFailureResultInput {
 
 /// <p>Represents the input of a <code>PutThirdPartyJobSuccessResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutThirdPartyJobSuccessResultInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
     #[serde(rename = "clientToken")]
@@ -1523,6 +1557,7 @@ pub struct PutThirdPartyJobSuccessResultInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutWebhookInput {
     /// <p>The tags for the webhook.</p>
     #[serde(rename = "tags")]
@@ -1543,6 +1578,7 @@ pub struct PutWebhookOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterWebhookWithThirdPartyInput {
     /// <p>The name of an existing webhook created with PutWebhook to register with a supported third party. </p>
     #[serde(rename = "webhookName")]
@@ -1556,6 +1592,7 @@ pub struct RegisterWebhookWithThirdPartyOutput {}
 
 /// <p>Represents the input of a <code>RetryStageExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetryStageExecutionInput {
     /// <p>The ID of the pipeline execution in the failed stage to be retried. Use the <a>GetPipelineState</a> action to retrieve the current pipelineExecutionId of the failed stage</p>
     #[serde(rename = "pipelineExecutionId")]
@@ -1689,6 +1726,7 @@ pub struct StageState {
 
 /// <p>Represents the input of a <code>StartPipelineExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPipelineExecutionInput {
     /// <p>The system-generated unique ID used to identify a unique execution request.</p>
     #[serde(rename = "clientRequestToken")]
@@ -1721,6 +1759,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource you want to add tags to.</p>
     #[serde(rename = "resourceArn")]
@@ -1827,6 +1866,7 @@ pub struct TransitionState {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p> The Amazon Resource Name (ARN) of the resource to remove tags from.</p>
     #[serde(rename = "resourceArn")]
@@ -1842,6 +1882,7 @@ pub struct UntagResourceOutput {}
 
 /// <p>Represents the input of an <code>UpdatePipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineInput {
     /// <p>The name of the pipeline to be updated.</p>
     #[serde(rename = "pipeline")]

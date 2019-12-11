@@ -25,6 +25,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateRoleToGroupRequest {
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -44,6 +45,7 @@ pub struct AssociateRoleToGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateServiceRoleToAccountRequest {
     /// <p>The ARN of the service role you wish to associate with your account.</p>
     #[serde(rename = "RoleArn")]
@@ -206,6 +208,7 @@ pub struct CoreDefinitionVersion {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConnectorDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -259,6 +262,7 @@ pub struct CreateConnectorDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConnectorDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -296,6 +300,7 @@ pub struct CreateConnectorDefinitionVersionResponse {
 
 /// <p>Information needed to create a core definition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCoreDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -349,6 +354,7 @@ pub struct CreateCoreDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCoreDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -385,6 +391,7 @@ pub struct CreateCoreDefinitionVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -420,6 +427,7 @@ pub struct CreateDeploymentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeviceDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -473,6 +481,7 @@ pub struct CreateDeviceDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeviceDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -509,6 +518,7 @@ pub struct CreateDeviceDefinitionVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFunctionDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -563,6 +573,7 @@ pub struct CreateFunctionDefinitionResponse {
 
 /// <p>Information needed to create a function definition version.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFunctionDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -603,6 +614,7 @@ pub struct CreateFunctionDefinitionVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupCertificateAuthorityRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -623,6 +635,7 @@ pub struct CreateGroupCertificateAuthorityResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -676,6 +689,7 @@ pub struct CreateGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -736,6 +750,7 @@ pub struct CreateGroupVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoggerDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -789,6 +804,7 @@ pub struct CreateLoggerDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoggerDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -825,6 +841,7 @@ pub struct CreateLoggerDefinitionVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -878,6 +895,7 @@ pub struct CreateResourceDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -914,6 +932,7 @@ pub struct CreateResourceDefinitionVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSoftwareUpdateJobRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -948,6 +967,7 @@ pub struct CreateSoftwareUpdateJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubscriptionDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -1001,6 +1021,7 @@ pub struct CreateSubscriptionDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubscriptionDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -1075,6 +1096,7 @@ pub struct DefinitionInformation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectorDefinitionRequest {
     /// <p>The ID of the connector definition.</p>
     #[serde(rename = "ConnectorDefinitionId")]
@@ -1086,6 +1108,7 @@ pub struct DeleteConnectorDefinitionRequest {
 pub struct DeleteConnectorDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCoreDefinitionRequest {
     /// <p>The ID of the core definition.</p>
     #[serde(rename = "CoreDefinitionId")]
@@ -1097,6 +1120,7 @@ pub struct DeleteCoreDefinitionRequest {
 pub struct DeleteCoreDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeviceDefinitionRequest {
     /// <p>The ID of the device definition.</p>
     #[serde(rename = "DeviceDefinitionId")]
@@ -1108,6 +1132,7 @@ pub struct DeleteDeviceDefinitionRequest {
 pub struct DeleteDeviceDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFunctionDefinitionRequest {
     /// <p>The ID of the Lambda function definition.</p>
     #[serde(rename = "FunctionDefinitionId")]
@@ -1119,6 +1144,7 @@ pub struct DeleteFunctionDefinitionRequest {
 pub struct DeleteFunctionDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -1130,6 +1156,7 @@ pub struct DeleteGroupRequest {
 pub struct DeleteGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoggerDefinitionRequest {
     /// <p>The ID of the logger definition.</p>
     #[serde(rename = "LoggerDefinitionId")]
@@ -1141,6 +1168,7 @@ pub struct DeleteLoggerDefinitionRequest {
 pub struct DeleteLoggerDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceDefinitionRequest {
     /// <p>The ID of the resource definition.</p>
     #[serde(rename = "ResourceDefinitionId")]
@@ -1152,6 +1180,7 @@ pub struct DeleteResourceDefinitionRequest {
 pub struct DeleteResourceDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubscriptionDefinitionRequest {
     /// <p>The ID of the subscription definition.</p>
     #[serde(rename = "SubscriptionDefinitionId")]
@@ -1216,6 +1245,7 @@ pub struct DeviceDefinitionVersion {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateRoleFromGroupRequest {
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -1232,6 +1262,7 @@ pub struct DisassociateRoleFromGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateServiceRoleFromAccountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1384,6 +1415,7 @@ pub struct FunctionRunAsConfig {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAssociatedRoleRequest {
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -1404,6 +1436,7 @@ pub struct GetAssociatedRoleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBulkDeploymentStatusRequest {
     /// <p>The ID of the bulk deployment.</p>
     #[serde(rename = "BulkDeploymentId")]
@@ -1440,6 +1473,7 @@ pub struct GetBulkDeploymentStatusResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectivityInfoRequest {
     /// <p>The thing name.</p>
     #[serde(rename = "ThingName")]
@@ -1460,6 +1494,7 @@ pub struct GetConnectivityInfoResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectorDefinitionRequest {
     /// <p>The ID of the connector definition.</p>
     #[serde(rename = "ConnectorDefinitionId")]
@@ -1504,6 +1539,7 @@ pub struct GetConnectorDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectorDefinitionVersionRequest {
     /// <p>The ID of the connector definition.</p>
     #[serde(rename = "ConnectorDefinitionId")]
@@ -1547,6 +1583,7 @@ pub struct GetConnectorDefinitionVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCoreDefinitionRequest {
     /// <p>The ID of the core definition.</p>
     #[serde(rename = "CoreDefinitionId")]
@@ -1591,6 +1628,7 @@ pub struct GetCoreDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCoreDefinitionVersionRequest {
     /// <p>The ID of the core definition.</p>
     #[serde(rename = "CoreDefinitionId")]
@@ -1630,6 +1668,7 @@ pub struct GetCoreDefinitionVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentStatusRequest {
     /// <p>The ID of the deployment.</p>
     #[serde(rename = "DeploymentId")]
@@ -1665,6 +1704,7 @@ pub struct GetDeploymentStatusResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceDefinitionRequest {
     /// <p>The ID of the device definition.</p>
     #[serde(rename = "DeviceDefinitionId")]
@@ -1709,6 +1749,7 @@ pub struct GetDeviceDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceDefinitionVersionRequest {
     /// <p>The ID of the device definition.</p>
     #[serde(rename = "DeviceDefinitionId")]
@@ -1752,6 +1793,7 @@ pub struct GetDeviceDefinitionVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionDefinitionRequest {
     /// <p>The ID of the Lambda function definition.</p>
     #[serde(rename = "FunctionDefinitionId")]
@@ -1796,6 +1838,7 @@ pub struct GetFunctionDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionDefinitionVersionRequest {
     /// <p>The ID of the Lambda function definition.</p>
     #[serde(rename = "FunctionDefinitionId")]
@@ -1839,6 +1882,7 @@ pub struct GetFunctionDefinitionVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupCertificateAuthorityRequest {
     /// <p>The ID of the certificate authority.</p>
     #[serde(rename = "CertificateAuthorityId")]
@@ -1866,6 +1910,7 @@ pub struct GetGroupCertificateAuthorityResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupCertificateConfigurationRequest {
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -1890,6 +1935,7 @@ pub struct GetGroupCertificateConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupRequest {
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -1934,6 +1980,7 @@ pub struct GetGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupVersionRequest {
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -1969,6 +2016,7 @@ pub struct GetGroupVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoggerDefinitionRequest {
     /// <p>The ID of the logger definition.</p>
     #[serde(rename = "LoggerDefinitionId")]
@@ -2013,6 +2061,7 @@ pub struct GetLoggerDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoggerDefinitionVersionRequest {
     /// <p>The ID of the logger definition.</p>
     #[serde(rename = "LoggerDefinitionId")]
@@ -2052,6 +2101,7 @@ pub struct GetLoggerDefinitionVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceDefinitionRequest {
     /// <p>The ID of the resource definition.</p>
     #[serde(rename = "ResourceDefinitionId")]
@@ -2096,6 +2146,7 @@ pub struct GetResourceDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceDefinitionVersionRequest {
     /// <p>The ID of the resource definition.</p>
     #[serde(rename = "ResourceDefinitionId")]
@@ -2131,6 +2182,7 @@ pub struct GetResourceDefinitionVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceRoleForAccountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2147,6 +2199,7 @@ pub struct GetServiceRoleForAccountResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSubscriptionDefinitionRequest {
     /// <p>The ID of the subscription definition.</p>
     #[serde(rename = "SubscriptionDefinitionId")]
@@ -2191,6 +2244,7 @@ pub struct GetSubscriptionDefinitionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSubscriptionDefinitionVersionRequest {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2328,6 +2382,7 @@ pub struct GroupVersion {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBulkDeploymentDetailedReportsRequest {
     /// <p>The ID of the bulk deployment.</p>
     #[serde(rename = "BulkDeploymentId")]
@@ -2356,6 +2411,7 @@ pub struct ListBulkDeploymentDetailedReportsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBulkDeploymentsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2381,6 +2437,7 @@ pub struct ListBulkDeploymentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConnectorDefinitionVersionsRequest {
     /// <p>The ID of the connector definition.</p>
     #[serde(rename = "ConnectorDefinitionId")]
@@ -2409,6 +2466,7 @@ pub struct ListConnectorDefinitionVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConnectorDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2434,6 +2492,7 @@ pub struct ListConnectorDefinitionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCoreDefinitionVersionsRequest {
     /// <p>The ID of the core definition.</p>
     #[serde(rename = "CoreDefinitionId")]
@@ -2462,6 +2521,7 @@ pub struct ListCoreDefinitionVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCoreDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2487,6 +2547,7 @@ pub struct ListCoreDefinitionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentsRequest {
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -2515,6 +2576,7 @@ pub struct ListDeploymentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceDefinitionVersionsRequest {
     /// <p>The ID of the device definition.</p>
     #[serde(rename = "DeviceDefinitionId")]
@@ -2543,6 +2605,7 @@ pub struct ListDeviceDefinitionVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2568,6 +2631,7 @@ pub struct ListDeviceDefinitionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFunctionDefinitionVersionsRequest {
     /// <p>The ID of the Lambda function definition.</p>
     #[serde(rename = "FunctionDefinitionId")]
@@ -2596,6 +2660,7 @@ pub struct ListFunctionDefinitionVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFunctionDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2621,6 +2686,7 @@ pub struct ListFunctionDefinitionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupCertificateAuthoritiesRequest {
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -2637,6 +2703,7 @@ pub struct ListGroupCertificateAuthoritiesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupVersionsRequest {
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -2665,6 +2732,7 @@ pub struct ListGroupVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2690,6 +2758,7 @@ pub struct ListGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLoggerDefinitionVersionsRequest {
     /// <p>The ID of the logger definition.</p>
     #[serde(rename = "LoggerDefinitionId")]
@@ -2718,6 +2787,7 @@ pub struct ListLoggerDefinitionVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLoggerDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2743,6 +2813,7 @@ pub struct ListLoggerDefinitionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceDefinitionVersionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2771,6 +2842,7 @@ pub struct ListResourceDefinitionVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2796,6 +2868,7 @@ pub struct ListResourceDefinitionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscriptionDefinitionVersionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2824,6 +2897,7 @@ pub struct ListSubscriptionDefinitionVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscriptionDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "MaxResults")]
@@ -2849,6 +2923,7 @@ pub struct ListSubscriptionDefinitionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "ResourceArn")]
@@ -2925,6 +3000,7 @@ pub struct LoggerDefinitionVersion {
 
 /// <p>Information needed to reset deployments.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetDeploymentsRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -3053,6 +3129,7 @@ pub struct SecretsManagerSecretResourceData {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartBulkDeploymentRequest {
     /// <p>A client token used to correlate requests and responses.</p>
     #[serde(rename = "AmznClientToken")]
@@ -3084,6 +3161,7 @@ pub struct StartBulkDeploymentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopBulkDeploymentRequest {
     /// <p>The ID of the bulk deployment.</p>
     #[serde(rename = "BulkDeploymentId")]
@@ -3122,6 +3200,7 @@ pub struct SubscriptionDefinitionVersion {
 
 /// <p>A map of the key-value pairs for the resource tag.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "ResourceArn")]
@@ -3132,6 +3211,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "ResourceArn")]
@@ -3143,6 +3223,7 @@ pub struct UntagResourceRequest {
 
 /// <p>Connectivity information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConnectivityInfoRequest {
     /// <p>A list of connectivity info.</p>
     #[serde(rename = "ConnectivityInfo")]
@@ -3167,6 +3248,7 @@ pub struct UpdateConnectivityInfoResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConnectorDefinitionRequest {
     /// <p>The ID of the connector definition.</p>
     #[serde(rename = "ConnectorDefinitionId")]
@@ -3182,6 +3264,7 @@ pub struct UpdateConnectorDefinitionRequest {
 pub struct UpdateConnectorDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCoreDefinitionRequest {
     /// <p>The ID of the core definition.</p>
     #[serde(rename = "CoreDefinitionId")]
@@ -3197,6 +3280,7 @@ pub struct UpdateCoreDefinitionRequest {
 pub struct UpdateCoreDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceDefinitionRequest {
     /// <p>The ID of the device definition.</p>
     #[serde(rename = "DeviceDefinitionId")]
@@ -3212,6 +3296,7 @@ pub struct UpdateDeviceDefinitionRequest {
 pub struct UpdateDeviceDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFunctionDefinitionRequest {
     /// <p>The ID of the Lambda function definition.</p>
     #[serde(rename = "FunctionDefinitionId")]
@@ -3227,6 +3312,7 @@ pub struct UpdateFunctionDefinitionRequest {
 pub struct UpdateFunctionDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupCertificateConfigurationRequest {
     /// <p>The amount of time remaining before the certificate expires, in milliseconds.</p>
     #[serde(rename = "CertificateExpiryInMilliseconds")]
@@ -3255,6 +3341,7 @@ pub struct UpdateGroupCertificateConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupRequest {
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
@@ -3270,6 +3357,7 @@ pub struct UpdateGroupRequest {
 pub struct UpdateGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLoggerDefinitionRequest {
     /// <p>The ID of the logger definition.</p>
     #[serde(rename = "LoggerDefinitionId")]
@@ -3285,6 +3373,7 @@ pub struct UpdateLoggerDefinitionRequest {
 pub struct UpdateLoggerDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceDefinitionRequest {
     /// <p>The name of the definition.</p>
     #[serde(rename = "Name")]
@@ -3300,6 +3389,7 @@ pub struct UpdateResourceDefinitionRequest {
 pub struct UpdateResourceDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSubscriptionDefinitionRequest {
     /// <p>The name of the definition.</p>
     #[serde(rename = "Name")]

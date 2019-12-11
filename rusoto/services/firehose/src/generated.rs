@@ -70,6 +70,7 @@ pub struct CopyCommand {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeliveryStreamInput {
     /// <p>The name of the delivery stream. This name must be unique per AWS account in the same AWS Region. If the delivery streams are in different accounts or different Regions, you can have multiple delivery streams with the same name.</p>
     #[serde(rename = "DeliveryStreamName")]
@@ -135,6 +136,7 @@ pub struct DataFormatConversionConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeliveryStreamInput {
     /// <p>The name of the delivery stream.</p>
     #[serde(rename = "DeliveryStreamName")]
@@ -199,6 +201,7 @@ pub struct DeliveryStreamEncryptionConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeliveryStreamInput {
     /// <p>The name of the delivery stream.</p>
     #[serde(rename = "DeliveryStreamName")]
@@ -278,6 +281,7 @@ pub struct ElasticsearchBufferingHints {
 
 /// <p>Describes the configuration of a destination in Amazon ES.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ElasticsearchDestinationConfiguration {
     /// <p>The buffering options. If no value is specified, the default values for <code>ElasticsearchBufferingHints</code> are used.</p>
     #[serde(rename = "BufferingHints")]
@@ -372,6 +376,7 @@ pub struct ElasticsearchDestinationDescription {
 
 /// <p>Describes an update for a destination in Amazon ES.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ElasticsearchDestinationUpdate {
     /// <p>The buffering options. If no value is specified, <code>ElasticsearchBufferingHints</code> object default values are used. </p>
     #[serde(rename = "BufferingHints")]
@@ -439,6 +444,7 @@ pub struct EncryptionConfiguration {
 
 /// <p>Describes the configuration of a destination in Amazon S3.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExtendedS3DestinationConfiguration {
     /// <p>The ARN of the S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
     #[serde(rename = "BucketARN")]
@@ -539,6 +545,7 @@ pub struct ExtendedS3DestinationDescription {
 
 /// <p>Describes an update for a destination in Amazon S3.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExtendedS3DestinationUpdate {
     /// <p>The ARN of the S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
     #[serde(rename = "BucketARN")]
@@ -618,6 +625,7 @@ pub struct KMSEncryptionConfig {
 
 /// <p>The stream and role Amazon Resource Names (ARNs) for a Kinesis data stream used as the source for a delivery stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamSourceConfiguration {
     /// <p>The ARN of the source Kinesis data stream. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-kinesis-streams">Amazon Kinesis Data Streams ARN Format</a>.</p>
     #[serde(rename = "KinesisStreamARN")]
@@ -646,6 +654,7 @@ pub struct KinesisStreamSourceDescription {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeliveryStreamsInput {
     /// <p>The delivery stream type. This can be one of the following values:</p> <ul> <li> <p> <code>DirectPut</code>: Provider applications access the delivery stream directly.</p> </li> <li> <p> <code>KinesisStreamAsSource</code>: The delivery stream uses a Kinesis data stream as a source.</p> </li> </ul> <p>This parameter is optional. If this parameter is omitted, delivery streams of all types are returned.</p>
     #[serde(rename = "DeliveryStreamType")]
@@ -673,6 +682,7 @@ pub struct ListDeliveryStreamsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForDeliveryStreamInput {
     /// <p>The name of the delivery stream whose tags you want to list.</p>
     #[serde(rename = "DeliveryStreamName")]
@@ -835,6 +845,7 @@ pub struct ProcessorParameter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRecordBatchInput {
     /// <p>The name of the delivery stream.</p>
     #[serde(rename = "DeliveryStreamName")]
@@ -878,6 +889,7 @@ pub struct PutRecordBatchResponseEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRecordInput {
     /// <p>The name of the delivery stream.</p>
     #[serde(rename = "DeliveryStreamName")]
@@ -901,6 +913,7 @@ pub struct PutRecordOutput {
 
 /// <p>The unit of data in a delivery stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Record {
     /// <p>The data blob, which is base64-encoded when the blob is serialized. The maximum size of the data blob, before base64-encoding, is 1,000 KiB.</p>
     #[serde(rename = "Data")]
@@ -914,6 +927,7 @@ pub struct Record {
 
 /// <p>Describes the configuration of a destination in Amazon Redshift.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RedshiftDestinationConfiguration {
     /// <p>The CloudWatch logging options for your delivery stream.</p>
     #[serde(rename = "CloudWatchLoggingOptions")]
@@ -998,6 +1012,7 @@ pub struct RedshiftDestinationDescription {
 
 /// <p>Describes an update for a destination in Amazon Redshift.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RedshiftDestinationUpdate {
     /// <p>The Amazon CloudWatch logging options for your delivery stream.</p>
     #[serde(rename = "CloudWatchLoggingOptions")]
@@ -1056,6 +1071,7 @@ pub struct RedshiftRetryOptions {
 
 /// <p>Describes the configuration of a destination in Amazon S3.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3DestinationConfiguration {
     /// <p>The ARN of the S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
     #[serde(rename = "BucketARN")]
@@ -1124,6 +1140,7 @@ pub struct S3DestinationDescription {
 
 /// <p>Describes an update for a destination in Amazon S3.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3DestinationUpdate {
     /// <p>The ARN of the S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
     #[serde(rename = "BucketARN")]
@@ -1213,6 +1230,7 @@ pub struct SourceDescription {
 
 /// <p>Describes the configuration of a destination in Splunk.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SplunkDestinationConfiguration {
     /// <p>The Amazon CloudWatch logging options for your delivery stream.</p>
     #[serde(rename = "CloudWatchLoggingOptions")]
@@ -1292,6 +1310,7 @@ pub struct SplunkDestinationDescription {
 
 /// <p>Describes an update for a destination in Splunk.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SplunkDestinationUpdate {
     /// <p>The Amazon CloudWatch logging options for your delivery stream.</p>
     #[serde(rename = "CloudWatchLoggingOptions")]
@@ -1341,6 +1360,7 @@ pub struct SplunkRetryOptions {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDeliveryStreamEncryptionInput {
     /// <p>The name of the delivery stream for which you want to enable server-side encryption (SSE).</p>
     #[serde(rename = "DeliveryStreamName")]
@@ -1352,6 +1372,7 @@ pub struct StartDeliveryStreamEncryptionInput {
 pub struct StartDeliveryStreamEncryptionOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDeliveryStreamEncryptionInput {
     /// <p>The name of the delivery stream for which you want to disable server-side encryption (SSE).</p>
     #[serde(rename = "DeliveryStreamName")]
@@ -1375,6 +1396,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagDeliveryStreamInput {
     /// <p>The name of the delivery stream to which you want to add the tags.</p>
     #[serde(rename = "DeliveryStreamName")]
@@ -1389,6 +1411,7 @@ pub struct TagDeliveryStreamInput {
 pub struct TagDeliveryStreamOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagDeliveryStreamInput {
     /// <p>The name of the delivery stream.</p>
     #[serde(rename = "DeliveryStreamName")]
@@ -1403,6 +1426,7 @@ pub struct UntagDeliveryStreamInput {
 pub struct UntagDeliveryStreamOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDestinationInput {
     /// <p>Obtain this value from the <code>VersionId</code> result of <a>DeliveryStreamDescription</a>. This value is required, and helps the service perform conditional operations. For example, if there is an interleaving update and this value is null, then the update destination fails. After the update is successful, the <code>VersionId</code> value is updated. The service then performs a merge of the old configuration with the new configuration.</p>
     #[serde(rename = "CurrentDeliveryStreamVersionId")]

@@ -38,6 +38,7 @@ pub struct ConsumedLicenseSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLicenseConfigurationRequest {
     /// <p>Human-friendly description of the license configuration.</p>
     #[serde(rename = "Description")]
@@ -77,6 +78,7 @@ pub struct CreateLicenseConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLicenseConfigurationRequest {
     /// <p>Unique ID of the configuration object to delete.</p>
     #[serde(rename = "LicenseConfigurationArn")]
@@ -89,6 +91,7 @@ pub struct DeleteLicenseConfigurationResponse {}
 
 /// <p>A filter name and value pair that is used to return a more specific list of results from a describe operation. Filters can be used to match a set of resources by specific criteria, such as tags, attributes, or IDs. The filters supported by a <code>Describe</code> operation are documented with the <code>Describe</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>Name of the filter. Filter names are case-sensitive.</p>
     #[serde(rename = "Name")]
@@ -101,6 +104,7 @@ pub struct Filter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLicenseConfigurationRequest {
     /// <p>ARN of the license configuration being requested.</p>
     #[serde(rename = "LicenseConfigurationArn")]
@@ -169,6 +173,7 @@ pub struct GetLicenseConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceSettingsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -194,6 +199,7 @@ pub struct GetServiceSettingsResponse {
 
 /// <p>An inventory filter object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryFilter {
     /// <p>The condition of the filter.</p>
     #[serde(rename = "Condition")]
@@ -326,6 +332,7 @@ pub struct LicenseSpecification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociationsForLicenseConfigurationRequest {
     /// <p>ARN of a <code>LicenseConfiguration</code> object.</p>
     #[serde(rename = "LicenseConfigurationArn")]
@@ -354,6 +361,7 @@ pub struct ListAssociationsForLicenseConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLicenseConfigurationsRequest {
     /// <p>One or more filters.</p>
     #[serde(rename = "Filters")]
@@ -387,6 +395,7 @@ pub struct ListLicenseConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLicenseSpecificationsForResourceRequest {
     /// <p>Maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>
     #[serde(rename = "MaxResults")]
@@ -415,6 +424,7 @@ pub struct ListLicenseSpecificationsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceInventoryRequest {
     /// <p>One or more filters.</p>
     #[serde(rename = "Filters")]
@@ -444,6 +454,7 @@ pub struct ListResourceInventoryResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>ARN for the resource.</p>
     #[serde(rename = "ResourceArn")]
@@ -460,6 +471,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsageForLicenseConfigurationRequest {
     /// <p>List of filters to apply.</p>
     #[serde(rename = "Filters")]
@@ -557,6 +569,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>Resource of the ARN to be tagged.</p>
     #[serde(rename = "ResourceArn")]
@@ -571,6 +584,7 @@ pub struct TagResourceRequest {
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>ARN of the resource.</p>
     #[serde(rename = "ResourceArn")]
@@ -585,6 +599,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLicenseConfigurationRequest {
     /// <p>New human-friendly description of the license configuration.</p>
     #[serde(rename = "Description")]
@@ -620,6 +635,7 @@ pub struct UpdateLicenseConfigurationRequest {
 pub struct UpdateLicenseConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLicenseSpecificationsForResourceRequest {
     /// <p>License configuration ARNs to be added to a resource.</p>
     #[serde(rename = "AddLicenseSpecifications")]
@@ -639,6 +655,7 @@ pub struct UpdateLicenseSpecificationsForResourceRequest {
 pub struct UpdateLicenseSpecificationsForResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceSettingsRequest {
     /// <p>Activates cross-account discovery.</p>
     #[serde(rename = "EnableCrossAccountsDiscovery")]

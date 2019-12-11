@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDRTLogBucketRequest {
     /// <p>The Amazon S3 bucket that contains your AWS WAF logs.</p>
     #[serde(rename = "LogBucket")]
@@ -35,6 +36,7 @@ pub struct AssociateDRTLogBucketRequest {
 pub struct AssociateDRTLogBucketResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDRTRoleRequest {
     /// <p>The Amazon Resource Name (ARN) of the role the DRT will use to access your AWS account.</p> <p>Prior to making the <code>AssociateDRTRole</code> request, you must attach the <a href="https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy">AWSShieldDRTAccessPolicy</a> managed policy to this role. For more information see <a href=" https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html">Attaching and Detaching IAM Policies</a>.</p>
     #[serde(rename = "RoleArn")]
@@ -159,6 +161,7 @@ pub struct Contributor {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProtectionRequest {
     /// <p>Friendly name for the <code>Protection</code> you are creating.</p>
     #[serde(rename = "Name")]
@@ -178,6 +181,7 @@ pub struct CreateProtectionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubscriptionRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -185,6 +189,7 @@ pub struct CreateSubscriptionRequest {}
 pub struct CreateSubscriptionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProtectionRequest {
     /// <p>The unique identifier (ID) for the <a>Protection</a> object to be deleted.</p>
     #[serde(rename = "ProtectionId")]
@@ -196,6 +201,7 @@ pub struct DeleteProtectionRequest {
 pub struct DeleteProtectionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubscriptionRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -203,6 +209,7 @@ pub struct DeleteSubscriptionRequest {}
 pub struct DeleteSubscriptionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAttackRequest {
     /// <p>The unique identifier (ID) for the attack that to be described.</p>
     #[serde(rename = "AttackId")]
@@ -219,6 +226,7 @@ pub struct DescribeAttackResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDRTAccessRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -235,6 +243,7 @@ pub struct DescribeDRTAccessResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEmergencyContactSettingsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -247,6 +256,7 @@ pub struct DescribeEmergencyContactSettingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProtectionRequest {
     /// <p>The unique identifier (ID) for the <a>Protection</a> object that is described. When submitting the <code>DescribeProtection</code> request you must provide either the <code>ResourceArn</code> or the <code>ProtectionID</code>, but not both.</p>
     #[serde(rename = "ProtectionId")]
@@ -268,6 +278,7 @@ pub struct DescribeProtectionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubscriptionRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -280,6 +291,7 @@ pub struct DescribeSubscriptionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDRTLogBucketRequest {
     /// <p>The Amazon S3 bucket that contains your AWS WAF logs.</p>
     #[serde(rename = "LogBucket")]
@@ -291,6 +303,7 @@ pub struct DisassociateDRTLogBucketRequest {
 pub struct DisassociateDRTLogBucketResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDRTRoleRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -306,6 +319,7 @@ pub struct EmergencyContact {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSubscriptionStateRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -331,6 +345,7 @@ pub struct Limit {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttacksRequest {
     /// <p>The end of the time period for the attacks. This is a <code>timestamp</code> type. The sample request above indicates a <code>number</code> type because the default used by WAF is Unix time in seconds. However any valid <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp format</a> is allowed. </p>
     #[serde(rename = "EndTime")]
@@ -368,6 +383,7 @@ pub struct ListAttacksResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProtectionsRequest {
     /// <p>The maximum number of <a>Protection</a> objects to be returned. If this is left blank the first 20 results will be returned.</p> <p>This is a maximum value; it is possible that AWS WAF will return the results in smaller batches. That is, the number of <a>Protection</a> objects returned could be less than <code>MaxResults</code>, even if there are still more <a>Protection</a> objects yet to return. If there are more <a>Protection</a> objects to return, AWS WAF will always also return a <code>NextToken</code>.</p>
     #[serde(rename = "MaxResults")]
@@ -513,6 +529,7 @@ pub struct SummarizedCounter {
 
 /// <p>The time range.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TimeRange {
     /// <p>The start time, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "FromInclusive")]
@@ -525,6 +542,7 @@ pub struct TimeRange {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEmergencyContactSettingsRequest {
     /// <p>A list of email addresses that the DRT can use to contact you during a suspected attack.</p>
     #[serde(rename = "EmergencyContactList")]
@@ -537,6 +555,7 @@ pub struct UpdateEmergencyContactSettingsRequest {
 pub struct UpdateEmergencyContactSettingsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSubscriptionRequest {
     /// <p>When you initally create a subscription, <code>AutoRenew</code> is set to <code>ENABLED</code>. If <code>ENABLED</code>, the subscription will be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. If the <code>UpdateSubscription</code> request does not included a value for <code>AutoRenew</code>, the existing value for <code>AutoRenew</code> remains unchanged.</p>
     #[serde(rename = "AutoRenew")]

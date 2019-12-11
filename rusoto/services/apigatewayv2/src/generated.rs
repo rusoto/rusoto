@@ -187,6 +187,7 @@ pub struct Authorizer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApiMappingRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -225,6 +226,7 @@ pub struct CreateApiMappingResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApiRequest {
     /// <p>An API key selection expression. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
     #[serde(rename = "ApiKeySelectionExpression")]
@@ -314,6 +316,7 @@ pub struct CreateApiResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAuthorizerRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -456,6 +459,7 @@ pub struct CreateAuthorizerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -498,6 +502,7 @@ pub struct CreateDeploymentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainNameRequest {
     /// <p>The domain name.</p>
     #[serde(rename = "DomainName")]
@@ -534,6 +539,7 @@ pub struct CreateDomainNameResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIntegrationRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -771,6 +777,7 @@ pub struct CreateIntegrationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIntegrationResponseRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -867,6 +874,7 @@ pub struct CreateIntegrationResponseResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -915,6 +923,7 @@ pub struct CreateModelResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRouteRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1037,6 +1046,7 @@ pub struct CreateRouteResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRouteResponseRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1087,6 +1097,7 @@ pub struct CreateRouteResponseResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStageRequest {
     /// <p>Settings for logging access in this stage.</p>
     #[serde(rename = "AccessLogSettings")]
@@ -1183,6 +1194,7 @@ pub struct CreateStageResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApiMappingRequest {
     /// <p>The API mapping identifier.</p>
     #[serde(rename = "ApiMappingId")]
@@ -1193,6 +1205,7 @@ pub struct DeleteApiMappingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApiRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1200,6 +1213,7 @@ pub struct DeleteApiRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAuthorizerRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1210,6 +1224,7 @@ pub struct DeleteAuthorizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1220,6 +1235,7 @@ pub struct DeleteDeploymentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainNameRequest {
     /// <p>The domain name.</p>
     #[serde(rename = "DomainName")]
@@ -1227,6 +1243,7 @@ pub struct DeleteDomainNameRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntegrationRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1237,6 +1254,7 @@ pub struct DeleteIntegrationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntegrationResponseRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1250,6 +1268,7 @@ pub struct DeleteIntegrationResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1260,6 +1279,7 @@ pub struct DeleteModelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1270,6 +1290,7 @@ pub struct DeleteRouteRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteResponseRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1283,6 +1304,7 @@ pub struct DeleteRouteResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStageRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1387,6 +1409,7 @@ pub struct DomainNameConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiMappingRequest {
     /// <p>The API mapping identifier.</p>
     #[serde(rename = "ApiMappingId")]
@@ -1418,6 +1441,7 @@ pub struct GetApiMappingResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiMappingsRequest {
     /// <p>The domain name.</p>
     #[serde(rename = "DomainName")]
@@ -1448,6 +1472,7 @@ pub struct GetApiMappingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1511,6 +1536,7 @@ pub struct GetApiResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApisRequest {
     /// <p>The maximum number of elements to be returned for this resource.</p>
     #[serde(rename = "MaxResults")]
@@ -1538,6 +1564,7 @@ pub struct GetApisResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizerRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1622,6 +1649,7 @@ pub struct GetAuthorizerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizersRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1652,6 +1680,7 @@ pub struct GetAuthorizersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1688,6 +1717,7 @@ pub struct GetDeploymentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentsRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1718,6 +1748,7 @@ pub struct GetDeploymentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainNameRequest {
     /// <p>The domain name.</p>
     #[serde(rename = "DomainName")]
@@ -1746,6 +1777,7 @@ pub struct GetDomainNameResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainNamesRequest {
     /// <p>The maximum number of elements to be returned for this resource.</p>
     #[serde(rename = "MaxResults")]
@@ -1773,6 +1805,7 @@ pub struct GetDomainNamesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1905,6 +1938,7 @@ pub struct GetIntegrationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationResponseRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1965,6 +1999,7 @@ pub struct GetIntegrationResponseResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationResponsesRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1998,6 +2033,7 @@ pub struct GetIntegrationResponsesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationsRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -2028,6 +2064,7 @@ pub struct GetIntegrationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -2064,6 +2101,7 @@ pub struct GetModelResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelTemplateRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -2083,6 +2121,7 @@ pub struct GetModelTemplateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelsRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -2113,6 +2152,7 @@ pub struct GetModelsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRouteRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -2188,6 +2228,7 @@ pub struct GetRouteResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRouteResponseRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -2226,6 +2267,7 @@ pub struct GetRouteResponseResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRouteResponsesRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -2259,6 +2301,7 @@ pub struct GetRouteResponsesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoutesRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -2289,6 +2332,7 @@ pub struct GetRoutesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStageRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -2351,6 +2395,7 @@ pub struct GetStageResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStagesRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -2381,6 +2426,7 @@ pub struct GetStagesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsRequest {
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -2773,6 +2819,7 @@ pub struct Stage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>AWS resource arn </p>
     #[serde(rename = "ResourceArn")]
@@ -2788,6 +2835,7 @@ pub struct TagResourceRequest {
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>AWS resource arn </p>
     #[serde(rename = "ResourceArn")]
@@ -2798,6 +2846,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApiMappingRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -2840,6 +2889,7 @@ pub struct UpdateApiMappingResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApiRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -2927,6 +2977,7 @@ pub struct UpdateApiResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuthorizerRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -3075,6 +3126,7 @@ pub struct UpdateAuthorizerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeploymentRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -3115,6 +3167,7 @@ pub struct UpdateDeploymentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainNameRequest {
     /// <p>The domain name.</p>
     #[serde(rename = "DomainName")]
@@ -3147,6 +3200,7 @@ pub struct UpdateDomainNameResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIntegrationRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -3388,6 +3442,7 @@ pub struct UpdateIntegrationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIntegrationResponseRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -3493,6 +3548,7 @@ pub struct UpdateIntegrationResponseResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateModelRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -3546,6 +3602,7 @@ pub struct UpdateModelResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRouteRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -3672,6 +3729,7 @@ pub struct UpdateRouteResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRouteResponseRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -3726,6 +3784,7 @@ pub struct UpdateRouteResponseResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStageRequest {
     /// <p>Settings for logging access in this stage.</p>
     #[serde(rename = "AccessLogSettings")]

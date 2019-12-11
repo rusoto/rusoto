@@ -60,6 +60,7 @@ pub struct AddressBookData {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApproveSkillRequest {
     /// <p>The unique identifier of the skill.</p>
     #[serde(rename = "SkillId")]
@@ -71,6 +72,7 @@ pub struct ApproveSkillRequest {
 pub struct ApproveSkillResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateContactWithAddressBookRequest {
     /// <p>The ARN of the address book with which to associate the contact.</p>
     #[serde(rename = "AddressBookArn")]
@@ -85,6 +87,7 @@ pub struct AssociateContactWithAddressBookRequest {
 pub struct AssociateContactWithAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDeviceWithNetworkProfileRequest {
     /// <p>The device ARN.</p>
     #[serde(rename = "DeviceArn")]
@@ -99,6 +102,7 @@ pub struct AssociateDeviceWithNetworkProfileRequest {
 pub struct AssociateDeviceWithNetworkProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDeviceWithRoomRequest {
     /// <p>The ARN of the device to associate to a room. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -115,6 +119,7 @@ pub struct AssociateDeviceWithRoomRequest {
 pub struct AssociateDeviceWithRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSkillGroupWithRoomRequest {
     /// <p>The ARN of the room with which to associate the skill group. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -131,6 +136,7 @@ pub struct AssociateSkillGroupWithRoomRequest {
 pub struct AssociateSkillGroupWithRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSkillWithSkillGroupRequest {
     /// <p>The ARN of the skill group to associate the skill to. Required.</p>
     #[serde(rename = "SkillGroupArn")]
@@ -146,6 +152,7 @@ pub struct AssociateSkillWithSkillGroupRequest {
 pub struct AssociateSkillWithSkillGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSkillWithUsersRequest {
     /// <p>The private skill ID you want to make available to enrolled users.</p>
     #[serde(rename = "SkillId")]
@@ -158,6 +165,7 @@ pub struct AssociateSkillWithUsersResponse {}
 
 /// <p>The audio message. There is a 1 MB limit on the audio file input and the only supported format is MP3. To convert your MP3 audio files to an Alexa-friendly, </p> <p>required codec version (MPEG version 2) and bit rate (48 kbps), you might use converter software. One option for this is a command-line tool, FFmpeg. For more information, see <a href="https://www.ffmpeg.org/">FFmpeg</a>. The following command converts the provided &lt;input-file&gt; to an MP3 file that is played in the announcement:</p> <p> <code>ffmpeg -i &lt;input-file&gt; -ac 2 -codec:a libmp3lame -b:a 48k -ar 16000 &lt;output-file.mp3&gt;</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Audio {
     /// <p>The locale of the audio message. Currently, en-US is supported.</p>
     #[serde(rename = "Locale")]
@@ -386,6 +394,7 @@ pub struct ContactData {
 
 /// <p>The content definition. This can contain only one text, SSML, or audio list object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Content {
     /// <p>The list of audio messages.</p>
     #[serde(rename = "AudioList")]
@@ -402,6 +411,7 @@ pub struct Content {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAddressBookRequest {
     /// <p>A unique, user-specified identifier for the request that ensures idempotency.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -426,6 +436,7 @@ pub struct CreateAddressBookResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBusinessReportScheduleRequest {
     /// <p>The client request token.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -465,6 +476,7 @@ pub struct CreateBusinessReportScheduleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConferenceProviderRequest {
     /// <p>The request token of the client.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -499,6 +511,7 @@ pub struct CreateConferenceProviderResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateContactRequest {
     /// <p>A unique, user-specified identifier for this request that ensures idempotency.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -539,6 +552,7 @@ pub struct CreateContactResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGatewayGroupRequest {
     /// <p> A unique, user-specified identifier for the request that ensures idempotency.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -562,6 +576,7 @@ pub struct CreateGatewayGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNetworkProfileRequest {
     /// <p>The ARN of the Private Certificate Authority (PCA) created in AWS Certificate Manager (ACM). This is used to issue certificates to the devices. </p>
     #[serde(rename = "CertificateAuthorityArn")]
@@ -610,6 +625,7 @@ pub struct CreateNetworkProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProfileRequest {
     /// <p>The valid address for the room.</p>
     #[serde(rename = "Address")]
@@ -661,6 +677,7 @@ pub struct CreateProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoomRequest {
     /// <p>A unique, user-specified identifier for this request that ensures idempotency. </p>
     #[serde(rename = "ClientRequestToken")]
@@ -697,6 +714,7 @@ pub struct CreateRoomResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSkillGroupRequest {
     /// <p>A unique, user-specified identifier for this request that ensures idempotency. </p>
     #[serde(rename = "ClientRequestToken")]
@@ -721,6 +739,7 @@ pub struct CreateSkillGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
     /// <p>A unique, user-specified identifier for this request that ensures idempotency. </p>
     #[serde(rename = "ClientRequestToken")]
@@ -757,6 +776,7 @@ pub struct CreateUserResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAddressBookRequest {
     /// <p>The ARN of the address book to delete.</p>
     #[serde(rename = "AddressBookArn")]
@@ -768,6 +788,7 @@ pub struct DeleteAddressBookRequest {
 pub struct DeleteAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBusinessReportScheduleRequest {
     /// <p>The ARN of the business report schedule.</p>
     #[serde(rename = "ScheduleArn")]
@@ -779,6 +800,7 @@ pub struct DeleteBusinessReportScheduleRequest {
 pub struct DeleteBusinessReportScheduleResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConferenceProviderRequest {
     /// <p>The ARN of the conference provider.</p>
     #[serde(rename = "ConferenceProviderArn")]
@@ -790,6 +812,7 @@ pub struct DeleteConferenceProviderRequest {
 pub struct DeleteConferenceProviderResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteContactRequest {
     /// <p>The ARN of the contact to delete.</p>
     #[serde(rename = "ContactArn")]
@@ -801,6 +824,7 @@ pub struct DeleteContactRequest {
 pub struct DeleteContactResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeviceRequest {
     /// <p>The ARN of the device for which to request details.</p>
     #[serde(rename = "DeviceArn")]
@@ -812,6 +836,7 @@ pub struct DeleteDeviceRequest {
 pub struct DeleteDeviceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeviceUsageDataRequest {
     /// <p>The ARN of the device.</p>
     #[serde(rename = "DeviceArn")]
@@ -826,6 +851,7 @@ pub struct DeleteDeviceUsageDataRequest {
 pub struct DeleteDeviceUsageDataResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGatewayGroupRequest {
     /// <p>The ARN of the gateway group to delete.</p>
     #[serde(rename = "GatewayGroupArn")]
@@ -837,6 +863,7 @@ pub struct DeleteGatewayGroupRequest {
 pub struct DeleteGatewayGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNetworkProfileRequest {
     /// <p>The ARN of the network profile associated with a device.</p>
     #[serde(rename = "NetworkProfileArn")]
@@ -848,6 +875,7 @@ pub struct DeleteNetworkProfileRequest {
 pub struct DeleteNetworkProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProfileRequest {
     /// <p>The ARN of the room profile to delete. Required.</p>
     #[serde(rename = "ProfileArn")]
@@ -860,6 +888,7 @@ pub struct DeleteProfileRequest {
 pub struct DeleteProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoomRequest {
     /// <p>The ARN of the room to delete. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -872,6 +901,7 @@ pub struct DeleteRoomRequest {
 pub struct DeleteRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoomSkillParameterRequest {
     /// <p>The room skill parameter key for which to remove details.</p>
     #[serde(rename = "ParameterKey")]
@@ -890,6 +920,7 @@ pub struct DeleteRoomSkillParameterRequest {
 pub struct DeleteRoomSkillParameterResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSkillAuthorizationRequest {
     /// <p>The room that the skill is authorized for.</p>
     #[serde(rename = "RoomArn")]
@@ -905,6 +936,7 @@ pub struct DeleteSkillAuthorizationRequest {
 pub struct DeleteSkillAuthorizationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSkillGroupRequest {
     /// <p>The ARN of the skill group to delete. Required.</p>
     #[serde(rename = "SkillGroupArn")]
@@ -917,6 +949,7 @@ pub struct DeleteSkillGroupRequest {
 pub struct DeleteSkillGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
     /// <p>The ARN of the user's enrollment in the organization. Required.</p>
     #[serde(rename = "EnrollmentId")]
@@ -1118,6 +1151,7 @@ pub struct DeviceStatusInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateContactFromAddressBookRequest {
     /// <p>The ARN of the address from which to disassociate the contact.</p>
     #[serde(rename = "AddressBookArn")]
@@ -1132,6 +1166,7 @@ pub struct DisassociateContactFromAddressBookRequest {
 pub struct DisassociateContactFromAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDeviceFromRoomRequest {
     /// <p>The ARN of the device to disassociate from a room. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -1144,6 +1179,7 @@ pub struct DisassociateDeviceFromRoomRequest {
 pub struct DisassociateDeviceFromRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateSkillFromSkillGroupRequest {
     /// <p>The unique identifier of a skill. Required.</p>
     #[serde(rename = "SkillGroupArn")]
@@ -1159,6 +1195,7 @@ pub struct DisassociateSkillFromSkillGroupRequest {
 pub struct DisassociateSkillFromSkillGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateSkillFromUsersRequest {
     /// <p> The private skill ID you want to make unavailable for enrolled users.</p>
     #[serde(rename = "SkillId")]
@@ -1170,6 +1207,7 @@ pub struct DisassociateSkillFromUsersRequest {
 pub struct DisassociateSkillFromUsersResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateSkillGroupFromRoomRequest {
     /// <p>The ARN of the room from which the skill group is to be disassociated. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -1187,6 +1225,7 @@ pub struct DisassociateSkillGroupFromRoomResponse {}
 
 /// <p>A filter name and value pair that is used to return a more specific list of results. Filters can be used to match a set of resources by various criteria.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>The key of a filter.</p>
     #[serde(rename = "Key")]
@@ -1197,6 +1236,7 @@ pub struct Filter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ForgetSmartHomeAppliancesRequest {
     /// <p>The room that the appliances are associated with.</p>
     #[serde(rename = "RoomArn")]
@@ -1296,6 +1336,7 @@ pub struct GatewaySummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAddressBookRequest {
     /// <p>The ARN of the address book for which to request details.</p>
     #[serde(rename = "AddressBookArn")]
@@ -1312,6 +1353,7 @@ pub struct GetAddressBookResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConferencePreferenceRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1324,6 +1366,7 @@ pub struct GetConferencePreferenceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConferenceProviderRequest {
     /// <p>The ARN of the newly created conference provider.</p>
     #[serde(rename = "ConferenceProviderArn")]
@@ -1340,6 +1383,7 @@ pub struct GetConferenceProviderResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContactRequest {
     /// <p>The ARN of the contact for which to request details.</p>
     #[serde(rename = "ContactArn")]
@@ -1356,6 +1400,7 @@ pub struct GetContactResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceRequest {
     /// <p>The ARN of the device for which to request details. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -1373,6 +1418,7 @@ pub struct GetDeviceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGatewayGroupRequest {
     /// <p>The ARN of the gateway group to get.</p>
     #[serde(rename = "GatewayGroupArn")]
@@ -1388,6 +1434,7 @@ pub struct GetGatewayGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGatewayRequest {
     /// <p>The ARN of the gateway to get.</p>
     #[serde(rename = "GatewayArn")]
@@ -1404,6 +1451,7 @@ pub struct GetGatewayResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInvitationConfigurationRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1424,6 +1472,7 @@ pub struct GetInvitationConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNetworkProfileRequest {
     /// <p>The ARN of the network profile associated with a device.</p>
     #[serde(rename = "NetworkProfileArn")]
@@ -1440,6 +1489,7 @@ pub struct GetNetworkProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProfileRequest {
     /// <p>The ARN of the room profile for which to request details. Required.</p>
     #[serde(rename = "ProfileArn")]
@@ -1457,6 +1507,7 @@ pub struct GetProfileResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoomRequest {
     /// <p>The ARN of the room for which to request details. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -1474,6 +1525,7 @@ pub struct GetRoomResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoomSkillParameterRequest {
     /// <p>The room skill parameter key for which to get details. Required.</p>
     #[serde(rename = "ParameterKey")]
@@ -1497,6 +1549,7 @@ pub struct GetRoomSkillParameterResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSkillGroupRequest {
     /// <p>The ARN of the skill group for which to get details. Required.</p>
     #[serde(rename = "SkillGroupArn")]
@@ -1525,6 +1578,7 @@ pub struct IPDialIn {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBusinessReportSchedulesRequest {
     /// <p>The maximum number of schedules listed in the call.</p>
     #[serde(rename = "MaxResults")]
@@ -1550,6 +1604,7 @@ pub struct ListBusinessReportSchedulesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConferenceProvidersRequest {
     /// <p>The maximum number of conference providers to be returned, per paginated calls.</p>
     #[serde(rename = "MaxResults")]
@@ -1575,6 +1630,7 @@ pub struct ListConferenceProvidersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceEventsRequest {
     /// <p>The ARN of a device.</p>
     #[serde(rename = "DeviceArn")]
@@ -1607,6 +1663,7 @@ pub struct ListDeviceEventsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGatewayGroupsRequest {
     /// <p>The maximum number of gateway group summaries to return. The default is 50.</p>
     #[serde(rename = "MaxResults")]
@@ -1632,6 +1689,7 @@ pub struct ListGatewayGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGatewaysRequest {
     /// <p>The gateway group ARN for which to list gateways.</p>
     #[serde(rename = "GatewayGroupArn")]
@@ -1661,6 +1719,7 @@ pub struct ListGatewaysResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSkillsRequest {
     /// <p>Whether the skill is enabled under the user's account, or if it requires linking to be used.</p>
     #[serde(rename = "EnablementType")]
@@ -1698,6 +1757,7 @@ pub struct ListSkillsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSkillsStoreCategoriesRequest {
     /// <p>The maximum number of categories returned, per paginated calls.</p>
     #[serde(rename = "MaxResults")]
@@ -1723,6 +1783,7 @@ pub struct ListSkillsStoreCategoriesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSkillsStoreSkillsByCategoryRequest {
     /// <p>The category ID for which the skills are being retrieved from the skill store.</p>
     #[serde(rename = "CategoryId")]
@@ -1751,6 +1812,7 @@ pub struct ListSkillsStoreSkillsByCategoryResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSmartHomeAppliancesRequest {
     /// <p>The maximum number of appliances to be returned, per paginated calls.</p>
     #[serde(rename = "MaxResults")]
@@ -1779,6 +1841,7 @@ pub struct ListSmartHomeAppliancesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
     /// <p>The ARN of the specified resource for which to list tags.</p>
     #[serde(rename = "Arn")]
@@ -2023,6 +2086,7 @@ pub struct ProfileData {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConferencePreferenceRequest {
     /// <p>The conference preference of a specific conference provider.</p>
     #[serde(rename = "ConferencePreference")]
@@ -2034,6 +2098,7 @@ pub struct PutConferencePreferenceRequest {
 pub struct PutConferencePreferenceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutInvitationConfigurationRequest {
     /// <p>The email ID of the organization or individual contact that the enrolled user can use. </p>
     #[serde(rename = "ContactEmail")]
@@ -2053,6 +2118,7 @@ pub struct PutInvitationConfigurationRequest {
 pub struct PutInvitationConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRoomSkillParameterRequest {
     /// <p>The ARN of the room associated with the room skill parameter. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -2071,6 +2137,7 @@ pub struct PutRoomSkillParameterRequest {
 pub struct PutRoomSkillParameterResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSkillAuthorizationRequest {
     /// <p>The authorization result specific to OAUTH code grant output. "Code” must be populated in the AuthorizationResult map to establish the authorization.</p>
     #[serde(rename = "AuthorizationResult")]
@@ -2089,6 +2156,7 @@ pub struct PutSkillAuthorizationRequest {
 pub struct PutSkillAuthorizationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterAVSDeviceRequest {
     /// <p>The device type ID for your AVS device generated by Amazon when the OEM creates a new product on Amazon's Developer Console.</p>
     #[serde(rename = "AmazonId")]
@@ -2117,6 +2185,7 @@ pub struct RegisterAVSDeviceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectSkillRequest {
     /// <p>The unique identifier of the skill.</p>
     #[serde(rename = "SkillId")]
@@ -2128,6 +2197,7 @@ pub struct RejectSkillRequest {
 pub struct RejectSkillResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResolveRoomRequest {
     /// <p>The ARN of the skill that was requested. Required.</p>
     #[serde(rename = "SkillId")]
@@ -2155,6 +2225,7 @@ pub struct ResolveRoomResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeInvitationRequest {
     /// <p>The ARN of the enrollment invitation to revoke. Required.</p>
     #[serde(rename = "EnrollmentId")]
@@ -2238,6 +2309,7 @@ pub struct RoomSkillParameter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchAddressBooksRequest {
     /// <p>The filters to use to list a specified set of address books. The supported filter key is AddressBookName.</p>
     #[serde(rename = "Filters")]
@@ -2275,6 +2347,7 @@ pub struct SearchAddressBooksResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchContactsRequest {
     /// <p>The filters to use to list a specified set of address books. The supported filter keys are DisplayName, FirstName, LastName, and AddressBookArns.</p>
     #[serde(rename = "Filters")]
@@ -2312,6 +2385,7 @@ pub struct SearchContactsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchDevicesRequest {
     /// <p>The filters to use to list a specified set of devices. Supported filter keys are DeviceName, DeviceStatus, DeviceStatusDetailCode, RoomName, DeviceType, DeviceSerialNumber, UnassociatedOnly, ConnectionStatus (ONLINE and OFFLINE), NetworkProfileName, NetworkProfileArn, Feature, and FailureCode.</p>
     #[serde(rename = "Filters")]
@@ -2349,6 +2423,7 @@ pub struct SearchDevicesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchNetworkProfilesRequest {
     /// <p>The filters to use to list a specified set of network profiles. Valid filters are NetworkProfileName, Ssid, and SecurityType.</p>
     #[serde(rename = "Filters")]
@@ -2386,6 +2461,7 @@ pub struct SearchNetworkProfilesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchProfilesRequest {
     /// <p>The filters to use to list a specified set of room profiles. Supported filter keys are ProfileName and Address. Required. </p>
     #[serde(rename = "Filters")]
@@ -2423,6 +2499,7 @@ pub struct SearchProfilesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchRoomsRequest {
     /// <p>The filters to use to list a specified set of rooms. The supported filter keys are RoomName and ProfileName.</p>
     #[serde(rename = "Filters")]
@@ -2460,6 +2537,7 @@ pub struct SearchRoomsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchSkillGroupsRequest {
     /// <p>The filters to use to list a specified set of skill groups. The supported filter key is SkillGroupName. </p>
     #[serde(rename = "Filters")]
@@ -2497,6 +2575,7 @@ pub struct SearchSkillGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchUsersRequest {
     /// <p>The filters to use for listing a specific set of users. Required. Supported filter keys are UserId, FirstName, LastName, Email, and EnrollmentStatus.</p>
     #[serde(rename = "Filters")]
@@ -2534,6 +2613,7 @@ pub struct SearchUsersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendAnnouncementRequest {
     /// <p>The unique, user-specified identifier for the request that ensures idempotency.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -2560,6 +2640,7 @@ pub struct SendAnnouncementResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendInvitationRequest {
     /// <p>The ARN of the user to whom to send an invitation. Required.</p>
     #[serde(rename = "UserArn")]
@@ -2744,6 +2825,7 @@ pub struct SmartHomeAppliance {
 
 /// <p>An object representing a sort criteria. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Sort {
     /// <p>The sort key of a sort object.</p>
     #[serde(rename = "Key")]
@@ -2755,6 +2837,7 @@ pub struct Sort {
 
 /// <p>The SSML message. For more information, see <a href="https://developer.amazon.com/docs/custom-skills/speech-synthesis-markup-language-ssml-reference.html">SSML Reference</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Ssml {
     /// <p>The locale of the SSML message. Currently, en-US is supported.</p>
     #[serde(rename = "Locale")]
@@ -2765,6 +2848,7 @@ pub struct Ssml {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDeviceSyncRequest {
     /// <p>The ARN of the device to sync. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -2784,6 +2868,7 @@ pub struct StartDeviceSyncRequest {
 pub struct StartDeviceSyncResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSmartHomeApplianceDiscoveryRequest {
     /// <p>The room where smart home appliance discovery was initiated.</p>
     #[serde(rename = "RoomArn")]
@@ -2806,6 +2891,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the resource to which to add metadata tags. Required. </p>
     #[serde(rename = "Arn")]
@@ -2821,6 +2907,7 @@ pub struct TagResourceResponse {}
 
 /// <p>The text message.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Text {
     /// <p>The locale of the text message. Currently, en-US is supported.</p>
     #[serde(rename = "Locale")]
@@ -2831,6 +2918,7 @@ pub struct Text {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the resource from which to remove metadata tags. Required. </p>
     #[serde(rename = "Arn")]
@@ -2845,6 +2933,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAddressBookRequest {
     /// <p>The ARN of the room to update.</p>
     #[serde(rename = "AddressBookArn")]
@@ -2864,6 +2953,7 @@ pub struct UpdateAddressBookRequest {
 pub struct UpdateAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBusinessReportScheduleRequest {
     /// <p>The format of the generated report (individual CSV files or zipped files of individual files).</p>
     #[serde(rename = "Format")]
@@ -2895,6 +2985,7 @@ pub struct UpdateBusinessReportScheduleRequest {
 pub struct UpdateBusinessReportScheduleResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConferenceProviderRequest {
     /// <p>The ARN of the conference provider.</p>
     #[serde(rename = "ConferenceProviderArn")]
@@ -2920,6 +3011,7 @@ pub struct UpdateConferenceProviderRequest {
 pub struct UpdateConferenceProviderResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContactRequest {
     /// <p>The ARN of the contact to update.</p>
     #[serde(rename = "ContactArn")]
@@ -2955,6 +3047,7 @@ pub struct UpdateContactRequest {
 pub struct UpdateContactResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceRequest {
     /// <p>The ARN of the device to update. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -2971,6 +3064,7 @@ pub struct UpdateDeviceRequest {
 pub struct UpdateDeviceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayGroupRequest {
     /// <p>The updated description of the gateway group.</p>
     #[serde(rename = "Description")]
@@ -2990,6 +3084,7 @@ pub struct UpdateGatewayGroupRequest {
 pub struct UpdateGatewayGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayRequest {
     /// <p>The updated description of the gateway.</p>
     #[serde(rename = "Description")]
@@ -3013,6 +3108,7 @@ pub struct UpdateGatewayRequest {
 pub struct UpdateGatewayResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNetworkProfileRequest {
     /// <p>The ARN of the Private Certificate Authority (PCA) created in AWS Certificate Manager (ACM). This is used to issue certificates to the devices. </p>
     #[serde(rename = "CertificateAuthorityArn")]
@@ -3048,6 +3144,7 @@ pub struct UpdateNetworkProfileRequest {
 pub struct UpdateNetworkProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProfileRequest {
     /// <p>The updated address for the room profile.</p>
     #[serde(rename = "Address")]
@@ -3104,6 +3201,7 @@ pub struct UpdateProfileRequest {
 pub struct UpdateProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoomRequest {
     /// <p>The updated description for the room.</p>
     #[serde(rename = "Description")]
@@ -3132,6 +3230,7 @@ pub struct UpdateRoomRequest {
 pub struct UpdateRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSkillGroupRequest {
     /// <p>The updated description for the skill group.</p>
     #[serde(rename = "Description")]

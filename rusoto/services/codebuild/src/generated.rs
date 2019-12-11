@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteBuildsInput {
     /// <p>The IDs of the builds to delete.</p>
     #[serde(rename = "ids")]
@@ -44,6 +45,7 @@ pub struct BatchDeleteBuildsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetBuildsInput {
     /// <p>The IDs of the builds.</p>
     #[serde(rename = "ids")]
@@ -64,6 +66,7 @@ pub struct BatchGetBuildsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetProjectsInput {
     /// <p>The names of the build projects.</p>
     #[serde(rename = "names")]
@@ -284,6 +287,7 @@ pub struct CloudWatchLogsConfig {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectInput {
     /// <p>Information about the build output artifacts for the build project.</p>
     #[serde(rename = "artifacts")]
@@ -364,6 +368,7 @@ pub struct CreateProjectOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWebhookInput {
     /// <p><p>A regular expression used to determine which repository branches are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If <code>branchFilter</code> is empty, then all branches are built.</p> <note> <p> It is recommended that you use <code>filterGroups</code> instead of <code>branchFilter</code>. </p> </note></p>
     #[serde(rename = "branchFilter")]
@@ -388,6 +393,7 @@ pub struct CreateWebhookOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectInput {
     /// <p>The name of the build project.</p>
     #[serde(rename = "name")]
@@ -399,6 +405,7 @@ pub struct DeleteProjectInput {
 pub struct DeleteProjectOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSourceCredentialsInput {
     /// <p> The Amazon Resource Name (ARN) of the token.</p>
     #[serde(rename = "arn")]
@@ -415,6 +422,7 @@ pub struct DeleteSourceCredentialsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWebhookInput {
     /// <p>The name of the AWS CodeBuild project.</p>
     #[serde(rename = "projectName")]
@@ -495,6 +503,7 @@ pub struct GitSubmodulesConfig {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportSourceCredentialsInput {
     /// <p> The type of authentication used to connect to a GitHub, GitHub Enterprise, or Bitbucket repository. An OAUTH connection is not supported by the API and must be created using the AWS CodeBuild console. </p>
     #[serde(rename = "authType")]
@@ -525,6 +534,7 @@ pub struct ImportSourceCredentialsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvalidateProjectCacheInput {
     /// <p>The name of the AWS CodeBuild build project that the cache is reset for.</p>
     #[serde(rename = "projectName")]
@@ -536,6 +546,7 @@ pub struct InvalidateProjectCacheInput {
 pub struct InvalidateProjectCacheOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBuildsForProjectInput {
     /// <p>During a previous call, if there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in the list, keep calling this operation with each subsequent next token that is returned, until no more next tokens are returned.</p>
     #[serde(rename = "nextToken")]
@@ -564,6 +575,7 @@ pub struct ListBuildsForProjectOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBuildsInput {
     /// <p>During a previous call, if there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in the list, keep calling this operation with each subsequent next token that is returned, until no more next tokens are returned.</p>
     #[serde(rename = "nextToken")]
@@ -589,6 +601,7 @@ pub struct ListBuildsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCuratedEnvironmentImagesInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -601,6 +614,7 @@ pub struct ListCuratedEnvironmentImagesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProjectsInput {
     /// <p>During a previous call, if there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in the list, keep calling this operation with each subsequent next token that is returned, until no more next tokens are returned.</p>
     #[serde(rename = "nextToken")]
@@ -630,6 +644,7 @@ pub struct ListProjectsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSourceCredentialsInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1019,6 +1034,7 @@ pub struct SourceCredentialsInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartBuildInput {
     /// <p>Build output artifact settings that override, for this build only, the latest ones already defined in the build project.</p>
     #[serde(rename = "artifactsOverride")]
@@ -1143,6 +1159,7 @@ pub struct StartBuildOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopBuildInput {
     /// <p>The ID of the build.</p>
     #[serde(rename = "id")]
@@ -1172,6 +1189,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProjectInput {
     /// <p>Information to be changed about the build output artifacts for the build project.</p>
     #[serde(rename = "artifacts")]
@@ -1256,6 +1274,7 @@ pub struct UpdateProjectOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWebhookInput {
     /// <p><p>A regular expression used to determine which repository branches are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If <code>branchFilter</code> is empty, then all branches are built.</p> <note> <p> It is recommended that you use <code>filterGroups</code> instead of <code>branchFilter</code>. </p> </note></p>
     #[serde(rename = "branchFilter")]

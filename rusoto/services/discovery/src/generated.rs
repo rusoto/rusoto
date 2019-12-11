@@ -102,6 +102,7 @@ pub struct AgentNetworkInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateConfigurationItemsToApplicationRequest {
     /// <p>The configuration ID of an application with which items are to be associated.</p>
     #[serde(rename = "applicationConfigurationId")]
@@ -134,6 +135,7 @@ pub struct DiscoveryBatchDeleteImportDataError {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteImportDataRequest {
     /// <p>The IDs for the import tasks that you want to delete.</p>
     #[serde(rename = "importTaskIds")]
@@ -214,6 +216,7 @@ pub struct ContinuousExportDescription {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
     /// <p>Description of the application to be created.</p>
     #[serde(rename = "description")]
@@ -234,6 +237,7 @@ pub struct CreateApplicationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
     /// <p>A list of configuration items that you want to tag.</p>
     #[serde(rename = "configurationIds")]
@@ -302,6 +306,7 @@ pub struct CustomerConnectorInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationsRequest {
     /// <p>Configuration ID of an application to be deleted.</p>
     #[serde(rename = "configurationIds")]
@@ -313,6 +318,7 @@ pub struct DeleteApplicationsRequest {
 pub struct DeleteApplicationsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
     /// <p>A list of configuration items with tags that you want to delete.</p>
     #[serde(rename = "configurationIds")]
@@ -328,6 +334,7 @@ pub struct DeleteTagsRequest {
 pub struct DeleteTagsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAgentsRequest {
     /// <p>The agent or the Connector IDs for which you want information. If you specify no IDs, the system returns information about all agents/Connectors associated with your AWS user account.</p>
     #[serde(rename = "agentIds")]
@@ -361,6 +368,7 @@ pub struct DescribeAgentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationsRequest {
     /// <p>One or more configuration IDs.</p>
     #[serde(rename = "configurationIds")]
@@ -377,6 +385,7 @@ pub struct DescribeConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeContinuousExportsRequest {
     /// <p>The unique IDs assigned to the exports.</p>
     #[serde(rename = "exportIds")]
@@ -406,6 +415,7 @@ pub struct DescribeContinuousExportsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExportConfigurationsRequest {
     /// <p>A list of continuous export ids to search for.</p>
     #[serde(rename = "exportIds")]
@@ -435,6 +445,7 @@ pub struct DescribeExportConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExportTasksRequest {
     /// <p>One or more unique identifiers used to query the status of an export request.</p>
     #[serde(rename = "exportIds")]
@@ -468,6 +479,7 @@ pub struct DescribeExportTasksResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImportTasksRequest {
     /// <p>An array of name-value pairs that you provide to filter the results for the <code>DescribeImportTask</code> request to a specific subset of results. Currently, wildcard values aren't supported for filters.</p>
     #[serde(rename = "filters")]
@@ -497,6 +509,7 @@ pub struct DescribeImportTasksResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsRequest {
     /// <p>You can filter the list using a <i>key</i>-<i>value</i> format. You can separate these items by using logical operators. Allowed filters include <code>tagKey</code>, <code>tagValue</code>, and <code>configurationId</code>. </p>
     #[serde(rename = "filters")]
@@ -526,6 +539,7 @@ pub struct DescribeTagsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateConfigurationItemsFromApplicationRequest {
     /// <p>Configuration ID of an application from which each item is disassociated.</p>
     #[serde(rename = "applicationConfigurationId")]
@@ -550,6 +564,7 @@ pub struct ExportConfigurationsResponse {
 
 /// <p>Used to select which agent's data is to be exported. A single agent ID may be selected for export using the <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_StartExportTask.html">StartExportTask</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportFilter {
     /// <p>Supported condition: <code>EQUALS</code> </p>
     #[serde(rename = "condition")]
@@ -598,6 +613,7 @@ pub struct ExportInfo {
 
 /// <p>A filter that can use conditional operators.</p> <p>For more information about filters, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html">Querying Discovered Configuration Items</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>A conditional operator. The following operators are valid: EQUALS, NOT_EQUALS, CONTAINS, NOT_CONTAINS. If you specify multiple filters, the system utilizes all filters as though concatenated by <i>AND</i>. If you specify multiple values for a particular filter, the system differentiates the values using <i>OR</i>. Calling either <i>DescribeConfigurations</i> or <i>ListConfigurations</i> returns attributes of matching configuration items.</p>
     #[serde(rename = "condition")]
@@ -611,6 +627,7 @@ pub struct Filter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiscoverySummaryRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -702,6 +719,7 @@ pub struct ImportTask {
 
 /// <p><p>A name-values pair of elements you can use to filter the results when querying your import tasks. Currently, wildcards are not supported for filters.</p> <note> <p>When filtering by import status, all other filter values are ignored.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportTaskFilter {
     /// <p>The name, status, or import task ID for a specific import task.</p>
     #[serde(rename = "name")]
@@ -714,6 +732,7 @@ pub struct ImportTaskFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationsRequest {
     /// <p>A valid configuration identified by Application Discovery Service. </p>
     #[serde(rename = "configurationType")]
@@ -750,6 +769,7 @@ pub struct ListConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServerNeighborsRequest {
     /// <p>Configuration ID of the server for which neighbors are being listed.</p>
     #[serde(rename = "configurationId")]
@@ -813,6 +833,7 @@ pub struct NeighborConnectionDetail {
 
 /// <p>A field and direction for ordered output.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OrderByElement {
     /// <p>The field on which to order.</p>
     #[serde(rename = "fieldName")]
@@ -824,6 +845,7 @@ pub struct OrderByElement {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartContinuousExportRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -852,6 +874,7 @@ pub struct StartContinuousExportResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDataCollectionByAgentIdsRequest {
     /// <p>The IDs of the agents or connectors from which to start collecting data. If you send a request to an agent/connector ID that you do not have permission to contact, according to your AWS account, the service does not throw an exception. Instead, it returns the error in the <i>Description</i> field. If you send a request to multiple agents/connectors and you do not have permission to contact some of those agents/connectors, the system does not throw an exception. Instead, the system shows <code>Failed</code> in the <i>Description</i> field.</p>
     #[serde(rename = "agentIds")]
@@ -868,6 +891,7 @@ pub struct StartDataCollectionByAgentIdsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartExportTaskRequest {
     /// <p>The end timestamp for exported data from the single Application Discovery Agent selected in the filters. If no value is specified, exported data includes the most recent data collected by the agent.</p>
     #[serde(rename = "endTime")]
@@ -897,6 +921,7 @@ pub struct StartExportTaskResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImportTaskRequest {
     /// <p>Optional. A unique token that you can provide to prevent the same import request from occurring more than once. If you don't provide a token, a token is automatically generated.</p> <p>Sending more than one <code>StartImportTask</code> request with the same client request token will return information about the original import task with that client request token.</p>
     #[serde(rename = "clientRequestToken")]
@@ -920,6 +945,7 @@ pub struct StartImportTaskResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopContinuousExportRequest {
     /// <p>The unique ID assigned to this export.</p>
     #[serde(rename = "exportId")]
@@ -940,6 +966,7 @@ pub struct StopContinuousExportResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDataCollectionByAgentIdsRequest {
     /// <p>The IDs of the agents or connectors from which to stop collecting data.</p>
     #[serde(rename = "agentIds")]
@@ -957,6 +984,7 @@ pub struct StopDataCollectionByAgentIdsResponse {
 
 /// <p>Metadata that help you categorize IT assets.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>The type of tag on which to filter.</p>
     #[serde(rename = "key")]
@@ -968,6 +996,7 @@ pub struct Tag {
 
 /// <p>The tag filter. Valid names are: <code>tagKey</code>, <code>tagValue</code>, <code>configurationId</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagFilter {
     /// <p>A name of the tag filter.</p>
     #[serde(rename = "name")]
@@ -978,6 +1007,7 @@ pub struct TagFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
     /// <p>Configuration ID of the application to be updated.</p>
     #[serde(rename = "configurationId")]

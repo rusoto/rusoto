@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Deletes the specified report.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReportDefinitionRequest {
     #[serde(rename = "ReportName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -42,6 +43,7 @@ pub struct DeleteReportDefinitionResponse {
 
 /// <p>Requests a list of AWS Cost and Usage reports owned by the account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReportDefinitionsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -65,6 +67,7 @@ pub struct DescribeReportDefinitionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReportDefinitionRequest {
     #[serde(rename = "ReportDefinition")]
     pub report_definition: ReportDefinition,
@@ -78,6 +81,7 @@ pub struct ModifyReportDefinitionResponse {}
 
 /// <p>Creates a Cost and Usage Report.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutReportDefinitionRequest {
     /// <p>Represents the output of the PutReportDefinition operation. The content consists of the detailed metadata and data file information. </p>
     #[serde(rename = "ReportDefinition")]

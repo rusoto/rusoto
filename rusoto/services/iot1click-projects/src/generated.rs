@@ -25,6 +25,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDeviceWithPlacementRequest {
     /// <p>The ID of the physical device to be associated with the given placement in the project. Note that a mandatory 4 character prefix is required for all <code>deviceId</code> values.</p>
     #[serde(rename = "deviceId")]
@@ -45,6 +46,7 @@ pub struct AssociateDeviceWithPlacementRequest {
 pub struct AssociateDeviceWithPlacementResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePlacementRequest {
     /// <p>Optional user-defined key/value pairs providing contextual data (such as location or function) for the placement.</p>
     #[serde(rename = "attributes")]
@@ -63,6 +65,7 @@ pub struct CreatePlacementRequest {
 pub struct CreatePlacementResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectRequest {
     /// <p>An optional description for the project.</p>
     #[serde(rename = "description")]
@@ -86,6 +89,7 @@ pub struct CreateProjectRequest {
 pub struct CreateProjectResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePlacementRequest {
     /// <p>The name of the empty placement to delete.</p>
     #[serde(rename = "placementName")]
@@ -100,6 +104,7 @@ pub struct DeletePlacementRequest {
 pub struct DeletePlacementResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectRequest {
     /// <p>The name of the empty project to delete.</p>
     #[serde(rename = "projectName")]
@@ -111,6 +116,7 @@ pub struct DeleteProjectRequest {
 pub struct DeleteProjectResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePlacementRequest {
     /// <p>The name of the placement within a project.</p>
     #[serde(rename = "placementName")]
@@ -129,6 +135,7 @@ pub struct DescribePlacementResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProjectRequest {
     /// <p>The name of the project to be described.</p>
     #[serde(rename = "projectName")]
@@ -157,6 +164,7 @@ pub struct DeviceTemplate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDeviceFromPlacementRequest {
     /// <p>The device ID that should be removed from the placement.</p>
     #[serde(rename = "deviceTemplateName")]
@@ -174,6 +182,7 @@ pub struct DisassociateDeviceFromPlacementRequest {
 pub struct DisassociateDeviceFromPlacementResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevicesInPlacementRequest {
     /// <p>The name of the placement to get the devices from.</p>
     #[serde(rename = "placementName")]
@@ -192,6 +201,7 @@ pub struct GetDevicesInPlacementResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPlacementsRequest {
     /// <p>The maximum number of results to return per request. If not set, a default value of 100 is used.</p>
     #[serde(rename = "maxResults")]
@@ -219,6 +229,7 @@ pub struct ListPlacementsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProjectsRequest {
     /// <p>The maximum number of results to return per request. If not set, a default value of 100 is used.</p>
     #[serde(rename = "maxResults")]
@@ -243,6 +254,7 @@ pub struct ListProjectsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN of the resource whose tags you want to list.</p>
     #[serde(rename = "resourceArn")]
@@ -365,6 +377,7 @@ pub struct ProjectSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the resouce for which tag(s) should be added or modified.</p>
     #[serde(rename = "resourceArn")]
@@ -379,6 +392,7 @@ pub struct TagResourceRequest {
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the resource whose tag you want to remove.</p>
     #[serde(rename = "resourceArn")]
@@ -393,6 +407,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePlacementRequest {
     /// <p>The user-defined object of attributes used to update the placement. The maximum number of key/value pairs is 50.</p>
     #[serde(rename = "attributes")]
@@ -411,6 +426,7 @@ pub struct UpdatePlacementRequest {
 pub struct UpdatePlacementResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProjectRequest {
     /// <p>An optional user-defined description for the project.</p>
     #[serde(rename = "description")]

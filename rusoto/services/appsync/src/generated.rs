@@ -100,6 +100,7 @@ pub struct CognitoUserPoolConfig {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApiKeyRequest {
     /// <p>The ID for your GraphQL API.</p>
     #[serde(rename = "apiId")]
@@ -124,6 +125,7 @@ pub struct CreateApiKeyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceRequest {
     /// <p>The API ID for the GraphQL API for the <code>DataSource</code>.</p>
     #[serde(rename = "apiId")]
@@ -174,6 +176,7 @@ pub struct CreateDataSourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFunctionRequest {
     /// <p>The GraphQL API ID.</p>
     #[serde(rename = "apiId")]
@@ -210,6 +213,7 @@ pub struct CreateFunctionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGraphqlApiRequest {
     /// <p>A list of additional authentication providers for the <code>GraphqlApi</code> API.</p>
     #[serde(rename = "additionalAuthenticationProviders")]
@@ -249,6 +253,7 @@ pub struct CreateGraphqlApiResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResolverRequest {
     /// <p>The ID for the GraphQL API for which the resolver is being created.</p>
     #[serde(rename = "apiId")]
@@ -290,6 +295,7 @@ pub struct CreateResolverResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTypeRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -358,6 +364,7 @@ pub struct DataSource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApiKeyRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -372,6 +379,7 @@ pub struct DeleteApiKeyRequest {
 pub struct DeleteApiKeyResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataSourceRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -386,6 +394,7 @@ pub struct DeleteDataSourceRequest {
 pub struct DeleteDataSourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFunctionRequest {
     /// <p>The GraphQL API ID.</p>
     #[serde(rename = "apiId")]
@@ -400,6 +409,7 @@ pub struct DeleteFunctionRequest {
 pub struct DeleteFunctionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGraphqlApiRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -411,6 +421,7 @@ pub struct DeleteGraphqlApiRequest {
 pub struct DeleteGraphqlApiResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResolverRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -428,6 +439,7 @@ pub struct DeleteResolverRequest {
 pub struct DeleteResolverResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTypeRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -506,6 +518,7 @@ pub struct FunctionConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataSourceRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -525,6 +538,7 @@ pub struct GetDataSourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionRequest {
     /// <p>The GraphQL API ID.</p>
     #[serde(rename = "apiId")]
@@ -544,6 +558,7 @@ pub struct GetFunctionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGraphqlApiRequest {
     /// <p>The API ID for the GraphQL API.</p>
     #[serde(rename = "apiId")]
@@ -560,6 +575,7 @@ pub struct GetGraphqlApiResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntrospectionSchemaRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -580,6 +596,7 @@ pub struct GetIntrospectionSchemaResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResolverRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -602,6 +619,7 @@ pub struct GetResolverResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSchemaCreationStatusRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -622,6 +640,7 @@ pub struct GetSchemaCreationStatusResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTypeRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -711,6 +730,7 @@ pub struct LambdaDataSourceConfig {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApiKeysRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -739,6 +759,7 @@ pub struct ListApiKeysResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataSourcesRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -767,6 +788,7 @@ pub struct ListDataSourcesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFunctionsRequest {
     /// <p>The GraphQL API ID.</p>
     #[serde(rename = "apiId")]
@@ -795,6 +817,7 @@ pub struct ListFunctionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGraphqlApisRequest {
     /// <p>The maximum number of results you want the request to return.</p>
     #[serde(rename = "maxResults")]
@@ -820,6 +843,7 @@ pub struct ListGraphqlApisResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResolversByFunctionRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -851,6 +875,7 @@ pub struct ListResolversByFunctionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResolversRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -882,6 +907,7 @@ pub struct ListResolversResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The <code>GraphqlApi</code> ARN.</p>
     #[serde(rename = "resourceArn")]
@@ -898,6 +924,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTypesRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -1049,6 +1076,7 @@ pub struct Resolver {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSchemaCreationRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -1073,6 +1101,7 @@ pub struct StartSchemaCreationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The <code>GraphqlApi</code> ARN.</p>
     #[serde(rename = "resourceArn")]
@@ -1113,6 +1142,7 @@ pub struct Type {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The <code>GraphqlApi</code> ARN.</p>
     #[serde(rename = "resourceArn")]
@@ -1127,6 +1157,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApiKeyRequest {
     /// <p>The ID for the GraphQL API.</p>
     #[serde(rename = "apiId")]
@@ -1154,6 +1185,7 @@ pub struct UpdateApiKeyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSourceRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -1204,6 +1236,7 @@ pub struct UpdateDataSourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFunctionRequest {
     /// <p>The GraphQL API ID.</p>
     #[serde(rename = "apiId")]
@@ -1243,6 +1276,7 @@ pub struct UpdateFunctionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGraphqlApiRequest {
     /// <p>A list of additional authentication providers for the <code>GraphqlApi</code> API.</p>
     #[serde(rename = "additionalAuthenticationProviders")]
@@ -1282,6 +1316,7 @@ pub struct UpdateGraphqlApiResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResolverRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -1323,6 +1358,7 @@ pub struct UpdateResolverResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTypeRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]

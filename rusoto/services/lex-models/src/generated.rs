@@ -180,6 +180,7 @@ pub struct CodeHook {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBotVersionRequest {
     /// <p>Identifies a specific revision of the <code>$LATEST</code> version of the bot. If you specify a checksum and the <code>$LATEST</code> version of the bot has a different checksum, a <code>PreconditionFailedException</code> exception is returned and Amazon Lex doesn't publish a new version. If you don't specify a checksum, Amazon Lex publishes the <code>$LATEST</code> version.</p>
     #[serde(rename = "checksum")]
@@ -256,6 +257,7 @@ pub struct CreateBotVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIntentVersionRequest {
     /// <p>Checksum of the <code>$LATEST</code> version of the intent that should be used to create the new version. If you specify a checksum and the <code>$LATEST</code> version of the intent has a different checksum, Amazon Lex returns a <code>PreconditionFailedException</code> exception and doesn't publish a new version. If you don't specify a checksum, Amazon Lex publishes the <code>$LATEST</code> version.</p>
     #[serde(rename = "checksum")]
@@ -332,6 +334,7 @@ pub struct CreateIntentVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSlotTypeVersionRequest {
     /// <p>Checksum for the <code>$LATEST</code> version of the slot type that you want to publish. If you specify a checksum and the <code>$LATEST</code> version of the slot type has a different checksum, Amazon Lex returns a <code>PreconditionFailedException</code> exception and doesn't publish the new version. If you don't specify a checksum, Amazon Lex publishes the <code>$LATEST</code> version.</p>
     #[serde(rename = "checksum")]
@@ -380,6 +383,7 @@ pub struct CreateSlotTypeVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBotAliasRequest {
     /// <p>The name of the bot that the alias points to.</p>
     #[serde(rename = "botName")]
@@ -390,6 +394,7 @@ pub struct DeleteBotAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBotChannelAssociationRequest {
     /// <p>An alias that points to the specific version of the Amazon Lex bot to which this association is being made.</p>
     #[serde(rename = "botAlias")]
@@ -403,6 +408,7 @@ pub struct DeleteBotChannelAssociationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBotRequest {
     /// <p>The name of the bot. The name is case sensitive. </p>
     #[serde(rename = "name")]
@@ -410,6 +416,7 @@ pub struct DeleteBotRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBotVersionRequest {
     /// <p>The name of the bot.</p>
     #[serde(rename = "name")]
@@ -420,6 +427,7 @@ pub struct DeleteBotVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntentRequest {
     /// <p>The name of the intent. The name is case sensitive. </p>
     #[serde(rename = "name")]
@@ -427,6 +435,7 @@ pub struct DeleteIntentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntentVersionRequest {
     /// <p>The name of the intent.</p>
     #[serde(rename = "name")]
@@ -437,6 +446,7 @@ pub struct DeleteIntentVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSlotTypeRequest {
     /// <p>The name of the slot type. The name is case sensitive. </p>
     #[serde(rename = "name")]
@@ -444,6 +454,7 @@ pub struct DeleteSlotTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSlotTypeVersionRequest {
     /// <p>The name of the slot type.</p>
     #[serde(rename = "name")]
@@ -454,6 +465,7 @@ pub struct DeleteSlotTypeVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUtterancesRequest {
     /// <p>The name of the bot that stored the utterances.</p>
     #[serde(rename = "botName")]
@@ -499,6 +511,7 @@ pub struct FulfillmentActivity {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotAliasRequest {
     /// <p>The name of the bot.</p>
     #[serde(rename = "botName")]
@@ -542,6 +555,7 @@ pub struct GetBotAliasResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotAliasesRequest {
     /// <p>The name of the bot.</p>
     #[serde(rename = "botName")]
@@ -574,6 +588,7 @@ pub struct GetBotAliasesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotChannelAssociationRequest {
     /// <p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made.</p>
     #[serde(rename = "botAlias")]
@@ -628,6 +643,7 @@ pub struct GetBotChannelAssociationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotChannelAssociationsRequest {
     /// <p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made.</p>
     #[serde(rename = "botAlias")]
@@ -663,6 +679,7 @@ pub struct GetBotChannelAssociationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotRequest {
     /// <p>The name of the bot. The name is case sensitive. </p>
     #[serde(rename = "name")]
@@ -738,6 +755,7 @@ pub struct GetBotResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotVersionsRequest {
     /// <p>The maximum number of bot versions to return in the response. The default is 10.</p>
     #[serde(rename = "maxResults")]
@@ -766,6 +784,7 @@ pub struct GetBotVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotsRequest {
     /// <p>The maximum number of bots to return in the response that the request will return. The default is 10.</p>
     #[serde(rename = "maxResults")]
@@ -795,6 +814,7 @@ pub struct GetBotsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBuiltinIntentRequest {
     /// <p>The unique identifier for a built-in intent. To find the signature for an intent, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>
     #[serde(rename = "signature")]
@@ -819,6 +839,7 @@ pub struct GetBuiltinIntentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBuiltinIntentsRequest {
     /// <p>A list of locales that the intent supports.</p>
     #[serde(rename = "locale")]
@@ -852,6 +873,7 @@ pub struct GetBuiltinIntentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBuiltinSlotTypesRequest {
     /// <p>A list of locales that the slot type supports.</p>
     #[serde(rename = "locale")]
@@ -885,6 +907,7 @@ pub struct GetBuiltinSlotTypesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExportRequest {
     /// <p>The format of the exported data.</p>
     #[serde(rename = "exportType")]
@@ -934,6 +957,7 @@ pub struct GetExportResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImportRequest {
     /// <p>The identifier of the import job information to return.</p>
     #[serde(rename = "importId")]
@@ -974,6 +998,7 @@ pub struct GetImportResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntentRequest {
     /// <p>The name of the intent. The name is case sensitive. </p>
     #[serde(rename = "name")]
@@ -1049,6 +1074,7 @@ pub struct GetIntentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntentVersionsRequest {
     /// <p>The maximum number of intent versions to return in the response. The default is 10.</p>
     #[serde(rename = "maxResults")]
@@ -1077,6 +1103,7 @@ pub struct GetIntentVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntentsRequest {
     /// <p>The maximum number of intents to return in the response. The default is 10.</p>
     #[serde(rename = "maxResults")]
@@ -1106,6 +1133,7 @@ pub struct GetIntentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSlotTypeRequest {
     /// <p>The name of the slot type. The name is case sensitive. </p>
     #[serde(rename = "name")]
@@ -1153,6 +1181,7 @@ pub struct GetSlotTypeResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSlotTypeVersionsRequest {
     /// <p>The maximum number of slot type versions to return in the response. The default is 10.</p>
     #[serde(rename = "maxResults")]
@@ -1181,6 +1210,7 @@ pub struct GetSlotTypeVersionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSlotTypesRequest {
     /// <p>The maximum number of slot types to return in the response. The default is 10.</p>
     #[serde(rename = "maxResults")]
@@ -1210,6 +1240,7 @@ pub struct GetSlotTypesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUtterancesViewRequest {
     /// <p>The name of the bot for which utterance information should be returned.</p>
     #[serde(rename = "botName")]
@@ -1303,6 +1334,7 @@ pub struct Prompt {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBotAliasRequest {
     /// <p>The name of the bot.</p>
     #[serde(rename = "botName")]
@@ -1357,6 +1389,7 @@ pub struct PutBotAliasResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBotRequest {
     /// <p>When Amazon Lex can't understand the user's input in context, it tries to elicit the information a few times. After that, Amazon Lex sends the message defined in <code>abortStatement</code> to the user, and then aborts the conversation. To set the number of retries, use the <code>valueElicitationPrompt</code> field for the slot type. </p> <p>For example, in a pizza ordering bot, Amazon Lex might ask a user "What type of crust would you like?" If the user's response is not one of the expected responses (for example, "thin crust, "deep dish," etc.), Amazon Lex tries to elicit a correct response a few more times. </p> <p>For example, in a pizza ordering application, <code>OrderPizza</code> might be one of the intents. This intent might require the <code>CrustType</code> slot. You specify the <code>valueElicitationPrompt</code> field when you create the <code>CrustType</code> slot.</p>
     #[serde(rename = "abortStatement")]
@@ -1473,6 +1506,7 @@ pub struct PutBotResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutIntentRequest {
     /// <p>Identifies a specific revision of the <code>$LATEST</code> version.</p> <p>When you create a new intent, leave the <code>checksum</code> field blank. If you specify a checksum you get a <code>BadRequestException</code> exception.</p> <p>When you want to update a intent, set the <code>checksum</code> field to the checksum of the most recent revision of the <code>$LATEST</code> version. If you don't specify the <code> checksum</code> field, or if the checksum does not match the <code>$LATEST</code> version, you get a <code>PreconditionFailedException</code> exception.</p>
     #[serde(rename = "checksum")]
@@ -1595,6 +1629,7 @@ pub struct PutIntentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSlotTypeRequest {
     /// <p>Identifies a specific revision of the <code>$LATEST</code> version.</p> <p>When you create a new slot type, leave the <code>checksum</code> field blank. If you specify a checksum you get a <code>BadRequestException</code> exception.</p> <p>When you want to update a slot type, set the <code>checksum</code> field to the checksum of the most recent revision of the <code>$LATEST</code> version. If you don't specify the <code> checksum</code> field, or if the checksum does not match the <code>$LATEST</code> version, you get a <code>PreconditionFailedException</code> exception.</p>
     #[serde(rename = "checksum")]
@@ -1735,6 +1770,7 @@ pub struct SlotTypeMetadata {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImportRequest {
     /// <p><p>Specifies the action that the <code>StartImport</code> operation should take when there is an existing resource with the same name.</p> <ul> <li> <p>FAIL<em>ON</em>CONFLICT - The import operation is stopped on the first conflict between a resource in the import file and an existing resource. The name of the resource causing the conflict is in the <code>failureReason</code> field of the response to the <code>GetImport</code> operation.</p> <p>OVERWRITE_LATEST - The import operation proceeds even if there is a conflict with an existing resource. The $LASTEST version of the existing resource is overwritten with the data from the import file.</p> </li> </ul></p>
     #[serde(rename = "mergeStrategy")]

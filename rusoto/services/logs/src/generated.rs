@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateKmsKeyRequest {
     /// <p>The Amazon Resource Name (ARN) of the CMK to use when encrypting log data. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-kms">Amazon Resource Names - AWS Key Management Service (AWS KMS)</a>.</p>
     #[serde(rename = "kmsKeyId")]
@@ -34,6 +35,7 @@ pub struct AssociateKmsKeyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelExportTaskRequest {
     /// <p>The ID of the export task.</p>
     #[serde(rename = "taskId")]
@@ -41,6 +43,7 @@ pub struct CancelExportTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateExportTaskRequest {
     /// <p>The name of S3 bucket for the exported log data. The bucket must be in the same AWS region.</p>
     #[serde(rename = "destination")]
@@ -78,6 +81,7 @@ pub struct CreateExportTaskResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLogGroupRequest {
     /// <p>The Amazon Resource Name (ARN) of the CMK to use when encrypting log data. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-kms">Amazon Resource Names - AWS Key Management Service (AWS KMS)</a>.</p>
     #[serde(rename = "kmsKeyId")]
@@ -93,6 +97,7 @@ pub struct CreateLogGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLogStreamRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
@@ -103,6 +108,7 @@ pub struct CreateLogStreamRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDestinationRequest {
     /// <p>The name of the destination.</p>
     #[serde(rename = "destinationName")]
@@ -110,6 +116,7 @@ pub struct DeleteDestinationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLogGroupRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
@@ -117,6 +124,7 @@ pub struct DeleteLogGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLogStreamRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
@@ -127,6 +135,7 @@ pub struct DeleteLogStreamRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMetricFilterRequest {
     /// <p>The name of the metric filter.</p>
     #[serde(rename = "filterName")]
@@ -137,6 +146,7 @@ pub struct DeleteMetricFilterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourcePolicyRequest {
     /// <p>The name of the policy to be revoked. This parameter is required.</p>
     #[serde(rename = "policyName")]
@@ -145,6 +155,7 @@ pub struct DeleteResourcePolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRetentionPolicyRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
@@ -152,6 +163,7 @@ pub struct DeleteRetentionPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubscriptionFilterRequest {
     /// <p>The name of the subscription filter.</p>
     #[serde(rename = "filterName")]
@@ -162,6 +174,7 @@ pub struct DeleteSubscriptionFilterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDestinationsRequest {
     /// <p>The prefix to match. If you don't specify a value, no prefix filter is applied.</p>
     #[serde(rename = "DestinationNamePrefix")]
@@ -190,6 +203,7 @@ pub struct DescribeDestinationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExportTasksRequest {
     /// <p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>
     #[serde(rename = "limit")]
@@ -222,6 +236,7 @@ pub struct DescribeExportTasksResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLogGroupsRequest {
     /// <p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>
     #[serde(rename = "limit")]
@@ -250,6 +265,7 @@ pub struct DescribeLogGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLogStreamsRequest {
     /// <p>If the value is true, results are returned in descending order. If the value is to false, results are returned in ascending order. The default value is false.</p>
     #[serde(rename = "descending")]
@@ -289,6 +305,7 @@ pub struct DescribeLogStreamsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMetricFiltersRequest {
     /// <p>The prefix to match.</p>
     #[serde(rename = "filterNamePrefix")]
@@ -329,6 +346,7 @@ pub struct DescribeMetricFiltersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeQueriesRequest {
     /// <p>Limits the returned queries to only those for the specified log group.</p>
     #[serde(rename = "logGroupName")]
@@ -360,6 +378,7 @@ pub struct DescribeQueriesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourcePoliciesRequest {
     /// <p>The maximum number of resource policies to be displayed with one call of this API.</p>
     #[serde(rename = "limit")]
@@ -383,6 +402,7 @@ pub struct DescribeResourcePoliciesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubscriptionFiltersRequest {
     /// <p>The prefix to match. If you don't specify a value, no prefix filter is applied.</p>
     #[serde(rename = "filterNamePrefix")]
@@ -444,6 +464,7 @@ pub struct Destination {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateKmsKeyRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
@@ -521,6 +542,7 @@ pub struct ExportTaskStatus {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FilterLogEventsRequest {
     /// <p>The end of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not returned.</p>
     #[serde(rename = "endTime")]
@@ -599,6 +621,7 @@ pub struct FilteredLogEvent {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLogEventsRequest {
     /// <p>The end of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a timestamp equal to or later than this time are not included.</p>
     #[serde(rename = "endTime")]
@@ -646,6 +669,7 @@ pub struct GetLogEventsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLogGroupFieldsRequest {
     /// <p>The name of the log group to search.</p>
     #[serde(rename = "logGroupName")]
@@ -666,6 +690,7 @@ pub struct GetLogGroupFieldsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLogRecordRequest {
     /// <p>The pointer corresponding to the log event record you want to retrieve. You get this from the response of a <code>GetQueryResults</code> operation. In that response, the value of the <code>@ptr</code> field for a log event is the value to use as <code>logRecordPointer</code> to retrieve that complete log event record.</p>
     #[serde(rename = "logRecordPointer")]
@@ -682,6 +707,7 @@ pub struct GetLogRecordResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueryResultsRequest {
     /// <p>The ID number of the query.</p>
     #[serde(rename = "queryId")]
@@ -707,6 +733,7 @@ pub struct GetQueryResultsResponse {
 
 /// <p>Represents a log event, which is a record of activity that was recorded by the application or resource being monitored.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputLogEvent {
     /// <p>The raw event message.</p>
     #[serde(rename = "message")]
@@ -717,6 +744,7 @@ pub struct InputLogEvent {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsLogGroupRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
@@ -893,6 +921,7 @@ pub struct OutputLogEvent {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDestinationPolicyRequest {
     /// <p>An IAM policy document that authorizes cross-account users to deliver their log events to the associated destination.</p>
     #[serde(rename = "accessPolicy")]
@@ -903,6 +932,7 @@ pub struct PutDestinationPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDestinationRequest {
     /// <p>A name for the destination.</p>
     #[serde(rename = "destinationName")]
@@ -925,6 +955,7 @@ pub struct PutDestinationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLogEventsRequest {
     /// <p>The log events.</p>
     #[serde(rename = "logEvents")]
@@ -955,6 +986,7 @@ pub struct PutLogEventsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMetricFilterRequest {
     /// <p>A name for the metric filter.</p>
     #[serde(rename = "filterName")]
@@ -971,6 +1003,7 @@ pub struct PutMetricFilterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourcePolicyRequest {
     /// <p>Details of the new policy, including the identity of the principal that is enabled to put logs to this account. This is formatted as a JSON string. This parameter is required.</p> <p>The following example creates a resource policy enabling the Route 53 service to put DNS query logs in to the specified log group. Replace "logArn" with the ARN of your CloudWatch Logs resource, such as a log group or log stream.</p> <p> <code>{ "Version": "2012-10-17", "Statement": [ { "Sid": "Route53LogsToCloudWatchLogs", "Effect": "Allow", "Principal": { "Service": [ "route53.amazonaws.com" ] }, "Action":"logs:PutLogEvents", "Resource": "logArn" } ] } </code> </p>
     #[serde(rename = "policyDocument")]
@@ -992,6 +1025,7 @@ pub struct PutResourcePolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRetentionPolicyRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
@@ -1001,6 +1035,7 @@ pub struct PutRetentionPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSubscriptionFilterRequest {
     /// <p><p>The ARN of the destination to deliver matching log events to. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination (specified using an ARN) belonging to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function belonging to the same account as the subscription filter, for same-account delivery.</p> </li> </ul></p>
     #[serde(rename = "destinationArn")]
@@ -1151,6 +1186,7 @@ pub struct SearchedLogStream {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartQueryRequest {
     /// <p>The end of the time range to query. The range is inclusive, so the specified end time is included in the query. Specified as epoch time, the number of seconds since January 1, 1970, 00:00:00 UTC.</p>
     #[serde(rename = "endTime")]
@@ -1185,6 +1221,7 @@ pub struct StartQueryResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopQueryRequest {
     /// <p>The ID number of the query to stop. If necessary, you can use <code>DescribeQueries</code> to find this ID number.</p>
     #[serde(rename = "queryId")]
@@ -1233,6 +1270,7 @@ pub struct SubscriptionFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagLogGroupRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
@@ -1243,6 +1281,7 @@ pub struct TagLogGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestMetricFilterRequest {
     #[serde(rename = "filterPattern")]
     pub filter_pattern: String,
@@ -1261,6 +1300,7 @@ pub struct TestMetricFilterResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagLogGroupRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]

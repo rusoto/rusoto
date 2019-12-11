@@ -25,6 +25,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInvitationRequest {
     /// <p>The ID of the invitation sent from the Security Hub master account.</p>
     #[serde(rename = "InvitationId")]
@@ -40,6 +41,7 @@ pub struct AcceptInvitationResponse {}
 
 /// <p>The details of an AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccountDetails {
     /// <p>The ID of an AWS account.</p>
     #[serde(rename = "AccountId")]
@@ -588,6 +590,7 @@ pub struct AwsSecurityFindingFilters {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDisableStandardsRequest {
     /// <p>The ARNs of the standards subscriptions to disable.</p>
     #[serde(rename = "StandardsSubscriptionArns")]
@@ -604,6 +607,7 @@ pub struct BatchDisableStandardsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchEnableStandardsRequest {
     /// <p><p>The list of standards compliance checks to enable.</p> <important> <p>In this release, Security Hub supports only the CIS AWS Foundations standard.</p> <p>The ARN for the standard is <code>arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0</code>.</p> </important></p>
     #[serde(rename = "StandardsSubscriptionRequests")]
@@ -620,6 +624,7 @@ pub struct BatchEnableStandardsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchImportFindingsRequest {
     /// <p>A list of findings to import. To successfully import a finding, it must follow the <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-findings-format.html">AWS Security Finding Format</a>.</p>
     #[serde(rename = "Findings")]
@@ -672,6 +677,7 @@ pub struct ContainerDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateActionTargetRequest {
     /// <p>The description for the custom action target.</p>
     #[serde(rename = "Description")]
@@ -693,6 +699,7 @@ pub struct CreateActionTargetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInsightRequest {
     /// <p>One or more attributes used to filter the findings included in the insight. Only findings that match the criteria defined in the filters are included in the insight.</p>
     #[serde(rename = "Filters")]
@@ -714,6 +721,7 @@ pub struct CreateInsightResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMembersRequest {
     /// <p>A list of account ID and email address pairs of the accounts to associate with the Security Hub master account.</p>
     #[serde(rename = "AccountDetails")]
@@ -761,6 +769,7 @@ pub struct DateRange {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeclineInvitationsRequest {
     /// <p>A list of account IDs that specify the accounts that invitations to Security Hub are declined from.</p>
     #[serde(rename = "AccountIds")]
@@ -777,6 +786,7 @@ pub struct DeclineInvitationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteActionTargetRequest {
     /// <p>The ARN of the custom action target to delete.</p>
     #[serde(rename = "ActionTargetArn")]
@@ -792,6 +802,7 @@ pub struct DeleteActionTargetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInsightRequest {
     /// <p>The ARN of the insight to delete.</p>
     #[serde(rename = "InsightArn")]
@@ -807,6 +818,7 @@ pub struct DeleteInsightResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInvitationsRequest {
     /// <p>A list of the account IDs that sent the invitations to delete.</p>
     #[serde(rename = "AccountIds")]
@@ -823,6 +835,7 @@ pub struct DeleteInvitationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMembersRequest {
     /// <p>A list of account IDs of the member accounts to delete.</p>
     #[serde(rename = "AccountIds")]
@@ -840,6 +853,7 @@ pub struct DeleteMembersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeActionTargetsRequest {
     /// <p>A list of custom action target ARNs for the custom action targets to retrieve.</p>
     #[serde(rename = "ActionTargetArns")]
@@ -868,6 +882,7 @@ pub struct DescribeActionTargetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHubRequest {
     /// <p>The ARN of the Hub resource to retrieve.</p>
     #[serde(rename = "HubArn")]
@@ -889,6 +904,7 @@ pub struct DescribeHubResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProductsRequest {
     /// <p>The maximum number of results to return.</p>
     #[serde(rename = "MaxResults")]
@@ -913,6 +929,7 @@ pub struct DescribeProductsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableImportFindingsForProductRequest {
     /// <p>The ARN of the integrated product to disable the integration for.</p>
     #[serde(rename = "ProductSubscriptionArn")]
@@ -924,6 +941,7 @@ pub struct DisableImportFindingsForProductRequest {
 pub struct DisableImportFindingsForProductResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableSecurityHubRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -931,6 +949,7 @@ pub struct DisableSecurityHubRequest {}
 pub struct DisableSecurityHubResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateFromMasterAccountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -938,6 +957,7 @@ pub struct DisassociateFromMasterAccountRequest {}
 pub struct DisassociateFromMasterAccountResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateMembersRequest {
     /// <p>The account IDs of the member accounts to disassociate from the master account.</p>
     #[serde(rename = "AccountIds")]
@@ -950,6 +970,7 @@ pub struct DisassociateMembersRequest {
 pub struct DisassociateMembersResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableImportFindingsForProductRequest {
     /// <p>The ARN of the product to enable the integration for.</p>
     #[serde(rename = "ProductArn")]
@@ -966,6 +987,7 @@ pub struct EnableImportFindingsForProductResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableSecurityHubRequest {
     /// <p>The tags to add to the Hub resource when you enable Security Hub.</p>
     #[serde(rename = "Tags")]
@@ -978,6 +1000,7 @@ pub struct EnableSecurityHubRequest {
 pub struct EnableSecurityHubResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEnabledStandardsRequest {
     /// <p>The maximum number of results to return in the response.</p>
     #[serde(rename = "MaxResults")]
@@ -1007,6 +1030,7 @@ pub struct GetEnabledStandardsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingsRequest {
     /// <p>The findings attributes used to define a condition to filter the findings returned.</p>
     #[serde(rename = "Filters")]
@@ -1039,6 +1063,7 @@ pub struct GetFindingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInsightResultsRequest {
     /// <p>The ARN of the insight whose results you want to see.</p>
     #[serde(rename = "InsightArn")]
@@ -1054,6 +1079,7 @@ pub struct GetInsightResultsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInsightsRequest {
     /// <p>The ARNs of the insights that you want to describe.</p>
     #[serde(rename = "InsightArns")]
@@ -1082,6 +1108,7 @@ pub struct GetInsightsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInvitationsCountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1094,6 +1121,7 @@ pub struct GetInvitationsCountResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMasterAccountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1106,6 +1134,7 @@ pub struct GetMasterAccountResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMembersRequest {
     /// <p>A list of account IDs for the Security Hub member accounts that you want to return the details for. </p>
     #[serde(rename = "AccountIds")]
@@ -1208,6 +1237,7 @@ pub struct Invitation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InviteMembersRequest {
     /// <p>A list of IDs of the AWS accounts that you want to invite to Security Hub as members. </p>
     #[serde(rename = "AccountIds")]
@@ -1243,6 +1273,7 @@ pub struct KeywordFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEnabledProductsForImportRequest {
     /// <p>The maximum number of items that you want in the response.</p>
     #[serde(rename = "MaxResults")]
@@ -1268,6 +1299,7 @@ pub struct ListEnabledProductsForImportResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvitationsRequest {
     /// <p>The maximum number of items that you want in the response. </p>
     #[serde(rename = "MaxResults")]
@@ -1293,6 +1325,7 @@ pub struct ListInvitationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMembersRequest {
     /// <p>The maximum number of items that you want in the response. </p>
     #[serde(rename = "MaxResults")]
@@ -1322,6 +1355,7 @@ pub struct ListMembersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN of the resource to retrieve tags for.</p>
     #[serde(rename = "ResourceArn")]
@@ -1469,6 +1503,7 @@ pub struct Note {
 
 /// <p>The updated note.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NoteUpdate {
     /// <p>The updated note text.</p>
     #[serde(rename = "Text")]
@@ -1674,6 +1709,7 @@ pub struct Severity {
 
 /// <p>A collection of finding attributes used to sort findings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SortCriterion {
     /// <p>The finding attribute used to sort findings.</p>
     #[serde(rename = "Field")]
@@ -1705,6 +1741,7 @@ pub struct StandardsSubscription {
 
 /// <p>The standard that you want to enable.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StandardsSubscriptionRequest {
     /// <p><p>The ARN of the standard that you want to enable.</p> <important> <p>In this release, Security Hub only supports the CIS AWS Foundations standard. </p> <p>Its ARN is <code>arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0</code>.</p> </important></p>
     #[serde(rename = "StandardsArn")]
@@ -1729,6 +1766,7 @@ pub struct StringFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the resource to apply the tags to.</p>
     #[serde(rename = "ResourceArn")]
@@ -1772,6 +1810,7 @@ pub struct ThreatIntelIndicator {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the resource to remove the tags from.</p>
     #[serde(rename = "ResourceArn")]
@@ -1786,6 +1825,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateActionTargetRequest {
     /// <p>The ARN of the custom action target to update.</p>
     #[serde(rename = "ActionTargetArn")]
@@ -1805,6 +1845,7 @@ pub struct UpdateActionTargetRequest {
 pub struct UpdateActionTargetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFindingsRequest {
     /// <p>A collection of attributes that specify which findings you want to update.</p>
     #[serde(rename = "Filters")]
@@ -1824,6 +1865,7 @@ pub struct UpdateFindingsRequest {
 pub struct UpdateFindingsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInsightRequest {
     /// <p>The updated filters that define this insight.</p>
     #[serde(rename = "Filters")]

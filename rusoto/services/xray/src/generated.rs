@@ -71,6 +71,7 @@ pub struct AvailabilityZoneDetail {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BackendConnectionErrors {
     /// <p><p/></p>
     #[serde(rename = "ConnectionRefusedCount")]
@@ -99,6 +100,7 @@ pub struct BackendConnectionErrors {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetTracesRequest {
     /// <p>Pagination token. Not used.</p>
     #[serde(rename = "NextToken")]
@@ -127,6 +129,7 @@ pub struct BatchGetTracesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
     /// <p>The filter expression defining criteria by which to group traces.</p>
     #[serde(rename = "FilterExpression")]
@@ -147,6 +150,7 @@ pub struct CreateGroupResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSamplingRuleRequest {
     /// <p>The rule definition.</p>
     #[serde(rename = "SamplingRule")]
@@ -163,6 +167,7 @@ pub struct CreateSamplingRuleResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
     /// <p>The ARN of the group that was generated on creation.</p>
     #[serde(rename = "GroupARN")]
@@ -179,6 +184,7 @@ pub struct DeleteGroupRequest {
 pub struct DeleteGroupResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSamplingRuleRequest {
     /// <p>The ARN of the sampling rule. Specify a rule by either name or ARN, but not both.</p>
     #[serde(rename = "RuleARN")]
@@ -422,6 +428,7 @@ pub struct FaultStatistics {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEncryptionConfigRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -434,6 +441,7 @@ pub struct GetEncryptionConfigResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupRequest {
     /// <p>The ARN of the group that was generated on creation.</p>
     #[serde(rename = "GroupARN")]
@@ -455,6 +463,7 @@ pub struct GetGroupResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupsRequest {
     /// <p>Pagination token. Not used.</p>
     #[serde(rename = "NextToken")]
@@ -476,6 +485,7 @@ pub struct GetGroupsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSamplingRulesRequest {
     /// <p>Pagination token. Not used.</p>
     #[serde(rename = "NextToken")]
@@ -497,6 +507,7 @@ pub struct GetSamplingRulesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSamplingStatisticSummariesRequest {
     /// <p>Pagination token. Not used.</p>
     #[serde(rename = "NextToken")]
@@ -518,6 +529,7 @@ pub struct GetSamplingStatisticSummariesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSamplingTargetsRequest {
     /// <p>Information about rules that the service is using to sample requests.</p>
     #[serde(rename = "SamplingStatisticsDocuments")]
@@ -542,6 +554,7 @@ pub struct GetSamplingTargetsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceGraphRequest {
     /// <p>The end of the timeframe for which to generate a graph.</p>
     #[serde(rename = "EndTime")]
@@ -589,6 +602,7 @@ pub struct GetServiceGraphResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTimeSeriesServiceStatisticsRequest {
     /// <p>The end of the time frame for which to aggregate statistics.</p>
     #[serde(rename = "EndTime")]
@@ -636,6 +650,7 @@ pub struct GetTimeSeriesServiceStatisticsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTraceGraphRequest {
     /// <p>Pagination token. Not used.</p>
     #[serde(rename = "NextToken")]
@@ -660,6 +675,7 @@ pub struct GetTraceGraphResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTraceSummariesRequest {
     /// <p>The end of the time frame for which to retrieve traces.</p>
     #[serde(rename = "EndTime")]
@@ -797,6 +813,7 @@ pub struct InstanceIdDetail {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEncryptionConfigRequest {
     /// <p>An AWS KMS customer master key (CMK) in one of the following formats:</p> <ul> <li> <p> <b>Alias</b> - The name of the key. For example, <code>alias/MyKey</code>.</p> </li> <li> <p> <b>Key ID</b> - The KMS key ID of the key. For example, <code>ae4aa6d49-a4d8-9df9-a475-4ff6d7898456</code>.</p> </li> <li> <p> <b>ARN</b> - The full Amazon Resource Name of the key ID or alias. For example, <code>arn:aws:kms:us-east-2:123456789012:key/ae4aa6d49-a4d8-9df9-a475-4ff6d7898456</code>. Use this format to specify a key in a different account.</p> </li> </ul> <p>Omit this key if you set <code>Type</code> to <code>NONE</code>.</p>
     #[serde(rename = "KeyId")]
@@ -817,6 +834,7 @@ pub struct PutEncryptionConfigResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutTelemetryRecordsRequest {
     /// <p><p/></p>
     #[serde(rename = "EC2InstanceId")]
@@ -840,6 +858,7 @@ pub struct PutTelemetryRecordsRequest {
 pub struct PutTelemetryRecordsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutTraceSegmentsRequest {
     /// <p>A string containing a JSON document defining one or more segments or subsegments.</p>
     #[serde(rename = "TraceSegmentDocuments")]
@@ -1004,6 +1023,7 @@ pub struct SamplingRuleRecord {
 
 /// <p>A document specifying changes to a sampling rule's configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SamplingRuleUpdate {
     /// <p>Matches attributes derived from the request.</p>
     #[serde(rename = "Attributes")]
@@ -1083,6 +1103,7 @@ pub struct SamplingStatisticSummary {
 
 /// <p>Request sampling results for a single rule from a service. Results are for the last 10 seconds unless the service has been assigned a longer reporting interval after a previous call to <a>GetSamplingTargets</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SamplingStatisticsDocument {
     /// <p>The number of requests recorded with borrowed reservoir quota.</p>
     #[serde(rename = "BorrowCount")]
@@ -1107,6 +1128,7 @@ pub struct SamplingStatisticsDocument {
 
 /// <p>The name and value of a sampling rule to apply to a trace summary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SamplingStrategy {
     /// <p>The name of a sampling rule.</p>
     #[serde(rename = "Name")]
@@ -1266,6 +1288,7 @@ pub struct ServiceStatistics {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TelemetryRecord {
     /// <p><p/></p>
     #[serde(rename = "BackendConnectionErrors")]
@@ -1467,6 +1490,7 @@ pub struct UnprocessedTraceSegment {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupRequest {
     /// <p>The updated filter expression defining criteria by which to group traces.</p>
     #[serde(rename = "FilterExpression")]
@@ -1492,6 +1516,7 @@ pub struct UpdateGroupResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSamplingRuleRequest {
     /// <p>The rule and fields to change.</p>
     #[serde(rename = "SamplingRuleUpdate")]

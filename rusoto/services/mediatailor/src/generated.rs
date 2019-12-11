@@ -57,6 +57,7 @@ pub struct DashConfiguration {
 
 /// <p>The configuration for DASH PUT operations. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DashConfigurationForPut {
     /// <p>The setting that controls whether MediaTailor includes the Location tag in DASH manifests. MediaTailor populates the Location tag with the URL for manifest update requests, to be used by players that don't support sticky redirects. Disable this if you have CDN routing rules set up for accessing MediaTailor manifests, and you are either using client-side reporting or your players support sticky HTTP redirects. Valid values are DISABLED and EMT_DEFAULT. The EMT_DEFAULT setting enables the inclusion of the tag and is the default value. </p>
     #[serde(rename = "MpdLocation")]
@@ -69,6 +70,7 @@ pub struct DashConfigurationForPut {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePlaybackConfigurationRequest {
     /// <p>The identifier for the playback configuration.</p>
     #[serde(rename = "Name")]
@@ -80,6 +82,7 @@ pub struct DeletePlaybackConfigurationRequest {
 pub struct DeletePlaybackConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPlaybackConfigurationRequest {
     /// <p>The identifier for the playback configuration.</p>
     #[serde(rename = "Name")]
@@ -150,6 +153,7 @@ pub struct HlsConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPlaybackConfigurationsRequest {
     /// <p>Maximum number of records to return. </p>
     #[serde(rename = "MaxResults")]
@@ -175,6 +179,7 @@ pub struct ListPlaybackConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the playback configuration. You can get this from the response to any playback configuration request. </p>
     #[serde(rename = "ResourceArn")]
@@ -250,6 +255,7 @@ pub struct PlaybackConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPlaybackConfigurationRequest {
     /// <p>The URL for the ad decision server (ADS). This includes the specification of static parameters and placeholders for dynamic parameters. AWS Elemental MediaTailor substitutes player-specific and session-specific parameters as needed when calling the ADS. Alternately, for testing you can provide a static VAST URL. The maximum length is 25,000 characters.</p>
     #[serde(rename = "AdDecisionServerUrl")]
@@ -339,6 +345,7 @@ pub struct PutPlaybackConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the playback configuration. You can get this from the response to any playback configuration request. </p>
     #[serde(rename = "ResourceArn")]
@@ -354,6 +361,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the playback configuration. You can get this from the response to any playback configuration request. </p>
     #[serde(rename = "ResourceArn")]

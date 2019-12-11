@@ -42,6 +42,7 @@ pub struct AuthorizationData {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCheckLayerAvailabilityRequest {
     /// <p>The digests of the image layers to check.</p>
     #[serde(rename = "layerDigests")]
@@ -70,6 +71,7 @@ pub struct BatchCheckLayerAvailabilityResponse {
 
 /// <p>Deletes specified images within a specified repository. Images are specified with either the <code>imageTag</code> or <code>imageDigest</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteImageRequest {
     /// <p>A list of image ID references that correspond to images to delete. The format of the <code>imageIds</code> reference is <code>imageTag=tag</code> or <code>imageDigest=digest</code>.</p>
     #[serde(rename = "imageIds")]
@@ -97,6 +99,7 @@ pub struct BatchDeleteImageResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetImageRequest {
     /// <p>The accepted media types for the request.</p> <p>Valid values: <code>application/vnd.docker.distribution.manifest.v1+json</code> | <code>application/vnd.docker.distribution.manifest.v2+json</code> | <code>application/vnd.oci.image.manifest.v1+json</code> </p>
     #[serde(rename = "acceptedMediaTypes")]
@@ -128,6 +131,7 @@ pub struct BatchGetImageResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompleteLayerUploadRequest {
     /// <p>The <code>sha256</code> digest of the image layer.</p>
     #[serde(rename = "layerDigests")]
@@ -166,6 +170,7 @@ pub struct CompleteLayerUploadResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRepositoryRequest {
     /// <p>The tag mutability setting for the repository. If this parameter is omitted, the default setting of <code>MUTABLE</code> will be used which will allow image tags to be overwritten. If <code>IMMUTABLE</code> is specified, all image tags within the repository will be immutable which will prevent them from being overwritten.</p>
     #[serde(rename = "imageTagMutability")]
@@ -190,6 +195,7 @@ pub struct CreateRepositoryResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLifecyclePolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
@@ -222,6 +228,7 @@ pub struct DeleteLifecyclePolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRepositoryPolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository policy to delete. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
@@ -250,6 +257,7 @@ pub struct DeleteRepositoryPolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRepositoryRequest {
     /// <p> If a repository contains images, forces the deletion.</p>
     #[serde(rename = "force")]
@@ -275,6 +283,7 @@ pub struct DeleteRepositoryResponse {
 
 /// <p>An object representing a filter on a <a>DescribeImages</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImagesFilter {
     /// <p>The tag status with which to filter your <a>DescribeImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>
     #[serde(rename = "tagStatus")]
@@ -283,6 +292,7 @@ pub struct DescribeImagesFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImagesRequest {
     /// <p>The filter key and value with which to filter your <code>DescribeImages</code> results.</p>
     #[serde(rename = "filter")]
@@ -323,6 +333,7 @@ pub struct DescribeImagesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRepositoriesRequest {
     /// <p>The maximum number of repository results returned by <code>DescribeRepositories</code> in paginated output. When this parameter is used, <code>DescribeRepositories</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeRepositories</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 1000. If this parameter is not used, then <code>DescribeRepositories</code> returns up to 100 results and a <code>nextToken</code> value, if applicable. This option cannot be used when you specify repositories with <code>repositoryNames</code>.</p>
     #[serde(rename = "maxResults")]
@@ -356,6 +367,7 @@ pub struct DescribeRepositoriesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizationTokenRequest {
     /// <p>A list of AWS account IDs that are associated with the registries for which to get authorization tokens. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryIds")]
@@ -373,6 +385,7 @@ pub struct GetAuthorizationTokenResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDownloadUrlForLayerRequest {
     /// <p>The digest of the image layer to download.</p>
     #[serde(rename = "layerDigest")]
@@ -400,6 +413,7 @@ pub struct GetDownloadUrlForLayerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLifecyclePolicyPreviewRequest {
     /// <p>An optional parameter that filters results based on image tag status and all tags, if tagged.</p>
     #[serde(rename = "filter")]
@@ -460,6 +474,7 @@ pub struct GetLifecyclePolicyPreviewResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLifecyclePolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
@@ -492,6 +507,7 @@ pub struct GetLifecyclePolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRepositoryPolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
@@ -603,6 +619,7 @@ pub struct ImageIdentifier {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitiateLayerUploadRequest {
     /// <p>The AWS account ID associated with the registry to which you intend to upload layers. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
@@ -668,6 +685,7 @@ pub struct LayerFailure {
 
 /// <p>The filter for the lifecycle policy preview.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LifecyclePolicyPreviewFilter {
     /// <p>The tag status of the image.</p>
     #[serde(rename = "tagStatus")]
@@ -723,6 +741,7 @@ pub struct LifecyclePolicyRuleAction {
 
 /// <p>An object representing a filter on a <a>ListImages</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagesFilter {
     /// <p>The tag status with which to filter your <a>ListImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>
     #[serde(rename = "tagStatus")]
@@ -731,6 +750,7 @@ pub struct ListImagesFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagesRequest {
     /// <p>The filter key and value with which to filter your <code>ListImages</code> results.</p>
     #[serde(rename = "filter")]
@@ -767,6 +787,7 @@ pub struct ListImagesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the resource for which to list the tags. Currently, the only supported resource is an Amazon ECR repository.</p>
     #[serde(rename = "resourceArn")]
@@ -783,6 +804,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImageRequest {
     /// <p>The image manifest corresponding to the image to be uploaded.</p>
     #[serde(rename = "imageManifest")]
@@ -810,6 +832,7 @@ pub struct PutImageResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImageTagMutabilityRequest {
     /// <p>The tag mutability setting for the repository. If <code>MUTABLE</code> is specified, image tags can be overwritten. If <code>IMMUTABLE</code> is specified, all image tags within the repository will be immutable which will prevent them from being overwritten.</p>
     #[serde(rename = "imageTagMutability")]
@@ -841,6 +864,7 @@ pub struct PutImageTagMutabilityResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLifecyclePolicyRequest {
     /// <p>The JSON repository policy text to apply to the repository.</p>
     #[serde(rename = "lifecyclePolicyText")]
@@ -902,6 +926,7 @@ pub struct Repository {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetRepositoryPolicyRequest {
     /// <p>If the policy you are attempting to set on a repository policy would prevent you from setting another policy in the future, you must force the <a>SetRepositoryPolicy</a> operation. This is intended to prevent accidental repository lock outs.</p>
     #[serde(rename = "force")]
@@ -937,6 +962,7 @@ pub struct SetRepositoryPolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartLifecyclePolicyPreviewRequest {
     /// <p>The policy to be evaluated against. If you do not specify a policy, the current policy for the repository is used.</p>
     #[serde(rename = "lifecyclePolicyText")]
@@ -986,6 +1012,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the the resource to which to add tags. Currently, the only supported resource is an Amazon ECR repository.</p>
     #[serde(rename = "resourceArn")]
@@ -1000,6 +1027,7 @@ pub struct TagResourceRequest {
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource from which to remove tags. Currently, the only supported resource is an Amazon ECR repository.</p>
     #[serde(rename = "resourceArn")]
@@ -1014,6 +1042,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadLayerPartRequest {
     /// <p>The base64-encoded layer part payload.</p>
     #[serde(rename = "layerPartBlob")]

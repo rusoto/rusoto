@@ -54,6 +54,7 @@ pub struct AccountModification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateIpGroupsRequest {
     /// <p>The identifier of the directory.</p>
     #[serde(rename = "DirectoryId")]
@@ -68,6 +69,7 @@ pub struct AssociateIpGroupsRequest {
 pub struct AssociateIpGroupsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthorizeIpRulesRequest {
     /// <p>The identifier of the group.</p>
     #[serde(rename = "GroupId")]
@@ -115,6 +117,7 @@ pub struct ComputeType {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyWorkspaceImageRequest {
     /// <p>A description of the image.</p>
     #[serde(rename = "Description")]
@@ -145,6 +148,7 @@ pub struct CopyWorkspaceImageResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIpGroupRequest {
     /// <p>The description of the group.</p>
     #[serde(rename = "GroupDesc")]
@@ -173,6 +177,7 @@ pub struct CreateIpGroupResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
     /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
     #[serde(rename = "ResourceId")]
@@ -187,6 +192,7 @@ pub struct CreateTagsRequest {
 pub struct CreateTagsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkspacesRequest {
     /// <p>The WorkSpaces to create. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "Workspaces")]
@@ -233,6 +239,7 @@ pub struct DefaultWorkspaceCreationProperties {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIpGroupRequest {
     /// <p>The identifier of the IP access control group.</p>
     #[serde(rename = "GroupId")]
@@ -244,6 +251,7 @@ pub struct DeleteIpGroupRequest {
 pub struct DeleteIpGroupResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
     /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
     #[serde(rename = "ResourceId")]
@@ -258,6 +266,7 @@ pub struct DeleteTagsRequest {
 pub struct DeleteTagsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkspaceImageRequest {
     /// <p>The identifier of the image.</p>
     #[serde(rename = "ImageId")]
@@ -269,6 +278,7 @@ pub struct DeleteWorkspaceImageRequest {
 pub struct DeleteWorkspaceImageResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountModificationsRequest {
     /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -290,6 +300,7 @@ pub struct DescribeAccountModificationsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -306,6 +317,7 @@ pub struct DescribeAccountResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClientPropertiesRequest {
     /// <p>The resource identifier, in the form of directory IDs.</p>
     #[serde(rename = "ResourceIds")]
@@ -322,6 +334,7 @@ pub struct DescribeClientPropertiesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIpGroupsRequest {
     /// <p>The identifiers of one or more IP access control groups.</p>
     #[serde(rename = "GroupIds")]
@@ -351,6 +364,7 @@ pub struct DescribeIpGroupsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsRequest {
     /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
     #[serde(rename = "ResourceId")]
@@ -367,6 +381,7 @@ pub struct DescribeTagsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceBundlesRequest {
     /// <p>The identifiers of the bundles. You cannot combine this parameter with any other filter.</p>
     #[serde(rename = "BundleIds")]
@@ -396,6 +411,7 @@ pub struct DescribeWorkspaceBundlesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceDirectoriesRequest {
     /// <p>The identifiers of the directories. If the value is null, all directories are retrieved.</p>
     #[serde(rename = "DirectoryIds")]
@@ -421,6 +437,7 @@ pub struct DescribeWorkspaceDirectoriesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceImagesRequest {
     /// <p>The identifier of the image.</p>
     #[serde(rename = "ImageIds")]
@@ -450,6 +467,7 @@ pub struct DescribeWorkspaceImagesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspacesConnectionStatusRequest {
     /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -475,6 +493,7 @@ pub struct DescribeWorkspacesConnectionStatusResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspacesRequest {
     /// <p>The identifier of the bundle. All WorkSpaces that are created from this bundle are retrieved. You cannot combine this parameter with any other filter.</p>
     #[serde(rename = "BundleId")]
@@ -516,6 +535,7 @@ pub struct DescribeWorkspacesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateIpGroupsRequest {
     /// <p>The identifier of the directory.</p>
     #[serde(rename = "DirectoryId")]
@@ -566,6 +586,7 @@ pub struct FailedWorkspaceChangeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportWorkspaceImageRequest {
     /// <p>The identifier of the EC2 image.</p>
     #[serde(rename = "Ec2ImageId")]
@@ -608,6 +629,7 @@ pub struct IpRuleItem {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAvailableManagementCidrRangesRequest {
     /// <p>The IP address range to search. Specify an IP address range that is compatible with your network and in CIDR notation (that is, specify the range as an IPv4 CIDR block).</p>
     #[serde(rename = "ManagementCidrRangeConstraint")]
@@ -650,6 +672,7 @@ pub struct ModificationState {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyAccountRequest {
     /// <p>The IP address range, specified as an IPv4 CIDR block, for the management network interface. Specify an IP address range that is compatible with your network and in CIDR notation (that is, specify the range as an IPv4 CIDR block). The CIDR block size must be /16 (for example, 203.0.113.25/16). It must also be specified as available by the <code>ListAvailableManagementCidrRanges</code> operation.</p>
     #[serde(rename = "DedicatedTenancyManagementCidrRange")]
@@ -666,6 +689,7 @@ pub struct ModifyAccountRequest {
 pub struct ModifyAccountResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClientPropertiesRequest {
     /// <p>Information about the Amazon WorkSpaces client.</p>
     #[serde(rename = "ClientProperties")]
@@ -680,6 +704,7 @@ pub struct ModifyClientPropertiesRequest {
 pub struct ModifyClientPropertiesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyWorkspacePropertiesRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -694,6 +719,7 @@ pub struct ModifyWorkspacePropertiesRequest {
 pub struct ModifyWorkspacePropertiesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyWorkspaceStateRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -719,6 +745,7 @@ pub struct OperatingSystem {
 
 /// <p>Describes the information used to reboot a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -726,6 +753,7 @@ pub struct RebootRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootWorkspacesRequest {
     /// <p>The WorkSpaces to reboot. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "RebootWorkspaceRequests")]
@@ -743,6 +771,7 @@ pub struct RebootWorkspacesResult {
 
 /// <p>Describes the information used to rebuild a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebuildRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -750,6 +779,7 @@ pub struct RebuildRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebuildWorkspacesRequest {
     /// <p>The WorkSpace to rebuild. You can specify a single WorkSpace.</p>
     #[serde(rename = "RebuildWorkspaceRequests")]
@@ -766,6 +796,7 @@ pub struct RebuildWorkspacesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeIpRulesRequest {
     /// <p>The identifier of the group.</p>
     #[serde(rename = "GroupId")]
@@ -791,6 +822,7 @@ pub struct RootStorage {
 
 /// <p>Information used to start a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -799,6 +831,7 @@ pub struct StartRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartWorkspacesRequest {
     /// <p>The WorkSpaces to start. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "StartWorkspaceRequests")]
@@ -816,6 +849,7 @@ pub struct StartWorkspacesResult {
 
 /// <p>Describes the information used to stop a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -824,6 +858,7 @@ pub struct StopRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopWorkspacesRequest {
     /// <p>The WorkSpaces to stop. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "StopWorkspaceRequests")]
@@ -853,6 +888,7 @@ pub struct Tag {
 
 /// <p>Describes the information used to terminate a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -860,6 +896,7 @@ pub struct TerminateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateWorkspacesRequest {
     /// <p>The WorkSpaces to terminate. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "TerminateWorkspaceRequests")]
@@ -876,6 +913,7 @@ pub struct TerminateWorkspacesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRulesOfIpGroupRequest {
     /// <p>The identifier of the group.</p>
     #[serde(rename = "GroupId")]

@@ -62,6 +62,7 @@ pub struct AffectedEntity {
 
 /// <p>A range of dates and times that is used by the <a>EventFilter</a> and <a>EntityFilter</a> objects. If <code>from</code> is set and <code>to</code> is set: match items where the timestamp (<code>startTime</code>, <code>endTime</code>, or <code>lastUpdatedTime</code>) is between <code>from</code> and <code>to</code> inclusive. If <code>from</code> is set and <code>to</code> is not set: match items where the timestamp value is equal to or after <code>from</code>. If <code>from</code> is not set and <code>to</code> is set: match items where the timestamp value is equal to or before <code>to</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DateTimeRange {
     /// <p>The starting date and time of a time range.</p>
     #[serde(rename = "from")]
@@ -74,6 +75,7 @@ pub struct DateTimeRange {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAffectedEntitiesRequest {
     /// <p>Values to narrow the results returned. At least one event ARN is required. </p>
     #[serde(rename = "filter")]
@@ -106,6 +108,7 @@ pub struct DescribeAffectedEntitiesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntityAggregatesRequest {
     /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456", "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"</code> </p>
     #[serde(rename = "eventArns")]
@@ -123,6 +126,7 @@ pub struct DescribeEntityAggregatesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventAggregatesRequest {
     /// <p>The only currently supported value is <code>eventTypeCategory</code>.</p>
     #[serde(rename = "aggregateField")]
@@ -155,6 +159,7 @@ pub struct DescribeEventAggregatesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventDetailsRequest {
     /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456", "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"</code> </p>
     #[serde(rename = "eventArns")]
@@ -179,6 +184,7 @@ pub struct DescribeEventDetailsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventTypesRequest {
     /// <p>Values to narrow the results returned.</p>
     #[serde(rename = "filter")]
@@ -212,6 +218,7 @@ pub struct DescribeEventTypesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsRequest {
     /// <p>Values to narrow the results returned.</p>
     #[serde(rename = "filter")]
@@ -260,6 +267,7 @@ pub struct EntityAggregate {
 
 /// <p>The values to use to filter results from the <a>DescribeAffectedEntities</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EntityFilter {
     /// <p>A list of entity ARNs (unique identifiers).</p>
     #[serde(rename = "entityArns")]
@@ -384,6 +392,7 @@ pub struct EventDetailsErrorItem {
 
 /// <p>The values to use to filter results from the <a>DescribeEvents</a> and <a>DescribeEventAggregates</a> operations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EventFilter {
     /// <p>A list of AWS availability zones.</p>
     #[serde(rename = "availabilityZones")]
@@ -441,6 +450,7 @@ pub struct EventFilter {
 
 /// <p>The values to use to filter results from the <a>DescribeEventTypes</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EventTypeFilter {
     /// <p>A list of event type category codes (<code>issue</code>, <code>scheduledChange</code>, or <code>accountNotification</code>).</p>
     #[serde(rename = "eventTypeCategories")]

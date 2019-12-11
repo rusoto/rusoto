@@ -37,6 +37,7 @@ pub struct ApplicationSource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateScalingPlanRequest {
     /// <p>A CloudFormation stack or set of tags. You can create one scaling plan per application source.</p>
     #[serde(rename = "ApplicationSource")]
@@ -116,6 +117,7 @@ pub struct Datapoint {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScalingPlanRequest {
     /// <p>The name of the scaling plan.</p>
     #[serde(rename = "ScalingPlanName")]
@@ -130,6 +132,7 @@ pub struct DeleteScalingPlanRequest {
 pub struct DeleteScalingPlanResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalingPlanResourcesRequest {
     /// <p>The maximum number of scalable resources to return. The value must be between 1 and 50. The default value is 50.</p>
     #[serde(rename = "MaxResults")]
@@ -161,6 +164,7 @@ pub struct DescribeScalingPlanResourcesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalingPlansRequest {
     /// <p>The sources for the applications (up to 10). If you specify scaling plan names, you cannot specify application sources.</p>
     #[serde(rename = "ApplicationSources")]
@@ -198,6 +202,7 @@ pub struct DescribeScalingPlansResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetScalingPlanResourceForecastDataRequest {
     /// <p>The exclusive end time of the time range for the forecast data to get. The maximum time duration between the start and end time is seven days. </p> <p>Although this parameter can accept a date and time that is more than two days in the future, the availability of forecast data has limits. AWS Auto Scaling only issues forecasts for periods of two days in advance.</p>
     #[serde(rename = "EndTime")]
@@ -450,6 +455,7 @@ pub struct TargetTrackingConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateScalingPlanRequest {
     /// <p>A CloudFormation stack or set of tags.</p>
     #[serde(rename = "ApplicationSource")]

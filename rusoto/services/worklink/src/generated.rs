@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDomainRequest {
     /// <p>The ARN of an issued ACM certificate that is valid for the domain being associated.</p>
     #[serde(rename = "AcmCertificateArn")]
@@ -45,6 +46,7 @@ pub struct AssociateDomainRequest {
 pub struct AssociateDomainResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateWebsiteAuthorizationProviderRequest {
     /// <p>The authorization provider type.</p>
     #[serde(rename = "AuthorizationProviderType")]
@@ -68,6 +70,7 @@ pub struct AssociateWebsiteAuthorizationProviderResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateWebsiteCertificateAuthorityRequest {
     /// <p>The root certificate of the CA.</p>
     #[serde(rename = "Certificate")]
@@ -91,6 +94,7 @@ pub struct AssociateWebsiteCertificateAuthorityResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFleetRequest {
     /// <p>The fleet name to display.</p>
     #[serde(rename = "DisplayName")]
@@ -115,6 +119,7 @@ pub struct CreateFleetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFleetRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -126,6 +131,7 @@ pub struct DeleteFleetRequest {
 pub struct DeleteFleetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditStreamConfigurationRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -142,6 +148,7 @@ pub struct DescribeAuditStreamConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCompanyNetworkConfigurationRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -166,6 +173,7 @@ pub struct DescribeCompanyNetworkConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDevicePolicyConfigurationRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -182,6 +190,7 @@ pub struct DescribeDevicePolicyConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeviceRequest {
     /// <p>A unique identifier for a registered user's device.</p>
     #[serde(rename = "DeviceId")]
@@ -233,6 +242,7 @@ pub struct DescribeDeviceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainRequest {
     /// <p>The name of the domain.</p>
     #[serde(rename = "DomainName")]
@@ -268,6 +278,7 @@ pub struct DescribeDomainResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetMetadataRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -308,6 +319,7 @@ pub struct DescribeFleetMetadataResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdentityProviderConfigurationRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -332,6 +344,7 @@ pub struct DescribeIdentityProviderConfigurationResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWebsiteCertificateAuthorityRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -373,6 +386,7 @@ pub struct DeviceSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDomainRequest {
     /// <p>The name of the domain.</p>
     #[serde(rename = "DomainName")]
@@ -387,6 +401,7 @@ pub struct DisassociateDomainRequest {
 pub struct DisassociateDomainResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateWebsiteAuthorizationProviderRequest {
     /// <p>A unique identifier for the authorization provider.</p>
     #[serde(rename = "AuthorizationProviderId")]
@@ -401,6 +416,7 @@ pub struct DisassociateWebsiteAuthorizationProviderRequest {
 pub struct DisassociateWebsiteAuthorizationProviderResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateWebsiteCertificateAuthorityRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -468,6 +484,7 @@ pub struct FleetSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicesRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -496,6 +513,7 @@ pub struct ListDevicesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -524,6 +542,7 @@ pub struct ListDomainsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFleetsRequest {
     /// <p>The maximum number of results to be included in the next page.</p>
     #[serde(rename = "MaxResults")]
@@ -549,6 +568,7 @@ pub struct ListFleetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebsiteAuthorizationProvidersRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -577,6 +597,7 @@ pub struct ListWebsiteAuthorizationProvidersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebsiteCertificateAuthoritiesRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -605,6 +626,7 @@ pub struct ListWebsiteCertificateAuthoritiesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDomainAccessRequest {
     /// <p>The name of the domain.</p>
     #[serde(rename = "DomainName")]
@@ -619,6 +641,7 @@ pub struct RestoreDomainAccessRequest {
 pub struct RestoreDomainAccessResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeDomainAccessRequest {
     /// <p>The name of the domain.</p>
     #[serde(rename = "DomainName")]
@@ -633,6 +656,7 @@ pub struct RevokeDomainAccessRequest {
 pub struct RevokeDomainAccessResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SignOutUserRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -647,6 +671,7 @@ pub struct SignOutUserRequest {
 pub struct SignOutUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuditStreamConfigurationRequest {
     /// <p>The ARN of the Amazon Kinesis data stream that receives the audit events.</p>
     #[serde(rename = "AuditStreamArn")]
@@ -662,6 +687,7 @@ pub struct UpdateAuditStreamConfigurationRequest {
 pub struct UpdateAuditStreamConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCompanyNetworkConfigurationRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -682,6 +708,7 @@ pub struct UpdateCompanyNetworkConfigurationRequest {
 pub struct UpdateCompanyNetworkConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDevicePolicyConfigurationRequest {
     /// <p>The certificate chain, including intermediate certificates and the root certificate authority certificate used to issue device certificates.</p>
     #[serde(rename = "DeviceCaCertificate")]
@@ -697,6 +724,7 @@ pub struct UpdateDevicePolicyConfigurationRequest {
 pub struct UpdateDevicePolicyConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainMetadataRequest {
     /// <p>The name to display.</p>
     #[serde(rename = "DisplayName")]
@@ -715,6 +743,7 @@ pub struct UpdateDomainMetadataRequest {
 pub struct UpdateDomainMetadataResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFleetMetadataRequest {
     /// <p>The fleet name to display. The existing DisplayName is unset if null is passed.</p>
     #[serde(rename = "DisplayName")]
@@ -734,6 +763,7 @@ pub struct UpdateFleetMetadataRequest {
 pub struct UpdateFleetMetadataResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIdentityProviderConfigurationRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]

@@ -25,6 +25,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobExecutionRequest {
     /// <p>Optional. A number that identifies a particular job execution on a particular device. If not specified, the latest job execution is returned.</p>
     #[serde(rename = "executionNumber")]
@@ -52,6 +53,7 @@ pub struct DescribeJobExecutionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPendingJobExecutionsRequest {
     /// <p>The name of the thing that is executing the job.</p>
     #[serde(rename = "thingName")]
@@ -170,6 +172,7 @@ pub struct JobExecutionSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartNextPendingJobExecutionRequest {
     /// <p>A collection of name/value pairs that describe the status of the job execution. If not specified, the statusDetails are unchanged.</p>
     #[serde(rename = "statusDetails")]
@@ -194,6 +197,7 @@ pub struct StartNextPendingJobExecutionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobExecutionRequest {
     /// <p>Optional. A number that identifies a particular job execution on a particular device.</p>
     #[serde(rename = "executionNumber")]

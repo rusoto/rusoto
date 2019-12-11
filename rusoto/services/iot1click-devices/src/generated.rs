@@ -29,6 +29,7 @@ use serde_json;
 pub struct Attributes {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClaimDevicesByClaimCodeRequest {
     /// <p>The claim code, starting with "C-", as provided by the device manufacturer.</p>
     #[serde(rename = "ClaimCode")]
@@ -50,6 +51,7 @@ pub struct ClaimDevicesByClaimCodeResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeviceRequest {
     /// <p>The unique identifier of the device.</p>
     #[serde(rename = "DeviceId")]
@@ -143,6 +145,7 @@ pub struct DeviceMethod {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FinalizeDeviceClaimRequest {
     /// <p>The unique identifier of the device.</p>
     #[serde(rename = "DeviceId")]
@@ -167,6 +170,7 @@ pub struct FinalizeDeviceClaimResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceMethodsRequest {
     /// <p>The unique identifier of the device.</p>
     #[serde(rename = "DeviceId")]
@@ -183,6 +187,7 @@ pub struct GetDeviceMethodsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitiateDeviceClaimRequest {
     /// <p>The unique identifier of the device.</p>
     #[serde(rename = "DeviceId")]
@@ -199,6 +204,7 @@ pub struct InitiateDeviceClaimResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvokeDeviceMethodRequest {
     /// <p>The unique identifier of the device.</p>
     #[serde(rename = "DeviceId")]
@@ -223,6 +229,7 @@ pub struct InvokeDeviceMethodResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceEventsRequest {
     /// <p>The unique identifier of the device.</p>
     #[serde(rename = "DeviceId")]
@@ -263,6 +270,7 @@ pub struct ListDeviceEventsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicesRequest {
     /// <p>The type of the device, such as "button".</p>
     #[serde(rename = "DeviceType")]
@@ -293,6 +301,7 @@ pub struct ListDevicesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN of the resource.</p>
     #[serde(rename = "ResourceArn")]
@@ -313,6 +322,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the resource.</p>
     #[serde(rename = "ResourceArn")]
@@ -327,6 +337,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnclaimDeviceRequest {
     /// <p>The unique identifier of the device.</p>
     #[serde(rename = "DeviceId")]
@@ -343,6 +354,7 @@ pub struct UnclaimDeviceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the resource.</p>
     #[serde(rename = "ResourceArn")]
@@ -353,6 +365,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceStateRequest {
     /// <p>The unique identifier of the device.</p>
     #[serde(rename = "DeviceId")]

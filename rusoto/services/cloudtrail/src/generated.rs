@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Specifies the tags to add to a trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsRequest {
     /// <p>Specifies the ARN of the trail to which one or more tags will be added. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "ResourceId")]
@@ -42,6 +43,7 @@ pub struct AddTagsResponse {}
 
 /// <p>Specifies the settings for each trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrailRequest {
     /// <p>Specifies a log group name using an Amazon Resource Name (ARN), a unique identifier that represents the log group to which CloudTrail logs will be delivered. Not required unless you specify CloudWatchLogsRoleArn.</p>
     #[serde(rename = "CloudWatchLogsLogGroupArn")]
@@ -156,6 +158,7 @@ pub struct DataResource {
 
 /// <p>The request that specifies the name of a trail to delete.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTrailRequest {
     /// <p>Specifies the name or the CloudTrail ARN of the trail to be deleted. The format of a trail ARN is: <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "Name")]
@@ -169,6 +172,7 @@ pub struct DeleteTrailResponse {}
 
 /// <p>Returns information about the trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrailsRequest {
     /// <p>Specifies whether to include shadow trails in the response. A shadow trail is the replication in a region of a trail that was created in a different region, or in the case of an organization trail, the replication of an organization trail in member accounts. If you do not include shadow trails, organization trails in a member account and region replication trails will not be returned. The default is true.</p>
     #[serde(rename = "includeShadowTrails")]
@@ -250,6 +254,7 @@ pub struct EventSelector {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEventSelectorsRequest {
     /// <p>Specifies the name of the trail or trail ARN. If you specify a trail name, the string must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are not valid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul> <p>If you specify a trail ARN, it must be in the format:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "TrailName")]
@@ -271,6 +276,7 @@ pub struct GetEventSelectorsResponse {
 
 /// <p>The name of a trail about which you want the current status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTrailStatusRequest {
     /// <p>Specifies the name or the CloudTrail ARN of the trail for which you are requesting status. To get the status of a shadow trail (a replication of the trail in another region), you must specify its ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "Name")]
@@ -353,6 +359,7 @@ pub struct GetTrailStatusResponse {
 
 /// <p>Requests the public keys for a specified time range.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPublicKeysRequest {
     /// <p>Optionally specifies, in UTC, the end of the time range to look up public keys for CloudTrail digest files. If not specified, the current time is used.</p>
     #[serde(rename = "EndTime")]
@@ -384,6 +391,7 @@ pub struct ListPublicKeysResponse {
 
 /// <p>Specifies a list of trail tags to return.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
     /// <p>Reserved for future use.</p>
     #[serde(rename = "NextToken")]
@@ -410,6 +418,7 @@ pub struct ListTagsResponse {
 
 /// <p>Specifies an attribute and value that filter the events returned.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LookupAttribute {
     /// <p>Specifies an attribute on which to filter the events returned.</p>
     #[serde(rename = "AttributeKey")]
@@ -421,6 +430,7 @@ pub struct LookupAttribute {
 
 /// <p>Contains a request for LookupEvents.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LookupEventsRequest {
     /// <p>Specifies that only events that occur before or at the specified time are returned. If the specified end time is before the specified start time, an error is returned.</p>
     #[serde(rename = "EndTime")]
@@ -486,6 +496,7 @@ pub struct PublicKey {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEventSelectorsRequest {
     /// <p>Specifies the settings for your event selectors. You can configure up to five event selectors for a trail.</p>
     #[serde(rename = "EventSelectors")]
@@ -510,6 +521,7 @@ pub struct PutEventSelectorsResponse {
 
 /// <p>Specifies the tags to remove from a trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsRequest {
     /// <p>Specifies the ARN of the trail from which tags should be removed. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "ResourceId")]
@@ -555,6 +567,7 @@ pub struct ResourceTag {
 
 /// <p>The request to CloudTrail to start logging AWS API calls for an account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartLoggingRequest {
     /// <p>Specifies the name or the CloudTrail ARN of the trail for which CloudTrail logs AWS API calls. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "Name")]
@@ -568,6 +581,7 @@ pub struct StartLoggingResponse {}
 
 /// <p>Passes the request to CloudTrail to stop logging AWS API calls for the specified account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopLoggingRequest {
     /// <p>Specifies the name or the CloudTrail ARN of the trail for which CloudTrail will stop logging AWS API calls. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "Name")]
@@ -655,6 +669,7 @@ pub struct Trail {
 
 /// <p>Specifies settings to update for the trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTrailRequest {
     /// <p>Specifies a log group name using an Amazon Resource Name (ARN), a unique identifier that represents the log group to which CloudTrail logs will be delivered. Not required unless you specify CloudWatchLogsRoleArn.</p>
     #[serde(rename = "CloudWatchLogsLogGroupArn")]

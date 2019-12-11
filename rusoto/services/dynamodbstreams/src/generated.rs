@@ -81,6 +81,7 @@ pub struct AttributeValue {
 
 /// <p>Represents the input of a <code>DescribeStream</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamInput {
     /// <p>The shard ID of the first item that this operation will evaluate. Use the value that was returned for <code>LastEvaluatedShardId</code> in the previous operation. </p>
     #[serde(rename = "ExclusiveStartShardId")]
@@ -107,6 +108,7 @@ pub struct DescribeStreamOutput {
 
 /// <p>Represents the input of a <code>GetRecords</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecordsInput {
     /// <p>The maximum number of records to return from the shard. The upper limit is 1000.</p>
     #[serde(rename = "Limit")]
@@ -133,6 +135,7 @@ pub struct GetRecordsOutput {
 
 /// <p>Represents the input of a <code>GetShardIterator</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetShardIteratorInput {
     /// <p>The sequence number of a stream record in the shard from which to start reading.</p>
     #[serde(rename = "SequenceNumber")]
@@ -187,6 +190,7 @@ pub struct KeySchemaElement {
 
 /// <p>Represents the input of a <code>ListStreams</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamsInput {
     /// <p>The ARN (Amazon Resource Name) of the first item that this operation will evaluate. Use the value that was returned for <code>LastEvaluatedStreamArn</code> in the previous operation. </p>
     #[serde(rename = "ExclusiveStartStreamArn")]

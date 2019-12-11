@@ -70,6 +70,7 @@ pub struct Activation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceRequest {
     /// <p><p>The resource ID you want to tag.</p> <p>Use the ID of the resource. Here are some examples:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceId")]
@@ -258,6 +259,7 @@ pub struct AssociationExecution {
 
 /// <p>Filters used in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociationExecutionFilter {
     /// <p>The key value used in the request.</p>
     #[serde(rename = "Key")]
@@ -314,6 +316,7 @@ pub struct AssociationExecutionTarget {
 
 /// <p>Filters for the association execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociationExecutionTargetsFilter {
     /// <p>The key value used in the request.</p>
     #[serde(rename = "Key")]
@@ -325,6 +328,7 @@ pub struct AssociationExecutionTargetsFilter {
 
 /// <p>Describes a filter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociationFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "key")]
@@ -466,6 +470,7 @@ pub struct AttachmentInformation {
 
 /// <p>A key and value pair that identifies the location of an attachment to a document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachmentsSource {
     /// <p>The key of a key and value pair that identifies the location of an attachment to a document.</p>
     #[serde(rename = "Key")]
@@ -585,6 +590,7 @@ pub struct AutomationExecution {
 
 /// <p>A filter used to match specific automation executions. This is used to limit the scope of Automation execution information returned.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AutomationExecutionFilter {
     /// <p>One or more keys to limit the results. Valid filter keys include the following: DocumentNamePrefix, ExecutionStatus, ExecutionId, ParentExecutionId, CurrentAction, StartTimeBefore, StartTimeAfter.</p>
     #[serde(rename = "Key")]
@@ -690,6 +696,7 @@ pub struct AutomationExecutionMetadata {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelCommandRequest {
     /// <p>The ID of the command you want to cancel.</p>
     #[serde(rename = "CommandId")]
@@ -706,6 +713,7 @@ pub struct CancelCommandRequest {
 pub struct CancelCommandResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelMaintenanceWindowExecutionRequest {
     /// <p>The ID of the maintenance window execution to stop.</p>
     #[serde(rename = "WindowExecutionId")]
@@ -834,6 +842,7 @@ pub struct Command {
 
 /// <p>Describes a command filter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CommandFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "key")]
@@ -1026,6 +1035,7 @@ pub struct ComplianceItem {
 
 /// <p>Information about a compliance item.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ComplianceItemEntry {
     /// <p>A "Key": "Value" tag combination for the compliance item.</p>
     #[serde(rename = "Details")]
@@ -1049,6 +1059,7 @@ pub struct ComplianceItemEntry {
 
 /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ComplianceStringFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Key")]
@@ -1097,6 +1108,7 @@ pub struct CompliantSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateActivationRequest {
     /// <p><p>The name of the registered, managed instance as it will appear in the Amazon EC2 console or when you use the AWS command line tools to list EC2 resources.</p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
     #[serde(rename = "DefaultInstanceName")]
@@ -1137,6 +1149,7 @@ pub struct CreateActivationResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssociationBatchRequest {
     /// <p>One or more associations.</p>
     #[serde(rename = "Entries")]
@@ -1209,6 +1222,7 @@ pub struct CreateAssociationBatchResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssociationRequest {
     /// <p>Specify a descriptive name for the association.</p>
     #[serde(rename = "AssociationName")]
@@ -1269,6 +1283,7 @@ pub struct CreateAssociationResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDocumentRequest {
     /// <p>A list of key and value pairs that describe attachments to a version of a document.</p>
     #[serde(rename = "Attachments")]
@@ -1312,6 +1327,7 @@ pub struct CreateDocumentResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMaintenanceWindowRequest {
     /// <p>Enables a maintenance window task to run on managed instances, even if you have not registered those instances as targets. If enabled, then you must specify the unregistered instances (by instance ID) when you register a task with the maintenance window.</p> <p>If you don't enable this option, then you must specify previously-registered targets when you register a task with the maintenance window.</p>
     #[serde(rename = "AllowUnassociatedTargets")]
@@ -1364,6 +1380,7 @@ pub struct CreateMaintenanceWindowResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOpsItemRequest {
     /// <p>Information about the OpsItem. </p>
     #[serde(rename = "Description")]
@@ -1406,6 +1423,7 @@ pub struct CreateOpsItemResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePatchBaselineRequest {
     /// <p>A set of rules used to include patches in the baseline.</p>
     #[serde(rename = "ApprovalRules")]
@@ -1470,6 +1488,7 @@ pub struct CreatePatchBaselineResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceDataSyncRequest {
     /// <p>Amazon S3 configuration details for the sync.</p>
     #[serde(rename = "S3Destination")]
@@ -1484,6 +1503,7 @@ pub struct CreateResourceDataSyncRequest {
 pub struct CreateResourceDataSyncResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteActivationRequest {
     /// <p>The ID of the activation that you want to delete.</p>
     #[serde(rename = "ActivationId")]
@@ -1495,6 +1515,7 @@ pub struct DeleteActivationRequest {
 pub struct DeleteActivationResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssociationRequest {
     /// <p>The association ID that you want to delete.</p>
     #[serde(rename = "AssociationId")]
@@ -1515,6 +1536,7 @@ pub struct DeleteAssociationRequest {
 pub struct DeleteAssociationResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentRequest {
     /// <p>The version of the document that you want to delete. If not provided, all versions of the document are deleted.</p>
     #[serde(rename = "DocumentVersion")]
@@ -1534,6 +1556,7 @@ pub struct DeleteDocumentRequest {
 pub struct DeleteDocumentResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInventoryRequest {
     /// <p>User-provided idempotency token.</p>
     #[serde(rename = "ClientToken")]
@@ -1570,6 +1593,7 @@ pub struct DeleteInventoryResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMaintenanceWindowRequest {
     /// <p>The ID of the maintenance window to delete.</p>
     #[serde(rename = "WindowId")]
@@ -1586,6 +1610,7 @@ pub struct DeleteMaintenanceWindowResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteParameterRequest {
     /// <p>The name of the parameter to delete.</p>
     #[serde(rename = "Name")]
@@ -1597,6 +1622,7 @@ pub struct DeleteParameterRequest {
 pub struct DeleteParameterResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteParametersRequest {
     /// <p>The names of the parameters to delete.</p>
     #[serde(rename = "Names")]
@@ -1617,6 +1643,7 @@ pub struct DeleteParametersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePatchBaselineRequest {
     /// <p>The ID of the patch baseline to delete.</p>
     #[serde(rename = "BaselineId")]
@@ -1633,6 +1660,7 @@ pub struct DeletePatchBaselineResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceDataSyncRequest {
     /// <p>The name of the configuration to delete.</p>
     #[serde(rename = "SyncName")]
@@ -1644,6 +1672,7 @@ pub struct DeleteResourceDataSyncRequest {
 pub struct DeleteResourceDataSyncResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterManagedInstanceRequest {
     /// <p>The ID assigned to the managed instance when you registered it using the activation process. </p>
     #[serde(rename = "InstanceId")]
@@ -1655,6 +1684,7 @@ pub struct DeregisterManagedInstanceRequest {
 pub struct DeregisterManagedInstanceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterPatchBaselineForPatchGroupRequest {
     /// <p>The ID of the patch baseline to deregister the patch group from.</p>
     #[serde(rename = "BaselineId")]
@@ -1678,6 +1708,7 @@ pub struct DeregisterPatchBaselineForPatchGroupResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterTargetFromMaintenanceWindowRequest {
     /// <p>The system checks if the target is being referenced by a task. If the target is being referenced, the system returns an error and does not deregister the target from the maintenance window.</p>
     #[serde(rename = "Safe")]
@@ -1705,6 +1736,7 @@ pub struct DeregisterTargetFromMaintenanceWindowResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterTaskFromMaintenanceWindowRequest {
     /// <p>The ID of the maintenance window the task should be removed from.</p>
     #[serde(rename = "WindowId")]
@@ -1729,6 +1761,7 @@ pub struct DeregisterTaskFromMaintenanceWindowResult {
 
 /// <p>Filter for the DescribeActivation API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeActivationsFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "FilterKey")]
@@ -1741,6 +1774,7 @@ pub struct DescribeActivationsFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeActivationsRequest {
     /// <p>A filter to view information about your activations.</p>
     #[serde(rename = "Filters")]
@@ -1770,6 +1804,7 @@ pub struct DescribeActivationsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssociationExecutionTargetsRequest {
     /// <p>The association ID that includes the execution for which you want to view details.</p>
     #[serde(rename = "AssociationId")]
@@ -1805,6 +1840,7 @@ pub struct DescribeAssociationExecutionTargetsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssociationExecutionsRequest {
     /// <p>The association ID for which you want to view execution history details.</p>
     #[serde(rename = "AssociationId")]
@@ -1837,6 +1873,7 @@ pub struct DescribeAssociationExecutionsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssociationRequest {
     /// <p>The association ID for which you want information.</p>
     #[serde(rename = "AssociationId")]
@@ -1866,6 +1903,7 @@ pub struct DescribeAssociationResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAutomationExecutionsRequest {
     /// <p>Filters used to limit the scope of executions that are requested.</p>
     #[serde(rename = "Filters")]
@@ -1895,6 +1933,7 @@ pub struct DescribeAutomationExecutionsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAutomationStepExecutionsRequest {
     /// <p>The Automation execution ID for which you want step execution descriptions.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -1931,6 +1970,7 @@ pub struct DescribeAutomationStepExecutionsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAvailablePatchesRequest {
     /// <p>Filters used to scope down the returned patches.</p>
     #[serde(rename = "Filters")]
@@ -1960,6 +2000,7 @@ pub struct DescribeAvailablePatchesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentPermissionRequest {
     /// <p>The name of the document for which you are the owner.</p>
     #[serde(rename = "Name")]
@@ -1979,6 +2020,7 @@ pub struct DescribeDocumentPermissionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentRequest {
     /// <p>The document version for which you want information. Can be a specific version or the default version.</p>
     #[serde(rename = "DocumentVersion")]
@@ -2003,6 +2045,7 @@ pub struct DescribeDocumentResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEffectiveInstanceAssociationsRequest {
     /// <p>The instance ID for which you want to view all associations.</p>
     #[serde(rename = "InstanceId")]
@@ -2031,6 +2074,7 @@ pub struct DescribeEffectiveInstanceAssociationsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEffectivePatchesForPatchBaselineRequest {
     /// <p>The ID of the patch baseline to retrieve the effective patches for.</p>
     #[serde(rename = "BaselineId")]
@@ -2059,6 +2103,7 @@ pub struct DescribeEffectivePatchesForPatchBaselineResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstanceAssociationsStatusRequest {
     /// <p>The instance IDs for which you want association status information.</p>
     #[serde(rename = "InstanceId")]
@@ -2087,6 +2132,7 @@ pub struct DescribeInstanceAssociationsStatusResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstanceInformationRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of instances. You can filter on Amazon EC2 tag. Specify tags by using a key-value mapping.</p>
     #[serde(rename = "Filters")]
@@ -2120,6 +2166,7 @@ pub struct DescribeInstanceInformationResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancePatchStatesForPatchGroupRequest {
     /// <p>Each entry in the array is a structure containing:</p> <p>Key (string between 1 and 200 characters)</p> <p> Values (array containing a single string)</p> <p> Type (string "Equal", "NotEqual", "LessThan", "GreaterThan")</p>
     #[serde(rename = "Filters")]
@@ -2152,6 +2199,7 @@ pub struct DescribeInstancePatchStatesForPatchGroupResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancePatchStatesRequest {
     /// <p>The ID of the instance whose patch state information should be retrieved.</p>
     #[serde(rename = "InstanceIds")]
@@ -2180,6 +2228,7 @@ pub struct DescribeInstancePatchStatesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancePatchesRequest {
     /// <p>An array of structures. Each entry in the array is a structure containing a Key, Value combination. Valid values for Key are <code>Classification</code> | <code>KBId</code> | <code>Severity</code> | <code>State</code>.</p>
     #[serde(rename = "Filters")]
@@ -2212,6 +2261,7 @@ pub struct DescribeInstancePatchesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInventoryDeletionsRequest {
     /// <p>Specify the delete inventory ID for which you want information. This ID was returned by the <code>DeleteInventory</code> action.</p>
     #[serde(rename = "DeletionId")]
@@ -2241,6 +2291,7 @@ pub struct DescribeInventoryDeletionsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowExecutionTaskInvocationsRequest {
     /// <p>Optional filters used to scope down the returned task invocations. The supported filter key is STATUS with the corresponding values PENDING, IN_PROGRESS, SUCCESS, FAILED, TIMED_OUT, CANCELLING, and CANCELLED.</p>
     #[serde(rename = "Filters")]
@@ -2277,6 +2328,7 @@ pub struct DescribeMaintenanceWindowExecutionTaskInvocationsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowExecutionTasksRequest {
     /// <p>Optional filters used to scope down the returned tasks. The supported filter key is STATUS with the corresponding values PENDING, IN_PROGRESS, SUCCESS, FAILED, TIMED_OUT, CANCELLING, and CANCELLED. </p>
     #[serde(rename = "Filters")]
@@ -2309,6 +2361,7 @@ pub struct DescribeMaintenanceWindowExecutionTasksResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowExecutionsRequest {
     /// <p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string is between 1 and 256 characters)</p> <p>The supported Keys are ExecutedBefore and ExecutedAfter with the value being a date/time string such as 2016-11-04T05:00:00Z.</p>
     #[serde(rename = "Filters")]
@@ -2341,6 +2394,7 @@ pub struct DescribeMaintenanceWindowExecutionsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowScheduleRequest {
     /// <p>Filters used to limit the range of results. For example, you can limit maintenance window executions to only those scheduled before or after a certain date and time.</p>
     #[serde(rename = "Filters")]
@@ -2382,6 +2436,7 @@ pub struct DescribeMaintenanceWindowScheduleResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowTargetsRequest {
     /// <p>Optional filters that can be used to narrow down the scope of the returned window targets. The supported filter keys are Type, WindowTargetId and OwnerInformation.</p>
     #[serde(rename = "Filters")]
@@ -2414,6 +2469,7 @@ pub struct DescribeMaintenanceWindowTargetsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowTasksRequest {
     /// <p>Optional filters used to narrow down the scope of the returned tasks. The supported filter keys are WindowTaskId, TaskArn, Priority, and TaskType.</p>
     #[serde(rename = "Filters")]
@@ -2446,6 +2502,7 @@ pub struct DescribeMaintenanceWindowTasksResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowsForTargetRequest {
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "MaxResults")]
@@ -2477,6 +2534,7 @@ pub struct DescribeMaintenanceWindowsForTargetResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowsRequest {
     /// <p>Optional filters used to narrow down the scope of the returned maintenance windows. Supported filter keys are <b>Name</b> and <b>Enabled</b>.</p>
     #[serde(rename = "Filters")]
@@ -2506,6 +2564,7 @@ pub struct DescribeMaintenanceWindowsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOpsItemsRequest {
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "MaxResults")]
@@ -2535,6 +2594,7 @@ pub struct DescribeOpsItemsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeParametersRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "Filters")]
@@ -2568,6 +2628,7 @@ pub struct DescribeParametersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePatchBaselinesRequest {
     /// <p>Each element in the array is a structure containing: </p> <p>Key: (string, "NAME_PREFIX" or "OWNER")</p> <p>Value: (array of strings, exactly 1 entry, between 1 and 255 characters)</p>
     #[serde(rename = "Filters")]
@@ -2597,6 +2658,7 @@ pub struct DescribePatchBaselinesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePatchGroupStateRequest {
     /// <p>The name of the patch group whose patch snapshot should be retrieved.</p>
     #[serde(rename = "PatchGroup")]
@@ -2641,6 +2703,7 @@ pub struct DescribePatchGroupStateResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePatchGroupsRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "Filters")]
@@ -2670,6 +2733,7 @@ pub struct DescribePatchGroupsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePatchPropertiesRequest {
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "MaxResults")]
@@ -2705,6 +2769,7 @@ pub struct DescribePatchPropertiesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSessionsRequest {
     /// <p>One or more filters to limit the type of sessions returned by the request.</p>
     #[serde(rename = "Filters")]
@@ -2846,6 +2911,7 @@ pub struct DocumentDescription {
 
 /// <p>Describes a filter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DocumentFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "key")]
@@ -2903,6 +2969,7 @@ pub struct DocumentIdentifier {
 
 /// <p>One or more filters. Use a filter to return a more specific list of documents.</p> <p>For keys, you can specify one or more tags that have been applied to a document. </p> <p>Other valid values include Owner, Name, PlatformTypes, and DocumentType.</p> <p>Note that only one Owner can be specified in a request. For example: <code>Key=Owner,Values=Self</code>.</p> <p>If you use Name as a key, you can use a name prefix to return a list of documents. For example, in the AWS CLI, to return a list of all documents that begin with <code>Te</code>, run the following command:</p> <p> <code>aws ssm list-documents --filters Key=Name,Values=Te</code> </p> <p>If you specify more than two keys, only documents that are identified by all the tags are returned in the results. If you specify more than two values for a key, documents that are identified by any of the values are returned in the results.</p> <p>To specify a custom key and value pair, use the format <code>Key=tag:[tagName],Values=[valueName]</code>.</p> <p>For example, if you created a Key called region and are using the AWS CLI to call the <code>list-documents</code> command: </p> <p> <code>aws ssm list-documents --filters Key=tag:region,Values=east,west Key=Owner,Values=Self</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DocumentKeyValuesFilter {
     /// <p>The name of the filter key.</p>
     #[serde(rename = "Key")]
@@ -3025,6 +3092,7 @@ pub struct FailureDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAutomationExecutionRequest {
     /// <p>The unique identifier for an existing automation execution to examine. The execution ID is returned by StartAutomationExecution when the execution of an Automation document is initiated.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -3041,6 +3109,7 @@ pub struct GetAutomationExecutionResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommandInvocationRequest {
     /// <p>(Required) The parent command ID of the invocation plugin.</p>
     #[serde(rename = "CommandId")]
@@ -3128,6 +3197,7 @@ pub struct GetCommandInvocationResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionStatusRequest {
     /// <p>The ID of the instance.</p>
     #[serde(rename = "Target")]
@@ -3148,6 +3218,7 @@ pub struct GetConnectionStatusResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDefaultPatchBaselineRequest {
     /// <p>Returns the default patch baseline for the specified operating system.</p>
     #[serde(rename = "OperatingSystem")]
@@ -3169,6 +3240,7 @@ pub struct GetDefaultPatchBaselineResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeployablePatchSnapshotForInstanceRequest {
     /// <p>The ID of the instance for which the appropriate patch snapshot should be retrieved.</p>
     #[serde(rename = "InstanceId")]
@@ -3200,6 +3272,7 @@ pub struct GetDeployablePatchSnapshotForInstanceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentRequest {
     /// <p>Returns the document in the specified format. The document format can be either JSON or YAML. JSON is the default format.</p>
     #[serde(rename = "DocumentFormat")]
@@ -3260,6 +3333,7 @@ pub struct GetDocumentResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInventoryRequest {
     /// <p>Returns counts of inventory types based on one or more expressions. For example, if you aggregate by using an expression that uses the <code>AWS:InstanceInformation.PlatformType</code> type, you can see a count of how many Windows and Linux instances exist in your inventoried fleet.</p>
     #[serde(rename = "Aggregators")]
@@ -3297,6 +3371,7 @@ pub struct GetInventoryResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInventorySchemaRequest {
     /// <p>Returns inventory schemas that support aggregation. For example, this call returns the <code>AWS:InstanceInformation</code> type, because it supports aggregation based on the <code>PlatformName</code>, <code>PlatformType</code>, and <code>PlatformVersion</code> attributes.</p>
     #[serde(rename = "Aggregator")]
@@ -3334,6 +3409,7 @@ pub struct GetInventorySchemaResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMaintenanceWindowExecutionRequest {
     /// <p>The ID of the maintenance window execution that includes the task.</p>
     #[serde(rename = "WindowExecutionId")]
@@ -3370,6 +3446,7 @@ pub struct GetMaintenanceWindowExecutionResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMaintenanceWindowExecutionTaskInvocationRequest {
     /// <p>The invocation ID to retrieve.</p>
     #[serde(rename = "InvocationId")]
@@ -3436,6 +3513,7 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMaintenanceWindowExecutionTaskRequest {
     /// <p>The ID of the specific task execution in the maintenance window task that should be retrieved.</p>
     #[serde(rename = "TaskId")]
@@ -3505,6 +3583,7 @@ pub struct GetMaintenanceWindowExecutionTaskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMaintenanceWindowRequest {
     /// <p>The ID of the maintenance window for which you want to retrieve information.</p>
     #[serde(rename = "WindowId")]
@@ -3573,6 +3652,7 @@ pub struct GetMaintenanceWindowResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMaintenanceWindowTaskRequest {
     /// <p>The maintenance window ID that includes the task to retrieve.</p>
     #[serde(rename = "WindowId")]
@@ -3645,6 +3725,7 @@ pub struct GetMaintenanceWindowTaskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOpsItemRequest {
     /// <p>The ID of the OpsItem that you want to get.</p>
     #[serde(rename = "OpsItemId")]
@@ -3661,6 +3742,7 @@ pub struct GetOpsItemResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOpsSummaryRequest {
     /// <p>Optional aggregators that return counts of OpsItems based on one or more expressions.</p>
     #[serde(rename = "Aggregators")]
@@ -3693,6 +3775,7 @@ pub struct GetOpsSummaryResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetParameterHistoryRequest {
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "MaxResults")]
@@ -3725,6 +3808,7 @@ pub struct GetParameterHistoryResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetParameterRequest {
     /// <p>The name of the parameter you want to query.</p>
     #[serde(rename = "Name")]
@@ -3745,6 +3829,7 @@ pub struct GetParameterResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetParametersByPathRequest {
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "MaxResults")]
@@ -3785,6 +3870,7 @@ pub struct GetParametersByPathResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetParametersRequest {
     /// <p>Names of the parameters for which you want to query information.</p>
     #[serde(rename = "Names")]
@@ -3809,6 +3895,7 @@ pub struct GetParametersResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPatchBaselineForPatchGroupRequest {
     /// <p>Returns he operating system rule specified for patch groups using the patch baseline.</p>
     #[serde(rename = "OperatingSystem")]
@@ -3837,6 +3924,7 @@ pub struct GetPatchBaselineForPatchGroupResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPatchBaselineRequest {
     /// <p>The ID of the patch baseline to retrieve.</p>
     #[serde(rename = "BaselineId")]
@@ -3910,6 +3998,7 @@ pub struct GetPatchBaselineResult {
 
 /// <p>The request body of the GetServiceSetting API action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceSettingRequest {
     /// <p>The ID of the service setting to get.</p>
     #[serde(rename = "SettingId")]
@@ -4120,6 +4209,7 @@ pub struct InstanceInformation {
 
 /// <p>Describes a filter for a specific list of instances. You can filter instances information by using tags. You specify tags by using a key-value mapping.</p> <p>Use this action instead of the <a>DescribeInstanceInformationRequest$InstanceInformationFilterList</a> method. The <code>InstanceInformationFilterList</code> method is a legacy method and does not support tags. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceInformationFilter {
     /// <p>The name of the filter. </p>
     #[serde(rename = "key")]
@@ -4131,6 +4221,7 @@ pub struct InstanceInformationFilter {
 
 /// <p>The filters to describe or get information about your managed instances.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceInformationStringFilter {
     /// <p>The filter key name to describe your instances. For example:</p> <p>"InstanceIds"|"AgentVersion"|"PingStatus"|"PlatformTypes"|"ActivationIds"|"IamRole"|"ResourceType"|"AssociationStatus"|"Tag Key"</p>
     #[serde(rename = "Key")]
@@ -4206,6 +4297,7 @@ pub struct InstancePatchState {
 
 /// <p>Defines a filter used in DescribeInstancePatchStatesForPatchGroup used to scope down the information returned by the API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstancePatchStateFilter {
     /// <p>The key for the filter. Supported values are FailedCount, InstalledCount, InstalledOtherCount, MissingCount and NotApplicableCount.</p>
     #[serde(rename = "Key")]
@@ -4220,6 +4312,7 @@ pub struct InstancePatchStateFilter {
 
 /// <p>Specifies the inventory type and attribute for the aggregation execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryAggregator {
     /// <p>Nested aggregators to further refine aggregation for an inventory type.</p>
     #[serde(rename = "Aggregators")]
@@ -4307,6 +4400,7 @@ pub struct InventoryDeletionSummaryItem {
 
 /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryFilter {
     /// <p>The name of the filter key.</p>
     #[serde(rename = "Key")]
@@ -4322,6 +4416,7 @@ pub struct InventoryFilter {
 
 /// <p>A user-defined set of one or more filters on which to aggregate inventory data. Groups return a count of resources that match and don't match the specified criteria.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryGroup {
     /// <p>Filters define the criteria for the group. The <code>matchingCount</code> field displays the number of resources that match the criteria. The <code>notMatchingCount</code> field displays the number of resources that don't match the criteria. </p>
     #[serde(rename = "Filters")]
@@ -4333,6 +4428,7 @@ pub struct InventoryGroup {
 
 /// <p>Information collected from managed instances based on your inventory policy document</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryItem {
     /// <p>The time the inventory information was collected.</p>
     #[serde(rename = "CaptureTime")]
@@ -4427,6 +4523,7 @@ pub struct InventoryResultItem {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LabelParameterVersionRequest {
     /// <p>One or more labels to attach to the specified parameter version.</p>
     #[serde(rename = "Labels")]
@@ -4450,6 +4547,7 @@ pub struct LabelParameterVersionResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociationVersionsRequest {
     /// <p>The association ID for which you want to view all versions.</p>
     #[serde(rename = "AssociationId")]
@@ -4478,6 +4576,7 @@ pub struct ListAssociationVersionsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociationsRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "AssociationFilterList")]
@@ -4507,6 +4606,7 @@ pub struct ListAssociationsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCommandInvocationsRequest {
     /// <p>(Optional) The invocations for a specific command ID.</p>
     #[serde(rename = "CommandId")]
@@ -4548,6 +4648,7 @@ pub struct ListCommandInvocationsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCommandsRequest {
     /// <p>(Optional) If provided, lists only the specified command.</p>
     #[serde(rename = "CommandId")]
@@ -4585,6 +4686,7 @@ pub struct ListCommandsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComplianceItemsRequest {
     /// <p>One or more compliance filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "Filters")]
@@ -4622,6 +4724,7 @@ pub struct ListComplianceItemsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComplianceSummariesRequest {
     /// <p>One or more compliance or inventory filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "Filters")]
@@ -4651,6 +4754,7 @@ pub struct ListComplianceSummariesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDocumentVersionsRequest {
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "MaxResults")]
@@ -4679,6 +4783,7 @@ pub struct ListDocumentVersionsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDocumentsRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "DocumentFilterList")]
@@ -4712,6 +4817,7 @@ pub struct ListDocumentsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInventoryEntriesRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "Filters")]
@@ -4763,6 +4869,7 @@ pub struct ListInventoryEntriesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceComplianceSummariesRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "Filters")]
@@ -4792,6 +4899,7 @@ pub struct ListResourceComplianceSummariesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceDataSyncRequest {
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "MaxResults")]
@@ -4817,6 +4925,7 @@ pub struct ListResourceDataSyncResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The resource ID for which you want to see a list of tags.</p>
     #[serde(rename = "ResourceId")]
@@ -4987,6 +5096,7 @@ pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
 
 /// <p>Filter used in the request. Supported filter keys are Name and Enabled.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MaintenanceWindowFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Key")]
@@ -5262,6 +5372,7 @@ pub struct MaintenanceWindowTaskParameterValueExpression {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDocumentPermissionRequest {
     /// <p>The AWS user accounts that should have access to the document. The account IDs can either be a group of account IDs or <i>All</i>.</p>
     #[serde(rename = "AccountIdsToAdd")]
@@ -5316,6 +5427,7 @@ pub struct NotificationConfig {
 
 /// <p>One or more aggregators for viewing counts of OpsItems using different dimensions such as <code>Source</code>, <code>CreatedTime</code>, or <code>Source and CreatedTime</code>, to name a few.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OpsAggregator {
     /// <p>Either a Range or Count aggregator for limiting an OpsItem summary.</p>
     #[serde(rename = "AggregatorType")]
@@ -5369,6 +5481,7 @@ pub struct OpsEntityItem {
 
 /// <p>A filter for viewing OpsItem summaries.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OpsFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Key")]
@@ -5459,6 +5572,7 @@ pub struct OpsItemDataValue {
 
 /// <p>Describes an OpsItem filter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OpsItemFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Key")]
@@ -5698,6 +5812,7 @@ pub struct ParameterMetadata {
 
 /// <p><p>One or more filters. Use a filter to return a more specific list of results.</p> <note> <p>The <code>Name</code> and <code>Tier</code> filter keys can&#39;t be used with the <a>GetParametersByPath</a> API action. Also, the <code>Label</code> filter key can&#39;t be used with the <a>DescribeParameters</a> API action.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParameterStringFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Key")]
@@ -5714,6 +5829,7 @@ pub struct ParameterStringFilter {
 
 /// <p>This data type is deprecated. Instead, use <a>ParameterStringFilter</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParametersFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Key")]
@@ -5866,6 +5982,7 @@ pub struct PatchGroupPatchBaselineMapping {
 
 /// <p>Defines a filter used in Patch Manager APIs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PatchOrchestratorFilter {
     /// <p>The key for the filter.</p>
     #[serde(rename = "Key")]
@@ -5963,6 +6080,7 @@ pub struct ProgressCounters {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutComplianceItemsRequest {
     /// <p>Specify the compliance type. For example, specify Association (for a State Manager association), Patch, or Custom:<code>string</code>.</p>
     #[serde(rename = "ComplianceType")]
@@ -5990,6 +6108,7 @@ pub struct PutComplianceItemsRequest {
 pub struct PutComplianceItemsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutInventoryRequest {
     /// <p>One or more instance IDs where you want to add or update inventory items.</p>
     #[serde(rename = "InstanceId")]
@@ -6009,6 +6128,7 @@ pub struct PutInventoryResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutParameterRequest {
     /// <p>A regular expression used to validate the parameter value. For example, for String types with values restricted to numbers, you can specify the following: AllowedPattern=^\d+$ </p>
     #[serde(rename = "AllowedPattern")]
@@ -6059,6 +6179,7 @@ pub struct PutParameterResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterDefaultPatchBaselineRequest {
     /// <p>The ID of the patch baseline that should be the default patch baseline.</p>
     #[serde(rename = "BaselineId")]
@@ -6075,6 +6196,7 @@ pub struct RegisterDefaultPatchBaselineResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterPatchBaselineForPatchGroupRequest {
     /// <p>The ID of the patch baseline to register the patch group with.</p>
     #[serde(rename = "BaselineId")]
@@ -6098,6 +6220,7 @@ pub struct RegisterPatchBaselineForPatchGroupResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterTargetWithMaintenanceWindowRequest {
     /// <p>User-provided idempotency token.</p>
     #[serde(rename = "ClientToken")]
@@ -6136,6 +6259,7 @@ pub struct RegisterTargetWithMaintenanceWindowResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterTaskWithMaintenanceWindowRequest {
     /// <p>User-provided idempotency token.</p>
     #[serde(rename = "ClientToken")]
@@ -6208,6 +6332,7 @@ pub struct RelatedOpsItem {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceRequest {
     /// <p><p>The ID of the resource from which you want to remove tags. For example:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. Specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceId")]
@@ -6226,6 +6351,7 @@ pub struct RemoveTagsFromResourceResult {}
 
 /// <p>The request body of the ResetServiceSetting API action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetServiceSettingRequest {
     /// <p>The ID of the service setting to reset.</p>
     #[serde(rename = "SettingId")]
@@ -6352,6 +6478,7 @@ pub struct ResourceDataSyncS3Destination {
 
 /// <p>The inventory item result attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResultAttribute {
     /// <p>Name of the inventory item type. Valid value: AWS:InstanceInformation. Default Value: AWS:InstanceInformation.</p>
     #[serde(rename = "TypeName")]
@@ -6359,6 +6486,7 @@ pub struct ResultAttribute {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResumeSessionRequest {
     /// <p>The ID of the disconnected session to resume.</p>
     #[serde(rename = "SessionId")]
@@ -6428,6 +6556,7 @@ pub struct ScheduledWindowExecution {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendAutomationSignalRequest {
     /// <p>The unique identifier for an existing Automation execution that you want to send the signal to.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -6446,6 +6575,7 @@ pub struct SendAutomationSignalRequest {
 pub struct SendAutomationSignalResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendCommandRequest {
     /// <p>Enables Systems Manager to send Run Command output to Amazon CloudWatch Logs. </p>
     #[serde(rename = "CloudWatchOutputConfig")]
@@ -6599,6 +6729,7 @@ pub struct Session {
 
 /// <p>Describes a filter for Session Manager information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SessionFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "key")]
@@ -6653,6 +6784,7 @@ pub struct SeveritySummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAssociationsOnceRequest {
     /// <p>The association IDs that you want to run immediately and only one time.</p>
     #[serde(rename = "AssociationIds")]
@@ -6664,6 +6796,7 @@ pub struct StartAssociationsOnceRequest {
 pub struct StartAssociationsOnceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAutomationExecutionRequest {
     /// <p>User-provided idempotency token. The token must be unique, is case insensitive, enforces the UUID format, and can't be reused.</p>
     #[serde(rename = "ClientToken")]
@@ -6720,6 +6853,7 @@ pub struct StartAutomationExecutionResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSessionRequest {
     /// <p>The name of the SSM document to define the parameters and plugin settings for the session. For example, <code>SSM-SessionManagerRunShell</code>. If no document name is provided, a shell to the instance is launched by default.</p>
     #[serde(rename = "DocumentName")]
@@ -6847,6 +6981,7 @@ pub struct StepExecution {
 
 /// <p>A filter to limit the amount of step execution information returned by the call.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StepExecutionFilter {
     /// <p>One or more keys to limit the results. Valid filter keys include the following: StepName, Action, StepExecutionId, StepExecutionStatus, StartTimeBefore, StartTimeAfter.</p>
     #[serde(rename = "Key")]
@@ -6857,6 +6992,7 @@ pub struct StepExecutionFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAutomationExecutionRequest {
     /// <p>The execution ID of the Automation to stop.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -6921,6 +7057,7 @@ pub struct TargetLocation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateSessionRequest {
     /// <p>The ID of the session to terminate.</p>
     #[serde(rename = "SessionId")]
@@ -6937,6 +7074,7 @@ pub struct TerminateSessionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAssociationRequest {
     /// <p>The ID of the association you want to update. </p>
     #[serde(rename = "AssociationId")]
@@ -7001,6 +7139,7 @@ pub struct UpdateAssociationResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAssociationStatusRequest {
     /// <p>The association status.</p>
     #[serde(rename = "AssociationStatus")]
@@ -7023,6 +7162,7 @@ pub struct UpdateAssociationStatusResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentDefaultVersionRequest {
     /// <p>The version of a custom document that you want to set as the default version.</p>
     #[serde(rename = "DocumentVersion")]
@@ -7042,6 +7182,7 @@ pub struct UpdateDocumentDefaultVersionResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentRequest {
     /// <p>A list of key and value pairs that describe attachments to a version of a document.</p>
     #[serde(rename = "Attachments")]
@@ -7081,6 +7222,7 @@ pub struct UpdateDocumentResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMaintenanceWindowRequest {
     /// <p>Whether targets must be registered with the maintenance window before tasks can be defined for those targets.</p>
     #[serde(rename = "AllowUnassociatedTargets")]
@@ -7181,6 +7323,7 @@ pub struct UpdateMaintenanceWindowResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMaintenanceWindowTargetRequest {
     /// <p>An optional description for the update.</p>
     #[serde(rename = "Description")]
@@ -7240,6 +7383,7 @@ pub struct UpdateMaintenanceWindowTargetResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMaintenanceWindowTaskRequest {
     /// <p>The new task description to specify.</p>
     #[serde(rename = "Description")]
@@ -7357,6 +7501,7 @@ pub struct UpdateMaintenanceWindowTaskResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateManagedInstanceRoleRequest {
     /// <p>The IAM role you want to assign or change.</p>
     #[serde(rename = "IamRole")]
@@ -7371,6 +7516,7 @@ pub struct UpdateManagedInstanceRoleRequest {
 pub struct UpdateManagedInstanceRoleResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOpsItemRequest {
     /// <p>Update the information about the OpsItem. Provide enough information so that users reading this OpsItem for the first time understand the issue. </p>
     #[serde(rename = "Description")]
@@ -7414,6 +7560,7 @@ pub struct UpdateOpsItemRequest {
 pub struct UpdateOpsItemResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePatchBaselineRequest {
     /// <p>A set of rules used to include patches in the baseline.</p>
     #[serde(rename = "ApprovalRules")]
@@ -7527,6 +7674,7 @@ pub struct UpdatePatchBaselineResult {
 
 /// <p>The request body of the UpdateServiceSetting API action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceSettingRequest {
     /// <p>The ID of the service setting to update.</p>
     #[serde(rename = "SettingId")]

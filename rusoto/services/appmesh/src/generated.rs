@@ -75,6 +75,7 @@ pub struct Backend {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMeshInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -106,6 +107,7 @@ pub struct CreateMeshOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRouteInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -142,6 +144,7 @@ pub struct CreateRouteOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualNodeInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -175,6 +178,7 @@ pub struct CreateVirtualNodeOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualRouterInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -208,6 +212,7 @@ pub struct CreateVirtualRouterOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualServiceInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -241,6 +246,7 @@ pub struct CreateVirtualServiceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMeshInput {
     /// <p>The name of the service mesh to delete.</p>
     #[serde(rename = "meshName")]
@@ -256,6 +262,7 @@ pub struct DeleteMeshOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteInput {
     /// <p>The name of the service mesh to delete the route in.</p>
     #[serde(rename = "meshName")]
@@ -277,6 +284,7 @@ pub struct DeleteRouteOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualNodeInput {
     /// <p>The name of the service mesh to delete the virtual node in.</p>
     #[serde(rename = "meshName")]
@@ -295,6 +303,7 @@ pub struct DeleteVirtualNodeOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualRouterInput {
     /// <p>The name of the service mesh to delete the virtual router in.</p>
     #[serde(rename = "meshName")]
@@ -313,6 +322,7 @@ pub struct DeleteVirtualRouterOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualServiceInput {
     /// <p>The name of the service mesh to delete the virtual service in.</p>
     #[serde(rename = "meshName")]
@@ -331,6 +341,7 @@ pub struct DeleteVirtualServiceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMeshInput {
     /// <p>The name of the service mesh to describe.</p>
     #[serde(rename = "meshName")]
@@ -346,6 +357,7 @@ pub struct DescribeMeshOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRouteInput {
     /// <p>The name of the service mesh that the route resides in.</p>
     #[serde(rename = "meshName")]
@@ -367,6 +379,7 @@ pub struct DescribeRouteOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualNodeInput {
     /// <p>The name of the service mesh that the virtual node resides in.</p>
     #[serde(rename = "meshName")]
@@ -385,6 +398,7 @@ pub struct DescribeVirtualNodeOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualRouterInput {
     /// <p>The name of the service mesh that the virtual router resides in.</p>
     #[serde(rename = "meshName")]
@@ -403,6 +417,7 @@ pub struct DescribeVirtualRouterOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualServiceInput {
     /// <p>The name of the service mesh that the virtual service resides in.</p>
     #[serde(rename = "meshName")]
@@ -640,6 +655,7 @@ pub struct HttpRouteMatch {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMeshesInput {
     /// <p>The maximum number of results returned by <code>ListMeshes</code> in paginated output.
     /// When you use this parameter, <code>ListMeshes</code> returns only <code>limit</code>
@@ -683,6 +699,7 @@ pub struct ListMeshesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoutesInput {
     /// <p>The maximum number of results returned by <code>ListRoutes</code> in paginated output.
     /// When you use this parameter, <code>ListRoutes</code> returns only <code>limit</code>
@@ -726,6 +743,7 @@ pub struct ListRoutesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>The maximum number of tag results returned by <code>ListTagsForResource</code> in
     /// paginated output. When this parameter is used, <code>ListTagsForResource</code> returns
@@ -766,6 +784,7 @@ pub struct ListTagsForResourceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualNodesInput {
     /// <p>The maximum number of results returned by <code>ListVirtualNodes</code> in paginated
     /// output. When you use this parameter, <code>ListVirtualNodes</code> returns only
@@ -806,6 +825,7 @@ pub struct ListVirtualNodesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualRoutersInput {
     /// <p>The maximum number of results returned by <code>ListVirtualRouters</code> in paginated
     /// output. When you use this parameter, <code>ListVirtualRouters</code> returns only
@@ -846,6 +866,7 @@ pub struct ListVirtualRoutersOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualServicesInput {
     /// <p>The maximum number of results returned by <code>ListVirtualServices</code> in paginated
     /// output. When you use this parameter, <code>ListVirtualServices</code> returns only
@@ -1098,6 +1119,7 @@ pub struct TagRef {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource to add tags to.</p>
     #[serde(rename = "resourceArn")]
@@ -1132,6 +1154,7 @@ pub struct TcpRouteAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource to delete tags from.</p>
     #[serde(rename = "resourceArn")]
@@ -1146,6 +1169,7 @@ pub struct UntagResourceInput {
 pub struct UntagResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMeshInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -1169,6 +1193,7 @@ pub struct UpdateMeshOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRouteInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -1198,6 +1223,7 @@ pub struct UpdateRouteOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualNodeInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -1224,6 +1250,7 @@ pub struct UpdateVirtualNodeOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualRouterInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -1250,6 +1277,7 @@ pub struct UpdateVirtualRouterOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualServiceInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>

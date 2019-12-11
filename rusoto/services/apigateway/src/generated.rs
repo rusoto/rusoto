@@ -310,6 +310,7 @@ pub struct ClientCertificates {
 
 /// <p>Request to create an <a>ApiKey</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApiKeyRequest {
     /// <p>An AWS Marketplace customer identifier , when integrating with the AWS SaaS Marketplace.</p>
     #[serde(rename = "customerId")]
@@ -347,6 +348,7 @@ pub struct CreateApiKeyRequest {
 
 /// <p>Request to add a new <a>Authorizer</a> to an existing <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAuthorizerRequest {
     /// <p>Optional customer-defined field, used in OpenAPI imports and exports without functional impact.</p>
     #[serde(rename = "authType")]
@@ -389,6 +391,7 @@ pub struct CreateAuthorizerRequest {
 
 /// <p>Requests API Gateway to create a new <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBasePathMappingRequest {
     /// <p>The base path name that callers of the API must provide as part of the URL after the domain name. This value must be unique for all of the mappings across a single API. Specify '(none)' if you do not want callers to specify a base path name after the domain name.</p>
     #[serde(rename = "basePath")]
@@ -408,6 +411,7 @@ pub struct CreateBasePathMappingRequest {
 
 /// <p>Requests API Gateway to create a <a>Deployment</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
     /// <p>Enables a cache cluster for the <a>Stage</a> resource specified in the input.</p>
     #[serde(rename = "cacheClusterEnabled")]
@@ -448,6 +452,7 @@ pub struct CreateDeploymentRequest {
 
 /// <p>Creates a new documentation part of a given API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDocumentationPartRequest {
     /// <p>[Required] The location of the targeted API entity of the to-be-created documentation part.</p>
     #[serde(rename = "location")]
@@ -462,6 +467,7 @@ pub struct CreateDocumentationPartRequest {
 
 /// <p>Creates a new documentation version of a given API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDocumentationVersionRequest {
     /// <p>A description about the new documentation snapshot.</p>
     #[serde(rename = "description")]
@@ -481,6 +487,7 @@ pub struct CreateDocumentationVersionRequest {
 
 /// <p>A request to create a new domain name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainNameRequest {
     /// <p>The reference to an AWS-managed certificate that will be used by edge-optimized endpoint for this domain name. AWS Certificate Manager is the only supported source.</p>
     #[serde(rename = "certificateArn")]
@@ -529,6 +536,7 @@ pub struct CreateDomainNameRequest {
 
 /// <p>Request to add a new <a>Model</a> to an existing <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelRequest {
     /// <p>[Required] The content-type for the model.</p>
     #[serde(rename = "contentType")]
@@ -551,6 +559,7 @@ pub struct CreateModelRequest {
 
 /// <p>Creates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRequestValidatorRequest {
     /// <p>The name of the to-be-created <a>RequestValidator</a>.</p>
     #[serde(rename = "name")]
@@ -571,6 +580,7 @@ pub struct CreateRequestValidatorRequest {
 
 /// <p>Requests API Gateway to create a <a>Resource</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceRequest {
     /// <p>[Required] The parent resource's identifier.</p>
     #[serde(rename = "parentId")]
@@ -585,6 +595,7 @@ pub struct CreateResourceRequest {
 
 /// <p>The POST Request to add a new <a>RestApi</a> resource to your collection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRestApiRequest {
     /// <p>The source of the API key for metering requests according to a usage plan. Valid values are: <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul> </p>
     #[serde(rename = "apiKeySource")]
@@ -629,6 +640,7 @@ pub struct CreateRestApiRequest {
 
 /// <p>Requests API Gateway to create a <a>Stage</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStageRequest {
     /// <p>Whether cache clustering is enabled for the stage.</p>
     #[serde(rename = "cacheClusterEnabled")]
@@ -675,6 +687,7 @@ pub struct CreateStageRequest {
 
 /// <p>The POST request to create a usage plan key for adding an existing API key to a usage plan.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUsagePlanKeyRequest {
     /// <p>[Required] The identifier of a <a>UsagePlanKey</a> resource for a plan customer.</p>
     #[serde(rename = "keyId")]
@@ -689,6 +702,7 @@ pub struct CreateUsagePlanKeyRequest {
 
 /// <p>The POST request to create a usage plan with the name, description, throttle limits and quota limits, as well as the associated API stages, specified in the payload.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUsagePlanRequest {
     /// <p>The associated API stages of the usage plan.</p>
     #[serde(rename = "apiStages")]
@@ -717,6 +731,7 @@ pub struct CreateUsagePlanRequest {
 
 /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpcLinkRequest {
     /// <p>The description of the VPC link.</p>
     #[serde(rename = "description")]
@@ -736,6 +751,7 @@ pub struct CreateVpcLinkRequest {
 
 /// <p>A request to delete the <a>ApiKey</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApiKeyRequest {
     /// <p>[Required] The identifier of the <a>ApiKey</a> resource to be deleted.</p>
     #[serde(rename = "apiKey")]
@@ -744,6 +760,7 @@ pub struct DeleteApiKeyRequest {
 
 /// <p>Request to delete an existing <a>Authorizer</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAuthorizerRequest {
     /// <p>[Required] The identifier of the <a>Authorizer</a> resource.</p>
     #[serde(rename = "authorizerId")]
@@ -755,6 +772,7 @@ pub struct DeleteAuthorizerRequest {
 
 /// <p>A request to delete the <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBasePathMappingRequest {
     /// <p>[Required] The base path name of the <a>BasePathMapping</a> resource to delete.</p> <p>To specify an empty base path, set this parameter to <code>'(none)'</code>.</p>
     #[serde(rename = "basePath")]
@@ -766,6 +784,7 @@ pub struct DeleteBasePathMappingRequest {
 
 /// <p>A request to delete the <a>ClientCertificate</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClientCertificateRequest {
     /// <p>[Required] The identifier of the <a>ClientCertificate</a> resource to be deleted.</p>
     #[serde(rename = "clientCertificateId")]
@@ -774,6 +793,7 @@ pub struct DeleteClientCertificateRequest {
 
 /// <p>Requests API Gateway to delete a <a>Deployment</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentRequest {
     /// <p>[Required] The identifier of the <a>Deployment</a> resource to delete.</p>
     #[serde(rename = "deploymentId")]
@@ -785,6 +805,7 @@ pub struct DeleteDeploymentRequest {
 
 /// <p>Deletes an existing documentation part of an API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentationPartRequest {
     /// <p>[Required] The identifier of the to-be-deleted documentation part.</p>
     #[serde(rename = "documentationPartId")]
@@ -796,6 +817,7 @@ pub struct DeleteDocumentationPartRequest {
 
 /// <p>Deletes an existing documentation version of an API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentationVersionRequest {
     /// <p>[Required] The version identifier of a to-be-deleted documentation snapshot.</p>
     #[serde(rename = "documentationVersion")]
@@ -807,6 +829,7 @@ pub struct DeleteDocumentationVersionRequest {
 
 /// <p>A request to delete the <a>DomainName</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainNameRequest {
     /// <p>[Required] The name of the <a>DomainName</a> resource to be deleted.</p>
     #[serde(rename = "domainName")]
@@ -815,6 +838,7 @@ pub struct DeleteDomainNameRequest {
 
 /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGatewayResponseRequest {
     /// <p>[Required] <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p></p>
     #[serde(rename = "responseType")]
@@ -826,6 +850,7 @@ pub struct DeleteGatewayResponseRequest {
 
 /// <p>Represents a delete integration request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntegrationRequest {
     /// <p>[Required] Specifies a delete integration request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
@@ -840,6 +865,7 @@ pub struct DeleteIntegrationRequest {
 
 /// <p>Represents a delete integration response request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntegrationResponseRequest {
     /// <p>[Required] Specifies a delete integration response request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
@@ -857,6 +883,7 @@ pub struct DeleteIntegrationResponseRequest {
 
 /// <p>Request to delete an existing <a>Method</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMethodRequest {
     /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
     #[serde(rename = "httpMethod")]
@@ -871,6 +898,7 @@ pub struct DeleteMethodRequest {
 
 /// <p>A request to delete an existing <a>MethodResponse</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMethodResponseRequest {
     /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
     #[serde(rename = "httpMethod")]
@@ -888,6 +916,7 @@ pub struct DeleteMethodResponseRequest {
 
 /// <p>Request to delete an existing model in an existing <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelRequest {
     /// <p>[Required] The name of the model to delete.</p>
     #[serde(rename = "modelName")]
@@ -899,6 +928,7 @@ pub struct DeleteModelRequest {
 
 /// <p>Deletes a specified <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRequestValidatorRequest {
     /// <p>[Required] The identifier of the <a>RequestValidator</a> to be deleted.</p>
     #[serde(rename = "requestValidatorId")]
@@ -910,6 +940,7 @@ pub struct DeleteRequestValidatorRequest {
 
 /// <p>Request to delete a <a>Resource</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceRequest {
     /// <p>[Required] The identifier of the <a>Resource</a> resource.</p>
     #[serde(rename = "resourceId")]
@@ -921,6 +952,7 @@ pub struct DeleteResourceRequest {
 
 /// <p>Request to delete the specified API from your collection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRestApiRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
@@ -929,6 +961,7 @@ pub struct DeleteRestApiRequest {
 
 /// <p>Requests API Gateway to delete a <a>Stage</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStageRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
@@ -940,6 +973,7 @@ pub struct DeleteStageRequest {
 
 /// <p>The DELETE request to delete a usage plan key and remove the underlying API key from the associated usage plan.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUsagePlanKeyRequest {
     /// <p>[Required] The Id of the <a>UsagePlanKey</a> resource to be deleted.</p>
     #[serde(rename = "keyId")]
@@ -951,6 +985,7 @@ pub struct DeleteUsagePlanKeyRequest {
 
 /// <p>The DELETE request to delete a usage plan of a given plan Id.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUsagePlanRequest {
     /// <p>[Required] The Id of the to-be-deleted usage plan.</p>
     #[serde(rename = "usagePlanId")]
@@ -959,6 +994,7 @@ pub struct DeleteUsagePlanRequest {
 
 /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpcLinkRequest {
     /// <p>[Required] The identifier of the <a>VpcLink</a>. It is used in an <a>Integration</a> to reference this <a>VpcLink</a>.</p>
     #[serde(rename = "vpcLinkId")]
@@ -991,6 +1027,7 @@ pub struct Deployment {
 
 /// <p>The input configuration for a canary deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeploymentCanarySettings {
     /// <p>The percentage (0.0-100.0) of traffic routed to the canary deployment.</p>
     #[serde(rename = "percentTraffic")]
@@ -1220,6 +1257,7 @@ pub struct ExportResponse {
 
 /// <p>Request to flush authorizer cache entries on a specified stage.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlushStageAuthorizersCacheRequest {
     /// <p>The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
@@ -1231,6 +1269,7 @@ pub struct FlushStageAuthorizersCacheRequest {
 
 /// <p>Requests API Gateway to flush a stage's cache.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlushStageCacheRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
@@ -1281,6 +1320,7 @@ pub struct GatewayResponses {
 
 /// <p>A request to generate a <a>ClientCertificate</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateClientCertificateRequest {
     /// <p>The description of the <a>ClientCertificate</a>.</p>
     #[serde(rename = "description")]
@@ -1294,10 +1334,12 @@ pub struct GenerateClientCertificateRequest {
 
 /// <p>Requests API Gateway to get information about the current <a>Account</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountRequest {}
 
 /// <p>A request to get information about the current <a>ApiKey</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiKeyRequest {
     /// <p>[Required] The identifier of the <a>ApiKey</a> resource.</p>
     #[serde(rename = "apiKey")]
@@ -1310,6 +1352,7 @@ pub struct GetApiKeyRequest {
 
 /// <p>A request to get information about the current <a>ApiKeys</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiKeysRequest {
     /// <p>The identifier of a customer in AWS Marketplace or an external system, such as a developer portal.</p>
     #[serde(rename = "customerId")]
@@ -1335,6 +1378,7 @@ pub struct GetApiKeysRequest {
 
 /// <p>Request to describe an existing <a>Authorizer</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizerRequest {
     /// <p>[Required] The identifier of the <a>Authorizer</a> resource.</p>
     #[serde(rename = "authorizerId")]
@@ -1346,6 +1390,7 @@ pub struct GetAuthorizerRequest {
 
 /// <p>Request to describe an existing <a>Authorizers</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizersRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
@@ -1362,6 +1407,7 @@ pub struct GetAuthorizersRequest {
 
 /// <p>Request to describe a <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBasePathMappingRequest {
     /// <p>[Required] The base path name that callers of the API must provide as part of the URL after the domain name. This value must be unique for all of the mappings across a single API. Specify '(none)' if you do not want callers to specify any base path name after the domain name.</p>
     #[serde(rename = "basePath")]
@@ -1373,6 +1419,7 @@ pub struct GetBasePathMappingRequest {
 
 /// <p>A request to get information about a collection of <a>BasePathMapping</a> resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBasePathMappingsRequest {
     /// <p>[Required] The domain name of a <a>BasePathMapping</a> resource.</p>
     #[serde(rename = "domainName")]
@@ -1389,6 +1436,7 @@ pub struct GetBasePathMappingsRequest {
 
 /// <p>A request to get information about the current <a>ClientCertificate</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClientCertificateRequest {
     /// <p>[Required] The identifier of the <a>ClientCertificate</a> resource to be described.</p>
     #[serde(rename = "clientCertificateId")]
@@ -1397,6 +1445,7 @@ pub struct GetClientCertificateRequest {
 
 /// <p>A request to get information about a collection of <a>ClientCertificate</a> resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClientCertificatesRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
@@ -1410,6 +1459,7 @@ pub struct GetClientCertificatesRequest {
 
 /// <p>Requests API Gateway to get information about a <a>Deployment</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentRequest {
     /// <p>[Required] The identifier of the <a>Deployment</a> resource to get information about.</p>
     #[serde(rename = "deploymentId")]
@@ -1425,6 +1475,7 @@ pub struct GetDeploymentRequest {
 
 /// <p>Requests API Gateway to get information about a <a>Deployments</a> collection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentsRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
@@ -1441,6 +1492,7 @@ pub struct GetDeploymentsRequest {
 
 /// <p>Gets a specified documentation part of a given API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentationPartRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "documentationPartId")]
@@ -1452,6 +1504,7 @@ pub struct GetDocumentationPartRequest {
 
 /// <p>Gets the documentation parts of an API. The result may be filtered by the type, name, or path of API entities (targets).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentationPartsRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
@@ -1484,6 +1537,7 @@ pub struct GetDocumentationPartsRequest {
 
 /// <p>Gets a documentation snapshot of an API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentationVersionRequest {
     /// <p>[Required] The version identifier of the to-be-retrieved documentation snapshot.</p>
     #[serde(rename = "documentationVersion")]
@@ -1495,6 +1549,7 @@ pub struct GetDocumentationVersionRequest {
 
 /// <p>Gets the documentation versions of an API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentationVersionsRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
@@ -1511,6 +1566,7 @@ pub struct GetDocumentationVersionsRequest {
 
 /// <p>Request to get the name of a <a>DomainName</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainNameRequest {
     /// <p>[Required] The name of the <a>DomainName</a> resource.</p>
     #[serde(rename = "domainName")]
@@ -1519,6 +1575,7 @@ pub struct GetDomainNameRequest {
 
 /// <p>Request to describe a collection of <a>DomainName</a> resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainNamesRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
@@ -1532,6 +1589,7 @@ pub struct GetDomainNamesRequest {
 
 /// <p>Request a new export of a <a>RestApi</a> for a particular <a>Stage</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExportRequest {
     /// <p>The content-type of the export, for example <code>application/json</code>. Currently <code>application/json</code> and <code>application/yaml</code> are supported for <code>exportType</code> of<code>oas30</code> and <code>swagger</code>. This should be specified in the <code>Accept</code> header for direct API requests.</p>
     #[serde(rename = "accepts")]
@@ -1554,6 +1612,7 @@ pub struct GetExportRequest {
 
 /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGatewayResponseRequest {
     /// <p>[Required] <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p></p>
     #[serde(rename = "responseType")]
@@ -1565,6 +1624,7 @@ pub struct GetGatewayResponseRequest {
 
 /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGatewayResponsesRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500. The <a>GatewayResponses</a> collection does not support pagination and the limit does not apply here.</p>
     #[serde(rename = "limit")]
@@ -1581,6 +1641,7 @@ pub struct GetGatewayResponsesRequest {
 
 /// <p>Represents a request to get the integration configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationRequest {
     /// <p>[Required] Specifies a get integration request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
@@ -1595,6 +1656,7 @@ pub struct GetIntegrationRequest {
 
 /// <p>Represents a get integration response request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationResponseRequest {
     /// <p>[Required] Specifies a get integration response request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
@@ -1612,6 +1674,7 @@ pub struct GetIntegrationResponseRequest {
 
 /// <p>Request to describe an existing <a>Method</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMethodRequest {
     /// <p>[Required] Specifies the method request's HTTP method type.</p>
     #[serde(rename = "httpMethod")]
@@ -1626,6 +1689,7 @@ pub struct GetMethodRequest {
 
 /// <p>Request to describe a <a>MethodResponse</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMethodResponseRequest {
     /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
     #[serde(rename = "httpMethod")]
@@ -1643,6 +1707,7 @@ pub struct GetMethodResponseRequest {
 
 /// <p>Request to list information about a model in an existing <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelRequest {
     /// <p>A query parameter of a Boolean value to resolve (<code>true</code>) all external model references and returns a flattened model schema or not (<code>false</code>) The default is <code>false</code>.</p>
     #[serde(rename = "flatten")]
@@ -1658,6 +1723,7 @@ pub struct GetModelRequest {
 
 /// <p>Request to generate a sample mapping template used to transform the payload.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelTemplateRequest {
     /// <p>[Required] The name of the model for which to generate a template.</p>
     #[serde(rename = "modelName")]
@@ -1669,6 +1735,7 @@ pub struct GetModelTemplateRequest {
 
 /// <p>Request to list existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelsRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
@@ -1685,6 +1752,7 @@ pub struct GetModelsRequest {
 
 /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRequestValidatorRequest {
     /// <p>[Required] The identifier of the <a>RequestValidator</a> to be retrieved.</p>
     #[serde(rename = "requestValidatorId")]
@@ -1696,6 +1764,7 @@ pub struct GetRequestValidatorRequest {
 
 /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRequestValidatorsRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
@@ -1712,6 +1781,7 @@ pub struct GetRequestValidatorsRequest {
 
 /// <p>Request to list information about a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceRequest {
     /// <p>A query parameter to retrieve the specified resources embedded in the returned <a>Resource</a> representation in the response. This <code>embed</code> parameter value is a list of comma-separated strings. Currently, the request supports only retrieval of the embedded <a>Method</a> resources this way. The query parameter value must be a single-valued list and contain the <code>"methods"</code> string. For example, <code>GET /restapis/{restapi_id}/resources/{resource_id}?embed=methods</code>.</p>
     #[serde(rename = "embed")]
@@ -1727,6 +1797,7 @@ pub struct GetResourceRequest {
 
 /// <p>Request to list information about a collection of resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcesRequest {
     /// <p>A query parameter used to retrieve the specified resources embedded in the returned <a>Resources</a> resource in the response. This <code>embed</code> parameter value is a list of comma-separated strings. Currently, the request supports only retrieval of the embedded <a>Method</a> resources this way. The query parameter value must be a single-valued list and contain the <code>"methods"</code> string. For example, <code>GET /restapis/{restapi_id}/resources?embed=methods</code>.</p>
     #[serde(rename = "embed")]
@@ -1747,6 +1818,7 @@ pub struct GetResourcesRequest {
 
 /// <p>The GET request to list an existing <a>RestApi</a> defined for your collection. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRestApiRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
@@ -1755,6 +1827,7 @@ pub struct GetRestApiRequest {
 
 /// <p>The GET request to list existing <a>RestApis</a> defined for your collection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRestApisRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
@@ -1768,6 +1841,7 @@ pub struct GetRestApisRequest {
 
 /// <p>Request a new generated client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSdkRequest {
     /// <p>A string-to-string key-value map of query parameters <code>sdkType</code>-dependent properties of the SDK. For <code>sdkType</code> of <code>objectivec</code> or <code>swift</code>, a parameter named <code>classPrefix</code> is required. For <code>sdkType</code> of <code>android</code>, parameters named <code>groupId</code>, <code>artifactId</code>, <code>artifactVersion</code>, and <code>invokerPackage</code> are required. For <code>sdkType</code> of <code>java</code>, parameters named <code>serviceName</code> and <code>javaPackageName</code> are required. </p>
     #[serde(rename = "parameters")]
@@ -1786,6 +1860,7 @@ pub struct GetSdkRequest {
 
 /// <p>Get an <a>SdkType</a> instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSdkTypeRequest {
     /// <p>[Required] The identifier of the queried <a>SdkType</a> instance.</p>
     #[serde(rename = "id")]
@@ -1794,6 +1869,7 @@ pub struct GetSdkTypeRequest {
 
 /// <p>Get the <a>SdkTypes</a> collection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSdkTypesRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
@@ -1807,6 +1883,7 @@ pub struct GetSdkTypesRequest {
 
 /// <p>Requests API Gateway to get information about a <a>Stage</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStageRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
@@ -1818,6 +1895,7 @@ pub struct GetStageRequest {
 
 /// <p>Requests API Gateway to get information about one or more <a>Stage</a> resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStagesRequest {
     /// <p>The stages' deployment identifiers.</p>
     #[serde(rename = "deploymentId")]
@@ -1830,6 +1908,7 @@ pub struct GetStagesRequest {
 
 /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsRequest {
     /// <p>(Not currently supported) The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
@@ -1846,6 +1925,7 @@ pub struct GetTagsRequest {
 
 /// <p>The GET request to get a usage plan key of a given key identifier.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsagePlanKeyRequest {
     /// <p>[Required] The key Id of the to-be-retrieved <a>UsagePlanKey</a> resource representing a plan customer.</p>
     #[serde(rename = "keyId")]
@@ -1857,6 +1937,7 @@ pub struct GetUsagePlanKeyRequest {
 
 /// <p>The GET request to get all the usage plan keys representing the API keys added to a specified usage plan.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsagePlanKeysRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
@@ -1877,6 +1958,7 @@ pub struct GetUsagePlanKeysRequest {
 
 /// <p>The GET request to get a usage plan of a given plan identifier.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsagePlanRequest {
     /// <p>[Required] The identifier of the <a>UsagePlan</a> resource to be retrieved.</p>
     #[serde(rename = "usagePlanId")]
@@ -1885,6 +1967,7 @@ pub struct GetUsagePlanRequest {
 
 /// <p>The GET request to get all the usage plans of the caller's account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsagePlansRequest {
     /// <p>The identifier of the API key associated with the usage plans.</p>
     #[serde(rename = "keyId")]
@@ -1902,6 +1985,7 @@ pub struct GetUsagePlansRequest {
 
 /// <p>The GET request to get the usage data of a usage plan in a specified time interval.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsageRequest {
     /// <p>[Required] The ending date (e.g., 2016-12-31) of the usage data.</p>
     #[serde(rename = "endDate")]
@@ -1928,6 +2012,7 @@ pub struct GetUsageRequest {
 
 /// <p>Gets a specified VPC link under the caller's account in a region.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVpcLinkRequest {
     /// <p>[Required] The identifier of the <a>VpcLink</a>. It is used in an <a>Integration</a> to reference this <a>VpcLink</a>.</p>
     #[serde(rename = "vpcLinkId")]
@@ -1936,6 +2021,7 @@ pub struct GetVpcLinkRequest {
 
 /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVpcLinksRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
@@ -1949,6 +2035,7 @@ pub struct GetVpcLinksRequest {
 
 /// <p>The POST request to import API keys from an external source, such as a CSV-formatted file.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportApiKeysRequest {
     /// <p>The payload of the POST request to import API keys. For the payload format, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-key-file-format.html">API Key File Format</a>.</p>
     #[serde(rename = "body")]
@@ -1969,6 +2056,7 @@ pub struct ImportApiKeysRequest {
 
 /// <p>Import documentation parts from an external (e.g., OpenAPI) definition file. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportDocumentationPartsRequest {
     /// <p>[Required] Raw byte array representing the to-be-imported documentation parts. To import from an OpenAPI file, this is a JSON object.</p>
     #[serde(rename = "body")]
@@ -1993,6 +2081,7 @@ pub struct ImportDocumentationPartsRequest {
 
 /// <p>A POST request to import an API to API Gateway using an input of an API definition file.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportRestApiRequest {
     /// <p>[Required] The POST request body containing external API definitions. Currently, only OpenAPI definition JSON/YAML files are supported. The maximum size of the API definition file is 2MB.</p>
     #[serde(rename = "body")]
@@ -2269,6 +2358,7 @@ pub struct Models {
 
 /// <p>A single patch operation to apply to the specified resource. Please refer to http://tools.ietf.org/html/rfc6902#section-4 for an explanation of how each operation is used.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PatchOperation {
     /// <p>The <code>copy</code> update operation's source as identified by a <code>JSON-Pointer</code> value referencing the location within the targeted resource to copy the value from. For example, to promote a canary deployment, you copy the canary deployment ID to the affiliated deployment ID by calling a PATCH request on a <a>Stage</a> resource with <code>"op":"copy"</code>, <code>"from":"/canarySettings/deploymentId"</code> and <code>"path":"/deploymentId"</code>.</p>
     #[serde(rename = "from")]
@@ -2290,6 +2380,7 @@ pub struct PatchOperation {
 
 /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutGatewayResponseRequest {
     /// <p><p>Response parameters (paths, query strings and headers) of the <a>GatewayResponse</a> as a string-to-string map of key-value pairs.</p></p>
     #[serde(rename = "responseParameters")]
@@ -2313,6 +2404,7 @@ pub struct PutGatewayResponseRequest {
 
 /// <p>Sets up a method's integration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutIntegrationRequest {
     /// <p>An API-specific tag group of related cached parameters.</p>
     #[serde(rename = "cacheKeyParameters")]
@@ -2378,6 +2470,7 @@ pub struct PutIntegrationRequest {
 
 /// <p>Represents a put integration response request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutIntegrationResponseRequest {
     /// <p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>
     #[serde(rename = "contentHandling")]
@@ -2411,6 +2504,7 @@ pub struct PutIntegrationResponseRequest {
 
 /// <p>Request to add a method to an existing <a>Resource</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMethodRequest {
     /// <p>Specifies whether the method required a valid <a>ApiKey</a>.</p>
     #[serde(rename = "apiKeyRequired")]
@@ -2456,6 +2550,7 @@ pub struct PutMethodRequest {
 
 /// <p>Request to add a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMethodResponseRequest {
     /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
     #[serde(rename = "httpMethod")]
@@ -2481,6 +2576,7 @@ pub struct PutMethodResponseRequest {
 
 /// <p>A PUT request to update an existing API, with external API definitions specified as the request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRestApiRequest {
     /// <p>[Required] The PUT request body containing external API definitions. Currently, only OpenAPI definition JSON/YAML files are supported. The maximum size of the API definition file is 2MB.</p>
     #[serde(rename = "body")]
@@ -2813,6 +2909,7 @@ pub struct Stage {
 
 /// <p>A reference to a unique stage identified in the format <code>{restApiId}/{stage}</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StageKey {
     /// <p>The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
@@ -2836,6 +2933,7 @@ pub struct Stages {
 
 /// <p>Adds or updates a tag on a given resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>[Required] The ARN of a resource that can be tagged. The resource ARN must be URL-encoded.</p>
     #[serde(rename = "resourceArn")]
@@ -2867,6 +2965,7 @@ pub struct Template {
 
 /// <p>Make a request to simulate the execution of an <a>Authorizer</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestInvokeAuthorizerRequest {
     /// <p>[Optional] A key-value map of additional context variables.</p>
     #[serde(rename = "additionalContext")]
@@ -2935,6 +3034,7 @@ pub struct TestInvokeAuthorizerResponse {
 
 /// <p>Make a request to simulate the execution of a <a>Method</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestInvokeMethodRequest {
     /// <p>The simulated request body of an incoming invocation request.</p>
     #[serde(rename = "body")]
@@ -3016,6 +3116,7 @@ pub struct ThrottleSettings {
 
 /// <p>Removes a tag from a given resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>[Required] The ARN of a resource that can be tagged. The resource ARN must be URL-encoded.</p>
     #[serde(rename = "resourceArn")]
@@ -3027,6 +3128,7 @@ pub struct UntagResourceRequest {
 
 /// <p>Requests API Gateway to change information about the current <a>Account</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]
@@ -3036,6 +3138,7 @@ pub struct UpdateAccountRequest {
 
 /// <p>A request to change information about an <a>ApiKey</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApiKeyRequest {
     /// <p>[Required] The identifier of the <a>ApiKey</a> resource to be updated.</p>
     #[serde(rename = "apiKey")]
@@ -3048,6 +3151,7 @@ pub struct UpdateApiKeyRequest {
 
 /// <p>Request to update an existing <a>Authorizer</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuthorizerRequest {
     /// <p>[Required] The identifier of the <a>Authorizer</a> resource.</p>
     #[serde(rename = "authorizerId")]
@@ -3063,6 +3167,7 @@ pub struct UpdateAuthorizerRequest {
 
 /// <p>A request to change information about the <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBasePathMappingRequest {
     /// <p>[Required] The base path of the <a>BasePathMapping</a> resource to change.</p> <p>To specify an empty base path, set this parameter to <code>'(none)'</code>.</p>
     #[serde(rename = "basePath")]
@@ -3078,6 +3183,7 @@ pub struct UpdateBasePathMappingRequest {
 
 /// <p>A request to change information about an <a>ClientCertificate</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClientCertificateRequest {
     /// <p>[Required] The identifier of the <a>ClientCertificate</a> resource to be updated.</p>
     #[serde(rename = "clientCertificateId")]
@@ -3090,6 +3196,7 @@ pub struct UpdateClientCertificateRequest {
 
 /// <p>Requests API Gateway to change information about a <a>Deployment</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeploymentRequest {
     /// <p>The replacement identifier for the <a>Deployment</a> resource to change information about.</p>
     #[serde(rename = "deploymentId")]
@@ -3105,6 +3212,7 @@ pub struct UpdateDeploymentRequest {
 
 /// <p>Updates an existing documentation part of a given API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentationPartRequest {
     /// <p>[Required] The identifier of the to-be-updated documentation part.</p>
     #[serde(rename = "documentationPartId")]
@@ -3120,6 +3228,7 @@ pub struct UpdateDocumentationPartRequest {
 
 /// <p>Updates an existing documentation version of an API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentationVersionRequest {
     /// <p>[Required] The version identifier of the to-be-updated documentation version.</p>
     #[serde(rename = "documentationVersion")]
@@ -3135,6 +3244,7 @@ pub struct UpdateDocumentationVersionRequest {
 
 /// <p>A request to change information about the <a>DomainName</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainNameRequest {
     /// <p>[Required] The name of the <a>DomainName</a> resource to be changed.</p>
     #[serde(rename = "domainName")]
@@ -3147,6 +3257,7 @@ pub struct UpdateDomainNameRequest {
 
 /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayResponseRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]
@@ -3162,6 +3273,7 @@ pub struct UpdateGatewayResponseRequest {
 
 /// <p>Represents an update integration request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIntegrationRequest {
     /// <p>[Required] Represents an update integration request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
@@ -3180,6 +3292,7 @@ pub struct UpdateIntegrationRequest {
 
 /// <p>Represents an update integration response request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIntegrationResponseRequest {
     /// <p>[Required] Specifies an update integration response request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
@@ -3201,6 +3314,7 @@ pub struct UpdateIntegrationResponseRequest {
 
 /// <p>Request to update an existing <a>Method</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMethodRequest {
     /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
     #[serde(rename = "httpMethod")]
@@ -3219,6 +3333,7 @@ pub struct UpdateMethodRequest {
 
 /// <p>A request to update an existing <a>MethodResponse</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMethodResponseRequest {
     /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
     #[serde(rename = "httpMethod")]
@@ -3240,6 +3355,7 @@ pub struct UpdateMethodResponseRequest {
 
 /// <p>Request to update an existing model in an existing <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateModelRequest {
     /// <p>[Required] The name of the model to update.</p>
     #[serde(rename = "modelName")]
@@ -3255,6 +3371,7 @@ pub struct UpdateModelRequest {
 
 /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRequestValidatorRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]
@@ -3270,6 +3387,7 @@ pub struct UpdateRequestValidatorRequest {
 
 /// <p>Request to change information about a <a>Resource</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]
@@ -3285,6 +3403,7 @@ pub struct UpdateResourceRequest {
 
 /// <p>Request to update an existing <a>RestApi</a> resource in your collection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRestApiRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]
@@ -3297,6 +3416,7 @@ pub struct UpdateRestApiRequest {
 
 /// <p>Requests API Gateway to change information about a <a>Stage</a> resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStageRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]
@@ -3312,6 +3432,7 @@ pub struct UpdateStageRequest {
 
 /// <p>The PATCH request to update a usage plan of a given plan Id.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUsagePlanRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]
@@ -3324,6 +3445,7 @@ pub struct UpdateUsagePlanRequest {
 
 /// <p>The PATCH request to grant a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUsageRequest {
     /// <p>[Required] The identifier of the API key associated with the usage plan in which a temporary extension is granted to the remaining quota.</p>
     #[serde(rename = "keyId")]
@@ -3339,6 +3461,7 @@ pub struct UpdateUsageRequest {
 
 /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVpcLinkRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]

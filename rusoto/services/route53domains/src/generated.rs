@@ -51,6 +51,7 @@ pub struct BillingRecord {
 
 /// <p>The CheckDomainAvailability request contains the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckDomainAvailabilityRequest {
     /// <p>The name of the domain that you want to get availability for.</p> <p>Constraints: The domain name can contain only the letters a through z, the numbers 0 through 9, and hyphen (-). Internationalized Domain Names are not supported.</p>
     #[serde(rename = "DomainName")]
@@ -72,6 +73,7 @@ pub struct CheckDomainAvailabilityResponse {
 
 /// <p>The CheckDomainTransferability request contains the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckDomainTransferabilityRequest {
     /// <p>If the registrar for the top-level domain (TLD) requires an authorization code to transfer the domain, the code that you got from the current registrar for the domain.</p>
     #[serde(rename = "AuthCode")]
@@ -154,6 +156,7 @@ pub struct ContactDetail {
 
 /// <p>The DeleteTagsForDomainRequest includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsForDomainRequest {
     /// <p>The domain for which you want to delete one or more tags.</p>
     #[serde(rename = "DomainName")]
@@ -168,6 +171,7 @@ pub struct DeleteTagsForDomainRequest {
 pub struct DeleteTagsForDomainResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableDomainAutoRenewRequest {
     /// <p>The name of the domain that you want to disable automatic renewal for.</p>
     #[serde(rename = "DomainName")]
@@ -180,6 +184,7 @@ pub struct DisableDomainAutoRenewResponse {}
 
 /// <p>The DisableDomainTransferLock request includes the following element.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableDomainTransferLockRequest {
     /// <p>The name of the domain that you want to remove the transfer lock for.</p>
     #[serde(rename = "DomainName")]
@@ -240,6 +245,7 @@ pub struct DomainTransferability {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableDomainAutoRenewRequest {
     /// <p>The name of the domain that you want to enable automatic renewal for.</p>
     #[serde(rename = "DomainName")]
@@ -252,6 +258,7 @@ pub struct EnableDomainAutoRenewResponse {}
 
 /// <p>A request to set the transfer lock for the specified domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableDomainTransferLockRequest {
     /// <p>The name of the domain that you want to set the transfer lock for.</p>
     #[serde(rename = "DomainName")]
@@ -279,6 +286,7 @@ pub struct ExtraParam {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContactReachabilityStatusRequest {
     /// <p>The name of the domain for which you want to know whether the registrant contact has confirmed that the email address is valid.</p>
     #[serde(rename = "domainName")]
@@ -301,6 +309,7 @@ pub struct GetContactReachabilityStatusResponse {
 
 /// <p>The GetDomainDetail request includes the following element.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainDetailRequest {
     /// <p>The name of the domain that you want to get detailed information about.</p>
     #[serde(rename = "DomainName")]
@@ -393,6 +402,7 @@ pub struct GetDomainDetailResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainSuggestionsRequest {
     /// <p>A domain name that you want to use as the basis for a list of possible domain names. The domain name must contain a top-level domain (TLD), such as .com, that Amazon Route 53 supports. For a list of TLDs, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html">Domains that You Can Register with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>
     #[serde(rename = "DomainName")]
@@ -416,6 +426,7 @@ pub struct GetDomainSuggestionsResponse {
 
 /// <p>The <a>GetOperationDetail</a> request includes the following element.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationDetailRequest {
     /// <p>The identifier for the operation for which you want to get the status. Amazon Route 53 returned the identifier in the response to the original request.</p>
     #[serde(rename = "OperationId")]
@@ -454,6 +465,7 @@ pub struct GetOperationDetailResponse {
 
 /// <p>The ListDomains request includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsRequest {
     /// <p>For an initial request for a list of domains, omit this element. If the number of domains that are associated with the current AWS account is greater than the value that you specified for <code>MaxItems</code>, you can use <code>Marker</code> to return additional domains. Get the value of <code>NextPageMarker</code> from the previous response, and submit another request that includes the value of <code>NextPageMarker</code> in the <code>Marker</code> element.</p> <p>Constraints: The marker must match the value specified in the previous request.</p>
     #[serde(rename = "Marker")]
@@ -480,6 +492,7 @@ pub struct ListDomainsResponse {
 
 /// <p>The ListOperations request includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOperationsRequest {
     /// <p>For an initial request for a list of operations, omit this element. If the number of operations that are not yet complete is greater than the value that you specified for <code>MaxItems</code>, you can use <code>Marker</code> to return additional operations. Get the value of <code>NextPageMarker</code> from the previous response, and submit another request that includes the value of <code>NextPageMarker</code> in the <code>Marker</code> element.</p>
     #[serde(rename = "Marker")]
@@ -510,6 +523,7 @@ pub struct ListOperationsResponse {
 
 /// <p>The ListTagsForDomainRequest includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForDomainRequest {
     /// <p>The domain for which you want to get a list of tags.</p>
     #[serde(rename = "DomainName")]
@@ -557,6 +571,7 @@ pub struct OperationSummary {
 
 /// <p>The RegisterDomain request includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterDomainRequest {
     /// <p>Provides detailed contact information.</p>
     #[serde(rename = "AdminContact")]
@@ -606,6 +621,7 @@ pub struct RegisterDomainResponse {
 
 /// <p>A <code>RenewDomain</code> request includes the number of years that you want to renew for and the current expiration year.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RenewDomainRequest {
     /// <p>The year when the registration for the domain is set to expire. This value must match the current expiration date for the domain.</p>
     #[serde(rename = "CurrentExpiryYear")]
@@ -628,6 +644,7 @@ pub struct RenewDomainResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResendContactReachabilityEmailRequest {
     /// <p>The name of the domain for which you want Amazon Route 53 to resend a confirmation email to the registrant contact.</p>
     #[serde(rename = "domainName")]
@@ -654,6 +671,7 @@ pub struct ResendContactReachabilityEmailResponse {
 
 /// <p>A request for the authorization code for the specified domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetrieveDomainAuthCodeRequest {
     /// <p>The name of the domain that you want to get an authorization code for.</p>
     #[serde(rename = "DomainName")]
@@ -684,6 +702,7 @@ pub struct Tag {
 
 /// <p>The TransferDomain request includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TransferDomainRequest {
     /// <p>Provides detailed contact information.</p>
     #[serde(rename = "AdminContact")]
@@ -741,6 +760,7 @@ pub struct TransferDomainResponse {
 
 /// <p>The UpdateDomainContactPrivacy request includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainContactPrivacyRequest {
     /// <p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS ("who is") queries return contact information either for Amazon Registrar (for .com, .net, and .org domains) or for our registrar associate, Gandi (for all other TLDs). If you specify <code>false</code>, WHOIS queries return the information that you entered for the admin contact.</p>
     #[serde(rename = "AdminPrivacy")]
@@ -770,6 +790,7 @@ pub struct UpdateDomainContactPrivacyResponse {
 
 /// <p>The UpdateDomainContact request includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainContactRequest {
     /// <p>Provides detailed contact information.</p>
     #[serde(rename = "AdminContact")]
@@ -799,6 +820,7 @@ pub struct UpdateDomainContactResponse {
 
 /// <p>Replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain.</p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainNameserversRequest {
     /// <p>The name of the domain that you want to change name servers for.</p>
     #[serde(rename = "DomainName")]
@@ -819,6 +841,7 @@ pub struct UpdateDomainNameserversResponse {
 
 /// <p>The UpdateTagsForDomainRequest includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTagsForDomainRequest {
     /// <p>The domain for which you want to add or update tags.</p>
     #[serde(rename = "DomainName")]
@@ -835,6 +858,7 @@ pub struct UpdateTagsForDomainResponse {}
 
 /// <p>The ViewBilling request includes the following elements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ViewBillingRequest {
     /// <p>The end date and time for the time period for which you want a list of billing records. Specify the date and time in Coordinated Universal time (UTC).</p>
     #[serde(rename = "End")]

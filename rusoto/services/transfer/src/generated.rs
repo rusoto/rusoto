@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServerRequest {
     /// <p>The virtual private cloud (VPC) endpoint settings that you want to configure for your SFTP server. This parameter is required when you specify a value for the <code>EndpointType</code> parameter.</p>
     #[serde(rename = "EndpointDetails")]
@@ -64,6 +65,7 @@ pub struct CreateServerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
     /// <p>The landing directory (folder) for a user when they log in to the server using their SFTP client. An example is <code>/home/<i>username</i> </code>.</p>
     #[serde(rename = "HomeDirectory")]
@@ -104,6 +106,7 @@ pub struct CreateUserResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServerRequest {
     /// <p>A unique system-assigned identifier for an SFTP server instance.</p>
     #[serde(rename = "ServerId")]
@@ -111,6 +114,7 @@ pub struct DeleteServerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSshPublicKeyRequest {
     /// <p>A system-assigned unique identifier for a Secure File Transfer Protocol (SFTP) server instance that has the user assigned to it.</p>
     #[serde(rename = "ServerId")]
@@ -124,6 +128,7 @@ pub struct DeleteSshPublicKeyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
     /// <p>A system-assigned unique identifier for an SFTP server instance that has the user assigned to it.</p>
     #[serde(rename = "ServerId")]
@@ -134,6 +139,7 @@ pub struct DeleteUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServerRequest {
     /// <p>A system-assigned unique identifier for an SFTP server.</p>
     #[serde(rename = "ServerId")]
@@ -149,6 +155,7 @@ pub struct DescribeServerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
     /// <p>A system-assigned unique identifier for an SFTP server that has this user assigned.</p>
     #[serde(rename = "ServerId")]
@@ -274,6 +281,7 @@ pub struct IdentityProviderDetails {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportSshPublicKeyRequest {
     /// <p>A system-assigned unique identifier for an SFTP server.</p>
     #[serde(rename = "ServerId")]
@@ -302,6 +310,7 @@ pub struct ImportSshPublicKeyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServersRequest {
     /// <p>Specifies the number of servers to return as a response to the <code>ListServers</code> query.</p>
     #[serde(rename = "MaxResults")]
@@ -326,6 +335,7 @@ pub struct ListServersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>Requests the tags associated with a particular Amazon Resource Name (ARN). An ARN is an identifier for a specific AWS resource, such as a server, user, or role.</p>
     #[serde(rename = "Arn")]
@@ -358,6 +368,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
     /// <p>Specifies the number of users to return as a response to the <code>ListUsers</code> request.</p>
     #[serde(rename = "MaxResults")]
@@ -461,6 +472,7 @@ pub struct SshPublicKey {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartServerRequest {
     /// <p>A system-assigned unique identifier for an SFTP server that you start.</p>
     #[serde(rename = "ServerId")]
@@ -468,6 +480,7 @@ pub struct StartServerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopServerRequest {
     /// <p>A system-assigned unique identifier for an SFTP server that you stopped.</p>
     #[serde(rename = "ServerId")]
@@ -486,6 +499,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>An Amazon Resource Name (ARN) for a specific AWS resource, such as a server, user, or role.</p>
     #[serde(rename = "Arn")]
@@ -496,6 +510,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestIdentityProviderRequest {
     /// <p>A system-assigned identifier for a specific server. That server's user authentication method is tested with a user name and password.</p>
     #[serde(rename = "ServerId")]
@@ -529,6 +544,7 @@ pub struct TestIdentityProviderResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>This is the value of the resource that will have the tag removed. An Amazon Resource Name (ARN) is an identifier for a specific AWS resource, such as a server, user, or role.</p>
     #[serde(rename = "Arn")]
@@ -539,6 +555,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServerRequest {
     /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your SFTP server. With a VPC endpoint, your SFTP server isn't accessible over the public internet.</p>
     #[serde(rename = "EndpointDetails")]
@@ -574,6 +591,7 @@ pub struct UpdateServerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
     /// <p>A parameter that specifies the landing directory (folder) for a user when they log in to the server using their client. An example is <code>/home/<i>username</i> </code>.</p>
     #[serde(rename = "HomeDirectory")]

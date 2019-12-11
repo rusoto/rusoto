@@ -37,6 +37,8 @@ use xml::EventWriter;
 
 /// <p>Specifies the days since the initiation of an incomplete multipart upload that Amazon S3 will wait before permanently removing all parts of the upload. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config"> Aborting Incomplete Multipart Uploads Using a Bucket Lifecycle Policy</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortIncompleteMultipartUpload {
     /// <p>Specifies the number of days after which Amazon S3 aborts an incomplete multipart upload.</p>
     pub days_after_initiation: Option<i64>,
@@ -94,6 +96,7 @@ impl AbortIncompleteMultipartUploadSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AbortMultipartUploadOutput {
     pub request_charged: Option<String>,
 }
@@ -115,6 +118,7 @@ impl AbortMultipartUploadOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortMultipartUploadRequest {
     /// <p>Name of the bucket to which the multipart upload was initiated.</p>
     pub bucket: String,
@@ -127,6 +131,7 @@ pub struct AbortMultipartUploadRequest {
 
 /// <p>Configures the transfer acceleration state for an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Amazon S3 Transfer Acceleration</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccelerateConfiguration {
     /// <p>Specifies the transfer acceleration status of the bucket.</p>
     pub status: Option<String>,
@@ -158,6 +163,7 @@ impl AccelerateConfigurationSerializer {
 
 /// <p>Contains the elements that set the ACL permissions for an object per grantee.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccessControlPolicy {
     /// <p>A list of grants.</p>
     pub grants: Option<Vec<Grant>>,
@@ -189,6 +195,8 @@ impl AccessControlPolicySerializer {
 
 /// <p>A container for information about access control for replicas.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccessControlTranslation {
     /// <p>Specifies the replica ownership. For default and valid values, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTreplication.html">PUT bucket replication</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
     pub owner: String,
@@ -527,6 +535,8 @@ impl AllowedOriginsSerializer {
 
 /// <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter. The operator must have at least two predicates in any combination, and an object must match all of the predicates for the filter to apply.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalyticsAndOperator {
     /// <p>The prefix to use when evaluating an AND predicate: The prefix that an object must have to be included in the metrics results.</p>
     pub prefix: Option<String>,
@@ -587,6 +597,8 @@ impl AnalyticsAndOperatorSerializer {
 
 /// <p> Specifies the configuration and any analyses for the analytics filter of an Amazon S3 bucket.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETAnalyticsConfig.html">GET Bucket analytics</a> in the <i>Amazon Simple Storage Service API Reference</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalyticsConfiguration {
     /// <p>The filter used to describe a set of objects for analyses. A filter must have exactly one prefix, one tag, or one conjunction (AnalyticsAndOperator). If no filter is provided, all objects will be considered in any analysis.</p>
     pub filter: Option<AnalyticsFilter>,
@@ -685,6 +697,8 @@ impl AnalyticsConfigurationListDeserializer {
 }
 /// <p>Where to publish the analytics results.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalyticsExportDestination {
     /// <p>A destination signifying output to an S3 bucket.</p>
     pub s3_bucket_destination: AnalyticsS3BucketDestination,
@@ -740,6 +754,8 @@ impl AnalyticsExportDestinationSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalyticsFilter {
     /// <p>A conjunction (logical AND) of predicates, which is used in evaluating an analytics filter. The operator must have at least two predicates.</p>
     pub and: Option<AnalyticsAndOperator>,
@@ -838,6 +854,8 @@ impl AnalyticsIdSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalyticsS3BucketDestination {
     /// <p>The Amazon Resource Name (ARN) of the bucket to which data is exported.</p>
     pub bucket: String,
@@ -999,6 +1017,7 @@ impl BodySerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Bucket {
     /// <p>Date the bucket was created.</p>
     pub creation_date: Option<String>,
@@ -1061,6 +1080,7 @@ impl BucketAccelerateStatusSerializer {
 
 /// <p>Specifies the lifecycle configuration for objects in an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BucketLifecycleConfiguration {
     /// <p>A lifecycle rule for individual objects in an Amazon S3 bucket.</p>
     pub rules: Vec<LifecycleRule>,
@@ -1117,6 +1137,7 @@ impl BucketLocationConstraintSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BucketLoggingStatus {
     /// <p><p/></p>
     pub logging_enabled: Option<LoggingEnabled>,
@@ -1289,6 +1310,7 @@ impl BytesScannedDeserializer {
 }
 /// <p>Describes the cross-origin access configuration for objects in an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html">Enabling Cross-Origin Resource Sharing</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CORSConfiguration {
     /// <p>A set of allowed origins and methods.</p>
     pub cors_rules: Vec<CORSRule>,
@@ -1313,6 +1335,8 @@ impl CORSConfigurationSerializer {
 
 /// <p>Specifies a cross-origin access rule for an Amazon S3 bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CORSRule {
     /// <p>Headers that are specified in the <code>Access-Control-Request-Headers</code> header. These headers are allowed in a preflight OPTIONS request. In response to any preflight OPTIONS request, Amazon S3 returns any requested headers that are allowed.</p>
     pub allowed_headers: Option<Vec<String>>,
@@ -1452,6 +1476,7 @@ impl CORSRulesSerializer {
 
 /// <p>Describes how a CSV-formatted input object is formatted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CSVInput {
     /// <p>Specifies that CSV field values may contain quoted record delimiters and such records should be allowed. Default value is FALSE. Setting this value to TRUE may lower performance.</p>
     pub allow_quoted_record_delimiter: Option<bool>,
@@ -1545,6 +1570,7 @@ impl CSVInputSerializer {
 
 /// <p>Describes how CSV-formatted results are formatted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CSVOutput {
     /// <p>The value used to separate individual fields in a record.</p>
     pub field_delimiter: Option<String>,
@@ -1648,6 +1674,8 @@ impl CloudFunctionSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloudFunctionConfiguration {
     /// <p><p/></p>
     pub cloud_function: Option<String>,
@@ -1808,6 +1836,7 @@ impl CommentsSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CommonPrefix {
     /// <p><p/></p>
     pub prefix: Option<String>,
@@ -1859,6 +1888,7 @@ impl CommonPrefixListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CompleteMultipartUploadOutput {
     /// <p><p/></p>
     pub bucket: Option<String>,
@@ -1911,6 +1941,7 @@ impl CompleteMultipartUploadOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompleteMultipartUploadRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -1925,6 +1956,7 @@ pub struct CompleteMultipartUploadRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompletedMultipartUpload {
     /// <p><p/></p>
     pub parts: Option<Vec<CompletedPart>>,
@@ -1951,6 +1983,7 @@ impl CompletedMultipartUploadSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompletedPart {
     /// <p>Entity tag returned when the part was uploaded.</p>
     pub e_tag: Option<String>,
@@ -2030,6 +2063,8 @@ impl CompressionTypeSerializer {
 
 /// <p>Specifies a condition that must be met for a redirect to apply. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Condition {
     /// <p>The HTTP error code when the redirect is applied. In the event of an error, if the error code equals this value, then the specified redirect is applied. Required when parent element <code>Condition</code> is specified and sibling <code>KeyPrefixEquals</code> is not specified. If both are specified, then both must be true for the redirect to be applied.</p>
     pub http_error_code_returned_equals: Option<String>,
@@ -2102,6 +2137,7 @@ impl ConditionSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ContinuationEvent {}
 
 struct ContinuationEventDeserializer;
@@ -2121,6 +2157,7 @@ impl ContinuationEventDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyObjectOutput {
     /// <p><p/></p>
     pub copy_object_result: Option<CopyObjectResult>,
@@ -2160,6 +2197,7 @@ impl CopyObjectOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyObjectRequest {
     /// <p>The canned ACL to apply to the object.</p>
     pub acl: Option<String>,
@@ -2238,6 +2276,7 @@ pub struct CopyObjectRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyObjectResult {
     /// <p><p/></p>
     pub e_tag: Option<String>,
@@ -2271,6 +2310,7 @@ impl CopyObjectResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyPartResult {
     /// <p>Entity tag of the object.</p>
     pub e_tag: Option<String>,
@@ -2304,6 +2344,7 @@ impl CopyPartResultDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBucketConfiguration {
     /// <p>Specifies the region where the bucket will be created. If you don't specify a region, the bucket is created in US East (N. Virginia) Region (us-east-1).</p>
     pub location_constraint: Option<String>,
@@ -2334,6 +2375,7 @@ impl CreateBucketConfigurationSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateBucketOutput {
     /// <p><p/></p>
     pub location: Option<String>,
@@ -2356,6 +2398,7 @@ impl CreateBucketOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBucketRequest {
     /// <p>The canned ACL to apply to the bucket.</p>
     pub acl: Option<String>,
@@ -2378,6 +2421,7 @@ pub struct CreateBucketRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateMultipartUploadOutput {
     /// <p>Date when multipart upload will become eligible for abort operation by lifecycle.</p>
     pub abort_date: Option<String>,
@@ -2433,6 +2477,7 @@ impl CreateMultipartUploadOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMultipartUploadRequest {
     /// <p>The canned ACL to apply to the object.</p>
     pub acl: Option<String>,
@@ -2598,6 +2643,8 @@ impl DaysAfterInitiationSerializer {
 
 /// <p>The container element for specifying the default object lock retention settings for new objects placed in the specified bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefaultRetention {
     /// <p>The number of days that you want to specify for the default retention period.</p>
     pub days: Option<i64>,
@@ -2676,6 +2723,7 @@ impl DefaultRetentionSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Delete {
     /// <p><p/></p>
     pub objects: Vec<ObjectIdentifier>,
@@ -2709,6 +2757,7 @@ impl DeleteSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketAnalyticsConfigurationRequest {
     /// <p>The name of the bucket from which an analytics configuration is deleted.</p>
     pub bucket: String,
@@ -2717,18 +2766,21 @@ pub struct DeleteBucketAnalyticsConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketCorsRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketEncryptionRequest {
     /// <p>The name of the bucket containing the server-side encryption configuration to delete.</p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketInventoryConfigurationRequest {
     /// <p>The name of the bucket containing the inventory configuration to delete.</p>
     pub bucket: String,
@@ -2737,12 +2789,14 @@ pub struct DeleteBucketInventoryConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketLifecycleRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketMetricsConfigurationRequest {
     /// <p>The name of the bucket containing the metrics configuration to delete.</p>
     pub bucket: String,
@@ -2751,30 +2805,35 @@ pub struct DeleteBucketMetricsConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketPolicyRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketReplicationRequest {
     /// <p><p> The bucket name. </p> <note> <p>It can take a while to propagate the deletion of a replication configuration to all Amazon S3 systems.</p> </note></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketTaggingRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketWebsiteRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -2793,6 +2852,7 @@ impl DeleteMarkerDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteMarkerEntry {
     /// <p>Specifies whether the object is (true) or is not (false) the latest version of an object.</p>
     pub is_latest: Option<bool>,
@@ -2844,6 +2904,8 @@ impl DeleteMarkerEntryDeserializer {
 }
 /// <p>Specifies whether Amazon S3 should replicate delete makers.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMarkerReplication {
     /// <p><p>The status of the delete marker replication.</p> <note> <p> In the current implementation, Amazon S3 doesn&#39;t replicate the delete markers. The status must be <code>Disabled</code>. </p> </note></p>
     pub status: Option<String>,
@@ -2969,6 +3031,7 @@ impl DeleteMarkersDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteObjectOutput {
     /// <p>Specifies whether the versioned object that was permanently deleted was (true) or was not (false) a delete marker.</p>
     pub delete_marker: Option<bool>,
@@ -2994,6 +3057,7 @@ impl DeleteObjectOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteObjectRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -3009,6 +3073,7 @@ pub struct DeleteObjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteObjectTaggingOutput {
     /// <p>The versionId of the object the tag-set was removed from.</p>
     pub version_id: Option<String>,
@@ -3031,6 +3096,7 @@ impl DeleteObjectTaggingOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteObjectTaggingRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -3041,6 +3107,7 @@ pub struct DeleteObjectTaggingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteObjectsOutput {
     /// <p><p/></p>
     pub deleted: Option<Vec<DeletedObject>>,
@@ -3075,6 +3142,7 @@ impl DeleteObjectsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteObjectsRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -3088,6 +3156,7 @@ pub struct DeleteObjectsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePublicAccessBlockRequest {
     /// <p>The Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to delete. </p>
     pub bucket: String,
@@ -3095,6 +3164,7 @@ pub struct DeletePublicAccessBlockRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeletedObject {
     /// <p><p/></p>
     pub delete_marker: Option<bool>,
@@ -3224,6 +3294,8 @@ impl DescriptionSerializer {
 
 /// <p>Specifies information about where to publish analysis or configuration results for an Amazon S3 bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Destination {
     /// <p>Specify this only in a cross-account scenario (where source and destination bucket owners are not the same), and you want to change replica ownership to the AWS account that owns the destination bucket. If this is not specified in the replication configuration, the replicas are owned by same AWS account that owns the source object.</p>
     pub access_control_translation: Option<AccessControlTranslation>,
@@ -3481,6 +3553,7 @@ impl EncodingTypeSerializer {
 
 /// <p>Describes the server-side encryption that will be applied to the restore results.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Encryption {
     /// <p>The server-side encryption algorithm used when storing job results in Amazon S3 (e.g., AES256, aws:kms).</p>
     pub encryption_type: String,
@@ -3530,6 +3603,8 @@ impl EncryptionSerializer {
 
 /// <p>Specifies encryption-related information for an Amazon S3 bucket that is a destination for replicated objects.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EncryptionConfiguration {
     /// <p>Specifies the AWS KMS Key ID (Key ARN or Alias ARN) for the destination bucket. Amazon S3 uses this key to encrypt replica objects.</p>
     pub replica_kms_key_id: Option<String>,
@@ -3587,6 +3662,7 @@ impl EncryptionConfigurationSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EndEvent {}
 
 struct EndEventDeserializer;
@@ -3607,6 +3683,7 @@ impl EndEventDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct S3Error {
     /// <p><p/></p>
     pub code: Option<String>,
@@ -3650,6 +3727,8 @@ impl S3ErrorDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ErrorDocument {
     /// <p>The object key name to use when a 4XX class error occurs.</p>
     pub key: String,
@@ -4045,6 +4124,8 @@ impl FileHeaderInfoSerializer {
 
 /// <p>Specifies the Amazon S3 object key name to filter on and whether to filter on the suffix or prefix of the key name.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FilterRule {
     /// <p>The object key name prefix or suffix identifying one or more objects to which the filtering rule applies. The maximum length is 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub name: Option<String>,
@@ -4217,6 +4298,7 @@ impl FilterRuleValueSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketAccelerateConfigurationOutput {
     /// <p>The accelerate configuration of the bucket.</p>
     pub status: Option<String>,
@@ -4247,12 +4329,14 @@ impl GetBucketAccelerateConfigurationOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketAccelerateConfigurationRequest {
     /// <p>Name of the bucket for which the accelerate configuration is retrieved.</p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketAclOutput {
     /// <p>A list of grants.</p>
     pub grants: Option<Vec<Grant>>,
@@ -4284,12 +4368,14 @@ impl GetBucketAclOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketAclRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketAnalyticsConfigurationOutput {
     /// <p>The configuration and any analyses for the analytics filter.</p>
     pub analytics_configuration: Option<AnalyticsConfiguration>,
@@ -4312,6 +4398,7 @@ impl GetBucketAnalyticsConfigurationOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketAnalyticsConfigurationRequest {
     /// <p>The name of the bucket from which an analytics configuration is retrieved.</p>
     pub bucket: String,
@@ -4320,6 +4407,7 @@ pub struct GetBucketAnalyticsConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketCorsOutput {
     /// <p><p/></p>
     pub cors_rules: Option<Vec<CORSRule>>,
@@ -4346,12 +4434,14 @@ impl GetBucketCorsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketCorsRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketEncryptionOutput {
     /// <p><p/></p>
     pub server_side_encryption_configuration: Option<ServerSideEncryptionConfiguration>,
@@ -4376,12 +4466,14 @@ impl GetBucketEncryptionOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketEncryptionRequest {
     /// <p>The name of the bucket from which the server-side encryption configuration is retrieved.</p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketInventoryConfigurationOutput {
     /// <p>Specifies the inventory configuration.</p>
     pub inventory_configuration: Option<InventoryConfiguration>,
@@ -4404,6 +4496,7 @@ impl GetBucketInventoryConfigurationOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketInventoryConfigurationRequest {
     /// <p>The name of the bucket containing the inventory configuration to retrieve.</p>
     pub bucket: String,
@@ -4412,6 +4505,7 @@ pub struct GetBucketInventoryConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketLifecycleConfigurationOutput {
     /// <p><p/></p>
     pub rules: Option<Vec<LifecycleRule>>,
@@ -4442,12 +4536,14 @@ impl GetBucketLifecycleConfigurationOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketLifecycleConfigurationRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketLifecycleOutput {
     /// <p><p/></p>
     pub rules: Option<Vec<Rule>>,
@@ -4478,12 +4574,14 @@ impl GetBucketLifecycleOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketLifecycleRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketLocationOutput {
     /// <p><p/></p>
     pub location_constraint: Option<String>,
@@ -4505,12 +4603,14 @@ impl GetBucketLocationOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketLocationRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketLoggingOutput {
     /// <p><p/></p>
     pub logging_enabled: Option<LoggingEnabled>,
@@ -4538,12 +4638,14 @@ impl GetBucketLoggingOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketLoggingRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketMetricsConfigurationOutput {
     /// <p>Specifies the metrics configuration.</p>
     pub metrics_configuration: Option<MetricsConfiguration>,
@@ -4566,6 +4668,7 @@ impl GetBucketMetricsConfigurationOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketMetricsConfigurationRequest {
     /// <p>The name of the bucket containing the metrics configuration to retrieve.</p>
     pub bucket: String,
@@ -4574,6 +4677,7 @@ pub struct GetBucketMetricsConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketNotificationConfigurationRequest {
     /// <p>Name of the bucket to get the notification configuration for.</p>
     pub bucket: String,
@@ -4586,12 +4690,14 @@ pub struct GetBucketPolicyOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketPolicyRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketPolicyStatusOutput {
     /// <p>The policy status for the specified bucket.</p>
     pub policy_status: Option<PolicyStatus>,
@@ -4614,12 +4720,14 @@ impl GetBucketPolicyStatusOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketPolicyStatusRequest {
     /// <p>The name of the Amazon S3 bucket whose policy status you want to retrieve.</p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketReplicationOutput {
     /// <p><p/></p>
     pub replication_configuration: Option<ReplicationConfiguration>,
@@ -4642,12 +4750,14 @@ impl GetBucketReplicationOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketReplicationRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketRequestPaymentOutput {
     /// <p>Specifies who pays for the download and request fees.</p>
     pub payer: Option<String>,
@@ -4676,12 +4786,14 @@ impl GetBucketRequestPaymentOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketRequestPaymentRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketTaggingOutput {
     /// <p><p/></p>
     pub tag_set: Vec<Tag>,
@@ -4707,12 +4819,14 @@ impl GetBucketTaggingOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketTaggingRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketVersioningOutput {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned.</p>
     pub mfa_delete: Option<String>,
@@ -4751,12 +4865,14 @@ impl GetBucketVersioningOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketVersioningRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketWebsiteOutput {
     /// <p><p/></p>
     pub error_document: Option<ErrorDocument>,
@@ -4808,12 +4924,14 @@ impl GetBucketWebsiteOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketWebsiteRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectAclOutput {
     /// <p>A list of grants.</p>
     pub grants: Option<Vec<Grant>>,
@@ -4846,6 +4964,7 @@ impl GetObjectAclOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectAclRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -4857,6 +4976,7 @@ pub struct GetObjectAclRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectLegalHoldOutput {
     /// <p>The current Legal Hold status for the specified object.</p>
     pub legal_hold: Option<ObjectLockLegalHold>,
@@ -4879,6 +4999,7 @@ impl GetObjectLegalHoldOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectLegalHoldRequest {
     /// <p>The bucket containing the object whose Legal Hold status you want to retrieve.</p>
     pub bucket: String,
@@ -4890,6 +5011,7 @@ pub struct GetObjectLegalHoldRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectLockConfigurationOutput {
     /// <p>The specified bucket's object lock configuration.</p>
     pub object_lock_configuration: Option<ObjectLockConfiguration>,
@@ -4912,6 +5034,7 @@ impl GetObjectLockConfigurationOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectLockConfigurationRequest {
     /// <p>The bucket whose object lock configuration you want to retrieve.</p>
     pub bucket: String,
@@ -4983,6 +5106,7 @@ pub struct GetObjectOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -5024,6 +5148,7 @@ pub struct GetObjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectRetentionOutput {
     /// <p>The container element for an object's retention settings.</p>
     pub retention: Option<ObjectLockRetention>,
@@ -5046,6 +5171,7 @@ impl GetObjectRetentionOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectRetentionRequest {
     /// <p>The bucket containing the object whose retention settings you want to retrieve.</p>
     pub bucket: String,
@@ -5057,6 +5183,7 @@ pub struct GetObjectRetentionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectTaggingOutput {
     /// <p><p/></p>
     pub tag_set: Vec<Tag>,
@@ -5084,6 +5211,7 @@ impl GetObjectTaggingOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectTaggingRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -5101,6 +5229,7 @@ pub struct GetObjectTorrentOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectTorrentRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -5110,6 +5239,7 @@ pub struct GetObjectTorrentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPublicAccessBlockOutput {
     /// <p>The <code>PublicAccessBlock</code> configuration currently in effect for this Amazon S3 bucket.</p>
     pub public_access_block_configuration: Option<PublicAccessBlockConfiguration>,
@@ -5134,6 +5264,7 @@ impl GetPublicAccessBlockOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicAccessBlockRequest {
     /// <p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to retrieve. </p>
     pub bucket: String,
@@ -5141,6 +5272,7 @@ pub struct GetPublicAccessBlockRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GlacierJobParameters {
     /// <p>Glacier retrieval tier at which the restore will be processed.</p>
     pub tier: String,
@@ -5170,6 +5302,8 @@ impl GlacierJobParametersSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Grant {
     /// <p><p/></p>
     pub grantee: Option<Grantee>,
@@ -5226,6 +5360,8 @@ impl GrantSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Grantee {
     /// <p>Screen name of the grantee.</p>
     pub display_name: Option<String>,
@@ -5367,12 +5503,14 @@ impl GrantsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HeadBucketRequest {
     /// <p><p/></p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HeadObjectOutput {
     /// <p><p/></p>
     pub accept_ranges: Option<String>,
@@ -5448,6 +5586,7 @@ impl HeadObjectOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HeadObjectRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -5606,6 +5745,8 @@ impl IDSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IndexDocument {
     /// <p>A suffix that is appended to a request that is for a directory on the website endpoint (e.g. if the suffix is index.html and you make a request to samplebucket/images/ the data that is returned will be for the object with the key name images/index.html) The suffix must not be empty and must not include a slash character.</p>
     pub suffix: String,
@@ -5665,6 +5806,7 @@ impl InitiatedDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Initiator {
     /// <p>Name of the Principal.</p>
     pub display_name: Option<String>,
@@ -5696,6 +5838,7 @@ impl InitiatorDeserializer {
 }
 /// <p>Describes the serialization format of the object.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputSerialization {
     /// <p>Describes the serialization of a CSV-encoded object.</p>
     pub csv: Option<CSVInput>,
@@ -5742,6 +5885,8 @@ impl InputSerializationSerializer {
 
 /// <p>Specifies the inventory configuration for an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETInventoryConfig.html">GET Bucket inventory</a> in the <i>Amazon Simple Storage Service API Reference</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryConfiguration {
     /// <p>Contains information about where to publish the inventory results.</p>
     pub destination: InventoryDestination,
@@ -5878,6 +6023,8 @@ impl InventoryConfigurationListDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryDestination {
     /// <p>Contains the bucket name, file format, bucket owner (optional), and prefix (optional) where inventory results are published.</p>
     pub s3_bucket_destination: InventoryS3BucketDestination,
@@ -5929,6 +6076,8 @@ impl InventoryDestinationSerializer {
 
 /// <p>Contains the type of server-side encryption used to encrypt the inventory results.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryEncryption {
     /// <p>Specifies the use of SSE-KMS to encrypt delivered Inventory reports.</p>
     pub ssekms: Option<SSEKMS>,
@@ -5982,6 +6131,8 @@ impl InventoryEncryptionSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryFilter {
     /// <p>The prefix that an object must have to be included in the inventory results.</p>
     pub prefix: String,
@@ -6230,6 +6381,8 @@ impl InventoryOptionalFieldsSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryS3BucketDestination {
     /// <p>The ID of the account that owns the destination bucket.</p>
     pub account_id: Option<String>,
@@ -6331,6 +6484,8 @@ impl InventoryS3BucketDestinationSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventorySchedule {
     /// <p>Specifies how frequently inventory results are produced.</p>
     pub frequency: String,
@@ -6445,6 +6600,7 @@ impl IsTruncatedDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct JSONInput {
     /// <p>The type of JSON. Valid values: Document, Lines.</p>
     pub type_: Option<String>,
@@ -6476,6 +6632,7 @@ impl JSONInputSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct JSONOutput {
     /// <p>The value used to separate individual records in the output.</p>
     pub record_delimiter: Option<String>,
@@ -6654,6 +6811,8 @@ impl LambdaFunctionArnSerializer {
 
 /// <p>A container for specifying the configuration for AWS Lambda notifications.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaFunctionConfiguration {
     /// <p>The Amazon S3 bucket event for which to invoke the AWS Lambda function. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Supported Event Types</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub events: Vec<String>,
@@ -6796,6 +6955,7 @@ impl LastModifiedDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LifecycleConfiguration {
     /// <p><p/></p>
     pub rules: Vec<Rule>,
@@ -6820,6 +6980,8 @@ impl LifecycleConfigurationSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LifecycleExpiration {
     /// <p>Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format.</p>
     pub date: Option<String>,
@@ -6902,6 +7064,8 @@ impl LifecycleExpirationSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LifecycleRule {
     /// <p><p/></p>
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
@@ -7043,6 +7207,8 @@ impl LifecycleRuleSerializer {
 
 /// <p>This is used in a Lifecycle Rule Filter to apply a logical AND to two or more predicates. The Lifecycle Rule will apply to any object matching all of the predicates configured inside the And operator.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LifecycleRuleAndOperator {
     /// <p><p/></p>
     pub prefix: Option<String>,
@@ -7107,6 +7273,8 @@ impl LifecycleRuleAndOperatorSerializer {
 
 /// <p>The Filter is used to identify objects that a Lifecycle Rule applies to. A Filter must have exactly one of Prefix, Tag, or And specified.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LifecycleRuleFilter {
     /// <p><p/></p>
     pub and: Option<LifecycleRuleAndOperator>,
@@ -7220,6 +7388,7 @@ impl LifecycleRulesSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListBucketAnalyticsConfigurationsOutput {
     /// <p>The list of analytics configurations for a bucket.</p>
     pub analytics_configuration_list: Option<Vec<AnalyticsConfiguration>>,
@@ -7273,6 +7442,7 @@ impl ListBucketAnalyticsConfigurationsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBucketAnalyticsConfigurationsRequest {
     /// <p>The name of the bucket from which analytics configurations are retrieved.</p>
     pub bucket: String,
@@ -7281,6 +7451,7 @@ pub struct ListBucketAnalyticsConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListBucketInventoryConfigurationsOutput {
     /// <p>If sent in the request, the marker that is used as a starting point for this inventory configuration list response.</p>
     pub continuation_token: Option<String>,
@@ -7334,6 +7505,7 @@ impl ListBucketInventoryConfigurationsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBucketInventoryConfigurationsRequest {
     /// <p>The name of the bucket containing the inventory configurations to retrieve.</p>
     pub bucket: String,
@@ -7342,6 +7514,7 @@ pub struct ListBucketInventoryConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListBucketMetricsConfigurationsOutput {
     /// <p>The marker that is used as a starting point for this metrics configuration list response. This value is present if it was sent in the request.</p>
     pub continuation_token: Option<String>,
@@ -7395,6 +7568,7 @@ impl ListBucketMetricsConfigurationsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBucketMetricsConfigurationsRequest {
     /// <p>The name of the bucket containing the metrics configurations to retrieve.</p>
     pub bucket: String,
@@ -7403,6 +7577,7 @@ pub struct ListBucketMetricsConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListBucketsOutput {
     /// <p><p/></p>
     pub buckets: Option<Vec<Bucket>>,
@@ -7434,6 +7609,7 @@ impl ListBucketsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListMultipartUploadsOutput {
     /// <p>Name of the bucket to which the multipart upload was initiated.</p>
     pub bucket: Option<String>,
@@ -7538,6 +7714,7 @@ impl ListMultipartUploadsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMultipartUploadsRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -7555,6 +7732,7 @@ pub struct ListMultipartUploadsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListObjectVersionsOutput {
     /// <p><p/></p>
     pub common_prefixes: Option<Vec<CommonPrefix>>,
@@ -7665,6 +7843,7 @@ impl ListObjectVersionsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectVersionsRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -7682,6 +7861,7 @@ pub struct ListObjectVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListObjectsOutput {
     /// <p><p/></p>
     pub common_prefixes: Option<Vec<CommonPrefix>>,
@@ -7760,6 +7940,7 @@ impl ListObjectsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectsRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -7777,6 +7958,7 @@ pub struct ListObjectsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListObjectsV2Output {
     /// <p>CommonPrefixes contains all (if there are any) keys between Prefix and the next occurrence of the string specified by delimiter</p>
     pub common_prefixes: Option<Vec<CommonPrefix>>,
@@ -7869,6 +8051,7 @@ impl ListObjectsV2OutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectsV2Request {
     /// <p>Name of the bucket to list.</p>
     pub bucket: String,
@@ -7891,6 +8074,7 @@ pub struct ListObjectsV2Request {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPartsOutput {
     /// <p>Date when multipart upload will become eligible for abort operation by lifecycle.</p>
     pub abort_date: Option<String>,
@@ -7985,6 +8169,7 @@ impl ListPartsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPartsRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -8033,6 +8218,8 @@ impl LocationPrefixSerializer {
 
 /// <p>Describes where logs are stored and the prefix that Amazon S3 assigns to all log object keys for a bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTlogging.html">PUT Bucket logging</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LoggingEnabled {
     /// <p>Specifies the bucket where you want Amazon S3 to store server access logs. You can have your logs delivered to any bucket that you own, including the same bucket that is being logged. You can also configure multiple buckets to deliver their logs to the same target bucket. In this case you should choose a different TargetPrefix for each source bucket so that the delivered log files can be distinguished by key.</p>
     pub target_bucket: String,
@@ -8306,6 +8493,7 @@ impl MessageDeserializer {
 }
 /// <p>A metadata key-value pair to store with an object.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MetadataEntry {
     /// <p><p/></p>
     pub name: Option<String>,
@@ -8387,6 +8575,8 @@ impl MetadataValueSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MetricsAndOperator {
     /// <p>The prefix used when evaluating an AND predicate.</p>
     pub prefix: Option<String>,
@@ -8447,6 +8637,8 @@ impl MetricsAndOperatorSerializer {
 
 /// <p>Specifies a metrics configuration for the CloudWatch request metrics (specified by the metrics configuration ID) from an Amazon S3 bucket. If you're updating an existing metrics configuration, note that this is a full replacement of the existing metrics configuration. If you don't include the elements you want to keep, they are erased. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTMetricConfiguration.html"> PUT Bucket metrics</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MetricsConfiguration {
     /// <p>Specifies a metrics configuration filter. The metrics configuration will only include objects that meet the filter's criteria. A filter must be a prefix, a tag, or a conjunction (MetricsAndOperator).</p>
     pub filter: Option<MetricsFilter>,
@@ -8532,6 +8724,8 @@ impl MetricsConfigurationListDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MetricsFilter {
     /// <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter. The operator must have at least two predicates, and an object must match all of the predicates in order for the filter to apply.</p>
     pub and: Option<MetricsAndOperator>,
@@ -8630,6 +8824,7 @@ impl MetricsIdSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct MultipartUpload {
     /// <p>Date and time at which the multipart upload was initiated.</p>
     pub initiated: Option<String>,
@@ -8810,6 +9005,8 @@ impl NextVersionIdMarkerDeserializer {
 }
 /// <p>Specifies when noncurrent object versions expire. Upon expiration, Amazon S3 permanently deletes the noncurrent object versions. You set this lifecycle configuration action on a bucket that has versioning enabled (or suspended) to request that Amazon S3 delete noncurrent object versions at a specific period in the object's lifetime.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NoncurrentVersionExpiration {
     /// <p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/intro-lifecycle-rules.html#non-current-days-calculations">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide.</p>
     pub noncurrent_days: Option<i64>,
@@ -8865,6 +9062,8 @@ impl NoncurrentVersionExpirationSerializer {
 
 /// <p>Container for the transition rule that describes when noncurrent objects transition to the <code>STANDARD_IA</code>, <code>ONEZONE_IA</code>, <code>INTELLIGENT_TIERING</code>, <code>GLACIER</code>, or <code>DEEP_ARCHIVE</code> storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the <code>STANDARD_IA</code>, <code>ONEZONE_IA</code>, <code>INTELLIGENT_TIERING</code>, <code>GLACIER</code>, or <code>DEEP_ARCHIVE</code> storage class at a specific period in the object's lifetime.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NoncurrentVersionTransition {
     /// <p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub noncurrent_days: Option<i64>,
@@ -8984,6 +9183,8 @@ impl NoncurrentVersionTransitionListSerializer {
 
 /// <p>A container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off for the bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotificationConfiguration {
     /// <p>Describes the AWS Lambda functions to invoke and the events for which to invoke them.</p>
     pub lambda_function_configurations: Option<Vec<LambdaFunctionConfiguration>>,
@@ -9067,6 +9268,8 @@ impl NotificationConfigurationSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotificationConfigurationDeprecated {
     /// <p><p/></p>
     pub cloud_function_configuration: Option<CloudFunctionConfiguration>,
@@ -9156,6 +9359,8 @@ impl NotificationConfigurationDeprecatedSerializer {
 
 /// <p>Specifies object key name filtering rules. For information about key name filtering, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotificationConfigurationFilter {
     /// <p><p/></p>
     pub key: Option<S3KeyFilter>,
@@ -9237,6 +9442,7 @@ impl NotificationIdSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Object {
     /// <p><p/></p>
     pub e_tag: Option<String>,
@@ -9311,6 +9517,7 @@ impl ObjectCannedACLSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectIdentifier {
     /// <p>Key name of the object to delete.</p>
     pub key: String,
@@ -9427,6 +9634,8 @@ impl ObjectListDeserializer {
 }
 /// <p>The container element for object lock configuration parameters.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectLockConfiguration {
     /// <p>Indicates whether this bucket has an object lock configuration enabled.</p>
     pub object_lock_enabled: Option<String>,
@@ -9524,6 +9733,8 @@ impl ObjectLockEnabledSerializer {
 
 /// <p>A Legal Hold configuration for an object.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectLockLegalHold {
     /// <p>Indicates whether the specified object has a Legal Hold in place.</p>
     pub status: Option<String>,
@@ -9608,6 +9819,8 @@ impl ObjectLockLegalHoldStatusSerializer {
 
 /// <p>A Retention configuration for an object.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectLockRetention {
     /// <p>Indicates the Retention mode for the specified object.</p>
     pub mode: Option<String>,
@@ -9706,6 +9919,8 @@ impl ObjectLockRetentionModeSerializer {
 
 /// <p>The container element for an object lock rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectLockRule {
     /// <p>The default retention period that you want to apply to new objects placed in the specified bucket.</p>
     pub default_retention: Option<DefaultRetention>,
@@ -9765,6 +9980,7 @@ impl ObjectStorageClassDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ObjectVersion {
     /// <p><p/></p>
     pub e_tag: Option<String>,
@@ -9904,6 +10120,7 @@ impl ObjectVersionStorageClassDeserializer {
 }
 /// <p>Describes the location where the restore job's output is stored.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OutputLocation {
     /// <p>Describes an S3 location that will receive the results of the restore request.</p>
     pub s3: Option<S3Location>,
@@ -9930,6 +10147,7 @@ impl OutputLocationSerializer {
 
 /// <p>Describes how results of the Select job are serialized.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OutputSerialization {
     /// <p>Describes the serialization of CSV-encoded Select results.</p>
     pub csv: Option<CSVOutput>,
@@ -9961,6 +10179,8 @@ impl OutputSerializationSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Owner {
     /// <p><p/></p>
     pub display_name: Option<String>,
@@ -10054,6 +10274,7 @@ impl OwnerOverrideSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParquetInput {}
 
 pub struct ParquetInputSerializer;
@@ -10074,6 +10295,7 @@ impl ParquetInputSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Part {
     /// <p>Entity tag returned when the part was uploaded.</p>
     pub e_tag: Option<String>,
@@ -10270,6 +10492,7 @@ impl PermissionSerializer {
 
 /// <p>The container element for a bucket's policy status.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PolicyStatus {
     /// <p>The policy status for this bucket. <code>TRUE</code> indicates that this bucket is public. <code>FALSE</code> indicates that the bucket is not public.</p>
     pub is_public: Option<bool>,
@@ -10359,6 +10582,7 @@ impl PrioritySerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Progress {
     /// <p>The current number of uncompressed object bytes processed.</p>
     pub bytes_processed: Option<i64>,
@@ -10403,6 +10627,7 @@ impl ProgressDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ProgressEvent {
     /// <p>The Progress event details.</p>
     pub details: Option<Progress>,
@@ -10460,6 +10685,8 @@ impl ProtocolSerializer {
 
 /// <p>Specifies the Block Public Access configuration for an Amazon S3 bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublicAccessBlockConfiguration {
     /// <p>Specifies whether Amazon S3 should block public access control lists (ACLs) for this bucket and objects in this bucket. Setting this element to <code>TRUE</code> causes the following behavior:</p> <ul> <li> <p>PUT Bucket acl and PUT Object acl calls fail if the specified ACL is public.</p> </li> <li> <p>PUT Object calls fail if the request includes a public ACL.</p> </li> </ul> <p>Enabling this setting doesn't affect existing policies or ACLs.</p>
     pub block_public_acls: Option<bool>,
@@ -10562,6 +10789,7 @@ impl PublicAccessBlockConfigurationSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketAccelerateConfigurationRequest {
     /// <p>Specifies the Accelerate Configuration you want to set for the bucket.</p>
     pub accelerate_configuration: AccelerateConfiguration,
@@ -10570,6 +10798,7 @@ pub struct PutBucketAccelerateConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketAclRequest {
     /// <p>The canned ACL to apply to the bucket.</p>
     pub acl: Option<String>,
@@ -10592,6 +10821,7 @@ pub struct PutBucketAclRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketAnalyticsConfigurationRequest {
     /// <p>The configuration and any analyses for the analytics filter.</p>
     pub analytics_configuration: AnalyticsConfiguration,
@@ -10602,6 +10832,7 @@ pub struct PutBucketAnalyticsConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketCorsRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10612,6 +10843,7 @@ pub struct PutBucketCorsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketEncryptionRequest {
     /// <p>Specifies default encryption for a bucket using server-side encryption with Amazon S3-managed keys (SSE-S3) or AWS KMS-managed keys (SSE-KMS). For information about the Amazon S3 default encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 Default Bucket Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub bucket: String,
@@ -10622,6 +10854,7 @@ pub struct PutBucketEncryptionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketInventoryConfigurationRequest {
     /// <p>The name of the bucket where the inventory configuration will be stored.</p>
     pub bucket: String,
@@ -10632,6 +10865,7 @@ pub struct PutBucketInventoryConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketLifecycleConfigurationRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10640,6 +10874,7 @@ pub struct PutBucketLifecycleConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketLifecycleRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10650,6 +10885,7 @@ pub struct PutBucketLifecycleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketLoggingRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10660,6 +10896,7 @@ pub struct PutBucketLoggingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketMetricsConfigurationRequest {
     /// <p>The name of the bucket for which the metrics configuration is set.</p>
     pub bucket: String,
@@ -10670,6 +10907,7 @@ pub struct PutBucketMetricsConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketNotificationConfigurationRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10678,6 +10916,7 @@ pub struct PutBucketNotificationConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketNotificationRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10688,6 +10927,7 @@ pub struct PutBucketNotificationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketPolicyRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10700,6 +10940,7 @@ pub struct PutBucketPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketReplicationRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10712,6 +10953,7 @@ pub struct PutBucketReplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketRequestPaymentRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10722,6 +10964,7 @@ pub struct PutBucketRequestPaymentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketTaggingRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10732,6 +10975,7 @@ pub struct PutBucketTaggingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketVersioningRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10744,6 +10988,7 @@ pub struct PutBucketVersioningRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketWebsiteRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -10754,6 +10999,7 @@ pub struct PutBucketWebsiteRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectAclOutput {
     pub request_charged: Option<String>,
 }
@@ -10775,6 +11021,7 @@ impl PutObjectAclOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectAclRequest {
     /// <p>The canned ACL to apply to the object.</p>
     pub acl: Option<String>,
@@ -10802,6 +11049,7 @@ pub struct PutObjectAclRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectLegalHoldOutput {
     pub request_charged: Option<String>,
 }
@@ -10823,6 +11071,7 @@ impl PutObjectLegalHoldOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectLegalHoldRequest {
     /// <p>The bucket containing the object that you want to place a Legal Hold on.</p>
     pub bucket: String,
@@ -10838,6 +11087,7 @@ pub struct PutObjectLegalHoldRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectLockConfigurationOutput {
     pub request_charged: Option<String>,
 }
@@ -10859,6 +11109,7 @@ impl PutObjectLockConfigurationOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectLockConfigurationRequest {
     /// <p>The bucket whose object lock configuration you want to create or replace.</p>
     pub bucket: String,
@@ -10872,6 +11123,7 @@ pub struct PutObjectLockConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectOutput {
     /// <p>Entity tag for the uploaded object.</p>
     pub e_tag: Option<String>,
@@ -10972,6 +11224,7 @@ pub struct PutObjectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectRetentionOutput {
     pub request_charged: Option<String>,
 }
@@ -10993,6 +11246,7 @@ impl PutObjectRetentionOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectRetentionRequest {
     /// <p>The bucket that contains the object you want to apply this Object Retention configuration to.</p>
     pub bucket: String,
@@ -11010,6 +11264,7 @@ pub struct PutObjectRetentionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectTaggingOutput {
     /// <p><p/></p>
     pub version_id: Option<String>,
@@ -11032,6 +11287,7 @@ impl PutObjectTaggingOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectTaggingRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -11046,6 +11302,7 @@ pub struct PutObjectTaggingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPublicAccessBlockRequest {
     /// <p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to set.</p>
     pub bucket: String,
@@ -11089,6 +11346,8 @@ impl QueueArnSerializer {
 
 /// <p>Specifies the configuration for publishing messages to an Amazon Simple Queue Service (Amazon SQS) queue when Amazon S3 detects specified events.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueueConfiguration {
     /// <p><p/></p>
     pub events: Vec<String>,
@@ -11166,6 +11425,8 @@ impl QueueConfigurationSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueueConfigurationDeprecated {
     /// <p><p/></p>
     pub events: Option<Vec<String>>,
@@ -11390,6 +11651,7 @@ impl RecordDelimiterSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RecordsEvent {
     /// <p>The byte array of partial, one or more result records.</p>
     pub payload: Option<bytes::Bytes>,
@@ -11415,6 +11677,8 @@ impl RecordsEventDeserializer {
 }
 /// <p>Specifies how requests are redirected. In the event of an error, you can specify a different error code to return.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Redirect {
     /// <p>The host name to use in the redirect request.</p>
     pub host_name: Option<String>,
@@ -11527,6 +11791,8 @@ impl RedirectSerializer {
 
 /// <p>Specifies the redirect behavior of all requests to a website endpoint of an Amazon S3 bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RedirectAllRequestsTo {
     /// <p>Name of the host where requests are redirected.</p>
     pub host_name: String,
@@ -11684,6 +11950,8 @@ impl ReplicaKmsKeyIDSerializer {
 
 /// <p>A container for replication rules. You can add up to 1,000 rules. The maximum size of a replication configuration is 2 MB.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplicationConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that Amazon S3 assumes when replicating objects. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/crr-how-setup.html">How to Set Up Cross-Region Replication</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub role: String,
@@ -11743,6 +12011,8 @@ impl ReplicationConfigurationSerializer {
 
 /// <p>Specifies which Amazon S3 objects to replicate and where to store the replicas.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplicationRule {
     /// <p><p/></p>
     pub delete_marker_replication: Option<DeleteMarkerReplication>,
@@ -11865,6 +12135,8 @@ impl ReplicationRuleSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplicationRuleAndOperator {
     /// <p><p/></p>
     pub prefix: Option<String>,
@@ -11929,6 +12201,8 @@ impl ReplicationRuleAndOperatorSerializer {
 
 /// <p>A filter that identifies the subset of objects to which the replication rule applies. A <code>Filter</code> must specify exactly one <code>Prefix</code>, <code>Tag</code>, or an <code>And</code> child element.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplicationRuleFilter {
     /// <p><p>A container for specifying rule filters. The filters determine the subset of objects to which the rule applies. This element is required only if you specify more than one filter. For example: </p> <ul> <li> <p>If you specify both a <code>Prefix</code> and a <code>Tag</code> filter, wrap these filters in an <code>And</code> tag.</p> </li> <li> <p>If you specify a filter based on multiple tags, wrap the <code>Tag</code> elements in an <code>And</code> tag.</p> </li> </ul></p>
     pub and: Option<ReplicationRuleAndOperator>,
@@ -12075,6 +12349,7 @@ impl ReplicationRulesSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestPaymentConfiguration {
     /// <p>Specifies who pays for the download and request fees.</p>
     pub payer: String,
@@ -12104,6 +12379,7 @@ impl RequestPaymentConfigurationSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestProgress {
     /// <p>Specifies whether periodic QueryProgress frames should be sent. Valid values: TRUE, FALSE. Default value: FALSE.</p>
     pub enabled: Option<bool>,
@@ -12254,6 +12530,7 @@ impl ResponseExpiresSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreObjectOutput {
     pub request_charged: Option<String>,
     /// <p>Indicates the path in the provided S3 output location where Select results will be restored to.</p>
@@ -12277,6 +12554,7 @@ impl RestoreObjectOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreObjectRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -12291,6 +12569,7 @@ pub struct RestoreObjectRequest {
 
 /// <p>Container for restore job parameters.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreRequest {
     /// <p>Lifetime of the active copy in days. Do not use with restores that specify OutputLocation.</p>
     pub days: Option<i64>,
@@ -12419,6 +12698,8 @@ impl RoleSerializer {
 
 /// <p>Specifies the redirect behavior and when a redirect is applied.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RoutingRule {
     /// <p>A container for describing a condition that must be met for the specified redirect to apply. For example, 1. If request is for pages in the <code>/docs</code> folder, redirect to the <code>/documents</code> folder. 2. If request results in HTTP error 4xx, redirect request to another host where you might process the error.</p>
     pub condition: Option<Condition>,
@@ -12508,6 +12789,8 @@ impl RoutingRulesSerializer {
 
 /// <p>Specifies lifecycle rules for an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTlifecycle.html">PUT Bucket lifecycle</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Rule {
     /// <p><p/></p>
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
@@ -12691,6 +12974,8 @@ impl RulesSerializer {
 
 /// <p>A container for object key name prefix and suffix filtering rules.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3KeyFilter {
     /// <p><p/></p>
     pub filter_rules: Option<Vec<FilterRule>>,
@@ -12738,6 +13023,7 @@ impl S3KeyFilterSerializer {
 
 /// <p>Describes an S3 location that will receive the results of the restore request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3Location {
     /// <p>A list of grants that control access to the staged results.</p>
     pub access_control_list: Option<Vec<Grant>>,
@@ -12815,6 +13101,8 @@ impl S3LocationSerializer {
 
 /// <p>Specifies the use of SSE-KMS to encrypt delivered Inventory reports.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SSEKMS {
     /// <p>Specifies the ID of the AWS Key Management Service (KMS) master encryption key to use for encrypting Inventory reports.</p>
     pub key_id: String,
@@ -12892,6 +13180,8 @@ impl SSEKMSKeyIdSerializer {
 
 /// <p>Specifies the use of SSE-S3 to encrypt delivered Inventory reports.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SSES3 {}
 
 struct SSES3Deserializer;
@@ -12926,6 +13216,7 @@ impl SSES3Serializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SelectObjectContentEventStream {
     /// <p>The Continuation Event.</p>
     pub cont: Option<ContinuationEvent>,
@@ -12976,6 +13267,7 @@ impl SelectObjectContentEventStreamDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SelectObjectContentOutput {
     /// <p><p/></p>
     pub payload: Option<SelectObjectContentEventStream>,
@@ -12998,6 +13290,7 @@ impl SelectObjectContentOutputDeserializer {
 }
 /// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records. It returns only records that match the specified SQL expression. You must also specify the data serialization format for the response. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelectObjectContentRequest {
     /// <p>The S3 bucket.</p>
     pub bucket: String,
@@ -13054,6 +13347,7 @@ impl SelectObjectContentRequestSerializer {
 }
 /// <p>Describes the parameters for Select job types.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelectParameters {
     /// <p>The expression that is used to query the object.</p>
     pub expression: String,
@@ -13137,6 +13431,8 @@ impl ServerSideEncryptionSerializer {
 
 /// <p>Describes the default server-side encryption to apply to new objects in the bucket. If a PUT Object request doesn't specify any server-side encryption, this default encryption will be applied. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTencryption.html">PUT Bucket encryption</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ServerSideEncryptionByDefault {
     /// <p>KMS master key ID to use for the default encryption. This parameter is allowed if and only if <code>SSEAlgorithm</code> is set to <code>aws:kms</code>.</p>
     pub kms_master_key_id: Option<String>,
@@ -13206,6 +13502,8 @@ impl ServerSideEncryptionByDefaultSerializer {
 
 /// <p>Specifies the default server-side-encryption configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ServerSideEncryptionConfiguration {
     /// <p>Container for information about a particular server-side encryption configuration rule.</p>
     pub rules: Vec<ServerSideEncryptionRule>,
@@ -13256,6 +13554,8 @@ impl ServerSideEncryptionConfigurationSerializer {
 
 /// <p>Specifies the default server-side encryption configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ServerSideEncryptionRule {
     /// <p>Specifies the default server-side encryption to apply to new objects in the bucket. If a PUT Object request doesn't specify any server-side encryption, this default encryption will be applied.</p>
     pub apply_server_side_encryption_by_default: Option<ServerSideEncryptionByDefault>,
@@ -13404,6 +13704,8 @@ impl SizeDeserializer {
 }
 /// <p>A container that describes additional filters for identifying the source objects that you want to replicate. You can choose to enable or disable the replication of these objects. Currently, Amazon S3 supports only the filter that you can specify for objects created with server-side encryption using an AWS KMS-Managed Key (SSE-KMS).</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SourceSelectionCriteria {
     /// <p> A container for filter information for the selection of Amazon S3 objects encrypted with AWS KMS. If you include <code>SourceSelectionCriteria</code> in the replication configuration, this element is required. </p>
     pub sse_kms_encrypted_objects: Option<SseKmsEncryptedObjects>,
@@ -13461,6 +13763,8 @@ impl SourceSelectionCriteriaSerializer {
 
 /// <p>A container for filter information for the selection of S3 objects encrypted with AWS KMS.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SseKmsEncryptedObjects {
     /// <p>Specifies whether Amazon S3 replicates objects created with server-side encryption using an AWS KMS-managed key.</p>
     pub status: String,
@@ -13574,6 +13878,7 @@ impl StartAfterSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Stats {
     /// <p>The total number of uncompressed object bytes processed.</p>
     pub bytes_processed: Option<i64>,
@@ -13615,6 +13920,7 @@ impl StatsDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StatsEvent {
     /// <p>The Stats event details.</p>
     pub details: Option<Stats>,
@@ -13672,6 +13978,8 @@ impl StorageClassSerializer {
 
 /// <p>Specifies data related to access patterns to be collected and made available to analyze the tradeoffs between different storage classes for an Amazon S3 bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StorageClassAnalysis {
     /// <p>Specifies how data related to the storage class analysis for an Amazon S3 bucket should be exported.</p>
     pub data_export: Option<StorageClassAnalysisDataExport>,
@@ -13721,6 +14029,8 @@ impl StorageClassAnalysisSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StorageClassAnalysisDataExport {
     /// <p>The place to store the data for an analysis.</p>
     pub destination: AnalyticsExportDestination,
@@ -13854,6 +14164,8 @@ impl SuffixSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>Name of the tag.</p>
     pub key: String,
@@ -13948,6 +14260,7 @@ impl TagSetSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tagging {
     /// <p><p/></p>
     pub tag_set: Vec<Tag>,
@@ -14004,6 +14317,8 @@ impl TargetBucketSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TargetGrant {
     /// <p><p/></p>
     pub grantee: Option<Grantee>,
@@ -14219,6 +14534,8 @@ impl TopicArnSerializer {
 
 /// <p>A container for specifying the configuration for publication of messages to an Amazon Simple Notification Service (Amazon SNS) topic when Amazon S3 detects specified events.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TopicConfiguration {
     /// <p>The Amazon S3 bucket event about which to send notifications. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Supported Event Types</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub events: Vec<String>,
@@ -14296,6 +14613,8 @@ impl TopicConfigurationSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TopicConfigurationDeprecated {
     /// <p><p/></p>
     pub events: Option<Vec<String>>,
@@ -14420,6 +14739,8 @@ impl TopicConfigurationListSerializer {
 
 /// <p>Specifies when an object transitions to a specified storage class.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Transition {
     /// <p>Indicates when objects are transitioned to the specified storage class. The date value must be in ISO 8601 format. The time is always midnight UTC.</p>
     pub date: Option<String>,
@@ -14672,6 +14993,7 @@ impl UploadIdMarkerSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UploadPartCopyOutput {
     /// <p><p/></p>
     pub copy_part_result: Option<CopyPartResult>,
@@ -14705,6 +15027,7 @@ impl UploadPartCopyOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadPartCopyRequest {
     /// <p><p/></p>
     pub bucket: String,
@@ -14742,6 +15065,7 @@ pub struct UploadPartCopyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UploadPartOutput {
     /// <p>Entity tag for the uploaded object.</p>
     pub e_tag: Option<String>,
@@ -14883,6 +15207,7 @@ impl VersionIdMarkerSerializer {
 
 /// <p>Describes the versioning state of an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTVersioningStatus.html">PUT Bucket versioning</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VersioningConfiguration {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned.</p>
     pub mfa_delete: Option<String>,
@@ -14924,6 +15249,7 @@ impl VersioningConfigurationSerializer {
 
 /// <p>Specifies website configuration parameters for an Amazon S3 bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct WebsiteConfiguration {
     /// <p>The name of the error document for the website.</p>
     pub error_document: Option<ErrorDocument>,

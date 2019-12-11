@@ -25,6 +25,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInvitationRequest {
     /// <p>The unique ID of the detector of the GuardDuty member account.</p>
     #[serde(rename = "DetectorId")]
@@ -65,6 +66,7 @@ pub struct AccessKeyDetails {
 
 /// <p>Contains information about the account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccountDetail {
     /// <p>Member account ID.</p>
     #[serde(rename = "AccountId")]
@@ -101,6 +103,7 @@ pub struct Action {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ArchiveFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to archive.</p>
     #[serde(rename = "DetectorId")]
@@ -194,6 +197,7 @@ pub struct Country {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDetectorRequest {
     /// <p>The idempotency token for the create request.</p>
     #[serde(rename = "ClientToken")]
@@ -222,6 +226,7 @@ pub struct CreateDetectorResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFilterRequest {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
     #[serde(rename = "Action")]
@@ -263,6 +268,7 @@ pub struct CreateFilterResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIPSetRequest {
     /// <p>A boolean value that indicates whether GuardDuty is to start using the uploaded IPSet.</p>
     #[serde(rename = "Activate")]
@@ -298,6 +304,7 @@ pub struct CreateIPSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMembersRequest {
     /// <p>A list of account ID and email address pairs of the accounts that you want to associate with the master GuardDuty account.</p>
     #[serde(rename = "AccountDetails")]
@@ -316,6 +323,7 @@ pub struct CreateMembersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSampleFindingsRequest {
     /// <p>The ID of the detector to create sample findings for.</p>
     #[serde(rename = "DetectorId")]
@@ -331,6 +339,7 @@ pub struct CreateSampleFindingsRequest {
 pub struct CreateSampleFindingsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThreatIntelSetRequest {
     /// <p>A boolean value that indicates whether GuardDuty is to start using the uploaded ThreatIntelSet.</p>
     #[serde(rename = "Activate")]
@@ -366,6 +375,7 @@ pub struct CreateThreatIntelSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeclineInvitationsRequest {
     /// <p>A list of account IDs of the AWS accounts that sent invitations to the current member account that you want to decline invitations from.</p>
     #[serde(rename = "AccountIds")]
@@ -381,6 +391,7 @@ pub struct DeclineInvitationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDetectorRequest {
     /// <p>The unique ID of the detector that you want to delete.</p>
     #[serde(rename = "DetectorId")]
@@ -392,6 +403,7 @@ pub struct DeleteDetectorRequest {
 pub struct DeleteDetectorResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFilterRequest {
     /// <p>The unique ID of the detector the filter is associated with.</p>
     #[serde(rename = "DetectorId")]
@@ -406,6 +418,7 @@ pub struct DeleteFilterRequest {
 pub struct DeleteFilterResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIPSetRequest {
     /// <p>The unique ID of the detector the ipSet is associated with.</p>
     #[serde(rename = "DetectorId")]
@@ -420,6 +433,7 @@ pub struct DeleteIPSetRequest {
 pub struct DeleteIPSetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInvitationsRequest {
     /// <p>A list of account IDs of the AWS accounts that sent invitations to the current member account that you want to delete invitations from.</p>
     #[serde(rename = "AccountIds")]
@@ -435,6 +449,7 @@ pub struct DeleteInvitationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to delete.</p>
     #[serde(rename = "AccountIds")]
@@ -453,6 +468,7 @@ pub struct DeleteMembersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThreatIntelSetRequest {
     /// <p>The unique ID of the detector the threatIntelSet is associated with.</p>
     #[serde(rename = "DetectorId")]
@@ -467,6 +483,7 @@ pub struct DeleteThreatIntelSetRequest {
 pub struct DeleteThreatIntelSetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateFromMasterAccountRequest {
     /// <p>The unique ID of the detector of the GuardDuty member account.</p>
     #[serde(rename = "DetectorId")]
@@ -478,6 +495,7 @@ pub struct DisassociateFromMasterAccountRequest {
 pub struct DisassociateFromMasterAccountResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to disassociate from master.</p>
     #[serde(rename = "AccountIds")]
@@ -613,6 +631,7 @@ pub struct GeoLocation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDetectorRequest {
     /// <p>The unique ID of the detector that you want to get.</p>
     #[serde(rename = "DetectorId")]
@@ -647,6 +666,7 @@ pub struct GetDetectorResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFilterRequest {
     /// <p>The unique ID of the detector the filter is associated with.</p>
     #[serde(rename = "DetectorId")]
@@ -683,6 +703,7 @@ pub struct GetFilterResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to retrieve.</p>
     #[serde(rename = "DetectorId")]
@@ -705,6 +726,7 @@ pub struct GetFindingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingsStatisticsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings' statistics you want to retrieve.</p>
     #[serde(rename = "DetectorId")]
@@ -727,6 +749,7 @@ pub struct GetFindingsStatisticsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIPSetRequest {
     /// <p>The unique ID of the detector the ipSet is associated with.</p>
     #[serde(rename = "DetectorId")]
@@ -758,6 +781,7 @@ pub struct GetIPSetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInvitationsCountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -770,6 +794,7 @@ pub struct GetInvitationsCountResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMasterAccountRequest {
     /// <p>The unique ID of the detector of the GuardDuty member account.</p>
     #[serde(rename = "DetectorId")]
@@ -785,6 +810,7 @@ pub struct GetMasterAccountResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to describe.</p>
     #[serde(rename = "AccountIds")]
@@ -806,6 +832,7 @@ pub struct GetMembersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetThreatIntelSetRequest {
     /// <p>The unique ID of the detector the threatIntelSet is associated with.</p>
     #[serde(rename = "DetectorId")]
@@ -927,6 +954,7 @@ pub struct Invitation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InviteMembersRequest {
     /// <p>A list of account IDs of the accounts that you want to invite to GuardDuty as members.</p>
     #[serde(rename = "AccountIds")]
@@ -953,6 +981,7 @@ pub struct InviteMembersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDetectorsRequest {
     /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 50. The maximum value is 50.</p>
     #[serde(rename = "MaxResults")]
@@ -977,6 +1006,7 @@ pub struct ListDetectorsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFiltersRequest {
     /// <p>The unique ID of the detector the filter is associated with.</p>
     #[serde(rename = "DetectorId")]
@@ -1004,6 +1034,7 @@ pub struct ListFiltersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to list.</p>
     #[serde(rename = "DetectorId")]
@@ -1039,6 +1070,7 @@ pub struct ListFindingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIPSetsRequest {
     /// <p>The unique ID of the detector the ipSet is associated with.</p>
     #[serde(rename = "DetectorId")]
@@ -1066,6 +1098,7 @@ pub struct ListIPSetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvitationsRequest {
     /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 50. The maximum value is 50.</p>
     #[serde(rename = "MaxResults")]
@@ -1091,6 +1124,7 @@ pub struct ListInvitationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMembersRequest {
     /// <p>The unique ID of the detector the member is associated with.</p>
     #[serde(rename = "DetectorId")]
@@ -1123,6 +1157,7 @@ pub struct ListMembersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the given GuardDuty resource </p>
     #[serde(rename = "ResourceArn")]
@@ -1139,6 +1174,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThreatIntelSetsRequest {
     /// <p>The unique ID of the detector the threatIntelSet is associated with.</p>
     #[serde(rename = "DetectorId")]
@@ -1504,6 +1540,7 @@ pub struct Service {
 
 /// <p>Contains information about the criteria for sorting.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SortCriteria {
     /// <p>Represents the finding attribute (for example, accountId) by which to sort findings.</p>
     #[serde(rename = "AttributeName")]
@@ -1516,6 +1553,7 @@ pub struct SortCriteria {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMonitoringMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts whose findings you want the master account to monitor.</p>
     #[serde(rename = "AccountIds")]
@@ -1534,6 +1572,7 @@ pub struct StartMonitoringMembersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopMonitoringMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts whose findings you want the master account to stop monitoring.</p>
     #[serde(rename = "AccountIds")]
@@ -1566,6 +1605,7 @@ pub struct Tag {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the given GuardDuty resource </p>
     #[serde(rename = "ResourceArn")]
@@ -1594,6 +1634,7 @@ pub struct ThreatIntelligenceDetail {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnarchiveFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to unarchive.</p>
     #[serde(rename = "DetectorId")]
@@ -1620,6 +1661,7 @@ pub struct UnprocessedAccount {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the given GuardDuty resource </p>
     #[serde(rename = "ResourceArn")]
@@ -1634,6 +1676,7 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorRequest {
     /// <p>The unique ID of the detector that you want to update.</p>
     #[serde(rename = "DetectorId")]
@@ -1653,6 +1696,7 @@ pub struct UpdateDetectorRequest {
 pub struct UpdateDetectorResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFilterRequest {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
     #[serde(rename = "Action")]
@@ -1687,6 +1731,7 @@ pub struct UpdateFilterResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFindingsFeedbackRequest {
     /// <p>Additional feedback about the GuardDuty findings.</p>
     #[serde(rename = "Comments")]
@@ -1708,6 +1753,7 @@ pub struct UpdateFindingsFeedbackRequest {
 pub struct UpdateFindingsFeedbackResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIPSetRequest {
     /// <p>The updated boolean value that specifies whether the IPSet is active or not.</p>
     #[serde(rename = "Activate")]
@@ -1734,6 +1780,7 @@ pub struct UpdateIPSetRequest {
 pub struct UpdateIPSetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThreatIntelSetRequest {
     /// <p>The updated boolean value that specifies whether the ThreateIntelSet is active or not.</p>
     #[serde(rename = "Activate")]

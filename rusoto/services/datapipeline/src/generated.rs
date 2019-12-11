@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Contains the parameters for ActivatePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ActivatePipelineInput {
     /// <p>A list of parameter values to pass to the pipeline at activation.</p>
     #[serde(rename = "parameterValues")]
@@ -46,6 +47,7 @@ pub struct ActivatePipelineOutput {}
 
 /// <p>Contains the parameters for AddTags.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
     /// <p>The ID of the pipeline.</p>
     #[serde(rename = "pipelineId")]
@@ -62,6 +64,7 @@ pub struct AddTagsOutput {}
 
 /// <p>Contains the parameters for CreatePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePipelineInput {
     /// <p>The description for the pipeline.</p>
     #[serde(rename = "description")]
@@ -90,6 +93,7 @@ pub struct CreatePipelineOutput {
 
 /// <p>Contains the parameters for DeactivatePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeactivatePipelineInput {
     /// <p>Indicates whether to cancel any running objects. The default is true, which sets the state of any running objects to <code>CANCELED</code>. If this value is false, the pipeline is deactivated after all running objects finish.</p>
     #[serde(rename = "cancelActive")]
@@ -107,6 +111,7 @@ pub struct DeactivatePipelineOutput {}
 
 /// <p>Contains the parameters for DeletePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePipelineInput {
     /// <p>The ID of the pipeline.</p>
     #[serde(rename = "pipelineId")]
@@ -115,6 +120,7 @@ pub struct DeletePipelineInput {
 
 /// <p>Contains the parameters for DescribeObjects.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeObjectsInput {
     /// <p>Indicates whether any expressions in the object should be evaluated when the object descriptions are returned.</p>
     #[serde(rename = "evaluateExpressions")]
@@ -151,6 +157,7 @@ pub struct DescribeObjectsOutput {
 
 /// <p>Contains the parameters for DescribePipelines.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePipelinesInput {
     /// <p>The IDs of the pipelines to describe. You can pass as many as 25 identifiers in a single call. To obtain pipeline IDs, call <a>ListPipelines</a>.</p>
     #[serde(rename = "pipelineIds")]
@@ -168,6 +175,7 @@ pub struct DescribePipelinesOutput {
 
 /// <p>Contains the parameters for EvaluateExpression.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EvaluateExpressionInput {
     /// <p>The expression to evaluate.</p>
     #[serde(rename = "expression")]
@@ -207,6 +215,7 @@ pub struct Field {
 
 /// <p>Contains the parameters for GetPipelineDefinition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPipelineDefinitionInput {
     /// <p>The ID of the pipeline.</p>
     #[serde(rename = "pipelineId")]
@@ -237,6 +246,7 @@ pub struct GetPipelineDefinitionOutput {
 
 /// <p><p>Identity information for the EC2 instance that is hosting the task runner. You can get this value by calling a metadata URI from the EC2 instance. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AESDG-chapter-instancedata.html">Instance Metadata</a> in the <i>Amazon Elastic Compute Cloud User Guide.</i> Passing in this value proves that your task runner is running on an EC2 instance, and ensures the proper AWS Data Pipeline service charges are applied to your pipeline.</p></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceIdentity {
     /// <p>A description of an EC2 instance that is generated when the instance is launched and exposed to the instance via the instance metadata service in the form of a JSON representation of an object.</p>
     #[serde(rename = "document")]
@@ -250,6 +260,7 @@ pub struct InstanceIdentity {
 
 /// <p>Contains the parameters for ListPipelines.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelinesInput {
     /// <p>The starting point for the results to be returned. For the first call, this value should be empty. As long as there are more results, continue to call <code>ListPipelines</code> with the marker value from the previous call to retrieve the next set of results.</p>
     #[serde(rename = "marker")]
@@ -276,6 +287,7 @@ pub struct ListPipelinesOutput {
 
 /// <p>Contains a logical operation for comparing the value of a field with a specified value.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Operator {
     /// <p> The logical operation to be performed: equal (<code>EQ</code>), equal reference (<code>REF_EQ</code>), less than or equal (<code>LE</code>), greater than or equal (<code>GE</code>), or between (<code>BETWEEN</code>). Equal reference (<code>REF_EQ</code>) can be used only with reference fields. The other comparison types can be used only with String fields. The comparison types you can use apply only to certain object fields, as detailed below. </p> <p> The comparison operators EQ and REF_EQ act on the following fields: </p> <ul> <li>name</li> <li>@sphere</li> <li>parent</li> <li>@componentParent</li> <li>@instanceParent</li> <li>@status</li> <li>@scheduledStartTime</li> <li>@scheduledEndTime</li> <li>@actualStartTime</li> <li>@actualEndTime</li> </ul> <p> The comparison operators <code>GE</code>, <code>LE</code>, and <code>BETWEEN</code> act on the following fields: </p> <ul> <li>@scheduledStartTime</li> <li>@scheduledEndTime</li> <li>@actualStartTime</li> <li>@actualEndTime</li> </ul> <p>Note that fields beginning with the at sign (@) are read-only and set by the web service. When you name fields, you should choose names containing only alpha-numeric values, as symbols may be reserved by AWS Data Pipeline. User-defined fields that you add to a pipeline should prefix their name with the string "my".</p>
     #[serde(rename = "type")]
@@ -373,6 +385,7 @@ pub struct PipelineObject {
 
 /// <p>Contains the parameters for PollForTask.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PollForTaskInput {
     /// <p>The public DNS name of the calling task runner.</p>
     #[serde(rename = "hostname")]
@@ -399,6 +412,7 @@ pub struct PollForTaskOutput {
 
 /// <p>Contains the parameters for PutPipelineDefinition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPipelineDefinitionInput {
     /// <p>The parameter objects used with the pipeline.</p>
     #[serde(rename = "parameterObjects")]
@@ -435,6 +449,7 @@ pub struct PutPipelineDefinitionOutput {
 
 /// <p>Defines the query to run against an object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Query {
     /// <p>List of selectors that define the query. An object must satisfy all of the selectors to match the query.</p>
     #[serde(rename = "selectors")]
@@ -444,6 +459,7 @@ pub struct Query {
 
 /// <p>Contains the parameters for QueryObjects.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryObjectsInput {
     /// <p>The maximum number of object names that <code>QueryObjects</code> will return in a single call. The default value is 100. </p>
     #[serde(rename = "limit")]
@@ -485,6 +501,7 @@ pub struct QueryObjectsOutput {
 
 /// <p>Contains the parameters for RemoveTags.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsInput {
     /// <p>The ID of the pipeline.</p>
     #[serde(rename = "pipelineId")]
@@ -501,6 +518,7 @@ pub struct RemoveTagsOutput {}
 
 /// <p>Contains the parameters for ReportTaskProgress.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReportTaskProgressInput {
     /// <p>Key-value pairs that define the properties of the ReportTaskProgressInput object.</p>
     #[serde(rename = "fields")]
@@ -522,6 +540,7 @@ pub struct ReportTaskProgressOutput {
 
 /// <p>Contains the parameters for ReportTaskRunnerHeartbeat.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReportTaskRunnerHeartbeatInput {
     /// <p>The public DNS name of the task runner.</p>
     #[serde(rename = "hostname")]
@@ -547,6 +566,7 @@ pub struct ReportTaskRunnerHeartbeatOutput {
 
 /// <p>A comparision that is used to determine whether a query should return this object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Selector {
     /// <p>The name of the field that the operator will be applied to. The field name is the "key" portion of the field definition in the pipeline definition syntax that is used by the AWS Data Pipeline API. If the field is not set on the object, the condition fails.</p>
     #[serde(rename = "fieldName")]
@@ -559,6 +579,7 @@ pub struct Selector {
 
 /// <p>Contains the parameters for SetStatus.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetStatusInput {
     /// <p>The IDs of the objects. The corresponding objects can be either physical or components, but not a mix of both types.</p>
     #[serde(rename = "objectIds")]
@@ -573,6 +594,7 @@ pub struct SetStatusInput {
 
 /// <p>Contains the parameters for SetTaskStatus.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTaskStatusInput {
     /// <p>If an error occurred during the task, this value specifies the error code. This value is set on the physical attempt object. It is used to display error information to the user. It should not start with string "Service_" which is reserved by the system.</p>
     #[serde(rename = "errorId")]
@@ -634,6 +656,7 @@ pub struct TaskObject {
 
 /// <p>Contains the parameters for ValidatePipelineDefinition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidatePipelineDefinitionInput {
     /// <p>The parameter objects used with the pipeline.</p>
     #[serde(rename = "parameterObjects")]

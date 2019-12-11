@@ -347,6 +347,7 @@ pub struct AvailSettings {
 
 /// <p>A list of schedule actions to create (in a request) or that have been created (in a response).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchScheduleActionCreateRequest {
     /// <p>A list of schedule actions to create.</p>
     #[serde(rename = "ScheduleActions")]
@@ -364,6 +365,7 @@ pub struct BatchScheduleActionCreateResult {
 
 /// <p>A list of schedule actions to delete.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchScheduleActionDeleteRequest {
     /// <p>A list of schedule actions to delete.</p>
     #[serde(rename = "ActionNames")]
@@ -381,6 +383,7 @@ pub struct BatchScheduleActionDeleteResult {
 
 /// <p>List of actions to create and list of actions to delete.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdateScheduleRequest {
     /// <p>Id of the channel whose schedule is being updated.</p>
     #[serde(rename = "ChannelId")]
@@ -763,6 +766,7 @@ pub struct ColorSpacePassthroughSettings {}
 
 /// <p>A request to create a channel</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChannelRequest {
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
@@ -816,6 +820,7 @@ pub struct CreateChannelResponse {
 
 /// <p>The name of the input</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInputRequest {
     /// <p>Destination settings for PUSH type inputs.</p>
     #[serde(rename = "Destinations")]
@@ -873,6 +878,7 @@ pub struct CreateInputResponse {
 
 /// <p>The IPv4 CIDRs to whitelist for this Input Security Group</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInputSecurityGroupRequest {
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
@@ -895,6 +901,7 @@ pub struct CreateInputSecurityGroupResponse {
 
 /// <p>Placeholder documentation for CreateTagsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -905,6 +912,7 @@ pub struct CreateTagsRequest {
 
 /// <p>Placeholder documentation for DeleteChannelRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelRequest {
     /// <p>Unique ID of the channel.</p>
     #[serde(rename = "ChannelId")]
@@ -978,6 +986,7 @@ pub struct DeleteChannelResponse {
 
 /// <p>Placeholder documentation for DeleteInputRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInputRequest {
     /// <p>Unique ID of the input</p>
     #[serde(rename = "InputId")]
@@ -991,6 +1000,7 @@ pub struct DeleteInputResponse {}
 
 /// <p>Placeholder documentation for DeleteInputSecurityGroupRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInputSecurityGroupRequest {
     /// <p>The Input Security Group to delete</p>
     #[serde(rename = "InputSecurityGroupId")]
@@ -1004,6 +1014,7 @@ pub struct DeleteInputSecurityGroupResponse {}
 
 /// <p>Placeholder documentation for DeleteReservationRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReservationRequest {
     /// <p>Unique reservation ID, e.g. &#39;1234567&#39;</p>
     #[serde(rename = "ReservationId")]
@@ -1090,6 +1101,7 @@ pub struct DeleteReservationResponse {
 
 /// <p>Placeholder documentation for DeleteScheduleRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScheduleRequest {
     /// <p>Id of the channel whose schedule is being deleted.</p>
     #[serde(rename = "ChannelId")]
@@ -1103,6 +1115,7 @@ pub struct DeleteScheduleResponse {}
 
 /// <p>Placeholder documentation for DeleteTagsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -1113,6 +1126,7 @@ pub struct DeleteTagsRequest {
 
 /// <p>Placeholder documentation for DescribeChannelRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelRequest {
     /// <p>channel ID</p>
     #[serde(rename = "ChannelId")]
@@ -1186,6 +1200,7 @@ pub struct DescribeChannelResponse {
 
 /// <p>Placeholder documentation for DescribeInputRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInputRequest {
     /// <p>Unique ID of the input</p>
     #[serde(rename = "InputId")]
@@ -1256,6 +1271,7 @@ pub struct DescribeInputResponse {
 
 /// <p>Placeholder documentation for DescribeInputSecurityGroupRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInputSecurityGroupRequest {
     /// <p>The id of the Input Security Group to describe</p>
     #[serde(rename = "InputSecurityGroupId")]
@@ -1294,6 +1310,7 @@ pub struct DescribeInputSecurityGroupResponse {
 
 /// <p>Placeholder documentation for DescribeOfferingRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOfferingRequest {
     /// <p>Unique offering ID, e.g. &#39;87654321&#39;</p>
     #[serde(rename = "OfferingId")]
@@ -1352,6 +1369,7 @@ pub struct DescribeOfferingResponse {
 
 /// <p>Placeholder documentation for DescribeReservationRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservationRequest {
     /// <p>Unique reservation ID, e.g. &#39;1234567&#39;</p>
     #[serde(rename = "ReservationId")]
@@ -1438,6 +1456,7 @@ pub struct DescribeReservationResponse {
 
 /// <p>Placeholder documentation for DescribeScheduleRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScheduleRequest {
     /// <p>Id of the channel whose schedule is being updated.</p>
     #[serde(rename = "ChannelId")]
@@ -2665,6 +2684,7 @@ pub struct InputDestination {
 
 /// <p>Endpoint settings for a PUSH type input.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputDestinationRequest {
     /// <p>A unique name for the location the RTMP stream is being pushed
     /// to.</p>
@@ -2823,6 +2843,7 @@ pub struct InputSource {
 
 /// <p>Settings for for a PULL type input.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputSourceRequest {
     /// <p>The key used to extract the password from EC2 Parameter store.</p>
     #[serde(rename = "PasswordParam")]
@@ -2877,6 +2898,7 @@ pub struct InputSwitchScheduleActionSettings {
 /// This property requires setting the roleArn property on Input creation.
 /// Not compatible with the inputSecurityGroups property.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputVpcRequest {
     /// <p>A list of up to 5 EC2 VPC security group IDs to attach to the Input VPC network interfaces.
     /// Requires subnetIds. If none are specified then the VPC default security group will be used.</p>
@@ -2901,6 +2923,7 @@ pub struct InputWhitelistRule {
 
 /// <p>An IPv4 CIDR to whitelist.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputWhitelistRuleCidr {
     /// <p>The IPv4 CIDR to whitelist.</p>
     #[serde(rename = "Cidr")]
@@ -2918,6 +2941,7 @@ pub struct KeyProviderSettings {
 
 /// <p>Placeholder documentation for ListChannelsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2941,6 +2965,7 @@ pub struct ListChannelsResponse {
 
 /// <p>Placeholder documentation for ListInputSecurityGroupsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInputSecurityGroupsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2965,6 +2990,7 @@ pub struct ListInputSecurityGroupsResponse {
 
 /// <p>Placeholder documentation for ListInputsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInputsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2988,6 +3014,7 @@ pub struct ListInputsResponse {
 
 /// <p>Placeholder documentation for ListOfferingsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingsRequest {
     /// <p>Filter by channel class, &#39;STANDARD&#39; or &#39;SINGLE_PIPELINE&#39;</p>
     #[serde(rename = "ChannelClass")]
@@ -3049,6 +3076,7 @@ pub struct ListOfferingsResponse {
 
 /// <p>Placeholder documentation for ListReservationsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReservationsRequest {
     /// <p>Filter by channel class, &#39;STANDARD&#39; or &#39;SINGLE_PIPELINE&#39;</p>
     #[serde(rename = "ChannelClass")]
@@ -3106,6 +3134,7 @@ pub struct ListReservationsResponse {
 
 /// <p>Placeholder documentation for ListTagsForResourceRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -3394,6 +3423,7 @@ pub struct MediaConnectFlow {
 
 /// <p>The settings for a MediaConnect Flow.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MediaConnectFlowRequest {
     /// <p>The ARN of the MediaConnect Flow that you want to use as a source.</p>
     #[serde(rename = "FlowArn")]
@@ -3781,6 +3811,7 @@ pub struct PipelinePauseStateSettings {
 
 /// <p>Placeholder documentation for PurchaseOfferingRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseOfferingRequest {
     /// <p>Number of resources</p>
     #[serde(rename = "Count")]
@@ -4276,6 +4307,7 @@ pub struct StandardHlsSettings {
 
 /// <p>Placeholder documentation for StartChannelRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartChannelRequest {
     /// <p>A request to start a channel</p>
     #[serde(rename = "ChannelId")]
@@ -4427,6 +4459,7 @@ pub struct StaticKeySettings {
 
 /// <p>Placeholder documentation for StopChannelRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopChannelRequest {
     /// <p>A request to stop a running channel</p>
     #[serde(rename = "ChannelId")]
@@ -4593,6 +4626,7 @@ pub struct UdpOutputSettings {
 
 /// <p>Channel class that the channel should be updated to.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelClassRequest {
     /// <p>The channel class that you wish to update this channel to use.</p>
     #[serde(rename = "ChannelClass")]
@@ -4617,6 +4651,7 @@ pub struct UpdateChannelClassResponse {
 
 /// <p>A request to update a channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelRequest {
     /// <p>channel ID</p>
     #[serde(rename = "ChannelId")]
@@ -4661,6 +4696,7 @@ pub struct UpdateChannelResponse {
 
 /// <p>A request to update an input.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInputRequest {
     /// <p>Destination settings for PUSH type inputs.</p>
     #[serde(rename = "Destinations")]
@@ -4706,6 +4742,7 @@ pub struct UpdateInputResponse {
 
 /// <p>The request to update some combination of the Input Security Group name and the IPv4 CIDRs the Input Security Group should allow.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInputSecurityGroupRequest {
     /// <p>The id of the Input Security Group to update.</p>
     #[serde(rename = "InputSecurityGroupId")]
@@ -4731,6 +4768,7 @@ pub struct UpdateInputSecurityGroupResponse {
 
 /// <p>Request to update a reservation</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateReservationRequest {
     /// <p>Name of the reservation</p>
     #[serde(rename = "Name")]

@@ -35,6 +35,7 @@ use xml::EventReader;
 
 /// <p>Contains the parameters for accepting the quote.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptReservedInstancesExchangeQuoteRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -77,6 +78,7 @@ impl AcceptReservedInstancesExchangeQuoteRequestSerializer {
 
 /// <p>The result of the exchange and whether it was <code>successful</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AcceptReservedInstancesExchangeQuoteResult {
     /// <p>The ID of the successful exchange.</p>
     pub exchange_id: Option<String>,
@@ -106,6 +108,7 @@ impl AcceptReservedInstancesExchangeQuoteResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptTransitGatewayVpcAttachmentRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -133,6 +136,7 @@ impl AcceptTransitGatewayVpcAttachmentRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AcceptTransitGatewayVpcAttachmentResult {
     /// <p>The VPC attachment.</p>
     pub transit_gateway_vpc_attachment: Option<TransitGatewayVpcAttachment>,
@@ -165,6 +169,7 @@ impl AcceptTransitGatewayVpcAttachmentResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptVpcEndpointConnectionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -196,6 +201,7 @@ impl AcceptVpcEndpointConnectionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AcceptVpcEndpointConnectionsResult {
     /// <p>Information about the interface endpoints that were not accepted, if applicable.</p>
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
@@ -226,6 +232,7 @@ impl AcceptVpcEndpointConnectionsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptVpcPeeringConnectionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -255,6 +262,7 @@ impl AcceptVpcPeeringConnectionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AcceptVpcPeeringConnectionResult {
     /// <p>Information about the VPC peering connection.</p>
     pub vpc_peering_connection: Option<VpcPeeringConnection>,
@@ -288,6 +296,7 @@ impl AcceptVpcPeeringConnectionResultDeserializer {
 }
 /// <p>Describes an account attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccountAttribute {
     /// <p>The name of the account attribute.</p>
     pub attribute_name: Option<String>,
@@ -353,6 +362,7 @@ impl AccountAttributeNameStringListSerializer {
 
 /// <p>Describes a value of an account attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccountAttributeValue {
     /// <p>The value of the attribute.</p>
     pub attribute_value: Option<String>,
@@ -398,6 +408,7 @@ impl AccountAttributeValueListDeserializer {
 }
 /// <p>Describes a running instance in a Spot Fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ActiveInstance {
     /// <p>The health status of the instance. If the status of either the instance status check or the system status check is <code>impaired</code>, the health status of the instance is <code>unhealthy</code>. Otherwise, the health status is <code>healthy</code>.</p>
     pub instance_health: Option<String>,
@@ -473,6 +484,7 @@ impl ActivityStatusDeserializer {
 }
 /// <p>Describes an Elastic IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Address {
     /// <p>The ID representing the allocation of the address for use with EC2-VPC.</p>
     pub allocation_id: Option<String>,
@@ -571,6 +583,7 @@ impl AddressListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdvertiseByoipCidrRequest {
     /// <p>The IPv4 address range, in CIDR notation. This must be the exact range that you provisioned. You can't advertise only a portion of the provisioned range.</p>
     pub cidr: String,
@@ -595,6 +608,7 @@ impl AdvertiseByoipCidrRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AdvertiseByoipCidrResult {
     /// <p>Information about the address range.</p>
     pub byoip_cidr: Option<ByoipCidr>,
@@ -624,6 +638,7 @@ impl AdvertiseByoipCidrResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocateAddressRequest {
     /// <p>[EC2-VPC] The Elastic IP address to recover or an IPv4 address from an address pool.</p>
     pub address: Option<String>,
@@ -660,6 +675,7 @@ impl AllocateAddressRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AllocateAddressResult {
     /// <p>[EC2-VPC] The ID that AWS assigns to represent the allocation of the Elastic IP address for use with instances in a VPC.</p>
     pub allocation_id: Option<String>,
@@ -701,6 +717,7 @@ impl AllocateAddressResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocateHostsRequest {
     /// <p>Indicates whether the host accepts any untargeted instance launches that match its instance type configuration, or if it only accepts Host tenancy instance launches that specify its unique host ID. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/how-dedicated-hosts-work.html#dedicated-hosts-understanding"> Understanding Instance Placement and Host Affinity</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>Default: <code>on</code> </p>
     pub auto_placement: Option<String>,
@@ -754,6 +771,7 @@ impl AllocateHostsRequestSerializer {
 
 /// <p>Contains the output of AllocateHosts.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AllocateHostsResult {
     /// <p>The ID of the allocated Dedicated Host. This is used to launch an instance onto a specific host.</p>
     pub host_ids: Option<Vec<String>>,
@@ -815,6 +833,7 @@ impl AllocationStrategyDeserializer {
 }
 /// <p>Describes a principal.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AllowedPrincipal {
     /// <p>The Amazon Resource Name (ARN) of the principal.</p>
     pub principal: Option<String>,
@@ -864,6 +883,7 @@ impl AllowedPrincipalSetDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplySecurityGroupsToClientVpnTargetNetworkRequest {
     /// <p>The ID of the Client VPN endpoint.</p>
     pub client_vpn_endpoint_id: String,
@@ -905,6 +925,7 @@ impl ApplySecurityGroupsToClientVpnTargetNetworkRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplySecurityGroupsToClientVpnTargetNetworkResult {
     /// <p>The IDs of the applied security groups.</p>
     pub security_group_ids: Option<Vec<String>>,
@@ -949,6 +970,7 @@ impl ArchitectureValuesDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssignIpv6AddressesRequest {
     /// <p>The number of IPv6 addresses to assign to the network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. You can't use this option if specifying specific IPv6 addresses.</p>
     pub ipv_6_address_count: Option<i64>,
@@ -985,6 +1007,7 @@ impl AssignIpv6AddressesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AssignIpv6AddressesResult {
     /// <p>The IPv6 addresses assigned to the network interface.</p>
     pub assigned_ipv_6_addresses: Option<Vec<String>>,
@@ -1027,6 +1050,7 @@ impl AssignIpv6AddressesResultDeserializer {
 }
 /// <p>Contains the parameters for AssignPrivateIpAddresses.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssignPrivateIpAddressesRequest {
     /// <p>Indicates whether to allow an IP address that is already assigned to another network interface or instance to be reassigned to the specified network interface.</p>
     pub allow_reassignment: Option<bool>,
@@ -1071,6 +1095,7 @@ impl AssignPrivateIpAddressesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AssignPrivateIpAddressesResult {
     /// <p>The private IP addresses assigned to the network interface.</p>
     pub assigned_private_ip_addresses: Option<Vec<AssignedPrivateIpAddress>>,
@@ -1113,6 +1138,7 @@ impl AssignPrivateIpAddressesResultDeserializer {
 }
 /// <p>Describes the private IP addresses assigned to a network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AssignedPrivateIpAddress {
     /// <p>The private IP address assigned to the network interface.</p>
     pub private_ip_address: Option<String>,
@@ -1161,6 +1187,7 @@ impl AssignedPrivateIpAddressListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateAddressRequest {
     /// <p>[EC2-VPC] The allocation ID. This is required for EC2-VPC.</p>
     pub allocation_id: Option<String>,
@@ -1212,6 +1239,7 @@ impl AssociateAddressRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AssociateAddressResult {
     /// <p>[EC2-VPC] The ID that represents the association of the Elastic IP address with an instance.</p>
     pub association_id: Option<String>,
@@ -1237,6 +1265,7 @@ impl AssociateAddressResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateClientVpnTargetNetworkRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -1272,6 +1301,7 @@ impl AssociateClientVpnTargetNetworkRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AssociateClientVpnTargetNetworkResult {
     /// <p>The unique ID of the target network association.</p>
     pub association_id: Option<String>,
@@ -1307,6 +1337,7 @@ impl AssociateClientVpnTargetNetworkResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDhcpOptionsRequest {
     /// <p>The ID of the DHCP options set, or <code>default</code> to associate no DHCP options with the VPC.</p>
     pub dhcp_options_id: String,
@@ -1337,6 +1368,7 @@ impl AssociateDhcpOptionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateIamInstanceProfileRequest {
     /// <p>The IAM instance profile.</p>
     pub iam_instance_profile: IamInstanceProfileSpecification,
@@ -1363,6 +1395,7 @@ impl AssociateIamInstanceProfileRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AssociateIamInstanceProfileResult {
     /// <p>Information about the IAM instance profile association.</p>
     pub iam_instance_profile_association: Option<IamInstanceProfileAssociation>,
@@ -1395,6 +1428,7 @@ impl AssociateIamInstanceProfileResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateRouteTableRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -1425,6 +1459,7 @@ impl AssociateRouteTableRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AssociateRouteTableResult {
     /// <p>The route table association ID. This ID is required for disassociating the route table.</p>
     pub association_id: Option<String>,
@@ -1454,6 +1489,7 @@ impl AssociateRouteTableResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSubnetCidrBlockRequest {
     /// <p>The IPv6 CIDR block for your subnet. The subnet must have a /64 prefix length.</p>
     pub ipv_6_cidr_block: String,
@@ -1479,6 +1515,7 @@ impl AssociateSubnetCidrBlockRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AssociateSubnetCidrBlockResult {
     /// <p>Information about the IPv6 CIDR block association.</p>
     pub ipv_6_cidr_block_association: Option<SubnetIpv6CidrBlockAssociation>,
@@ -1516,6 +1553,7 @@ impl AssociateSubnetCidrBlockResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTransitGatewayRouteTableRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -1549,6 +1587,7 @@ impl AssociateTransitGatewayRouteTableRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AssociateTransitGatewayRouteTableResult {
     /// <p>The ID of the association.</p>
     pub association: Option<TransitGatewayAssociation>,
@@ -1580,6 +1619,7 @@ impl AssociateTransitGatewayRouteTableResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateVpcCidrBlockRequest {
     /// <p>Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IPv6 addresses, or the size of the CIDR block.</p>
     pub amazon_provided_ipv_6_cidr_block: Option<bool>,
@@ -1612,6 +1652,7 @@ impl AssociateVpcCidrBlockRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AssociateVpcCidrBlockResult {
     /// <p>Information about the IPv4 CIDR block association.</p>
     pub cidr_block_association: Option<VpcCidrBlockAssociation>,
@@ -1679,6 +1720,7 @@ impl AssociationIdListSerializer {
 
 /// <p>Describes the state of a target network association.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AssociationStatus {
     /// <p>The state of the target network association.</p>
     pub code: Option<String>,
@@ -1721,6 +1763,7 @@ impl AssociationStatusCodeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachClassicLinkVpcRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -1755,6 +1798,7 @@ impl AttachClassicLinkVpcRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AttachClassicLinkVpcResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -1783,6 +1827,7 @@ impl AttachClassicLinkVpcResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachInternetGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -1814,6 +1859,7 @@ impl AttachInternetGatewayRequestSerializer {
 
 /// <p>Contains the parameters for AttachNetworkInterface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachNetworkInterfaceRequest {
     /// <p>The index of the device for the network interface attachment.</p>
     pub device_index: i64,
@@ -1848,6 +1894,7 @@ impl AttachNetworkInterfaceRequestSerializer {
 
 /// <p>Contains the output of AttachNetworkInterface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AttachNetworkInterfaceResult {
     /// <p>The ID of the network interface attachment.</p>
     pub attachment_id: Option<String>,
@@ -1878,6 +1925,7 @@ impl AttachNetworkInterfaceResultDeserializer {
 }
 /// <p>Contains the parameters for AttachVolume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachVolumeRequest {
     /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device: String,
@@ -1909,6 +1957,7 @@ impl AttachVolumeRequestSerializer {
 
 /// <p>Contains the parameters for AttachVpnGateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachVpnGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -1940,6 +1989,7 @@ impl AttachVpnGatewayRequestSerializer {
 
 /// <p>Contains the output of AttachVpnGateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AttachVpnGatewayResult {
     /// <p>Information about the attachment.</p>
     pub vpc_attachment: Option<VpcAttachment>,
@@ -1977,6 +2027,8 @@ impl AttachmentStatusDeserializer {
 }
 /// <p>Describes a value for a resource attribute that is a Boolean value.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttributeBooleanValue {
     /// <p>The attribute value. The valid values are <code>true</code> or <code>false</code>.</p>
     pub value: Option<bool>,
@@ -2018,6 +2070,8 @@ impl AttributeBooleanValueSerializer {
 
 /// <p>Describes a value for a resource attribute that is a String.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttributeValue {
     /// <p>The attribute value. The value is case-sensitive.</p>
     pub value: Option<String>,
@@ -2059,6 +2113,7 @@ impl AttributeValueSerializer {
 
 /// <p>Information about an authorization rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AuthorizationRule {
     /// <p>Indicates whether the authorization rule grants access to all clients.</p>
     pub access_all: Option<bool>,
@@ -2131,6 +2186,7 @@ impl AuthorizationRuleSetDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthorizeClientVpnIngressRequest {
     /// <p>The ID of the Active Directory group to grant access.</p>
     pub access_group_id: Option<String>,
@@ -2184,6 +2240,7 @@ impl AuthorizeClientVpnIngressRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AuthorizeClientVpnIngressResult {
     /// <p>The current state of the authorization rule.</p>
     pub status: Option<ClientVpnAuthorizationRuleStatus>,
@@ -2215,6 +2272,7 @@ impl AuthorizeClientVpnIngressResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthorizeSecurityGroupEgressRequest {
     /// <p>Not supported. Use a set of IP permissions to specify the CIDR.</p>
     pub cidr_ip: Option<String>,
@@ -2284,6 +2342,7 @@ impl AuthorizeSecurityGroupEgressRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthorizeSecurityGroupIngressRequest {
     /// <p>The IPv4 address range, in CIDR format. You can't specify this parameter when specifying a source security group. To specify an IPv6 address range, use a set of IP permissions.</p> <p>Alternatively, use a set of IP permissions to specify multiple rules and a description for the rule.</p>
     pub cidr_ip: Option<String>,
@@ -2383,6 +2442,7 @@ impl AutoPlacementDeserializer {
 }
 /// <p>Describes an Availability Zone.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AvailabilityZone {
     /// <p>Any messages about the Availability Zone.</p>
     pub messages: Option<Vec<AvailabilityZoneMessage>>,
@@ -2450,6 +2510,7 @@ impl AvailabilityZoneListDeserializer {
 }
 /// <p>Describes a message about an Availability Zone.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AvailabilityZoneMessage {
     /// <p>The message about the Availability Zone.</p>
     pub message: Option<String>,
@@ -2509,6 +2570,7 @@ impl AvailabilityZoneStateDeserializer {
 }
 /// <p>The capacity information for instances launched onto the Dedicated Host.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AvailableCapacity {
     /// <p>The total number of instances supported by the Dedicated Host.</p>
     pub available_instance_capacity: Option<Vec<InstanceCapacity>>,
@@ -2598,6 +2660,7 @@ impl BlobDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BlobAttributeValue {
     pub value: Option<bytes::Bytes>,
 }
@@ -2622,6 +2685,8 @@ impl BlobAttributeValueSerializer {
 
 /// <p>Describes a block device mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BlockDeviceMapping {
     /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device_name: Option<String>,
@@ -2754,6 +2819,7 @@ impl BundleIdStringListSerializer {
 
 /// <p>Contains the parameters for BundleInstance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BundleInstanceRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -2782,6 +2848,7 @@ impl BundleInstanceRequestSerializer {
 
 /// <p>Contains the output of BundleInstance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct BundleInstanceResult {
     /// <p>Information about the bundle task.</p>
     pub bundle_task: Option<BundleTask>,
@@ -2810,6 +2877,7 @@ impl BundleInstanceResultDeserializer {
 }
 /// <p>Describes a bundle task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct BundleTask {
     /// <p>The ID of the bundle task.</p>
     pub bundle_id: Option<String>,
@@ -2871,6 +2939,7 @@ impl BundleTaskDeserializer {
 }
 /// <p>Describes an error for <a>BundleInstance</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct BundleTaskError {
     /// <p>The error code.</p>
     pub code: Option<String>,
@@ -2929,6 +2998,7 @@ impl BundleTaskStateDeserializer {
 }
 /// <p>Information about an address range that is provisioned for use with your AWS resources through bring your own IP addresses (BYOIP).</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ByoipCidr {
     /// <p>The public IPv4 address range, in CIDR notation.</p>
     pub cidr: Option<String>,
@@ -3009,6 +3079,7 @@ impl CancelBatchErrorCodeDeserializer {
 }
 /// <p>Contains the parameters for CancelBundleTask.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelBundleTaskRequest {
     /// <p>The ID of the bundle task.</p>
     pub bundle_id: String,
@@ -3034,6 +3105,7 @@ impl CancelBundleTaskRequestSerializer {
 
 /// <p>Contains the output of CancelBundleTask.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CancelBundleTaskResult {
     /// <p>Information about the bundle task.</p>
     pub bundle_task: Option<BundleTask>,
@@ -3061,6 +3133,7 @@ impl CancelBundleTaskResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelCapacityReservationRequest {
     /// <p>The ID of the Capacity Reservation to be cancelled.</p>
     pub capacity_reservation_id: String,
@@ -3088,6 +3161,7 @@ impl CancelCapacityReservationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CancelCapacityReservationResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -3116,6 +3190,7 @@ impl CancelCapacityReservationResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelConversionRequest {
     /// <p>The ID of the conversion task.</p>
     pub conversion_task_id: String,
@@ -3148,6 +3223,7 @@ impl CancelConversionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelExportTaskRequest {
     /// <p>The ID of the export task. This is the ID returned by <code>CreateInstanceExportTask</code>.</p>
     pub export_task_id: String,
@@ -3170,6 +3246,7 @@ impl CancelExportTaskRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelImportTaskRequest {
     /// <p>The reason for canceling the task.</p>
     pub cancel_reason: Option<String>,
@@ -3201,6 +3278,7 @@ impl CancelImportTaskRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CancelImportTaskResult {
     /// <p>The ID of the task being canceled.</p>
     pub import_task_id: Option<String>,
@@ -3238,6 +3316,7 @@ impl CancelImportTaskResultDeserializer {
 }
 /// <p>Contains the parameters for CancelReservedInstancesListing.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelReservedInstancesListingRequest {
     /// <p>The ID of the Reserved Instance listing.</p>
     pub reserved_instances_listing_id: String,
@@ -3261,6 +3340,7 @@ impl CancelReservedInstancesListingRequestSerializer {
 
 /// <p>Contains the output of CancelReservedInstancesListing.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CancelReservedInstancesListingResult {
     /// <p>The Reserved Instance listing.</p>
     pub reserved_instances_listings: Option<Vec<ReservedInstancesListing>>,
@@ -3295,6 +3375,7 @@ impl CancelReservedInstancesListingResultDeserializer {
 }
 /// <p>Describes a Spot Fleet error.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CancelSpotFleetRequestsError {
     /// <p>The error code.</p>
     pub code: Option<String>,
@@ -3331,6 +3412,7 @@ impl CancelSpotFleetRequestsErrorDeserializer {
 }
 /// <p>Describes a Spot Fleet request that was not successfully canceled.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CancelSpotFleetRequestsErrorItem {
     /// <p>The error.</p>
     pub error: Option<CancelSpotFleetRequestsError>,
@@ -3389,6 +3471,7 @@ impl CancelSpotFleetRequestsErrorSetDeserializer {
 }
 /// <p>Contains the parameters for CancelSpotFleetRequests.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelSpotFleetRequestsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -3424,6 +3507,7 @@ impl CancelSpotFleetRequestsRequestSerializer {
 
 /// <p>Contains the output of CancelSpotFleetRequests.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CancelSpotFleetRequestsResponse {
     /// <p>Information about the Spot Fleet requests that are successfully canceled.</p>
     pub successful_fleet_requests: Option<Vec<CancelSpotFleetRequestsSuccessItem>>,
@@ -3468,6 +3552,7 @@ impl CancelSpotFleetRequestsResponseDeserializer {
 }
 /// <p>Describes a Spot Fleet request that was successfully canceled.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CancelSpotFleetRequestsSuccessItem {
     /// <p>The current state of the Spot Fleet request.</p>
     pub current_spot_fleet_request_state: Option<String>,
@@ -3548,6 +3633,7 @@ impl CancelSpotInstanceRequestStateDeserializer {
 }
 /// <p>Contains the parameters for CancelSpotInstanceRequests.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelSpotInstanceRequestsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -3577,6 +3663,7 @@ impl CancelSpotInstanceRequestsRequestSerializer {
 
 /// <p>Contains the output of CancelSpotInstanceRequests.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CancelSpotInstanceRequestsResult {
     /// <p>One or more Spot Instance requests.</p>
     pub cancelled_spot_instance_requests: Option<Vec<CancelledSpotInstanceRequest>>,
@@ -3611,6 +3698,7 @@ impl CancelSpotInstanceRequestsResultDeserializer {
 }
 /// <p>Describes a request to cancel a Spot Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CancelledSpotInstanceRequest {
     /// <p>The ID of the Spot Instance request.</p>
     pub spot_instance_request_id: Option<String>,
@@ -3669,6 +3757,7 @@ impl CancelledSpotInstanceRequestListDeserializer {
 }
 /// <p>Describes a Capacity Reservation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CapacityReservation {
     /// <p>The Availability Zone in which the capacity is reserved.</p>
     pub availability_zone: Option<String>,
@@ -3865,6 +3954,7 @@ impl CapacityReservationSetDeserializer {
 }
 /// <p>Describes an instance's Capacity Reservation targeting option. You can specify only one parameter at a time. If you specify <code>CapacityReservationPreference</code> and <code>CapacityReservationTarget</code>, the request fails.</p> <p>Use the <code>CapacityReservationPreference</code> parameter to configure the instance to run as an On-Demand Instance or to run in any <code>open</code> Capacity Reservation that has matching attributes (instance type, platform, Availability Zone). Use the <code>CapacityReservationTarget</code> parameter to explicitly target a specific Capacity Reservation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CapacityReservationSpecification {
     /// <p><p>Indicates the instance&#39;s Capacity Reservation preferences. Possible preferences include:</p> <ul> <li> <p> <code>open</code> - The instance can run in any <code>open</code> Capacity Reservation that has matching attributes (instance type, platform, Availability Zone).</p> </li> <li> <p> <code>none</code> - The instance avoids running in a Capacity Reservation even if one is available. The instance runs as an On-Demand Instance.</p> </li> </ul></p>
     pub capacity_reservation_preference: Option<String>,
@@ -3899,6 +3989,7 @@ impl CapacityReservationSpecificationSerializer {
 
 /// <p>Describes the instance's Capacity Reservation targeting preferences. The action returns the <code>capacityReservationPreference</code> response element if the instance is configured to run in On-Demand capacity, or if it is configured in run in any <code>open</code> Capacity Reservation that has matching attributes (instance type, platform, Availability Zone). The action returns the <code>capacityReservationTarget</code> response element if the instance explicily targets a specific Capacity Reservation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CapacityReservationSpecificationResponse {
     /// <p><p>Describes the instance&#39;s Capacity Reservation preferences. Possible preferences include:</p> <ul> <li> <p> <code>open</code> - The instance can run in any <code>open</code> Capacity Reservation that has matching attributes (instance type, platform, Availability Zone).</p> </li> <li> <p> <code>none</code> - The instance avoids running in a Capacity Reservation even if one is available. The instance runs in On-Demand capacity.</p> </li> </ul></p>
     pub capacity_reservation_preference: Option<String>,
@@ -3952,6 +4043,7 @@ impl CapacityReservationStateDeserializer {
 }
 /// <p>Describes a target Capacity Reservation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CapacityReservationTarget {
     /// <p>The ID of the Capacity Reservation.</p>
     pub capacity_reservation_id: Option<String>,
@@ -3977,6 +4069,7 @@ impl CapacityReservationTargetSerializer {
 
 /// <p>Describes a target Capacity Reservation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CapacityReservationTargetResponse {
     /// <p>The ID of the Capacity Reservation.</p>
     pub capacity_reservation_id: Option<String>,
@@ -4020,6 +4113,7 @@ impl CapacityReservationTenancyDeserializer {
 }
 /// <p>Information about the client certificate used for authentication.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CertificateAuthentication {
     /// <p>The ARN of the client certificate. </p>
     pub client_root_certificate_chain: Option<String>,
@@ -4052,6 +4146,7 @@ impl CertificateAuthenticationDeserializer {
 }
 /// <p>Information about the client certificate to be used for authentication.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CertificateAuthenticationRequest {
     /// <p>The ARN of the client certificate. The certificate must be signed by a certificate authority (CA) and it must be provisioned in AWS Certificate Manager (ACM).</p>
     pub client_root_certificate_chain_arn: Option<String>,
@@ -4077,6 +4172,7 @@ impl CertificateAuthenticationRequestSerializer {
 
 /// <p>Provides authorization for Amazon to bring a specific IP address range to a specific AWS account using bring your own IP addresses (BYOIP). For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-byoip.html#prepare-for-byoip">Prepare to Bring Your Address Range to Your AWS Account</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CidrAuthorizationContext {
     /// <p>The plain-text authorization message for the prefix and account.</p>
     pub message: String,
@@ -4100,6 +4196,7 @@ impl CidrAuthorizationContextSerializer {
 
 /// <p>Describes an IPv4 CIDR block.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CidrBlock {
     /// <p>The IPv4 CIDR block.</p>
     pub cidr_block: Option<String>,
@@ -4142,6 +4239,7 @@ impl CidrBlockSetDeserializer {
 }
 /// <p>Describes the ClassicLink DNS support status of a VPC.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClassicLinkDnsSupport {
     /// <p>Indicates whether ClassicLink DNS support is enabled for the VPC.</p>
     pub classic_link_dns_supported: Option<bool>,
@@ -4194,6 +4292,7 @@ impl ClassicLinkDnsSupportListDeserializer {
 }
 /// <p>Describes a linked EC2-Classic instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClassicLinkInstance {
     /// <p>A list of security groups.</p>
     pub groups: Option<Vec<GroupIdentifier>>,
@@ -4255,6 +4354,8 @@ impl ClassicLinkInstanceListDeserializer {
 }
 /// <p>Describes a Classic Load Balancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClassicLoadBalancer {
     /// <p>The name of the load balancer.</p>
     pub name: Option<String>,
@@ -4325,6 +4426,8 @@ impl ClassicLoadBalancersSerializer {
 
 /// <p>Describes the Classic Load Balancers to attach to a Spot Fleet. Spot Fleet registers the running Spot Instances with these Classic Load Balancers.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClassicLoadBalancersConfig {
     /// <p>One or more Classic Load Balancers.</p>
     pub classic_load_balancers: Option<Vec<ClassicLoadBalancer>>,
@@ -4379,6 +4482,7 @@ impl ClassicLoadBalancersConfigSerializer {
 
 /// <p>Describes the state of a client certificate revocation list.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClientCertificateRevocationListStatus {
     /// <p>The state of the client certificate revocation list.</p>
     pub code: Option<String>,
@@ -4428,6 +4532,7 @@ impl ClientCertificateRevocationListStatusCodeDeserializer {
 }
 /// <p>Describes the client-specific data.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClientData {
     /// <p>A user-defined comment about the disk upload.</p>
     pub comment: Option<String>,
@@ -4465,6 +4570,7 @@ impl ClientDataSerializer {
 
 /// <p>Describes the authentication methods used by a Client VPN endpoint. Client VPN supports Active Directory and mutual authentication. For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/authentication-authrization.html#client-authentication">Authentication</a> in the <i>AWS Client VPN Administrator Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClientVpnAuthentication {
     /// <p>Information about the Active Directory, if applicable.</p>
     pub active_directory: Option<DirectoryServiceAuthentication>,
@@ -4533,6 +4639,7 @@ impl ClientVpnAuthenticationListDeserializer {
 }
 /// <p>Describes the authentication method to be used by a Client VPN endpoint. Client VPN supports Active Directory and mutual authentication. For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/authentication-authrization.html#client-authentication">Authentication</a> in the <i>AWS Client VPN Administrator Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClientVpnAuthenticationRequest {
     /// <p>Information about the Active Directory to be used, if applicable. You must provide this information if <b>Type</b> is <code>directory-service-authentication</code>.</p>
     pub active_directory: Option<DirectoryServiceAuthenticationRequest>,
@@ -4595,6 +4702,7 @@ impl ClientVpnAuthenticationTypeDeserializer {
 }
 /// <p>Describes the state of an authorization rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClientVpnAuthorizationRuleStatus {
     /// <p>The state of the authorization rule.</p>
     pub code: Option<String>,
@@ -4644,6 +4752,7 @@ impl ClientVpnAuthorizationRuleStatusCodeDeserializer {
 }
 /// <p>Describes a client connection.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClientVpnConnection {
     /// <p>The IP address of the client.</p>
     pub client_ip: Option<String>,
@@ -4759,6 +4868,7 @@ impl ClientVpnConnectionSetDeserializer {
 }
 /// <p>Describes the status of a client connection.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClientVpnConnectionStatus {
     /// <p>The state of the client connection.</p>
     pub code: Option<String>,
@@ -4806,6 +4916,7 @@ impl ClientVpnConnectionStatusCodeDeserializer {
 }
 /// <p>Describes a Client VPN endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClientVpnEndpoint {
     /// <p>Information about the authentication method used by the Client VPN endpoint.</p>
     pub authentication_options: Option<Vec<ClientVpnAuthentication>>,
@@ -4930,6 +5041,7 @@ impl ClientVpnEndpointDeserializer {
 }
 /// <p>Describes the state of a Client VPN endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClientVpnEndpointStatus {
     /// <p><p>The state of the Client VPN endpoint. Possible states include:</p> <ul> <li> <p> <code>pending-associate</code> - The Client VPN endpoint has been created but no target networks have been associated. The Client VPN endpoint cannot accept connections.</p> </li> <li> <p> <code>available</code> - The Client VPN endpoint has been created and a target network has been associated. The Client VPN endpoint can accept connections.</p> </li> <li> <p> <code>deleting</code> - The Client VPN endpoint is being deleted. The Client VPN endpoint cannot accept connections.</p> </li> <li> <p> <code>deleted</code> - The Client VPN endpoint has been deleted. The Client VPN endpoint cannot accept connections.</p> </li> </ul></p>
     pub code: Option<String>,
@@ -4977,6 +5089,7 @@ impl ClientVpnEndpointStatusCodeDeserializer {
 }
 /// <p>Information about a Client VPN endpoint route.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClientVpnRoute {
     /// <p>The ID of the Client VPN endpoint with which the route is associated.</p>
     pub client_vpn_endpoint_id: Option<String>,
@@ -5056,6 +5169,7 @@ impl ClientVpnRouteSetDeserializer {
 }
 /// <p>Describes the state of a Client VPN endpoint route.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClientVpnRouteStatus {
     /// <p>The state of the Client VPN endpoint route.</p>
     pub code: Option<String>,
@@ -5127,6 +5241,7 @@ impl ClientVpnSecurityGroupIdSetSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmProductInstanceRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -5154,6 +5269,7 @@ impl ConfirmProductInstanceRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConfirmProductInstanceResult {
     /// <p>The AWS account ID of the instance owner. This is only present if the product code is attached to the instance.</p>
     pub owner_id: Option<String>,
@@ -5188,6 +5304,7 @@ impl ConfirmProductInstanceResultDeserializer {
 }
 /// <p>Describes the client connection logging options for the Client VPN endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConnectionLogOptions {
     /// <p>The name of the CloudWatch Logs log group.</p>
     pub cloudwatch_log_group: Option<String>,
@@ -5223,6 +5340,7 @@ impl ConnectionLogOptionsSerializer {
 
 /// <p>Information about the client connection logging options for a Client VPN endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConnectionLogResponseOptions {
     /// <p>The name of the Amazon CloudWatch Logs log group to which connection logging data is published.</p>
     pub cloudwatch_log_group: Option<String>,
@@ -5268,6 +5386,7 @@ impl ConnectionLogResponseOptionsDeserializer {
 }
 /// <p>Describes a connection notification for a VPC endpoint or VPC endpoint service.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConnectionNotification {
     /// <p>The events for the notification. Valid values are <code>Accept</code>, <code>Connect</code>, <code>Delete</code>, and <code>Reject</code>.</p>
     pub connection_events: Option<Vec<String>>,
@@ -5404,6 +5523,7 @@ impl ConversionIdStringListSerializer {
 
 /// <p>Describes a conversion task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConversionTask {
     /// <p>The ID of the conversion task.</p>
     pub conversion_task_id: Option<String>,
@@ -5482,6 +5602,7 @@ impl ConversionTaskStateDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyFpgaImageRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -5527,6 +5648,7 @@ impl CopyFpgaImageRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyFpgaImageResult {
     /// <p>The ID of the new AFI.</p>
     pub fpga_image_id: Option<String>,
@@ -5553,6 +5675,7 @@ impl CopyFpgaImageResultDeserializer {
 }
 /// <p>Contains the parameters for CopyImage.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyImageRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub client_token: Option<String>,
@@ -5607,6 +5730,7 @@ impl CopyImageRequestSerializer {
 
 /// <p>Contains the output of CopyImage.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyImageResult {
     /// <p>The ID of the new AMI.</p>
     pub image_id: Option<String>,
@@ -5632,6 +5756,7 @@ impl CopyImageResultDeserializer {
 }
 /// <p>Contains the parameters for CopySnapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopySnapshotRequest {
     /// <p>A description for the EBS snapshot.</p>
     pub description: Option<String>,
@@ -5688,6 +5813,7 @@ impl CopySnapshotRequestSerializer {
 
 /// <p>Contains the output of CopySnapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopySnapshotResult {
     /// <p>The ID of the new snapshot.</p>
     pub snapshot_id: Option<String>,
@@ -5713,6 +5839,7 @@ impl CopySnapshotResultDeserializer {
 }
 /// <p>The CPU options for the instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CpuOptions {
     /// <p>The number of CPU cores for the instance.</p>
     pub core_count: Option<i64>,
@@ -5744,6 +5871,7 @@ impl CpuOptionsDeserializer {
 }
 /// <p>The CPU options for the instance. Both the core count and threads per core must be specified in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CpuOptionsRequest {
     /// <p>The number of CPU cores for the instance.</p>
     pub core_count: Option<i64>,
@@ -5770,6 +5898,7 @@ impl CpuOptionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCapacityReservationRequest {
     /// <p>The Availability Zone in which to create the Capacity Reservation.</p>
     pub availability_zone: Option<String>,
@@ -5863,6 +5992,7 @@ impl CreateCapacityReservationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateCapacityReservationResult {
     /// <p>Information about the Capacity Reservation.</p>
     pub capacity_reservation: Option<CapacityReservation>,
@@ -5895,6 +6025,7 @@ impl CreateCapacityReservationResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClientVpnEndpointRequest {
     /// <p>Information about the authentication method to be used to authenticate clients.</p>
     pub authentication_options: Vec<ClientVpnAuthenticationRequest>,
@@ -5980,6 +6111,7 @@ impl CreateClientVpnEndpointRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateClientVpnEndpointResult {
     /// <p>The ID of the Client VPN endpoint.</p>
     pub client_vpn_endpoint_id: Option<String>,
@@ -6023,6 +6155,7 @@ impl CreateClientVpnEndpointResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClientVpnRouteRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -6072,6 +6205,7 @@ impl CreateClientVpnRouteRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateClientVpnRouteResult {
     /// <p>The current state of the route.</p>
     pub status: Option<ClientVpnRouteStatus>,
@@ -6103,6 +6237,7 @@ impl CreateClientVpnRouteResultDeserializer {
 }
 /// <p>Contains the parameters for CreateCustomerGateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomerGatewayRequest {
     /// <p>For devices that support BGP, the customer gateway's BGP ASN.</p> <p>Default: 65000</p>
     pub bgp_asn: i64,
@@ -6141,6 +6276,7 @@ impl CreateCustomerGatewayRequestSerializer {
 
 /// <p>Contains the output of CreateCustomerGateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateCustomerGatewayResult {
     /// <p>Information about the customer gateway.</p>
     pub customer_gateway: Option<CustomerGateway>,
@@ -6172,6 +6308,7 @@ impl CreateCustomerGatewayResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDefaultSubnetRequest {
     /// <p>The Availability Zone in which to create the default subnet.</p>
     pub availability_zone: String,
@@ -6199,6 +6336,7 @@ impl CreateDefaultSubnetRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDefaultSubnetResult {
     /// <p>Information about the subnet.</p>
     pub subnet: Option<Subnet>,
@@ -6227,6 +6365,7 @@ impl CreateDefaultSubnetResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDefaultVpcRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -6248,6 +6387,7 @@ impl CreateDefaultVpcRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDefaultVpcResult {
     /// <p>Information about the VPC.</p>
     pub vpc: Option<Vpc>,
@@ -6272,6 +6412,7 @@ impl CreateDefaultVpcResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDhcpOptionsRequest {
     /// <p>A DHCP configuration option.</p>
     pub dhcp_configurations: Vec<NewDhcpConfiguration>,
@@ -6300,6 +6441,7 @@ impl CreateDhcpOptionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDhcpOptionsResult {
     /// <p>A set of DHCP options.</p>
     pub dhcp_options: Option<DhcpOptions>,
@@ -6329,6 +6471,7 @@ impl CreateDhcpOptionsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEgressOnlyInternetGatewayRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -6358,6 +6501,7 @@ impl CreateEgressOnlyInternetGatewayRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateEgressOnlyInternetGatewayResult {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     pub client_token: Option<String>,
@@ -6397,6 +6541,7 @@ impl CreateEgressOnlyInternetGatewayResultDeserializer {
 }
 /// <p>Describes the instances that could not be launched by the fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EC2CreateFleetError {
     /// <p>The error code that indicates why the instance could not be launched. For more information about error codes, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html.html">Error Codes</a>.</p>
     pub error_code: Option<String>,
@@ -6462,6 +6607,7 @@ impl CreateFleetErrorsSetDeserializer {
 }
 /// <p>Describes the instances that were launched by the fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateFleetInstance {
     /// <p>The IDs of the instances.</p>
     pub instance_ids: Option<Vec<String>>,
@@ -6536,6 +6682,7 @@ impl CreateFleetInstancesSetDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFleetRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -6642,6 +6789,7 @@ impl CreateFleetRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateFleetResult {
     /// <p>Information about the instances that could not be launched by the fleet. Valid only when <b>Type</b> is set to <code>instant</code>.</p>
     pub errors: Option<Vec<EC2CreateFleetError>>,
@@ -6684,6 +6832,7 @@ impl CreateFleetResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFlowLogsRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -6751,6 +6900,7 @@ impl CreateFlowLogsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateFlowLogsResult {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     pub client_token: Option<String>,
@@ -6789,6 +6939,7 @@ impl CreateFlowLogsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFpgaImageRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -6841,6 +6992,7 @@ impl CreateFpgaImageRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateFpgaImageResult {
     /// <p>The global FPGA image identifier (AGFI ID).</p>
     pub fpga_image_global_id: Option<String>,
@@ -6872,6 +7024,7 @@ impl CreateFpgaImageResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImageRequest {
     /// <p>The block device mappings. This parameter cannot be used to modify the encryption status of existing volumes or snapshots. To create an AMI with encrypted snapshots, use the <a>CopyImage</a> action.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
@@ -6918,6 +7071,7 @@ impl CreateImageRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateImageResult {
     /// <p>The ID of the new AMI.</p>
     pub image_id: Option<String>,
@@ -6942,6 +7096,7 @@ impl CreateImageResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstanceExportTaskRequest {
     /// <p>A description for the conversion task or the resource being exported. The maximum length is 255 bytes.</p>
     pub description: Option<String>,
@@ -6980,6 +7135,7 @@ impl CreateInstanceExportTaskRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateInstanceExportTaskResult {
     /// <p>Information about the instance export task.</p>
     pub export_task: Option<ExportTask>,
@@ -7009,6 +7165,7 @@ impl CreateInstanceExportTaskResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInternetGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -7030,6 +7187,7 @@ impl CreateInternetGatewayRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateInternetGatewayResult {
     /// <p>Information about the internet gateway.</p>
     pub internet_gateway: Option<InternetGateway>,
@@ -7061,6 +7219,7 @@ impl CreateInternetGatewayResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateKeyPairRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -7085,6 +7244,7 @@ impl CreateKeyPairRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLaunchTemplateRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p> <p>Constraint: Maximum 128 ASCII characters.</p>
     pub client_token: Option<String>,
@@ -7138,6 +7298,7 @@ impl CreateLaunchTemplateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateLaunchTemplateResult {
     /// <p>Information about the launch template.</p>
     pub launch_template: Option<LaunchTemplate>,
@@ -7169,6 +7330,7 @@ impl CreateLaunchTemplateResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLaunchTemplateVersionRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p> <p>Constraint: Maximum 128 ASCII characters.</p>
     pub client_token: Option<String>,
@@ -7222,6 +7384,7 @@ impl CreateLaunchTemplateVersionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateLaunchTemplateVersionResult {
     /// <p>Information about the launch template version.</p>
     pub launch_template_version: Option<LaunchTemplateVersion>,
@@ -7254,6 +7417,7 @@ impl CreateLaunchTemplateVersionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNatGatewayRequest {
     /// <p>The allocation ID of an Elastic IP address to associate with the NAT gateway. If the Elastic IP address is associated with another resource, you must first disassociate it.</p>
     pub allocation_id: String,
@@ -7281,6 +7445,7 @@ impl CreateNatGatewayRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateNatGatewayResult {
     /// <p>Unique, case-sensitive identifier to ensure the idempotency of the request. Only returned if a client token was provided in the request.</p>
     pub client_token: Option<String>,
@@ -7311,6 +7476,7 @@ impl CreateNatGatewayResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNetworkAclEntryRequest {
     /// <p>The IPv4 network range to allow or deny, in CIDR notation (for example <code>172.16.0.0/24</code>).</p>
     pub cidr_block: Option<String>,
@@ -7378,6 +7544,7 @@ impl CreateNetworkAclEntryRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNetworkAclRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -7402,6 +7569,7 @@ impl CreateNetworkAclRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateNetworkAclResult {
     /// <p>Information about the network ACL.</p>
     pub network_acl: Option<NetworkAcl>,
@@ -7428,6 +7596,7 @@ impl CreateNetworkAclResultDeserializer {
 }
 /// <p>Contains the parameters for CreateNetworkInterfacePermission.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNetworkInterfacePermissionRequest {
     /// <p>The AWS account ID.</p>
     pub aws_account_id: Option<String>,
@@ -7469,6 +7638,7 @@ impl CreateNetworkInterfacePermissionRequestSerializer {
 
 /// <p>Contains the output of CreateNetworkInterfacePermission.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateNetworkInterfacePermissionResult {
     /// <p>Information about the permission for the network interface.</p>
     pub interface_permission: Option<NetworkInterfacePermission>,
@@ -7502,6 +7672,7 @@ impl CreateNetworkInterfacePermissionResultDeserializer {
 }
 /// <p>Contains the parameters for CreateNetworkInterface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNetworkInterfaceRequest {
     /// <p>A description for the network interface.</p>
     pub description: Option<String>,
@@ -7582,6 +7753,7 @@ impl CreateNetworkInterfaceRequestSerializer {
 
 /// <p>Contains the output of CreateNetworkInterface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateNetworkInterfaceResult {
     /// <p>Information about the network interface.</p>
     pub network_interface: Option<NetworkInterface>,
@@ -7613,6 +7785,7 @@ impl CreateNetworkInterfaceResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePlacementGroupRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -7650,6 +7823,7 @@ impl CreatePlacementGroupRequestSerializer {
 
 /// <p>Contains the parameters for CreateReservedInstancesListing.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReservedInstancesListingRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure idempotency of your listings. This helps avoid duplicate listings. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: String,
@@ -7689,6 +7863,7 @@ impl CreateReservedInstancesListingRequestSerializer {
 
 /// <p>Contains the output of CreateReservedInstancesListing.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateReservedInstancesListingResult {
     /// <p>Information about the Standard Reserved Instance listing.</p>
     pub reserved_instances_listings: Option<Vec<ReservedInstancesListing>>,
@@ -7722,6 +7897,7 @@ impl CreateReservedInstancesListingResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRouteRequest {
     /// <p>The IPv4 CIDR address block used for the destination match. Routing decisions are based on the most specific match.</p>
     pub destination_cidr_block: Option<String>,
@@ -7806,6 +7982,7 @@ impl CreateRouteRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateRouteResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -7830,6 +8007,7 @@ impl CreateRouteResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRouteTableRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -7854,6 +8032,7 @@ impl CreateRouteTableRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateRouteTableResult {
     /// <p>Information about the route table.</p>
     pub route_table: Option<RouteTable>,
@@ -7879,6 +8058,7 @@ impl CreateRouteTableResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSecurityGroupRequest {
     /// <p>A description for the security group. This is informational only.</p> <p>Constraints: Up to 255 characters in length</p> <p>Constraints for EC2-Classic: ASCII characters</p> <p>Constraints for EC2-VPC: a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=&amp;;{}!$*</p>
     pub description: String,
@@ -7914,6 +8094,7 @@ impl CreateSecurityGroupRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateSecurityGroupResult {
     /// <p>The ID of the security group.</p>
     pub group_id: Option<String>,
@@ -7943,6 +8124,7 @@ impl CreateSecurityGroupResultDeserializer {
 }
 /// <p>Contains the parameters for CreateSnapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSnapshotRequest {
     /// <p>A description for the snapshot.</p>
     pub description: Option<String>,
@@ -7981,6 +8163,7 @@ impl CreateSnapshotRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSnapshotsRequest {
     /// <p>Copies the tags from the specified volume to corresponding snapshot.</p>
     pub copy_tags_from_source: Option<String>,
@@ -8028,6 +8211,7 @@ impl CreateSnapshotsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateSnapshotsResult {
     /// <p>List of snapshots.</p>
     pub snapshots: Option<Vec<SnapshotInfo>>,
@@ -8055,6 +8239,7 @@ impl CreateSnapshotsResultDeserializer {
 }
 /// <p>Contains the parameters for CreateSpotDatafeedSubscription.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSpotDatafeedSubscriptionRequest {
     /// <p>The Amazon S3 bucket in which to store the Spot Instance data feed.</p>
     pub bucket: String,
@@ -8085,6 +8270,7 @@ impl CreateSpotDatafeedSubscriptionRequestSerializer {
 
 /// <p>Contains the output of CreateSpotDatafeedSubscription.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateSpotDatafeedSubscriptionResult {
     /// <p>The Spot Instance data feed subscription.</p>
     pub spot_datafeed_subscription: Option<SpotDatafeedSubscription>,
@@ -8117,6 +8303,7 @@ impl CreateSpotDatafeedSubscriptionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubnetRequest {
     /// <p>The Availability Zone for the subnet.</p> <p>Default: AWS selects one for you. If you create more than one subnet in your VPC, we may not necessarily select a different zone for each subnet.</p>
     pub availability_zone: Option<String>,
@@ -8159,6 +8346,7 @@ impl CreateSubnetRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateSubnetResult {
     /// <p>Information about the subnet.</p>
     pub subnet: Option<Subnet>,
@@ -8183,6 +8371,7 @@ impl CreateSubnetResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -8214,6 +8403,7 @@ impl CreateTagsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrafficMirrorFilterRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -8254,6 +8444,7 @@ impl CreateTrafficMirrorFilterRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTrafficMirrorFilterResult {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -8292,6 +8483,7 @@ impl CreateTrafficMirrorFilterResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrafficMirrorFilterRuleRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -8376,6 +8568,7 @@ impl CreateTrafficMirrorFilterRuleRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTrafficMirrorFilterRuleResult {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -8414,6 +8607,7 @@ impl CreateTrafficMirrorFilterRuleResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrafficMirrorSessionRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -8488,6 +8682,7 @@ impl CreateTrafficMirrorSessionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTrafficMirrorSessionResult {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -8526,6 +8721,7 @@ impl CreateTrafficMirrorSessionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrafficMirrorTargetRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -8579,6 +8775,7 @@ impl CreateTrafficMirrorTargetRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTrafficMirrorTargetResult {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -8617,6 +8814,7 @@ impl CreateTrafficMirrorTargetResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTransitGatewayRequest {
     /// <p>A description of the transit gateway.</p>
     pub description: Option<String>,
@@ -8661,6 +8859,7 @@ impl CreateTransitGatewayRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTransitGatewayResult {
     /// <p>Information about the transit gateway.</p>
     pub transit_gateway: Option<TransitGateway>,
@@ -8692,6 +8891,7 @@ impl CreateTransitGatewayResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTransitGatewayRouteRequest {
     /// <p>Indicates whether to drop traffic that matches this route.</p>
     pub blackhole: Option<bool>,
@@ -8738,6 +8938,7 @@ impl CreateTransitGatewayRouteRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTransitGatewayRouteResult {
     /// <p>Information about the route.</p>
     pub route: Option<TransitGatewayRoute>,
@@ -8768,6 +8969,7 @@ impl CreateTransitGatewayRouteResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTransitGatewayRouteTableRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -8804,6 +9006,7 @@ impl CreateTransitGatewayRouteTableRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTransitGatewayRouteTableResult {
     /// <p>Information about the transit gateway route table.</p>
     pub transit_gateway_route_table: Option<TransitGatewayRouteTable>,
@@ -8836,6 +9039,7 @@ impl CreateTransitGatewayRouteTableResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTransitGatewayVpcAttachmentRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -8892,6 +9096,7 @@ impl CreateTransitGatewayVpcAttachmentRequestSerializer {
 
 /// <p>Describes the options for a VPC attachment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTransitGatewayVpcAttachmentRequestOptions {
     /// <p>Enable or disable DNS support. The default is <code>enable</code>.</p>
     pub dns_support: Option<String>,
@@ -8922,6 +9127,7 @@ impl CreateTransitGatewayVpcAttachmentRequestOptionsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTransitGatewayVpcAttachmentResult {
     /// <p>Information about the VPC attachment.</p>
     pub transit_gateway_vpc_attachment: Option<TransitGatewayVpcAttachment>,
@@ -8955,6 +9161,8 @@ impl CreateTransitGatewayVpcAttachmentResultDeserializer {
 }
 /// <p>Describes the user or group to be added or removed from the list of create volume permissions for a volume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVolumePermission {
     /// <p>The group to be added or removed. The possible value is <code>all</code>.</p>
     pub group: Option<String>,
@@ -9035,6 +9243,7 @@ impl CreateVolumePermissionListSerializer {
 
 /// <p>Describes modifications to the list of create volume permissions for a volume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVolumePermissionModifications {
     /// <p>Adds the specified AWS account ID or group to the list.</p>
     pub add: Option<Vec<CreateVolumePermission>>,
@@ -9070,6 +9279,7 @@ impl CreateVolumePermissionModificationsSerializer {
 
 /// <p>Contains the parameters for CreateVolume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVolumeRequest {
     /// <p>The Availability Zone in which to create the volume.</p>
     pub availability_zone: String,
@@ -9136,6 +9346,7 @@ impl CreateVolumeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpcEndpointConnectionNotificationRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -9189,6 +9400,7 @@ impl CreateVpcEndpointConnectionNotificationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateVpcEndpointConnectionNotificationResult {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request.</p>
     pub client_token: Option<String>,
@@ -9228,6 +9440,7 @@ impl CreateVpcEndpointConnectionNotificationResultDeserializer {
 }
 /// <p>Contains the parameters for CreateVpcEndpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpcEndpointRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -9303,6 +9516,7 @@ impl CreateVpcEndpointRequestSerializer {
 
 /// <p>Contains the output of CreateVpcEndpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateVpcEndpointResult {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request.</p>
     pub client_token: Option<String>,
@@ -9338,6 +9552,7 @@ impl CreateVpcEndpointResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpcEndpointServiceConfigurationRequest {
     /// <p>Indicate whether requests from service consumers to create an endpoint to your service must be accepted. To accept a request, use <a>AcceptVpcEndpointConnections</a>.</p>
     pub acceptance_required: Option<bool>,
@@ -9380,6 +9595,7 @@ impl CreateVpcEndpointServiceConfigurationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateVpcEndpointServiceConfigurationResult {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request.</p>
     pub client_token: Option<String>,
@@ -9418,6 +9634,7 @@ impl CreateVpcEndpointServiceConfigurationResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpcPeeringConnectionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -9459,6 +9676,7 @@ impl CreateVpcPeeringConnectionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateVpcPeeringConnectionResult {
     /// <p>Information about the VPC peering connection.</p>
     pub vpc_peering_connection: Option<VpcPeeringConnection>,
@@ -9491,6 +9709,7 @@ impl CreateVpcPeeringConnectionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpcRequest {
     /// <p>Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block.</p>
     pub amazon_provided_ipv_6_cidr_block: Option<bool>,
@@ -9528,6 +9747,7 @@ impl CreateVpcRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateVpcResult {
     /// <p>Information about the VPC.</p>
     pub vpc: Option<Vpc>,
@@ -9553,6 +9773,7 @@ impl CreateVpcResultDeserializer {
 }
 /// <p>Contains the parameters for CreateVpnConnection.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpnConnectionRequest {
     /// <p>The ID of the customer gateway.</p>
     pub customer_gateway_id: String,
@@ -9603,6 +9824,7 @@ impl CreateVpnConnectionRequestSerializer {
 
 /// <p>Contains the output of CreateVpnConnection.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateVpnConnectionResult {
     /// <p>Information about the VPN connection.</p>
     pub vpn_connection: Option<VpnConnection>,
@@ -9635,6 +9857,7 @@ impl CreateVpnConnectionResultDeserializer {
 }
 /// <p>Contains the parameters for CreateVpnConnectionRoute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpnConnectionRouteRequest {
     /// <p>The CIDR block associated with the local subnet of the customer network.</p>
     pub destination_cidr_block: String,
@@ -9664,6 +9887,7 @@ impl CreateVpnConnectionRouteRequestSerializer {
 
 /// <p>Contains the parameters for CreateVpnGateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpnGatewayRequest {
     /// <p>A private Autonomous System Number (ASN) for the Amazon side of a BGP session. If you're using a 16-bit ASN, it must be in the 64512 to 65534 range. If you're using a 32-bit ASN, it must be in the 4200000000 to 4294967294 range.</p> <p>Default: 64512</p>
     pub amazon_side_asn: Option<i64>,
@@ -9699,6 +9923,7 @@ impl CreateVpnGatewayRequestSerializer {
 
 /// <p>Contains the output of CreateVpnGateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateVpnGatewayResult {
     /// <p>Information about the virtual private gateway.</p>
     pub vpn_gateway: Option<VpnGateway>,
@@ -9725,6 +9950,7 @@ impl CreateVpnGatewayResultDeserializer {
 }
 /// <p>Describes the credit option for CPU usage of a T2 or T3 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreditSpecification {
     /// <p>The credit option for CPU usage of a T2 or T3 instance. Valid values are <code>standard</code> and <code>unlimited</code>.</p>
     pub cpu_credits: Option<String>,
@@ -9750,6 +9976,7 @@ impl CreditSpecificationDeserializer {
 }
 /// <p>The credit option for CPU usage of a T2 or T3 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreditSpecificationRequest {
     /// <p>The credit option for CPU usage of a T2 or T3 instance. Valid values are <code>standard</code> and <code>unlimited</code>.</p>
     pub cpu_credits: String,
@@ -9781,6 +10008,7 @@ impl CurrencyCodeValuesDeserializer {
 }
 /// <p>Describes a customer gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CustomerGateway {
     /// <p>The customer gateway's Border Gateway Protocol (BGP) Autonomous System Number (ASN).</p>
     pub bgp_asn: Option<String>,
@@ -9923,6 +10151,7 @@ impl DefaultTargetCapacityTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClientVpnEndpointRequest {
     /// <p>The ID of the Client VPN to be deleted.</p>
     pub client_vpn_endpoint_id: String,
@@ -9950,6 +10179,7 @@ impl DeleteClientVpnEndpointRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteClientVpnEndpointResult {
     /// <p>The current state of the Client VPN endpoint.</p>
     pub status: Option<ClientVpnEndpointStatus>,
@@ -9980,6 +10210,7 @@ impl DeleteClientVpnEndpointResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClientVpnRouteRequest {
     /// <p>The ID of the Client VPN endpoint from which the route is to be deleted.</p>
     pub client_vpn_endpoint_id: String,
@@ -10018,6 +10249,7 @@ impl DeleteClientVpnRouteRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteClientVpnRouteResult {
     /// <p>The current state of the route.</p>
     pub status: Option<ClientVpnRouteStatus>,
@@ -10049,6 +10281,7 @@ impl DeleteClientVpnRouteResultDeserializer {
 }
 /// <p>Contains the parameters for DeleteCustomerGateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomerGatewayRequest {
     /// <p>The ID of the customer gateway.</p>
     pub customer_gateway_id: String,
@@ -10076,6 +10309,7 @@ impl DeleteCustomerGatewayRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDhcpOptionsRequest {
     /// <p>The ID of the DHCP options set.</p>
     pub dhcp_options_id: String,
@@ -10103,6 +10337,7 @@ impl DeleteDhcpOptionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEgressOnlyInternetGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10130,6 +10365,7 @@ impl DeleteEgressOnlyInternetGatewayRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteEgressOnlyInternetGatewayResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_code: Option<bool>,
@@ -10160,6 +10396,7 @@ impl DeleteEgressOnlyInternetGatewayResultDeserializer {
 }
 /// <p>Describes an EC2 Fleet error.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteFleetError {
     /// <p>The error code.</p>
     pub code: Option<String>,
@@ -10203,6 +10440,7 @@ impl DeleteFleetErrorCodeDeserializer {
 }
 /// <p>Describes an EC2 Fleet that was not successfully deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteFleetErrorItem {
     /// <p>The error.</p>
     pub error: Option<DeleteFleetError>,
@@ -10253,6 +10491,7 @@ impl DeleteFleetErrorSetDeserializer {
 }
 /// <p>Describes an EC2 Fleet that was successfully deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteFleetSuccessItem {
     /// <p>The current state of the EC2 Fleet.</p>
     pub current_fleet_state: Option<String>,
@@ -10313,6 +10552,7 @@ impl DeleteFleetSuccessSetDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFleetsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10347,6 +10587,7 @@ impl DeleteFleetsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteFleetsResult {
     /// <p>Information about the EC2 Fleets that are successfully deleted.</p>
     pub successful_fleet_deletions: Option<Vec<DeleteFleetSuccessItem>>,
@@ -10386,6 +10627,7 @@ impl DeleteFleetsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFlowLogsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10414,6 +10656,7 @@ impl DeleteFlowLogsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteFlowLogsResult {
     /// <p>Information about the flow logs that could not be deleted successfully.</p>
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
@@ -10440,6 +10683,7 @@ impl DeleteFlowLogsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFpgaImageRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10464,6 +10708,7 @@ impl DeleteFpgaImageRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteFpgaImageResult {
     /// <p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>
     pub return_: Option<bool>,
@@ -10488,6 +10733,7 @@ impl DeleteFpgaImageResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInternetGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10515,6 +10761,7 @@ impl DeleteInternetGatewayRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteKeyPairRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10539,6 +10786,7 @@ impl DeleteKeyPairRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLaunchTemplateRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10570,6 +10818,7 @@ impl DeleteLaunchTemplateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteLaunchTemplateResult {
     /// <p>Information about the launch template.</p>
     pub launch_template: Option<LaunchTemplate>,
@@ -10601,6 +10850,7 @@ impl DeleteLaunchTemplateResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLaunchTemplateVersionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10640,6 +10890,7 @@ impl DeleteLaunchTemplateVersionsRequestSerializer {
 
 /// <p>Describes a launch template version that could not be deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteLaunchTemplateVersionsResponseErrorItem {
     /// <p>The ID of the launch template.</p>
     pub launch_template_id: Option<String>,
@@ -10713,6 +10964,7 @@ impl DeleteLaunchTemplateVersionsResponseErrorSetDeserializer {
 }
 /// <p>Describes a launch template version that was successfully deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteLaunchTemplateVersionsResponseSuccessItem {
     /// <p>The ID of the launch template.</p>
     pub launch_template_id: Option<String>,
@@ -10777,6 +11029,7 @@ impl DeleteLaunchTemplateVersionsResponseSuccessSetDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteLaunchTemplateVersionsResult {
     /// <p>Information about the launch template versions that were successfully deleted.</p>
     pub successfully_deleted_launch_template_versions:
@@ -10816,6 +11069,7 @@ impl DeleteLaunchTemplateVersionsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNatGatewayRequest {
     /// <p>The ID of the NAT gateway.</p>
     pub nat_gateway_id: String,
@@ -10838,6 +11092,7 @@ impl DeleteNatGatewayRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteNatGatewayResult {
     /// <p>The ID of the NAT gateway.</p>
     pub nat_gateway_id: Option<String>,
@@ -10863,6 +11118,7 @@ impl DeleteNatGatewayResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNetworkAclEntryRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10896,6 +11152,7 @@ impl DeleteNetworkAclEntryRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNetworkAclRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10924,6 +11181,7 @@ impl DeleteNetworkAclRequestSerializer {
 
 /// <p>Contains the parameters for DeleteNetworkInterfacePermission.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNetworkInterfacePermissionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10957,6 +11215,7 @@ impl DeleteNetworkInterfacePermissionRequestSerializer {
 
 /// <p>Contains the output for DeleteNetworkInterfacePermission.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteNetworkInterfacePermissionResult {
     /// <p>Returns <code>true</code> if the request succeeds, otherwise returns an error.</p>
     pub return_: Option<bool>,
@@ -10986,6 +11245,7 @@ impl DeleteNetworkInterfacePermissionResultDeserializer {
 }
 /// <p>Contains the parameters for DeleteNetworkInterface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNetworkInterfaceRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11013,6 +11273,7 @@ impl DeleteNetworkInterfaceRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePlacementGroupRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11037,6 +11298,7 @@ impl DeletePlacementGroupRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteRequest {
     /// <p>The IPv4 CIDR range for the route. The value you specify must match the CIDR for the route exactly.</p>
     pub destination_cidr_block: Option<String>,
@@ -11080,6 +11342,7 @@ impl DeleteRouteRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteTableRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11107,6 +11370,7 @@ impl DeleteRouteTableRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSecurityGroupRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11139,6 +11403,7 @@ impl DeleteSecurityGroupRequestSerializer {
 
 /// <p>Contains the parameters for DeleteSnapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSnapshotRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11164,6 +11429,7 @@ impl DeleteSnapshotRequestSerializer {
 
 /// <p>Contains the parameters for DeleteSpotDatafeedSubscription.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSpotDatafeedSubscriptionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11185,6 +11451,7 @@ impl DeleteSpotDatafeedSubscriptionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubnetRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11209,6 +11476,7 @@ impl DeleteSubnetRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11242,6 +11510,7 @@ impl DeleteTagsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTrafficMirrorFilterRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11269,6 +11538,7 @@ impl DeleteTrafficMirrorFilterRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTrafficMirrorFilterResult {
     /// <p>The ID of the Traffic Mirror filter.</p>
     pub traffic_mirror_filter_id: Option<String>,
@@ -11300,6 +11570,7 @@ impl DeleteTrafficMirrorFilterResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTrafficMirrorFilterRuleRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11327,6 +11598,7 @@ impl DeleteTrafficMirrorFilterRuleRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTrafficMirrorFilterRuleResult {
     /// <p>The ID of the deleted Traffic Mirror rule.</p>
     pub traffic_mirror_filter_rule_id: Option<String>,
@@ -11358,6 +11630,7 @@ impl DeleteTrafficMirrorFilterRuleResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTrafficMirrorSessionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11385,6 +11658,7 @@ impl DeleteTrafficMirrorSessionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTrafficMirrorSessionResult {
     /// <p>The ID of the deleted Traffic Mirror session.</p>
     pub traffic_mirror_session_id: Option<String>,
@@ -11416,6 +11690,7 @@ impl DeleteTrafficMirrorSessionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTrafficMirrorTargetRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11443,6 +11718,7 @@ impl DeleteTrafficMirrorTargetRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTrafficMirrorTargetResult {
     /// <p>The ID of the deleted Traffic Mirror target.</p>
     pub traffic_mirror_target_id: Option<String>,
@@ -11474,6 +11750,7 @@ impl DeleteTrafficMirrorTargetResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTransitGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11501,6 +11778,7 @@ impl DeleteTransitGatewayRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTransitGatewayResult {
     /// <p>Information about the deleted transit gateway.</p>
     pub transit_gateway: Option<TransitGateway>,
@@ -11532,6 +11810,7 @@ impl DeleteTransitGatewayResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTransitGatewayRouteRequest {
     /// <p>The CIDR range for the route. This must match the CIDR for the route exactly.</p>
     pub destination_cidr_block: String,
@@ -11565,6 +11844,7 @@ impl DeleteTransitGatewayRouteRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTransitGatewayRouteResult {
     /// <p>Information about the route.</p>
     pub route: Option<TransitGatewayRoute>,
@@ -11595,6 +11875,7 @@ impl DeleteTransitGatewayRouteResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTransitGatewayRouteTableRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11622,6 +11903,7 @@ impl DeleteTransitGatewayRouteTableRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTransitGatewayRouteTableResult {
     /// <p>Information about the deleted transit gateway route table.</p>
     pub transit_gateway_route_table: Option<TransitGatewayRouteTable>,
@@ -11654,6 +11936,7 @@ impl DeleteTransitGatewayRouteTableResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTransitGatewayVpcAttachmentRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11681,6 +11964,7 @@ impl DeleteTransitGatewayVpcAttachmentRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTransitGatewayVpcAttachmentResult {
     /// <p>Information about the deleted VPC attachment.</p>
     pub transit_gateway_vpc_attachment: Option<TransitGatewayVpcAttachment>,
@@ -11714,6 +11998,7 @@ impl DeleteTransitGatewayVpcAttachmentResultDeserializer {
 }
 /// <p>Contains the parameters for DeleteVolume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVolumeRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11738,6 +12023,7 @@ impl DeleteVolumeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpcEndpointConnectionNotificationsRequest {
     /// <p>One or more notification IDs.</p>
     pub connection_notification_ids: Vec<String>,
@@ -11770,6 +12056,7 @@ impl DeleteVpcEndpointConnectionNotificationsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteVpcEndpointConnectionNotificationsResult {
     /// <p>Information about the notifications that could not be deleted successfully.</p>
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
@@ -11800,6 +12087,7 @@ impl DeleteVpcEndpointConnectionNotificationsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpcEndpointServiceConfigurationsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11832,6 +12120,7 @@ impl DeleteVpcEndpointServiceConfigurationsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteVpcEndpointServiceConfigurationsResult {
     /// <p>Information about the service configurations that were not deleted, if applicable.</p>
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
@@ -11863,6 +12152,7 @@ impl DeleteVpcEndpointServiceConfigurationsResultDeserializer {
 }
 /// <p>Contains the parameters for DeleteVpcEndpoints.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpcEndpointsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11892,6 +12182,7 @@ impl DeleteVpcEndpointsRequestSerializer {
 
 /// <p>Contains the output of DeleteVpcEndpoints.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteVpcEndpointsResult {
     /// <p>Information about the VPC endpoints that were not successfully deleted.</p>
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
@@ -11922,6 +12213,7 @@ impl DeleteVpcEndpointsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpcPeeringConnectionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11949,6 +12241,7 @@ impl DeleteVpcPeeringConnectionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteVpcPeeringConnectionResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -11977,6 +12270,7 @@ impl DeleteVpcPeeringConnectionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpcRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -12002,6 +12296,7 @@ impl DeleteVpcRequestSerializer {
 
 /// <p>Contains the parameters for DeleteVpnConnection.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpnConnectionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -12030,6 +12325,7 @@ impl DeleteVpnConnectionRequestSerializer {
 
 /// <p>Contains the parameters for DeleteVpnConnectionRoute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpnConnectionRouteRequest {
     /// <p>The CIDR block associated with the local subnet of the customer network.</p>
     pub destination_cidr_block: String,
@@ -12059,6 +12355,7 @@ impl DeleteVpnConnectionRouteRequestSerializer {
 
 /// <p>Contains the parameters for DeleteVpnGateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpnGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -12086,6 +12383,7 @@ impl DeleteVpnGatewayRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprovisionByoipCidrRequest {
     /// <p>The public IPv4 address range, in CIDR notation. The prefix must be the same prefix that you specified when you provisioned the address range.</p>
     pub cidr: String,
@@ -12110,6 +12408,7 @@ impl DeprovisionByoipCidrRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeprovisionByoipCidrResult {
     /// <p>Information about the address range.</p>
     pub byoip_cidr: Option<ByoipCidr>,
@@ -12140,6 +12439,7 @@ impl DeprovisionByoipCidrResultDeserializer {
 }
 /// <p>Contains the parameters for DeregisterImage.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterImageRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -12164,6 +12464,7 @@ impl DeregisterImageRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountAttributesRequest {
     /// <p>The account attribute names.</p>
     pub attribute_names: Option<Vec<String>>,
@@ -12194,6 +12495,7 @@ impl DescribeAccountAttributesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAccountAttributesResult {
     /// <p>Information about the account attributes.</p>
     pub account_attributes: Option<Vec<AccountAttribute>>,
@@ -12227,6 +12529,7 @@ impl DescribeAccountAttributesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAddressesRequest {
     /// <p>[EC2-VPC] Information about the allocation IDs.</p>
     pub allocation_ids: Option<Vec<String>>,
@@ -12275,6 +12578,7 @@ impl DescribeAddressesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAddressesResult {
     /// <p>Information about the Elastic IP addresses.</p>
     pub addresses: Option<Vec<Address>>,
@@ -12305,6 +12609,7 @@ impl DescribeAddressesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAggregateIdFormatRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -12326,6 +12631,7 @@ impl DescribeAggregateIdFormatRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAggregateIdFormatResult {
     /// <p>Information about each resource's ID format.</p>
     pub statuses: Option<Vec<IdFormat>>,
@@ -12364,6 +12670,7 @@ impl DescribeAggregateIdFormatResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAvailabilityZonesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -12412,6 +12719,7 @@ impl DescribeAvailabilityZonesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAvailabilityZonesResult {
     /// <p>Information about the Availability Zones.</p>
     pub availability_zones: Option<Vec<AvailabilityZone>>,
@@ -12445,6 +12753,7 @@ impl DescribeAvailabilityZonesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBundleTasksRequest {
     /// <p>The bundle task IDs.</p> <p>Default: Describes all your bundle tasks.</p>
     pub bundle_ids: Option<Vec<String>>,
@@ -12484,6 +12793,7 @@ impl DescribeBundleTasksRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeBundleTasksResult {
     /// <p>Information about the bundle tasks.</p>
     pub bundle_tasks: Option<Vec<BundleTask>>,
@@ -12517,6 +12827,7 @@ impl DescribeBundleTasksResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeByoipCidrsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -12546,6 +12857,7 @@ impl DescribeByoipCidrsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeByoipCidrsResult {
     /// <p>Information about your address ranges.</p>
     pub byoip_cidrs: Option<Vec<ByoipCidr>>,
@@ -12581,6 +12893,7 @@ impl DescribeByoipCidrsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCapacityReservationsRequest {
     /// <p>The ID of the Capacity Reservation.</p>
     pub capacity_reservation_ids: Option<Vec<String>>,
@@ -12630,6 +12943,7 @@ impl DescribeCapacityReservationsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeCapacityReservationsResult {
     /// <p>Information about the Capacity Reservations.</p>
     pub capacity_reservations: Option<Vec<CapacityReservation>>,
@@ -12668,6 +12982,7 @@ impl DescribeCapacityReservationsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClassicLinkInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -12717,6 +13032,7 @@ impl DescribeClassicLinkInstancesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeClassicLinkInstancesResult {
     /// <p>Information about one or more linked EC2-Classic instances.</p>
     pub instances: Option<Vec<ClassicLinkInstance>>,
@@ -12755,6 +13071,7 @@ impl DescribeClassicLinkInstancesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClientVpnAuthorizationRulesRequest {
     /// <p>The ID of the Client VPN endpoint.</p>
     pub client_vpn_endpoint_id: String,
@@ -12805,6 +13122,7 @@ impl DescribeClientVpnAuthorizationRulesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeClientVpnAuthorizationRulesResult {
     /// <p>Information about the authorization rules.</p>
     pub authorization_rules: Option<Vec<AuthorizationRule>>,
@@ -12844,6 +13162,7 @@ impl DescribeClientVpnAuthorizationRulesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClientVpnConnectionsRequest {
     /// <p>The ID of the Client VPN endpoint.</p>
     pub client_vpn_endpoint_id: String,
@@ -12890,6 +13209,7 @@ impl DescribeClientVpnConnectionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeClientVpnConnectionsResult {
     /// <p>Information about the active and terminated client connections.</p>
     pub connections: Option<Vec<ClientVpnConnection>>,
@@ -12926,6 +13246,7 @@ impl DescribeClientVpnConnectionsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClientVpnEndpointsRequest {
     /// <p>The ID of the Client VPN endpoint.</p>
     pub client_vpn_endpoint_ids: Option<Vec<String>>,
@@ -12975,6 +13296,7 @@ impl DescribeClientVpnEndpointsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeClientVpnEndpointsResult {
     /// <p>Information about the Client VPN endpoints.</p>
     pub client_vpn_endpoints: Option<Vec<ClientVpnEndpoint>>,
@@ -13011,6 +13333,7 @@ impl DescribeClientVpnEndpointsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClientVpnRoutesRequest {
     /// <p>The ID of the Client VPN endpoint.</p>
     pub client_vpn_endpoint_id: String,
@@ -13057,6 +13380,7 @@ impl DescribeClientVpnRoutesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeClientVpnRoutesResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -13093,6 +13417,7 @@ impl DescribeClientVpnRoutesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClientVpnTargetNetworksRequest {
     /// <p>The IDs of the target network associations.</p>
     pub association_ids: Option<Vec<String>>,
@@ -13148,6 +13473,7 @@ impl DescribeClientVpnTargetNetworksRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeClientVpnTargetNetworksResult {
     /// <p>Information about the associated target networks.</p>
     pub client_vpn_target_networks: Option<Vec<TargetNetwork>>,
@@ -13204,6 +13530,7 @@ impl DescribeConversionTaskListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConversionTasksRequest {
     /// <p>The conversion task IDs.</p>
     pub conversion_task_ids: Option<Vec<String>>,
@@ -13234,6 +13561,7 @@ impl DescribeConversionTasksRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeConversionTasksResult {
     /// <p>Information about the conversion tasks.</p>
     pub conversion_tasks: Option<Vec<ConversionTask>>,
@@ -13268,6 +13596,7 @@ impl DescribeConversionTasksResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeCustomerGateways.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCustomerGatewaysRequest {
     /// <p>One or more customer gateway IDs.</p> <p>Default: Describes all your customer gateways.</p>
     pub customer_gateway_ids: Option<Vec<String>>,
@@ -13308,6 +13637,7 @@ impl DescribeCustomerGatewaysRequestSerializer {
 
 /// <p>Contains the output of DescribeCustomerGateways.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeCustomerGatewaysResult {
     /// <p>Information about one or more customer gateways.</p>
     pub customer_gateways: Option<Vec<CustomerGateway>>,
@@ -13341,6 +13671,7 @@ impl DescribeCustomerGatewaysResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDhcpOptionsRequest {
     /// <p>The IDs of one or more DHCP options sets.</p> <p>Default: Describes all your DHCP options sets.</p>
     pub dhcp_options_ids: Option<Vec<String>>,
@@ -13390,6 +13721,7 @@ impl DescribeDhcpOptionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDhcpOptionsResult {
     /// <p>Information about one or more DHCP options sets.</p>
     pub dhcp_options: Option<Vec<DhcpOptions>>,
@@ -13425,6 +13757,7 @@ impl DescribeDhcpOptionsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEgressOnlyInternetGatewaysRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -13465,6 +13798,7 @@ impl DescribeEgressOnlyInternetGatewaysRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEgressOnlyInternetGatewaysResult {
     /// <p>Information about the egress-only internet gateways.</p>
     pub egress_only_internet_gateways: Option<Vec<EgressOnlyInternetGateway>>,
@@ -13503,6 +13837,7 @@ impl DescribeEgressOnlyInternetGatewaysResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticGpusRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -13552,6 +13887,7 @@ impl DescribeElasticGpusRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeElasticGpusResult {
     /// <p>Information about the Elastic Graphics accelerators.</p>
     pub elastic_gpu_set: Option<Vec<ElasticGpus>>,
@@ -13593,6 +13929,7 @@ impl DescribeElasticGpusResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExportImageTasksRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -13642,6 +13979,7 @@ impl DescribeExportImageTasksRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeExportImageTasksResult {
     /// <p>Information about the export image tasks.</p>
     pub export_image_tasks: Option<Vec<ExportImageTask>>,
@@ -13681,6 +14019,7 @@ impl DescribeExportImageTasksResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExportTasksRequest {
     /// <p>The export task IDs.</p>
     pub export_task_ids: Option<Vec<String>>,
@@ -13706,6 +14045,7 @@ impl DescribeExportTasksRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeExportTasksResult {
     /// <p>Information about the export tasks.</p>
     pub export_tasks: Option<Vec<ExportTask>>,
@@ -13737,6 +14077,7 @@ impl DescribeExportTasksResultDeserializer {
 }
 /// <p>Describes the instances that could not be launched by the fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeFleetError {
     /// <p>The error code that indicates why the instance could not be launched. For more information about error codes, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html.html">Error Codes</a>.</p>
     pub error_code: Option<String>,
@@ -13784,6 +14125,7 @@ impl DescribeFleetErrorDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetHistoryRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -13826,6 +14168,7 @@ impl DescribeFleetHistoryRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeFleetHistoryResult {
     /// <p>The ID of the EC Fleet.</p>
     pub fleet_id: Option<String>,
@@ -13881,6 +14224,7 @@ impl DescribeFleetHistoryResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -13924,6 +14268,7 @@ impl DescribeFleetInstancesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeFleetInstancesResult {
     /// <p>The running instances. This list is refreshed periodically and might be out of date.</p>
     pub active_instances: Option<Vec<ActiveInstance>>,
@@ -13983,6 +14328,7 @@ impl DescribeFleetsErrorSetDeserializer {
 }
 /// <p>Describes the instances that were launched by the fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeFleetsInstances {
     /// <p>The IDs of the instances.</p>
     pub instance_ids: Option<Vec<String>>,
@@ -14063,6 +14409,7 @@ impl DescribeFleetsInstancesSetDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -14112,6 +14459,7 @@ impl DescribeFleetsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeFleetsResult {
     /// <p>Information about the EC2 Fleets.</p>
     pub fleets: Option<Vec<FleetData>>,
@@ -14143,6 +14491,7 @@ impl DescribeFleetsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFlowLogsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -14192,6 +14541,7 @@ impl DescribeFlowLogsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeFlowLogsResult {
     /// <p>Information about the flow logs.</p>
     pub flow_logs: Option<Vec<FlowLog>>,
@@ -14223,6 +14573,7 @@ impl DescribeFlowLogsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFpgaImageAttributeRequest {
     /// <p>The AFI attribute.</p>
     pub attribute: String,
@@ -14250,6 +14601,7 @@ impl DescribeFpgaImageAttributeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeFpgaImageAttributeResult {
     /// <p>Information about the attribute.</p>
     pub fpga_image_attribute: Option<FpgaImageAttribute>,
@@ -14282,6 +14634,7 @@ impl DescribeFpgaImageAttributeResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFpgaImagesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -14340,6 +14693,7 @@ impl DescribeFpgaImagesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeFpgaImagesResult {
     /// <p>Information about the FPGA images.</p>
     pub fpga_images: Option<Vec<FpgaImage>>,
@@ -14376,6 +14730,7 @@ impl DescribeFpgaImagesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHostReservationOfferingsRequest {
     /// <p><p>The filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family of the offering (for example, <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
@@ -14426,6 +14781,7 @@ impl DescribeHostReservationOfferingsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeHostReservationOfferingsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -14461,6 +14817,7 @@ impl DescribeHostReservationOfferingsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHostReservationsRequest {
     /// <p><p>The filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family (for example, <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> <li> <p> <code>state</code> - The state of the reservation (<code>payment-pending</code> | <code>payment-failed</code> | <code>active</code> | <code>retired</code>).</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
@@ -14505,6 +14862,7 @@ impl DescribeHostReservationsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeHostReservationsResult {
     /// <p>Details about the reservation's configuration.</p>
     pub host_reservation_set: Option<Vec<HostReservation>>,
@@ -14543,6 +14901,7 @@ impl DescribeHostReservationsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHostsRequest {
     /// <p><p>The filters.</p> <ul> <li> <p> <code>auto-placement</code> - Whether auto-placement is enabled or disabled (<code>on</code> | <code>off</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the host.</p> </li> <li> <p> <code>client-token</code> - The idempotency token that you provided when you allocated the host.</p> </li> <li> <p> <code>host-reservation-id</code> - The ID of the reservation assigned to this host.</p> </li> <li> <p> <code>instance-type</code> - The instance type size that the Dedicated Host is configured to support.</p> </li> <li> <p> <code>state</code> - The allocation state of the Dedicated Host (<code>available</code> | <code>under-assessment</code> | <code>permanent-failure</code> | <code>released</code> | <code>released-permanent-failure</code>).</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
@@ -14587,6 +14946,7 @@ impl DescribeHostsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeHostsResult {
     /// <p>Information about the Dedicated Hosts.</p>
     pub hosts: Option<Vec<Host>>,
@@ -14618,6 +14978,7 @@ impl DescribeHostsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIamInstanceProfileAssociationsRequest {
     /// <p>The IAM instance profile associations.</p>
     pub association_ids: Option<Vec<String>>,
@@ -14666,6 +15027,7 @@ impl DescribeIamInstanceProfileAssociationsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeIamInstanceProfileAssociationsResult {
     /// <p>Information about the IAM instance profile associations.</p>
     pub iam_instance_profile_associations: Option<Vec<IamInstanceProfileAssociation>>,
@@ -14705,6 +15067,7 @@ impl DescribeIamInstanceProfileAssociationsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdFormatRequest {
     /// <p>The type of resource: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code> </p>
     pub resource: Option<String>,
@@ -14726,6 +15089,7 @@ impl DescribeIdFormatRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeIdFormatResult {
     /// <p>Information about the ID format for the resource.</p>
     pub statuses: Option<Vec<IdFormat>>,
@@ -14752,6 +15116,7 @@ impl DescribeIdFormatResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdentityIdFormatRequest {
     /// <p>The ARN of the principal, which can be an IAM role, IAM user, or the root user.</p>
     pub principal_arn: String,
@@ -14776,6 +15141,7 @@ impl DescribeIdentityIdFormatRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeIdentityIdFormatResult {
     /// <p>Information about the ID format for the resources.</p>
     pub statuses: Option<Vec<IdFormat>>,
@@ -14807,6 +15173,7 @@ impl DescribeIdentityIdFormatResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeImageAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImageAttributeRequest {
     /// <p>The AMI attribute.</p> <p> <b>Note</b>: Depending on your account privileges, the <code>blockDeviceMapping</code> attribute may return a <code>Client.AuthFailure</code> error. If this happens, use <a>DescribeImages</a> to get information about the block device mapping for the AMI.</p>
     pub attribute: String,
@@ -14834,6 +15201,7 @@ impl DescribeImageAttributeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImagesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -14891,6 +15259,7 @@ impl DescribeImagesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeImagesResult {
     /// <p>Information about the images.</p>
     pub images: Option<Vec<Image>>,
@@ -14917,6 +15286,7 @@ impl DescribeImagesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImportImageTasksRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -14966,6 +15336,7 @@ impl DescribeImportImageTasksRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeImportImageTasksResult {
     /// <p>A list of zero or more import image tasks that are currently active or were completed or canceled in the previous 7 days.</p>
     pub import_image_tasks: Option<Vec<ImportImageTask>>,
@@ -15004,6 +15375,7 @@ impl DescribeImportImageTasksResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImportSnapshotTasksRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15053,6 +15425,7 @@ impl DescribeImportSnapshotTasksRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeImportSnapshotTasksResult {
     /// <p>A list of zero or more import snapshot tasks that are currently active or were completed or canceled in the previous 7 days.</p>
     pub import_snapshot_tasks: Option<Vec<ImportSnapshotTask>>,
@@ -15091,6 +15464,7 @@ impl DescribeImportSnapshotTasksResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstanceAttributeRequest {
     /// <p>The instance attribute.</p> <p>Note: The <code>enaSupport</code> attribute is not supported at this time.</p>
     pub attribute: String,
@@ -15118,6 +15492,7 @@ impl DescribeInstanceAttributeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstanceCreditSpecificationsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15171,6 +15546,7 @@ impl DescribeInstanceCreditSpecificationsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeInstanceCreditSpecificationsResult {
     /// <p>Information about the credit option for CPU usage of an instance.</p>
     pub instance_credit_specifications: Option<Vec<InstanceCreditSpecification>>,
@@ -15209,6 +15585,7 @@ impl DescribeInstanceCreditSpecificationsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstanceStatusRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15266,6 +15643,7 @@ impl DescribeInstanceStatusRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeInstanceStatusResult {
     /// <p>Information about the status of the instances.</p>
     pub instance_statuses: Option<Vec<InstanceStatus>>,
@@ -15304,6 +15682,7 @@ impl DescribeInstanceStatusResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15353,6 +15732,7 @@ impl DescribeInstancesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeInstancesResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -15388,6 +15768,7 @@ impl DescribeInstancesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInternetGatewaysRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15437,6 +15818,7 @@ impl DescribeInternetGatewaysRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeInternetGatewaysResult {
     /// <p>Information about one or more internet gateways.</p>
     pub internet_gateways: Option<Vec<InternetGateway>>,
@@ -15475,6 +15857,7 @@ impl DescribeInternetGatewaysResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeKeyPairsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15514,6 +15897,7 @@ impl DescribeKeyPairsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeKeyPairsResult {
     /// <p>Information about the key pairs.</p>
     pub key_pairs: Option<Vec<KeyPairInfo>>,
@@ -15540,6 +15924,7 @@ impl DescribeKeyPairsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLaunchTemplateVersionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15609,6 +15994,7 @@ impl DescribeLaunchTemplateVersionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLaunchTemplateVersionsResult {
     /// <p>Information about the launch template versions.</p>
     pub launch_template_versions: Option<Vec<LaunchTemplateVersion>>,
@@ -15647,6 +16033,7 @@ impl DescribeLaunchTemplateVersionsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLaunchTemplatesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15705,6 +16092,7 @@ impl DescribeLaunchTemplatesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLaunchTemplatesResult {
     /// <p>Information about the launch templates.</p>
     pub launch_templates: Option<Vec<LaunchTemplate>>,
@@ -15740,6 +16128,7 @@ impl DescribeLaunchTemplatesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMovingAddressesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15789,6 +16178,7 @@ impl DescribeMovingAddressesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeMovingAddressesResult {
     /// <p>The status for each Elastic IP address.</p>
     pub moving_address_statuses: Option<Vec<MovingAddressStatus>>,
@@ -15827,6 +16217,7 @@ impl DescribeMovingAddressesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNatGatewaysRequest {
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>nat-gateway-id</code> - The ID of the NAT gateway.</p> </li> <li> <p> <code>state</code> - The state of the NAT gateway (<code>pending</code> | <code>failed</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet in which the NAT gateway resides.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC in which the NAT gateway resides.</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
@@ -15871,6 +16262,7 @@ impl DescribeNatGatewaysRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeNatGatewaysResult {
     /// <p>Information about the NAT gateways.</p>
     pub nat_gateways: Option<Vec<NatGateway>>,
@@ -15906,6 +16298,7 @@ impl DescribeNatGatewaysResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNetworkAclsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15955,6 +16348,7 @@ impl DescribeNetworkAclsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeNetworkAclsResult {
     /// <p>Information about one or more network ACLs.</p>
     pub network_acls: Option<Vec<NetworkAcl>>,
@@ -15991,6 +16385,7 @@ impl DescribeNetworkAclsResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeNetworkInterfaceAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNetworkInterfaceAttributeRequest {
     /// <p>The attribute of the network interface. This parameter is required.</p>
     pub attribute: Option<String>,
@@ -16024,6 +16419,7 @@ impl DescribeNetworkInterfaceAttributeRequestSerializer {
 
 /// <p>Contains the output of DescribeNetworkInterfaceAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeNetworkInterfaceAttributeResult {
     /// <p>The attachment (if any) of the network interface.</p>
     pub attachment: Option<NetworkInterfaceAttachment>,
@@ -16088,6 +16484,7 @@ impl DescribeNetworkInterfaceAttributeResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeNetworkInterfacePermissions.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNetworkInterfacePermissionsRequest {
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>network-interface-permission.network-interface-permission-id</code> - The ID of the permission.</p> </li> <li> <p> <code>network-interface-permission.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface-permission.aws-account-id</code> - The AWS account ID.</p> </li> <li> <p> <code>network-interface-permission.aws-service</code> - The AWS service.</p> </li> <li> <p> <code>network-interface-permission.permission</code> - The type of permission (<code>INSTANCE-ATTACH</code> | <code>EIP-ASSOCIATE</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
@@ -16137,6 +16534,7 @@ impl DescribeNetworkInterfacePermissionsRequestSerializer {
 
 /// <p>Contains the output for DescribeNetworkInterfacePermissions.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeNetworkInterfacePermissionsResult {
     /// <p>The network interface permissions.</p>
     pub network_interface_permissions: Option<Vec<NetworkInterfacePermission>>,
@@ -16176,6 +16574,7 @@ impl DescribeNetworkInterfacePermissionsResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeNetworkInterfaces.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNetworkInterfacesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -16226,6 +16625,7 @@ impl DescribeNetworkInterfacesRequestSerializer {
 
 /// <p>Contains the output of DescribeNetworkInterfaces.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeNetworkInterfacesResult {
     /// <p>Information about one or more network interfaces.</p>
     pub network_interfaces: Option<Vec<NetworkInterface>>,
@@ -16264,6 +16664,7 @@ impl DescribeNetworkInterfacesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePlacementGroupsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -16303,6 +16704,7 @@ impl DescribePlacementGroupsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribePlacementGroupsResult {
     /// <p>Information about the placement groups.</p>
     pub placement_groups: Option<Vec<PlacementGroup>>,
@@ -16336,6 +16738,7 @@ impl DescribePlacementGroupsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePrefixListsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -16385,6 +16788,7 @@ impl DescribePrefixListsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribePrefixListsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -16420,6 +16824,7 @@ impl DescribePrefixListsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePrincipalIdFormatRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -16460,6 +16865,7 @@ impl DescribePrincipalIdFormatRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribePrincipalIdFormatResult {
     /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -16495,6 +16901,7 @@ impl DescribePrincipalIdFormatResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePublicIpv4PoolsRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     pub max_results: Option<i64>,
@@ -16530,6 +16937,7 @@ impl DescribePublicIpv4PoolsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribePublicIpv4PoolsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -16565,6 +16973,7 @@ impl DescribePublicIpv4PoolsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRegionsRequest {
     /// <p>Indicates whether to display all Regions, including Regions that are disabled for your account.</p>
     pub all_regions: Option<bool>,
@@ -16609,6 +17018,7 @@ impl DescribeRegionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeRegionsResult {
     /// <p>Information about the Regions.</p>
     pub regions: Option<Vec<Region>>,
@@ -16636,6 +17046,7 @@ impl DescribeRegionsResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeReservedInstancesListings.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedInstancesListingsRequest {
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>reserved-instances-id</code> - The ID of the Reserved Instances.</p> </li> <li> <p> <code>reserved-instances-listing-id</code> - The ID of the Reserved Instances listing.</p> </li> <li> <p> <code>status</code> - The status of the Reserved Instance listing (<code>pending</code> | <code>active</code> | <code>cancelled</code> | <code>closed</code>).</p> </li> <li> <p> <code>status-message</code> - The reason for the status.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
@@ -16678,6 +17089,7 @@ impl DescribeReservedInstancesListingsRequestSerializer {
 
 /// <p>Contains the output of DescribeReservedInstancesListings.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeReservedInstancesListingsResult {
     /// <p>Information about the Reserved Instance listing.</p>
     pub reserved_instances_listings: Option<Vec<ReservedInstancesListing>>,
@@ -16712,6 +17124,7 @@ impl DescribeReservedInstancesListingsResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeReservedInstancesModifications.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedInstancesModificationsRequest {
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>client-token</code> - The idempotency token for the modification request.</p> </li> <li> <p> <code>create-date</code> - The time when the modification request was created.</p> </li> <li> <p> <code>effective-date</code> - The time when the modification becomes effective.</p> </li> <li> <p> <code>modification-result.reserved-instances-id</code> - The ID for the Reserved Instances created as part of the modification request. This ID is only available when the status of the modification is <code>fulfilled</code>.</p> </li> <li> <p> <code>modification-result.target-configuration.availability-zone</code> - The Availability Zone for the new Reserved Instances.</p> </li> <li> <p> <code>modification-result.target-configuration.instance-count </code> - The number of new Reserved Instances.</p> </li> <li> <p> <code>modification-result.target-configuration.instance-type</code> - The instance type of the new Reserved Instances.</p> </li> <li> <p> <code>modification-result.target-configuration.platform</code> - The network platform of the new Reserved Instances (<code>EC2-Classic</code> | <code>EC2-VPC</code>).</p> </li> <li> <p> <code>reserved-instances-id</code> - The ID of the Reserved Instances modified.</p> </li> <li> <p> <code>reserved-instances-modification-id</code> - The ID of the modification request.</p> </li> <li> <p> <code>status</code> - The status of the Reserved Instances modification request (<code>processing</code> | <code>fulfilled</code> | <code>failed</code>).</p> </li> <li> <p> <code>status-message</code> - The reason for the status.</p> </li> <li> <p> <code>update-date</code> - The time when the modification request was last updated.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
@@ -16756,6 +17169,7 @@ impl DescribeReservedInstancesModificationsRequestSerializer {
 
 /// <p>Contains the output of DescribeReservedInstancesModifications.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeReservedInstancesModificationsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -16795,6 +17209,7 @@ impl DescribeReservedInstancesModificationsResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeReservedInstancesOfferings.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedInstancesOfferingsRequest {
     /// <p>The Availability Zone in which the Reserved Instance can be used.</p>
     pub availability_zone: Option<String>,
@@ -16895,6 +17310,7 @@ impl DescribeReservedInstancesOfferingsRequestSerializer {
 
 /// <p>Contains the output of DescribeReservedInstancesOfferings.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeReservedInstancesOfferingsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -16934,6 +17350,7 @@ impl DescribeReservedInstancesOfferingsResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeReservedInstances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -16984,6 +17401,7 @@ impl DescribeReservedInstancesRequestSerializer {
 
 /// <p>Contains the output for DescribeReservedInstances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeReservedInstancesResult {
     /// <p>A list of Reserved Instances.</p>
     pub reserved_instances: Option<Vec<ReservedInstances>>,
@@ -17017,6 +17435,7 @@ impl DescribeReservedInstancesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRouteTablesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17067,6 +17486,7 @@ impl DescribeRouteTablesRequestSerializer {
 
 /// <p>Contains the output of DescribeRouteTables.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeRouteTablesResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -17103,6 +17523,7 @@ impl DescribeRouteTablesResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeScheduledInstanceAvailability.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScheduledInstanceAvailabilityRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17178,6 +17599,7 @@ impl DescribeScheduledInstanceAvailabilityRequestSerializer {
 
 /// <p>Contains the output of DescribeScheduledInstanceAvailability.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeScheduledInstanceAvailabilityResult {
     /// <p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -17217,6 +17639,7 @@ impl DescribeScheduledInstanceAvailabilityResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeScheduledInstances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScheduledInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17276,6 +17699,7 @@ impl DescribeScheduledInstancesRequestSerializer {
 
 /// <p>Contains the output of DescribeScheduledInstances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeScheduledInstancesResult {
     /// <p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -17314,6 +17738,7 @@ impl DescribeScheduledInstancesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSecurityGroupReferencesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17338,6 +17763,7 @@ impl DescribeSecurityGroupReferencesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSecurityGroupReferencesResult {
     /// <p>Information about the VPCs with the referencing security groups.</p>
     pub security_group_reference_set: Option<Vec<SecurityGroupReference>>,
@@ -17371,6 +17797,7 @@ impl DescribeSecurityGroupReferencesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSecurityGroupsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17429,6 +17856,7 @@ impl DescribeSecurityGroupsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSecurityGroupsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -17465,6 +17893,7 @@ impl DescribeSecurityGroupsResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeSnapshotAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSnapshotAttributeRequest {
     /// <p>The snapshot attribute you would like to view.</p>
     pub attribute: String,
@@ -17493,6 +17922,7 @@ impl DescribeSnapshotAttributeRequestSerializer {
 
 /// <p>Contains the output of DescribeSnapshotAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSnapshotAttributeResult {
     /// <p>The users and groups that have the permissions for creating volumes from the snapshot.</p>
     pub create_volume_permissions: Option<Vec<CreateVolumePermission>>,
@@ -17539,6 +17969,7 @@ impl DescribeSnapshotAttributeResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSnapshotsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17606,6 +18037,7 @@ impl DescribeSnapshotsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSnapshotsResult {
     /// <p>The <code>NextToken</code> value to include in a future <code>DescribeSnapshots</code> request. When the results of a <code>DescribeSnapshots</code> request exceed <code>MaxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -17642,6 +18074,7 @@ impl DescribeSnapshotsResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeSpotDatafeedSubscription.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSpotDatafeedSubscriptionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17664,6 +18097,7 @@ impl DescribeSpotDatafeedSubscriptionRequestSerializer {
 
 /// <p>Contains the output of DescribeSpotDatafeedSubscription.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSpotDatafeedSubscriptionResult {
     /// <p>The Spot Instance data feed subscription.</p>
     pub spot_datafeed_subscription: Option<SpotDatafeedSubscription>,
@@ -17697,6 +18131,7 @@ impl DescribeSpotDatafeedSubscriptionResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeSpotFleetInstances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSpotFleetInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17735,6 +18170,7 @@ impl DescribeSpotFleetInstancesRequestSerializer {
 
 /// <p>Contains the output of DescribeSpotFleetInstances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSpotFleetInstancesResponse {
     /// <p>The running instances. This list is refreshed periodically and might be out of date.</p>
     pub active_instances: Option<Vec<ActiveInstance>>,
@@ -17779,6 +18215,7 @@ impl DescribeSpotFleetInstancesResponseDeserializer {
 }
 /// <p>Contains the parameters for DescribeSpotFleetRequestHistory.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSpotFleetRequestHistoryRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17825,6 +18262,7 @@ impl DescribeSpotFleetRequestHistoryRequestSerializer {
 
 /// <p>Contains the output of DescribeSpotFleetRequestHistory.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSpotFleetRequestHistoryResponse {
     /// <p>Information about the events in the history of the Spot Fleet request.</p>
     pub history_records: Option<Vec<HistoryRecord>>,
@@ -17883,6 +18321,7 @@ impl DescribeSpotFleetRequestHistoryResponseDeserializer {
 }
 /// <p>Contains the parameters for DescribeSpotFleetRequests.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSpotFleetRequestsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17924,6 +18363,7 @@ impl DescribeSpotFleetRequestsRequestSerializer {
 
 /// <p>Contains the output of DescribeSpotFleetRequests.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSpotFleetRequestsResponse {
     /// <p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -17963,6 +18403,7 @@ impl DescribeSpotFleetRequestsResponseDeserializer {
 }
 /// <p>Contains the parameters for DescribeSpotInstanceRequests.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSpotInstanceRequestsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18013,6 +18454,7 @@ impl DescribeSpotInstanceRequestsRequestSerializer {
 
 /// <p>Contains the output of DescribeSpotInstanceRequests.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSpotInstanceRequestsResult {
     /// <p>The token to use to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -18052,6 +18494,7 @@ impl DescribeSpotInstanceRequestsResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeSpotPriceHistory.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSpotPriceHistoryRequest {
     /// <p>Filters the results by the specified Availability Zone.</p>
     pub availability_zone: Option<String>,
@@ -18126,6 +18569,7 @@ impl DescribeSpotPriceHistoryRequestSerializer {
 
 /// <p>Contains the output of DescribeSpotPriceHistory.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSpotPriceHistoryResult {
     /// <p>The token required to retrieve the next set of results. This value is null or an empty string when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -18164,6 +18608,7 @@ impl DescribeSpotPriceHistoryResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStaleSecurityGroupsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18198,6 +18643,7 @@ impl DescribeStaleSecurityGroupsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStaleSecurityGroupsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     pub next_token: Option<String>,
@@ -18236,6 +18682,7 @@ impl DescribeStaleSecurityGroupsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubnetsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18285,6 +18732,7 @@ impl DescribeSubnetsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSubnetsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -18316,6 +18764,7 @@ impl DescribeSubnetsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18356,6 +18805,7 @@ impl DescribeTagsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTagsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -18387,6 +18837,7 @@ impl DescribeTagsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrafficMirrorFiltersRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18436,6 +18887,7 @@ impl DescribeTrafficMirrorFiltersRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTrafficMirrorFiltersResult {
     /// <p>The token to use to retrieve the next page of results. The value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -18474,6 +18926,7 @@ impl DescribeTrafficMirrorFiltersResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrafficMirrorSessionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18523,6 +18976,7 @@ impl DescribeTrafficMirrorSessionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTrafficMirrorSessionsResult {
     /// <p>The token to use to retrieve the next page of results. The value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -18561,6 +19015,7 @@ impl DescribeTrafficMirrorSessionsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrafficMirrorTargetsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18610,6 +19065,7 @@ impl DescribeTrafficMirrorTargetsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTrafficMirrorTargetsResult {
     /// <p>The token to use to retrieve the next page of results. The value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -18648,6 +19104,7 @@ impl DescribeTrafficMirrorTargetsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTransitGatewayAttachmentsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18697,6 +19154,7 @@ impl DescribeTransitGatewayAttachmentsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTransitGatewayAttachmentsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -18735,6 +19193,7 @@ impl DescribeTransitGatewayAttachmentsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTransitGatewayRouteTablesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18784,6 +19243,7 @@ impl DescribeTransitGatewayRouteTablesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTransitGatewayRouteTablesResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -18822,6 +19282,7 @@ impl DescribeTransitGatewayRouteTablesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTransitGatewayVpcAttachmentsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18875,6 +19336,7 @@ impl DescribeTransitGatewayVpcAttachmentsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTransitGatewayVpcAttachmentsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -18913,6 +19375,7 @@ impl DescribeTransitGatewayVpcAttachmentsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTransitGatewaysRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18962,6 +19425,7 @@ impl DescribeTransitGatewaysRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTransitGatewaysResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -19001,6 +19465,7 @@ impl DescribeTransitGatewaysResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeVolumeAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVolumeAttributeRequest {
     /// <p>The attribute of the volume. This parameter is required.</p>
     pub attribute: String,
@@ -19029,6 +19494,7 @@ impl DescribeVolumeAttributeRequestSerializer {
 
 /// <p>Contains the output of DescribeVolumeAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVolumeAttributeResult {
     /// <p>The state of <code>autoEnableIO</code> attribute.</p>
     pub auto_enable_io: Option<AttributeBooleanValue>,
@@ -19072,6 +19538,7 @@ impl DescribeVolumeAttributeResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVolumeStatusRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19121,6 +19588,7 @@ impl DescribeVolumeStatusRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVolumeStatusResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -19156,6 +19624,7 @@ impl DescribeVolumeStatusResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVolumesModificationsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19205,6 +19674,7 @@ impl DescribeVolumesModificationsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVolumesModificationsResult {
     /// <p>Token for pagination, null if there are no more results </p>
     pub next_token: Option<String>,
@@ -19243,6 +19713,7 @@ impl DescribeVolumesModificationsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVolumesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19292,6 +19763,7 @@ impl DescribeVolumesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVolumesResult {
     /// <p>The <code>NextToken</code> value to include in a future <code>DescribeVolumes</code> request. When the results of a <code>DescribeVolumes</code> request exceed <code>MaxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -19323,6 +19795,7 @@ impl DescribeVolumesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcAttributeRequest {
     /// <p>The VPC attribute.</p>
     pub attribute: String,
@@ -19350,6 +19823,7 @@ impl DescribeVpcAttributeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVpcAttributeResult {
     /// <p>Indicates whether the instances launched in the VPC get DNS hostnames. If this attribute is <code>true</code>, instances in the VPC get DNS hostnames; otherwise, they do not.</p>
     pub enable_dns_hostnames: Option<AttributeBooleanValue>,
@@ -19407,6 +19881,7 @@ impl DescribeVpcClassicLinkDnsSupportNextTokenDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcClassicLinkDnsSupportRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     pub max_results: Option<i64>,
@@ -19442,6 +19917,7 @@ impl DescribeVpcClassicLinkDnsSupportRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVpcClassicLinkDnsSupportResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -19482,6 +19958,7 @@ impl DescribeVpcClassicLinkDnsSupportResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcClassicLinkRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19521,6 +19998,7 @@ impl DescribeVpcClassicLinkRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVpcClassicLinkResult {
     /// <p>The ClassicLink status of one or more VPCs.</p>
     pub vpcs: Option<Vec<VpcClassicLink>>,
@@ -19551,6 +20029,7 @@ impl DescribeVpcClassicLinkResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcEndpointConnectionNotificationsRequest {
     /// <p>The ID of the notification.</p>
     pub connection_notification_id: Option<String>,
@@ -19603,6 +20082,7 @@ impl DescribeVpcEndpointConnectionNotificationsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVpcEndpointConnectionNotificationsResult {
     /// <p>One or more notifications.</p>
     pub connection_notification_set: Option<Vec<ConnectionNotification>>,
@@ -19641,6 +20121,7 @@ impl DescribeVpcEndpointConnectionNotificationsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcEndpointConnectionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19681,6 +20162,7 @@ impl DescribeVpcEndpointConnectionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVpcEndpointConnectionsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -19719,6 +20201,7 @@ impl DescribeVpcEndpointConnectionsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcEndpointServiceConfigurationsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19772,6 +20255,7 @@ impl DescribeVpcEndpointServiceConfigurationsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVpcEndpointServiceConfigurationsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -19810,6 +20294,7 @@ impl DescribeVpcEndpointServiceConfigurationsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcEndpointServicePermissionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19857,6 +20342,7 @@ impl DescribeVpcEndpointServicePermissionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVpcEndpointServicePermissionsResult {
     /// <p>Information about one or more allowed principals.</p>
     pub allowed_principals: Option<Vec<AllowedPrincipal>>,
@@ -19896,6 +20382,7 @@ impl DescribeVpcEndpointServicePermissionsResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeVpcEndpointServices.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcEndpointServicesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19946,6 +20433,7 @@ impl DescribeVpcEndpointServicesRequestSerializer {
 
 /// <p>Contains the output of DescribeVpcEndpointServices.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVpcEndpointServicesResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     pub next_token: Option<String>,
@@ -19989,6 +20477,7 @@ impl DescribeVpcEndpointServicesResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeVpcEndpoints.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcEndpointsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -20039,6 +20528,7 @@ impl DescribeVpcEndpointsRequestSerializer {
 
 /// <p>Contains the output of DescribeVpcEndpoints.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVpcEndpointsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     pub next_token: Option<String>,
@@ -20074,6 +20564,7 @@ impl DescribeVpcEndpointsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcPeeringConnectionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -20123,6 +20614,7 @@ impl DescribeVpcPeeringConnectionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVpcPeeringConnectionsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -20161,6 +20653,7 @@ impl DescribeVpcPeeringConnectionsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpcsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -20210,6 +20703,7 @@ impl DescribeVpcsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVpcsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -20242,6 +20736,7 @@ impl DescribeVpcsResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeVpnConnections.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpnConnectionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -20282,6 +20777,7 @@ impl DescribeVpnConnectionsRequestSerializer {
 
 /// <p>Contains the output of DescribeVpnConnections.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVpnConnectionsResult {
     /// <p>Information about one or more VPN connections.</p>
     pub vpn_connections: Option<Vec<VpnConnection>>,
@@ -20313,6 +20809,7 @@ impl DescribeVpnConnectionsResultDeserializer {
 }
 /// <p>Contains the parameters for DescribeVpnGateways.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVpnGatewaysRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -20353,6 +20850,7 @@ impl DescribeVpnGatewaysRequestSerializer {
 
 /// <p>Contains the output of DescribeVpnGateways.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeVpnGatewaysResult {
     /// <p>Information about one or more virtual private gateways.</p>
     pub vpn_gateways: Option<Vec<VpnGateway>>,
@@ -20383,6 +20881,7 @@ impl DescribeVpnGatewaysResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachClassicLinkVpcRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -20410,6 +20909,7 @@ impl DetachClassicLinkVpcRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DetachClassicLinkVpcResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -20438,6 +20938,7 @@ impl DetachClassicLinkVpcResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachInternetGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -20469,6 +20970,7 @@ impl DetachInternetGatewayRequestSerializer {
 
 /// <p>Contains the parameters for DetachNetworkInterface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachNetworkInterfaceRequest {
     /// <p>The ID of the attachment.</p>
     pub attachment_id: String,
@@ -20499,6 +21001,7 @@ impl DetachNetworkInterfaceRequestSerializer {
 
 /// <p>Contains the parameters for DetachVolume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachVolumeRequest {
     /// <p>The device name.</p>
     pub device: Option<String>,
@@ -20539,6 +21042,7 @@ impl DetachVolumeRequestSerializer {
 
 /// <p>Contains the parameters for DetachVpnGateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachVpnGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -20581,6 +21085,7 @@ impl DeviceTypeDeserializer {
 }
 /// <p>Describes a DHCP configuration option.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DhcpConfiguration {
     /// <p>The name of a DHCP option.</p>
     pub key: Option<String>,
@@ -20647,6 +21152,7 @@ impl DhcpConfigurationValueListDeserializer {
 }
 /// <p>Describes a set of DHCP options.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DhcpOptions {
     /// <p>One or more DHCP options in the set.</p>
     pub dhcp_configurations: Option<Vec<DhcpConfiguration>>,
@@ -20724,6 +21230,7 @@ impl DhcpOptionsListDeserializer {
 }
 /// <p>Describes an Active Directory.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DirectoryServiceAuthentication {
     /// <p>The ID of the Active Directory used for authentication.</p>
     pub directory_id: Option<String>,
@@ -20754,6 +21261,7 @@ impl DirectoryServiceAuthenticationDeserializer {
 }
 /// <p>Describes the Active Directory to be used for client authentication.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DirectoryServiceAuthenticationRequest {
     /// <p>The ID of the Active Directory to be used for authentication.</p>
     pub directory_id: Option<String>,
@@ -20775,6 +21283,7 @@ impl DirectoryServiceAuthenticationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableEbsEncryptionByDefaultRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>. </p>
     pub dry_run: Option<bool>,
@@ -20796,6 +21305,7 @@ impl DisableEbsEncryptionByDefaultRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisableEbsEncryptionByDefaultResult {
     /// <p>The updated status of encryption by default.</p>
     pub ebs_encryption_by_default: Option<bool>,
@@ -20827,6 +21337,7 @@ impl DisableEbsEncryptionByDefaultResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableTransitGatewayRouteTablePropagationRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -20864,6 +21375,7 @@ impl DisableTransitGatewayRouteTablePropagationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisableTransitGatewayRouteTablePropagationResult {
     /// <p>Information about route propagation.</p>
     pub propagation: Option<TransitGatewayPropagation>,
@@ -20896,6 +21408,7 @@ impl DisableTransitGatewayRouteTablePropagationResultDeserializer {
 }
 /// <p>Contains the parameters for DisableVgwRoutePropagation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableVgwRoutePropagationRequest {
     /// <p>The ID of the virtual private gateway.</p>
     pub gateway_id: String,
@@ -20921,6 +21434,7 @@ impl DisableVgwRoutePropagationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableVpcClassicLinkDnsSupportRequest {
     /// <p>The ID of the VPC.</p>
     pub vpc_id: Option<String>,
@@ -20942,6 +21456,7 @@ impl DisableVpcClassicLinkDnsSupportRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisableVpcClassicLinkDnsSupportResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -20970,6 +21485,7 @@ impl DisableVpcClassicLinkDnsSupportResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableVpcClassicLinkRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -20994,6 +21510,7 @@ impl DisableVpcClassicLinkRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisableVpcClassicLinkResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -21022,6 +21539,7 @@ impl DisableVpcClassicLinkResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateAddressRequest {
     /// <p>[EC2-VPC] The association ID. Required for EC2-VPC.</p>
     pub association_id: Option<String>,
@@ -21053,6 +21571,7 @@ impl DisassociateAddressRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateClientVpnTargetNetworkRequest {
     /// <p>The ID of the target network association.</p>
     pub association_id: String,
@@ -21086,6 +21605,7 @@ impl DisassociateClientVpnTargetNetworkRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisassociateClientVpnTargetNetworkResult {
     /// <p>The ID of the target network association.</p>
     pub association_id: Option<String>,
@@ -21121,6 +21641,7 @@ impl DisassociateClientVpnTargetNetworkResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateIamInstanceProfileRequest {
     /// <p>The ID of the IAM instance profile association.</p>
     pub association_id: String,
@@ -21143,6 +21664,7 @@ impl DisassociateIamInstanceProfileRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisassociateIamInstanceProfileResult {
     /// <p>Information about the IAM instance profile association.</p>
     pub iam_instance_profile_association: Option<IamInstanceProfileAssociation>,
@@ -21175,6 +21697,7 @@ impl DisassociateIamInstanceProfileResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateRouteTableRequest {
     /// <p>The association ID representing the current association between the route table and subnet.</p>
     pub association_id: String,
@@ -21202,6 +21725,7 @@ impl DisassociateRouteTableRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateSubnetCidrBlockRequest {
     /// <p>The association ID for the CIDR block.</p>
     pub association_id: String,
@@ -21224,6 +21748,7 @@ impl DisassociateSubnetCidrBlockRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisassociateSubnetCidrBlockResult {
     /// <p>Information about the IPv6 CIDR block association.</p>
     pub ipv_6_cidr_block_association: Option<SubnetIpv6CidrBlockAssociation>,
@@ -21261,6 +21786,7 @@ impl DisassociateSubnetCidrBlockResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateTransitGatewayRouteTableRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -21298,6 +21824,7 @@ impl DisassociateTransitGatewayRouteTableRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisassociateTransitGatewayRouteTableResult {
     /// <p>Information about the association.</p>
     pub association: Option<TransitGatewayAssociation>,
@@ -21329,6 +21856,7 @@ impl DisassociateTransitGatewayRouteTableResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateVpcCidrBlockRequest {
     /// <p>The association ID for the CIDR block.</p>
     pub association_id: String,
@@ -21351,6 +21879,7 @@ impl DisassociateVpcCidrBlockRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisassociateVpcCidrBlockResult {
     /// <p>Information about the IPv4 CIDR block association.</p>
     pub cidr_block_association: Option<VpcCidrBlockAssociation>,
@@ -21398,6 +21927,7 @@ impl DisassociateVpcCidrBlockResultDeserializer {
 }
 /// <p>Describes a disk image.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DiskImage {
     /// <p>A description of the disk image.</p>
     pub description: Option<String>,
@@ -21438,6 +21968,7 @@ impl DiskImageSerializer {
 
 /// <p>Describes a disk image.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DiskImageDescription {
     /// <p>The checksum computed for the disk image.</p>
     pub checksum: Option<String>,
@@ -21479,6 +22010,7 @@ impl DiskImageDescriptionDeserializer {
 }
 /// <p>Describes a disk image.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DiskImageDetail {
     /// <p>The size of the disk image, in GiB.</p>
     pub bytes: i64,
@@ -21531,6 +22063,7 @@ impl DiskImageListSerializer {
 
 /// <p>Describes a disk image volume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DiskImageVolumeDescription {
     /// <p>The volume identifier.</p>
     pub id: Option<String>,
@@ -21565,6 +22098,7 @@ impl DiskImageVolumeDescriptionDeserializer {
 }
 /// <p>Describes a DNS entry.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DnsEntry {
     /// <p>The DNS name.</p>
     pub dns_name: Option<String>,
@@ -21613,6 +22147,7 @@ impl DnsEntrySetDeserializer {
 }
 /// <p>Information about the DNS server to be used.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DnsServersOptionsModifyStructure {
     /// <p>The IPv4 address range, in CIDR notation, of the DNS servers to be used. You can specify up to two DNS servers. Ensure that the DNS servers can be reached by the clients. The specified values overwrite the existing values.</p>
     pub custom_dns_servers: Option<Vec<String>>,
@@ -21677,6 +22212,8 @@ impl DoubleDeserializer {
 }
 /// <p>Describes a block device for an EBS volume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EbsBlockDevice {
     /// <p>Indicates whether the EBS volume is deleted on instance termination.</p>
     pub delete_on_termination: Option<bool>,
@@ -21773,6 +22310,7 @@ impl EbsBlockDeviceSerializer {
 
 /// <p>Describes a parameter used to set up an EBS volume in a block device mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EbsInstanceBlockDevice {
     /// <p>The time stamp when the attachment initiated.</p>
     pub attach_time: Option<String>,
@@ -21816,6 +22354,7 @@ impl EbsInstanceBlockDeviceDeserializer {
 }
 /// <p>Describes information used to set up an EBS volume specified in a block device mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EbsInstanceBlockDeviceSpecification {
     /// <p>Indicates whether the volume is deleted on instance termination.</p>
     pub delete_on_termination: Option<bool>,
@@ -21846,6 +22385,7 @@ impl EbsInstanceBlockDeviceSpecificationSerializer {
 
 /// <p>Describes an egress-only internet gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EgressOnlyInternetGateway {
     /// <p>Information about the attachment of the egress-only internet gateway.</p>
     pub attachments: Option<Vec<InternetGatewayAttachment>>,
@@ -21931,6 +22471,7 @@ impl EgressOnlyInternetGatewayListDeserializer {
 }
 /// <p>Describes the association between an instance and an Elastic Graphics accelerator.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ElasticGpuAssociation {
     /// <p>The ID of the association.</p>
     pub elastic_gpu_association_id: Option<String>,
@@ -22000,6 +22541,7 @@ impl ElasticGpuAssociationListDeserializer {
 }
 /// <p>Describes the status of an Elastic Graphics accelerator.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ElasticGpuHealth {
     /// <p>The health status.</p>
     pub status: Option<String>,
@@ -22054,6 +22596,7 @@ impl ElasticGpuSetDeserializer {
 }
 /// <p>A specification for an Elastic Graphics accelerator.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ElasticGpuSpecification {
     /// <p>The type of Elastic Graphics accelerator.</p>
     pub type_: String,
@@ -22085,6 +22628,7 @@ impl ElasticGpuSpecificationListSerializer {
 
 /// <p>Describes an elastic GPU.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ElasticGpuSpecificationResponse {
     /// <p>The elastic GPU type.</p>
     pub type_: Option<String>,
@@ -22167,6 +22711,7 @@ impl ElasticGpuStatusDeserializer {
 }
 /// <p>Describes an Elastic Graphics accelerator.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ElasticGpus {
     /// <p>The Availability Zone in the which the Elastic Graphics accelerator resides.</p>
     pub availability_zone: Option<String>,
@@ -22226,6 +22771,7 @@ impl ElasticGpusDeserializer {
 }
 /// <p> Describes an elastic inference accelerator. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ElasticInferenceAccelerator {
     /// <p> The type of elastic inference accelerator. The possible values are <code>eia1.small</code>, <code>eia1.medium</code>, and <code>eia1.large</code>. </p>
     pub type_: String,
@@ -22246,6 +22792,7 @@ impl ElasticInferenceAcceleratorSerializer {
 
 /// <p> Describes the association between an instance and an elastic inference accelerator. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ElasticInferenceAcceleratorAssociation {
     /// <p> The Amazon Resource Name (ARN) of the elastic inference accelerator. </p>
     pub elastic_inference_accelerator_arn: Option<String>,
@@ -22336,6 +22883,7 @@ impl ElasticInferenceAcceleratorsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableEbsEncryptionByDefaultRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>. </p>
     pub dry_run: Option<bool>,
@@ -22357,6 +22905,7 @@ impl EnableEbsEncryptionByDefaultRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnableEbsEncryptionByDefaultResult {
     /// <p>The updated status of encryption by default.</p>
     pub ebs_encryption_by_default: Option<bool>,
@@ -22388,6 +22937,7 @@ impl EnableEbsEncryptionByDefaultResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableTransitGatewayRouteTablePropagationRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -22425,6 +22975,7 @@ impl EnableTransitGatewayRouteTablePropagationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnableTransitGatewayRouteTablePropagationResult {
     /// <p>Information about route propagation.</p>
     pub propagation: Option<TransitGatewayPropagation>,
@@ -22457,6 +23008,7 @@ impl EnableTransitGatewayRouteTablePropagationResultDeserializer {
 }
 /// <p>Contains the parameters for EnableVgwRoutePropagation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableVgwRoutePropagationRequest {
     /// <p>The ID of the virtual private gateway that is attached to a VPC. The virtual private gateway must be attached to the same VPC that the routing tables are associated with. </p>
     pub gateway_id: String,
@@ -22483,6 +23035,7 @@ impl EnableVgwRoutePropagationRequestSerializer {
 
 /// <p>Contains the parameters for EnableVolumeIO.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableVolumeIORequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -22507,6 +23060,7 @@ impl EnableVolumeIORequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableVpcClassicLinkDnsSupportRequest {
     /// <p>The ID of the VPC.</p>
     pub vpc_id: Option<String>,
@@ -22528,6 +23082,7 @@ impl EnableVpcClassicLinkDnsSupportRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnableVpcClassicLinkDnsSupportResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -22556,6 +23111,7 @@ impl EnableVpcClassicLinkDnsSupportResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableVpcClassicLinkRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -22580,6 +23136,7 @@ impl EnableVpcClassicLinkRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnableVpcClassicLinkResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -22648,6 +23205,7 @@ impl EventCodeDeserializer {
 }
 /// <p>Describes an EC2 Fleet or Spot Fleet event.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventInformation {
     /// <p>The description of the event.</p>
     pub event_description: Option<String>,
@@ -22718,6 +23276,7 @@ impl ExecutableByStringListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportClientVpnClientCertificateRevocationListRequest {
     /// <p>The ID of the Client VPN endpoint.</p>
     pub client_vpn_endpoint_id: String,
@@ -22749,6 +23308,7 @@ impl ExportClientVpnClientCertificateRevocationListRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ExportClientVpnClientCertificateRevocationListResult {
     /// <p>Information about the client certificate revocation list.</p>
     pub certificate_revocation_list: Option<String>,
@@ -22789,6 +23349,7 @@ impl ExportClientVpnClientCertificateRevocationListResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportClientVpnClientConfigurationRequest {
     /// <p>The ID of the Client VPN endpoint.</p>
     pub client_vpn_endpoint_id: String,
@@ -22816,6 +23377,7 @@ impl ExportClientVpnClientConfigurationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ExportClientVpnClientConfigurationResult {
     /// <p>The contents of the Client VPN endpoint configuration file.</p>
     pub client_configuration: Option<String>,
@@ -22858,6 +23420,7 @@ impl ExportEnvironmentDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportImageRequest {
     /// <p>Token to enable idempotency for export image requests.</p>
     pub client_token: Option<String>,
@@ -22910,6 +23473,7 @@ impl ExportImageRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ExportImageResult {
     /// <p>A description of the image being exported.</p>
     pub description: Option<String>,
@@ -22983,6 +23547,7 @@ impl ExportImageResultDeserializer {
 }
 /// <p>Describes an export image task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ExportImageTask {
     /// <p>A description of the image being exported.</p>
     pub description: Option<String>,
@@ -23072,6 +23637,7 @@ impl ExportImageTaskListDeserializer {
 }
 /// <p>Describes an instance export task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ExportTask {
     /// <p>A description of the resource being exported.</p>
     pub description: Option<String>,
@@ -23158,6 +23724,7 @@ impl ExportTaskListDeserializer {
 }
 /// <p>Describes the destination for an export image task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ExportTaskS3Location {
     /// <p>The destination S3 bucket.</p>
     pub s3_bucket: Option<String>,
@@ -23188,6 +23755,7 @@ impl ExportTaskS3LocationDeserializer {
 }
 /// <p>Describes the destination for an export image task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportTaskS3LocationRequest {
     /// <p>The destination S3 bucket.</p>
     pub s3_bucket: String,
@@ -23224,6 +23792,7 @@ impl ExportTaskStateDeserializer {
 }
 /// <p>Describes the format and location for an instance export task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ExportToS3Task {
     /// <p>The container format used to combine disk images with metadata (such as OVF). If absent, only the disk image is exported.</p>
     pub container_format: Option<String>,
@@ -23270,6 +23839,7 @@ impl ExportToS3TaskDeserializer {
 }
 /// <p>Describes an instance export task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportToS3TaskSpecification {
     /// <p>The container format used to combine disk images with metadata (such as OVF). If absent, only the disk image is exported.</p>
     pub container_format: Option<String>,
@@ -23306,6 +23876,7 @@ impl ExportToS3TaskSpecificationSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportTransitGatewayRoutesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -23345,6 +23916,7 @@ impl ExportTransitGatewayRoutesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ExportTransitGatewayRoutesResult {
     /// <p>The URL of the exported file in Amazon S3. For example, s3://<i>bucket_name</i>/VPCTransitGateway/TransitGatewayRouteTables/<i>file_name</i>.</p>
     pub s3_location: Option<String>,
@@ -23375,6 +23947,7 @@ impl ExportTransitGatewayRoutesResultDeserializer {
 }
 /// <p><p>A filter name and value pair that is used to return a more specific list of results from a describe operation. Filters can be used to match a set of resources by specific criteria, such as tags, attributes, or IDs. The filters supported by a describe operation are documented with the describe operation. For example:</p> <ul> <li> <p> <a>DescribeAvailabilityZones</a> </p> </li> <li> <p> <a>DescribeImages</a> </p> </li> <li> <p> <a>DescribeInstances</a> </p> </li> <li> <p> <a>DescribeKeyPairs</a> </p> </li> <li> <p> <a>DescribeSecurityGroups</a> </p> </li> <li> <p> <a>DescribeSnapshots</a> </p> </li> <li> <p> <a>DescribeSubnets</a> </p> </li> <li> <p> <a>DescribeTags</a> </p> </li> <li> <p> <a>DescribeVolumes</a> </p> </li> <li> <p> <a>DescribeVpcs</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>The name of the filter. Filter names are case-sensitive.</p>
     pub name: Option<String>,
@@ -23428,6 +24001,7 @@ impl FleetActivityStatusDeserializer {
 }
 /// <p>Describes an EC2 Fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FleetData {
     /// <p>The progress of the EC2 Fleet. If there is an error, the status is <code>error</code>. After all requests are placed, the status is <code>pending_fulfillment</code>. If the size of the EC2 Fleet is equal to or greater than its target capacity, the status is <code>fulfilled</code>. If the size of the EC2 Fleet is decreased, the status is <code>pending_termination</code> while instances are terminating.</p>
     pub activity_status: Option<String>,
@@ -23638,6 +24212,7 @@ impl FleetIdentifierDeserializer {
 }
 /// <p>Describes a launch template and overrides.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FleetLaunchTemplateConfig {
     /// <p>The launch template.</p>
     pub launch_template_specification: Option<FleetLaunchTemplateSpecification>,
@@ -23712,6 +24287,7 @@ impl FleetLaunchTemplateConfigListRequestSerializer {
 
 /// <p>Describes a launch template and overrides.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FleetLaunchTemplateConfigRequest {
     /// <p>The launch template to use. You must specify either the launch template ID or launch template name in the request. </p>
     pub launch_template_specification: Option<FleetLaunchTemplateSpecificationRequest>,
@@ -23747,6 +24323,7 @@ impl FleetLaunchTemplateConfigRequestSerializer {
 
 /// <p>Describes overrides for a launch template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FleetLaunchTemplateOverrides {
     /// <p>The Availability Zone in which to launch the instances.</p>
     pub availability_zone: Option<String>,
@@ -23845,6 +24422,7 @@ impl FleetLaunchTemplateOverridesListRequestSerializer {
 
 /// <p>Describes overrides for a launch template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FleetLaunchTemplateOverridesRequest {
     /// <p>The Availability Zone in which to launch the instances.</p>
     pub availability_zone: Option<String>,
@@ -23901,6 +24479,8 @@ impl FleetLaunchTemplateOverridesRequestSerializer {
 
 /// <p>Describes a launch template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FleetLaunchTemplateSpecification {
     /// <p>The ID of the launch template. You must specify either a template ID or a template name.</p>
     pub launch_template_id: Option<String>,
@@ -23967,6 +24547,7 @@ impl FleetLaunchTemplateSpecificationSerializer {
 
 /// <p>The launch template to use. You must specify either the launch template ID or launch template name in the request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FleetLaunchTemplateSpecificationRequest {
     /// <p>The ID of the launch template.</p>
     pub launch_template_id: Option<String>,
@@ -24060,6 +24641,7 @@ impl FloatDeserializer {
 }
 /// <p>Describes a flow log.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FlowLog {
     /// <p>The date and time the flow log was created.</p>
     pub creation_time: Option<String>,
@@ -24172,6 +24754,7 @@ impl FlowLogSetDeserializer {
 }
 /// <p>Describes an Amazon FPGA image (AFI).</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FpgaImage {
     /// <p>The date and time the AFI was created.</p>
     pub create_time: Option<String>,
@@ -24277,6 +24860,7 @@ impl FpgaImageDeserializer {
 }
 /// <p>Describes an Amazon FPGA image (AFI) attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FpgaImageAttribute {
     /// <p>The description of the AFI.</p>
     pub description: Option<String>,
@@ -24356,6 +24940,7 @@ impl FpgaImageListDeserializer {
 }
 /// <p>Describes the state of the bitstream generation process for an Amazon FPGA image (AFI).</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FpgaImageState {
     /// <p><p>The state. The following are the possible values:</p> <ul> <li> <p> <code>pending</code> - AFI bitstream generation is in progress.</p> </li> <li> <p> <code>available</code> - The AFI is available for use.</p> </li> <li> <p> <code>failed</code> - AFI bitstream generation failed.</p> </li> <li> <p> <code>unavailable</code> - The AFI is no longer available for use.</p> </li> </ul></p>
     pub code: Option<String>,
@@ -24407,6 +24992,7 @@ impl GatewayTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCapacityReservationUsageRequest {
     /// <p>The ID of the Capacity Reservation.</p>
     pub capacity_reservation_id: String,
@@ -24444,6 +25030,7 @@ impl GetCapacityReservationUsageRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCapacityReservationUsageResult {
     /// <p>The remaining capacity. Indicates the number of instances that can be launched in the Capacity Reservation.</p>
     pub available_instance_count: Option<i64>,
@@ -24516,6 +25103,7 @@ impl GetCapacityReservationUsageResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConsoleOutputRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -24545,6 +25133,7 @@ impl GetConsoleOutputRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetConsoleOutputResult {
     /// <p>The ID of the instance.</p>
     pub instance_id: Option<String>,
@@ -24579,6 +25168,7 @@ impl GetConsoleOutputResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConsoleScreenshotRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -24608,6 +25198,7 @@ impl GetConsoleScreenshotRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetConsoleScreenshotResult {
     /// <p>The data that comprises the image.</p>
     pub image_data: Option<String>,
@@ -24642,6 +25233,7 @@ impl GetConsoleScreenshotResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEbsDefaultKmsKeyIdRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -24663,6 +25255,7 @@ impl GetEbsDefaultKmsKeyIdRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetEbsDefaultKmsKeyIdResult {
     /// <p>The Amazon Resource Name (ARN) of the default CMK for encryption by default.</p>
     pub kms_key_id: Option<String>,
@@ -24691,6 +25284,7 @@ impl GetEbsDefaultKmsKeyIdResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEbsEncryptionByDefaultRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -24712,6 +25306,7 @@ impl GetEbsEncryptionByDefaultRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetEbsEncryptionByDefaultResult {
     /// <p>Indicates whether encryption by default is enabled.</p>
     pub ebs_encryption_by_default: Option<bool>,
@@ -24743,6 +25338,7 @@ impl GetEbsEncryptionByDefaultResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHostReservationPurchasePreviewRequest {
     /// <p>The IDs of the Dedicated Hosts with which the reservation is associated.</p>
     pub host_id_set: Vec<String>,
@@ -24769,6 +25365,7 @@ impl GetHostReservationPurchasePreviewRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetHostReservationPurchasePreviewResult {
     /// <p>The currency in which the <code>totalUpfrontPrice</code> and <code>totalHourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>
     pub currency_code: Option<String>,
@@ -24819,6 +25416,7 @@ impl GetHostReservationPurchasePreviewResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLaunchTemplateDataRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -24843,6 +25441,7 @@ impl GetLaunchTemplateDataRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetLaunchTemplateDataResult {
     /// <p>The instance data.</p>
     pub launch_template_data: Option<ResponseLaunchTemplateData>,
@@ -24875,6 +25474,7 @@ impl GetLaunchTemplateDataResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPasswordDataRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -24899,6 +25499,7 @@ impl GetPasswordDataRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPasswordDataResult {
     /// <p>The ID of the Windows instance.</p>
     pub instance_id: Option<String>,
@@ -24935,6 +25536,7 @@ impl GetPasswordDataResultDeserializer {
 }
 /// <p>Contains the parameters for GetReservedInstanceExchangeQuote.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReservedInstancesExchangeQuoteRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -24973,6 +25575,7 @@ impl GetReservedInstancesExchangeQuoteRequestSerializer {
 
 /// <p>Contains the output of GetReservedInstancesExchangeQuote.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetReservedInstancesExchangeQuoteResult {
     /// <p>The currency of the transaction.</p>
     pub currency_code: Option<String>,
@@ -25071,6 +25674,7 @@ impl GetReservedInstancesExchangeQuoteResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTransitGatewayAttachmentPropagationsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -25121,6 +25725,7 @@ impl GetTransitGatewayAttachmentPropagationsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTransitGatewayAttachmentPropagationsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -25161,6 +25766,7 @@ impl GetTransitGatewayAttachmentPropagationsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTransitGatewayRouteTableAssociationsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -25211,6 +25817,7 @@ impl GetTransitGatewayRouteTableAssociationsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTransitGatewayRouteTableAssociationsResult {
     /// <p>Information about the associations.</p>
     pub associations: Option<Vec<TransitGatewayRouteTableAssociation>>,
@@ -25249,6 +25856,7 @@ impl GetTransitGatewayRouteTableAssociationsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTransitGatewayRouteTablePropagationsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -25299,6 +25907,7 @@ impl GetTransitGatewayRouteTablePropagationsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTransitGatewayRouteTablePropagationsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -25369,6 +25978,8 @@ impl GroupIdStringListSerializer {
 
 /// <p>Describes a security group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GroupIdentifier {
     /// <p>The ID of the security group.</p>
     pub group_id: Option<String>,
@@ -25489,6 +26100,7 @@ impl GroupNameStringListSerializer {
 
 /// <p>Indicates whether your instance is configured for hibernation. This parameter is valid only if the instance meets the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#hibernating-prerequisites">hibernation prerequisites</a>. Hibernation is currently supported only for Amazon Linux. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html">Hibernate Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HibernationOptions {
     /// <p>If this parameter is set to <code>true</code>, your instance is enabled for hibernation; otherwise, it is not enabled for hibernation.</p>
     pub configured: Option<bool>,
@@ -25514,6 +26126,7 @@ impl HibernationOptionsDeserializer {
 }
 /// <p>Indicates whether your instance is configured for hibernation. This parameter is valid only if the instance meets the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#hibernating-prerequisites">hibernation prerequisites</a>. Hibernation is currently supported only for Amazon Linux. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html">Hibernate Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HibernationOptionsRequest {
     /// <p>If you set this parameter to <code>true</code>, your instance is enabled for hibernation.</p> <p>Default: <code>false</code> </p>
     pub configured: Option<bool>,
@@ -25536,6 +26149,7 @@ impl HibernationOptionsRequestSerializer {
 
 /// <p>Describes an event in the history of the Spot Fleet request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HistoryRecord {
     /// <p>Information about the event.</p>
     pub event_information: Option<EventInformation>,
@@ -25574,6 +26188,7 @@ impl HistoryRecordDeserializer {
 }
 /// <p>Describes an event in the history of an EC2 Fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HistoryRecordEntry {
     /// <p>Information about the event.</p>
     pub event_information: Option<EventInformation>,
@@ -25647,6 +26262,7 @@ impl HistoryRecordsDeserializer {
 }
 /// <p>Describes the properties of the Dedicated Host.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Host {
     /// <p>The time that the Dedicated Host was allocated.</p>
     pub allocation_time: Option<String>,
@@ -25749,6 +26365,7 @@ impl HostDeserializer {
 }
 /// <p>Describes an instance running on a Dedicated Host.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HostInstance {
     /// <p>the IDs of instances that are running on the Dedicated Host.</p>
     pub instance_id: Option<String>,
@@ -25814,6 +26431,7 @@ impl HostListDeserializer {
 }
 /// <p>Details about the Dedicated Host Reservation offering.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HostOffering {
     /// <p>The currency of the offering.</p>
     pub currency_code: Option<String>,
@@ -25894,6 +26512,7 @@ impl HostOfferingSetDeserializer {
 }
 /// <p>Describes properties of a Dedicated Host.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HostProperties {
     /// <p>The number of cores on the Dedicated Host.</p>
     pub cores: Option<i64>,
@@ -25946,6 +26565,7 @@ impl HostRecoveryDeserializer {
 }
 /// <p>Details about the Dedicated Host Reservation and associated Dedicated Hosts.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HostReservation {
     /// <p>The number of Dedicated Hosts the reservation is associated with.</p>
     pub count: Option<i64>,
@@ -26108,6 +26728,7 @@ impl IKEVersionsListDeserializer {
 }
 /// <p>The internet key exchange (IKE) version permitted for the VPN tunnel.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct IKEVersionsListValue {
     /// <p>The IKE version.</p>
     pub value: Option<String>,
@@ -26145,6 +26766,7 @@ impl IKEVersionsRequestListSerializer {
 
 /// <p>The IKE version that is permitted for the VPN tunnel.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IKEVersionsRequestListValue {
     /// <p>The IKE version.</p>
     pub value: Option<String>,
@@ -26167,6 +26789,7 @@ impl IKEVersionsRequestListValueSerializer {
 
 /// <p>Describes an IAM instance profile.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct IamInstanceProfile {
     /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
     pub arn: Option<String>,
@@ -26197,6 +26820,7 @@ impl IamInstanceProfileDeserializer {
 }
 /// <p>Describes an association between an IAM instance profile and an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct IamInstanceProfileAssociation {
     /// <p>The ID of the association.</p>
     pub association_id: Option<String>,
@@ -26286,6 +26910,8 @@ impl IamInstanceProfileAssociationStateDeserializer {
 }
 /// <p>Describes an IAM instance profile.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IamInstanceProfileSpecification {
     /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
     pub arn: Option<String>,
@@ -26339,6 +26965,8 @@ impl IamInstanceProfileSpecificationSerializer {
 
 /// <p>Describes the ICMP type and code.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IcmpTypeCode {
     /// <p>The ICMP code. A value of -1 means all codes for the specified ICMP type.</p>
     pub code: Option<i64>,
@@ -26388,6 +27016,7 @@ impl IcmpTypeCodeSerializer {
 
 /// <p>Describes the ID format for a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct IdFormat {
     /// <p>The date in UTC at which you are permanently switched over to using longer IDs. If a deadline is not yet available for this resource type, this field is not returned.</p>
     pub deadline: Option<String>,
@@ -26440,6 +27069,7 @@ impl IdFormatListDeserializer {
 }
 /// <p>Describes an image.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Image {
     /// <p>The architecture of the image.</p>
     pub architecture: Option<String>,
@@ -26608,6 +27238,7 @@ impl ImageDeserializer {
 }
 /// <p>Describes an image attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ImageAttribute {
     /// <p>The block device mapping entries.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
@@ -26684,6 +27315,7 @@ impl ImageAttributeDeserializer {
 }
 /// <p>Describes the disk container object for an import image task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImageDiskContainer {
     /// <p>The description of the disk image.</p>
     pub description: Option<String>,
@@ -26795,6 +27427,7 @@ impl ImageTypeValuesDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportClientVpnClientCertificateRevocationListRequest {
     /// <p>The client certificate revocation list file. For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-working-certificates.html#cvpn-working-certificates-generate">Generate a Client Certificate Revocation List</a> in the <i>AWS Client VPN Administrator Guide</i>.</p>
     pub certificate_revocation_list: String,
@@ -26832,6 +27465,7 @@ impl ImportClientVpnClientCertificateRevocationListRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ImportClientVpnClientCertificateRevocationListResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -26860,6 +27494,7 @@ impl ImportClientVpnClientCertificateRevocationListResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportImageRequest {
     /// <p>The architecture of the virtual machine.</p> <p>Valid values: <code>i386</code> | <code>x86_64</code> | <code>arm64</code> </p>
     pub architecture: Option<String>,
@@ -26944,6 +27579,7 @@ impl ImportImageRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ImportImageResult {
     /// <p>The architecture of the virtual machine.</p>
     pub architecture: Option<String>,
@@ -27034,6 +27670,7 @@ impl ImportImageResultDeserializer {
 }
 /// <p>Describes an import image task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ImportImageTask {
     /// <p>The architecture of the virtual machine.</p> <p>Valid values: <code>i386</code> | <code>x86_64</code> | <code>arm64</code> </p>
     pub architecture: Option<String>,
@@ -27141,6 +27778,7 @@ impl ImportImageTaskListDeserializer {
 }
 /// <p>Describes the launch specification for VM import.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportInstanceLaunchSpecification {
     /// <p>Reserved.</p>
     pub additional_info: Option<String>,
@@ -27231,6 +27869,7 @@ impl ImportInstanceLaunchSpecificationSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportInstanceRequest {
     /// <p>A description for the instance being imported.</p>
     pub description: Option<String>,
@@ -27278,6 +27917,7 @@ impl ImportInstanceRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ImportInstanceResult {
     /// <p>Information about the conversion task.</p>
     pub conversion_task: Option<ConversionTask>,
@@ -27306,6 +27946,7 @@ impl ImportInstanceResultDeserializer {
 }
 /// <p>Describes an import instance task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ImportInstanceTaskDetails {
     /// <p>A description of the task.</p>
     pub description: Option<String>,
@@ -27357,6 +27998,7 @@ impl ImportInstanceTaskDetailsDeserializer {
 }
 /// <p>Describes an import volume task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ImportInstanceVolumeDetailItem {
     /// <p>The Availability Zone where the resulting instance will reside.</p>
     pub availability_zone: Option<String>,
@@ -27442,6 +28084,7 @@ impl ImportInstanceVolumeDetailSetDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportKeyPairRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -27472,6 +28115,7 @@ impl ImportKeyPairRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ImportKeyPairResult {
     /// <p>The MD5 public key fingerprint as specified in section 4 of RFC 4716.</p>
     pub key_fingerprint: Option<String>,
@@ -27502,6 +28146,7 @@ impl ImportKeyPairResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportSnapshotRequest {
     /// <p>The client-specific data.</p>
     pub client_data: Option<ClientData>,
@@ -27566,6 +28211,7 @@ impl ImportSnapshotRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ImportSnapshotResult {
     /// <p>A description of the import snapshot task.</p>
     pub description: Option<String>,
@@ -27605,6 +28251,7 @@ impl ImportSnapshotResultDeserializer {
 }
 /// <p>Describes an import snapshot task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ImportSnapshotTask {
     /// <p>A description of the import snapshot task.</p>
     pub description: Option<String>,
@@ -27672,6 +28319,7 @@ impl ImportTaskIdListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportVolumeRequest {
     /// <p>The Availability Zone for the resulting EBS volume.</p>
     pub availability_zone: String,
@@ -27710,6 +28358,7 @@ impl ImportVolumeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ImportVolumeResult {
     /// <p>Information about the conversion task.</p>
     pub conversion_task: Option<ConversionTask>,
@@ -27738,6 +28387,7 @@ impl ImportVolumeResultDeserializer {
 }
 /// <p>Describes an import volume task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ImportVolumeTaskDetails {
     /// <p>The Availability Zone where the resulting volume will reside.</p>
     pub availability_zone: Option<String>,
@@ -27794,6 +28444,7 @@ impl ImportVolumeTaskDetailsDeserializer {
 }
 /// <p>Describes an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Instance {
     /// <p>The AMI launch index, which can be used to find this instance in the launch group.</p>
     pub ami_launch_index: Option<i64>,
@@ -28121,6 +28772,7 @@ impl InstanceDeserializer {
 }
 /// <p>Describes an instance attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceAttribute {
     /// <p>The block device mapping of the instance.</p>
     pub block_device_mappings: Option<Vec<InstanceBlockDeviceMapping>>,
@@ -28253,6 +28905,7 @@ impl InstanceAttributeDeserializer {
 }
 /// <p>Describes a block device mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceBlockDeviceMapping {
     /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device_name: Option<String>,
@@ -28309,6 +28962,7 @@ impl InstanceBlockDeviceMappingListDeserializer {
 }
 /// <p>Describes a block device mapping entry.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceBlockDeviceMappingSpecification {
     /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device_name: Option<String>,
@@ -28365,6 +29019,7 @@ impl InstanceBlockDeviceMappingSpecificationListSerializer {
 
 /// <p>Information about the instance type that the Dedicated Host supports.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceCapacity {
     /// <p>The number of instances that can still be launched onto the Dedicated Host.</p>
     pub available_capacity: Option<i64>,
@@ -28405,6 +29060,7 @@ impl InstanceCapacityDeserializer {
 }
 /// <p>Describes a Reserved Instance listing state.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceCount {
     /// <p>The number of listed Reserved Instances in the state specified by the <code>state</code>.</p>
     pub instance_count: Option<i64>,
@@ -28453,6 +29109,7 @@ impl InstanceCountListDeserializer {
 }
 /// <p>Describes the credit option for CPU usage of a T2 or T3 instance. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceCreditSpecification {
     /// <p>The credit option for CPU usage of the instance. Valid values are <code>standard</code> and <code>unlimited</code>.</p>
     pub cpu_credits: Option<String>,
@@ -28520,6 +29177,7 @@ impl InstanceCreditSpecificationListRequestSerializer {
 
 /// <p>Describes the credit option for CPU usage of a T2 or T3 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceCreditSpecificationRequest {
     /// <p>The credit option for CPU usage of the instance. Valid values are <code>standard</code> and <code>unlimited</code>.</p>
     pub cpu_credits: Option<String>,
@@ -28558,6 +29216,7 @@ impl InstanceEventIdDeserializer {
 }
 /// <p>Describes an instance to export.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceExportDetails {
     /// <p>The ID of the resource being exported.</p>
     pub instance_id: Option<String>,
@@ -28670,6 +29329,8 @@ impl InstanceInterruptionBehaviorDeserializer {
 }
 /// <p>Describes an IPv6 address.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceIpv6Address {
     /// <p>The IPv6 address.</p>
     pub ipv_6_address: Option<String>,
@@ -28752,6 +29413,7 @@ impl InstanceIpv6AddressListRequestSerializer {
 
 /// <p>Describes an IPv6 address.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceIpv6AddressRequest {
     /// <p>The IPv6 address.</p>
     pub ipv_6_address: Option<String>,
@@ -28813,6 +29475,7 @@ impl InstanceListDeserializer {
 }
 /// <p>Describes the market (purchasing) option for the instances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceMarketOptionsRequest {
     /// <p>The market type.</p>
     pub market_type: Option<String>,
@@ -28855,6 +29518,7 @@ impl InstanceMatchCriteriaDeserializer {
 }
 /// <p>Describes the monitoring of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceMonitoring {
     /// <p>The ID of the instance.</p>
     pub instance_id: Option<String>,
@@ -28903,6 +29567,7 @@ impl InstanceMonitoringListDeserializer {
 }
 /// <p>Describes a network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceNetworkInterface {
     /// <p>The association information for an Elastic IPv4 associated with the network interface.</p>
     pub association: Option<InstanceNetworkInterfaceAssociation>,
@@ -29039,6 +29704,7 @@ impl InstanceNetworkInterfaceDeserializer {
 }
 /// <p>Describes association information for an Elastic IP address (IPv4).</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceNetworkInterfaceAssociation {
     /// <p>The ID of the owner of the Elastic IP address.</p>
     pub ip_owner_id: Option<String>,
@@ -29080,6 +29746,7 @@ impl InstanceNetworkInterfaceAssociationDeserializer {
 }
 /// <p>Describes a network interface attachment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceNetworkInterfaceAttachment {
     /// <p>The time stamp when the attachment initiated.</p>
     pub attach_time: Option<String>,
@@ -29155,6 +29822,8 @@ impl InstanceNetworkInterfaceListDeserializer {
 }
 /// <p>Describes a network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceNetworkInterfaceSpecification {
     /// <p>Indicates whether to assign a public IPv4 address to an instance you launch in a VPC. The public IP address can only be assigned to a network interface for eth0, and can only be assigned to a new network interface, not an existing one. You cannot specify more than one network interface in the request. If launching into a default subnet, the default value is <code>true</code>.</p>
     pub associate_public_ip_address: Option<bool>,
@@ -29385,6 +30054,7 @@ impl InstanceNetworkInterfaceSpecificationListSerializer {
 
 /// <p>Describes a private IPv4 address.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstancePrivateIpAddress {
     /// <p>The association information for an Elastic IP address for the network interface.</p>
     pub association: Option<InstanceNetworkInterfaceAssociation>,
@@ -29455,6 +30125,7 @@ impl InstancePrivateIpAddressListDeserializer {
 }
 /// <p>The instance details to specify which volumes should be snapshotted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceSpecification {
     /// <p>Excludes the root volume from being snapshotted.</p>
     pub exclude_boot_volume: Option<bool>,
@@ -29482,6 +30153,7 @@ impl InstanceSpecificationSerializer {
 
 /// <p>Describes the current state of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceState {
     /// <p>The state of the instance as a 16-bit unsigned integer. </p> <p>The high byte is all of the bits between 2^8 and (2^16)-1, which equals decimal values between 256 and 65,535. These numerical values are used for internal purposes and should be ignored.</p> <p>The low byte is all of the bits between 2^0 and (2^8)-1, which equals decimal values between 0 and 255. </p> <p>The valid values for instance-state-code will all be in the range of the low byte and they are:</p> <ul> <li> <p> <code>0</code> : <code>pending</code> </p> </li> <li> <p> <code>16</code> : <code>running</code> </p> </li> <li> <p> <code>32</code> : <code>shutting-down</code> </p> </li> <li> <p> <code>48</code> : <code>terminated</code> </p> </li> <li> <p> <code>64</code> : <code>stopping</code> </p> </li> <li> <p> <code>80</code> : <code>stopped</code> </p> </li> </ul> <p>You can ignore the high byte value by zeroing out all of the bits above 2^8 or 256 in decimal.</p>
     pub code: Option<i64>,
@@ -29512,6 +30184,7 @@ impl InstanceStateDeserializer {
 }
 /// <p>Describes an instance state change.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceStateChange {
     /// <p>The current state of the instance.</p>
     pub current_state: Option<InstanceState>,
@@ -29581,6 +30254,7 @@ impl InstanceStateNameDeserializer {
 }
 /// <p>Describes the status of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceStatus {
     /// <p>The Availability Zone of the instance.</p>
     pub availability_zone: Option<String>,
@@ -29643,6 +30317,7 @@ impl InstanceStatusDeserializer {
 }
 /// <p>Describes the instance status.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceStatusDetails {
     /// <p>The time when a status check failed. For an instance that was launched and impaired, this is the time when the instance was launched.</p>
     pub impaired_since: Option<String>,
@@ -29698,6 +30373,7 @@ impl InstanceStatusDetailsListDeserializer {
 }
 /// <p>Describes a scheduled event for an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceStatusEvent {
     /// <p>The event code.</p>
     pub code: Option<String>,
@@ -29788,6 +30464,7 @@ impl InstanceStatusListDeserializer {
 }
 /// <p>Describes the status of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceStatusSummary {
     /// <p>The system instance health or application instance health.</p>
     pub details: Option<Vec<InstanceStatusDetails>>,
@@ -29843,6 +30520,7 @@ impl InstanceTypeListSerializer {
 
 /// <p>Information about the Capacity Reservation usage.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceUsage {
     /// <p>The ID of the AWS account that is making use of the Capacity Reservation.</p>
     pub account_id: Option<String>,
@@ -29915,6 +30593,7 @@ impl InterfacePermissionTypeDeserializer {
 }
 /// <p>Describes an internet gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InternetGateway {
     /// <p>Any VPCs attached to the internet gateway.</p>
     pub attachments: Option<Vec<InternetGatewayAttachment>>,
@@ -29963,6 +30642,7 @@ impl InternetGatewayDeserializer {
 }
 /// <p>Describes the attachment of a VPC to an internet gateway or an egress-only internet gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InternetGatewayAttachment {
     /// <p>The current state of the attachment. For an internet gateway, the state is <code>available</code> when attached to a VPC; otherwise, this value is not returned.</p>
     pub state: Option<String>,
@@ -30034,6 +30714,8 @@ impl InternetGatewayListDeserializer {
 }
 /// <p>Describes a set of permissions for a security group rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IpPermission {
     /// <p>The start of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. A value of <code>-1</code> indicates all ICMP/ICMPv6 types. If you specify all ICMP/ICMPv6 types, you must specify all codes.</p>
     pub from_port: Option<i64>,
@@ -30176,6 +30858,8 @@ impl IpPermissionListSerializer {
 
 /// <p>Describes an IPv4 range.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IpRange {
     /// <p>The IPv4 CIDR range. You can either specify a CIDR range or a source security group, not both. To specify a single IPv4 address, use the /32 prefix length.</p>
     pub cidr_ip: Option<String>,
@@ -30300,6 +30984,7 @@ impl Ipv6AddressListSerializer {
 
 /// <p>Describes an IPv6 CIDR block.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Ipv6CidrBlock {
     /// <p>The IPv6 CIDR block.</p>
     pub ipv_6_cidr_block: Option<String>,
@@ -30343,6 +31028,8 @@ impl Ipv6CidrBlockSetDeserializer {
 }
 /// <p>[EC2-VPC only] Describes an IPv6 range.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Ipv6Range {
     /// <p>The IPv6 CIDR range. You can either specify a CIDR range or a source security group, not both. To specify a single IPv6 address, use the /128 prefix length.</p>
     pub cidr_ipv_6: Option<String>,
@@ -30444,6 +31131,7 @@ impl KeyNameStringListSerializer {
 
 /// <p>Describes a key pair.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct KeyPair {
     /// <p>The SHA-1 digest of the DER encoded private key.</p>
     pub key_fingerprint: Option<String>,
@@ -30480,6 +31168,7 @@ impl KeyPairDeserializer {
 }
 /// <p>Describes a key pair.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct KeyPairInfo {
     /// <p>If you used <a>CreateKeyPair</a> to create the key pair, this is the SHA-1 digest of the DER encoded private key. If you used <a>ImportKeyPair</a> to provide AWS the public key, this is the MD5 public key fingerprint as specified in section 4 of RFC4716.</p>
     pub key_fingerprint: Option<String>,
@@ -30528,6 +31217,8 @@ impl KeyPairListDeserializer {
 }
 /// <p>Describes a launch permission.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchPermission {
     /// <p>The name of the group.</p>
     pub group: Option<String>,
@@ -30606,6 +31297,7 @@ impl LaunchPermissionListSerializer {
 
 /// <p>Describes a launch permission modification.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchPermissionModifications {
     /// <p>The AWS account ID to add to the list of launch permissions for the AMI.</p>
     pub add: Option<Vec<LaunchPermission>>,
@@ -30641,6 +31333,7 @@ impl LaunchPermissionModificationsSerializer {
 
 /// <p>Describes the launch specification for an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchSpecification {
     /// <p>Deprecated.</p>
     pub addressing_type: Option<String>,
@@ -30791,6 +31484,7 @@ impl LaunchSpecsListSerializer {
 
 /// <p>Describes a launch template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplate {
     /// <p>The time launch template was created.</p>
     pub create_time: Option<String>,
@@ -30856,6 +31550,7 @@ impl LaunchTemplateDeserializer {
 }
 /// <p>Describes a launch template and overrides.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplateAndOverridesResponse {
     /// <p>The launch template.</p>
     pub launch_template_specification: Option<FleetLaunchTemplateSpecification>,
@@ -30898,6 +31593,7 @@ impl LaunchTemplateAndOverridesResponseDeserializer {
 }
 /// <p>Describes a block device mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplateBlockDeviceMapping {
     /// <p>The device name.</p>
     pub device_name: Option<String>,
@@ -30965,6 +31661,7 @@ impl LaunchTemplateBlockDeviceMappingListDeserializer {
 }
 /// <p>Describes a block device mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateBlockDeviceMappingRequest {
     /// <p>The device name (for example, /dev/sdh or xvdh).</p>
     pub device_name: Option<String>,
@@ -31021,6 +31718,7 @@ impl LaunchTemplateBlockDeviceMappingRequestListSerializer {
 
 /// <p>Describes an instance's Capacity Reservation targeting option. You can specify only one option at a time. Use the <code>CapacityReservationPreference</code> parameter to configure the instance to run in On-Demand capacity or to run in any <code>open</code> Capacity Reservation that has matching attributes (instance type, platform, Availability Zone). Use the <code>CapacityReservationTarget</code> parameter to explicitly target a specific Capacity Reservation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateCapacityReservationSpecificationRequest {
     /// <p><p>Indicates the instance&#39;s Capacity Reservation preferences. Possible preferences include:</p> <ul> <li> <p> <code>open</code> - The instance can run in any <code>open</code> Capacity Reservation that has matching attributes (instance type, platform, Availability Zone).</p> </li> <li> <p> <code>none</code> - The instance avoids running in a Capacity Reservation even if one is available. The instance runs in On-Demand capacity.</p> </li> </ul></p>
     pub capacity_reservation_preference: Option<String>,
@@ -31059,6 +31757,7 @@ impl LaunchTemplateCapacityReservationSpecificationRequestSerializer {
 
 /// <p>Information about the Capacity Reservation targeting option.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplateCapacityReservationSpecificationResponse {
     /// <p><p>Indicates the instance&#39;s Capacity Reservation preferences. Possible preferences include:</p> <ul> <li> <p> <code>open</code> - The instance can run in any <code>open</code> Capacity Reservation that has matching attributes (instance type, platform, Availability Zone).</p> </li> <li> <p> <code>none</code> - The instance avoids running in a Capacity Reservation even if one is available. The instance runs in On-Demand capacity.</p> </li> </ul></p>
     pub capacity_reservation_preference: Option<String>,
@@ -31101,6 +31800,8 @@ impl LaunchTemplateCapacityReservationSpecificationResponseDeserializer {
 }
 /// <p>Describes a launch template and overrides.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateConfig {
     /// <p>The launch template.</p>
     pub launch_template_specification: Option<FleetLaunchTemplateSpecification>,
@@ -31195,6 +31896,7 @@ impl LaunchTemplateConfigListSerializer {
 
 /// <p>The CPU options for the instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplateCpuOptions {
     /// <p>The number of CPU cores for the instance.</p>
     pub core_count: Option<i64>,
@@ -31231,6 +31933,7 @@ impl LaunchTemplateCpuOptionsDeserializer {
 }
 /// <p>The CPU options for the instance. Both the core count and threads per core must be specified in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateCpuOptionsRequest {
     /// <p>The number of CPU cores for the instance.</p>
     pub core_count: Option<i64>,
@@ -31258,6 +31961,7 @@ impl LaunchTemplateCpuOptionsRequestSerializer {
 
 /// <p>Describes a block device for an EBS volume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplateEbsBlockDevice {
     /// <p>Indicates whether the EBS volume is deleted on instance termination.</p>
     pub delete_on_termination: Option<bool>,
@@ -31323,6 +32027,7 @@ impl LaunchTemplateEbsBlockDeviceDeserializer {
 }
 /// <p>The parameters for a block device for an EBS volume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateEbsBlockDeviceRequest {
     /// <p>Indicates whether the EBS volume is deleted on instance termination.</p>
     pub delete_on_termination: Option<bool>,
@@ -31378,6 +32083,7 @@ impl LaunchTemplateEbsBlockDeviceRequestSerializer {
 
 /// <p> Describes an elastic inference accelerator. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateElasticInferenceAccelerator {
     /// <p> The type of elastic inference accelerator. The possible values are eia1.medium, eia1.large, and eia1.xlarge. </p>
     pub type_: String,
@@ -31413,6 +32119,7 @@ impl LaunchTemplateElasticInferenceAcceleratorListSerializer {
 
 /// <p> Describes an elastic inference accelerator. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplateElasticInferenceAcceleratorResponse {
     /// <p> The type of elastic inference accelerator. The possible values are eia1.medium, eia1.large, and eia1.xlarge. </p>
     pub type_: Option<String>,
@@ -31474,6 +32181,7 @@ impl LaunchTemplateErrorCodeDeserializer {
 }
 /// <p>Indicates whether an instance is configured for hibernation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplateHibernationOptions {
     /// <p>If this parameter is set to <code>true</code>, the instance is enabled for hibernation; otherwise, it is not enabled for hibernation.</p>
     pub configured: Option<bool>,
@@ -31504,6 +32212,7 @@ impl LaunchTemplateHibernationOptionsDeserializer {
 }
 /// <p>Indicates whether the instance is configured for hibernation. This parameter is valid only if the instance meets the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#hibernating-prerequisites">hibernation prerequisites</a>. Hibernation is currently supported only for Amazon Linux.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateHibernationOptionsRequest {
     /// <p>If you set this parameter to <code>true</code>, the instance is enabled for hibernation.</p> <p>Default: <code>false</code> </p>
     pub configured: Option<bool>,
@@ -31526,6 +32235,7 @@ impl LaunchTemplateHibernationOptionsRequestSerializer {
 
 /// <p>Describes an IAM instance profile.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplateIamInstanceProfileSpecification {
     /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
     pub arn: Option<String>,
@@ -31560,6 +32270,7 @@ impl LaunchTemplateIamInstanceProfileSpecificationDeserializer {
 }
 /// <p>An IAM instance profile.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateIamInstanceProfileSpecificationRequest {
     /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
     pub arn: Option<String>,
@@ -31591,6 +32302,7 @@ impl LaunchTemplateIamInstanceProfileSpecificationRequestSerializer {
 
 /// <p>The market (purchasing) option for the instances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplateInstanceMarketOptions {
     /// <p>The market type.</p>
     pub market_type: Option<String>,
@@ -31630,6 +32342,7 @@ impl LaunchTemplateInstanceMarketOptionsDeserializer {
 }
 /// <p>The market (purchasing) option for the instances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateInstanceMarketOptionsRequest {
     /// <p>The market type.</p>
     pub market_type: Option<String>,
@@ -31665,6 +32378,7 @@ impl LaunchTemplateInstanceMarketOptionsRequestSerializer {
 
 /// <p>Describes a network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplateInstanceNetworkInterfaceSpecification {
     /// <p>Indicates whether to associate a public IPv4 address with eth0 for a new network interface.</p>
     pub associate_public_ip_address: Option<bool>,
@@ -31805,6 +32519,7 @@ impl LaunchTemplateInstanceNetworkInterfaceSpecificationListDeserializer {
 }
 /// <p>The parameters for a network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateInstanceNetworkInterfaceSpecificationRequest {
     /// <p>Associates a public IPv4 address with eth0 for a new network interface.</p>
     pub associate_public_ip_address: Option<bool>,
@@ -31929,6 +32644,7 @@ impl LaunchTemplateInstanceNetworkInterfaceSpecificationRequestListSerializer {
 
 /// <p>Describes a license configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplateLicenseConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the license configuration.</p>
     pub license_configuration_arn: Option<String>,
@@ -31961,6 +32677,7 @@ impl LaunchTemplateLicenseConfigurationDeserializer {
 }
 /// <p>Describes a license configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateLicenseConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the license configuration.</p>
     pub license_configuration_arn: Option<String>,
@@ -32044,6 +32761,8 @@ impl LaunchTemplateNameStringListSerializer {
 
 /// <p>Describes overrides for a launch template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateOverrides {
     /// <p>The Availability Zone in which to launch the instances.</p>
     pub availability_zone: Option<String>,
@@ -32165,6 +32884,7 @@ impl LaunchTemplateOverridesListSerializer {
 
 /// <p>Describes the placement of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplatePlacement {
     /// <p>The affinity setting for the instance on the Dedicated Host.</p>
     pub affinity: Option<String>,
@@ -32221,6 +32941,7 @@ impl LaunchTemplatePlacementDeserializer {
 }
 /// <p>Describes the placement of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplatePlacementRequest {
     /// <p>The affinity setting for an instance on a Dedicated Host.</p>
     pub affinity: Option<String>,
@@ -32285,6 +33006,7 @@ impl LaunchTemplateSetDeserializer {
 }
 /// <p>The launch template to use. You must specify either the launch template ID or launch template name in the request, but not both.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateSpecification {
     /// <p>The ID of the launch template.</p>
     pub launch_template_id: Option<String>,
@@ -32317,6 +33039,7 @@ impl LaunchTemplateSpecificationSerializer {
 
 /// <p>The options for Spot Instances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplateSpotMarketOptions {
     /// <p>The required duration for the Spot Instances (also known as Spot blocks), in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360).</p>
     pub block_duration_minutes: Option<i64>,
@@ -32377,6 +33100,7 @@ impl LaunchTemplateSpotMarketOptionsDeserializer {
 }
 /// <p>The options for Spot Instances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateSpotMarketOptionsRequest {
     /// <p>The required duration for the Spot Instances (also known as Spot blocks), in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360).</p>
     pub block_duration_minutes: Option<i64>,
@@ -32425,6 +33149,7 @@ impl LaunchTemplateSpotMarketOptionsRequestSerializer {
 
 /// <p>The tag specification for the launch template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplateTagSpecification {
     /// <p>The type of resource.</p>
     pub resource_type: Option<String>,
@@ -32483,6 +33208,7 @@ impl LaunchTemplateTagSpecificationListDeserializer {
 }
 /// <p>The tags specification for the launch template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplateTagSpecificationRequest {
     /// <p>The type of resource to tag. Currently, the resource types that support tagging on creation are <code>instance</code> and <code>volume</code>. To tag a resource after it has been created, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html">CreateTags</a>.</p>
     pub resource_type: Option<String>,
@@ -32525,6 +33251,7 @@ impl LaunchTemplateTagSpecificationRequestListSerializer {
 
 /// <p>Describes a launch template version.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplateVersion {
     /// <p>The time the version was created.</p>
     pub create_time: Option<String>,
@@ -32617,6 +33344,7 @@ impl LaunchTemplateVersionSetDeserializer {
 }
 /// <p>Describes the monitoring for the instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplatesMonitoring {
     /// <p>Indicates whether detailed monitoring is enabled. Otherwise, basic monitoring is enabled.</p>
     pub enabled: Option<bool>,
@@ -32646,6 +33374,7 @@ impl LaunchTemplatesMonitoringDeserializer {
 }
 /// <p>Describes the monitoring for the instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplatesMonitoringRequest {
     /// <p>Specify <code>true</code> to enable detailed monitoring. Otherwise, basic monitoring is enabled.</p>
     pub enabled: Option<bool>,
@@ -32668,6 +33397,7 @@ impl LaunchTemplatesMonitoringRequestSerializer {
 
 /// <p>Describes a license configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LicenseConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the license configuration.</p>
     pub license_configuration_arn: Option<String>,
@@ -32696,6 +33426,7 @@ impl LicenseConfigurationDeserializer {
 }
 /// <p>Describes a license configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LicenseConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the license configuration.</p>
     pub license_configuration_arn: Option<String>,
@@ -32774,6 +33505,8 @@ impl ListingStatusDeserializer {
 }
 /// <p>Describes the Classic Load Balancers and target groups to attach to a Spot Fleet request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LoadBalancersConfig {
     /// <p>The Classic Load Balancers.</p>
     pub classic_load_balancers_config: Option<ClassicLoadBalancersConfig>,
@@ -32838,6 +33571,7 @@ impl LoadBalancersConfigSerializer {
 
 /// <p>Describes a load permission.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LoadPermission {
     /// <p>The name of the group.</p>
     pub group: Option<String>,
@@ -32897,6 +33631,7 @@ impl LoadPermissionListRequestSerializer {
 
 /// <p>Describes modifications to the load permissions of an Amazon FPGA image (AFI).</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LoadPermissionModifications {
     /// <p>The load permissions to add.</p>
     pub add: Option<Vec<LoadPermissionRequest>>,
@@ -32932,6 +33667,7 @@ impl LoadPermissionModificationsSerializer {
 
 /// <p>Describes a load permission.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LoadPermissionRequest {
     /// <p>The name of the group.</p>
     pub group: Option<String>,
@@ -33002,6 +33738,7 @@ impl MillisecondDateTimeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyCapacityReservationRequest {
     /// <p>The ID of the Capacity Reservation.</p>
     pub capacity_reservation_id: String,
@@ -33044,6 +33781,7 @@ impl ModifyCapacityReservationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyCapacityReservationResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -33072,6 +33810,7 @@ impl ModifyCapacityReservationResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClientVpnEndpointRequest {
     /// <p>The ID of the Client VPN endpoint to modify.</p>
     pub client_vpn_endpoint_id: String,
@@ -33135,6 +33874,7 @@ impl ModifyClientVpnEndpointRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyClientVpnEndpointResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -33163,6 +33903,7 @@ impl ModifyClientVpnEndpointResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyEbsDefaultKmsKeyIdRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -33187,6 +33928,7 @@ impl ModifyEbsDefaultKmsKeyIdRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyEbsDefaultKmsKeyIdResult {
     /// <p>The Amazon Resource Name (ARN) of the default CMK for encryption by default.</p>
     pub kms_key_id: Option<String>,
@@ -33215,6 +33957,7 @@ impl ModifyEbsDefaultKmsKeyIdResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyFleetRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -33254,6 +33997,7 @@ impl ModifyFleetRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyFleetResult {
     /// <p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>
     pub return_: Option<bool>,
@@ -33278,6 +34022,7 @@ impl ModifyFleetResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyFpgaImageAttributeRequest {
     /// <p>The name of the attribute.</p>
     pub attribute: Option<String>,
@@ -33358,6 +34103,7 @@ impl ModifyFpgaImageAttributeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyFpgaImageAttributeResult {
     /// <p>Information about the attribute.</p>
     pub fpga_image_attribute: Option<FpgaImageAttribute>,
@@ -33390,6 +34136,7 @@ impl ModifyFpgaImageAttributeResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyHostsRequest {
     /// <p>Specify whether to enable or disable auto-placement.</p>
     pub auto_placement: Option<String>,
@@ -33423,6 +34170,7 @@ impl ModifyHostsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyHostsResult {
     /// <p>The IDs of the Dedicated Hosts that were successfully modified.</p>
     pub successful: Option<Vec<String>>,
@@ -33456,6 +34204,7 @@ impl ModifyHostsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyIdFormatRequest {
     /// <p>The type of resource: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p> <p>Alternatively, use the <code>all-current</code> option to include all resource types that are currently within their opt-in period for longer IDs.</p>
     pub resource: String,
@@ -33478,6 +34227,7 @@ impl ModifyIdFormatRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyIdentityIdFormatRequest {
     /// <p>The ARN of the principal, which can be an IAM user, IAM role, or the root user. Specify <code>all</code> to modify the ID format for all IAM users, IAM roles, and the root user of the account.</p>
     pub principal_arn: String,
@@ -33504,6 +34254,7 @@ impl ModifyIdentityIdFormatRequestSerializer {
 
 /// <p>Contains the parameters for ModifyImageAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyImageAttributeRequest {
     /// <p>The name of the attribute to modify. The valid values are <code>description</code>, <code>launchPermission</code>, and <code>productCodes</code>.</p>
     pub attribute: Option<String>,
@@ -33588,6 +34339,7 @@ impl ModifyImageAttributeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyInstanceAttributeRequest {
     /// <p>The name of the attribute.</p>
     pub attribute: Option<String>,
@@ -33730,6 +34482,7 @@ impl ModifyInstanceAttributeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyInstanceCapacityReservationAttributesRequest {
     /// <p>Information about the Capacity Reservation targeting option.</p>
     pub capacity_reservation_specification: CapacityReservationSpecification,
@@ -33765,6 +34518,7 @@ impl ModifyInstanceCapacityReservationAttributesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyInstanceCapacityReservationAttributesResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -33793,6 +34547,7 @@ impl ModifyInstanceCapacityReservationAttributesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyInstanceCreditSpecificationRequest {
     /// <p>A unique, case-sensitive token that you provide to ensure idempotency of your modification request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -33826,6 +34581,7 @@ impl ModifyInstanceCreditSpecificationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyInstanceCreditSpecificationResult {
     /// <p>Information about the instances whose credit option for CPU usage was successfully modified.</p>
     pub successful_instance_credit_specifications:
@@ -33870,6 +34626,7 @@ impl ModifyInstanceCreditSpecificationResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyInstanceEventStartTimeRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -33903,6 +34660,7 @@ impl ModifyInstanceEventStartTimeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyInstanceEventStartTimeResult {
     pub event: Option<InstanceStatusEvent>,
 }
@@ -33932,6 +34690,7 @@ impl ModifyInstanceEventStartTimeResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyInstancePlacementRequest {
     /// <p>The affinity setting for the instance.</p>
     pub affinity: Option<String>,
@@ -33976,6 +34735,7 @@ impl ModifyInstancePlacementRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyInstancePlacementResult {
     /// <p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>
     pub return_: Option<bool>,
@@ -34004,6 +34764,7 @@ impl ModifyInstancePlacementResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyLaunchTemplateRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p> <p>Constraint: Maximum 128 ASCII characters.</p>
     pub client_token: Option<String>,
@@ -34045,6 +34806,7 @@ impl ModifyLaunchTemplateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyLaunchTemplateResult {
     /// <p>Information about the launch template.</p>
     pub launch_template: Option<LaunchTemplate>,
@@ -34077,6 +34839,7 @@ impl ModifyLaunchTemplateResultDeserializer {
 }
 /// <p>Contains the parameters for ModifyNetworkInterfaceAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyNetworkInterfaceAttributeRequest {
     /// <p>Information about the interface attachment. If modifying the 'delete on termination' attribute, you must specify the ID of the interface attachment.</p>
     pub attachment: Option<NetworkInterfaceAttachmentChanges>,
@@ -34141,6 +34904,7 @@ impl ModifyNetworkInterfaceAttributeRequestSerializer {
 
 /// <p>Contains the parameters for ModifyReservedInstances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReservedInstancesRequest {
     /// <p>A unique, case-sensitive token you provide to ensure idempotency of your modification request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -34177,6 +34941,7 @@ impl ModifyReservedInstancesRequestSerializer {
 
 /// <p>Contains the output of ModifyReservedInstances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyReservedInstancesResult {
     /// <p>The ID for the modification.</p>
     pub reserved_instances_modification_id: Option<String>,
@@ -34210,6 +34975,7 @@ impl ModifyReservedInstancesResultDeserializer {
 }
 /// <p>Contains the parameters for ModifySnapshotAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifySnapshotAttributeRequest {
     /// <p>The snapshot attribute to modify. Only volume creation permissions can be modified.</p>
     pub attribute: Option<String>,
@@ -34272,6 +35038,7 @@ impl ModifySnapshotAttributeRequestSerializer {
 
 /// <p>Contains the parameters for ModifySpotFleetRequest.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifySpotFleetRequestRequest {
     /// <p>Indicates whether running Spot Instances should be terminated if the target capacity of the Spot Fleet request is decreased below the current size of the Spot Fleet.</p>
     pub excess_capacity_termination_policy: Option<String>,
@@ -34316,6 +35083,7 @@ impl ModifySpotFleetRequestRequestSerializer {
 
 /// <p>Contains the output of ModifySpotFleetRequest.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifySpotFleetRequestResponse {
     /// <p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>
     pub return_: Option<bool>,
@@ -34344,6 +35112,7 @@ impl ModifySpotFleetRequestResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifySubnetAttributeRequest {
     /// <p>Specify <code>true</code> to indicate that network interfaces created in the specified subnet should be assigned an IPv6 address. This includes a network interface that's created when launching an instance into the subnet (the instance therefore receives an IPv6 address). </p> <p>If you enable the IPv6 addressing feature for your subnet, your network interface or instance only receives an IPv6 address if it's created using version <code>2016-11-15</code> or later of the Amazon EC2 API.</p>
     pub assign_ipv_6_address_on_creation: Option<AttributeBooleanValue>,
@@ -34381,6 +35150,7 @@ impl ModifySubnetAttributeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyTrafficMirrorFilterNetworkServicesRequest {
     /// <p>The network service, for example Amazon DNS, that you want to mirror.</p>
     pub add_network_services: Option<Vec<String>>,
@@ -34430,6 +35200,7 @@ impl ModifyTrafficMirrorFilterNetworkServicesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyTrafficMirrorFilterNetworkServicesResult {
     /// <p>The Traffic Mirror filter that the network service is associated with.</p>
     pub traffic_mirror_filter: Option<TrafficMirrorFilter>,
@@ -34462,6 +35233,7 @@ impl ModifyTrafficMirrorFilterNetworkServicesResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyTrafficMirrorFilterRuleRequest {
     /// <p>The description to assign to the Traffic Mirror rule.</p>
     pub description: Option<String>,
@@ -34554,6 +35326,7 @@ impl ModifyTrafficMirrorFilterRuleRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyTrafficMirrorFilterRuleResult {
     /// <p>Modifies a Traffic Mirror rule.</p>
     pub traffic_mirror_filter_rule: Option<TrafficMirrorFilterRule>,
@@ -34586,6 +35359,7 @@ impl ModifyTrafficMirrorFilterRuleResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyTrafficMirrorSessionRequest {
     /// <p>The description to assign to the Traffic Mirror session.</p>
     pub description: Option<String>,
@@ -34658,6 +35432,7 @@ impl ModifyTrafficMirrorSessionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyTrafficMirrorSessionResult {
     /// <p>Information about the Traffic Mirror session.</p>
     pub traffic_mirror_session: Option<TrafficMirrorSession>,
@@ -34690,6 +35465,7 @@ impl ModifyTrafficMirrorSessionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyTransitGatewayVpcAttachmentRequest {
     /// <p>The IDs of one or more subnets to add. You can specify at most one subnet per Availability Zone.</p>
     pub add_subnet_ids: Option<Vec<String>>,
@@ -34745,6 +35521,7 @@ impl ModifyTransitGatewayVpcAttachmentRequestSerializer {
 
 /// <p>Describes the options for a VPC attachment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyTransitGatewayVpcAttachmentRequestOptions {
     /// <p>Enable or disable DNS support. The default is <code>enable</code>.</p>
     pub dns_support: Option<String>,
@@ -34775,6 +35552,7 @@ impl ModifyTransitGatewayVpcAttachmentRequestOptionsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyTransitGatewayVpcAttachmentResult {
     /// <p>Information about the modified attachment.</p>
     pub transit_gateway_vpc_attachment: Option<TransitGatewayVpcAttachment>,
@@ -34808,6 +35586,7 @@ impl ModifyTransitGatewayVpcAttachmentResultDeserializer {
 }
 /// <p>Contains the parameters for ModifyVolumeAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyVolumeAttributeRequest {
     /// <p>Indicates whether the volume should be auto-enabled for I/O operations.</p>
     pub auto_enable_io: Option<AttributeBooleanValue>,
@@ -34841,6 +35620,7 @@ impl ModifyVolumeAttributeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyVolumeRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -34880,6 +35660,7 @@ impl ModifyVolumeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyVolumeResult {
     /// <p>Information about the volume modification.</p>
     pub volume_modification: Option<VolumeModification>,
@@ -34907,6 +35688,7 @@ impl ModifyVolumeResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyVpcAttributeRequest {
     /// <p>Indicates whether the instances launched in the VPC get DNS hostnames. If enabled, instances in the VPC get DNS hostnames; otherwise, they do not.</p> <p>You cannot modify the DNS resolution and DNS hostnames attributes in the same request. Use separate requests for each attribute. You can only enable DNS hostnames if you've enabled DNS support.</p>
     pub enable_dns_hostnames: Option<AttributeBooleanValue>,
@@ -34944,6 +35726,7 @@ impl ModifyVpcAttributeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyVpcEndpointConnectionNotificationRequest {
     /// <p>One or more events for the endpoint. Valid values are <code>Accept</code>, <code>Connect</code>, <code>Delete</code>, and <code>Reject</code>.</p>
     pub connection_events: Option<Vec<String>>,
@@ -34992,6 +35775,7 @@ impl ModifyVpcEndpointConnectionNotificationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyVpcEndpointConnectionNotificationResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_value: Option<bool>,
@@ -35021,6 +35805,7 @@ impl ModifyVpcEndpointConnectionNotificationResultDeserializer {
 }
 /// <p>Contains the parameters for ModifyVpcEndpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyVpcEndpointRequest {
     /// <p>(Gateway endpoint) One or more route tables IDs to associate with the endpoint.</p>
     pub add_route_table_ids: Option<Vec<String>>,
@@ -35117,6 +35902,7 @@ impl ModifyVpcEndpointRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyVpcEndpointResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -35145,6 +35931,7 @@ impl ModifyVpcEndpointResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyVpcEndpointServiceConfigurationRequest {
     /// <p>Indicate whether requests to create an endpoint to your service must be accepted.</p>
     pub acceptance_required: Option<bool>,
@@ -35196,6 +35983,7 @@ impl ModifyVpcEndpointServiceConfigurationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyVpcEndpointServiceConfigurationResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -35224,6 +36012,7 @@ impl ModifyVpcEndpointServiceConfigurationResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyVpcEndpointServicePermissionsRequest {
     /// <p>The Amazon Resource Names (ARN) of one or more principals. Permissions are granted to the principals in this list. To grant permissions to all principals, specify an asterisk (*).</p>
     pub add_allowed_principals: Option<Vec<String>>,
@@ -35270,6 +36059,7 @@ impl ModifyVpcEndpointServicePermissionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyVpcEndpointServicePermissionsResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_value: Option<bool>,
@@ -35298,6 +36088,7 @@ impl ModifyVpcEndpointServicePermissionsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyVpcPeeringConnectionOptionsRequest {
     /// <p>The VPC peering connection options for the accepter VPC.</p>
     pub accepter_peering_connection_options: Option<PeeringConnectionOptionsRequest>,
@@ -35343,6 +36134,7 @@ impl ModifyVpcPeeringConnectionOptionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyVpcPeeringConnectionOptionsResult {
     /// <p>Information about the VPC peering connection options for the accepter VPC.</p>
     pub accepter_peering_connection_options: Option<PeeringConnectionOptions>,
@@ -35384,6 +36176,7 @@ impl ModifyVpcPeeringConnectionOptionsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyVpcTenancyRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -35414,6 +36207,7 @@ impl ModifyVpcTenancyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyVpcTenancyResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, returns an error.</p>
     pub return_value: Option<bool>,
@@ -35438,6 +36232,7 @@ impl ModifyVpcTenancyResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyVpnConnectionRequest {
     /// <p>The ID of the customer gateway at your end of the VPN connection.</p>
     pub customer_gateway_id: Option<String>,
@@ -35480,6 +36275,7 @@ impl ModifyVpnConnectionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyVpnConnectionResult {
     pub vpn_connection: Option<VpnConnection>,
 }
@@ -35510,6 +36306,7 @@ impl ModifyVpnConnectionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyVpnTunnelCertificateRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -35543,6 +36340,7 @@ impl ModifyVpnTunnelCertificateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyVpnTunnelCertificateResult {
     pub vpn_connection: Option<VpnConnection>,
 }
@@ -35573,6 +36371,7 @@ impl ModifyVpnTunnelCertificateResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyVpnTunnelOptionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -35613,6 +36412,7 @@ impl ModifyVpnTunnelOptionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyVpnTunnelOptionsResult {
     pub vpn_connection: Option<VpnConnection>,
 }
@@ -35644,6 +36444,7 @@ impl ModifyVpnTunnelOptionsResultDeserializer {
 }
 /// <p>The AWS Site-to-Site VPN tunnel options to modify.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyVpnTunnelOptionsSpecification {
     /// <p>The number of seconds after which a DPD timeout occurs.</p> <p>Constraints: A value between 0 and 30.</p> <p>Default: <code>30</code> </p>
     pub dpd_timeout_seconds: Option<i64>,
@@ -35775,6 +36576,7 @@ impl ModifyVpnTunnelOptionsSpecificationSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MonitorInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -35803,6 +36605,7 @@ impl MonitorInstancesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct MonitorInstancesResult {
     /// <p>The monitoring information.</p>
     pub instance_monitorings: Option<Vec<InstanceMonitoring>>,
@@ -35830,6 +36633,7 @@ impl MonitorInstancesResultDeserializer {
 }
 /// <p>Describes the monitoring of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Monitoring {
     /// <p>Indicates whether detailed monitoring is enabled. Otherwise, basic monitoring is enabled.</p>
     pub state: Option<String>,
@@ -35865,6 +36669,7 @@ impl MonitoringStateDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MoveAddressToVpcRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -35889,6 +36694,7 @@ impl MoveAddressToVpcRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct MoveAddressToVpcResult {
     /// <p>The allocation ID for the Elastic IP address.</p>
     pub allocation_id: Option<String>,
@@ -35931,6 +36737,7 @@ impl MoveStatusDeserializer {
 }
 /// <p>Describes the status of a moving Elastic IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct MovingAddressStatus {
     /// <p>The status of the Elastic IP address that's being moved to the EC2-VPC platform, or restored to the EC2-Classic platform.</p>
     pub move_status: Option<String>,
@@ -35979,6 +36786,7 @@ impl MovingAddressStatusSetDeserializer {
 }
 /// <p>Describes a NAT gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NatGateway {
     /// <p>The date and time the NAT gateway was created.</p>
     pub create_time: Option<String>,
@@ -36067,6 +36875,7 @@ impl NatGatewayDeserializer {
 }
 /// <p>Describes the IP addresses and network interface associated with a NAT gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NatGatewayAddress {
     /// <p>The allocation ID of the Elastic IP address that's associated with the NAT gateway.</p>
     pub allocation_id: Option<String>,
@@ -36156,6 +36965,7 @@ impl NatGatewayStateDeserializer {
 }
 /// <p>Describes a network ACL.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NetworkAcl {
     /// <p>Any associations between the network ACL and one or more subnets</p>
     pub associations: Option<Vec<NetworkAclAssociation>>,
@@ -36221,6 +37031,7 @@ impl NetworkAclDeserializer {
 }
 /// <p>Describes an association between a network ACL and a subnet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NetworkAclAssociation {
     /// <p>The ID of the association between a network ACL and a subnet.</p>
     pub network_acl_association_id: Option<String>,
@@ -36279,6 +37090,7 @@ impl NetworkAclAssociationListDeserializer {
 }
 /// <p>Describes an entry in a network ACL.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NetworkAclEntry {
     /// <p>The IPv4 network range to allow or deny, in CIDR notation.</p>
     pub cidr_block: Option<String>,
@@ -36378,6 +37190,7 @@ impl NetworkAclListDeserializer {
 }
 /// <p>Describes a network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NetworkInterface {
     /// <p>The association information for an Elastic IP address (IPv4) associated with the network interface.</p>
     pub association: Option<NetworkInterfaceAssociation>,
@@ -36531,6 +37344,7 @@ impl NetworkInterfaceDeserializer {
 }
 /// <p>Describes association information for an Elastic IP address (IPv4 only).</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NetworkInterfaceAssociation {
     /// <p>The allocation ID.</p>
     pub allocation_id: Option<String>,
@@ -36584,6 +37398,7 @@ impl NetworkInterfaceAssociationDeserializer {
 }
 /// <p>Describes a network interface attachment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NetworkInterfaceAttachment {
     /// <p>The timestamp indicating when the attachment initiated.</p>
     pub attach_time: Option<String>,
@@ -36652,6 +37467,7 @@ impl NetworkInterfaceAttachmentDeserializer {
 }
 /// <p>Describes an attachment change.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NetworkInterfaceAttachmentChanges {
     /// <p>The ID of the network interface attachment.</p>
     pub attachment_id: Option<String>,
@@ -36693,6 +37509,7 @@ impl NetworkInterfaceIdListSerializer {
 
 /// <p>Describes an IPv6 address associated with a network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NetworkInterfaceIpv6Address {
     /// <p>The IPv6 address.</p>
     pub ipv_6_address: Option<String>,
@@ -36759,6 +37576,7 @@ impl NetworkInterfaceListDeserializer {
 }
 /// <p>Describes a permission for a network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NetworkInterfacePermission {
     /// <p>The AWS account ID.</p>
     pub aws_account_id: Option<String>,
@@ -36858,6 +37676,7 @@ impl NetworkInterfacePermissionListDeserializer {
 }
 /// <p>Describes the state of a network interface permission.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NetworkInterfacePermissionState {
     /// <p>The state of the permission.</p>
     pub state: Option<String>,
@@ -36908,6 +37727,7 @@ impl NetworkInterfacePermissionStateCodeDeserializer {
 }
 /// <p>Describes the private IPv4 address of a network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NetworkInterfacePrivateIpAddress {
     /// <p>The association information for an Elastic IP address (IPv4) associated with the network interface.</p>
     pub association: Option<NetworkInterfaceAssociation>,
@@ -36998,6 +37818,7 @@ impl NetworkInterfaceTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NewDhcpConfiguration {
     pub key: Option<String>,
     pub values: Option<Vec<String>>,
@@ -37111,6 +37932,7 @@ impl OnDemandAllocationStrategyDeserializer {
 }
 /// <p>Describes the configuration of On-Demand Instances in an EC2 Fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OnDemandOptions {
     /// <p>The order of the launch template overrides to use in fulfilling On-Demand capacity. If you specify <code>lowest-price</code>, EC2 Fleet uses price to determine the order, launching the lowest price first. If you specify <code>prioritized</code>, EC2 Fleet uses the priority that you assigned to each launch template override, launching the highest priority first. If you do not specify a value, EC2 Fleet defaults to <code>lowest-price</code>.</p>
     pub allocation_strategy: Option<String>,
@@ -37170,6 +37992,7 @@ impl OnDemandOptionsDeserializer {
 }
 /// <p>Describes the configuration of On-Demand Instances in an EC2 Fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OnDemandOptionsRequest {
     /// <p>The order of the launch template overrides to use in fulfilling On-Demand capacity. If you specify <code>lowest-price</code>, EC2 Fleet uses price to determine the order, launching the lowest price first. If you specify <code>prioritized</code>, EC2 Fleet uses the priority that you assigned to each launch template override, launching the highest priority first. If you do not specify a value, EC2 Fleet defaults to <code>lowest-price</code>.</p>
     pub allocation_strategy: Option<String>,
@@ -37237,6 +38060,7 @@ impl PaymentOptionDeserializer {
 }
 /// <p>Describes the data that identifies an Amazon FPGA image (AFI) on the PCI bus.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PciId {
     /// <p>The ID of the device.</p>
     pub device_id: Option<String>,
@@ -37275,6 +38099,7 @@ impl PciIdDeserializer {
 }
 /// <p>Describes the VPC peering connection options.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PeeringConnectionOptions {
     /// <p>If true, the public DNS hostnames of instances in the specified VPC resolve to private IP addresses when queried from instances in the peer VPC.</p>
     pub allow_dns_resolution_from_remote_vpc: Option<bool>,
@@ -37326,6 +38151,7 @@ impl PeeringConnectionOptionsDeserializer {
 }
 /// <p>The VPC peering connection options.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PeeringConnectionOptionsRequest {
     /// <p>If true, enables a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p>
     pub allow_dns_resolution_from_remote_vpc: Option<bool>,
@@ -37397,6 +38223,7 @@ impl Phase1DHGroupNumbersListDeserializer {
 }
 /// <p>The Diffie-Hellmann group number for phase 1 IKE negotiations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Phase1DHGroupNumbersListValue {
     /// <p>The Diffie-Hellmann group number.</p>
     pub value: Option<i64>,
@@ -37438,6 +38265,7 @@ impl Phase1DHGroupNumbersRequestListSerializer {
 
 /// <p>Specifies a Diffie-Hellman group number for the VPN tunnel for phase 1 IKE negotiations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Phase1DHGroupNumbersRequestListValue {
     /// <p>The Diffie-Hellmann group number.</p>
     pub value: Option<i64>,
@@ -37479,6 +38307,7 @@ impl Phase1EncryptionAlgorithmsListDeserializer {
 }
 /// <p>The encryption algorithm for phase 1 IKE negotiations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Phase1EncryptionAlgorithmsListValue {
     /// <p>The value for the encryption algorithm.</p>
     pub value: Option<String>,
@@ -37524,6 +38353,7 @@ impl Phase1EncryptionAlgorithmsRequestListSerializer {
 
 /// <p>Specifies the encryption algorithm for the VPN tunnel for phase 1 IKE negotiations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Phase1EncryptionAlgorithmsRequestListValue {
     /// <p>The value for the encryption algorithm.</p>
     pub value: Option<String>,
@@ -37569,6 +38399,7 @@ impl Phase1IntegrityAlgorithmsListDeserializer {
 }
 /// <p>The integrity algorithm for phase 1 IKE negotiations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Phase1IntegrityAlgorithmsListValue {
     /// <p>The value for the integrity algorithm.</p>
     pub value: Option<String>,
@@ -37614,6 +38445,7 @@ impl Phase1IntegrityAlgorithmsRequestListSerializer {
 
 /// <p>Specifies the integrity algorithm for the VPN tunnel for phase 1 IKE negotiations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Phase1IntegrityAlgorithmsRequestListValue {
     /// <p>The value for the integrity algorithm.</p>
     pub value: Option<String>,
@@ -37655,6 +38487,7 @@ impl Phase2DHGroupNumbersListDeserializer {
 }
 /// <p>The Diffie-Hellmann group number for phase 2 IKE negotiations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Phase2DHGroupNumbersListValue {
     /// <p>The Diffie-Hellmann group number.</p>
     pub value: Option<i64>,
@@ -37696,6 +38529,7 @@ impl Phase2DHGroupNumbersRequestListSerializer {
 
 /// <p>Specifies a Diffie-Hellman group number for the VPN tunnel for phase 2 IKE negotiations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Phase2DHGroupNumbersRequestListValue {
     /// <p>The Diffie-Hellmann group number.</p>
     pub value: Option<i64>,
@@ -37737,6 +38571,7 @@ impl Phase2EncryptionAlgorithmsListDeserializer {
 }
 /// <p>The encryption algorithm for phase 2 IKE negotiations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Phase2EncryptionAlgorithmsListValue {
     /// <p>The encryption algorithm.</p>
     pub value: Option<String>,
@@ -37782,6 +38617,7 @@ impl Phase2EncryptionAlgorithmsRequestListSerializer {
 
 /// <p>Specifies the encryption algorithm for the VPN tunnel for phase 2 IKE negotiations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Phase2EncryptionAlgorithmsRequestListValue {
     /// <p>The encryption algorithm.</p>
     pub value: Option<String>,
@@ -37827,6 +38663,7 @@ impl Phase2IntegrityAlgorithmsListDeserializer {
 }
 /// <p>The integrity algorithm for phase 2 IKE negotiations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Phase2IntegrityAlgorithmsListValue {
     /// <p>The integrity algorithm.</p>
     pub value: Option<String>,
@@ -37872,6 +38709,7 @@ impl Phase2IntegrityAlgorithmsRequestListSerializer {
 
 /// <p>Specifies the integrity algorithm for the VPN tunnel for phase 2 IKE negotiations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Phase2IntegrityAlgorithmsRequestListValue {
     /// <p>The integrity algorithm.</p>
     pub value: Option<String>,
@@ -37894,6 +38732,8 @@ impl Phase2IntegrityAlgorithmsRequestListValueSerializer {
 
 /// <p>Describes the placement of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Placement {
     /// <p>The affinity setting for the instance on the Dedicated Host. This parameter is not supported for the <a>ImportInstance</a> command.</p>
     pub affinity: Option<String>,
@@ -37986,6 +38826,7 @@ impl PlacementSerializer {
 
 /// <p>Describes a placement group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PlacementGroup {
     /// <p>The name of the placement group.</p>
     pub group_name: Option<String>,
@@ -38071,6 +38912,7 @@ impl PlacementGroupStringListSerializer {
 
 /// <p>Describes the placement of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PlacementResponse {
     /// <p>The name of the placement group the instance is in.</p>
     pub group_name: Option<String>,
@@ -38118,6 +38960,8 @@ impl PlatformValuesDeserializer {
 }
 /// <p>Describes a range of ports.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PortRange {
     /// <p>The first port in the range.</p>
     pub from: Option<i64>,
@@ -38167,6 +39011,7 @@ impl PortRangeSerializer {
 
 /// <p>Describes prefixes for AWS services.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PrefixList {
     /// <p>The IP address range of the AWS service.</p>
     pub cidrs: Option<Vec<String>>,
@@ -38206,6 +39051,8 @@ impl PrefixListDeserializer {
 }
 /// <p>Describes a prefix list ID.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PrefixListId {
     /// <p>A description for the security group rule that references this prefix list ID.</p> <p>Constraints: Up to 255 characters in length. Allowed characters are a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=;{}!$*</p>
     pub description: Option<String>,
@@ -38319,6 +39166,7 @@ impl PrefixListSetDeserializer {
 }
 /// <p>Describes the price for a Reserved Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PriceSchedule {
     /// <p>The current price schedule, as determined by the term remaining for the Reserved Instance in the listing.</p> <p>A specific price schedule is always in effect, but only one price schedule can be active at any time. Take, for example, a Reserved Instance listing that has five months remaining in its term. When you specify price schedules for five months and two months, this means that schedule 1, covering the first three months of the remaining term, will be active during months 5, 4, and 3. Then schedule 2, covering the last two months of the term, will be active for months 2 and 1.</p>
     pub active: Option<bool>,
@@ -38379,6 +39227,7 @@ impl PriceScheduleListDeserializer {
 }
 /// <p>Describes the price for a Reserved Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PriceScheduleSpecification {
     /// <p>The currency for transacting the Reserved Instance resale. At this time, the only supported currency is <code>USD</code>.</p>
     pub currency_code: Option<String>,
@@ -38422,6 +39271,7 @@ impl PriceScheduleSpecificationListSerializer {
 
 /// <p>Describes a Reserved Instance offering.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PricingDetail {
     /// <p>The number of reservations available for the price.</p>
     pub count: Option<i64>,
@@ -38469,6 +39319,7 @@ impl PricingDetailsListDeserializer {
 }
 /// <p>PrincipalIdFormat description</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PrincipalIdFormat {
     /// <p>PrincipalIdFormatARN description</p>
     pub arn: Option<String>,
@@ -38545,6 +39396,8 @@ impl PrivateIpAddressConfigSetSerializer {
 
 /// <p>Describes a secondary private IPv4 address for a network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PrivateIpAddressSpecification {
     /// <p>Indicates whether the private IPv4 address is the primary private IPv4 address. Only one IPv4 address can be designated as primary.</p>
     pub primary: Option<bool>,
@@ -38641,6 +39494,7 @@ impl PrivateIpAddressStringListSerializer {
 
 /// <p>Describes a product code.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ProductCode {
     /// <p>The product code.</p>
     pub product_code_id: Option<String>,
@@ -38725,6 +39579,7 @@ impl ProductDescriptionListSerializer {
 
 /// <p>Describes a virtual private gateway propagating route.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PropagatingVgw {
     /// <p>The ID of the virtual private gateway.</p>
     pub gateway_id: Option<String>,
@@ -38766,6 +39621,7 @@ impl PropagatingVgwListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ProvisionByoipCidrRequest {
     /// <p>The public IPv4 address range, in CIDR notation. The most specific prefix that you can specify is /24. The address range cannot overlap with another address range that you've brought to this or another Region.</p>
     pub cidr: String,
@@ -38804,6 +39660,7 @@ impl ProvisionByoipCidrRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ProvisionByoipCidrResult {
     /// <p>Information about the address pool.</p>
     pub byoip_cidr: Option<ByoipCidr>,
@@ -38834,6 +39691,7 @@ impl ProvisionByoipCidrResultDeserializer {
 }
 /// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ProvisionedBandwidth {
     /// <p>Reserved. If you need to sustain traffic greater than the <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
     pub provision_time: Option<String>,
@@ -38893,6 +39751,7 @@ impl PublicIpStringListSerializer {
 
 /// <p>Describes an address pool.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicIpv4Pool {
     /// <p>A description of the address pool.</p>
     pub description: Option<String>,
@@ -38949,6 +39808,7 @@ impl PublicIpv4PoolDeserializer {
 }
 /// <p>Describes an address range of an IPv4 address pool.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicIpv4PoolRange {
     /// <p>The number of addresses in the range.</p>
     pub address_count: Option<i64>,
@@ -39028,6 +39888,7 @@ impl PublicIpv4PoolSetDeserializer {
 }
 /// <p>Describes the result of the purchase.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Purchase {
     /// <p>The currency in which the <code>UpfrontPrice</code> and <code>HourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>
     pub currency_code: Option<String>,
@@ -39098,6 +39959,7 @@ impl PurchaseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseHostReservationRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -39139,6 +40001,7 @@ impl PurchaseHostReservationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PurchaseHostReservationResult {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -39196,6 +40059,7 @@ impl PurchaseHostReservationResultDeserializer {
 }
 /// <p>Describes a request to purchase Scheduled Instances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseRequest {
     /// <p>The number of instances.</p>
     pub instance_count: i64,
@@ -39236,6 +40100,7 @@ impl PurchaseRequestSetSerializer {
 
 /// <p>Contains the parameters for PurchaseReservedInstancesOffering.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseReservedInstancesOfferingRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -39279,6 +40144,7 @@ impl PurchaseReservedInstancesOfferingRequestSerializer {
 
 /// <p>Contains the output of PurchaseReservedInstancesOffering.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PurchaseReservedInstancesOfferingResult {
     /// <p>The IDs of the purchased Reserved Instances.</p>
     pub reserved_instances_id: Option<String>,
@@ -39311,6 +40177,7 @@ impl PurchaseReservedInstancesOfferingResultDeserializer {
 }
 /// <p>Contains the parameters for PurchaseScheduledInstances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseScheduledInstancesRequest {
     /// <p>Unique, case-sensitive identifier that ensures the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -39345,6 +40212,7 @@ impl PurchaseScheduledInstancesRequestSerializer {
 
 /// <p>Contains the output of PurchaseScheduledInstances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PurchaseScheduledInstancesResult {
     /// <p>Information about the Scheduled Instances.</p>
     pub scheduled_instance_set: Option<Vec<ScheduledInstance>>,
@@ -39435,6 +40303,7 @@ impl ReasonCodesListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -39464,6 +40333,7 @@ impl RebootInstancesRequestSerializer {
 
 /// <p>Describes a recurring charge.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RecurringCharge {
     /// <p>The amount of the recurring charge.</p>
     pub amount: Option<f64>,
@@ -39525,6 +40395,7 @@ impl RecurringChargesListDeserializer {
 }
 /// <p>Describes a Region.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Region {
     /// <p>The Region service endpoint.</p>
     pub endpoint: Option<String>,
@@ -39587,6 +40458,7 @@ impl RegionNameStringListSerializer {
 
 /// <p>Contains the parameters for RegisterImage.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterImageRequest {
     /// <p>The architecture of the AMI.</p> <p>Default: For Amazon EBS-backed AMIs, <code>i386</code>. For instance store-backed AMIs, the architecture specified in the manifest file.</p>
     pub architecture: Option<String>,
@@ -39675,6 +40547,7 @@ impl RegisterImageRequestSerializer {
 
 /// <p>Contains the output of RegisterImage.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RegisterImageResult {
     /// <p>The ID of the newly registered AMI.</p>
     pub image_id: Option<String>,
@@ -39699,6 +40572,7 @@ impl RegisterImageResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectTransitGatewayVpcAttachmentRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -39726,6 +40600,7 @@ impl RejectTransitGatewayVpcAttachmentRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RejectTransitGatewayVpcAttachmentResult {
     /// <p>Information about the attachment.</p>
     pub transit_gateway_vpc_attachment: Option<TransitGatewayVpcAttachment>,
@@ -39758,6 +40633,7 @@ impl RejectTransitGatewayVpcAttachmentResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectVpcEndpointConnectionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -39789,6 +40665,7 @@ impl RejectVpcEndpointConnectionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RejectVpcEndpointConnectionsResult {
     /// <p>Information about the endpoints that were not rejected, if applicable.</p>
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
@@ -39819,6 +40696,7 @@ impl RejectVpcEndpointConnectionsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectVpcPeeringConnectionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -39846,6 +40724,7 @@ impl RejectVpcPeeringConnectionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RejectVpcPeeringConnectionResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -39874,6 +40753,7 @@ impl RejectVpcPeeringConnectionResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReleaseAddressRequest {
     /// <p>[EC2-VPC] The allocation ID. Required for EC2-VPC.</p>
     pub allocation_id: Option<String>,
@@ -39905,6 +40785,7 @@ impl ReleaseAddressRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReleaseHostsRequest {
     /// <p>The IDs of the Dedicated Hosts to release.</p>
     pub host_ids: Vec<String>,
@@ -39928,6 +40809,7 @@ impl ReleaseHostsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReleaseHostsResult {
     /// <p>The IDs of the Dedicated Hosts that were successfully released.</p>
     pub successful: Option<Vec<String>>,
@@ -39961,6 +40843,7 @@ impl ReleaseHostsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceIamInstanceProfileAssociationRequest {
     /// <p>The ID of the existing IAM instance profile association.</p>
     pub association_id: String,
@@ -39994,6 +40877,7 @@ impl ReplaceIamInstanceProfileAssociationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReplaceIamInstanceProfileAssociationResult {
     /// <p>Information about the IAM instance profile association.</p>
     pub iam_instance_profile_association: Option<IamInstanceProfileAssociation>,
@@ -40026,6 +40910,7 @@ impl ReplaceIamInstanceProfileAssociationResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceNetworkAclAssociationRequest {
     /// <p>The ID of the current association between the original network ACL and the subnet.</p>
     pub association_id: String,
@@ -40059,6 +40944,7 @@ impl ReplaceNetworkAclAssociationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReplaceNetworkAclAssociationResult {
     /// <p>The ID of the new association.</p>
     pub new_association_id: Option<String>,
@@ -40088,6 +40974,7 @@ impl ReplaceNetworkAclAssociationResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceNetworkAclEntryRequest {
     /// <p>The IPv4 network range to allow or deny, in CIDR notation (for example <code>172.16.0.0/24</code>).</p>
     pub cidr_block: Option<String>,
@@ -40155,6 +41042,7 @@ impl ReplaceNetworkAclEntryRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceRouteRequest {
     /// <p>The IPv4 CIDR address block used for the destination match. The value that you provide must match the CIDR of an existing route in the table.</p>
     pub destination_cidr_block: Option<String>,
@@ -40239,6 +41127,7 @@ impl ReplaceRouteRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceRouteTableAssociationRequest {
     /// <p>The association ID.</p>
     pub association_id: String,
@@ -40272,6 +41161,7 @@ impl ReplaceRouteTableAssociationRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReplaceRouteTableAssociationResult {
     /// <p>The ID of the new association.</p>
     pub new_association_id: Option<String>,
@@ -40301,6 +41191,7 @@ impl ReplaceRouteTableAssociationResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceTransitGatewayRouteRequest {
     /// <p>Indicates whether traffic matching this route is to be dropped.</p>
     pub blackhole: Option<bool>,
@@ -40347,6 +41238,7 @@ impl ReplaceTransitGatewayRouteRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReplaceTransitGatewayRouteResult {
     /// <p>Information about the modified route.</p>
     pub route: Option<TransitGatewayRoute>,
@@ -40377,6 +41269,7 @@ impl ReplaceTransitGatewayRouteResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReportInstanceStatusRequest {
     /// <p>Descriptive text about the health state of your instance.</p>
     pub description: Option<String>,
@@ -40453,6 +41346,7 @@ impl RequestHostIdSetSerializer {
 
 /// <p>The information to include in the launch template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestLaunchTemplateData {
     /// <p><p>The block device mapping.</p> <important> <p>Supplying both a snapshot ID and an encryption value as arguments for block-device mapping results in an error. This is because only blank volumes can be encrypted on start, and these are not created from a snapshot. If a snapshot is the basis for the volume, it contains data by definition and its encryption status cannot be changed using this action.</p> </important></p>
     pub block_device_mappings: Option<Vec<LaunchTemplateBlockDeviceMappingRequest>>,
@@ -40666,6 +41560,7 @@ impl RequestLaunchTemplateDataSerializer {
 
 /// <p>Contains the parameters for RequestSpotFleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestSpotFleetRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -40695,6 +41590,7 @@ impl RequestSpotFleetRequestSerializer {
 
 /// <p>Contains the output of RequestSpotFleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RequestSpotFleetResponse {
     /// <p>The ID of the Spot Fleet request.</p>
     pub spot_fleet_request_id: Option<String>,
@@ -40727,6 +41623,7 @@ impl RequestSpotFleetResponseDeserializer {
 }
 /// <p>Contains the parameters for RequestSpotInstances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestSpotInstancesRequest {
     /// <p>The user-specified name for a logical grouping of requests.</p> <p>When you specify an Availability Zone group in a Spot Instance request, all Spot Instances in the request are launched in the same Availability Zone. Instance proximity is maintained with this parameter, but the choice of Availability Zone is not. The group applies only to requests for Spot Instances of the same instance type. Any additional Spot Instance requests that are specified with the same Availability Zone group name are launched in that same Availability Zone, as long as at least one instance from the group is still active.</p> <p>If there is no active instance running in the Availability Zone group that you specify for a new Spot Instance request (all instances are terminated, the request is expired, or the maximum price you specified falls below current Spot price), then Amazon EC2 launches the instance in any Availability Zone where the constraint can be met. Consequently, the subsequent set of Spot Instances could be placed in a different zone from the original request, even if you specified the same Availability Zone group.</p> <p>Default: Instances are launched in any available Availability Zone.</p>
     pub availability_zone_group: Option<String>,
@@ -40817,6 +41714,7 @@ impl RequestSpotInstancesRequestSerializer {
 
 /// <p>Contains the output of RequestSpotInstances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RequestSpotInstancesResult {
     /// <p>One or more Spot Instance requests.</p>
     pub spot_instance_requests: Option<Vec<SpotInstanceRequest>>,
@@ -40851,6 +41749,7 @@ impl RequestSpotInstancesResultDeserializer {
 }
 /// <p>Describes the launch specification for an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestSpotLaunchSpecification {
     /// <p>Deprecated.</p>
     pub addressing_type: Option<String>,
@@ -40976,6 +41875,7 @@ impl RequestSpotLaunchSpecificationSerializer {
 
 /// <p>Describes a reservation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Reservation {
     /// <p>[EC2-Classic only] The security groups.</p>
     pub groups: Option<Vec<GroupIdentifier>>,
@@ -41054,6 +41954,7 @@ impl ReservationStateDeserializer {
 }
 /// <p>The cost associated with the Reserved Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservationValue {
     /// <p>The hourly rate of the reservation.</p>
     pub hourly_price: Option<String>,
@@ -41107,6 +42008,7 @@ impl ReservedInstanceIdSetSerializer {
 
 /// <p>Describes the limit price of a Reserved Instance offering.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReservedInstanceLimitPrice {
     /// <p>Used for Reserved Instance Marketplace offerings. Specifies the limit price on the total order (instanceCount * price).</p>
     pub amount: Option<f64>,
@@ -41134,6 +42036,7 @@ impl ReservedInstanceLimitPriceSerializer {
 
 /// <p>The total value of the Convertible Reserved Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedInstanceReservationValue {
     /// <p>The total value of the Convertible Reserved Instance that you are exchanging.</p>
     pub reservation_value: Option<ReservationValue>,
@@ -41204,6 +42107,7 @@ impl ReservedInstanceStateDeserializer {
 }
 /// <p>Describes a Reserved Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedInstances {
     /// <p>The Availability Zone in which the Reserved Instance can be used.</p>
     pub availability_zone: Option<String>,
@@ -41341,6 +42245,8 @@ impl ReservedInstancesDeserializer {
 }
 /// <p>Describes the configuration settings for the modified Reserved Instances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReservedInstancesConfiguration {
     /// <p>The Availability Zone for the modified Reserved Instances.</p>
     pub availability_zone: Option<String>,
@@ -41434,6 +42340,7 @@ impl ReservedInstancesConfigurationListSerializer {
 
 /// <p>Describes the ID of a Reserved Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedInstancesId {
     /// <p>The ID of the Reserved Instance.</p>
     pub reserved_instances_id: Option<String>,
@@ -41491,6 +42398,7 @@ impl ReservedInstancesListDeserializer {
 }
 /// <p>Describes a Reserved Instance listing.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedInstancesListing {
     /// <p>A unique, case-sensitive key supplied by the client to ensure that the request is idempotent. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -41600,6 +42508,7 @@ impl ReservedInstancesListingListDeserializer {
 }
 /// <p>Describes a Reserved Instance modification.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedInstancesModification {
     /// <p>A unique, case-sensitive key supplied by the client to ensure that the request is idempotent. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -41719,6 +42628,7 @@ impl ReservedInstancesModificationListDeserializer {
 }
 /// <p>Describes the modification request/s.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedInstancesModificationResult {
     /// <p>The ID for the Reserved Instances that were created as part of the modification request. This field is only available when the modification is fulfilled.</p>
     pub reserved_instances_id: Option<String>,
@@ -41779,6 +42689,7 @@ impl ReservedInstancesModificationResultListDeserializer {
 }
 /// <p>Describes a Reserved Instance offering.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedInstancesOffering {
     /// <p>The Availability Zone in which the Reserved Instance can be used.</p>
     pub availability_zone: Option<String>,
@@ -41959,6 +42870,7 @@ impl ReservedIntancesIdsDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetEbsDefaultKmsKeyIdRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -41980,6 +42892,7 @@ impl ResetEbsDefaultKmsKeyIdRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResetEbsDefaultKmsKeyIdResult {
     /// <p>The Amazon Resource Name (ARN) of the default CMK for EBS encryption by default.</p>
     pub kms_key_id: Option<String>,
@@ -42008,6 +42921,7 @@ impl ResetEbsDefaultKmsKeyIdResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetFpgaImageAttributeRequest {
     /// <p>The attribute.</p>
     pub attribute: Option<String>,
@@ -42037,6 +42951,7 @@ impl ResetFpgaImageAttributeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResetFpgaImageAttributeResult {
     /// <p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>
     pub return_: Option<bool>,
@@ -42066,6 +42981,7 @@ impl ResetFpgaImageAttributeResultDeserializer {
 }
 /// <p>Contains the parameters for ResetImageAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetImageAttributeRequest {
     /// <p>The attribute to reset (currently you can only reset the launch permission attribute).</p>
     pub attribute: String,
@@ -42093,6 +43009,7 @@ impl ResetImageAttributeRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetInstanceAttributeRequest {
     /// <p><p>The attribute to reset.</p> <important> <p>You can only reset the following attributes: <code>kernel</code> | <code>ramdisk</code> | <code>sourceDestCheck</code>. To change an instance attribute, use <a>ModifyInstanceAttribute</a>.</p> </important></p>
     pub attribute: String,
@@ -42121,6 +43038,7 @@ impl ResetInstanceAttributeRequestSerializer {
 
 /// <p>Contains the parameters for ResetNetworkInterfaceAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetNetworkInterfaceAttributeRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -42154,6 +43072,7 @@ impl ResetNetworkInterfaceAttributeRequestSerializer {
 
 /// <p>Contains the parameters for ResetSnapshotAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetSnapshotAttributeRequest {
     /// <p>The attribute to reset. Currently, only the attribute for permission to create volumes can be reset.</p>
     pub attribute: String,
@@ -42215,6 +43134,7 @@ impl ResourceTypeDeserializer {
 }
 /// <p>Describes the error that's returned when you cannot delete a launch template version.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResponseError {
     /// <p>The error code.</p>
     pub code: Option<String>,
@@ -42281,6 +43201,7 @@ impl ResponseHostIdSetDeserializer {
 }
 /// <p>The information for a launch template. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResponseLaunchTemplateData {
     /// <p>The block device mappings.</p>
     pub block_device_mappings: Option<Vec<LaunchTemplateBlockDeviceMapping>>,
@@ -42510,6 +43431,7 @@ impl RestorableByStringListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreAddressToClassicRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -42534,6 +43456,7 @@ impl RestoreAddressToClassicRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreAddressToClassicResult {
     /// <p>The Elastic IP address.</p>
     pub public_ip: Option<String>,
@@ -42567,6 +43490,7 @@ impl RestoreAddressToClassicResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeClientVpnIngressRequest {
     /// <p>The ID of the Active Directory group for which to revoke access. </p>
     pub access_group_id: Option<String>,
@@ -42610,6 +43534,7 @@ impl RevokeClientVpnIngressRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RevokeClientVpnIngressResult {
     /// <p>The current state of the authorization rule.</p>
     pub status: Option<ClientVpnAuthorizationRuleStatus>,
@@ -42641,6 +43566,7 @@ impl RevokeClientVpnIngressResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeSecurityGroupEgressRequest {
     /// <p>Not supported. Use a set of IP permissions to specify the CIDR.</p>
     pub cidr_ip: Option<String>,
@@ -42710,6 +43636,7 @@ impl RevokeSecurityGroupEgressRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeSecurityGroupIngressRequest {
     /// <p>The CIDR IP address range. You can't specify this parameter when specifying a source security group.</p>
     pub cidr_ip: Option<String>,
@@ -42787,6 +43714,7 @@ impl RevokeSecurityGroupIngressRequestSerializer {
 
 /// <p>Describes a route in a route table.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Route {
     /// <p>The IPv4 CIDR block used for the destination match.</p>
     pub destination_cidr_block: Option<String>,
@@ -42929,6 +43857,7 @@ impl RouteStateDeserializer {
 }
 /// <p>Describes a route table.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RouteTable {
     /// <p>The associations between the route table and one or more subnets.</p>
     pub associations: Option<Vec<RouteTableAssociation>>,
@@ -42996,6 +43925,7 @@ impl RouteTableDeserializer {
 }
 /// <p>Describes an association between a route table and a subnet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RouteTableAssociation {
     /// <p>Indicates whether this is the main route table.</p>
     pub main: Option<bool>,
@@ -43087,6 +44017,8 @@ impl RuleActionDeserializer {
 }
 /// <p>Describes the monitoring of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RunInstancesMonitoringEnabled {
     /// <p>Indicates whether detailed monitoring is enabled. Otherwise, basic monitoring is enabled.</p>
     pub enabled: bool,
@@ -43129,6 +44061,7 @@ impl RunInstancesMonitoringEnabledSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RunInstancesRequest {
     /// <p>Reserved.</p>
     pub additional_info: Option<String>,
@@ -43395,6 +44328,7 @@ impl RunInstancesRequestSerializer {
 
 /// <p>Contains the parameters for RunScheduledInstances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RunScheduledInstancesRequest {
     /// <p>Unique, case-sensitive identifier that ensures the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -43440,6 +44374,7 @@ impl RunScheduledInstancesRequestSerializer {
 
 /// <p>Contains the output of RunScheduledInstances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RunScheduledInstancesResult {
     /// <p>The IDs of the newly launched instances.</p>
     pub instance_id_set: Option<Vec<String>>,
@@ -43471,6 +44406,8 @@ impl RunScheduledInstancesResultDeserializer {
 }
 /// <p>Describes the storage parameters for S3 and S3 buckets for an instance store-backed AMI.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3Storage {
     /// <p>The access key ID of the owner of the bucket. Before you specify a value for your access key ID, review and follow the guidance in <a href="https://docs.aws.amazon.com/general/latest/gr/aws-access-keys-best-practices.html">Best Practices for Managing AWS Access Keys</a>.</p>
     pub aws_access_key_id: Option<String>,
@@ -43554,6 +44491,7 @@ impl S3StorageSerializer {
 
 /// <p>Describes a Scheduled Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ScheduledInstance {
     /// <p>The Availability Zone.</p>
     pub availability_zone: Option<String>,
@@ -43673,6 +44611,7 @@ impl ScheduledInstanceDeserializer {
 }
 /// <p>Describes a schedule that is available for your Scheduled Instances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ScheduledInstanceAvailability {
     /// <p>The Availability Zone.</p>
     pub availability_zone: Option<String>,
@@ -43819,6 +44758,7 @@ impl ScheduledInstanceIdRequestSetSerializer {
 
 /// <p>Describes the recurring schedule for a Scheduled Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ScheduledInstanceRecurrence {
     /// <p>The frequency (<code>Daily</code>, <code>Weekly</code>, or <code>Monthly</code>).</p>
     pub frequency: Option<String>,
@@ -43874,6 +44814,7 @@ impl ScheduledInstanceRecurrenceDeserializer {
 }
 /// <p>Describes the recurring schedule for a Scheduled Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledInstanceRecurrenceRequest {
     /// <p>The frequency (<code>Daily</code>, <code>Weekly</code>, or <code>Monthly</code>).</p>
     pub frequency: Option<String>,
@@ -43940,6 +44881,7 @@ impl ScheduledInstanceSetDeserializer {
 }
 /// <p>Describes a block device mapping for a Scheduled Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledInstancesBlockDeviceMapping {
     /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device_name: Option<String>,
@@ -43992,6 +44934,7 @@ impl ScheduledInstancesBlockDeviceMappingSetSerializer {
 
 /// <p>Describes an EBS volume for a Scheduled Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledInstancesEbs {
     /// <p>Indicates whether the volume is deleted on instance termination.</p>
     pub delete_on_termination: Option<bool>,
@@ -44042,6 +44985,7 @@ impl ScheduledInstancesEbsSerializer {
 
 /// <p>Describes an IAM instance profile for a Scheduled Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledInstancesIamInstanceProfile {
     /// <p>The Amazon Resource Name (ARN).</p>
     pub arn: Option<String>,
@@ -44069,6 +45013,7 @@ impl ScheduledInstancesIamInstanceProfileSerializer {
 
 /// <p>Describes an IPv6 address.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledInstancesIpv6Address {
     /// <p>The IPv6 address.</p>
     pub ipv_6_address: Option<String>,
@@ -44102,6 +45047,7 @@ impl ScheduledInstancesIpv6AddressListSerializer {
 
 /// <p>Describes the launch specification for a Scheduled Instance.</p> <p>If you are launching the Scheduled Instance in EC2-VPC, you must specify the ID of the subnet. You can specify the subnet using either <code>SubnetId</code> or <code>NetworkInterface</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledInstancesLaunchSpecification {
     /// <p>The block device mapping entries.</p>
     pub block_device_mappings: Option<Vec<ScheduledInstancesBlockDeviceMapping>>,
@@ -44211,6 +45157,7 @@ impl ScheduledInstancesLaunchSpecificationSerializer {
 
 /// <p>Describes whether monitoring is enabled for a Scheduled Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledInstancesMonitoring {
     /// <p>Indicates whether monitoring is enabled.</p>
     pub enabled: Option<bool>,
@@ -44233,6 +45180,7 @@ impl ScheduledInstancesMonitoringSerializer {
 
 /// <p>Describes a network interface for a Scheduled Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledInstancesNetworkInterface {
     /// <p>Indicates whether to assign a public IPv4 address to instances launched in a VPC. The public IPv4 address can only be assigned to a network interface for eth0, and can only be assigned to a new network interface, not an existing one. You cannot specify more than one network interface in the request. If launching into a default subnet, the default value is <code>true</code>.</p>
     pub associate_public_ip_address: Option<bool>,
@@ -44342,6 +45290,7 @@ impl ScheduledInstancesNetworkInterfaceSetSerializer {
 
 /// <p>Describes the placement for a Scheduled Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledInstancesPlacement {
     /// <p>The Availability Zone.</p>
     pub availability_zone: Option<String>,
@@ -44369,6 +45318,7 @@ impl ScheduledInstancesPlacementSerializer {
 
 /// <p>Describes a private IPv4 address for a Scheduled Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledInstancesPrivateIpAddressConfig {
     /// <p>Indicates whether this is a primary IPv4 address. Otherwise, this is a secondary IPv4 address.</p>
     pub primary: Option<bool>,
@@ -44417,6 +45367,7 @@ impl ScopeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchTransitGatewayRoutesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -44452,6 +45403,7 @@ impl SearchTransitGatewayRoutesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SearchTransitGatewayRoutesResult {
     /// <p>Indicates whether there are additional routes available.</p>
     pub additional_routes_available: Option<bool>,
@@ -44491,6 +45443,7 @@ impl SearchTransitGatewayRoutesResultDeserializer {
 }
 /// <p>Describes a security group</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SecurityGroup {
     /// <p>A description of the security group.</p>
     pub description: Option<String>,
@@ -44587,6 +45540,7 @@ impl SecurityGroupIdStringListSerializer {
 
 /// <p>Describes a security group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SecurityGroupIdentifier {
     /// <p>The ID of the security group.</p>
     pub group_id: Option<String>,
@@ -44638,6 +45592,7 @@ impl SecurityGroupListDeserializer {
 }
 /// <p>Describes a VPC with a security group that references your security group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SecurityGroupReference {
     /// <p>The ID of your security group.</p>
     pub group_id: Option<String>,
@@ -44707,6 +45662,7 @@ impl SecurityGroupStringListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendDiagnosticInterruptRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -44732,6 +45688,7 @@ impl SendDiagnosticInterruptRequestSerializer {
 
 /// <p>Describes a service configuration for a VPC endpoint service.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ServiceConfiguration {
     /// <p>Indicates whether requests from other AWS accounts to create an endpoint to the service must first be accepted.</p>
     pub acceptance_required: Option<bool>,
@@ -44849,6 +45806,7 @@ impl ServiceConfigurationSetDeserializer {
 }
 /// <p>Describes a VPC endpoint service.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ServiceDetail {
     /// <p>Indicates whether VPC endpoint connection requests to the service must be accepted by the service owner.</p>
     pub acceptance_required: Option<bool>,
@@ -44981,6 +45939,7 @@ impl ServiceTypeDeserializer {
 }
 /// <p>Describes the type of service for a VPC endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ServiceTypeDetail {
     /// <p>The type of service.</p>
     pub service_type: Option<String>,
@@ -45035,6 +45994,7 @@ impl ShutdownBehaviorDeserializer {
 }
 /// <p>Describes the time period for a Scheduled Instance to start its first schedule. The time period must span less than one day.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SlotDateTimeRangeRequest {
     /// <p>The earliest date and time, in UTC, for the Scheduled Instance to start.</p>
     pub earliest_time: String,
@@ -45058,6 +46018,7 @@ impl SlotDateTimeRangeRequestSerializer {
 
 /// <p>Describes the time period for a Scheduled Instance to start its first schedule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SlotStartTimeRangeRequest {
     /// <p>The earliest date and time, in UTC, for the Scheduled Instance to start.</p>
     pub earliest_time: Option<String>,
@@ -45085,6 +46046,7 @@ impl SlotStartTimeRangeRequestSerializer {
 
 /// <p>Describes a snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Snapshot {
     /// <p>The data encryption key identifier for the snapshot. This value is a unique identifier that corresponds to the data encryption key that was used to encrypt the original volume or snapshot copy. Because data encryption keys are inherited by volumes created from snapshots, and vice versa, if snapshots share the same data encryption key identifier, then they belong to the same volume/snapshot lineage. This parameter is only returned by <a>DescribeSnapshots</a>.</p>
     pub data_encryption_key_id: Option<String>,
@@ -45181,6 +46143,7 @@ impl SnapshotDeserializer {
 }
 /// <p>Describes the snapshot created from the imported disk.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SnapshotDetail {
     /// <p>A description for the snapshot.</p>
     pub description: Option<String>,
@@ -45273,6 +46236,7 @@ impl SnapshotDetailListDeserializer {
 }
 /// <p>The disk container object for the import snapshot request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SnapshotDiskContainer {
     /// <p>The description of the disk image being imported.</p>
     pub description: Option<String>,
@@ -45325,6 +46289,7 @@ impl SnapshotIdStringListSerializer {
 
 /// <p>Information about a snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SnapshotInfo {
     /// <p>Description specified by the CreateSnapshotRequest that has been applied to all snapshots.</p>
     pub description: Option<String>,
@@ -45445,6 +46410,7 @@ impl SnapshotStateDeserializer {
 }
 /// <p>Details about the import snapshot task.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SnapshotTaskDetail {
     /// <p>The description of the snapshot.</p>
     pub description: Option<String>,
@@ -45536,6 +46502,7 @@ impl SpotAllocationStrategyDeserializer {
 }
 /// <p>Describes the data feed for a Spot Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SpotDatafeedSubscription {
     /// <p>The Amazon S3 bucket where the Spot Instance data feed is located.</p>
     pub bucket: Option<String>,
@@ -45589,6 +46556,8 @@ impl SpotDatafeedSubscriptionDeserializer {
 }
 /// <p>Describes the launch specification for one or more Spot Instances. If you include On-Demand capacity in your fleet request, you can't use <code>SpotFleetLaunchSpecification</code>; you must use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_LaunchTemplateConfig.html">LaunchTemplateConfig</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SpotFleetLaunchSpecification {
     /// <p>Deprecated.</p>
     pub addressing_type: Option<String>,
@@ -45829,6 +46798,8 @@ impl SpotFleetLaunchSpecificationSerializer {
 
 /// <p>Describes whether monitoring is enabled.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SpotFleetMonitoring {
     /// <p>Enables monitoring for the instance.</p> <p>Default: <code>false</code> </p>
     pub enabled: Option<bool>,
@@ -45870,6 +46841,7 @@ impl SpotFleetMonitoringSerializer {
 
 /// <p>Describes a Spot Fleet request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SpotFleetRequestConfig {
     /// <p>The progress of the Spot Fleet request. If there is an error, the status is <code>error</code>. After all requests are placed, the status is <code>pending_fulfillment</code>. If the size of the fleet is equal to or greater than its target capacity, the status is <code>fulfilled</code>. If the size of the fleet is decreased, the status is <code>pending_termination</code> while Spot Instances are terminating.</p>
     pub activity_status: Option<String>,
@@ -45928,6 +46900,8 @@ impl SpotFleetRequestConfigDeserializer {
 }
 /// <p>Describes the configuration of a Spot Fleet request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SpotFleetRequestConfigData {
     /// <p>Indicates how to allocate the target Spot Instance capacity across the Spot Instance pools specified by the Spot Fleet request.</p> <p>If the allocation strategy is <code>lowestPrice</code>, Spot Fleet launches instances from the Spot Instance pools with the lowest price. This is the default allocation strategy.</p> <p>If the allocation strategy is <code>diversified</code>, Spot Fleet launches instances from all the Spot Instance pools that you specify.</p> <p>If the allocation strategy is <code>capacityOptimized</code>, Spot Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p>
     pub allocation_strategy: Option<String>,
@@ -46257,6 +47231,8 @@ impl SpotFleetRequestConfigSetDeserializer {
 }
 /// <p>The tags for a Spot Fleet resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SpotFleetTagSpecification {
     /// <p>The type of resource. Currently, the only resource type that is supported is <code>instance</code>.</p>
     pub resource_type: Option<String>,
@@ -46357,6 +47333,7 @@ impl SpotInstanceInterruptionBehaviorDeserializer {
 }
 /// <p>Describes a Spot Instance request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SpotInstanceRequest {
     /// <p>If you specified a duration and your Spot Instance request was fulfilled, this is the fixed hourly price in effect for the Spot Instance while it runs.</p>
     pub actual_block_hourly_price: Option<String>,
@@ -46543,6 +47520,7 @@ impl SpotInstanceStateDeserializer {
 }
 /// <p>Describes a Spot Instance state change.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SpotInstanceStateFault {
     /// <p>The reason code for the Spot Instance state change.</p>
     pub code: Option<String>,
@@ -46573,6 +47551,7 @@ impl SpotInstanceStateFaultDeserializer {
 }
 /// <p>Describes the status of a Spot Instance request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SpotInstanceStatus {
     /// <p>The status code. For a list of status codes, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html#spot-instance-bid-status-understand">Spot Status Codes</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub code: Option<String>,
@@ -46619,6 +47598,7 @@ impl SpotInstanceTypeDeserializer {
 }
 /// <p>The options for Spot Instances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SpotMarketOptions {
     /// <p>The required duration for the Spot Instances (also known as Spot blocks), in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360).</p>
     pub block_duration_minutes: Option<i64>,
@@ -46667,6 +47647,7 @@ impl SpotMarketOptionsSerializer {
 
 /// <p>Describes the configuration of Spot Instances in an EC2 Fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SpotOptions {
     /// <p>Indicates how to allocate the target Spot Instance capacity across the Spot Instance pools specified by the EC2 Fleet.</p> <p>If the allocation strategy is <code>lowestPrice</code>, EC2 Fleet launches instances from the Spot Instance pools with the lowest price. This is the default allocation strategy.</p> <p>If the allocation strategy is <code>diversified</code>, EC2 Fleet launches instances from all the Spot Instance pools that you specify.</p> <p>If the allocation strategy is <code>capacityOptimized</code>, EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p>
     pub allocation_strategy: Option<String>,
@@ -46743,6 +47724,7 @@ impl SpotOptionsDeserializer {
 }
 /// <p>Describes the configuration of Spot Instances in an EC2 Fleet request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SpotOptionsRequest {
     /// <p>Indicates how to allocate the target Spot Instance capacity across the Spot Instance pools specified by the EC2 Fleet.</p> <p>If the allocation strategy is <code>lowestPrice</code>, EC2 Fleet launches instances from the Spot Instance pools with the lowest price. This is the default allocation strategy.</p> <p>If the allocation strategy is <code>diversified</code>, EC2 Fleet launches instances from all the Spot Instance pools that you specify.</p> <p>If the allocation strategy is <code>capacityOptimized</code>, EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.</p>
     pub allocation_strategy: Option<String>,
@@ -46804,6 +47786,8 @@ impl SpotOptionsRequestSerializer {
 
 /// <p>Describes Spot Instance placement.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SpotPlacement {
     /// <p>The Availability Zone.</p> <p>[Spot Fleet only] To specify multiple Availability Zones, separate them using commas; for example, "us-west-2a, us-west-2b".</p>
     pub availability_zone: Option<String>,
@@ -46862,6 +47846,7 @@ impl SpotPlacementSerializer {
 
 /// <p>Describes the maximum price per hour that you are willing to pay for a Spot Instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SpotPrice {
     /// <p>The Availability Zone.</p>
     pub availability_zone: Option<String>,
@@ -46931,6 +47916,7 @@ impl SpotPriceHistoryListDeserializer {
 }
 /// <p>Describes a stale rule in a security group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StaleIpPermission {
     /// <p>The start of the port range for the TCP and UDP protocols, or an ICMP type number. A value of <code>-1</code> indicates all ICMP types. </p>
     pub from_port: Option<i64>,
@@ -47004,6 +47990,7 @@ impl StaleIpPermissionSetDeserializer {
 }
 /// <p>Describes a stale security group (a security group that contains stale rules).</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StaleSecurityGroup {
     /// <p>The description of the security group.</p>
     pub description: Option<String>,
@@ -47077,6 +48064,7 @@ impl StaleSecurityGroupSetDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartInstancesRequest {
     /// <p>Reserved.</p>
     pub additional_info: Option<String>,
@@ -47110,6 +48098,7 @@ impl StartInstancesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StartInstancesResult {
     /// <p>Information about the started instances.</p>
     pub starting_instances: Option<Vec<InstanceStateChange>>,
@@ -47148,6 +48137,7 @@ impl StateDeserializer {
 }
 /// <p>Describes a state change.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StateReason {
     /// <p>The reason code for the state change.</p>
     pub code: Option<String>,
@@ -47210,6 +48200,7 @@ impl StatusTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -47248,6 +48239,7 @@ impl StopInstancesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StopInstancesResult {
     /// <p>Information about the stopped instances.</p>
     pub stopping_instances: Option<Vec<InstanceStateChange>>,
@@ -47275,6 +48267,8 @@ impl StopInstancesResultDeserializer {
 }
 /// <p>Describes the storage location for an instance store-backed AMI.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Storage {
     /// <p>An Amazon S3 storage location.</p>
     pub s3: Option<S3Storage>,
@@ -47316,6 +48310,7 @@ impl StorageSerializer {
 
 /// <p>Describes a storage location in Amazon S3.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StorageLocation {
     /// <p>The name of the S3 bucket.</p>
     pub bucket: Option<String>,
@@ -47354,6 +48349,7 @@ impl StringDeserializer {
 }
 /// <p>Describes a subnet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Subnet {
     /// <p>Indicates whether a network interface created in this subnet (including a network interface created by <a>RunInstances</a>) receives an IPv6 address.</p>
     pub assign_ipv_6_address_on_creation: Option<bool>,
@@ -47462,6 +48458,7 @@ impl SubnetDeserializer {
 }
 /// <p>Describes the state of a CIDR block.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SubnetCidrBlockState {
     /// <p>The state of a CIDR block.</p>
     pub state: Option<String>,
@@ -47518,6 +48515,7 @@ impl SubnetIdStringListSerializer {
 
 /// <p>Describes an IPv6 CIDR block associated with a subnet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SubnetIpv6CidrBlockAssociation {
     /// <p>The association ID for the CIDR block.</p>
     pub association_id: Option<String>,
@@ -47610,6 +48608,7 @@ impl SubnetStateDeserializer {
 }
 /// <p>Describes the T2 or T3 instance whose credit option for CPU usage was successfully modified.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SuccessfulInstanceCreditSpecificationItem {
     /// <p>The ID of the instance.</p>
     pub instance_id: Option<String>,
@@ -47672,6 +48671,8 @@ impl SummaryStatusDeserializer {
 }
 /// <p>Describes a tag.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>The key of the tag.</p> <p>Constraints: Tag keys are case-sensitive and accept a maximum of 127 Unicode characters. May not begin with <code>aws:</code>.</p>
     pub key: Option<String>,
@@ -47718,6 +48719,7 @@ impl TagSerializer {
 
 /// <p>Describes a tag.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TagDescription {
     /// <p>The tag key.</p>
     pub key: Option<String>,
@@ -47807,6 +48809,7 @@ impl TagListSerializer {
 
 /// <p>The tags to apply to a resource when the resource is being created.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagSpecification {
     /// <p>The type of resource to tag. Currently, the resource types that support tagging on creation are: <code>capacity-reservation</code> | <code>client-vpn-endpoint</code> | <code>dedicated-host</code> | <code>fleet</code> | <code>instance</code> | <code>launch-template</code> | <code>snapshot</code> | <code>transit-gateway</code> | <code>transit-gateway-attachment</code> | <code>transit-gateway-route-table</code> | <code>volume</code>.</p> <p>To tag a resource after it has been created, see <a>CreateTags</a>.</p>
     pub resource_type: Option<String>,
@@ -47845,6 +48848,7 @@ impl TagSpecificationListSerializer {
 
 /// <p>The number of units to request. You can choose to set the target capacity in terms of instances or a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O. If the request type is <code>maintain</code>, you can specify a target capacity of 0 and add capacity later.</p> <p>You can use the On-Demand Instance <code>MaxTotalPrice</code> parameter, the Spot Instance <code>MaxTotalPrice</code>, or both to ensure your fleet cost does not exceed your budget. If you set a maximum price per hour for the On-Demand Instances and Spot Instances in your request, EC2 Fleet will launch instances until it reaches the maximum amount you're willing to pay. When the maximum amount you're willing to pay is reached, the fleet stops launching instances even if it hasn’t met the target capacity. The <code>MaxTotalPrice</code> parameters are located in and </p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TargetCapacitySpecification {
     /// <p>The default <code>TotalTargetCapacity</code>, which is either <code>Spot</code> or <code>On-Demand</code>.</p>
     pub default_target_capacity_type: Option<String>,
@@ -47902,6 +48906,7 @@ impl TargetCapacitySpecificationDeserializer {
 }
 /// <p>The number of units to request. You can choose to set the target capacity as the number of instances. Or you can set the target capacity to a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O. If the request type is <code>maintain</code>, you can specify a target capacity of 0 and add capacity later.</p> <p>You can use the On-Demand Instance <code>MaxTotalPrice</code> parameter, the Spot Instance <code>MaxTotalPrice</code> parameter, or both parameters to ensure that your fleet cost does not exceed your budget. If you set a maximum price per hour for the On-Demand Instances and Spot Instances in your request, EC2 Fleet will launch instances until it reaches the maximum amount you're willing to pay. When the maximum amount you're willing to pay is reached, the fleet stops launching instances even if it hasn’t met the target capacity. The <code>MaxTotalPrice</code> parameters are located in and .</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TargetCapacitySpecificationRequest {
     /// <p>The default <code>TotalTargetCapacity</code>, which is either <code>Spot</code> or <code>On-Demand</code>.</p>
     pub default_target_capacity_type: Option<String>,
@@ -47946,6 +48951,7 @@ impl TargetCapacitySpecificationRequestSerializer {
 
 /// <p>Information about the Convertible Reserved Instance offering.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TargetConfiguration {
     /// <p>The number of instances the Convertible Reserved Instance offering can be applied to. This parameter is reserved and cannot be specified in a request</p>
     pub instance_count: Option<i64>,
@@ -47977,6 +48983,7 @@ impl TargetConfigurationDeserializer {
 }
 /// <p>Details about the target configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TargetConfigurationRequest {
     /// <p>The number of instances the Covertible Reserved Instance offering can be applied to. This parameter is reserved and cannot be specified in a request</p>
     pub instance_count: Option<i64>,
@@ -48013,6 +49020,8 @@ impl TargetConfigurationRequestSetSerializer {
 
 /// <p>Describes a load balancer target group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TargetGroup {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub arn: Option<String>,
@@ -48083,6 +49092,8 @@ impl TargetGroupsSerializer {
 
 /// <p>Describes the target groups to attach to a Spot Fleet. Spot Fleet registers the running Spot Instances with these target groups.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TargetGroupsConfig {
     /// <p>One or more target groups.</p>
     pub target_groups: Option<Vec<TargetGroup>>,
@@ -48130,6 +49141,7 @@ impl TargetGroupsConfigSerializer {
 
 /// <p>Describes a target network associated with a Client VPN endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TargetNetwork {
     /// <p>The ID of the association.</p>
     pub association_id: Option<String>,
@@ -48204,6 +49216,7 @@ impl TargetNetworkSetDeserializer {
 }
 /// <p>The total value of the new Convertible Reserved Instances.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TargetReservationValue {
     /// <p>The total value of the Convertible Reserved Instances that make up the exchange. This is the sum of the list value, remaining upfront price, and additional upfront cost of the exchange.</p>
     pub reservation_value: Option<ReservationValue>,
@@ -48280,6 +49293,7 @@ impl TenancyDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateClientVpnConnectionsRequest {
     /// <p>The ID of the Client VPN endpoint to which the client is connected.</p>
     pub client_vpn_endpoint_id: String,
@@ -48317,6 +49331,7 @@ impl TerminateClientVpnConnectionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TerminateClientVpnConnectionsResult {
     /// <p>The ID of the Client VPN endpoint.</p>
     pub client_vpn_endpoint_id: Option<String>,
@@ -48364,6 +49379,7 @@ impl TerminateClientVpnConnectionsResultDeserializer {
 }
 /// <p>Information about a terminated Client VPN endpoint client connection.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TerminateConnectionStatus {
     /// <p>The ID of the client connection.</p>
     pub connection_id: Option<String>,
@@ -48430,6 +49446,7 @@ impl TerminateConnectionStatusSetDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -48458,6 +49475,7 @@ impl TerminateInstancesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TerminateInstancesResult {
     /// <p>Information about the terminated instances.</p>
     pub terminating_instances: Option<Vec<InstanceStateChange>>,
@@ -48503,6 +49521,7 @@ impl TrafficDirectionDeserializer {
 }
 /// <p>Describes the Traffic Mirror filter.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TrafficMirrorFilter {
     /// <p>The description of the Traffic Mirror filter.</p>
     pub description: Option<String>,
@@ -48573,6 +49592,7 @@ impl TrafficMirrorFilterDeserializer {
 }
 /// <p>Describes the Traffic Mirror rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TrafficMirrorFilterRule {
     /// <p>The description of the Traffic Mirror rule.</p>
     pub description: Option<String>,
@@ -48768,6 +49788,7 @@ impl TrafficMirrorNetworkServiceListSerializer {
 
 /// <p>Describes the Traffic Mirror port range.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TrafficMirrorPortRange {
     /// <p>The start of the Traffic Mirror port range. This applies to the TCP and UDP protocols.</p>
     pub from_port: Option<i64>,
@@ -48798,6 +49819,7 @@ impl TrafficMirrorPortRangeDeserializer {
 }
 /// <p>Information about the Traffic Mirror filter rule port range.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TrafficMirrorPortRangeRequest {
     /// <p>The first port in the Traffic Mirror port range. This applies to the TCP and UDP protocols.</p>
     pub from_port: Option<i64>,
@@ -48836,6 +49858,7 @@ impl TrafficMirrorRuleActionDeserializer {
 }
 /// <p>Describes a Traffic Mirror session.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TrafficMirrorSession {
     /// <p>The description of the Traffic Mirror session.</p>
     pub description: Option<String>,
@@ -48954,6 +49977,7 @@ impl TrafficMirrorSessionSetDeserializer {
 }
 /// <p>Describes a Traffic Mirror target.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TrafficMirrorTarget {
     /// <p>Information about the Traffic Mirror target.</p>
     pub description: Option<String>,
@@ -49061,6 +50085,7 @@ impl TrafficTypeDeserializer {
 }
 /// <p>Describes a transit gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TransitGateway {
     /// <p>The creation time.</p>
     pub creation_time: Option<String>,
@@ -49130,6 +50155,7 @@ impl TransitGatewayDeserializer {
 }
 /// <p>Describes an association between a resource attachment and a transit gateway route table.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TransitGatewayAssociation {
     /// <p>The ID of the resource.</p>
     pub resource_id: Option<String>,
@@ -49204,6 +50230,7 @@ impl TransitGatewayAssociationStateDeserializer {
 }
 /// <p>Describes an attachment between a resource and a transit gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TransitGatewayAttachment {
     /// <p>The association.</p>
     pub association: Option<TransitGatewayAttachmentAssociation>,
@@ -49302,6 +50329,7 @@ impl TransitGatewayAttachmentDeserializer {
 }
 /// <p>Describes an association.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TransitGatewayAttachmentAssociation {
     /// <p>The state of the association.</p>
     pub state: Option<String>,
@@ -49372,6 +50400,7 @@ impl TransitGatewayAttachmentListDeserializer {
 }
 /// <p>Describes a propagation route table.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TransitGatewayAttachmentPropagation {
     /// <p>The state of the propagation route table.</p>
     pub state: Option<String>,
@@ -49481,6 +50510,7 @@ impl TransitGatewayListDeserializer {
 }
 /// <p>Describes the options for a transit gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TransitGatewayOptions {
     /// <p>A private Autonomous System Number (ASN) for the Amazon side of a BGP session. The range is 64512 to 65534 for 16-bit ASNs and 4200000000 to 4294967294 for 32-bit ASNs.</p>
     pub amazon_side_asn: Option<i64>,
@@ -49566,6 +50596,7 @@ impl TransitGatewayOptionsDeserializer {
 }
 /// <p>Describes route propagation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TransitGatewayPropagation {
     /// <p>The ID of the resource.</p>
     pub resource_id: Option<String>,
@@ -49640,6 +50671,7 @@ impl TransitGatewayPropagationStateDeserializer {
 }
 /// <p>Describes the options for a transit gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TransitGatewayRequestOptions {
     /// <p>A private Autonomous System Number (ASN) for the Amazon side of a BGP session. The range is 64512 to 65534 for 16-bit ASNs and 4200000000 to 4294967294 for 32-bit ASNs.</p>
     pub amazon_side_asn: Option<i64>,
@@ -49696,6 +50728,7 @@ impl TransitGatewayRequestOptionsSerializer {
 
 /// <p>Describes a route for a transit gateway route table.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TransitGatewayRoute {
     /// <p>The CIDR block used for destination matches.</p>
     pub destination_cidr_block: Option<String>,
@@ -49748,6 +50781,7 @@ impl TransitGatewayRouteDeserializer {
 }
 /// <p>Describes a route attachment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TransitGatewayRouteAttachment {
     /// <p>The ID of the resource.</p>
     pub resource_id: Option<String>,
@@ -49843,6 +50877,7 @@ impl TransitGatewayRouteStateDeserializer {
 }
 /// <p>Describes a transit gateway route table.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TransitGatewayRouteTable {
     /// <p>The creation time.</p>
     pub creation_time: Option<String>,
@@ -49919,6 +50954,7 @@ impl TransitGatewayRouteTableDeserializer {
 }
 /// <p>Describes an association between a route table and a resource attachment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TransitGatewayRouteTableAssociation {
     /// <p>The ID of the resource.</p>
     pub resource_id: Option<String>,
@@ -50024,6 +51060,7 @@ impl TransitGatewayRouteTableListDeserializer {
 }
 /// <p>Describes a route table propagation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TransitGatewayRouteTablePropagation {
     /// <p>The ID of the resource.</p>
     pub resource_id: Option<String>,
@@ -50131,6 +51168,7 @@ impl TransitGatewayStateDeserializer {
 }
 /// <p>Describes a VPC attachment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TransitGatewayVpcAttachment {
     /// <p>The creation time.</p>
     pub creation_time: Option<String>,
@@ -50234,6 +51272,7 @@ impl TransitGatewayVpcAttachmentListDeserializer {
 }
 /// <p>Describes the VPC attachment options.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TransitGatewayVpcAttachmentOptions {
     /// <p>Indicates whether DNS support is enabled.</p>
     pub dns_support: Option<String>,
@@ -50285,6 +51324,7 @@ impl TransportProtocolDeserializer {
 }
 /// <p>The VPN tunnel options.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TunnelOption {
     /// <p>The number of seconds after which a DPD timeout occurs.</p>
     pub dpd_timeout_seconds: Option<i64>,
@@ -50452,6 +51492,7 @@ impl TunnelOptionsListDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnassignIpv6AddressesRequest {
     /// <p>The IPv6 addresses to unassign from the network interface.</p>
     pub ipv_6_addresses: Vec<String>,
@@ -50481,6 +51522,7 @@ impl UnassignIpv6AddressesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UnassignIpv6AddressesResult {
     /// <p>The ID of the network interface.</p>
     pub network_interface_id: Option<String>,
@@ -50523,6 +51565,7 @@ impl UnassignIpv6AddressesResultDeserializer {
 }
 /// <p>Contains the parameters for UnassignPrivateIpAddresses.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnassignPrivateIpAddressesRequest {
     /// <p>The ID of the network interface.</p>
     pub network_interface_id: String,
@@ -50552,6 +51595,7 @@ impl UnassignPrivateIpAddressesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnmonitorInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -50580,6 +51624,7 @@ impl UnmonitorInstancesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UnmonitorInstancesResult {
     /// <p>The monitoring information.</p>
     pub instance_monitorings: Option<Vec<InstanceMonitoring>>,
@@ -50622,6 +51667,7 @@ impl UnsuccessfulInstanceCreditSpecificationErrorCodeDeserializer {
 }
 /// <p>Describes the T2 or T3 instance whose credit option for CPU usage was not modified.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UnsuccessfulInstanceCreditSpecificationItem {
     /// <p>The applicable error for the T2 or T3 instance whose credit option for CPU usage was not modified.</p>
     pub error: Option<UnsuccessfulInstanceCreditSpecificationItemError>,
@@ -50657,6 +51703,7 @@ impl UnsuccessfulInstanceCreditSpecificationItemDeserializer {
 }
 /// <p>Information about the error for the T2 or T3 instance whose credit option for CPU usage was not modified.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UnsuccessfulInstanceCreditSpecificationItemError {
     /// <p>The error code.</p>
     pub code: Option<String>,
@@ -50712,6 +51759,7 @@ impl UnsuccessfulInstanceCreditSpecificationSetDeserializer {
 }
 /// <p>Information about items that were not successfully processed in a batch call.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UnsuccessfulItem {
     /// <p>Information about the error.</p>
     pub error: Option<UnsuccessfulItemError>,
@@ -50744,6 +51792,7 @@ impl UnsuccessfulItemDeserializer {
 }
 /// <p>Information about the error that occurred. For more information about errors, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html">Error Codes</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UnsuccessfulItemError {
     /// <p>The error code.</p>
     pub code: Option<String>,
@@ -50807,6 +51856,7 @@ impl UnsuccessfulItemSetDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSecurityGroupRuleDescriptionsEgressRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -50849,6 +51899,7 @@ impl UpdateSecurityGroupRuleDescriptionsEgressRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateSecurityGroupRuleDescriptionsEgressResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, returns an error.</p>
     pub return_: Option<bool>,
@@ -50877,6 +51928,7 @@ impl UpdateSecurityGroupRuleDescriptionsEgressResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSecurityGroupRuleDescriptionsIngressRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -50919,6 +51971,7 @@ impl UpdateSecurityGroupRuleDescriptionsIngressRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateSecurityGroupRuleDescriptionsIngressResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, returns an error.</p>
     pub return_: Option<bool>,
@@ -50948,6 +52001,7 @@ impl UpdateSecurityGroupRuleDescriptionsIngressResultDeserializer {
 }
 /// <p>Describes the S3 bucket for the disk image.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UserBucket {
     /// <p>The name of the S3 bucket where the disk image is located.</p>
     pub s3_bucket: Option<String>,
@@ -50975,6 +52029,7 @@ impl UserBucketSerializer {
 
 /// <p>Describes the S3 bucket for the disk image.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UserBucketDetails {
     /// <p>The S3 bucket from which the disk image was created.</p>
     pub s3_bucket: Option<String>,
@@ -51005,6 +52060,7 @@ impl UserBucketDetailsDeserializer {
 }
 /// <p>Describes the user data for an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UserData {
     /// <p>The user data. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>
     pub data: Option<String>,
@@ -51038,6 +52094,8 @@ impl UserGroupStringListSerializer {
 
 /// <p>Describes a security group and AWS account ID pair.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UserIdGroupPair {
     /// <p>A description for the security group rule that references this user ID group pair.</p> <p>Constraints: Up to 255 characters in length. Allowed characters are a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=;{}!$*</p>
     pub description: Option<String>,
@@ -51244,6 +52302,7 @@ impl VersionStringListSerializer {
 
 /// <p>Describes telemetry for a VPN tunnel.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VgwTelemetry {
     /// <p>The number of accepted routes.</p>
     pub accepted_route_count: Option<i64>,
@@ -51331,6 +52390,7 @@ impl VirtualizationTypeDeserializer {
 }
 /// <p>Describes a volume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Volume {
     /// <p>Information about the volume attachments.</p>
     pub attachments: Option<Vec<VolumeAttachment>>,
@@ -51414,6 +52474,7 @@ impl VolumeDeserializer {
 }
 /// <p>Describes volume attachment details.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VolumeAttachment {
     /// <p>The time stamp when the attachment initiated.</p>
     pub attach_time: Option<String>,
@@ -51497,6 +52558,7 @@ impl VolumeAttachmentStateDeserializer {
 }
 /// <p>Describes an EBS volume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VolumeDetail {
     /// <p>The size of the volume, in GiB.</p>
     pub size: i64,
@@ -51545,6 +52607,7 @@ impl VolumeListDeserializer {
 }
 /// <p>Describes the modification status of an EBS volume.</p> <p>If the volume has never been modified, some element values will be null.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VolumeModification {
     /// <p>The modification completion or failure time.</p>
     pub end_time: Option<String>,
@@ -51677,6 +52740,7 @@ impl VolumeStateDeserializer {
 }
 /// <p>Describes a volume status operation code.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VolumeStatusAction {
     /// <p>The code identifying the operation, for example, <code>enable-volume-io</code>.</p>
     pub code: Option<String>,
@@ -51734,6 +52798,7 @@ impl VolumeStatusActionsListDeserializer {
 }
 /// <p>Describes a volume status.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VolumeStatusDetails {
     /// <p>The name of the volume status.</p>
     pub name: Option<String>,
@@ -51781,6 +52846,7 @@ impl VolumeStatusDetailsListDeserializer {
 }
 /// <p>Describes a volume status event.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VolumeStatusEvent {
     /// <p>A description of the event.</p>
     pub description: Option<String>,
@@ -51843,6 +52909,7 @@ impl VolumeStatusEventsListDeserializer {
 }
 /// <p>Describes the status of a volume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VolumeStatusInfo {
     /// <p>The details of the volume status.</p>
     pub details: Option<Vec<VolumeStatusDetails>>,
@@ -51888,6 +52955,7 @@ impl VolumeStatusInfoStatusDeserializer {
 }
 /// <p>Describes the volume status.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VolumeStatusItem {
     /// <p>The details of the operation.</p>
     pub actions: Option<Vec<VolumeStatusAction>>,
@@ -51980,6 +53048,7 @@ impl VolumeTypeDeserializer {
 }
 /// <p>Describes a VPC.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Vpc {
     /// <p>The primary IPv4 CIDR block for the VPC.</p>
     pub cidr_block: Option<String>,
@@ -52061,6 +53130,7 @@ impl VpcDeserializer {
 }
 /// <p>Describes an attachment between a virtual private gateway and a VPC.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpcAttachment {
     /// <p>The current state of the attachment.</p>
     pub state: Option<String>,
@@ -52108,6 +53178,7 @@ impl VpcAttachmentListDeserializer {
 }
 /// <p>Describes an IPv4 CIDR block associated with a VPC.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpcCidrBlockAssociation {
     /// <p>The association ID for the IPv4 CIDR block.</p>
     pub association_id: Option<String>,
@@ -52170,6 +53241,7 @@ impl VpcCidrBlockAssociationSetDeserializer {
 }
 /// <p>Describes the state of a CIDR block.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpcCidrBlockState {
     /// <p>The state of the CIDR block.</p>
     pub state: Option<String>,
@@ -52214,6 +53286,7 @@ impl VpcCidrBlockStateCodeDeserializer {
 }
 /// <p>Describes whether a VPC is enabled for ClassicLink.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpcClassicLink {
     /// <p>Indicates whether the VPC is enabled for ClassicLink.</p>
     pub classic_link_enabled: Option<bool>,
@@ -52283,6 +53356,7 @@ impl VpcClassicLinkListDeserializer {
 }
 /// <p>Describes a VPC endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpcEndpoint {
     /// <p>The date and time the VPC endpoint was created.</p>
     pub creation_timestamp: Option<String>,
@@ -52407,6 +53481,7 @@ impl VpcEndpointDeserializer {
 }
 /// <p>Describes a VPC endpoint connection to a service.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpcEndpointConnection {
     /// <p>The date and time the VPC endpoint was created.</p>
     pub creation_timestamp: Option<String>,
@@ -52534,6 +53609,7 @@ impl VpcIdStringListSerializer {
 
 /// <p>Describes an IPv6 CIDR block associated with a VPC.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpcIpv6CidrBlockAssociation {
     /// <p>The association ID for the IPv6 CIDR block.</p>
     pub association_id: Option<String>,
@@ -52615,6 +53691,7 @@ impl VpcListDeserializer {
 }
 /// <p>Describes a VPC peering connection.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpcPeeringConnection {
     /// <p>Information about the accepter VPC. CIDR block information is only returned when describing an active VPC peering connection.</p>
     pub accepter_vpc_info: Option<VpcPeeringConnectionVpcInfo>,
@@ -52700,6 +53777,7 @@ impl VpcPeeringConnectionListDeserializer {
 }
 /// <p>Describes the VPC peering connection options.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpcPeeringConnectionOptionsDescription {
     /// <p>Indicates whether a local VPC can resolve public DNS hostnames to private IP addresses when queried from instances in a peer VPC.</p>
     pub allow_dns_resolution_from_remote_vpc: Option<bool>,
@@ -52751,6 +53829,7 @@ impl VpcPeeringConnectionOptionsDescriptionDeserializer {
 }
 /// <p>Describes the status of a VPC peering connection.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpcPeeringConnectionStateReason {
     /// <p>The status of the VPC peering connection.</p>
     pub code: Option<String>,
@@ -52800,6 +53879,7 @@ impl VpcPeeringConnectionStateReasonCodeDeserializer {
 }
 /// <p>Describes a VPC in a VPC peering connection.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpcPeeringConnectionVpcInfo {
     /// <p>The IPv4 CIDR block for the VPC.</p>
     pub cidr_block: Option<String>,
@@ -52879,6 +53959,7 @@ impl VpcStateDeserializer {
 }
 /// <p>Describes a VPN connection.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpnConnection {
     /// <p>The category of the VPN connection. A value of <code>VPN</code> indicates an AWS VPN connection. A value of <code>VPN-Classic</code> indicates an AWS Classic VPN connection.</p>
     pub category: Option<String>,
@@ -53003,6 +54084,7 @@ impl VpnConnectionListDeserializer {
 }
 /// <p>Describes VPN connection options.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpnConnectionOptions {
     /// <p>Indicates whether the VPN connection uses static routes only. Static routes must be used for devices that don't support BGP.</p>
     pub static_routes_only: Option<bool>,
@@ -53036,6 +54118,7 @@ impl VpnConnectionOptionsDeserializer {
 }
 /// <p>Describes VPN connection options.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VpnConnectionOptionsSpecification {
     /// <p>Indicate whether the VPN connection uses static routes only. If you are creating a VPN connection for a device that does not support BGP, you must specify <code>true</code>. Use <a>CreateVpnConnectionRoute</a> to create a static route.</p> <p>Default: <code>false</code> </p>
     pub static_routes_only: Option<bool>,
@@ -53078,6 +54161,7 @@ impl VpnEcmpSupportValueDeserializer {
 }
 /// <p>Describes a virtual private gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpnGateway {
     /// <p>The private Autonomous System Number (ASN) for the Amazon side of a BGP session.</p>
     pub amazon_side_asn: Option<i64>,
@@ -53191,6 +54275,7 @@ impl VpnStateDeserializer {
 }
 /// <p>Describes a static route for a VPN connection.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpnStaticRoute {
     /// <p>The CIDR block associated with the local subnet of the customer data center.</p>
     pub destination_cidr_block: Option<String>,
@@ -53259,6 +54344,7 @@ impl VpnStaticRouteSourceDeserializer {
 }
 /// <p>The tunnel options for a VPN connection.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VpnTunnelOptionsSpecification {
     /// <p>The number of seconds after which a DPD timeout occurs.</p> <p>Constraints: A value between 0 and 30.</p> <p>Default: <code>30</code> </p>
     pub dpd_timeout_seconds: Option<i64>,
@@ -53401,6 +54487,7 @@ impl VpnTunnelOptionsSpecificationsListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct WithdrawByoipCidrRequest {
     /// <p>The public IPv4 address range, in CIDR notation.</p>
     pub cidr: String,
@@ -53425,6 +54512,7 @@ impl WithdrawByoipCidrRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct WithdrawByoipCidrResult {
     /// <p>Information about the address pool.</p>
     pub byoip_cidr: Option<ByoipCidr>,

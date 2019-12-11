@@ -26,6 +26,7 @@ use serde_json;
 /// <p>The request parameters represent the input of a SQL statement over an array of
 /// data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchExecuteStatementRequest {
     /// <p>The name of the database.</p>
     #[serde(rename = "database")]
@@ -74,6 +75,7 @@ pub struct BatchExecuteStatementResponse {
 /// <p>The request parameters represent the input of a request to start a SQL
 /// transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BeginTransactionRequest {
     /// <p>The name of the database.</p>
     #[serde(rename = "database")]
@@ -166,6 +168,7 @@ pub struct ColumnMetadata {
 
 /// <p>The request parameters represent the input of a commit transaction request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CommitTransactionRequest {
     /// <p>The Amazon Resource Name (ARN) of the Aurora Serverless DB cluster.</p>
     #[serde(rename = "resourceArn")]
@@ -191,6 +194,7 @@ pub struct CommitTransactionResponse {
 /// <p>The request parameters represent the input of a request to run one or more SQL
 /// statements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteSqlRequest {
     /// <p>The Amazon Resource Name (ARN) of the secret that enables access to the DB cluster.</p>
     #[serde(rename = "awsSecretStoreArn")]
@@ -230,6 +234,7 @@ pub struct ExecuteSqlResponse {
 /// <p>The request parameters represent the input of a request to run a SQL statement against
 /// a database.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteStatementRequest {
     /// <p>A value that indicates whether to continue running the statement after
     /// the call times out. By default, the statement stops running when the call
@@ -378,6 +383,7 @@ pub struct ResultSetMetadata {
 /// <p>The request parameters represent the input of a request to perform a rollback of a
 /// transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RollbackTransactionRequest {
     /// <p>The Amazon Resource Name (ARN) of the Aurora Serverless DB cluster.</p>
     #[serde(rename = "resourceArn")]
@@ -403,6 +409,7 @@ pub struct RollbackTransactionResponse {
 
 /// <p>A parameter used in a SQL statement.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SqlParameter {
     /// <p>The name of the parameter.</p>
     #[serde(rename = "name")]

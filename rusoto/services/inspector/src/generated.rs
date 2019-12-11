@@ -24,6 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddAttributesToFindingsRequest {
     /// <p>The array of attributes that you want to assign to specified findings.</p>
     #[serde(rename = "attributes")]
@@ -52,6 +53,7 @@ pub struct AgentAlreadyRunningAssessment {
 
 /// <p>Contains information about an Amazon Inspector agent. This data type is used as a request parameter in the <a>ListAssessmentRunAgents</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AgentFilter {
     /// <p>The detailed health state of the agent. Values can be set to <b>IDLE</b>, <b>RUNNING</b>, <b>SHUTDOWN</b>, <b>UNHEALTHY</b>, <b>THROTTLED</b>, and <b>UNKNOWN</b>. </p>
     #[serde(rename = "agentHealthCodes")]
@@ -182,6 +184,7 @@ pub struct AssessmentRunAgent {
 
 /// <p>Used as the request parameter in the <a>ListAssessmentRuns</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssessmentRunFilter {
     /// <p>For a record to match a filter, the value that is specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>completedAt</b> property of the <a>AssessmentRun</a> data type.</p>
     #[serde(rename = "completionTimeRange")]
@@ -276,6 +279,7 @@ pub struct AssessmentTarget {
 
 /// <p>Used as the request parameter in the <a>ListAssessmentTargets</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssessmentTargetFilter {
     /// <p>For a record to match a filter, an explicit value or a string that contains a wildcard that is specified for this data type property must match the value of the <b>assessmentTargetName</b> property of the <a>AssessmentTarget</a> data type.</p>
     #[serde(rename = "assessmentTargetNamePattern")]
@@ -319,6 +323,7 @@ pub struct AssessmentTemplate {
 
 /// <p>Used as the request parameter in the <a>ListAssessmentTemplates</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssessmentTemplateFilter {
     /// <p>For a record to match a filter, the value specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>durationInSeconds</b> property of the <a>AssessmentTemplate</a> data type.</p>
     #[serde(rename = "durationRange")]
@@ -384,6 +389,7 @@ pub struct Attribute {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssessmentTargetRequest {
     /// <p>The user-defined name that identifies the assessment target that you want to create. The name must be unique within the AWS account.</p>
     #[serde(rename = "assessmentTargetName")]
@@ -403,6 +409,7 @@ pub struct CreateAssessmentTargetResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssessmentTemplateRequest {
     /// <p>The ARN that specifies the assessment target for which you want to create the assessment template.</p>
     #[serde(rename = "assessmentTargetArn")]
@@ -431,6 +438,7 @@ pub struct CreateAssessmentTemplateResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateExclusionsPreviewRequest {
     /// <p>The ARN that specifies the assessment template for which you want to create an exclusions preview.</p>
     #[serde(rename = "assessmentTemplateArn")]
@@ -446,6 +454,7 @@ pub struct CreateExclusionsPreviewResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceGroupRequest {
     /// <p>A collection of keys and an array of possible values, '[{"key":"key1","values":["Value1","Value2"]},{"key":"Key2","values":["Value3"]}]'.</p> <p>For example,'[{"key":"Name","values":["TestEC2Instance"]}]'.</p>
     #[serde(rename = "resourceGroupTags")]
@@ -461,6 +470,7 @@ pub struct CreateResourceGroupResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssessmentRunRequest {
     /// <p>The ARN that specifies the assessment run that you want to delete.</p>
     #[serde(rename = "assessmentRunArn")]
@@ -468,6 +478,7 @@ pub struct DeleteAssessmentRunRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssessmentTargetRequest {
     /// <p>The ARN that specifies the assessment target that you want to delete.</p>
     #[serde(rename = "assessmentTargetArn")]
@@ -475,6 +486,7 @@ pub struct DeleteAssessmentTargetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssessmentTemplateRequest {
     /// <p>The ARN that specifies the assessment template that you want to delete.</p>
     #[serde(rename = "assessmentTemplateArn")]
@@ -482,6 +494,7 @@ pub struct DeleteAssessmentTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssessmentRunsRequest {
     /// <p>The ARN that specifies the assessment run that you want to describe.</p>
     #[serde(rename = "assessmentRunArns")]
@@ -500,6 +513,7 @@ pub struct DescribeAssessmentRunsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssessmentTargetsRequest {
     /// <p>The ARNs that specifies the assessment targets that you want to describe.</p>
     #[serde(rename = "assessmentTargetArns")]
@@ -518,6 +532,7 @@ pub struct DescribeAssessmentTargetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssessmentTemplatesRequest {
     #[serde(rename = "assessmentTemplateArns")]
     pub assessment_template_arns: Vec<String>,
@@ -549,6 +564,7 @@ pub struct DescribeCrossAccountAccessRoleResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExclusionsRequest {
     /// <p>The list of ARNs that specify the exclusions that you want to describe.</p>
     #[serde(rename = "exclusionArns")]
@@ -571,6 +587,7 @@ pub struct DescribeExclusionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFindingsRequest {
     /// <p>The ARN that specifies the finding that you want to describe.</p>
     #[serde(rename = "findingArns")]
@@ -593,6 +610,7 @@ pub struct DescribeFindingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourceGroupsRequest {
     /// <p>The ARN that specifies the resource group that you want to describe.</p>
     #[serde(rename = "resourceGroupArns")]
@@ -611,6 +629,7 @@ pub struct DescribeResourceGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRulesPackagesRequest {
     /// <p>The locale that you want to translate a rules package description into.</p>
     #[serde(rename = "locale")]
@@ -634,6 +653,7 @@ pub struct DescribeRulesPackagesResponse {
 
 /// <p>This data type is used in the <a>AssessmentTemplateFilter</a> data type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DurationRange {
     /// <p>The maximum value of the duration range. Must be less than or equal to 604800 seconds (1 week).</p>
     #[serde(rename = "maxSeconds")]
@@ -791,6 +811,7 @@ pub struct Finding {
 
 /// <p>This data type is used as a request parameter in the <a>ListFindings</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FindingFilter {
     /// <p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>agentId</b> property of the <a>Finding</a> data type.</p>
     #[serde(rename = "agentIds")]
@@ -827,6 +848,7 @@ pub struct FindingFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAssessmentReportRequest {
     /// <p>The ARN that specifies the assessment run for which you want to generate a report.</p>
     #[serde(rename = "assessmentRunArn")]
@@ -852,6 +874,7 @@ pub struct GetAssessmentReportResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExclusionsPreviewRequest {
     /// <p>The ARN that specifies the assessment template for which the exclusions preview was requested.</p>
     #[serde(rename = "assessmentTemplateArn")]
@@ -890,6 +913,7 @@ pub struct GetExclusionsPreviewResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTelemetryMetadataRequest {
     /// <p>The ARN that specifies the assessment run that has the telemetry data that you want to obtain.</p>
     #[serde(rename = "assessmentRunArn")]
@@ -922,6 +946,7 @@ pub struct InspectorServiceAttributes {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentRunAgentsRequest {
     /// <p>The ARN that specifies the assessment run whose agents you want to list.</p>
     #[serde(rename = "assessmentRunArn")]
@@ -953,6 +978,7 @@ pub struct ListAssessmentRunAgentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentRunsRequest {
     /// <p>The ARNs that specify the assessment templates whose assessment runs you want to list.</p>
     #[serde(rename = "assessmentTemplateArns")]
@@ -985,6 +1011,7 @@ pub struct ListAssessmentRunsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentTargetsRequest {
     /// <p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>
     #[serde(rename = "filter")]
@@ -1013,6 +1040,7 @@ pub struct ListAssessmentTargetsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentTemplatesRequest {
     /// <p>A list of ARNs that specifies the assessment targets whose assessment templates you want to list.</p>
     #[serde(rename = "assessmentTargetArns")]
@@ -1045,6 +1073,7 @@ pub struct ListAssessmentTemplatesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventSubscriptionsRequest {
     /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
     #[serde(rename = "maxResults")]
@@ -1073,6 +1102,7 @@ pub struct ListEventSubscriptionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListExclusionsRequest {
     /// <p>The ARN of the assessment run that generated the exclusions that you want to list.</p>
     #[serde(rename = "assessmentRunArn")]
@@ -1100,6 +1130,7 @@ pub struct ListExclusionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFindingsRequest {
     /// <p>The ARNs of the assessment runs that generate the findings that you want to list.</p>
     #[serde(rename = "assessmentRunArns")]
@@ -1132,6 +1163,7 @@ pub struct ListFindingsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRulesPackagesRequest {
     /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
     #[serde(rename = "maxResults")]
@@ -1156,6 +1188,7 @@ pub struct ListRulesPackagesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN that specifies the assessment template whose tags you want to list.</p>
     #[serde(rename = "resourceArn")]
@@ -1217,6 +1250,7 @@ pub struct NetworkInterface {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PreviewAgentsRequest {
     /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
     #[serde(rename = "maxResults")]
@@ -1258,6 +1292,7 @@ pub struct PrivateIp {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterCrossAccountAccessRoleRequest {
     /// <p>The ARN of the IAM role that grants Amazon Inspector access to AWS Services needed to perform security assessments. </p>
     #[serde(rename = "roleArn")]
@@ -1265,6 +1300,7 @@ pub struct RegisterCrossAccountAccessRoleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveAttributesFromFindingsRequest {
     /// <p>The array of attribute keys that you want to remove from specified findings.</p>
     #[serde(rename = "attributeKeys")]
@@ -1360,6 +1396,7 @@ pub struct SecurityGroup {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTagsForResourceRequest {
     /// <p>The ARN of the assessment template that you want to set tags to.</p>
     #[serde(rename = "resourceArn")]
@@ -1371,6 +1408,7 @@ pub struct SetTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAssessmentRunRequest {
     /// <p>You can specify the name for the assessment run. The name must be unique for the assessment template whose ARN is used to start the assessment run.</p>
     #[serde(rename = "assessmentRunName")]
@@ -1390,6 +1428,7 @@ pub struct StartAssessmentRunResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAssessmentRunRequest {
     /// <p>The ARN of the assessment run that you want to stop.</p>
     #[serde(rename = "assessmentRunArn")]
@@ -1401,6 +1440,7 @@ pub struct StopAssessmentRunRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubscribeToEventRequest {
     /// <p>The event for which you want to receive SNS notifications.</p>
     #[serde(rename = "event")]
@@ -1458,6 +1498,7 @@ pub struct TelemetryMetadata {
 
 /// <p>This data type is used in the <a>AssessmentRunFilter</a> data type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TimestampRange {
     /// <p>The minimum value of the timestamp range.</p>
     #[serde(rename = "beginDate")]
@@ -1470,6 +1511,7 @@ pub struct TimestampRange {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnsubscribeFromEventRequest {
     /// <p>The event for which you want to stop receiving SNS notifications.</p>
     #[serde(rename = "event")]
@@ -1483,6 +1525,7 @@ pub struct UnsubscribeFromEventRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAssessmentTargetRequest {
     /// <p>The ARN of the assessment target that you want to update.</p>
     #[serde(rename = "assessmentTargetArn")]

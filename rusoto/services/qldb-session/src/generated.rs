@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Contains the details of the transaction to abort.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortTransactionRequest {}
 
 /// <p>Contains the details of the aborted transaction.</p>
@@ -34,6 +35,7 @@ pub struct AbortTransactionResult {}
 
 /// <p>Contains the details of the transaction to commit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CommitTransactionRequest {
     /// <p>Specifies the commit digest for the transaction to commit. For every active transaction, the commit digest must be passed. QLDB validates <code>CommitDigest</code> and rejects the commit with an error if the digest computed on the client does not match the digest computed by QLDB.</p>
     #[serde(rename = "CommitDigest")]
@@ -69,6 +71,7 @@ pub struct CommitTransactionResult {
 
 /// <p>Specifies a request to end the session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EndSessionRequest {}
 
 /// <p>Contains the details of the ended session.</p>
@@ -78,6 +81,7 @@ pub struct EndSessionResult {}
 
 /// <p>Specifies a request to execute a statement.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteStatementRequest {
     /// <p>Specifies the parameters for the parameterized statement in the request.</p>
     #[serde(rename = "Parameters")]
@@ -103,6 +107,7 @@ pub struct ExecuteStatementResult {
 
 /// <p>Specifies the details of the page to be fetched.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FetchPageRequest {
     /// <p>Specifies the next page token of the page to be fetched.</p>
     #[serde(rename = "NextPageToken")]
@@ -137,6 +142,7 @@ pub struct Page {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendCommandRequest {
     /// <p>Command to abort the current transaction.</p>
     #[serde(rename = "AbortTransaction")]
@@ -207,6 +213,7 @@ pub struct SendCommandResult {
 
 /// <p>Specifies a request to start a a new session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSessionRequest {
     /// <p>The name of the ledger to start a new session against.</p>
     #[serde(rename = "LedgerName")]
@@ -225,6 +232,7 @@ pub struct StartSessionResult {
 
 /// <p>Specifies a request to start a transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTransactionRequest {}
 
 /// <p>Contains the details of the started transaction.</p>

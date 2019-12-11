@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>An object representing an AWS Batch array job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ArrayProperties {
     /// <p>The size of the array job.</p>
     #[serde(rename = "size")]
@@ -117,6 +118,7 @@ pub struct AttemptDetail {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobRequest {
     /// <p>The AWS Batch job ID of the job to cancel.</p>
     #[serde(rename = "jobId")]
@@ -241,6 +243,7 @@ pub struct ComputeResource {
 
 /// <p>An object representing the attributes of a compute environment that can be updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ComputeResourceUpdate {
     /// <p>The desired number of EC2 vCPUS in the compute environment.</p>
     #[serde(rename = "desiredvCpus")]
@@ -348,6 +351,7 @@ pub struct ContainerDetail {
 
 /// <p>The overrides that should be sent to a container.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContainerOverrides {
     /// <p>The command to send to the container that overrides the default command from the Docker image or the job definition.</p>
     #[serde(rename = "command")]
@@ -455,6 +459,7 @@ pub struct ContainerSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateComputeEnvironmentRequest {
     /// <p>The name for your compute environment. Up to 128 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "computeEnvironmentName")]
@@ -489,6 +494,7 @@ pub struct CreateComputeEnvironmentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobQueueRequest {
     /// <p>The set of compute environments mapped to a job queue and their order relative to each other. The job scheduler uses this parameter to determine which compute environment should execute a given job. Compute environments must be in the <code>VALID</code> state before you can associate them with a job queue. You can associate up to three compute environments with a job queue.</p>
     #[serde(rename = "computeEnvironmentOrder")]
@@ -517,6 +523,7 @@ pub struct CreateJobQueueResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteComputeEnvironmentRequest {
     /// <p>The name or Amazon Resource Name (ARN) of the compute environment to delete. </p>
     #[serde(rename = "computeEnvironment")]
@@ -528,6 +535,7 @@ pub struct DeleteComputeEnvironmentRequest {
 pub struct DeleteComputeEnvironmentResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobQueueRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the queue to delete. </p>
     #[serde(rename = "jobQueue")]
@@ -539,6 +547,7 @@ pub struct DeleteJobQueueRequest {
 pub struct DeleteJobQueueResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterJobDefinitionRequest {
     /// <p>The name and revision (<code>name:revision</code>) or full Amazon Resource Name (ARN) of the job definition to deregister. </p>
     #[serde(rename = "jobDefinition")]
@@ -550,6 +559,7 @@ pub struct DeregisterJobDefinitionRequest {
 pub struct DeregisterJobDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeComputeEnvironmentsRequest {
     /// <p>A list of up to 100 compute environment names or full Amazon Resource Name (ARN) entries. </p>
     #[serde(rename = "computeEnvironments")]
@@ -579,6 +589,7 @@ pub struct DescribeComputeEnvironmentsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobDefinitionsRequest {
     /// <p>The name of the job definition to describe.</p>
     #[serde(rename = "jobDefinitionName")]
@@ -616,6 +627,7 @@ pub struct DescribeJobDefinitionsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobQueuesRequest {
     /// <p>A list of up to 100 queue names or full queue Amazon Resource Name (ARN) entries.</p>
     #[serde(rename = "jobQueues")]
@@ -645,6 +657,7 @@ pub struct DescribeJobQueuesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobsRequest {
     /// <p>A list of up to 100 job IDs.</p>
     #[serde(rename = "jobs")]
@@ -934,6 +947,7 @@ pub struct LinuxParameters {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
     /// <p>The job ID for an array job. Specifying an array job ID with this parameter lists all child jobs from within the specified array.</p>
     #[serde(rename = "arrayJobId")]
@@ -1024,6 +1038,7 @@ pub struct NodeDetails {
 
 /// <p>Object representing any node overrides to a job definition that is used in a <a>SubmitJob</a> API operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NodeOverrides {
     /// <p>The node property overrides for the job.</p>
     #[serde(rename = "nodePropertyOverrides")]
@@ -1069,6 +1084,7 @@ pub struct NodePropertiesSummary {
 
 /// <p>Object representing any node overrides to a job definition that is used in a <a>SubmitJob</a> API operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NodePropertyOverride {
     /// <p>The overrides that should be sent to a node range.</p>
     #[serde(rename = "containerOverrides")]
@@ -1092,6 +1108,7 @@ pub struct NodeRangeProperty {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterJobDefinitionRequest {
     /// <p>An object with various properties specific to single-node container-based jobs. If the job definition's <code>type</code> parameter is <code>container</code>, then you must specify either <code>containerProperties</code> or <code>nodeProperties</code>.</p>
     #[serde(rename = "containerProperties")]
@@ -1156,6 +1173,7 @@ pub struct RetryStrategy {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubmitJobRequest {
     /// <p>The array properties for the submitted job, such as the size of the array. The array size can be between 2 and 10,000. If you specify array properties for a job, it becomes an array job. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/array_jobs.html">Array Jobs</a> in the <i>AWS Batch User Guide</i>.</p>
     #[serde(rename = "arrayProperties")]
@@ -1208,6 +1226,7 @@ pub struct SubmitJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateJobRequest {
     /// <p>The AWS Batch job ID of the job to terminate.</p>
     #[serde(rename = "jobId")]
@@ -1236,6 +1255,7 @@ pub struct Ulimit {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateComputeEnvironmentRequest {
     /// <p>The name or full Amazon Resource Name (ARN) of the compute environment to update.</p>
     #[serde(rename = "computeEnvironment")]
@@ -1268,6 +1288,7 @@ pub struct UpdateComputeEnvironmentResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobQueueRequest {
     /// <p>Details the set of compute environments mapped to a job queue and their order relative to each other. This is one of the parameters used by the job scheduler to determine which compute environment should execute a given job. </p>
     #[serde(rename = "computeEnvironmentOrder")]
