@@ -37,7 +37,7 @@ serde = "1.0.2"
 sha2 = "0.8.0"
 time = "0.1.35"
 percent-encoding = "2.1.0"
-tokio = { version = "0.2.2", features = ["macros"] }
+tokio = { version = "0.2.4", features = ["macros"] }
 
 [dependencies.rusoto_credential]
 path = "../credential"

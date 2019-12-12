@@ -29,7 +29,7 @@ path = "../../core"
 default-features = false
 
 [dev-dependencies]
-tokio = "0.2.2"
+tokio = "0.2.4"
 
 [dev-dependencies.rusoto_mock]
 version = "0.42.0"

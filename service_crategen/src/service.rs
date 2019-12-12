@@ -213,7 +213,7 @@ impl<'b> Service<'b> {
 
         dev_dependencies.insert(
             "tokio".to_owned(),
-            cargo::Dependency::Simple("0.2.2".to_owned()),
+            cargo::Dependency::Simple("0.2.4".to_owned()),
         );
 
         if let Some(ref custom_dev_dependencies) = self.config.custom_dev_dependencies {
