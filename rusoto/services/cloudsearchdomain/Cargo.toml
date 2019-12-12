@@ -17,8 +17,6 @@ exclude = ["test_resources/*"]
 [dependencies]
 async-trait = "0.1"
 bytes = "0.5"
-serde = "1.0.2"
-serde_derive = "1.0.2"
 
 [dependencies.futures]
 version = "0.3.1"
@@ -27,6 +25,10 @@ version = "0.3.1"
 version = "0.42.0"
 path = "../../core"
 default-features = false
+
+[dependencies.serde]
+version = "1.0.103"
+features = ["derive"]
 
 [dev-dependencies]
 tokio = "0.2.4"

@@ -148,7 +148,7 @@ impl<'b> Service<'b> {
                 dependencies.insert(
                     "serde".to_owned(),
                     cargo::Dependency::Extended {
-                        version: Some("1.0".into()),
+                        version: Some("1.0.103".into()),
                         path: None,
                         optional: None,
                         default_features: None,
@@ -157,7 +157,7 @@ impl<'b> Service<'b> {
                 );
                 dependencies.insert(
                     "serde_json".to_owned(),
-                    cargo::Dependency::Simple("1.0.1".into()),
+                    cargo::Dependency::Simple("1.0.44".into()),
                 );
             }
             "query" | "ec2" => {
@@ -173,17 +173,19 @@ impl<'b> Service<'b> {
             "rest-json" => {
                 dependencies.insert(
                     "serde".to_owned(),
-                    cargo::Dependency::Simple("1.0.2".into()),
-                );
-                dependencies.insert(
-                    "serde_derive".to_owned(),
-                    cargo::Dependency::Simple("1.0.2".into()),
+                    cargo::Dependency::Extended {
+                        version: Some("1.0.103".into()),
+                        path: None,
+                        optional: None,
+                        default_features: None,
+                        features: Some(vec!["derive".into()]),
+                    },
                 );
                 // some rest-json services don't use the `serde_json` crate:
                 if self.needs_serde_json_crate() {
                     dependencies.insert(
                         "serde_json".to_owned(),
-                        cargo::Dependency::Simple("1.0.1".into()),
+                        cargo::Dependency::Simple("1.0.44".into()),
                     );
                 }
             }
