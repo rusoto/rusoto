@@ -137,7 +137,7 @@ impl Future for WebIdentityProviderFuture {
             LoadBearerToken(_, Err(e), _) => Err(e.clone()),
             LoadBearerToken(_, _, Err(e)) => Err(e.clone()),
             LoadBearerToken(Ok(token), Ok(role), Ok(session)) => match HttpClient::new() {
-                Err(e) => Err(CredentialsError::new(e.description().to_string())),
+                Err(e) => Err(CredentialsError::new(e.to_string())),
                 Ok(c) => {
                     let client = Client::new_not_signing(c);
                     let sts = StsClient::new_with_client(client, Region::default());
