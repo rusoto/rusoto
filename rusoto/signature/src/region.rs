@@ -266,11 +266,7 @@ impl ParseRegionError {
     }
 }
 
-impl Error for ParseRegionError {
-    fn description(&self) -> &str {
-        &self.message
-    }
-}
+impl Error for ParseRegionError {}
 
 impl Display for ParseRegionError {
     fn fmt(&self, f: &mut Formatter) -> Result<(), FmtError> {
